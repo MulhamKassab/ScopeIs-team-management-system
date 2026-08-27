@@ -10,8 +10,8 @@ export function parseEnvironment(input: NodeJS.ProcessEnv) {
     // compatibility fallbacks for local/provider transitions only.
     DATABASE_URL: isE2e ? input.SCOPEIS_E2E_DATABASE_URL : (input.DATABASE_URL ?? input.POSTGRES_URL ?? input.POSTGRES_URL_NON_POOLING),
     APP_ENV: isE2e ? "test" : (isVercelProduction ? "production" : (input.APP_ENV ?? "development")),
-    // Production mock access is fail-closed regardless of a misconfigured flag.
-    MOCK_AUTH_ENABLED: isE2e ? "true" : (isVercelProduction ? "false" : (input.MOCK_AUTH_ENABLED ?? "false")),
+    // Temporary fictional mock access is an explicit deployment choice.
+    MOCK_AUTH_ENABLED: isE2e ? "true" : (input.MOCK_AUTH_ENABLED ?? "false"),
     SESSION_TTL_HOURS: input.SESSION_TTL_HOURS && Number(input.SESSION_TTL_HOURS) > 0 ? input.SESSION_TTL_HOURS : "12",
   });
   if (config.APP_ENV === "test") {
@@ -28,6 +28,9 @@ export function env() {
 }
 
 export function mockAuthenticationIsAllowed() {
-  const config = env();
-  return config.APP_ENV !== "production" && config.MOCK_AUTH_ENABLED;
+  return isMockAuthenticationEnabled(env());
+}
+
+export function isMockAuthenticationEnabled(config: ReturnType<typeof environmentSchema.parse>) {
+  return config.MOCK_AUTH_ENABLED === "true";
 }

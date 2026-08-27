@@ -4,7 +4,7 @@ import { and, eq, isNull } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { db } from "@/db/client";
 import { sessions } from "@/db/schema";
-import { mockPersonas } from "@/db/seed/fixtures";
+import { isMockPersonaId } from "@/db/seed/fixtures";
 import { writeAuditEvent } from "@/modules/audit/audit-service";
 import { errors } from "@/shared/errors/app-error";
 import { foundationRepository } from "@/server/repositories/foundation-repository";
@@ -26,7 +26,7 @@ async function actorForUser(userId: string, sessionId: string): Promise<Authenti
 
 export async function beginMockSession(personaId: string) {
   if (!mockAuthenticationIsAllowed()) throw errors.mockUnavailable();
-  if (!mockPersonas.some((persona) => persona.id === personaId)) throw errors.validation();
+  if (!isMockPersonaId(personaId)) throw errors.validation();
   const actorWithoutSession = await actorForUser(personaId, "pending");
   const token = randomBytes(32).toString("base64url");
   const expiry = expiresAt();

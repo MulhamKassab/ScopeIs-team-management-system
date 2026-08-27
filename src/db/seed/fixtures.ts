@@ -15,3 +15,7 @@ export const mockPersonas: MockPersonaFixture[] = [
   { id: "mock-employee-cora", displayName: "Cora Bell", role: "EMPLOYEE", scopeDescription: "Mock Team Alpha association", scopes: [{ type: "TEAM", reference: "team:alpha" }] },
   { id: "mock-employee-dan", displayName: "Dan Rowan", role: "EMPLOYEE", scopeDescription: "Mock Team Bravo association", scopes: [{ type: "TEAM", reference: "team:bravo" }] },
 ];
+
+export function isMockPersonaId(personaId: string) {
+  return mockPersonas.some((persona) => persona.id === personaId);
+}
