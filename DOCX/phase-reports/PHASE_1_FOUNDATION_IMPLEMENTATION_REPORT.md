@@ -11,6 +11,10 @@
 - Initial worktree: documentation-only, no application package files, lockfile, environment files, or inherited changes.
 - Final worktree: Phase 1 Next.js application, database foundation, tests, local logo, and documentation. No Git repository was initialized, committed, or pushed.
 
+## Git custody
+
+The repository was placed under Git custody after Phase 1 validation. Initial commit `6e0c0046aef366115ec90caf394f5950f7f043bb` was pushed to `https://github.com/MulhamKassab/ScopeIs-team-management-system.git` on branch `main` on 2026-08-27. No deployment occurred.
+
 ## Implemented architecture
 
 Next.js App Router 16.3.3 with TypeScript strict mode implements the approved modular-monolith direction. UI and route handlers call server services; server authorization is centralized; repositories provide purpose-specific PostgreSQL access; Drizzle ORM is the sole schema/migration workflow. Zod validates environment and request boundaries. No browser has PostgreSQL credentials or direct database access.
