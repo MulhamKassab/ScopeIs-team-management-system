@@ -4,6 +4,9 @@ import { boolean, check, index, integer, jsonb, pgEnum, pgTable, text, timestamp
 export const systemRoleEnum = pgEnum("system_role", ["SUPER_ADMIN", "ADMIN", "EMPLOYEE"]);
 export const scopeTypeEnum = pgEnum("scope_type", ["TEAM", "CLIENT", "PROJECT", "LOCATION"]);
 export const authenticationModeEnum = pgEnum("authentication_mode", ["mock"]);
+export const evidenceReviewStateEnum = pgEnum("evidence_review_state", ["unreviewed", "reviewed", "verified"]);
+export const evidenceKindEnum = pgEnum("evidence_kind", ["certification", "cv", "portfolio", "project_example", "supporting_document"]);
+export const noteVisibilityEnum = pgEnum("note_visibility", ["private_to_author", "shared_upward"]);
 
 const timestamps = {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
@@ -67,6 +70,11 @@ export const notifications = pgTable("notifications", {
   archivedAt: timestamp("archived_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 }, (table) => [index("notifications_recipient_unread_idx").on(table.recipientUserId, table.readAt)]);
+
+export const designations = pgTable("designations", { id: uuid("id").defaultRandom().primaryKey(), name: text("name").notNull(), sortOrder: integer("sort_order").notNull().default(0), active: boolean("active").notNull().default(true), archivedAt: timestamp("archived_at", { withTimezone: true }), version: integer("version").notNull().default(1), ...timestamps }, (table) => [uniqueIndex("designations_name_unique").on(table.name)]);
+export const skills = pgTable("skills", { id: uuid("id").defaultRandom().primaryKey(), name: text("name").notNull(), active: boolean("active").notNull().default(true), archivedAt: timestamp("archived_at", { withTimezone: true }), version: integer("version").notNull().default(1), ...timestamps }, (table) => [uniqueIndex("skills_name_unique").on(table.name)]);
+export const arrangementLabels = pgTable("arrangement_labels", { id: uuid("id").defaultRandom().primaryKey(), name: text("name").notNull(), color: text("color").notNull(), sortOrder: integer("sort_order").notNull().default(0), active: boolean("active").notNull().default(true), archivedAt: timestamp("archived_at", { withTimezone: true }), version: integer("version").notNull().default(1), ...timestamps }, (table) => [uniqueIndex("arrangement_labels_name_unique").on(table.name)]);
+export const employeeProfiles = pgTable("employee_profiles", { userId: text("user_id").primaryKey().references(() => users.id), employeeCode: text("employee_code").notNull(), workEmail: text("work_email"), workPhone: text("work_phone"), professionalSummary: text("professional_summary"), designationId: uuid("designation_id").references(() => designations.id), team: text("team"), managerUserId: text("manager_user_id").references(() => users.id), defaultWorkLocation: text("default_work_location"), version: integer("version").notNull().default(1), ...timestamps }, (table) => [uniqueIndex("employee_profiles_employee_code_unique").on(table.employeeCode), index("employee_profiles_team_idx").on(table.team)]);
 
 export const userRelations = relations(users, ({ many }) => ({ sessions: many(sessions), scopeGrants: many(adminScopeGrants) }));
 export const sessionRelations = relations(sessions, ({ one }) => ({ user: one(users, { fields: [sessions.userId], references: [users.id] }) }));

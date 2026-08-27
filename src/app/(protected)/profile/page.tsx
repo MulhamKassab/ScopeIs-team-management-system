@@ -1,0 +1,4 @@
+import { redirect } from "next/navigation";
+import { getCurrentActor } from "@/modules/auth/session-service";
+export const dynamic = "force-dynamic";
+export default async function ProfilePage() { const actor = await getCurrentActor(); if (!actor) redirect("/login"); return <section className="phase-two-page"><p className="eyebrow">Phase 2 · My profile</p><h2>Professional profile and evidence</h2><p>Role, team, manager, designation, active status, scope, and protected home data are never self-service fields.</p><div className="phase-two-grid"><article><h3>Capabilities</h3><p>Maintain multiple skills with optional documented proficiency—there is no fixed scale.</p></article><article><h3>Private evidence</h3><p>Certifications, CVs, portfolio links, project examples, and supporting documents stay server-authorized.</p></article></div></section>; }

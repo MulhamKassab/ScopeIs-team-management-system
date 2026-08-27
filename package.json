@@ -22,8 +22,10 @@
     "db:migrate:test": "tsx --env-file=.env.test ./node_modules/drizzle-kit/bin.cjs migrate --config drizzle.test.config.ts",
     "db:validate": "tsx src/db/validate.ts",
     "audit:dependencies": "npm audit --omit=dev"
+    ,"validate:phase2-runbook": "node scripts/validate-phase2-runbook.mjs"
   },
   "dependencies": {
+    "@vercel/blob": "^2.3.0",
     "dotenv": "latest",
     "drizzle-orm": "latest",
     "next": "latest",

@@ -9,7 +9,7 @@
 - Application location: repository root
 - Starting branch / HEAD: not applicable; the supplied documentation-only directory is not a Git repository.
 - Initial worktree: documentation-only, no application package files, lockfile, environment files, or inherited changes.
-- Final worktree: Phase 1 Next.js application, database foundation, tests, local logo, and documentation. No Git repository was initialized, committed, or pushed.
+- Final worktree: Phase 1 Next.js application, database foundation, tests, local logo, and documentation. No Git repository was initialized, committed, or pushed during the initial Phase 1 implementation. Git custody was established afterward on 2026-08-27; see the Git custody section.
 
 ## Git custody
 

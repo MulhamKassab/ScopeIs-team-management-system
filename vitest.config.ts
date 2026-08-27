@@ -7,6 +7,9 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "node",
+    pool: "forks",
+    maxWorkers: 1,
+    fileParallelism: false,
     setupFiles: ["./test/setup.ts"],
     include: ["test/**/*.test.{ts,tsx}"],
   },

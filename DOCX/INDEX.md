@@ -38,6 +38,7 @@ This directory is the canonical documentation foundation for ScopeIs Team Manage
 - [`project-memory/SYSTEM_ARCHITECTURE_DECISIONS.md`](project-memory/SYSTEM_ARCHITECTURE_DECISIONS.md) - current recommended Phase 1 architecture; translates product rules into modular, server-side, database, transaction, adapter, testing, and deployment boundaries without finalizing providers.
 - [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) - phases 1-9 with entry/exit conditions and exclusions.
 - [`project-memory/UI_UX_FOUNDATION.md`](project-memory/UI_UX_FOUNDATION.md) - approved Phase 1 visual, responsive, accessibility, theme, and RTL foundation.
+- [`project-memory/PHASE_2_EMPLOYEE_DOMAIN_DECISIONS.md`](project-memory/PHASE_2_EMPLOYEE_DOMAIN_DECISIONS.md) - approved Phase 2 employee, capability, evidence, privacy, and production-operational boundaries.
 
 ## Implementation status
 
