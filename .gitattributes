@@ -1,0 +1,2 @@
+# Canonical Markdown uses two-space hard breaks and intentional terminal blank lines.
+DOCX/project-memory/*.md whitespace=-blank-at-eol,-blank-at-eof
