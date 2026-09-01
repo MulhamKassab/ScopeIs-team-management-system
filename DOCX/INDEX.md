@@ -42,7 +42,7 @@ This directory is the canonical documentation foundation for ScopeIs Team Manage
 
 ## Implementation status
 
-Historical reports remain immutable evidence and are not current roadmaps or tracker replacements. Phase 1's mock-account prototype foundation is verified only in its narrow scope; the Phase 2 database and core employee/catalogue service layers are verified backend foundations, including the R3 closure evidence in [`phase-reports/SCOPEIS_PHASE_2_CORE_SERVICE_INCIDENT_REMEDIATION_AND_VERIFICATION_CLOSURE_R3.md`](phase-reports/SCOPEIS_PHASE_2_CORE_SERVICE_INCIDENT_REMEDIATION_AND_VERIFICATION_CLOSURE_R3.md). No complete workforce-management journey is certified. The current next work is Phase 2 sub-phase 2.1 in the live tracker; no later journey, production authentication, production database state, or deployment is certified.
+Historical reports remain immutable evidence and are not current roadmaps or tracker replacements. Phase 1's mock-account prototype foundation is verified only in its narrow scope. Phase 2.1 is completed only as a committed, verified backend foundation; its custody-resolution evidence is [`phase-reports/SCOPEIS_PHASE_2_1_CUSTODY_RESOLUTION_VERIFIED_MAIN_CLOSURE_R1.md`](phase-reports/SCOPEIS_PHASE_2_1_CUSTODY_RESOLUTION_VERIFIED_MAIN_CLOSURE_R1.md). No complete workforce-management journey is certified: Phase 2 remains `PARTIAL`, and later Phase 2 sub-phases remain unstarted. No later journey, production authentication, production database state, or deployment is certified.
 
 ## Diagram catalog
 

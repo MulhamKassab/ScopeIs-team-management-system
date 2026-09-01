@@ -13,6 +13,8 @@
     "test:unit": "vitest run test/unit",
     "test:integration": "tsx --env-file=.env.test ./node_modules/vitest/vitest.mjs run test/integration",
     "test:component": "vitest run test/component",
+    "test:migration": "node scripts/run-phase2-migration-tests.mjs",
+    "test:phase2-core": "node scripts/run-phase2-core-service-tests.mjs",
     "test:e2e": "playwright test",
     "test": "npm run test:unit && npm run test:integration && npm run test:component",
     "test:all": "npm run lint && npm run typecheck && npm run test && npm run build && npm run test:e2e",
@@ -20,6 +22,14 @@
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "tsx src/db/seed/index.ts",
     "db:migrate:test": "tsx --env-file=.env.test ./node_modules/drizzle-kit/bin.cjs migrate --config drizzle.test.config.ts",
+    "db:migration:inspect": "node scripts/run-phase2-migration-command.mjs inspect",
+    "db:migration:reconcile": "node scripts/run-phase2-migration-command.mjs reconcile",
+    "db:migration:reconcile:apply": "node scripts/run-phase2-migration-command.mjs reconcile --apply",
+    "db:migration:validate": "node scripts/run-phase2-migration-command.mjs validate",
+    "db:migration:clean-install:validate": "node scripts/run-phase2-migration-tests.mjs -t \"clean normal migration\"",
+    "db:schema:export": "drizzle-kit export --config=drizzle.certification.config.ts",
+    "db:schema:drift": "node scripts/run-phase2-migration-tests.mjs -t \"detects migration\"",
+    "db:schema:runtime:validate": "node scripts/run-phase2-migration-tests.mjs -t \"uses all eight\"",
     "db:validate": "tsx src/db/validate.ts",
     "audit:dependencies": "npm audit --omit=dev"
     ,"validate:phase2-runbook": "node scripts/validate-phase2-runbook.mjs"

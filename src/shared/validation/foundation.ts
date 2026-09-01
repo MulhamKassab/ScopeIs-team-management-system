@@ -9,7 +9,7 @@ export const environmentSchema = z.object({
 });
 
 export const mockPersonaSelectionSchema = z.object({ personaId: z.string().min(3).max(80) });
-export const scopeReferenceSchema = z.object({ scopeRef: z.string().regex(/^[a-z]+:[a-z0-9-]+$/) });
+export const scopeReferenceSchema = z.object({ scopeRef: z.string().regex(/^(team|client|project|location):[a-z0-9-]+$/) });
 export const scopeGrantSchema = z.object({ type: z.enum(scopeTypes), reference: z.string().min(1).max(100) });
 export const roleSchema = z.enum(systemRoles);
 export const themeSchema = z.enum(["light", "dark", "system"]);

@@ -1,2 +1,5 @@
 # Canonical Markdown uses two-space hard breaks and intentional terminal blank lines.
 DOCX/project-memory/*.md whitespace=-blank-at-eol,-blank-at-eof
+DOCX/phase-reports/SCOPEIS_PHASE_2_1_PRESERVE_AND_RECONCILE_EXISTING_EMPLOYEE_BACKEND_R1.md whitespace=-trailing-space
+DOCX/phase-reports/SCOPEIS_PHASE_2_CORE_SERVICE_INCIDENT_REMEDIATION_AND_VERIFICATION_CLOSURE_R3.md whitespace=-trailing-space
+DOCX/phase-reports/evidence/SCOPEIS_R3_PERSISTENT_TEST_DB_INCIDENT_BACKUP.md whitespace=-trailing-space

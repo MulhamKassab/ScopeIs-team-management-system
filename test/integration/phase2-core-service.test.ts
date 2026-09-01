@@ -1,0 +1,126 @@
+import { randomUUID } from "node:crypto";
+import { and, eq } from "drizzle-orm";
+import { describe, expect, it } from "vitest";
+import { db } from "@/db/client";
+import { auditEvents, employeeProfiles, employeeSkills, users, adminScopeGrants, designations } from "@/db/schema";
+import { EmployeeCatalogueService, employeeCatalogueService, employeeProfileService, employeeSkillService } from "@/modules/employees/employee-services";
+import { designationRepository } from "@/modules/employees/employee-repositories";
+import type { EmployeeActor } from "@/modules/employees/contracts";
+
+type Fixture = ReturnType<typeof fixture>;
+function actor(id: string, role: EmployeeActor["role"], scopes: EmployeeActor["scopes"] = []): EmployeeActor {
+  return { id, role, scopes, displayName: id, sessionId: `session-${id}`, sessionVersion: 1, authenticationMode: "mock" };
+}
+function fixture() {
+  const suffix = randomUUID().replaceAll("-", "");
+  const ids = {
+    superAdmin: `sa-${suffix}`, adminAlpha: `admin-alpha-${suffix}`, adminBravo: `admin-bravo-${suffix}`,
+    employeeAlpha: `employee-alpha-${suffix}`, employeeBravo: `employee-bravo-${suffix}`, employeeExtra: `employee-extra-${suffix}`,
+  };
+  return {
+    ids,
+    superAdmin: actor(ids.superAdmin, "SUPER_ADMIN"),
+    adminAlpha: actor(ids.adminAlpha, "ADMIN", [{ type: "TEAM", reference: "team:alpha" }]),
+    adminBravo: actor(ids.adminBravo, "ADMIN", [{ type: "TEAM", reference: "team:bravo" }]),
+    employeeAlpha: actor(ids.employeeAlpha, "EMPLOYEE", [{ type: "TEAM", reference: "team:alpha" }]),
+    employeeBravo: actor(ids.employeeBravo, "EMPLOYEE", [{ type: "TEAM", reference: "team:bravo" }]),
+  };
+}
+async function seedProfiles(f: Fixture) {
+  await db.insert(users).values([
+    { id: f.ids.superAdmin, displayName: "Super Admin", role: "SUPER_ADMIN" }, { id: f.ids.adminAlpha, displayName: "Admin Alpha", role: "ADMIN" },
+    { id: f.ids.adminBravo, displayName: "Admin Bravo", role: "ADMIN" }, { id: f.ids.employeeAlpha, displayName: "Employee Alpha", role: "EMPLOYEE" },
+    { id: f.ids.employeeBravo, displayName: "Employee Bravo", role: "EMPLOYEE" }, { id: f.ids.employeeExtra, displayName: "Employee Extra", role: "EMPLOYEE" },
+  ]);
+  await db.insert(adminScopeGrants).values([
+    { userId: f.ids.adminAlpha, scopeType: "TEAM", scopeReference: "team:alpha" }, { userId: f.ids.adminBravo, scopeType: "TEAM", scopeReference: "team:bravo" },
+  ]);
+  await db.insert(employeeProfiles).values([
+    { userId: f.ids.employeeAlpha, employeeCode: `ALPHA-${f.ids.employeeAlpha}`, team: "team:alpha", workEmail: "alpha@example.test", workPhone: "100", professionalSummary: "Alpha capability", defaultWorkLocation: "Private work location" },
+    { userId: f.ids.employeeBravo, employeeCode: `BRAVO-${f.ids.employeeBravo}`, team: "team:bravo", workEmail: "bravo@example.test", workPhone: "200", professionalSummary: "Bravo capability", defaultWorkLocation: "Private work location" },
+  ]);
+}
+
+describe("Phase 2 core employee and catalogue services", () => {
+  it("enforces global catalogue ownership, normalized duplicates, archival, ordering, and audit", async () => {
+    const f = fixture(); await seedProfiles(f);
+    const designation = await employeeCatalogueService.createDesignation(f.superAdmin, { name: "  Site   Engineer  ", sortOrder: 2 });
+    const skill = await employeeCatalogueService.createSkill(f.superAdmin, { name: "Electrical Safety" });
+    const label = await employeeCatalogueService.createArrangementLabel(f.superAdmin, { name: "Weekend", color: "#123456", sortOrder: 5 });
+    expect(designation.name).toBe("Site Engineer"); expect(skill.active).toBe(true); expect(label.sortOrder).toBe(5);
+    await expect(employeeCatalogueService.createDesignation(f.superAdmin, { name: "site engineer" })).rejects.toMatchObject({ code: "DUPLICATE_NAME" });
+    await expect(employeeCatalogueService.createSkill(f.adminAlpha, { name: "Forbidden" })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(employeeCatalogueService.createArrangementLabel(f.employeeAlpha, { name: "Forbidden", color: "#000000" })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(employeeCatalogueService.createArrangementLabel(f.superAdmin, { name: "Bad colour", color: "red" })).rejects.toMatchObject({ code: "VALIDATION_ERROR" });
+    const renamed = await employeeCatalogueService.updateArrangementLabel(f.superAdmin, label.id, { expectedVersion: label.version, name: "Weekend rotation", color: "#abcdef", sortOrder: 1 });
+    expect(renamed.version).toBe(2);
+    const archived = await employeeCatalogueService.setDesignationActive(f.superAdmin, designation.id, designation.version, false);
+    expect(archived.active).toBe(false); expect(archived.archivedAt).toBeInstanceOf(Date);
+    expect(await employeeCatalogueService.listDesignations(f.employeeAlpha, { includeArchived: true })).toMatchObject({ total: 0 });
+    const audits = await db.select().from(auditEvents).where(and(eq(auditEvents.actorUserId, f.superAdmin.id), eq(auditEvents.targetType, "arrangement_label")));
+    expect(audits.some((event) => event.action === "arrangement_label.updated")).toBe(true);
+  });
+
+  it("enforces profile role/scope isolation, safe projections, self-field boundary, and audit", async () => {
+    const f = fixture(); await seedProfiles(f);
+    const alphaAdminView = await employeeProfileService.getProfile(f.adminAlpha, f.ids.employeeAlpha);
+    expect(alphaAdminView).not.toHaveProperty("workEmail"); expect(alphaAdminView).not.toHaveProperty("defaultWorkLocation");
+    await expect(employeeProfileService.getProfile(f.adminBravo, f.ids.employeeAlpha)).rejects.toMatchObject({ code: "OUT_OF_SCOPE", status: 404 });
+    await expect(employeeProfileService.getProfile(f.employeeBravo, f.ids.employeeAlpha)).rejects.toMatchObject({ code: "FORBIDDEN" });
+    const own = await employeeProfileService.getOwnProfile(f.employeeAlpha);
+    expect(own).toHaveProperty("workEmail", "alpha@example.test");
+    const updated = await employeeProfileService.updateOwnProfile(f.employeeAlpha, f.ids.employeeAlpha, { expectedVersion: own.version, workPhone: "101" });
+    expect(updated.workPhone).toBe("101");
+    await expect(employeeProfileService.updateOwnProfile(f.employeeAlpha, f.ids.employeeAlpha, { expectedVersion: updated.version, team: "team:bravo" } as never)).rejects.toMatchObject({ code: "VALIDATION_ERROR" });
+    await expect(employeeProfileService.updateManagementProfile(f.adminAlpha, f.ids.employeeAlpha, { expectedVersion: updated.version, team: "team:bravo" })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    const events = await db.select().from(auditEvents).where(and(eq(auditEvents.actorUserId, f.ids.employeeAlpha), eq(auditEvents.targetId, f.ids.employeeAlpha)));
+    expect(events.some((event) => event.action === "employee_profile.self_updated" && !JSON.stringify(event.metadata).includes("101"))).toBe(true);
+  });
+
+  it("creates valid internal profiles, protects manager graphs and stale writes, and preserves deactivation history", async () => {
+    const f = fixture(); await seedProfiles(f);
+    const designation = await employeeCatalogueService.createDesignation(f.superAdmin, { name: `Planner ${f.ids.superAdmin}` });
+    const extra = await employeeProfileService.createProfile(f.superAdmin, { userId: f.ids.employeeExtra, employeeCode: "EXTRA-1", designationId: designation.id, team: "team:alpha" });
+    const alpha = await employeeProfileService.getOwnProfile(f.employeeAlpha);
+    const alphaManaged = await employeeProfileService.updateManagementProfile(f.superAdmin, f.ids.employeeAlpha, { expectedVersion: alpha.version, managerUserId: f.ids.employeeExtra });
+    await expect(employeeProfileService.updateManagementProfile(f.superAdmin, f.ids.employeeExtra, { expectedVersion: extra.version, managerUserId: f.ids.employeeAlpha })).rejects.toMatchObject({ code: "INVALID_MANAGER" });
+    await expect(employeeProfileService.updateManagementProfile(f.superAdmin, f.ids.employeeAlpha, { expectedVersion: alpha.version, team: "team:bravo" })).rejects.toMatchObject({ code: "STALE_VERSION" });
+    const deactivated = await employeeProfileService.setEmployeeActive(f.superAdmin, f.ids.employeeAlpha, alphaManaged.version, false);
+    expect(deactivated.version).toBe(alphaManaged.version + 1);
+    const [user] = await db.select().from(users).where(eq(users.id, f.ids.employeeAlpha)); expect(user?.active).toBe(false);
+    expect(await db.select().from(auditEvents).where(eq(auditEvents.targetId, f.ids.employeeAlpha))).toEqual(expect.arrayContaining([expect.objectContaining({ action: "employee_profile.deactivated" })]));
+  });
+
+  it("enforces employee-skill scope, duplicate/reference rules, optional proficiency, archive safety, and audit", async () => {
+    const f = fixture(); await seedProfiles(f);
+    const skill = await employeeCatalogueService.createSkill(f.superAdmin, { name: `First Aid ${f.ids.superAdmin}` });
+    const association = await employeeSkillService.add(f.superAdmin, { employeeUserId: f.ids.employeeAlpha, skillId: skill.id, proficiencyDescription: null, experienceDescription: null, coverageEligible: true });
+    expect(association.proficiencyDescription).toBeNull();
+    const adminRows = await employeeSkillService.listForEmployee(f.adminAlpha, f.ids.employeeAlpha); expect(adminRows).toHaveLength(1);
+    const adminSkillMembers = await employeeSkillService.listEmployeesForSkill(f.adminAlpha, skill.id);
+    expect(adminSkillMembers[0]?.profile).not.toHaveProperty("defaultWorkLocation");
+    expect(adminSkillMembers[0]?.profile).not.toHaveProperty("workEmail");
+    expect(adminSkillMembers[0]?.profile).not.toHaveProperty("workPhone");
+    await expect(employeeSkillService.listForEmployee(f.adminBravo, f.ids.employeeAlpha)).rejects.toMatchObject({ code: "OUT_OF_SCOPE" });
+    await expect(employeeSkillService.add(f.adminAlpha, { employeeUserId: f.ids.employeeAlpha, skillId: skill.id })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(employeeSkillService.add(f.employeeAlpha, { employeeUserId: f.ids.employeeAlpha, skillId: skill.id })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(employeeSkillService.add(f.superAdmin, { employeeUserId: f.ids.employeeAlpha, skillId: skill.id })).rejects.toMatchObject({ code: "INVALID_SKILL_ASSOCIATION" });
+    const updated = await employeeSkillService.update(f.superAdmin, association.id, { expectedVersion: association.version, notes: "Reviewed capability", verified: true });
+    expect(updated.verified).toBe(true);
+    const archived = await employeeSkillService.setArchived(f.superAdmin, association.id, updated.version, true); expect(archived.archivedAt).toBeInstanceOf(Date);
+    expect(await employeeSkillService.listForEmployee(f.employeeAlpha, f.ids.employeeAlpha)).toHaveLength(0);
+    expect(await db.select().from(auditEvents).where(eq(auditEvents.targetId, association.id))).toEqual(expect.arrayContaining([expect.objectContaining({ action: "employee_skill.archived" })]));
+  });
+
+  it("rolls back business state when audit persistence fails and repository pagination remains deterministic", async () => {
+    const f = fixture(); await seedProfiles(f);
+    const failingAudit = new EmployeeCatalogueService(async () => { throw new Error("forced audit failure"); });
+    const name = `Rollback designation ${f.ids.superAdmin}`;
+    await expect(failingAudit.createDesignation(f.superAdmin, { name })).rejects.toThrow("forced audit failure");
+    expect(await db.select().from(designations).where(eq(designations.name, name))).toHaveLength(0);
+    await employeeCatalogueService.createDesignation(f.superAdmin, { name: `Find A ${f.ids.superAdmin}`, sortOrder: 2 });
+    await employeeCatalogueService.createDesignation(f.superAdmin, { name: `Find B ${f.ids.superAdmin}`, sortOrder: 1 });
+    const page = await designationRepository.list(db, { query: `Find`, page: 1, pageSize: 1 });
+    expect(page).toMatchObject({ total: 2, page: 1, pageSize: 1 }); expect(page.items[0]?.name).toContain("Find B");
+  });
+});

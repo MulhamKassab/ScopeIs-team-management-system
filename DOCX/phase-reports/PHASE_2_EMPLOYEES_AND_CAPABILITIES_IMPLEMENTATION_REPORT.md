@@ -4,6 +4,8 @@
 
 **PARTIAL** — local implementation foundations and clean SQL execution were validated. Production migration, deployment, commit, and push were intentionally not performed under the local-completion instruction.
 
+**Superseded database note (2026-08-29):** the migration/schema/ledger mismatch identified after this report is resolved and certified in [`SCOPEIS_PHASE_2_DATABASE_FOUNDATION_RECONCILIATION_R1.md`](SCOPEIS_PHASE_2_DATABASE_FOUNDATION_RECONCILIATION_R1.md). This historical report remains `PARTIAL`; employee application workflows are still incomplete.
+
 ## Production safety
 
 The initial Neon bootstrap is permitted only after read-only proof that the configured application database is empty. The Phase 1 foundation migration must run first, followed by the reviewed additive Phase 2 migration. Production is never seeded or used for tests. Neon Free-plan recovery limitations require an explicit backup/recovery policy before real personnel or evidence data is entered.
