@@ -21,6 +21,21 @@ export const paginationSchema = z.object({
   includeArchived: z.boolean().optional().default(false),
 });
 
+const directoryQueryText = z.string().trim().max(80).optional().transform((value) => value || undefined);
+const directoryTeam = z.string().trim().min(1).max(120).regex(/^[a-zA-Z0-9:_ -]+$/).optional();
+export const employeeDirectoryQuerySchema = z.object({
+  query: directoryQueryText,
+  designationId: z.string().uuid().optional(),
+  team: directoryTeam,
+  active: z.boolean().optional(),
+}).strict();
+export const employeeDirectorySearchParamsSchema = z.object({
+  query: directoryQueryText,
+  designation: z.string().uuid().optional(),
+  team: directoryTeam,
+  status: z.enum(["active", "inactive"]).optional(),
+}).strict();
+
 export const catalogueCreateSchema = z.object({ name: nonBlank, sortOrder: z.number().int().optional().default(0) }).strict();
 export const catalogueUpdateSchema = z.object({ name: nonBlank.optional(), sortOrder: z.number().int().optional(), expectedVersion: version }).strict()
   .refine((value) => value.name !== undefined || value.sortOrder !== undefined, "At least one field is required");

@@ -13,11 +13,28 @@ describe("EmployeeDirectory", () => {
     expect(screen.getByText("Avery Morgan")).toBeInTheDocument();
     expect(screen.getByText("EMP-001")).toBeInTheDocument();
     expect(screen.getByText("Alpha")).toBeInTheDocument();
-    expect(screen.getByText("Active")).toBeInTheDocument();
+    expect(screen.getByRole("cell", { name: "Active" })).toBeInTheDocument();
   });
 
   it("renders a clear safe empty state", () => {
     render(<EmployeeDirectory profiles={[]} />);
     expect(screen.getByRole("status")).toHaveTextContent("No employee records are available");
+  });
+
+  it("renders accessible active filters and a distinct no-results state", () => {
+    render(<EmployeeDirectory profiles={[]} filters={{ query: "Avery", status: "active" }} filterOptions={{
+      teams: ["team:alpha"], designations: [{ id: "844f52b6-2baf-4d9f-a8cf-3fbbd4f3e1ef", name: "Field Engineer" }],
+    }} />);
+    expect(screen.getByRole("searchbox", { name: "Search employees" })).toHaveValue("Avery");
+    expect(screen.getByRole("combobox", { name: "Designation" })).toHaveTextContent("Field Engineer");
+    expect(screen.getByText("2 active filters")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Clear filters" })).toHaveAttribute("href", "/employees");
+    expect(screen.getByRole("heading", { name: "No matching employees" })).toBeInTheDocument();
+  });
+
+  it("fails invalid parameters closed without rendering records", () => {
+    render(<EmployeeDirectory profiles={[]} invalidQuery />);
+    expect(screen.getByRole("alert")).toHaveTextContent("could not be applied");
+    expect(screen.getByRole("heading", { name: "No matching employees" })).toBeInTheDocument();
   });
 });

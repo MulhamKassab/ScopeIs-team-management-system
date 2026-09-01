@@ -4,7 +4,7 @@ import { db } from "@/db/client";
 import {
   arrangementLabels, designations, employeeEvidence, employeeProfiles, employeeSkills, skills, users,
 } from "@/db/schema";
-import type { PaginationInput } from "@/modules/employees/contracts";
+import type { EmployeeDirectoryQuery, PaginationInput } from "@/modules/employees/contracts";
 import { normalizeCatalogueName, normalizeIdentifier, parseOrDomainError, paginationSchema } from "@/modules/employees/employee-validation";
 
 export type DatabaseTransaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
@@ -116,15 +116,28 @@ export const employeeProfileRepository = {
   async findByNormalizedEmployeeCode(executor: DatabaseExecutor, employeeCode: string) {
     const [row] = await executor.select().from(employeeProfiles).where(sql`lower(trim(${employeeProfiles.employeeCode})) = ${normalizeIdentifier(employeeCode)}`).limit(1); return row ?? null;
   },
-  async list(executor: DatabaseExecutor, input: PaginationInput & { teams?: string[] }) {
+  async list(executor: DatabaseExecutor, input: PaginationInput & EmployeeDirectoryQuery & { teams?: string[] }) {
     const parsed = pageInput(input); const conditions = [];
     if (parsed.query) conditions.push(or(ilike(employeeProfiles.employeeCode, `%${parsed.query}%`), ilike(users.displayName, `%${parsed.query}%`)));
+    if (input.designationId) conditions.push(eq(employeeProfiles.designationId, input.designationId));
+    if (input.team) conditions.push(eq(employeeProfiles.team, input.team));
+    if (input.active !== undefined) conditions.push(eq(users.active, input.active));
     if (input.teams) { if (input.teams.length === 0) return { items: [], total: 0, page: parsed.page, pageSize: parsed.pageSize }; conditions.push(inArray(employeeProfiles.team, input.teams)); }
     const where = conditions.length ? and(...conditions) : undefined;
     const [totalRecord] = await executor.select({ value: count() }).from(employeeProfiles).innerJoin(users, eq(employeeProfiles.userId, users.id)).where(where);
     const rows = await executor.select({ profile: employeeProfiles, user: users }).from(employeeProfiles).innerJoin(users, eq(employeeProfiles.userId, users.id)).where(where)
       .orderBy(asc(users.displayName), asc(employeeProfiles.userId)).limit(parsed.pageSize).offset((parsed.page - 1) * parsed.pageSize);
     return { items: rows.map((row) => ({ ...row.profile, user: row.user })), total: Number(totalRecord?.value ?? 0), page: parsed.page, pageSize: parsed.pageSize };
+  },
+  async listDirectoryFilterOptions(executor: DatabaseExecutor, input: { teams?: string[] }) {
+    if (input.teams?.length === 0) return { teams: [], designations: [] };
+    const where = input.teams ? inArray(employeeProfiles.team, input.teams) : undefined;
+    const rows = await executor.select({ team: employeeProfiles.team, designationId: designations.id, designationName: designations.name })
+      .from(employeeProfiles).leftJoin(designations, eq(employeeProfiles.designationId, designations.id)).where(where)
+      .orderBy(asc(employeeProfiles.team), asc(designations.name), asc(designations.id));
+    const teams = [...new Set(rows.flatMap((row) => row.team ? [row.team] : []))];
+    const designationsById = new Map(rows.flatMap((row) => row.designationId && row.designationName ? [[row.designationId, row.designationName] as const] : []));
+    return { teams, designations: [...designationsById].map(([id, name]) => ({ id, name })) };
   },
   async create(executor: DatabaseExecutor, input: typeof employeeProfiles.$inferInsert) { const [row] = await executor.insert(employeeProfiles).values(input).returning(); return row!; },
   async update(executor: DatabaseExecutor, userId: string, expectedVersion: number, input: Partial<typeof employeeProfiles.$inferInsert>) {

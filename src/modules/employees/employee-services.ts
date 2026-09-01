@@ -4,13 +4,13 @@ import { db } from "@/db/client";
 import { writeAuditEvent } from "@/modules/audit/audit-service";
 import type {
   ArrangementLabelCreateInput, ArrangementLabelUpdateInput, AuditChangeMetadata, CatalogueCreateInput,
-  CatalogueUpdateInput, CreateEmployeeProfileInput, EmployeeActor, EmployeeSkillCreateInput, EmployeeSkillUpdateInput,
+  CatalogueUpdateInput, CreateEmployeeProfileInput, EmployeeActor, EmployeeDirectoryFilterOptions, EmployeeDirectoryQuery, EmployeeSkillCreateInput, EmployeeSkillUpdateInput,
   ManagementProfileUpdateInput, Page, PaginationInput, SelfProfileUpdateInput, SkillCreateInput, SkillUpdateInput,
 } from "@/modules/employees/contracts";
 import { EmployeeDomainError } from "@/modules/employees/domain-error";
 import {
   arrangementCreateSchema, arrangementUpdateSchema, catalogueCreateSchema, catalogueUpdateSchema, createEmployeeProfileSchema,
-  employeeSkillCreateSchema, employeeSkillUpdateSchema, managementProfileUpdateSchema, normalizeCatalogueName, skillCreateSchema, skillUpdateSchema,
+  employeeDirectoryQuerySchema, employeeSkillCreateSchema, employeeSkillUpdateSchema, managementProfileUpdateSchema, normalizeCatalogueName, skillCreateSchema, skillUpdateSchema,
   normalizeIdentifier, parseOrDomainError, selfProfileUpdateSchema,
 } from "@/modules/employees/employee-validation";
 import { canReadEmployee, requireEmployeeRead, requireOwnEditableProfile, requireSuperAdmin } from "@/modules/employees/employee-policy";
@@ -171,9 +171,15 @@ export class EmployeeProfileService {
   }
 
   /** Management directory reads are distinct from an Employee's future own-profile journey. */
-  async listDirectoryProfiles(actor: EmployeeActor): Promise<Page<EmployeeProfileView>> {
+  async listDirectoryProfiles(actor: EmployeeActor, input: EmployeeDirectoryQuery = {}): Promise<Page<EmployeeProfileView>> {
     if (actor.role === "EMPLOYEE") throw new EmployeeDomainError("FORBIDDEN");
-    return this.listProfiles(actor, { page: 1, pageSize: 100 });
+    const parsed = parseOrDomainError(employeeDirectoryQuerySchema, input);
+    return this.listProfiles(actor, { ...parsed, page: 1, pageSize: 100 });
+  }
+
+  async listDirectoryFilterOptions(actor: EmployeeActor): Promise<EmployeeDirectoryFilterOptions> {
+    if (actor.role === "EMPLOYEE") throw new EmployeeDomainError("FORBIDDEN");
+    return employeeProfileRepository.listDirectoryFilterOptions(db, { teams: actor.role === "ADMIN" ? actorTeamScopes(actor) : undefined });
   }
 
   async createProfile(actor: EmployeeActor, input: CreateEmployeeProfileInput) {

@@ -4,6 +4,9 @@ export type EmployeeActor = AuthenticatedActor;
 
 export type PaginationInput = { page?: number; pageSize?: number; query?: string; includeArchived?: boolean };
 export type Page<T> = { items: T[]; total: number; page: number; pageSize: number };
+export type EmployeeDirectoryQuery = { query?: string; designationId?: string; team?: string; active?: boolean };
+export type EmployeeDirectorySearchFilters = { query?: string; designationId?: string; team?: string; status?: "active" | "inactive" };
+export type EmployeeDirectoryFilterOptions = { teams: string[]; designations: { id: string; name: string }[] };
 
 export type CatalogueCreateInput = { name: string; sortOrder?: number };
 export type CatalogueUpdateInput = { name?: string; sortOrder?: number; expectedVersion: number };

@@ -95,6 +95,31 @@ describe("Phase 2 core employee and catalogue services", () => {
     await expect(employeeProfileService.listDirectoryProfiles(f.employeeAlpha)).rejects.toMatchObject({ code: "FORBIDDEN" });
   });
 
+  it("searches and filters directory records by approved fields without widening Admin scope", async () => {
+    const f = fixture(); await seedProfiles(f);
+    const designation = await employeeCatalogueService.createDesignation(f.superAdmin, { name: `Field Engineer ${f.ids.superAdmin}` });
+    await db.update(employeeProfiles).set({ designationId: designation.id }).where(eq(employeeProfiles.userId, f.ids.employeeAlpha));
+    await db.update(users).set({ active: false }).where(eq(users.id, f.ids.employeeBravo));
+    const nameSearch = await employeeProfileService.listDirectoryProfiles(f.superAdmin, { query: "Employee Alpha" });
+    expect(nameSearch.items.map((profile) => profile.userId)).toContain(f.ids.employeeAlpha);
+    const codeSearch = await employeeProfileService.listDirectoryProfiles(f.superAdmin, { query: `ALPHA-${f.ids.employeeAlpha}` });
+    expect(codeSearch.items.map((profile) => profile.userId)).toContain(f.ids.employeeAlpha);
+    const combined = await employeeProfileService.listDirectoryProfiles(f.superAdmin, { designationId: designation.id, team: "team:alpha", active: true });
+    expect(combined.items.map((profile) => profile.userId)).toContain(f.ids.employeeAlpha);
+    expect(combined.items.every((profile) => profile.team === "team:alpha" && profile.user.active)).toBe(true);
+    const adversarialAdmin = await employeeProfileService.listDirectoryProfiles(f.adminAlpha, { query: "Employee Bravo", team: "team:bravo", active: false });
+    expect(adversarialAdmin.items).toEqual([]);
+    const scopedOptions = await employeeProfileService.listDirectoryFilterOptions(f.adminAlpha);
+    expect(scopedOptions.teams).toEqual(["team:alpha"]);
+    expect(scopedOptions.designations).toEqual(expect.arrayContaining([expect.objectContaining({ id: designation.id })]));
+    const alpha = await employeeProfileService.listDirectoryProfiles(f.adminAlpha, { team: "team:alpha" });
+    expect(alpha.items.every((profile) => profile.team === "team:alpha")).toBe(true);
+    expect(alpha.items[0]).not.toHaveProperty("defaultWorkLocation");
+    expect(alpha.items[0]).not.toHaveProperty("workEmail");
+    expect(alpha.items[0]).not.toHaveProperty("workPhone");
+    await expect(employeeProfileService.listDirectoryProfiles(f.superAdmin, { query: "x".repeat(81) })).rejects.toMatchObject({ code: "VALIDATION_ERROR" });
+  });
+
   it("creates valid internal profiles, protects manager graphs and stale writes, and preserves deactivation history", async () => {
     const f = fixture(); await seedProfiles(f);
     const designation = await employeeCatalogueService.createDesignation(f.superAdmin, { name: `Planner ${f.ids.superAdmin}` });
