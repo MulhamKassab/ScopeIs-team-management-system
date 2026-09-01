@@ -16,7 +16,7 @@ Technical implementation direction is recorded separately in [`SYSTEM_ARCHITECTU
 - Assignment/request discussions are private to requester and assignee(s).
 - Certification/portfolio updates save immediately and notify Super Admin; review/verification is optional, not a required approval gate.
 - Version 1 uses mock test accounts with no real passwords documented.
-- The Ticket System is a Phase 9 feature, not the workforce-system foundation.
+- The Ticket System is a Phase 12 feature, not the workforce-system foundation.
 
 ## Explicit constraints
 
@@ -71,7 +71,7 @@ Every item below is **not finalized**. The safe documentation default prevents a
 | Travel-time estimates | Schedule feasibility | Not required until confirmed |
 | External notification channels | Identity, delivery, cost | In-application notification centre only |
 | Final authentication provider | Enterprise identity and migration | Mock accounts only in version 1 |
-| Ticket migration strategy | Reuse, data migration, risk | Inspect and select candidates in Phase 9 |
+| Ticket migration strategy | Reuse, data migration, risk | Inspect and select candidates in Phase 12 |
 | Repository strategy | Ownership and long-term architecture | Keep new workforce project independent; later decision may absorb selected code |
 | Warning severity by conflict | Whether users may proceed | Identify confirmed conflicts; final blocker/warning/info policies later |
 | Leave cancellation rules | Schedule/coverage reversals | Pending cancellation when permitted; exact cutoff unresolved |

@@ -20,7 +20,7 @@ System access roles are independent of job designations. An Account Manager or S
 
 The product manages planned work and availability. It is not initially a full HR, payroll, attendance, accounting, GPS, recruitment, or performance system. The map uses stored home/location data and published schedule data for a selected date; it never represents live movement.
 
-The existing Ticket System remains separate until Phase 9. A ticket describes work needed; an assignment identifies who, where, and when; a schedule represents planned time; a work log records work performed.
+The existing Ticket System remains separate until Phase 12. A ticket describes work needed; an assignment identifies who, where, and when; a schedule represents planned time; a work log records work performed.
 
 ## Key confirmed decisions
 
@@ -33,7 +33,7 @@ The existing Ticket System remains separate until Phase 9. A ticket describes wo
 7. Employee-management notes follow private-to-author or shared-upward hierarchy.
 8. Assignment/request discussions are private to requester and assignee(s).
 9. Version 1 uses mock accounts without real passwords in documentation.
-10. Ticket integration is the ninth and final major roadmap phase.
+10. Ticket integration is the twelfth major roadmap phase and remains late.
 
 ## Non-goals
 
@@ -41,5 +41,4 @@ Live GPS, movement history, payroll, salary, accounting, biometric attendance, a
 
 ## Current project stage
 
-Foundation and documentation only. No frontend, database, API, package installation, external-service connection, or Ticket System modification is authorized.
-
+The former module-first roadmap is superseded by the journey-first roadmap. Phase 0 discovery and technical direction are `COMPLETED`. Phase 1 is `COMPLETED_IN_NARROW_FOUNDATION_SCOPE`: mock authentication, server sessions, protected shell/navigation, role and initial scope enforcement, PostgreSQL/migration foundation, audit persistence, and disposable PostgreSQL QA are complete, but no workforce-management journey is complete. Existing employee profile, catalogue, and employee-skill backend services are verified and preserved; the employee-management area is approximately 25–35% complete. Phase 2 — Employee management journey is `NEXT`. Later journey phases remain unimplemented or shell-only, and Ticket System modification remains excluded until Phase 12.

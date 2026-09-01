@@ -105,7 +105,6 @@
 2. The ticket may initiate a separate assignment request.
 3. An approved schedule assignment identifies who, where, and when.
 4. Work logs record actual work; ticket and assignment remain linked but maintain independent states.
-5. This workflow is implemented only in Phase 9.
+5. This workflow is implemented only in Phase 12.
 
 ![Future Ticket System integration](../diagrams/09_ticket_system_later_integration.png)
-

@@ -123,15 +123,14 @@
 
 ## Future Ticket System
 
-- **TKT-001:** Ticket integration must occur only in Phase 9 after the workforce modules are stable.
+- **TKT-001:** Ticket integration must occur only in Phase 12 after the workforce modules are stable.
 - **TKT-002:** The existing Ticket System must not be cloned, modified, or used as the new system foundation during the documentation phase.
 - **TKT-003:** A future ticket may link to Client, Project, Location, requester, assignee(s), required skills, due date, schedule assignment, work logs, and attachments.
 - **TKT-004:** Ticket status, assignment status, schedule state, and work-log completion must remain distinct.
-- **TKT-005:** Phase 9 must inspect reusable candidates and preserve the workforce system's roles, scopes, privacy, storage choices, and domain boundaries.
+- **TKT-005:** Phase 12 must inspect reusable candidates and preserve the workforce system's roles, scopes, privacy, storage choices, and domain boundaries.
 
 ## Dependencies and acceptance focus
 
 Roles/audit enable every later module. Employee capabilities precede client staffing and coverage. Clients/projects/locations precede schedule assignment. Published schedules precede the static map. Scheduling and leave precede robust coverage/replacement. Notification and communication events depend on stable source workflows. Ticket integration depends on all workforce phases.
 
 Acceptance testing must include the seven operational scenarios in `WORKFLOWS.md`, negative permission tests, out-of-scope access tests, draft/publication visibility tests, privacy tests, audit/notification checks, and proof that no map path consumes live location data.
-

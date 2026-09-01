@@ -2,9 +2,11 @@
 
 ## Status
 
-**CURRENT RECOMMENDED ARCHITECTURE FOR PHASE 1**
+**APPROVED PHASE 1 ARCHITECTURE — IMPLEMENTED AND CERTIFIED FOR THE MOCK-ACCOUNT PROTOTYPE**
 
-This file records the approved technical direction for planning and starting Phase 1. It does not claim that application implementation has begun, that the architecture has been production-tested, or that any provider or package version has been selected. Exact versions, providers, hosting platforms, schema details, and unresolved product policies require implementation-time validation.
+This file records the approved technical direction that governed Phase 1. Its earlier statement that implementation had not begun is historical and superseded by the 2026-08-29 Phase 1 certification report. The architecture is certified only for the local mock-account prototype; it has not been production-tested, and production identity, deployment, database, and provider readiness remain outside that certification.
+
+The Phase 2 database foundation was reconciled on 2026-08-29. The TypeScript Drizzle schema is the authoritative runtime model; committed SQL migrations are immutable transitions; `_journal.json` defines ordering; and database adoption is permitted only after exact schema and installed-format ledger verification. Migration `0001` remains byte-for-byte unchanged. State E drift is fail-closed and never repaired automatically.
 
 The confirmed product requirements and permissions remain authoritative. Read this file with:
 
@@ -38,7 +40,7 @@ Architecture must implement, not reinterpret, these canonical product decisions:
 - Assignment/request discussions remain participant-only.
 - The static map remains non-live and introduces no GPS or movement tracking.
 - Replacement ranking remains advisory; Super Admin retains final authority.
-- Ticket System integration remains the bounded Phase 9 feature, not the product foundation.
+- Ticket System integration remains the bounded Phase 12 feature, not the product foundation.
 
 ## Current technology direction
 
@@ -59,7 +61,7 @@ Architecture must implement, not reinterpret, these canonical product decisions:
 | Testing | Vitest, React Testing Library, and Playwright |
 | Dedicated backend | Not initially |
 | Background worker | Add only when a real workload requires it |
-| Ticket System | Phase 9 bounded feature |
+| Ticket System | Phase 12 bounded feature |
 
 This table is a technical direction, not an instruction to install packages during the documentation phase. No package versions are pinned here.
 
@@ -111,7 +113,7 @@ src/
 │   ├── notifications/
 │   ├── audit/
 │   ├── reports/
-│   └── tickets/             # Phase 9 only
+│   └── tickets/             # Phase 12 only
 ├── server/
 │   ├── authorization/
 │   ├── services/
@@ -186,7 +188,7 @@ The future Ticket System's historical JSON model must not control the new workfo
 
 ## Drizzle and migration workflow
 
-Drizzle ORM is the current recommendation because it works naturally with TypeScript, stays close to SQL, supports version-controlled migrations, permits PostgreSQL-specific features, and gives sufficient control over constraints and indexes. It may also align with selected Phase 9 reuse after review.
+Drizzle ORM is the current recommendation because it works naturally with TypeScript, stays close to SQL, supports version-controlled migrations, permits PostgreSQL-specific features, and gives sufficient control over constraints and indexes. It may also align with selected Phase 12 reuse after review.
 
 Prisma would be technically viable, but mixing multiple ORMs is not recommended. Phase 1 must select one authoritative schema and migration workflow. Raw, reviewed SQL migrations may be used when a PostgreSQL feature cannot be represented cleanly by the selected ORM.
 
@@ -467,7 +469,7 @@ Negative permission tests are mandatory. A hidden interface control is not suffi
 
 ## Ticket System boundary
 
-The existing Ticket System is not the architectural foundation and must not be inspected or modified during this amendment. Ticket functionality is introduced only in Phase 9 after Phases 1–8 are stable.
+The existing Ticket System is not the architectural foundation and must not be inspected or modified during this amendment. Ticket functionality is introduced only in Phase 12 after Phases 1–11 are stable.
 
 Selected ticket functionality may later use the workforce system's PostgreSQL, authorization, audit, file-storage, and notification foundations after review. Workforce roles and scopes remain authoritative. Ticket, Assignment, Schedule, Project, Client, and Work Log remain distinct. Ticket-specific storage or permission restrictions are not imported automatically.
 
@@ -489,7 +491,7 @@ Selected ticket functionality may later use the workforce system's PostgreSQL, a
 | ADR-012 | UTC instants and explicit business timezone/date handling | Current recommendation |
 | ADR-013 | Optimistic concurrency for critical records | Current recommendation |
 | ADR-014 | Dedicated workers/services only when justified | Current recommendation |
-| ADR-015 | Ticket System remains Phase 9 | Confirmed constraint |
+| ADR-015 | Ticket System remains Phase 12 | Confirmed constraint |
 
 ## Decision records
 
@@ -619,10 +621,10 @@ Selected ticket functionality may later use the workforce system's PostgreSQL, a
 - **Alternatives considered:** Queue and workers from Phase 1.
 - **Reconsider when:** Scheduled, heavy, high-volume, persistent, or independently scaled processing appears.
 
-### ADR-015 — Ticket System remains Phase 9
+### ADR-015 — Ticket System remains Phase 12
 
 - **Context:** Existing ticket functionality may contain reuse candidates but is not the workforce foundation.
-- **Decision:** Inspect and integrate selected ticket capabilities only after Phases 1–8 are stable.
+- **Decision:** Inspect and integrate selected ticket capabilities only after Phases 1–11 are stable.
 - **Reason:** Workforce roles, scopes, domains, storage, and privacy must remain authoritative.
 - **Consequences:** Ticket, Assignment, Schedule, Project, Client, and Work Log remain distinct.
 - **Alternatives considered:** Starting from or immediately merging the Ticket System.
@@ -648,7 +650,7 @@ The following are not finalized and do not block creation of this architecture m
 - Exact encryption approach for sensitive fields
 - Exact backup and recovery policy
 - Exact external-job or queue provider if later needed
-- Repository strategy for Phase 9 Ticket integration
+- Repository strategy for Phase 12 Ticket integration
 - Exact package versions at implementation time
 
 Product-policy decisions—including address precision, Admin scope dimensions, work patterns, leave calendars, certification verification, warning severities, note-edit rights, and travel-time policy—remain governed by [`DECISIONS_AND_CONSTRAINTS.md`](DECISIONS_AND_CONSTRAINTS.md).
@@ -678,6 +680,6 @@ Before Phase 1 architecture is considered established, implementation evidence m
 - Optimistic-concurrency handling for selected critical records
 - Provider adapters for identity, storage, and map boundaries
 - Unit, integration, component, end-to-end, and negative-permission test foundations
-- No dependency on Ticket functionality before Phase 9
+- No dependency on Ticket functionality before Phase 12
 
 These checks describe future implementation acceptance. They do not claim that implementation has occurred.

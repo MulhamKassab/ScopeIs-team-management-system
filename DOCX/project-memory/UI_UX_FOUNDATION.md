@@ -12,7 +12,7 @@ Primary brand color is ScopeIs blue `#163B99`; ScopeIs orange `#F26608` is a spa
 
 ## Shell and navigation
 
-Desktop uses a collapsible left application sidebar, persistent top header, full-width work area, local collapse preference, notification shortcut, theme control, persona/role display, logout, and a persistent Mock authentication marker. The sidebar preserves room for later schedule and map workspaces. A disabled `Ticket System — Phase 9` entry is deliberately non-functional.
+Desktop uses a collapsible left application sidebar, persistent top header, full-width work area, local collapse preference, notification shortcut, theme control, persona/role display, logout, and a persistent Mock authentication marker. The sidebar preserves room for later schedule and map workspaces. A disabled `Ticket System — Phase 12` entry is deliberately non-functional.
 
 Mobile uses a compact header plus bottom navigation of four role-specific primary destinations and `More`. The drawer exposes every remaining authorized destination; it is not a reduced-function mobile demo. Narrow layouts use full-width content and 44px-or-larger touch targets.
 
@@ -32,4 +32,4 @@ English is the Phase 1 interface language. The root supports `dir=ltr` and `dir=
 
 ## Deferred design decisions
 
-Detailed information architecture for employee data, schedule board density, map interactions, leave/coverage/replacement workflows, reporting visualizations, full notification centre behavior, content localization, and the final component library remain later-phase work. Their implementation must continue to follow the confirmed role, scope, privacy, and Phase 9 Ticket System boundaries.
+Detailed information architecture for employee data, schedule board density, map interactions, leave/coverage/replacement workflows, reporting visualizations, full notification centre behavior, content localization, and the final component library remain later-phase work. Their implementation must continue to follow the confirmed role, scope, privacy, and Phase 12 Ticket System boundaries.

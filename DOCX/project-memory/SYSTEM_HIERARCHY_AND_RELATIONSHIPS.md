@@ -66,7 +66,6 @@ The map combines stored employee home location/area, stored client/project locat
 
 ## Future Ticket System boundary
 
-A future Ticket can relate to Client, Project, Location, requester, assignee(s), required skills, due date, schedule assignment, work logs, and attachments. Ticket status, assignment status, schedule state, and work-log completion remain distinct. Selected ticket capabilities may be migrated in Phase 9 only after the workforce domain and permissions are stable.
+A future Ticket can relate to Client, Project, Location, requester, assignee(s), required skills, due date, schedule assignment, work logs, and attachments. Ticket status, assignment status, schedule state, and work-log completion remain distinct. Selected ticket capabilities may be migrated in Phase 12 only after the workforce domain and permissions are stable.
 
 ![Future Ticket System boundary](../diagrams/09_ticket_system_later_integration.png)
-
