@@ -12,6 +12,9 @@ export function normalizeIdentifier(value: string) {
 const nonBlank = z.string().transform((value) => value.trim()).refine((value) => value.length > 0, "Required");
 const nullableText = z.string().transform((value) => value.trim()).nullable().optional();
 const nullableOptionalText = nullableText.transform((value) => value === "" ? null : value);
+const nullableBoundedText = (maximum: number) => z.string().trim().max(maximum).nullable().optional().transform((value) => value === "" ? null : value);
+const nullableBoundedEmail = z.string().trim().email().max(254).nullable().optional().transform((value) => value === "" ? null : value);
+const nullableTeam = z.string().trim().max(120).regex(/^team:[a-z0-9][a-z0-9:_-]{0,118}$/i).nullable().optional().transform((value) => value === "" ? null : value);
 const version = z.number().int().positive();
 const optionalText = (maximum: number) => z.string().optional().transform((value) => value?.trim() || undefined).pipe(z.string().max(maximum).optional());
 const optionalEmail = z.string().optional().transform((value) => value?.trim() || undefined).pipe(z.string().email("Enter a valid work email address.").max(254, "Work email must be 254 characters or fewer.").optional());
@@ -70,8 +73,18 @@ export const managementProfileUpdateSchema = createEmployeeProfileSchema.omit({ 
   employeeCode: nonBlank.optional(), expectedVersion: version,
 }).strict().refine((value) => Object.keys(value).some((key) => key !== "expectedVersion"), "At least one field is required");
 export const selfProfileUpdateSchema = z.object({
-  workEmail: z.string().email().nullable().optional(), workPhone: nullableOptionalText, professionalSummary: nullableOptionalText, expectedVersion: version,
+  workEmail: nullableBoundedEmail, workPhone: nullableBoundedText(40), professionalSummary: nullableBoundedText(2_000), expectedVersion: version,
 }).strict().refine((value) => value.workEmail !== undefined || value.workPhone !== undefined || value.professionalSummary !== undefined, "At least one field is required");
+export const managementBasicProfileUpdateSchema = z.object({
+  displayName: createEmployeeSchema.shape.displayName.optional(), employeeCode: createEmployeeSchema.shape.employeeCode.optional(),
+  workEmail: nullableBoundedEmail, workPhone: nullableBoundedText(40), professionalSummary: nullableBoundedText(2_000), expectedVersion: version,
+}).strict().refine((value) => Object.keys(value).some((key) => key !== "expectedVersion"), "At least one field is required");
+export const employeeManagementAssignmentSchema = z.object({
+  designationId: z.string().uuid().nullable().optional(), managerUserId: z.string().min(1).max(160).nullable().optional(),
+  team: nullableTeam, workingPattern: nullableBoundedText(120), expectedVersion: version,
+}).strict().refine((value) => Object.keys(value).some((key) => key !== "expectedVersion"), "At least one field is required");
+export const employeeRoleUpdateSchema = z.object({ role: z.enum(["SUPER_ADMIN", "ADMIN", "EMPLOYEE"]), expectedVersion: version }).strict();
+export const adminScopeGrantSchema = z.object({ adminUserId: z.string().min(1).max(160), team: z.string().trim().regex(/^team:[a-z0-9][a-z0-9:_-]{0,118}$/i), expectedVersion: version.optional() }).strict();
 
 export const employeeSkillCreateSchema = z.object({
   employeeUserId: nonBlank, skillId: nonBlank, proficiencyDescription: nullableOptionalText, experienceDescription: nullableOptionalText,

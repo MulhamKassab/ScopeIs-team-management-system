@@ -55,7 +55,7 @@ export function EmployeeDirectory({ profiles, filters = {}, filterOptions = { te
             <tbody>
               {profiles.map((profile) => (
                 <tr key={profile.userId}>
-                  <th scope="row">{profile.user.displayName}</th>
+                  <th scope="row"><Link href={`/employees/${profile.userId}`}>{profile.user.displayName}</Link></th>
                   <td data-label="Employee code">{profile.employeeCode}</td>
                   <td data-label="Team">{displayTeam(profile.team)}</td>
                   <td data-label="Status"><span className={`directory-status ${profile.user.active ? "active" : "inactive"}`}>{profile.user.active ? "Active" : "Inactive"}</span></td>

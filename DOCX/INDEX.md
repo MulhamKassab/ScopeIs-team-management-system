@@ -2,7 +2,7 @@
 
 ## Purpose and status
 
-This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is `COMPLETED` only in its narrow foundation scope; existing employee backend work is preserved but approximately 25–35% complete and does not form a usable workforce journey. Phase 2 — Employee management journey is `PARTIAL` and current.
+This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is `COMPLETED` only in its narrow foundation scope; Phase 2 — Employee management journey is `COMPLETED` (11/11) in its documented bounded scope. Phase 3 remains `NOT_STARTED`.
 
 ## Reader path
 
@@ -42,7 +42,7 @@ This directory is the canonical documentation foundation for ScopeIs Team Manage
 
 ## Implementation status
 
-Historical reports remain immutable evidence and are not current roadmaps or tracker replacements. Phase 1's mock-account prototype foundation is verified only in its narrow scope. Phase 2.1 is completed as a committed, verified backend foundation; Phase 2.2 is completed as a scoped, read-only real employee directory; Phase 2.3 is completed as server-side directory search/filtering; and Phase 2.4 is completed as Super Admin-only workforce-record creation. The earlier automatic `.env.production` build load remains documented, and its safe-build remediation verifies an isolated temporary copy with no `.env*` files. See [`phase-reports/SCOPEIS_PHASE_2_4_CREATE_EMPLOYEE_R1.md`](phase-reports/SCOPEIS_PHASE_2_4_CREATE_EMPLOYEE_R1.md). No complete workforce-management journey is certified: Phase 2 remains `PARTIAL` (4/11), and all later employee journeys remain unstarted. No later journey, production authentication, production database state, or deployment is certified.
+Historical reports remain immutable evidence and are not current roadmaps or tracker replacements. Phase 2.1–2.11 are completed as the bounded employee-management journey: trusted backend, scoped directory/search/details, Super Admin creation/management, explicit Admin TEAM scope, and an exact three-field self-service profile. The completion evidence is [`phase-reports/SCOPEIS_PHASE_2_EMPLOYEE_MANAGEMENT_JOURNEY_COMPLETION_R1.md`](phase-reports/SCOPEIS_PHASE_2_EMPLOYEE_MANAGEMENT_JOURNEY_COMPLETION_R1.md). The prior automatic `.env.production` build load remains documented as remediated; Phase 2 verification uses an isolated temporary copy with no `.env*` files. Phase 3 and all later journeys remain unstarted; no production authentication, database state, or deployment is certified.
 
 ## Diagram catalog
 

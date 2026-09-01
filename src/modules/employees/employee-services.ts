@@ -5,18 +5,18 @@ import { db } from "@/db/client";
 import { writeAuditEvent } from "@/modules/audit/audit-service";
 import type {
   ArrangementLabelCreateInput, ArrangementLabelUpdateInput, AuditChangeMetadata, CatalogueCreateInput,
-  CatalogueUpdateInput, CreateEmployeeInput, CreateEmployeeProfileInput, EmployeeActor, EmployeeDirectoryFilterOptions, EmployeeDirectoryQuery, EmployeeSkillCreateInput, EmployeeSkillUpdateInput,
+  AdminScopeGrantInput, CatalogueUpdateInput, CreateEmployeeInput, CreateEmployeeProfileInput, EmployeeActor, EmployeeDirectoryFilterOptions, EmployeeDirectoryQuery, EmployeeManagementAssignmentInput, EmployeeRoleUpdateInput, EmployeeSkillCreateInput, EmployeeSkillUpdateInput, ManagementBasicProfileUpdateInput,
   ManagementProfileUpdateInput, Page, PaginationInput, SelfProfileUpdateInput, SkillCreateInput, SkillUpdateInput,
 } from "@/modules/employees/contracts";
 import { EmployeeDomainError } from "@/modules/employees/domain-error";
 import {
-  arrangementCreateSchema, arrangementUpdateSchema, catalogueCreateSchema, catalogueUpdateSchema, createEmployeeSchema, createEmployeeProfileSchema,
+  adminScopeGrantSchema, arrangementCreateSchema, arrangementUpdateSchema, catalogueCreateSchema, catalogueUpdateSchema, createEmployeeSchema, createEmployeeProfileSchema, employeeManagementAssignmentSchema, employeeRoleUpdateSchema, managementBasicProfileUpdateSchema,
   employeeDirectoryQuerySchema, employeeSkillCreateSchema, employeeSkillUpdateSchema, managementProfileUpdateSchema, normalizeCatalogueName, skillCreateSchema, skillUpdateSchema,
   normalizeIdentifier, parseOrDomainError, selfProfileUpdateSchema,
 } from "@/modules/employees/employee-validation";
 import { canReadEmployee, requireEmployeeRead, requireOwnEditableProfile, requireSuperAdmin } from "@/modules/employees/employee-policy";
 import {
-  arrangementLabelRepository, type DatabaseExecutor, type DatabaseTransaction, designationRepository, employeeProfileRepository,
+  adminScopeGrantRepository, arrangementLabelRepository, type DatabaseExecutor, type DatabaseTransaction, designationRepository, employeeProfileRepository,
   employeeSkillRepository, skillRepository, type ProfileWithUser,
 } from "@/modules/employees/employee-repositories";
 
@@ -40,6 +40,11 @@ export type ScopedEmployeeProfileView = Pick<ProfileWithUser, "userId" | "employ
 };
 export type OwnEmployeeProfileView = ProfileWithUser;
 export type EmployeeProfileView = SuperAdminProfileView | ScopedEmployeeProfileView | OwnEmployeeProfileView;
+export type ManagementEmployeeDetail = {
+  userId: string; employeeCode: string; team: string | null; designationId: string | null; designationName: string | null; managerUserId: string | null; managerName: string | null; workingPattern: string | null; version: number;
+  user: { displayName: string; role: ProfileWithUser["user"]["role"]; active: boolean };
+  workEmail?: string | null; workPhone?: string | null; professionalSummary?: string | null; defaultWorkLocation?: string | null;
+};
 
 function scopedProjection(profile: ProfileWithUser): ScopedEmployeeProfileView {
   return {
@@ -140,8 +145,8 @@ export class EmployeeProfileService {
   private async assertValidManager(tx: DatabaseTransaction, userId: string, managerUserId: string | null | undefined) {
     if (managerUserId === null || managerUserId === undefined) return;
     if (managerUserId === userId) throw new EmployeeDomainError("INVALID_MANAGER");
-    const manager = await employeeProfileRepository.findUser(tx, managerUserId);
-    if (!manager?.active) throw new EmployeeDomainError("INVALID_MANAGER");
+    const manager = await employeeProfileRepository.getByUserId(tx, managerUserId);
+    if (!manager?.user.active) throw new EmployeeDomainError("INVALID_MANAGER");
     const chain = await employeeProfileRepository.managerChain(tx, managerUserId);
     if (chain.hasExistingCycle || chain.chain.includes(userId)) throw new EmployeeDomainError("INVALID_MANAGER");
   }
@@ -159,7 +164,32 @@ export class EmployeeProfileService {
     return profileProjection(actor, profile);
   }
 
-  getOwnProfile(actor: EmployeeActor) { return this.getProfile(actor, actor.id); }
+  async getOwnProfile(actor: EmployeeActor): Promise<OwnEmployeeProfileView> {
+    const profile = await employeeProfileRepository.getByUserId(db, actor.id);
+    if (!profile) throw new EmployeeDomainError("NOT_FOUND");
+    requireEmployeeRead(actor, { userId: profile.userId, team: profile.team, role: profile.user.role });
+    return profile;
+  }
+
+  /** Management detail deliberately keeps the Admin projection narrower than Super Admin's. */
+  async getManagementDetail(actor: EmployeeActor, userId: string): Promise<ManagementEmployeeDetail> {
+    if (actor.role === "EMPLOYEE") throw new EmployeeDomainError("FORBIDDEN");
+    if (!/^[A-Za-z0-9_-]{1,160}$/.test(userId)) throw new EmployeeDomainError("NOT_FOUND");
+    const profile = await employeeProfileRepository.getByUserId(db, userId);
+    if (!profile) throw new EmployeeDomainError("NOT_FOUND");
+    requireEmployeeRead(actor, { userId: profile.userId, team: profile.team, role: profile.user.role });
+    const [designation, manager] = await Promise.all([
+      profile.designationId ? designationRepository.getById(db, profile.designationId) : null,
+      profile.managerUserId ? employeeProfileRepository.findUser(db, profile.managerUserId) : null,
+    ]);
+    const base = {
+      userId: profile.userId, employeeCode: profile.employeeCode, team: profile.team, designationId: profile.designationId,
+      designationName: designation?.name ?? null, managerUserId: profile.managerUserId, managerName: manager?.displayName ?? null, workingPattern: profile.workingPattern, version: profile.version,
+      user: { displayName: profile.user.displayName, role: profile.user.role, active: profile.user.active },
+    };
+    if (actor.role === "ADMIN") return base;
+    return { ...base, workEmail: profile.workEmail, workPhone: profile.workPhone, professionalSummary: profile.professionalSummary, defaultWorkLocation: profile.defaultWorkLocation };
+  }
 
   async listProfiles(actor: EmployeeActor, input: PaginationInput = {}): Promise<Page<EmployeeProfileView>> {
     if (actor.role === "SUPER_ADMIN") return employeeProfileRepository.list(db, input);
@@ -238,6 +268,85 @@ export class EmployeeProfileService {
     });
   }
 
+  async updateBasicProfile(actor: EmployeeActor, userId: string, input: ManagementBasicProfileUpdateInput) {
+    requireSuperAdmin(actor); const parsed = parseOrDomainError(managementBasicProfileUpdateSchema, input);
+    return db.transaction(async (tx) => {
+      const current = await employeeProfileRepository.getByUserId(tx, userId); if (!current) throw new EmployeeDomainError("NOT_FOUND");
+      if (current.version !== parsed.expectedVersion) throw new EmployeeDomainError("STALE_VERSION");
+      if (parsed.employeeCode && normalizeIdentifier(parsed.employeeCode) !== normalizeIdentifier(current.employeeCode)) {
+        await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${`employee-code:${normalizeIdentifier(parsed.employeeCode)}`}))`);
+        const duplicate = await employeeProfileRepository.findByNormalizedEmployeeCode(tx, parsed.employeeCode); if (duplicate && duplicate.userId !== userId) throw new EmployeeDomainError("CONFLICT");
+      }
+      const { expectedVersion, displayName, ...profileUpdate } = parsed;
+      if (displayName !== undefined) await employeeProfileRepository.updateUser(tx, userId, { displayName });
+      const profile = await employeeProfileRepository.update(tx, userId, expectedVersion, { ...profileUpdate, ...(profileUpdate.employeeCode ? { employeeCode: profileUpdate.employeeCode.trim().replace(/\s+/g, " ") } : {}) });
+      if (!profile) throw new EmployeeDomainError("STALE_VERSION");
+      await this.audit(tx, actor, "employee_profile.management_updated", userId, { fields: changedFields(parsed), version: expectedVersion + 1 }); return profile;
+    });
+  }
+
+  /** Keeps role, reporting relationships, team and descriptive working pattern as separate governed fields. */
+  async updateManagementAssignments(actor: EmployeeActor, userId: string, input: EmployeeManagementAssignmentInput) {
+    requireSuperAdmin(actor); const parsed = parseOrDomainError(employeeManagementAssignmentSchema, input);
+    return db.transaction(async (tx) => {
+      const current = await employeeProfileRepository.getByUserId(tx, userId); if (!current) throw new EmployeeDomainError("NOT_FOUND");
+      if (current.version !== parsed.expectedVersion) throw new EmployeeDomainError("STALE_VERSION");
+      await this.assertActiveDesignation(tx, parsed.designationId); await this.assertValidManager(tx, userId, parsed.managerUserId);
+      const { expectedVersion, ...update } = parsed;
+      const profile = await employeeProfileRepository.update(tx, userId, expectedVersion, update);
+      if (!profile) throw new EmployeeDomainError("STALE_VERSION");
+      await this.audit(tx, actor, "employee_profile.assignments_updated", userId, { fields: changedFields(update), version: expectedVersion + 1 });
+      return profile;
+    });
+  }
+
+  async updateEmployeeRole(actor: EmployeeActor, userId: string, input: EmployeeRoleUpdateInput) {
+    requireSuperAdmin(actor); const parsed = parseOrDomainError(employeeRoleUpdateSchema, input);
+    return db.transaction(async (tx) => {
+      const current = await employeeProfileRepository.getByUserId(tx, userId); if (!current) throw new EmployeeDomainError("NOT_FOUND");
+      if (current.version !== parsed.expectedVersion) throw new EmployeeDomainError("STALE_VERSION");
+      if (actor.id === userId) throw new EmployeeDomainError("CONFLICT");
+      if (current.user.role === "SUPER_ADMIN" && current.user.active && parsed.role !== "SUPER_ADMIN" && await employeeProfileRepository.activeSuperAdminCount(tx) <= 1) throw new EmployeeDomainError("CONFLICT");
+      const profile = await employeeProfileRepository.update(tx, userId, parsed.expectedVersion, {}); if (!profile) throw new EmployeeDomainError("STALE_VERSION");
+      if (current.user.role !== parsed.role) { await employeeProfileRepository.updateUser(tx, userId, { role: parsed.role }); await employeeProfileRepository.revokeSessions(tx, userId); }
+      await this.audit(tx, actor, "employee_profile.role_updated", userId, { role: parsed.role, version: parsed.expectedVersion + 1 });
+      return profile;
+    });
+  }
+
+  async listManagementFormOptions(actor: EmployeeActor, userId: string) {
+    requireSuperAdmin(actor);
+    const [designations, managers, scopes] = await Promise.all([
+      designationRepository.list(db, { page: 1, pageSize: 100 }), employeeProfileRepository.listManagementCandidates(db, userId), adminScopeGrantRepository.listForUser(db, userId),
+    ]);
+    return { designations: designations.items.filter((designation) => designation.active), managers: managers.filter((manager) => manager.active), scopes };
+  }
+
+  async grantAdminTeamScope(actor: EmployeeActor, input: AdminScopeGrantInput) {
+    requireSuperAdmin(actor); const parsed = parseOrDomainError(adminScopeGrantSchema, input);
+    return db.transaction(async (tx) => {
+      const target = await employeeProfileRepository.findUser(tx, parsed.adminUserId); if (!target || target.role !== "ADMIN" || !target.active) throw new EmployeeDomainError("INVALID_EMPLOYEE");
+      const existing = await adminScopeGrantRepository.get(tx, parsed.adminUserId, parsed.team);
+      if (existing?.active) throw new EmployeeDomainError("CONFLICT");
+      const grant = existing ? await adminScopeGrantRepository.reactivate(tx, existing.id, parsed.expectedVersion ?? existing.version) : await adminScopeGrantRepository.create(tx, parsed.adminUserId, parsed.team);
+      if (!grant) throw new EmployeeDomainError("STALE_VERSION");
+      await this.audit(tx, actor, "admin_scope_grant.granted", parsed.adminUserId, { scope: parsed.team, version: grant.version }); return grant;
+    });
+  }
+
+  async revokeAdminTeamScope(actor: EmployeeActor, grantId: string, expectedVersion: number) {
+    requireSuperAdmin(actor);
+    return db.transaction(async (tx) => {
+      const grants = await tx.execute(sql`select id, user_id, scope_type, scope_reference, active, version from admin_scope_grants where id=${grantId} for update`);
+      const grant = grants.rows[0] as { id: string; user_id: string; scope_type: string; scope_reference: string; active: boolean; version: number } | undefined;
+      if (!grant || grant.scope_type !== "TEAM") throw new EmployeeDomainError("NOT_FOUND");
+      if (!grant.active) throw new EmployeeDomainError("CONFLICT");
+      if (grant.version !== expectedVersion) throw new EmployeeDomainError("STALE_VERSION");
+      const revoked = await adminScopeGrantRepository.revoke(tx, grant.id, expectedVersion); if (!revoked) throw new EmployeeDomainError("STALE_VERSION");
+      await this.audit(tx, actor, "admin_scope_grant.revoked", grant.user_id, { scope: grant.scope_reference, version: revoked.version }); return revoked;
+    });
+  }
+
   async updateOwnProfile(actor: EmployeeActor, userId: string, input: SelfProfileUpdateInput) {
     requireOwnEditableProfile(actor, userId); const parsed = parseOrDomainError(selfProfileUpdateSchema, input);
     return db.transaction(async (tx) => {
@@ -256,9 +365,12 @@ export class EmployeeProfileService {
     return db.transaction(async (tx) => {
       const current = await employeeProfileRepository.getByUserId(tx, userId); if (!current) throw new EmployeeDomainError("NOT_FOUND");
       if (current.version !== expectedVersion) throw new EmployeeDomainError("STALE_VERSION");
+      if (actor.id === userId) throw new EmployeeDomainError("CONFLICT");
+      if (!active && current.user.role === "SUPER_ADMIN" && await employeeProfileRepository.activeSuperAdminCount(tx) <= 1) throw new EmployeeDomainError("CONFLICT");
       const profile = await employeeProfileRepository.update(tx, userId, expectedVersion, {});
       if (!profile) throw new EmployeeDomainError("STALE_VERSION");
       await employeeProfileRepository.setUserActive(tx, userId, active);
+      if (!active) await employeeProfileRepository.revokeSessions(tx, userId);
       await this.audit(tx, actor, `employee_profile.${active ? "reactivated" : "deactivated"}`, userId, { active, version: expectedVersion + 1 });
       return profile;
     });

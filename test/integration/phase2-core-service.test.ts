@@ -95,6 +95,17 @@ describe("Phase 2 core employee and catalogue services", () => {
     await expect(employeeProfileService.listDirectoryProfiles(f.employeeAlpha)).rejects.toMatchObject({ code: "FORBIDDEN" });
   });
 
+  it("returns non-enumerating scoped details with the correct privacy projection", async () => {
+    const f = fixture(); await seedProfiles(f);
+    const superDetail = await employeeProfileService.getManagementDetail(f.superAdmin, f.ids.employeeAlpha);
+    expect(superDetail.workEmail).toBe("alpha@example.test"); expect(superDetail.defaultWorkLocation).toBe("Private work location");
+    const adminDetail = await employeeProfileService.getManagementDetail(f.adminAlpha, f.ids.employeeAlpha);
+    expect(adminDetail).not.toHaveProperty("workEmail"); expect(adminDetail).not.toHaveProperty("workPhone"); expect(adminDetail).not.toHaveProperty("defaultWorkLocation");
+    await expect(employeeProfileService.getManagementDetail(f.adminBravo, f.ids.employeeAlpha)).rejects.toMatchObject({ code: "OUT_OF_SCOPE", status: 404 });
+    await expect(employeeProfileService.getManagementDetail(f.employeeAlpha, f.ids.employeeAlpha)).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(employeeProfileService.getManagementDetail(f.superAdmin, "not/a-valid-id")).rejects.toMatchObject({ code: "NOT_FOUND" });
+  });
+
   it("searches and filters directory records by approved fields without widening Admin scope", async () => {
     const f = fixture(); await seedProfiles(f);
     const designation = await employeeCatalogueService.createDesignation(f.superAdmin, { name: `Field Engineer ${f.ids.superAdmin}` });
@@ -159,6 +170,42 @@ describe("Phase 2 core employee and catalogue services", () => {
     await expect(failingAudit.createEmployee(f.superAdmin, { displayName: rollbackName, employeeCode: `ROLLBACK-${f.ids.superAdmin}` })).rejects.toThrow("forced employee audit failure");
     expect(await db.select().from(users).where(eq(users.displayName, rollbackName))).toEqual([]);
     expect(await db.select().from(employeeProfiles).where(eq(employeeProfiles.employeeCode, `ROLLBACK-${f.ids.superAdmin}`))).toEqual([]);
+  });
+
+  it("governs lifecycle, assignments, roles, explicit Admin TEAM scopes, concurrency, and audit rollback", async () => {
+    const f = fixture(); await seedProfiles(f);
+    const designation = await employeeCatalogueService.createDesignation(f.superAdmin, { name: `Journey designation ${f.ids.superAdmin}` });
+    const alpha = await employeeProfileService.getOwnProfile(f.employeeAlpha);
+    const assigned = await employeeProfileService.updateManagementAssignments(f.superAdmin, f.ids.employeeAlpha, {
+      expectedVersion: alpha.version, designationId: designation.id, managerUserId: f.ids.employeeBravo, team: "team:alpha", workingPattern: "Hybrid weekdays",
+    });
+    expect(assigned.workingPattern).toBe("Hybrid weekdays");
+    await expect(employeeProfileService.updateManagementAssignments(f.superAdmin, f.ids.employeeBravo, { expectedVersion: 1, managerUserId: f.ids.employeeAlpha })).rejects.toMatchObject({ code: "INVALID_MANAGER" });
+    await expect(employeeProfileService.updateManagementAssignments(f.adminAlpha, f.ids.employeeAlpha, { expectedVersion: assigned.version, team: "team:bravo" })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    const renamed = await employeeProfileService.updateBasicProfile(f.superAdmin, f.ids.employeeAlpha, { expectedVersion: assigned.version, displayName: "Renamed Alpha", employeeCode: `RENAMED-${f.ids.employeeAlpha}`, workEmail: "changed@example.test" });
+    expect(renamed.employeeCode).toContain("RENAMED-");
+    await expect(employeeProfileService.updateBasicProfile(f.superAdmin, f.ids.employeeAlpha, { expectedVersion: assigned.version, displayName: "Stale" })).rejects.toMatchObject({ code: "STALE_VERSION" });
+    await expect(employeeProfileService.updateBasicProfile(f.superAdmin, f.ids.employeeBravo, { expectedVersion: 1, employeeCode: renamed.employeeCode })).rejects.toMatchObject({ code: "CONFLICT" });
+    await db.insert(sessions).values({ userId: f.ids.employeeAlpha, tokenHash: `session-${f.ids.employeeAlpha}`, sessionVersion: 1, expiresAt: new Date(Date.now() + 60_000) });
+    const deactivated = await employeeProfileService.setEmployeeActive(f.superAdmin, f.ids.employeeAlpha, renamed.version, false);
+    expect(deactivated.version).toBe(renamed.version + 1);
+    expect((await db.select().from(sessions).where(eq(sessions.userId, f.ids.employeeAlpha)))[0]?.revokedAt).toBeInstanceOf(Date);
+    await expect(employeeProfileService.setEmployeeActive(f.superAdmin, f.ids.superAdmin, 1, false)).rejects.toMatchObject({ code: "NOT_FOUND" });
+    const reactivated = await employeeProfileService.setEmployeeActive(f.superAdmin, f.ids.employeeAlpha, deactivated.version, true);
+    const roleChanged = await employeeProfileService.updateEmployeeRole(f.superAdmin, f.ids.employeeAlpha, { expectedVersion: reactivated.version, role: "ADMIN" });
+    expect(roleChanged.version).toBe(reactivated.version + 1);
+    expect((await employeeProfileService.listDirectoryProfiles(actor(f.ids.employeeAlpha, "ADMIN"))).items).toEqual([]);
+    const grant = await employeeProfileService.grantAdminTeamScope(f.superAdmin, { adminUserId: f.ids.employeeAlpha, team: "team:alpha" });
+    const scopedActor = actor(f.ids.employeeAlpha, "ADMIN", [{ type: "TEAM", reference: "team:alpha" }]);
+    expect((await employeeProfileService.listDirectoryProfiles(scopedActor)).items.map((item) => item.userId)).toContain(f.ids.employeeAlpha);
+    await employeeProfileService.revokeAdminTeamScope(f.superAdmin, grant.id, grant.version);
+    await expect(employeeProfileService.grantAdminTeamScope(f.superAdmin, { adminUserId: f.ids.employeeAlpha, team: "team:alpha" })).resolves.toBeTruthy();
+    const rollback = new EmployeeProfileService(async () => { throw new Error("forced management audit failure"); });
+    const before = await employeeProfileService.getProfile(f.superAdmin, f.ids.employeeBravo);
+    await expect(rollback.updateBasicProfile(f.superAdmin, f.ids.employeeBravo, { expectedVersion: before.version, displayName: "Never persisted" })).rejects.toThrow("forced management audit failure");
+    expect((await employeeProfileService.getProfile(f.superAdmin, f.ids.employeeBravo)).user.displayName).toBe("Employee Bravo");
+    const audits = await db.select().from(auditEvents).where(eq(auditEvents.targetId, f.ids.employeeAlpha));
+    expect(JSON.stringify(audits.map((event) => event.metadata))).not.toContain("changed@example.test");
   });
 
   it("enforces employee-skill scope, duplicate/reference rules, optional proficiency, archive safety, and audit", async () => {

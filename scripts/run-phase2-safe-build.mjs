@@ -2,11 +2,14 @@ import { spawn } from "node:child_process";
 import { cp, lstat, mkdir, mkdtemp, readdir, rm, symlink } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { basename, join } from "node:path";
-import { loadPhase1TestConfiguration, repositoryRoot } from "./phase1-test-environment.mjs";
+import { assertPhase1TestDatabaseSafety, loadPhase1TestConfiguration, repositoryRoot } from "./phase1-test-environment.mjs";
 
 const COPY_ALLOWLIST = ["src", "public", "next.config.ts", "tsconfig.json", "next-env.d.ts", "package.json", "package-lock.json"];
 const EXCLUDED_NAMES = new Set([".git", ".next", "coverage", "test-results", "playwright-report", "logs", "backups"]);
 const SAFE_BUILD_DATABASE_URL = "postgresql://scopeis_safe_build@127.0.0.1:1/scopeis_phase2_safe_build_test";
+const serveIndex = process.argv.indexOf("--serve-port");
+const servePort = serveIndex >= 0 ? Number(process.argv[serveIndex + 1]) : null;
+if (serveIndex >= 0 && (!Number.isInteger(servePort) || servePort < 1024 || servePort > 65_535)) throw new Error("Safe build server mode requires a valid loopback port.");
 
 function excluded(name) { return name.startsWith(".env") || EXCLUDED_NAMES.has(name); }
 
@@ -45,7 +48,7 @@ function safeBuildEnvironment(configuration) {
   return {
     ...inherited,
     APP_ENV: "test",
-    DATABASE_URL: SAFE_BUILD_DATABASE_URL,
+    DATABASE_URL: servePort !== null ? configuration.databaseUrl : SAFE_BUILD_DATABASE_URL,
     MOCK_AUTH_ENABLED: "true",
     NEXT_TELEMETRY_DISABLED: "1",
     NODE_ENV: "production",
@@ -66,6 +69,7 @@ async function run(command, args, temporaryApplication, environment) {
 }
 
 const configuration = await loadPhase1TestConfiguration();
+if (servePort !== null) await assertPhase1TestDatabaseSafety(configuration);
 const temporaryApplication = await mkdtemp(join(tmpdir(), "scopeis-phase2-safe-build-"));
 let exitCode = 1;
 try {
@@ -79,6 +83,10 @@ try {
   else {
     process.stdout.write("Phase 2 isolated typecheck passed.\n");
     exitCode = await run(process.execPath, [join(repositoryRoot, "node_modules", "next", "dist", "bin", "next"), "build", "--webpack"], temporaryApplication, environment);
+    if (exitCode === 0 && servePort !== null) {
+      const server = spawn(process.execPath, [join(repositoryRoot, "node_modules", "next", "dist", "bin", "next"), "start", "--hostname", "127.0.0.1", "--port", String(servePort)], { cwd: temporaryApplication, env: environment, stdio: "inherit" });
+      exitCode = await new Promise((resolve, reject) => { server.once("error", reject); server.once("exit", (code) => resolve(code ?? 1)); });
+    }
   }
 } finally {
   await rm(temporaryApplication, { recursive: true, force: true });

@@ -8,7 +8,7 @@ The tracker uses only: `NOT_STARTED`, `READY`, `IN_PROGRESS`, `PARTIAL`, `BLOCKE
 
 **Completion rule:** backend-only work and UI shells are not completed user journeys. A phase is complete only after all applicable delivery gates and its end-to-end journey are verified.
 
-Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
+Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [Phase 2 journey completion], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
 
 [roadmap]: IMPLEMENTATION_ROADMAP.md
 [context]: ../../PROJECT_CONTEXT.md
@@ -21,6 +21,7 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 [Phase 2.3 search]: ../phase-reports/SCOPEIS_PHASE_2_3_EMPLOYEE_SEARCH_AND_FILTERS_R1.md
 [Phase 2.4 blocked]: ../phase-reports/SCOPEIS_PHASE_2_4_CREATE_EMPLOYEE_R1.md
 [Phase 2.4 closure]: ../phase-reports/SCOPEIS_PHASE_2_4_CREATE_EMPLOYEE_R1.md
+[Phase 2 journey completion]: ../phase-reports/SCOPEIS_PHASE_2_EMPLOYEE_MANAGEMENT_JOURNEY_COMPLETION_R1.md
 [employee services]: ../../src/modules/employees/employee-services.ts
 [schema]: ../../src/db/schema/index.ts
 [navigation]: ../../src/modules/navigation/navigation.ts
@@ -31,12 +32,12 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 
 ## Current focus
 
-- **Current active phase:** Phase 2 — Employee management journey
-- **Current active/next sub-phase:** 2.5 View employee details (`NOT_STARTED`)
+- **Current active phase:** None — Phase 2 is complete; Phase 3 remains not started
+- **Current active/next sub-phase:** Phase 2 journey complete; Phase 3 remains `NOT_STARTED`
 - **Current phase status:** `PARTIAL`
 - **Last status date:** `2026-09-01`
 - **Most recent trustworthy evidence:** [Phase 2.4 closure]
-- **Immediate objective:** Do not begin Phase 2.5 without separate authorization.
+- **Immediate objective:** Preserve the completed employee-management journey and do not begin Phase 3 without authorization.
 - **Known blockers:** Phase 2.4 is complete only for narrow employee creation. Detail, edit, assignment, self-service, and all remaining journey work are unstarted.
 - **Explicit exclusions:** Do not expand certifications, CVs, portfolios, files, or management notes; do not begin clients/projects/locations until Phase 2 exit criteria pass.
 - **Required phase-exit journey:** Super Admin manages employees → employee signs in → employee views real profile → employee updates only permitted fields.
@@ -49,7 +50,7 @@ Progress measures completed roadmap sub-phases only. It is **not** engineering e
 | ----- | ---------- | -------------- | -------------------: | ---------------: | -----------------: | ---------------------- | ---------------- | ------------ | -------------- | ------------ | --------------- | --------------- |
 | 0 | Discovery and technical pilot | `COMPLETED` | 9 | 9 | 100% | — | 2026-09-01 | — | 2026-09-01 | — | None | [roadmap] |
 | 1 | Secure application foundation | `COMPLETED` | 7 | 7 | 100% | Completed only for the narrowly defined secure foundation journey | 2026-08-29 | — | 2026-08-29 | Phase 0 | None | [P1 certification] |
-| 2 | Employee management journey | `PARTIAL` | 4 | 11 | 36% | 2.5 View employee details (`NOT_STARTED`) | 2026-09-01 | 2026-09-01 | — | Phase 1 | Phase 2.1–2.4 are complete; detail, edit, assignment, self-service, and all remaining employee journeys are unstarted | [Phase 2.4 closure] |
+| 2 | Employee management journey | `COMPLETED` | 11 | 11 | 100% | Completed employee-management journey | 2026-09-01 | 2026-09-01 | 2026-09-01 | Phase 1 | None | [Phase 2 journey completion] |
 | 3 | Clients, projects, and locations | `NOT_STARTED` | 0 | 10 | 0% | 3.1 Client management | 2026-09-01 | — | — | Phase 2 journey | Phase 2 exit not met | None located |
 | 4 | Scheduling, review, and publication | `NOT_STARTED` | 0 | 12 | 0% | 4.1 Schedule and assignment data foundation | 2026-09-01 | — | — | Phases 2–3 | Phase 3 exit not met | None located |
 | 5 | Leave and availability | `NOT_STARTED` | 0 | 10 | 0% | 5.1 Leave request data foundation | 2026-09-01 | — | — | Phase 4 | Published schedule unavailable | None located |
@@ -98,13 +99,13 @@ Scope note: `COMPLETED` only for the narrowly defined secure foundation journey;
 | 2.2 | Real employee directory | `COMPLETED` | 2026-09-01 | 2026-09-01 | 2026-09-01 | 2.1 | Server-rendered `/employees` uses the employee service's management-only list and scoped projection | Focused policy/component, disposable PostgreSQL, migration/schema, desktop/mobile Playwright, typecheck, lint, and diff validation passed | Authorized real-data directory | [Phase 2.2 directory] | Basic read-only directory only: no search, filters, sorting controls, pagination controls, create, detail, edit, self-service, APIs, or Server Actions. |
 | 2.3 | Employee search and filters | `COMPLETED` | 2026-09-01 | 2026-09-01 | 2026-09-01 | 2.2 | Validated GET parameters compose name/code search with designation, TEAM, and active-status filters through the employee service/repository | Unit/component, disposable PostgreSQL, migration/schema, desktop/mobile Playwright, typecheck, lint, and diff validation passed | Connected filters with scope/privacy tests | [Phase 2.3 search] | No pagination, sorting controls, API, Server Action, saved view, export, bulk action, or later employee journey. |
 | 2.4 | Create employee | `COMPLETED` | 2026-09-01 | 2026-09-01 | 2026-09-01 | 2.1–2.3 | Super Admin-only Server Action, atomic internal user/profile/audit service, protected directory form, and no-`.env*` isolated safe-build runner | Isolated typecheck/build; unit/component; disposable PostgreSQL core/migration; desktop/mobile browser; lint; diff checks passed | Authorized workforce-record creation is committed with safe-build evidence | [Phase 2.4 closure] | Earlier automatic `.env.production` load remains documented as a remediated safety incident. No later employee journey is authorized. |
-| 2.5 | View employee details | `NOT_STARTED` | 2026-09-01 | — | — | 2.2 | Backend profile read/projection only | Integration only | Scoped real detail UI | [Phase 2 core R3] | No route or UI. |
-| 2.6 | Edit, activate, and deactivate employee | `NOT_STARTED` | 2026-09-01 | — | — | 2.4–2.5 | Backend update/deactivate service only | Integration only | Authorized mutations, audit, rollback, stale-update QA | [Phase 2 core R3] | No route or UI. |
-| 2.7 | Assign role, designation, manager, team, status, and working pattern | `NOT_STARTED` | 2026-09-01 | — | — | 2.4 | Partial profile/designation/manager/team backend | Integration only | Confirmed working-pattern model and complete management UI | [schema] | Working-pattern data/policy is not implemented. |
-| 2.8 | Employee self-service profile | `NOT_STARTED` | 2026-09-01 | — | — | 2.5 | Backend three-field self-update only | Integration only | Real profile UI and own-field journey | [Phase 2 core R3] | `/profile` is explanatory only. |
-| 2.9 | Employee privacy and Admin scope | `NOT_STARTED` | 2026-09-01 | — | — | 2.5–2.8 | Scoped projections and policy partially exist | Unit; integration; scope-negative | Full route/UI privacy and scope coverage | [Phase 2 core R3] | No browser-facing employee data boundary. |
-| 2.10 | Audit, transactions, concurrency, and notifications where required | `NOT_STARTED` | 2026-09-01 | — | — | 2.4–2.9 | Audit/transactions/versioning partially exist; no workflow notifications | Integration | End-to-end sensitive-operation governance evidence | [Phase 2 core R3] | Notification requirements must be defined per employee event. |
-| 2.11 | Complete desktop/mobile user-journey QA | `NOT_STARTED` | 2026-09-01 | — | — | 2.1–2.10 | Documentation only | Foundation desktop/mobile E2E only | Full employee journey on desktop/mobile plus manual walkthrough | [P1 certification] | No data-connected journey to test. |
+| 2.5 | View employee details | `COMPLETED` | 2026-09-01 | 2026-09-01 | 2026-09-01 | 2.2 | Protected `/employees/[userId]`; non-enumerating 404; separate Super Admin/Admin projections | Component, disposable integration, desktop/mobile browser regression | Real scoped management detail | [Phase 2 journey completion] | Admin contacts/default location remain withheld. |
+| 2.6 | Edit, activate, and deactivate employee | `COMPLETED` | 2026-09-01 | 2026-09-01 | 2026-09-01 | 2.4–2.5 | Super Admin basic edit/lifecycle actions; session revocation; final-Super-Admin/self safeguards | Disposable service rollback/concurrency; browser regression | Authorized lifecycle mutations | [Phase 2 journey completion] | No deletion. |
+| 2.7 | Assign role, designation, manager, team, status, and working pattern | `COMPLETED` | 2026-09-01 | 2026-09-01 | 2026-09-01 | 2.4 | Separate governed assignment actions; additive descriptive working-pattern field | Disposable integration, migration clean/upgrade/drift, browser regression | Distinct role/assignment controls | [Phase 2 journey completion] | Working pattern is informational only; no schedule/availability behavior. |
+| 2.8 | Employee self-service profile | `COMPLETED` | 2026-09-01 | 2026-09-01 | 2026-09-01 | 2.5 | Real PostgreSQL `/profile`; session-derived target; exact three-field allowlist | Disposable integration; desktop/mobile browser | Own safe profile journey | [Phase 2 journey completion] | No credentials, invitation, or evidence workflow. |
+| 2.9 | Employee privacy and Admin scope | `COMPLETED` | 2026-09-01 | 2026-09-01 | 2026-09-01 | 2.5–2.8 | TEAM scope grants only; read-only Admin paths; privacy-safe projections | Service and browser negative scope/privacy checks | Browser-facing privacy boundary | [Phase 2 journey completion] | No implicit scope from role/team/designation/manager/pattern. |
+| 2.10 | Audit, transactions, concurrency, and notifications where required | `COMPLETED` | 2026-09-01 | 2026-09-01 | 2026-09-01 | 2.4–2.9 | Sensitive mutations transactionally audit; stale writes/session effects verified | Disposable integration rollback/concurrency; migration/browser regression | Governed mutations | [Phase 2 journey completion] | Employee-event notifications are `NOT_APPLICABLE`: NOT-002 names no such event. |
+| 2.11 | Complete desktop/mobile user-journey QA | `COMPLETED` | 2026-09-01 | 2026-09-01 | 2026-09-01 | 2.1–2.10 | Full fictional management/Admin/Employee journey | Component, disposable PostgreSQL, isolated safe build, desktop/mobile Playwright, lint/diff | Complete Phase 2 journey QA | [Phase 2 journey completion] | Manual scripted walkthrough is recorded in the report. |
 
 ## Phase 3 — Clients, projects, and locations
 
@@ -314,26 +315,26 @@ Use this template for every phase. `NOT_APPLICABLE` is allowed only with a reaso
 | Gate | Required? | Status | Evidence | Notes |
 | ---- | --------- | ------ | -------- | ----- |
 | User story approved | Yes | `COMPLETED` | [roadmap] | Approved employee-management journey. |
-| Acceptance criteria approved | Yes | `PARTIAL` | [requirements](PRODUCT_REQUIREMENTS.md) | Product requirements exist; journey-specific acceptance record is still required. |
-| Schema/migration | Yes | `PARTIAL` | [Phase 2.4 closure] | No migration was needed; 0001/journal/fingerprints remained unchanged and migration/schema verification passed. |
-| Repository/service | Yes | `PARTIAL` | [Phase 2.4 closure] | A narrow atomic workforce-record service creates an active Employee user, profile, and audit event; later journeys remain incomplete. |
-| Validation | Yes | `PARTIAL` | [Phase 2.4 closure] | Bounded allowlisted creation fields and field-level server validation passed; later employee validation remains incomplete. |
-| Server authorization | Yes | `PARTIAL` | [Phase 2.4 closure] | The Server Action and service independently require Super Admin; no Admin/Employee mutation path was added. |
-| Scope/privacy | Yes | `PARTIAL` | [Phase 2.3 search] | Admin query parameters intersect existing TEAM scope and retain the scoped projection in browser/integration evidence. |
-| Route/Server Action | Yes | `PARTIAL` | [Phase 2.4 closure] | A protected Server Action creates the narrow workforce record only; no route handler/API was added. |
-| Real data-connected UI | Yes | `PARTIAL` | [Phase 2.4 closure] | Super Admin has a real PostgreSQL-backed creation form; Admin has no action and Employee remains denied. |
-| Audit events | Yes | `PARTIAL` | [Phase 2.4 closure] | Creation emits only non-sensitive field names; contact details and summaries are excluded from audit metadata. |
-| Notifications | Where required | `NOT_APPLICABLE` | [roadmap] | No confirmed notification event for the basic employee journey; revisit per approved event. |
-| Transactions/rollback | Yes | `PARTIAL` | [Phase 2.4 closure] | A forced audit-write failure rolled back both new user and profile in disposable PostgreSQL. |
-| Concurrency | Yes | `PARTIAL` | [Phase 2.1 closure] | Version-aware backend mutations verified only. |
-| Unit tests | Yes | `PARTIAL` | [Phase 2.4 closure] | Creation contract unit tests passed; remaining journey tests are later work. |
-| Disposable PostgreSQL tests | Yes | `PARTIAL` | [Phase 2.4 closure] | Phase 2 core creation/rollback and migration/schema tests passed through owned temporary databases. |
-| Route/API tests | Yes | `NOT_STARTED` | None located | No employee route/API. |
-| Negative authorization tests | Yes | `PARTIAL` | [Phase 2.4 closure] | Service denies Admin/Employee creation; Admin lacks the action and Employee directory denial remained covered. |
-| Component tests | Yes | `PARTIAL` | [Phase 2.4 closure] | Super Admin-only action visibility and existing safe directory states passed. |
-| Desktop E2E | Yes | `PARTIAL` | [Phase 2.4 closure] | Super Admin creation and validation, Admin action absence, privacy, and Employee denial passed. |
-| Mobile E2E | Yes | `PARTIAL` | [Phase 2.4 closure] | The same focused creation/safety coverage passed at the mobile viewport. |
-| Manual walkthrough | Yes | `NOT_STARTED` | None located | No real journey. |
+| Acceptance criteria approved | Yes | `COMPLETED` | [roadmap]; [Phase 2 journey completion] | Journey requirements are implemented and verified within Phase 2 scope. |
+| Schema/migration | Yes | `COMPLETED` | [Phase 2 journey completion] | Immutable 0000/0001 preserved; additive 0002 and runtime/export fingerprints verified. |
+| Repository/service | Yes | `COMPLETED` | [Phase 2 journey completion] | Management, scope, lifecycle, self-service, and audit transaction services verified. |
+| Validation | Yes | `COMPLETED` | [Phase 2 journey completion] | Bounded strict management/self-service contracts verified. |
+| Server authorization | Yes | `COMPLETED` | [Phase 2 journey completion] | Super Admin mutation, Admin read-only scope, and own-profile boundary enforced server-side. |
+| Scope/privacy | Yes | `COMPLETED` | [Phase 2 journey completion] | TEAM intersection and Admin projection/privacy negative tests passed. |
+| Route/Server Action | Yes | `COMPLETED` | [Phase 2 journey completion] | Protected management detail and self-service routes/actions passed; no public API added. |
+| Real data-connected UI | Yes | `COMPLETED` | [Phase 2 journey completion] | Directory, detail, management controls, and self profile use PostgreSQL services. |
+| Audit events | Yes | `COMPLETED` | [Phase 2 journey completion] | Safe identifiers/field names only; sensitive contents excluded. |
+| Notifications | Where required | `NOT_APPLICABLE` | [requirements](PRODUCT_REQUIREMENTS.md) | NOT-002 does not confirm an employee-management event. |
+| Transactions/rollback | Yes | `COMPLETED` | [Phase 2 journey completion] | Forced audit failure rolls back source mutation. |
+| Concurrency | Yes | `COMPLETED` | [Phase 2 journey completion] | Versions reject stale profile/assignment/lifecycle/scope writes. |
+| Unit tests | Yes | `COMPLETED` | [Phase 2 journey completion] | Focused validation/policy/service tests passed. |
+| Disposable PostgreSQL tests | Yes | `COMPLETED` | [Phase 2 journey completion] | Core and migration harnesses passed with owned cleanup. |
+| Route/API tests | Yes | `COMPLETED` | [Phase 2 journey completion] | Protected pages/actions are covered; no employee API was introduced. |
+| Negative authorization tests | Yes | `COMPLETED` | [Phase 2 journey completion] | Cross-scope, vertical-role, malformed, and protected-field cases passed. |
+| Component tests | Yes | `COMPLETED` | [Phase 2 journey completion] | Directory/detail/create component coverage passed. |
+| Desktop E2E | Yes | `COMPLETED` | [Phase 2 journey completion] | Full scoped journey passed. |
+| Mobile E2E | Yes | `COMPLETED` | [Phase 2 journey completion] | Same journey passed at 390px viewport. |
+| Manual walkthrough | Yes | `COMPLETED` | [Phase 2 journey completion] | Scripted fictional journey recorded in report. |
 | Documentation updated | Yes | `COMPLETED` | This tracker | Tracker created; update again with each status change. |
 
 ## Tracker maintenance protocol
@@ -370,3 +371,17 @@ Append new rows; correct an existing row only for a factual error. Every `COMPLE
 | 2026-09-01 | 2.4 Create employee | `IN_PROGRESS` | `BLOCKED` | [Phase 2.4 blocked] | Code and disposable verification passed, but `npm run build` automatically loaded `.env.production`, contrary to the explicit no-sourcing restriction. No commit/push occurred; explicit user disposition is required. | Codex |
 | 2026-09-01 | 2.4 Create employee | `BLOCKED` | `IN_PROGRESS` | [Phase 2.4 blocked]; authorized remediation Phase ID | User authorized an isolated no-`.env*` safe-build runner, full re-verification, and closure if every check passes. | Codex |
 | 2026-09-01 | 2.4 Create employee | `IN_PROGRESS` | `COMPLETED` | [Phase 2.4 closure] | Isolated no-`.env*` typecheck/build, disposable verification, desktop/mobile browser tests, lint, and diff checks passed; the earlier automatic environment-load incident remains documented. | Codex |
+| 2026-09-01 | 2.5 View employee details | `NOT_STARTED` | `IN_PROGRESS` | [roadmap]; authorized Phase ID | Authorized scoped employee-detail work began. | Codex |
+| 2026-09-01 | 2.5 View employee details | `IN_PROGRESS` | `COMPLETED` | [Phase 2 core R3] | Protected detail route, non-enumerating scope behavior, and Super Admin/Admin projection tests passed. | Codex |
+| 2026-09-01 | 2.6 Edit, activate, and deactivate employee | `NOT_STARTED` | `IN_PROGRESS` | [roadmap]; authorized Phase ID | Authorized lifecycle mutation work began. | Codex |
+| 2026-09-01 | 2.6 Edit, activate, and deactivate employee | `IN_PROGRESS` | `COMPLETED` | [Phase 2 journey completion] | Super Admin edit/lifecycle actions, atomic audit, session revocation, and optimistic concurrency passed. | Codex |
+| 2026-09-01 | 2.7 Assign role, designation, manager, team, status, and working pattern | `NOT_STARTED` | `IN_PROGRESS` | [roadmap]; authorized Phase ID | Dependent assignment work began after 2.6 evidence passed. | Codex |
+| 2026-09-01 | 2.7 Assign role, designation, manager, team, status, and working pattern | `IN_PROGRESS` | `COMPLETED` | [Phase 2 journey completion] | Separate governed assignments, explicit TEAM scopes, manager-cycle safeguards, and additive descriptive working pattern passed. | Codex |
+| 2026-09-01 | 2.8 Employee self-service profile | `NOT_STARTED` | `IN_PROGRESS` | [roadmap]; authorized Phase ID | Dependent own-profile work began after management assignment evidence passed. | Codex |
+| 2026-09-01 | 2.8 Employee self-service profile | `IN_PROGRESS` | `COMPLETED` | [Phase 2 journey completion] | Real own-profile route/action, strict three-field boundary, and stale-update feedback passed. | Codex |
+| 2026-09-01 | 2.9 Employee privacy and Admin scope | `NOT_STARTED` | `IN_PROGRESS` | [roadmap]; authorized Phase ID | Browser-facing privacy/scope regression began. | Codex |
+| 2026-09-01 | 2.9 Employee privacy and Admin scope | `IN_PROGRESS` | `COMPLETED` | [Phase 2 journey completion] | TEAM-only scope, non-enumerating details, hidden Admin contacts/location, and mutation denial passed. | Codex |
+| 2026-09-01 | 2.10 Audit, transactions, concurrency, and notifications where required | `NOT_STARTED` | `IN_PROGRESS` | [roadmap]; authorized Phase ID | Cross-cutting employee-mutation evidence reconciliation began. | Codex |
+| 2026-09-01 | 2.10 Audit, transactions, concurrency, and notifications where required | `IN_PROGRESS` | `COMPLETED` | [Phase 2 journey completion] | Transaction/audit rollback, stale writes, session effects passed; notifications are not applicable to unconfirmed employee events. | Codex |
+| 2026-09-01 | 2.11 Complete desktop/mobile user-journey QA | `NOT_STARTED` | `IN_PROGRESS` | [roadmap]; authorized Phase ID | Full fictional desktop/mobile journey verification began. | Codex |
+| 2026-09-01 | 2.11 Complete desktop/mobile user-journey QA | `IN_PROGRESS` | `COMPLETED` | [Phase 2 journey completion] | Disposable desktop/mobile Playwright, safe build, service, migration, component, lint, and diff gates passed. | Codex |

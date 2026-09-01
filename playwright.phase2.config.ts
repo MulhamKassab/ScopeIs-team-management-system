@@ -9,7 +9,7 @@ export default defineConfig({
   testMatch: "employee-directory.spec.ts",
   timeout: 30_000,
   use: { baseURL, trace: "on-first-retry" },
-  webServer: { command: `node scripts/start-phase2-test-server.mjs --port ${port}`, url: baseURL, reuseExistingServer: false },
+  webServer: { command: `node scripts/run-phase2-safe-build.mjs --serve-port ${port}`, url: baseURL, reuseExistingServer: false },
   projects: [
     { name: "desktop", use: { browserName: "chromium", viewport: { width: 1440, height: 900 } } },
     { name: "mobile", use: { browserName: "chromium", viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true } },

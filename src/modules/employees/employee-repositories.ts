@@ -2,7 +2,7 @@ import "server-only";
 import { and, asc, count, eq, ilike, inArray, isNull, or, sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import {
-  arrangementLabels, designations, employeeEvidence, employeeProfiles, employeeSkills, skills, users,
+  adminScopeGrants, arrangementLabels, designations, employeeEvidence, employeeProfiles, employeeSkills, sessions, skills, users,
 } from "@/db/schema";
 import type { EmployeeDirectoryQuery, PaginationInput } from "@/modules/employees/contracts";
 import { normalizeCatalogueName, normalizeIdentifier, parseOrDomainError, paginationSchema } from "@/modules/employees/employee-validation";
@@ -148,12 +148,38 @@ export const employeeProfileRepository = {
   async setUserActive(executor: DatabaseExecutor, userId: string, active: boolean) {
     const [row] = await executor.update(users).set({ active, version: sql`${users.version} + 1`, updatedAt: new Date() }).where(eq(users.id, userId)).returning(); return row ?? null;
   },
+  async updateUser(executor: DatabaseExecutor, userId: string, input: Partial<typeof users.$inferInsert>) {
+    const [row] = await executor.update(users).set({ ...input, version: sql`${users.version} + 1`, updatedAt: new Date() }).where(eq(users.id, userId)).returning(); return row ?? null;
+  },
+  async activeSuperAdminCount(executor: DatabaseExecutor) {
+    const [row] = await executor.select({ value: count() }).from(users).where(and(eq(users.role, "SUPER_ADMIN"), eq(users.active, true))); return Number(row?.value ?? 0);
+  },
+  async revokeSessions(executor: DatabaseExecutor, userId: string) { await executor.update(sessions).set({ revokedAt: new Date(), updatedAt: new Date() }).where(and(eq(sessions.userId, userId), isNull(sessions.revokedAt))); },
+  async listManagementCandidates(executor: DatabaseExecutor, excludeUserId: string) {
+    return executor.select({ userId: employeeProfiles.userId, displayName: users.displayName, active: users.active }).from(employeeProfiles).innerJoin(users, eq(employeeProfiles.userId, users.id)).where(sql`${employeeProfiles.userId} <> ${excludeUserId}`).orderBy(asc(users.displayName), asc(employeeProfiles.userId));
+  },
   async managerChain(executor: DatabaseExecutor, startUserId: string) {
     const rows = await executor.select({ userId: employeeProfiles.userId, managerUserId: employeeProfiles.managerUserId }).from(employeeProfiles);
     const managerByUser = new Map(rows.map((row) => [row.userId, row.managerUserId])); const chain: string[] = []; const visited = new Set<string>();
     let current: string | null | undefined = startUserId;
     while (current && !visited.has(current)) { visited.add(current); chain.push(current); current = managerByUser.get(current); }
     return { chain, hasExistingCycle: current !== null && current !== undefined };
+  },
+};
+
+export const adminScopeGrantRepository = {
+  get(executor: DatabaseExecutor, userId: string, team: string) {
+    return executor.select().from(adminScopeGrants).where(and(eq(adminScopeGrants.userId, userId), eq(adminScopeGrants.scopeType, "TEAM"), eq(adminScopeGrants.scopeReference, team))).limit(1).then(([row]) => row ?? null);
+  },
+  listForUser(executor: DatabaseExecutor, userId: string) {
+    return executor.select().from(adminScopeGrants).where(and(eq(adminScopeGrants.userId, userId), eq(adminScopeGrants.scopeType, "TEAM"))).orderBy(asc(adminScopeGrants.scopeReference));
+  },
+  async create(executor: DatabaseExecutor, userId: string, team: string) { const [row] = await executor.insert(adminScopeGrants).values({ userId, scopeType: "TEAM", scopeReference: team }).returning(); return row!; },
+  async reactivate(executor: DatabaseExecutor, id: string, expectedVersion: number) {
+    const [row] = await executor.update(adminScopeGrants).set({ active: true, version: sql`${adminScopeGrants.version} + 1`, updatedAt: new Date() }).where(and(eq(adminScopeGrants.id, id), eq(adminScopeGrants.version, expectedVersion))).returning(); return row ?? null;
+  },
+  async revoke(executor: DatabaseExecutor, id: string, expectedVersion: number) {
+    const [row] = await executor.update(adminScopeGrants).set({ active: false, version: sql`${adminScopeGrants.version} + 1`, updatedAt: new Date() }).where(and(eq(adminScopeGrants.id, id), eq(adminScopeGrants.version, expectedVersion))).returning(); return row ?? null;
   },
 };
 

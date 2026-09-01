@@ -93,3 +93,40 @@ test("Employee is forbidden from the workforce directory", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Employee directory" })).toHaveCount(0);
   await signOut(page);
 });
+
+test("management details preserve Admin privacy and expose only Super Admin controls", async ({ page }) => {
+  await signIn(page, "Nora Albright");
+  await page.goto("/employees");
+  await page.getByRole("link", { name: "Cora Bell" }).click();
+  await expect(page.getByRole("heading", { name: "Cora Bell" })).toBeVisible();
+  await expect(page.getByText("cora@example.test", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Super Admin controls" })).toBeVisible();
+  await signOut(page);
+
+  await signIn(page, "Ava Mercer");
+  await page.goto("/employees/mock-employee-cora");
+  await expect(page.getByRole("heading", { name: "Cora Bell" })).toBeVisible();
+  await expect(page.getByText("cora@example.test", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Private Alpha location", { exact: true })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Super Admin controls" })).toHaveCount(0);
+  const crossScope = await page.goto("/employees/mock-employee-dan");
+  expect(crossScope?.status()).toBe(404);
+  await signOut(page);
+});
+
+test("Employee views and updates only the self-service profile", async ({ page }) => {
+  await signIn(page, "Cora Bell");
+  await page.goto("/profile");
+  await expect(page.getByRole("heading", { name: "My professional profile" })).toBeVisible();
+  await expect(page.getByLabel("My professional profile").getByText("Cora Bell", { exact: true })).toBeVisible();
+  await page.getByLabel("Work phone").fill("101");
+  await page.getByLabel("Professional summary").fill("Updated fictional profile");
+  await page.getByRole("button", { name: "Save profile" }).click();
+  await expect(page.locator(".employee-form-success, .employee-form-error")).toContainText(/saved|changed/i);
+  await page.reload();
+  await expect(page.getByLabel("Work phone")).toHaveValue("101");
+  await expect(page.getByLabel("Professional summary")).toHaveValue("Updated fictional profile");
+  const management = await page.goto("/employees/mock-employee-cora");
+  expect(management?.status()).toBe(404);
+  await signOut(page);
+});

@@ -38,6 +38,16 @@ export type CreateEmployeeInput = {
 
 export type ManagementProfileUpdateInput = Omit<Partial<CreateEmployeeProfileInput>, "userId"> & { expectedVersion: number };
 export type SelfProfileUpdateInput = Pick<ManagementProfileUpdateInput, "workEmail" | "workPhone" | "professionalSummary"> & { expectedVersion: number };
+export type ManagementBasicProfileUpdateInput = { displayName?: string; employeeCode?: string; workEmail?: string | null; workPhone?: string | null; professionalSummary?: string | null; expectedVersion: number };
+export type EmployeeManagementAssignmentInput = {
+  designationId?: string | null;
+  managerUserId?: string | null;
+  team?: string | null;
+  workingPattern?: string | null;
+  expectedVersion: number;
+};
+export type EmployeeRoleUpdateInput = { role: "SUPER_ADMIN" | "ADMIN" | "EMPLOYEE"; expectedVersion: number };
+export type AdminScopeGrantInput = { adminUserId: string; team: string; expectedVersion?: number };
 
 export type EmployeeSkillCreateInput = {
   employeeUserId: string;
@@ -50,4 +60,4 @@ export type EmployeeSkillCreateInput = {
 };
 export type EmployeeSkillUpdateInput = Omit<Partial<EmployeeSkillCreateInput>, "employeeUserId" | "skillId"> & { expectedVersion: number };
 
-export type AuditChangeMetadata = { fields?: string[]; version?: number; active?: boolean; archive?: boolean; order?: number };
+export type AuditChangeMetadata = { fields?: string[]; version?: number; active?: boolean; archive?: boolean; order?: number; role?: "SUPER_ADMIN" | "ADMIN" | "EMPLOYEE"; scope?: string };
