@@ -2,16 +2,15 @@
 
 ## Purpose and status
 
-This directory is the canonical documentation foundation for ScopeIs Team Management System. The journey-first roadmap is the sole authoritative current implementation sequence. Phase 0 discovery is `COMPLETED`; Phase 1 is `COMPLETED_IN_NARROW_FOUNDATION_SCOPE`; existing employee backend work is preserved but approximately 25–35% complete and does not form a usable workforce journey. Phase 2 — Employee management journey is `NEXT`.
+This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is `COMPLETED` only in its narrow foundation scope; existing employee backend work is preserved but approximately 25–35% complete and does not form a usable workforce journey. Phase 2 — Employee management journey is `PARTIAL` and current.
 
 ## Reader path
 
-1. Read [`../PROJECT_CONTEXT.md`](../PROJECT_CONTEXT.md) for orientation.
-2. Read [`project-memory/PROJECT_OVERVIEW.md`](project-memory/PROJECT_OVERVIEW.md) and [`project-memory/DECISIONS_AND_CONSTRAINTS.md`](project-memory/DECISIONS_AND_CONSTRAINTS.md).
-3. Use [`project-memory/PRODUCT_REQUIREMENTS.md`](project-memory/PRODUCT_REQUIREMENTS.md) as the canonical acceptance-oriented requirement set.
-4. Use [`project-memory/ROLE_AND_PERMISSION_MODEL.md`](project-memory/ROLE_AND_PERMISSION_MODEL.md), [`project-memory/SYSTEM_HIERARCHY_AND_RELATIONSHIPS.md`](project-memory/SYSTEM_HIERARCHY_AND_RELATIONSHIPS.md), and [`project-memory/WORKFLOWS.md`](project-memory/WORKFLOWS.md) for implementation interpretation.
-5. Before technical implementation, read [`project-memory/SYSTEM_ARCHITECTURE_DECISIONS.md`](project-memory/SYSTEM_ARCHITECTURE_DECISIONS.md) for the current recommended Phase 1 architecture and its provider-neutral boundaries.
-6. Follow [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md), the journey-first roadmap; Ticket System integration remains Phase 12.
+1. Read [`../PROJECT_CONTEXT.md`](../PROJECT_CONTEXT.md) for active orientation.
+2. Read [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) for authoritative phase definitions and order.
+3. Read [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) for live status, evidence, blockers, and the current sub-phase.
+4. Read the relevant requirements and workflow documents, including [`project-memory/PRODUCT_REQUIREMENTS.md`](project-memory/PRODUCT_REQUIREMENTS.md), [`project-memory/ROLE_AND_PERMISSION_MODEL.md`](project-memory/ROLE_AND_PERMISSION_MODEL.md), [`project-memory/SYSTEM_HIERARCHY_AND_RELATIONSHIPS.md`](project-memory/SYSTEM_HIERARCHY_AND_RELATIONSHIPS.md), and [`project-memory/WORKFLOWS.md`](project-memory/WORKFLOWS.md).
+5. Before technical implementation, read [`project-memory/SYSTEM_ARCHITECTURE_DECISIONS.md`](project-memory/SYSTEM_ARCHITECTURE_DECISIONS.md) and the relevant historical phase reports as evidence only. Ticket System integration remains Phase 12.
 
 ## Word documents
 
@@ -37,12 +36,13 @@ This directory is the canonical documentation foundation for ScopeIs Team Manage
 - [`project-memory/DECISIONS_AND_CONSTRAINTS.md`](project-memory/DECISIONS_AND_CONSTRAINTS.md) - confirmed decisions, constraints, non-goals, unsafe assumptions, open/deferred decisions.
 - [`project-memory/SYSTEM_ARCHITECTURE_DECISIONS.md`](project-memory/SYSTEM_ARCHITECTURE_DECISIONS.md) - current recommended Phase 1 architecture; translates product rules into modular, server-side, database, transaction, adapter, testing, and deployment boundaries without finalizing providers.
 - [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) - sole authoritative journey-first phases 0-13, completion standard, and cross-cutting delivery rules; it supersedes the former module-first order.
+- [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) - sole authoritative live tracker for phase/sub-phase status, dates, evidence, blockers, QA state, and update protocol; it does not redefine roadmap scope.
 - [`project-memory/UI_UX_FOUNDATION.md`](project-memory/UI_UX_FOUNDATION.md) - approved Phase 1 visual, responsive, accessibility, theme, and RTL foundation.
 - [`project-memory/PHASE_2_EMPLOYEE_DOMAIN_DECISIONS.md`](project-memory/PHASE_2_EMPLOYEE_DOMAIN_DECISIONS.md) - approved Phase 2 employee, capability, evidence, privacy, and production-operational boundaries.
 
 ## Implementation status
 
-Historical reports remain evidence and are not current roadmaps. Phase 1's mock-account prototype foundation is verified only in its narrow scope; the Phase 2 database and core employee/catalogue service layers are verified backend foundations, including the R3 closure evidence in [`phase-reports/SCOPEIS_PHASE_2_CORE_SERVICE_INCIDENT_REMEDIATION_AND_VERIFICATION_CLOSURE_R3.md`](phase-reports/SCOPEIS_PHASE_2_CORE_SERVICE_INCIDENT_REMEDIATION_AND_VERIFICATION_CLOSURE_R3.md). No complete workforce-management journey is certified. The current next work is the Phase 2 employee management journey in the authoritative roadmap; no later journey, production authentication, production database state, or deployment is certified.
+Historical reports remain immutable evidence and are not current roadmaps or tracker replacements. Phase 1's mock-account prototype foundation is verified only in its narrow scope; the Phase 2 database and core employee/catalogue service layers are verified backend foundations, including the R3 closure evidence in [`phase-reports/SCOPEIS_PHASE_2_CORE_SERVICE_INCIDENT_REMEDIATION_AND_VERIFICATION_CLOSURE_R3.md`](phase-reports/SCOPEIS_PHASE_2_CORE_SERVICE_INCIDENT_REMEDIATION_AND_VERIFICATION_CLOSURE_R3.md). No complete workforce-management journey is certified. The current next work is Phase 2 sub-phase 2.1 in the live tracker; no later journey, production authentication, production database state, or deployment is certified.
 
 ## Diagram catalog
 
