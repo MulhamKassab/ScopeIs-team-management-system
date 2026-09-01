@@ -62,16 +62,28 @@ async function run(command, args, temporaryApplication, environment) {
   const child = spawn(command, args, {
     cwd: temporaryApplication, env: environment, stdio: "inherit",
   });
-  return new Promise((resolve, reject) => {
-    child.once("error", reject);
-    child.once("exit", (code) => resolve(code ?? 1));
-  });
+  activeChild = child;
+  try {
+    return await new Promise((resolve, reject) => {
+      child.once("error", reject);
+      child.once("exit", (code) => resolve(code ?? 1));
+    });
+  } finally {
+    if (activeChild === child) activeChild = null;
+  }
 }
 
 const configuration = await loadPhase1TestConfiguration();
 if (servePort !== null) await assertPhase1TestDatabaseSafety(configuration);
 const temporaryApplication = await mkdtemp(join(tmpdir(), "scopeis-phase2-safe-build-"));
 let exitCode = 1;
+let activeChild = null;
+let terminationRequested = false;
+function stopActiveChild() {
+  terminationRequested = true;
+  if (activeChild && activeChild.exitCode === null && activeChild.signalCode === null) activeChild.kill("SIGTERM");
+}
+for (const signal of ["SIGINT", "SIGTERM", "SIGHUP"]) process.on(signal, stopActiveChild);
 try {
   for (const path of COPY_ALLOWLIST) await copySafe(join(repositoryRoot, path), join(temporaryApplication, path));
   await symlink(join(repositoryRoot, "node_modules"), join(temporaryApplication, "node_modules"), "dir");
@@ -79,13 +91,15 @@ try {
   process.stdout.write("Phase 2 safe build preflight passed: isolated copy contains no .env* files.\n");
   const environment = safeBuildEnvironment(configuration);
   const typecheckExitCode = await run(process.execPath, [join(repositoryRoot, "node_modules", "typescript", "bin", "tsc"), "--noEmit"], temporaryApplication, environment);
-  if (typecheckExitCode !== 0) exitCode = typecheckExitCode;
+  if (terminationRequested) exitCode = 0;
+  else if (typecheckExitCode !== 0) exitCode = typecheckExitCode;
   else {
     process.stdout.write("Phase 2 isolated typecheck passed.\n");
     exitCode = await run(process.execPath, [join(repositoryRoot, "node_modules", "next", "dist", "bin", "next"), "build", "--webpack"], temporaryApplication, environment);
-    if (exitCode === 0 && servePort !== null) {
-      const server = spawn(process.execPath, [join(repositoryRoot, "node_modules", "next", "dist", "bin", "next"), "start", "--hostname", "127.0.0.1", "--port", String(servePort)], { cwd: temporaryApplication, env: environment, stdio: "inherit" });
-      exitCode = await new Promise((resolve, reject) => { server.once("error", reject); server.once("exit", (code) => resolve(code ?? 1)); });
+    if (terminationRequested) exitCode = 0;
+    else if (exitCode === 0 && servePort !== null) {
+      exitCode = await run(process.execPath, [join(repositoryRoot, "node_modules", "next", "dist", "bin", "next"), "start", "--hostname", "127.0.0.1", "--port", String(servePort)], temporaryApplication, environment);
+      if (terminationRequested) exitCode = 0;
     }
   }
 } finally {

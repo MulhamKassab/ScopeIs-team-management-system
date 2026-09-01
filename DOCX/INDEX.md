@@ -42,7 +42,7 @@ This directory is the canonical documentation foundation for ScopeIs Team Manage
 
 ## Implementation status
 
-Historical reports remain immutable evidence and are not current roadmaps or tracker replacements. Phase 2.1–2.11 are completed as the bounded employee-management journey: trusted backend, scoped directory/search/details, Super Admin creation/management, explicit Admin TEAM scope, and an exact three-field self-service profile. The completion evidence is [`phase-reports/SCOPEIS_PHASE_2_EMPLOYEE_MANAGEMENT_JOURNEY_COMPLETION_R1.md`](phase-reports/SCOPEIS_PHASE_2_EMPLOYEE_MANAGEMENT_JOURNEY_COMPLETION_R1.md). The prior automatic `.env.production` build load remains documented as remediated; Phase 2 verification uses an isolated temporary copy with no `.env*` files. Phase 3 and all later journeys remain unstarted; no production authentication, database state, or deployment is certified.
+Historical reports remain immutable evidence and are not current roadmaps or tracker replacements. Phase 2.1–2.11 are completed as the bounded employee-management journey. Manual QA must use the supported disposable launcher, `node scripts/run-phase2-manual-qa.mjs`; it supplies complete fictional data and an isolated no-`.env*` build. The reported generic boundary errors were an unseeded/manual-runtime readiness gap, remediated and smoke-tested in [`phase-reports/SCOPEIS_PHASE_2_MANUAL_QA_RUNTIME_READINESS_AND_DEFECT_REMEDIATION_R1.md`](phase-reports/SCOPEIS_PHASE_2_MANUAL_QA_RUNTIME_READINESS_AND_DEFECT_REMEDIATION_R1.md). Phase 3 and all later journeys remain unstarted; no production authentication, database state, or deployment is certified.
 
 ## Diagram catalog
 

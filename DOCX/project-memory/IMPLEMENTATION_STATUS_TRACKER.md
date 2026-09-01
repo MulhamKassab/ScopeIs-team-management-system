@@ -8,7 +8,7 @@ The tracker uses only: `NOT_STARTED`, `READY`, `IN_PROGRESS`, `PARTIAL`, `BLOCKE
 
 **Completion rule:** backend-only work and UI shells are not completed user journeys. A phase is complete only after all applicable delivery gates and its end-to-end journey are verified.
 
-Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [Phase 2 journey completion], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
+Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [Phase 2 journey completion], [Phase 2 manual QA readiness], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
 
 [roadmap]: IMPLEMENTATION_ROADMAP.md
 [context]: ../../PROJECT_CONTEXT.md
@@ -22,6 +22,7 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 [Phase 2.4 blocked]: ../phase-reports/SCOPEIS_PHASE_2_4_CREATE_EMPLOYEE_R1.md
 [Phase 2.4 closure]: ../phase-reports/SCOPEIS_PHASE_2_4_CREATE_EMPLOYEE_R1.md
 [Phase 2 journey completion]: ../phase-reports/SCOPEIS_PHASE_2_EMPLOYEE_MANAGEMENT_JOURNEY_COMPLETION_R1.md
+[Phase 2 manual QA readiness]: ../phase-reports/SCOPEIS_PHASE_2_MANUAL_QA_RUNTIME_READINESS_AND_DEFECT_REMEDIATION_R1.md
 [employee services]: ../../src/modules/employees/employee-services.ts
 [schema]: ../../src/db/schema/index.ts
 [navigation]: ../../src/modules/navigation/navigation.ts
@@ -34,11 +35,11 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 
 - **Current active phase:** None — Phase 2 is complete; Phase 3 remains not started
 - **Current active/next sub-phase:** Phase 2 journey complete; Phase 3 remains `NOT_STARTED`
-- **Current phase status:** `PARTIAL`
+- **Current phase status:** `COMPLETED`
 - **Last status date:** `2026-09-01`
-- **Most recent trustworthy evidence:** [Phase 2.4 closure]
-- **Immediate objective:** Preserve the completed employee-management journey and do not begin Phase 3 without authorization.
-- **Known blockers:** Phase 2.4 is complete only for narrow employee creation. Detail, edit, assignment, self-service, and all remaining journey work are unstarted.
+- **Most recent trustworthy evidence:** [Phase 2 manual QA readiness]
+- **Immediate objective:** Preserve the completed employee-management journey, use its disposable manual-QA launcher for local verification, and do not begin Phase 3 without authorization.
+- **Known blockers:** None for the documented Phase 2 journey. Phase 3 remains unstarted and separately authorized.
 - **Explicit exclusions:** Do not expand certifications, CVs, portfolios, files, or management notes; do not begin clients/projects/locations until Phase 2 exit criteria pass.
 - **Required phase-exit journey:** Super Admin manages employees → employee signs in → employee views real profile → employee updates only permitted fields.
 
@@ -50,7 +51,7 @@ Progress measures completed roadmap sub-phases only. It is **not** engineering e
 | ----- | ---------- | -------------- | -------------------: | ---------------: | -----------------: | ---------------------- | ---------------- | ------------ | -------------- | ------------ | --------------- | --------------- |
 | 0 | Discovery and technical pilot | `COMPLETED` | 9 | 9 | 100% | — | 2026-09-01 | — | 2026-09-01 | — | None | [roadmap] |
 | 1 | Secure application foundation | `COMPLETED` | 7 | 7 | 100% | Completed only for the narrowly defined secure foundation journey | 2026-08-29 | — | 2026-08-29 | Phase 0 | None | [P1 certification] |
-| 2 | Employee management journey | `COMPLETED` | 11 | 11 | 100% | Completed employee-management journey | 2026-09-01 | 2026-09-01 | 2026-09-01 | Phase 1 | None | [Phase 2 journey completion] |
+| 2 | Employee management journey | `COMPLETED` | 11 | 11 | 100% | Completed employee-management journey; supported disposable manual QA launcher | 2026-09-01 | 2026-09-01 | 2026-09-01 | Phase 1 | None | [Phase 2 manual QA readiness] |
 | 3 | Clients, projects, and locations | `NOT_STARTED` | 0 | 10 | 0% | 3.1 Client management | 2026-09-01 | — | — | Phase 2 journey | Phase 2 exit not met | None located |
 | 4 | Scheduling, review, and publication | `NOT_STARTED` | 0 | 12 | 0% | 4.1 Schedule and assignment data foundation | 2026-09-01 | — | — | Phases 2–3 | Phase 3 exit not met | None located |
 | 5 | Leave and availability | `NOT_STARTED` | 0 | 10 | 0% | 5.1 Leave request data foundation | 2026-09-01 | — | — | Phase 4 | Published schedule unavailable | None located |
@@ -334,7 +335,7 @@ Use this template for every phase. `NOT_APPLICABLE` is allowed only with a reaso
 | Component tests | Yes | `COMPLETED` | [Phase 2 journey completion] | Directory/detail/create component coverage passed. |
 | Desktop E2E | Yes | `COMPLETED` | [Phase 2 journey completion] | Full scoped journey passed. |
 | Mobile E2E | Yes | `COMPLETED` | [Phase 2 journey completion] | Same journey passed at 390px viewport. |
-| Manual walkthrough | Yes | `COMPLETED` | [Phase 2 journey completion] | Scripted fictional journey recorded in report. |
+| Manual walkthrough | Yes | `COMPLETED` | [Phase 2 manual QA readiness] | Disposable launcher smoke proves `/employees` and `/profile` load with seeded fictional data; operator instructions are documented. |
 | Documentation updated | Yes | `COMPLETED` | This tracker | Tracker created; update again with each status change. |
 
 ## Tracker maintenance protocol
@@ -385,3 +386,5 @@ Append new rows; correct an existing row only for a factual error. Every `COMPLE
 | 2026-09-01 | 2.10 Audit, transactions, concurrency, and notifications where required | `IN_PROGRESS` | `COMPLETED` | [Phase 2 journey completion] | Transaction/audit rollback, stale writes, session effects passed; notifications are not applicable to unconfirmed employee events. | Codex |
 | 2026-09-01 | 2.11 Complete desktop/mobile user-journey QA | `NOT_STARTED` | `IN_PROGRESS` | [roadmap]; authorized Phase ID | Full fictional desktop/mobile journey verification began. | Codex |
 | 2026-09-01 | 2.11 Complete desktop/mobile user-journey QA | `IN_PROGRESS` | `COMPLETED` | [Phase 2 journey completion] | Disposable desktop/mobile Playwright, safe build, service, migration, component, lint, and diff gates passed. | Codex |
+| 2026-09-01 | Phase 2 manual QA runtime readiness | `COMPLETED` | `IN_PROGRESS` | authorized remediation Phase ID | Manual users reported safe-boundary errors; runtime readiness and fixture/launch evidence was reopened without changing the completed Phase 2 scope. | Codex |
+| 2026-09-01 | Phase 2 manual QA runtime readiness | `IN_PROGRESS` | `COMPLETED` | [Phase 2 manual QA readiness] | Root cause was an unsupported/unseeded local manual environment, not a Phase 2 product regression; disposable seeded launcher smoke passed for `/employees` and `/profile`. | Codex |

@@ -77,6 +77,13 @@ describe("Phase 2 core employee and catalogue services", () => {
     expect(events.some((event) => event.action === "employee_profile.self_updated" && !JSON.stringify(event.metadata).includes("101"))).toBe(true);
   });
 
+  it("identifies a fictional session without a profile as unready while management data remains safe", async () => {
+    const f = fixture(); await seedProfiles(f);
+    await expect(employeeProfileService.getOwnProfile(f.superAdmin)).rejects.toMatchObject({ code: "NOT_FOUND", status: 404 });
+    expect((await employeeProfileService.listDirectoryProfiles(f.superAdmin)).items.map((profile) => profile.userId))
+      .toEqual(expect.arrayContaining([f.ids.employeeAlpha, f.ids.employeeBravo]));
+  });
+
   it("provides a management-only directory with server-enforced scope and safe Admin projections", async () => {
     const f = fixture(); await seedProfiles(f);
     const globalDirectory = await employeeProfileService.listDirectoryProfiles(f.superAdmin);
