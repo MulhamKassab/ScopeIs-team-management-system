@@ -25,17 +25,20 @@ test("Super Admin searches employee name and employee code", async ({ page }) =>
   await signOut(page);
 });
 
-test("Super Admin creates a workforce record without exposing contact data in the directory", async ({ page }, testInfo) => {
-  const employeeCode = `EMP-NEW-240-${testInfo.project.name.toUpperCase()}`;
+test("Super Admin creates a workforce record with a server-generated code and no editable code field", async ({ page }, testInfo) => {
+  const employeeName = `Riley Workforce ${testInfo.project.name}`;
   await signIn(page, "Nora Albright");
   await page.goto("/employees");
   await page.getByRole("button", { name: "Add employee" }).click();
-  await page.getByLabel("Employee name").fill("Riley Workforce");
-  await page.getByLabel("Employee code").fill(employeeCode);
+  await expect(page.getByLabel("Employee code")).toHaveCount(0);
+  await expect(page.getByText("Employee code is assigned automatically by the server after creation.")).toBeVisible();
+  await page.getByLabel("Employee name").fill(employeeName);
   await page.getByLabel("Work email").fill("riley.workforce@example.test");
   await page.getByRole("button", { name: "Create employee" }).click();
   await expect(page).toHaveURL(/\/employees$/);
-  await expect(page.getByText(employeeCode, { exact: true })).toBeVisible();
+  const row = page.getByRole("row", { name: new RegExp(employeeName) });
+  await expect(row).toBeVisible();
+  await expect(row.getByText(/^\d{4}$/)).toBeVisible();
   await expect(page.getByText("riley.workforce@example.test", { exact: true })).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
   await signOut(page);
@@ -47,7 +50,7 @@ test("creation form returns field-level validation errors", async ({ page }) => 
   await page.getByRole("button", { name: "Add employee" }).click();
   await page.getByRole("button", { name: "Create employee" }).click();
   await expect(page.getByText("Enter an employee name with at least 2 characters.")).toBeVisible();
-  await expect(page.getByText("Enter an employee code with at least 2 characters.")).toBeVisible();
+  await expect(page.getByLabel("Employee code")).toHaveCount(0);
   await signOut(page);
 });
 
@@ -94,13 +97,17 @@ test("Employee is forbidden from the workforce directory", async ({ page }) => {
   await signOut(page);
 });
 
-test("management details preserve Admin privacy and expose only Super Admin controls", async ({ page }) => {
+test("management details preserve Admin privacy and provide visible Super Admin controls", async ({ page }) => {
   await signIn(page, "Nora Albright");
   await page.goto("/employees");
   await page.getByRole("link", { name: "Cora Bell" }).click();
   await expect(page.getByRole("heading", { name: "Cora Bell" })).toBeVisible();
   await expect(page.getByText("cora@example.test", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Super Admin controls" })).toBeVisible();
+  await expect(page.getByRole("form", { name: "Edit basic employee information" })).toBeVisible();
+  await expect(page.getByRole("form", { name: "Employee assignments" })).toBeVisible();
+  await expect(page.getByRole("form", { name: "Change system role" })).toBeVisible();
+  await expect(page.getByRole("form", { name: "Employee lifecycle" })).toBeVisible();
   await signOut(page);
 
   await signIn(page, "Ava Mercer");
@@ -111,6 +118,45 @@ test("management details preserve Admin privacy and expose only Super Admin cont
   await expect(page.getByRole("heading", { name: "Super Admin controls" })).toHaveCount(0);
   const crossScope = await page.goto("/employees/mock-employee-dan");
   expect(crossScope?.status()).toBe(404);
+  await signOut(page);
+});
+
+test("Super Admin can use visible management controls without granting manager or Admin authority implicitly", async ({ page }, testInfo) => {
+  const name = `Managed Workforce ${testInfo.project.name}`;
+  await signIn(page, "Nora Albright");
+  await page.goto("/employees");
+  await page.getByRole("button", { name: "Add employee" }).click();
+  await page.getByLabel("Employee name").fill(name);
+  await page.getByRole("button", { name: "Create employee" }).click();
+  await page.getByRole("row", { name: new RegExp(name) }).getByRole("link", { name: "Manage employee" }).click();
+  await expect(page.getByRole("heading", { name })).toBeVisible();
+  const basic = page.getByRole("form", { name: "Edit basic employee information" });
+  await basic.getByLabel("Display name").fill(`${name} Updated`);
+  await basic.getByRole("button", { name: "Save changes" }).click();
+  await expect(basic.getByText("Basic employee information saved.")).toBeVisible();
+  const assignments = page.getByRole("form", { name: "Employee assignments" });
+  await assignments.getByLabel("Designation").selectOption({ label: "Field Engineer" });
+  await assignments.getByLabel("Manager").selectOption("mock-employee-cora");
+  await assignments.getByLabel("Team").fill("team:alpha");
+  await assignments.getByLabel(/Working pattern/).fill("Hybrid weekdays");
+  await assignments.getByRole("button", { name: "Save changes" }).click();
+  await expect(assignments.getByText("Employee assignments saved.")).toBeVisible();
+  const role = page.getByRole("form", { name: "Change system role" });
+  await role.getByLabel("System role").selectOption("ADMIN");
+  await role.getByRole("button", { name: "Save changes" }).click();
+  await expect(role.getByText("System role saved. Existing sessions were revoked.")).toBeVisible();
+  const grant = page.getByRole("form", { name: "Grant Admin TEAM scope" });
+  await expect(grant).toBeVisible();
+  await grant.getByLabel("TEAM scope").fill("team:alpha");
+  await grant.getByRole("button", { name: "Save changes" }).click();
+  await expect(grant.getByText("TEAM scope grant added.")).toBeVisible();
+  const lifecycle = page.getByRole("form", { name: "Employee lifecycle" });
+  page.once("dialog", (dialog) => dialog.accept());
+  await lifecycle.getByRole("button", { name: "Deactivate employee" }).click();
+  await expect(lifecycle.getByText("Employee deactivated and active sessions revoked.")).toBeVisible();
+  page.once("dialog", (dialog) => dialog.accept());
+  await lifecycle.getByRole("button", { name: "Reactivate employee" }).click();
+  await expect(lifecycle.getByText("Employee reactivated.")).toBeVisible();
   await signOut(page);
 });
 

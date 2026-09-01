@@ -64,19 +64,18 @@ export const createEmployeeProfileSchema = z.object({
 }).strict();
 export const createEmployeeSchema = z.object({
   displayName: z.string().trim().min(2, "Enter an employee name with at least 2 characters.").max(120, "Employee name must be 120 characters or fewer.").transform((value) => value.replace(/\s+/g, " ")),
-  employeeCode: z.string().trim().min(2, "Enter an employee code with at least 2 characters.").max(64, "Employee code must be 64 characters or fewer.").regex(/^[A-Za-z0-9][A-Za-z0-9 _-]*$/, "Employee code may contain letters, numbers, spaces, hyphens, and underscores only.").transform((value) => value.replace(/\s+/g, " ")),
   workEmail: optionalEmail,
   workPhone: optionalText(40),
   professionalSummary: optionalText(2_000),
 }).strict();
 export const managementProfileUpdateSchema = createEmployeeProfileSchema.omit({ userId: true, employeeCode: true }).extend({
-  employeeCode: nonBlank.optional(), expectedVersion: version,
+  expectedVersion: version,
 }).strict().refine((value) => Object.keys(value).some((key) => key !== "expectedVersion"), "At least one field is required");
 export const selfProfileUpdateSchema = z.object({
   workEmail: nullableBoundedEmail, workPhone: nullableBoundedText(40), professionalSummary: nullableBoundedText(2_000), expectedVersion: version,
 }).strict().refine((value) => value.workEmail !== undefined || value.workPhone !== undefined || value.professionalSummary !== undefined, "At least one field is required");
 export const managementBasicProfileUpdateSchema = z.object({
-  displayName: createEmployeeSchema.shape.displayName.optional(), employeeCode: createEmployeeSchema.shape.employeeCode.optional(),
+  displayName: createEmployeeSchema.shape.displayName.optional(),
   workEmail: nullableBoundedEmail, workPhone: nullableBoundedText(40), professionalSummary: nullableBoundedText(2_000), expectedVersion: version,
 }).strict().refine((value) => Object.keys(value).some((key) => key !== "expectedVersion"), "At least one field is required");
 export const employeeManagementAssignmentSchema = z.object({

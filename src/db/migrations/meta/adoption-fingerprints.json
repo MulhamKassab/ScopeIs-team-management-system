@@ -3,7 +3,8 @@
   "migrations": [
     { "tag": "0000_phase_1_foundation", "idx": 0, "when": 1787814000000, "hash": "cd7965d9b11f756075d76c0a9ef2adb4159827391224233cc143b05dfbe22e34" },
     { "tag": "0001_phase_2_employee_capabilities", "idx": 1, "when": 1787827000000, "hash": "d0dc109b1cca66b727ea2843186559c1b9e0f802ad001d8013322f6a2beddd60" },
-    { "tag": "0002_phase_2_employee_management_journey", "idx": 2, "when": 1787830000000, "hash": "11913dffe54013a53021896f7c57d7357cbab8cf12e674ae86366bddd039c62c" }
+    { "tag": "0002_phase_2_employee_management_journey", "idx": 2, "when": 1787830000000, "hash": "11913dffe54013a53021896f7c57d7357cbab8cf12e674ae86366bddd039c62c" },
+    { "tag": "0003_phase_2_employee_code_sequence", "idx": 3, "when": 1787831000000, "hash": "fac18923754fb6f8049a69356749770280722d272a1b83bc42d313ccaf3b2be9" }
   ],
   "states": {
     "phase1": {
@@ -74,6 +75,33 @@
         "users": "1d0b0156834d5ad932fbd5d35b3b3a742d2752f76e7103cf534f040269a47dad"
       },
       "tables": ["admin_scope_grants", "arrangement_labels", "audit_events", "designations", "employee_evidence", "employee_files", "employee_management_notes", "employee_profiles", "employee_skills", "notifications", "sessions", "skills", "users"],
+      "enumTypes": ["authentication_mode", "evidence_kind", "evidence_review_state", "note_visibility", "scope_type", "system_role"]
+    },
+    "phase2EmployeeCode": {
+      "hash": "1525b8ec70092611d31189cf91a1c65b4cdfc6ee76c39e701c9ceef7a485f307",
+      "sectionHashes": {
+        "enums": "68f85618a4593f262607d5b2d6f33c57c191f62a8b29ff078adc46092708b68f",
+        "columns": "111bd45bd067d527247fdcdcefb419e1f19b45b37e4d45c467737c2532db436e",
+        "constraints": "36f1913ea74fe81a0590d59a7f440d26f271e90ee57e384820d1be1cd0841724",
+        "indexes": "a122a8119afe8764edcc4a59a6d0bca38a30c41d87db6be85b4738c131dd9f00"
+      },
+      "tableHashes": {
+        "admin_scope_grants": "532a21bb52d51df346aa1b0b4960a4e802ff300d1a4defe6b6c670463c0b039b",
+        "arrangement_labels": "589ef8c44b7a3e6b2e13e5876599a7685b24baec65d58f8b81b530f7563c0dc1",
+        "audit_events": "cf944aa48d66a79b4af2dee2465144828ea5a3cb60ebc58becd81d63f993045e",
+        "designations": "10a61e717a9c720fc5f72686f17d045403e88b8e361fdd746aa04739d6264095",
+        "employee_code_sequence": "1d8048f2d467c33d2a411d905053396cdddf5aadc1dc2f21e01ed239144309a0",
+        "employee_evidence": "554a248349ceda2da969f5968b8de253c25ca82dbb9c1d3d40e255f457978ea1",
+        "employee_files": "49eb32d34e43b74d938f8b3cebf191054c64e53a8476a447ddb096a40ef3b86c",
+        "employee_management_notes": "59e8a4e3b222e50ec8a9cd91212a14342f469956f5acd37f9c43ae22179e7b74",
+        "employee_profiles": "a4fefb743e1ed5e41da1f7c3392e3f2e014b803b7c5a6658f07a6cda7b3001d5",
+        "employee_skills": "1d76d44c2941e3c020decbfd0b702530ff18e367e653a75dd74e9723b6abb85e",
+        "notifications": "0445b9a5e570865f7dbc4d6e463bd9d4f6313e07693bfd6f08d60213b92ad166",
+        "sessions": "6402b0286967f08a327b86774d8942718cc0fe5093e1d5a8c4fbf037878d8b67",
+        "skills": "baea1f13432a2d3b602d5819d57afa56b7a2d4b811af6a29635ae0be7a4ecdc8",
+        "users": "1d0b0156834d5ad932fbd5d35b3b3a742d2752f76e7103cf534f040269a47dad"
+      },
+      "tables": ["admin_scope_grants", "arrangement_labels", "audit_events", "designations", "employee_code_sequence", "employee_evidence", "employee_files", "employee_management_notes", "employee_profiles", "employee_skills", "notifications", "sessions", "skills", "users"],
       "enumTypes": ["authentication_mode", "evidence_kind", "evidence_review_state", "note_visibility", "scope_type", "system_role"]
     }
   }

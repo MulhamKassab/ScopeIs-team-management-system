@@ -41,10 +41,15 @@ async function smokeRoutes(url) {
   }
   const nora = await session("mock-super-admin-nora");
   const employees = await fetch(`${url}/employees`, { headers: { cookie: nora } });
-  if (employees.status !== 200 || !(await employees.text()).includes("Employee directory")) throw new Error("Manual QA smoke failed for /employees.");
+  const employeePage = await employees.text();
+  if (employees.status !== 200 || !employeePage.includes("Employee directory") || !employeePage.includes("Manage employee")) throw new Error("Manual QA smoke failed for the Super Admin directory.");
+  const detail = await fetch(`${url}/employees/mock-employee-cora`, { headers: { cookie: nora } });
+  const detailPage = await detail.text();
+  if (detail.status !== 200 || !detailPage.includes("Super Admin controls") || !detailPage.includes("Edit basic employee information") || !detailPage.includes("Employee lifecycle")) throw new Error("Manual QA smoke failed for visible Super Admin controls.");
   const cora = await session("mock-employee-cora");
   const profile = await fetch(`${url}/profile`, { headers: { cookie: cora } });
-  if (profile.status !== 200 || !(await profile.text()).includes("My professional profile")) throw new Error("Manual QA smoke failed for /profile.");
+  const profilePage = await profile.text();
+  if (profile.status !== 200 || !profilePage.includes("My professional profile") || !profilePage.includes("Work email") || !profilePage.includes("Save profile")) throw new Error("Manual QA smoke failed for the Employee self-service profile.");
 }
 
 const port = await allocateLoopbackPort();
@@ -70,6 +75,6 @@ await withDisposableTestDatabase("phase2_manual_qa", async ({ databaseUrl, env }
   child = spawn(process.execPath, ["scripts/run-phase2-safe-build.mjs", "--serve-port", String(port)], { cwd: repositoryRoot, env: { ...env }, stdio: "inherit" });
   child.once("error", (error) => { throw error; });
   if (!(await waitFor(url))) return;
-  if (smoke) { await smokeRoutes(url); process.stdout.write("Phase 2 manual QA smoke passed: /employees and /profile loaded.\n"); await stop(); return; }
+  if (smoke) { await smokeRoutes(url); process.stdout.write("Phase 2 manual QA smoke passed: visible Super Admin controls and Cora self-service profile loaded.\n"); await stop(); return; }
   await waitForChildExit();
 });

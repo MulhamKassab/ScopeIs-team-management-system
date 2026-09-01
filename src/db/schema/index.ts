@@ -70,6 +70,12 @@ export const employeeProfiles = pgTable("employee_profiles", {
   workingPattern: text("working_pattern"),
 }, (table) => [foreignKey({ name: "employee_profiles_user_id_fkey", columns: [table.userId], foreignColumns: [users.id] }).onDelete("restrict"), foreignKey({ name: "employee_profiles_designation_id_fkey", columns: [table.designationId], foreignColumns: [designations.id] }).onDelete("restrict"), foreignKey({ name: "employee_profiles_manager_user_id_fkey", columns: [table.managerUserId], foreignColumns: [users.id] }).onDelete("restrict"), unique("employee_profiles_employee_code_key").on(table.employeeCode), index("employee_profiles_team_idx").on(table.team), check("employee_profiles_version_check", sql`${table.version} > 0`), check("employee_profiles_working_pattern_length_check", sql`${table.workingPattern} is null or char_length(${table.workingPattern}) <= 120`)]);
 
+/** One locked row allocates temporary Phase 2 employee codes without browser input or COUNT/MAX races. */
+export const employeeCodeSequence = pgTable("employee_code_sequence", {
+  singleton: boolean("singleton").primaryKey().notNull().default(true),
+  nextValue: integer("next_value").notNull().default(1),
+}, (table) => [check("employee_code_sequence_singleton_check", sql`${table.singleton} = true`), check("employee_code_sequence_next_value_check", sql`${table.nextValue} between 1 and 10000`)]);
+
 export const employeeSkills = pgTable("employee_skills", {
   id: uuid("id").defaultRandom().primaryKey(), employeeUserId: text("employee_user_id").notNull(), skillId: uuid("skill_id").notNull(), proficiencyDescription: text("proficiency_description"),
   experienceDescription: text("experience_description"), notes: text("notes"), coverageEligible: boolean("coverage_eligible"),

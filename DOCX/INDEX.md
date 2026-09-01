@@ -2,7 +2,7 @@
 
 ## Purpose and status
 
-This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is `COMPLETED` only in its narrow foundation scope; Phase 2 — Employee management journey is `COMPLETED` (11/11) in its documented bounded scope. Phase 3 remains `NOT_STARTED`.
+This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is `COMPLETED` only in its narrow foundation scope; Phase 2 — Employee management journey is `COMPLETED` (11/11) in its documented bounded scope after the verified controls/code remediation. Phase 3 remains `NOT_STARTED`.
 
 ## Reader path
 
@@ -42,7 +42,7 @@ This directory is the canonical documentation foundation for ScopeIs Team Manage
 
 ## Implementation status
 
-Historical reports remain immutable evidence and are not current roadmaps or tracker replacements. Phase 2.1–2.11 are completed as the bounded employee-management journey. Manual QA must use the supported disposable launcher, `node scripts/run-phase2-manual-qa.mjs`; it supplies complete fictional data and an isolated no-`.env*` build. The reported generic boundary errors were an unseeded/manual-runtime readiness gap, remediated and smoke-tested in [`phase-reports/SCOPEIS_PHASE_2_MANUAL_QA_RUNTIME_READINESS_AND_DEFECT_REMEDIATION_R1.md`](phase-reports/SCOPEIS_PHASE_2_MANUAL_QA_RUNTIME_READINESS_AND_DEFECT_REMEDIATION_R1.md). Phase 3 and all later journeys remain unstarted; no production authentication, database state, or deployment is certified.
+Historical reports remain immutable evidence and are not current roadmaps or tracker replacements. Phase 2.1–2.11 are completed as the bounded employee-management journey. Manual QA must use the supported disposable launcher, `node scripts/run-phase2-manual-qa.mjs`; it supplies complete fictional data and an isolated no-`.env*` build. The reported generic boundary errors were an unseeded/manual-runtime readiness gap; a subsequent genuine Super Admin discoverability/manual-code defect was remediated and verified in [`phase-reports/SCOPEIS_PHASE_2_MANUAL_QA_EMPLOYEE_CONTROLS_AND_CODE_REMEDIATION_R2.md`](phase-reports/SCOPEIS_PHASE_2_MANUAL_QA_EMPLOYEE_CONTROLS_AND_CODE_REMEDIATION_R2.md). Phase 3 and all later journeys remain unstarted; no production authentication, database state, or deployment is certified.
 
 ## Diagram catalog
 

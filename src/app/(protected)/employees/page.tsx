@@ -15,5 +15,5 @@ export default async function EmployeesPage({ searchParams }: { searchParams: Pr
   const parsed = parseEmployeeDirectorySearchParams(await searchParams);
   const filterOptions = await employeeProfileService.listDirectoryFilterOptions(actor);
   const directory = parsed.valid ? await employeeProfileService.listDirectoryProfiles(actor, parsed.query) : { items: [] };
-  return <EmployeeDirectory profiles={directory.items} filters={parsed.filters} filterOptions={filterOptions} invalidQuery={!parsed.valid} createEmployeeAction={actor.role === "SUPER_ADMIN" ? createEmployeeAction : undefined} />;
+  return <EmployeeDirectory profiles={directory.items} filters={parsed.filters} filterOptions={filterOptions} invalidQuery={!parsed.valid} createEmployeeAction={actor.role === "SUPER_ADMIN" ? createEmployeeAction : undefined} canManage={actor.role === "SUPER_ADMIN"} />;
 }

@@ -15,12 +15,13 @@ function displayTeam(team: string | null) {
   return team.replace(/^team:/, "").replace(/[-_]+/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
-export function EmployeeDirectory({ profiles, filters = {}, filterOptions = { teams: [], designations: [] }, invalidQuery = false, createEmployeeAction }: {
+export function EmployeeDirectory({ profiles, filters = {}, filterOptions = { teams: [], designations: [] }, invalidQuery = false, createEmployeeAction, canManage = false }: {
   profiles: DirectoryProfile[];
   filters?: EmployeeDirectorySearchFilters;
   filterOptions?: EmployeeDirectoryFilterOptions;
   invalidQuery?: boolean;
   createEmployeeAction?: CreateEmployeeFormAction;
+  canManage?: boolean;
 }) {
   const activeFilterCount = Object.values(filters).filter((value) => value !== undefined).length;
   const filtered = invalidQuery || activeFilterCount > 0;
@@ -50,7 +51,7 @@ export function EmployeeDirectory({ profiles, filters = {}, filterOptions = { te
         <div className="directory-table-wrap" role="region" aria-label="Employee directory records" tabIndex={0}>
           <table>
             <thead>
-              <tr><th scope="col">Employee</th><th scope="col">Employee code</th><th scope="col">Team</th><th scope="col">Status</th></tr>
+              <tr><th scope="col">Employee</th><th scope="col">Employee code</th><th scope="col">Team</th><th scope="col">Status</th><th scope="col">Action</th></tr>
             </thead>
             <tbody>
               {profiles.map((profile) => (
@@ -59,6 +60,7 @@ export function EmployeeDirectory({ profiles, filters = {}, filterOptions = { te
                   <td data-label="Employee code">{profile.employeeCode}</td>
                   <td data-label="Team">{displayTeam(profile.team)}</td>
                   <td data-label="Status"><span className={`directory-status ${profile.user.active ? "active" : "inactive"}`}>{profile.user.active ? "Active" : "Inactive"}</span></td>
+                  <td data-label="Action"><Link className="button directory-record-action" href={`/employees/${profile.userId}`}>{canManage ? "Manage employee" : "View details"}</Link></td>
                 </tr>
               ))}
             </tbody>

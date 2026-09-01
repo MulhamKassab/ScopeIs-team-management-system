@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { and, eq } from "drizzle-orm";
 import { describe, expect, it } from "vitest";
 import { db } from "@/db/client";
-import { auditEvents, employeeProfiles, employeeSkills, users, adminScopeGrants, designations, sessions } from "@/db/schema";
+import { auditEvents, employeeCodeSequence, employeeProfiles, employeeSkills, users, adminScopeGrants, designations, sessions } from "@/db/schema";
 import { EmployeeCatalogueService, EmployeeProfileService, employeeCatalogueService, employeeProfileService, employeeSkillService } from "@/modules/employees/employee-services";
 import { designationRepository } from "@/modules/employees/employee-repositories";
 import type { EmployeeActor } from "@/modules/employees/contracts";
@@ -152,21 +152,20 @@ describe("Phase 2 core employee and catalogue services", () => {
     expect(await db.select().from(auditEvents).where(eq(auditEvents.targetId, f.ids.employeeAlpha))).toEqual(expect.arrayContaining([expect.objectContaining({ action: "employee_profile.deactivated" })]));
   });
 
-  it("creates a Super Admin-only workforce record atomically without provisioning access or auditing sensitive values", async () => {
+  it("allocates sequential server-only employee codes atomically without provisioning access or auditing sensitive values", async () => {
     const f = fixture(); await seedProfiles(f);
-    const employeeCode = `NEW-${f.ids.superAdmin}`;
     const created = await employeeProfileService.createEmployee(f.superAdmin, {
-      displayName: "  New   Workforce  Employee ", employeeCode, workEmail: "new.workforce@example.test",
+      displayName: "  New   Workforce  Employee ", workEmail: "new.workforce@example.test",
       workPhone: "555-0100", professionalSummary: "Trusted operational summary",
     });
     expect(created.user).toMatchObject({ displayName: "New Workforce Employee", role: "EMPLOYEE", active: true });
-    expect(created.profile).toMatchObject({ userId: created.user.id, employeeCode, workEmail: "new.workforce@example.test", workPhone: "555-0100" });
+    expect(created.profile).toMatchObject({ userId: created.user.id, employeeCode: "0001", workEmail: "new.workforce@example.test", workPhone: "555-0100" });
     expect(await db.select().from(sessions).where(eq(sessions.userId, created.user.id))).toEqual([]);
-    expect((await employeeProfileService.listDirectoryProfiles(f.superAdmin, { query: employeeCode })).items.map((profile) => profile.userId)).toContain(created.user.id);
-    await expect(employeeProfileService.createEmployee(f.adminAlpha, { displayName: "Forbidden Admin", employeeCode: `ADMIN-${f.ids.adminAlpha}` })).rejects.toMatchObject({ code: "FORBIDDEN" });
-    await expect(employeeProfileService.createEmployee(f.employeeAlpha, { displayName: "Forbidden Employee", employeeCode: `EMPLOYEE-${f.ids.employeeAlpha}` })).rejects.toMatchObject({ code: "FORBIDDEN" });
-    await expect(employeeProfileService.createEmployee(f.superAdmin, { displayName: "Duplicate", employeeCode: employeeCode.toLowerCase() })).rejects.toMatchObject({ code: "CONFLICT" });
-    await expect(employeeProfileService.createEmployee(f.superAdmin, { displayName: "", employeeCode: "x" })).rejects.toMatchObject({ code: "VALIDATION_ERROR" });
+    expect((await employeeProfileService.listDirectoryProfiles(f.superAdmin, { query: "0001" })).items.map((profile) => profile.userId)).toContain(created.user.id);
+    await expect(employeeProfileService.createEmployee(f.adminAlpha, { displayName: "Forbidden Admin" })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(employeeProfileService.createEmployee(f.employeeAlpha, { displayName: "Forbidden Employee" })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(employeeProfileService.createEmployee(f.superAdmin, { displayName: "Crafted code", employeeCode: "9999" } as never)).rejects.toMatchObject({ code: "VALIDATION_ERROR" });
+    await expect(employeeProfileService.createEmployee(f.superAdmin, { displayName: "" })).rejects.toMatchObject({ code: "VALIDATION_ERROR" });
     const [event] = await db.select().from(auditEvents).where(and(eq(auditEvents.targetId, created.user.id), eq(auditEvents.action, "employee_profile.created")));
     expect(event?.metadata).toEqual({ fields: ["displayName", "employeeCode"] });
     expect(JSON.stringify(event?.metadata)).not.toContain("new.workforce@example.test");
@@ -174,9 +173,33 @@ describe("Phase 2 core employee and catalogue services", () => {
 
     const rollbackName = `Rollback Workforce ${f.ids.superAdmin}`;
     const failingAudit = new EmployeeProfileService(async () => { throw new Error("forced employee audit failure"); });
-    await expect(failingAudit.createEmployee(f.superAdmin, { displayName: rollbackName, employeeCode: `ROLLBACK-${f.ids.superAdmin}` })).rejects.toThrow("forced employee audit failure");
+    await expect(failingAudit.createEmployee(f.superAdmin, { displayName: rollbackName })).rejects.toThrow("forced employee audit failure");
     expect(await db.select().from(users).where(eq(users.displayName, rollbackName))).toEqual([]);
-    expect(await db.select().from(employeeProfiles).where(eq(employeeProfiles.employeeCode, `ROLLBACK-${f.ids.superAdmin}`))).toEqual([]);
+    expect(await db.select().from(employeeProfiles).where(eq(employeeProfiles.employeeCode, "0002"))).toEqual([]);
+    expect((await db.select().from(employeeCodeSequence))[0]?.nextValue).toBe(2);
+  });
+
+  it("serializes automatic codes, skips preserved legacy collisions, and never reuses a deactivated code", async () => {
+    const f = fixture(); await seedProfiles(f);
+    await db.update(employeeCodeSequence).set({ nextValue: 10 }).where(eq(employeeCodeSequence.singleton, true));
+    await employeeProfileService.createProfile(f.superAdmin, { userId: f.ids.employeeExtra, employeeCode: "0010" });
+    const created = await Promise.all([
+      employeeProfileService.createEmployee(f.superAdmin, { displayName: "Concurrent One" }),
+      employeeProfileService.createEmployee(f.superAdmin, { displayName: "Concurrent Two" }),
+    ]);
+    expect(created.map((record) => record.profile.employeeCode).sort()).toEqual(["0011", "0012"]);
+    const first = created.find((record) => record.profile.employeeCode === "0011")!;
+    const deactivated = await employeeProfileService.setEmployeeActive(f.superAdmin, first.user.id, first.profile.version, false);
+    expect(deactivated.userId).toBe(first.user.id);
+    const afterDeactivation = await employeeProfileService.createEmployee(f.superAdmin, { displayName: "After deactivation" });
+    expect(afterDeactivation.profile.employeeCode).toBe("0013");
+    expect((await employeeProfileService.getProfile(f.superAdmin, f.ids.employeeExtra)).employeeCode).toBe("0010");
+  });
+
+  it("returns a safe capacity error after the bounded four-digit range is exhausted", async () => {
+    const f = fixture(); await seedProfiles(f);
+    await db.update(employeeCodeSequence).set({ nextValue: 10_000 }).where(eq(employeeCodeSequence.singleton, true));
+    await expect(employeeProfileService.createEmployee(f.superAdmin, { displayName: "Beyond four digits" })).rejects.toMatchObject({ code: "EMPLOYEE_CODE_CAPACITY" });
   });
 
   it("governs lifecycle, assignments, roles, explicit Admin TEAM scopes, concurrency, and audit rollback", async () => {
@@ -189,10 +212,10 @@ describe("Phase 2 core employee and catalogue services", () => {
     expect(assigned.workingPattern).toBe("Hybrid weekdays");
     await expect(employeeProfileService.updateManagementAssignments(f.superAdmin, f.ids.employeeBravo, { expectedVersion: 1, managerUserId: f.ids.employeeAlpha })).rejects.toMatchObject({ code: "INVALID_MANAGER" });
     await expect(employeeProfileService.updateManagementAssignments(f.adminAlpha, f.ids.employeeAlpha, { expectedVersion: assigned.version, team: "team:bravo" })).rejects.toMatchObject({ code: "FORBIDDEN" });
-    const renamed = await employeeProfileService.updateBasicProfile(f.superAdmin, f.ids.employeeAlpha, { expectedVersion: assigned.version, displayName: "Renamed Alpha", employeeCode: `RENAMED-${f.ids.employeeAlpha}`, workEmail: "changed@example.test" });
-    expect(renamed.employeeCode).toContain("RENAMED-");
+    const renamed = await employeeProfileService.updateBasicProfile(f.superAdmin, f.ids.employeeAlpha, { expectedVersion: assigned.version, displayName: "Renamed Alpha", workEmail: "changed@example.test" });
+    expect(renamed.employeeCode).toContain("ALPHA-");
     await expect(employeeProfileService.updateBasicProfile(f.superAdmin, f.ids.employeeAlpha, { expectedVersion: assigned.version, displayName: "Stale" })).rejects.toMatchObject({ code: "STALE_VERSION" });
-    await expect(employeeProfileService.updateBasicProfile(f.superAdmin, f.ids.employeeBravo, { expectedVersion: 1, employeeCode: renamed.employeeCode })).rejects.toMatchObject({ code: "CONFLICT" });
+    await expect(employeeProfileService.updateBasicProfile(f.superAdmin, f.ids.employeeBravo, { expectedVersion: 1, employeeCode: renamed.employeeCode } as never)).rejects.toMatchObject({ code: "VALIDATION_ERROR" });
     await db.insert(sessions).values({ userId: f.ids.employeeAlpha, tokenHash: `session-${f.ids.employeeAlpha}`, sessionVersion: 1, expiresAt: new Date(Date.now() + 60_000) });
     const deactivated = await employeeProfileService.setEmployeeActive(f.superAdmin, f.ids.employeeAlpha, renamed.version, false);
     expect(deactivated.version).toBe(renamed.version + 1);

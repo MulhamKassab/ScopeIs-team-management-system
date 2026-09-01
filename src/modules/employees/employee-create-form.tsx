@@ -21,9 +21,7 @@ export function EmployeeCreatePanel({ action }: { action: CreateEmployeeFormActi
         <input id="employee-display-name" name="displayName" type="text" autoComplete="name" maxLength={120} aria-invalid={Boolean(state.fieldErrors?.displayName)} aria-describedby={state.fieldErrors?.displayName ? "employee-display-name-error" : undefined} />
         {state.fieldErrors?.displayName ? <p id="employee-display-name-error" className="employee-form-error">{state.fieldErrors.displayName}</p> : null}
 
-        <label htmlFor="employee-code">Employee code <span aria-hidden="true">*</span></label>
-        <input id="employee-code" name="employeeCode" type="text" maxLength={64} aria-invalid={Boolean(state.fieldErrors?.employeeCode)} aria-describedby={state.fieldErrors?.employeeCode ? "employee-code-error" : undefined} />
-        {state.fieldErrors?.employeeCode ? <p id="employee-code-error" className="employee-form-error">{state.fieldErrors.employeeCode}</p> : null}
+        <p className="employee-code-notice" role="status">Employee code is assigned automatically by the server after creation.</p>
 
         <label htmlFor="employee-work-email">Work email <span className="employee-optional">Optional</span></label>
         <input id="employee-work-email" name="workEmail" type="email" autoComplete="email" maxLength={254} aria-invalid={Boolean(state.fieldErrors?.workEmail)} aria-describedby={state.fieldErrors?.workEmail ? "employee-work-email-error" : undefined} />

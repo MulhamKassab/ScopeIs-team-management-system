@@ -30,7 +30,8 @@ export const updateEmployeeBasicAction: EmployeeMutationAction = async (_state, 
   const actor = await actorOrState(); if (!actor) return { error: "Your session has expired. Sign in again." };
   const userId = target(formData);
   try {
-    await employeeProfileService.updateBasicProfile(actor, userId, { expectedVersion: version(formData), displayName: text(formData, "displayName"), employeeCode: text(formData, "employeeCode"), workEmail: nullable(formData, "workEmail"), workPhone: nullable(formData, "workPhone"), professionalSummary: nullable(formData, "professionalSummary") });
+    if (!onlyContains(formData, ["userId", "expectedVersion", "displayName", "workEmail", "workPhone", "professionalSummary"])) return { error: "Employee code and management assignments cannot be changed from this form." };
+    await employeeProfileService.updateBasicProfile(actor, userId, { expectedVersion: version(formData), displayName: text(formData, "displayName"), workEmail: nullable(formData, "workEmail"), workPhone: nullable(formData, "workPhone"), professionalSummary: nullable(formData, "professionalSummary") });
     refresh(userId); return { success: "Basic employee information saved." };
   } catch (error) { return { error: message(error) }; }
 };

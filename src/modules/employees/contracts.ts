@@ -30,15 +30,14 @@ export type CreateEmployeeProfileInput = {
 /** The deliberately small Phase 2.4 workforce-record creation contract. */
 export type CreateEmployeeInput = {
   displayName: string;
-  employeeCode: string;
   workEmail?: string;
   workPhone?: string;
   professionalSummary?: string;
 };
 
-export type ManagementProfileUpdateInput = Omit<Partial<CreateEmployeeProfileInput>, "userId"> & { expectedVersion: number };
+export type ManagementProfileUpdateInput = Omit<Partial<CreateEmployeeProfileInput>, "userId" | "employeeCode"> & { expectedVersion: number };
 export type SelfProfileUpdateInput = Pick<ManagementProfileUpdateInput, "workEmail" | "workPhone" | "professionalSummary"> & { expectedVersion: number };
-export type ManagementBasicProfileUpdateInput = { displayName?: string; employeeCode?: string; workEmail?: string | null; workPhone?: string | null; professionalSummary?: string | null; expectedVersion: number };
+export type ManagementBasicProfileUpdateInput = { displayName?: string; workEmail?: string | null; workPhone?: string | null; professionalSummary?: string | null; expectedVersion: number };
 export type EmployeeManagementAssignmentInput = {
   designationId?: string | null;
   managerUserId?: string | null;

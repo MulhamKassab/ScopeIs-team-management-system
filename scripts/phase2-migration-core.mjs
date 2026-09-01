@@ -48,6 +48,7 @@ function expectedStage(manifest, count) {
   if (count === 1) return manifest.states.phase1;
   if (count === 2) return manifest.states.phase1And2;
   if (count === 3) return manifest.states.phase2EmployeeJourney;
+  if (count === 4) return manifest.states.phase2EmployeeCode;
   return null;
 }
 
@@ -118,7 +119,10 @@ export async function inspectMigrationState(client) {
     return { state: "C", description: "Exact ledgerless Phase 1+2 database", pending: manifest.migrations.slice(2).map((migration) => migration.tag), adopt: manifest.migrations.slice(0, 2), fingerprint, ledger, diagnostics: schemaDiagnostics(fingerprint, manifest.states.phase1And2) };
   }
   if (!ledger.schemaExists && fingerprint.hash === manifest.states.phase2EmployeeJourney.hash) {
-    return { state: "F", description: "Exact ledgerless Phase 2 employee-journey database", pending: [], adopt: manifest.migrations, fingerprint, ledger, diagnostics: schemaDiagnostics(fingerprint, manifest.states.phase2EmployeeJourney) };
+    return { state: "F", description: "Exact ledgerless Phase 2 employee-journey database", pending: manifest.migrations.slice(3).map((migration) => migration.tag), adopt: manifest.migrations.slice(0, 3), fingerprint, ledger, diagnostics: schemaDiagnostics(fingerprint, manifest.states.phase2EmployeeJourney) };
+  }
+  if (!ledger.schemaExists && fingerprint.hash === manifest.states.phase2EmployeeCode.hash) {
+    return { state: "G", description: "Exact ledgerless Phase 2 employee-code database", pending: [], adopt: manifest.migrations, fingerprint, ledger, diagnostics: schemaDiagnostics(fingerprint, manifest.states.phase2EmployeeCode) };
   }
   if (ledger.schemaExists && ledgerValidation.valid) {
     const expected = expectedStage(manifest, ledgerValidation.count);
@@ -195,7 +199,7 @@ export async function reconcileMigrationState(connectionString, options = {}) {
     const before = await inspectMigrationState(client);
     if (before.state === "E") return { safety, before, applied: false, refused: true };
     if (!options.apply) return { safety, before, applied: false, refused: false, dryRun: true };
-    if (before.state === "B" || before.state === "C" || before.state === "F") await createAndAdoptLedger(client, before.adopt);
+    if (before.state === "B" || before.state === "C" || before.state === "F" || before.state === "G") await createAndAdoptLedger(client, before.adopt);
     await client.end();
     clientClosed = true;
     await runNormalMigrator(connectionString);

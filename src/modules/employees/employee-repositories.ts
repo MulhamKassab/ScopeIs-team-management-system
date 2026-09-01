@@ -1,8 +1,8 @@
 import "server-only";
-import { and, asc, count, eq, ilike, inArray, isNull, or, sql } from "drizzle-orm";
+import { and, asc, count, eq, ilike, inArray, isNull, lte, or, sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import {
-  adminScopeGrants, arrangementLabels, designations, employeeEvidence, employeeProfiles, employeeSkills, sessions, skills, users,
+  adminScopeGrants, arrangementLabels, designations, employeeCodeSequence, employeeEvidence, employeeProfiles, employeeSkills, sessions, skills, users,
 } from "@/db/schema";
 import type { EmployeeDirectoryQuery, PaginationInput } from "@/modules/employees/contracts";
 import { normalizeCatalogueName, normalizeIdentifier, parseOrDomainError, paginationSchema } from "@/modules/employees/employee-validation";
@@ -116,6 +116,13 @@ export const employeeProfileRepository = {
   async createUser(executor: DatabaseExecutor, input: typeof users.$inferInsert) { const [row] = await executor.insert(users).values(input).returning(); return row!; },
   async findByNormalizedEmployeeCode(executor: DatabaseExecutor, employeeCode: string) {
     const [row] = await executor.select().from(employeeProfiles).where(sql`lower(trim(${employeeProfiles.employeeCode})) = ${normalizeIdentifier(employeeCode)}`).limit(1); return row ?? null;
+  },
+  async allocateEmployeeCodeNumber(executor: DatabaseExecutor) {
+    const [row] = await executor.update(employeeCodeSequence)
+      .set({ nextValue: sql`${employeeCodeSequence.nextValue} + 1` })
+      .where(and(eq(employeeCodeSequence.singleton, true), lte(employeeCodeSequence.nextValue, 9_999)))
+      .returning({ allocated: employeeCodeSequence.nextValue });
+    return row ? row.allocated - 1 : null;
   },
   async list(executor: DatabaseExecutor, input: PaginationInput & EmployeeDirectoryQuery & { teams?: string[] }) {
     const parsed = pageInput(input); const conditions = [];

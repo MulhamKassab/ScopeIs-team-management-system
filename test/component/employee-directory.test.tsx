@@ -31,6 +31,15 @@ describe("EmployeeDirectory", () => {
     expect(screen.queryByRole("button", { name: "Add employee" })).not.toBeInTheDocument();
   });
 
+  it("makes the Super Admin management entry point explicit without showing that wording to scoped Admin views", () => {
+    const profiles = [{ userId: "employee-1", employeeCode: "0001", team: "team:alpha", user: { id: "employee-1", displayName: "Avery Morgan", role: "EMPLOYEE" as const, active: true } }];
+    const { rerender } = render(<EmployeeDirectory profiles={profiles} canManage />);
+    expect(screen.getByRole("link", { name: "Manage employee" })).toHaveAttribute("href", "/employees/employee-1");
+    rerender(<EmployeeDirectory profiles={profiles} />);
+    expect(screen.getByRole("link", { name: "View details" })).toHaveAttribute("href", "/employees/employee-1");
+    expect(screen.queryByRole("link", { name: "Manage employee" })).not.toBeInTheDocument();
+  });
+
   it("renders accessible active filters and a distinct no-results state", () => {
     render(<EmployeeDirectory profiles={[]} filters={{ query: "Avery", status: "active" }} filterOptions={{
       teams: ["team:alpha"], designations: [{ id: "844f52b6-2baf-4d9f-a8cf-3fbbd4f3e1ef", name: "Field Engineer" }],

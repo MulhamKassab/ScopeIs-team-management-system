@@ -157,6 +157,16 @@ export class EmployeeProfileService {
     return user;
   }
 
+  private async allocateEmployeeCode(tx: DatabaseTransaction) {
+    while (true) {
+      const number = await employeeProfileRepository.allocateEmployeeCodeNumber(tx);
+      if (number === null) throw new EmployeeDomainError("EMPLOYEE_CODE_CAPACITY");
+      const employeeCode = String(number).padStart(4, "0");
+      // Preserve legacy/manual records: reserve a colliding numeric value rather than renumbering or reusing it.
+      if (!await employeeProfileRepository.findByNormalizedEmployeeCode(tx, employeeCode)) return employeeCode;
+    }
+  }
+
   async getProfile(actor: EmployeeActor, userId: string): Promise<EmployeeProfileView> {
     const profile = await employeeProfileRepository.getByUserId(db, userId);
     if (!profile) throw new EmployeeDomainError("NOT_FOUND");
@@ -234,13 +244,12 @@ export class EmployeeProfileService {
   async createEmployee(actor: EmployeeActor, input: CreateEmployeeInput) {
     requireSuperAdmin(actor); const parsed = parseOrDomainError(createEmployeeSchema, input);
     return db.transaction(async (tx) => {
-      await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${`employee-code:${normalizeIdentifier(parsed.employeeCode)}`}))`);
-      if (await employeeProfileRepository.findByNormalizedEmployeeCode(tx, parsed.employeeCode)) throw new EmployeeDomainError("CONFLICT");
+      const employeeCode = await this.allocateEmployeeCode(tx);
       const user = await employeeProfileRepository.createUser(tx, {
         id: `employee-${randomUUID()}`, displayName: parsed.displayName, role: "EMPLOYEE", active: true,
       });
       const profile = await employeeProfileRepository.create(tx, {
-        userId: user.id, employeeCode: parsed.employeeCode, workEmail: parsed.workEmail,
+        userId: user.id, employeeCode, workEmail: parsed.workEmail,
         workPhone: parsed.workPhone, professionalSummary: parsed.professionalSummary,
       });
       // Audit only the non-sensitive identifiers; contact details and summaries never enter metadata.
@@ -254,14 +263,9 @@ export class EmployeeProfileService {
     return db.transaction(async (tx) => {
       const current = await employeeProfileRepository.getByUserId(tx, userId); if (!current) throw new EmployeeDomainError("NOT_FOUND");
       if (current.version !== parsed.expectedVersion) throw new EmployeeDomainError("STALE_VERSION");
-      if (parsed.employeeCode !== undefined && normalizeIdentifier(parsed.employeeCode) !== normalizeIdentifier(current.employeeCode)) {
-        await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${`employee-code:${normalizeIdentifier(parsed.employeeCode)}`}))`);
-        const duplicate = await employeeProfileRepository.findByNormalizedEmployeeCode(tx, parsed.employeeCode);
-        if (duplicate && duplicate.userId !== userId) throw new EmployeeDomainError("CONFLICT");
-      }
       await this.assertActiveDesignation(tx, parsed.designationId); await this.assertValidManager(tx, userId, parsed.managerUserId);
       const { expectedVersion, ...update } = parsed;
-      const profile = await employeeProfileRepository.update(tx, userId, expectedVersion, { ...update, ...(update.employeeCode ? { employeeCode: update.employeeCode.trim().replace(/\s+/g, " ") } : {}) });
+      const profile = await employeeProfileRepository.update(tx, userId, expectedVersion, update);
       if (!profile) throw new EmployeeDomainError("STALE_VERSION");
       await this.audit(tx, actor, "employee_profile.management_updated", userId, { fields: changedFields(update), version: expectedVersion + 1 });
       return profile;
@@ -273,13 +277,9 @@ export class EmployeeProfileService {
     return db.transaction(async (tx) => {
       const current = await employeeProfileRepository.getByUserId(tx, userId); if (!current) throw new EmployeeDomainError("NOT_FOUND");
       if (current.version !== parsed.expectedVersion) throw new EmployeeDomainError("STALE_VERSION");
-      if (parsed.employeeCode && normalizeIdentifier(parsed.employeeCode) !== normalizeIdentifier(current.employeeCode)) {
-        await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${`employee-code:${normalizeIdentifier(parsed.employeeCode)}`}))`);
-        const duplicate = await employeeProfileRepository.findByNormalizedEmployeeCode(tx, parsed.employeeCode); if (duplicate && duplicate.userId !== userId) throw new EmployeeDomainError("CONFLICT");
-      }
       const { expectedVersion, displayName, ...profileUpdate } = parsed;
       if (displayName !== undefined) await employeeProfileRepository.updateUser(tx, userId, { displayName });
-      const profile = await employeeProfileRepository.update(tx, userId, expectedVersion, { ...profileUpdate, ...(profileUpdate.employeeCode ? { employeeCode: profileUpdate.employeeCode.trim().replace(/\s+/g, " ") } : {}) });
+      const profile = await employeeProfileRepository.update(tx, userId, expectedVersion, profileUpdate);
       if (!profile) throw new EmployeeDomainError("STALE_VERSION");
       await this.audit(tx, actor, "employee_profile.management_updated", userId, { fields: changedFields(parsed), version: expectedVersion + 1 }); return profile;
     });
