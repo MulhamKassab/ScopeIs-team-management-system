@@ -25,6 +25,32 @@ test("Super Admin searches employee name and employee code", async ({ page }) =>
   await signOut(page);
 });
 
+test("Super Admin creates a workforce record without exposing contact data in the directory", async ({ page }, testInfo) => {
+  const employeeCode = `EMP-NEW-240-${testInfo.project.name.toUpperCase()}`;
+  await signIn(page, "Nora Albright");
+  await page.goto("/employees");
+  await page.getByRole("button", { name: "Add employee" }).click();
+  await page.getByLabel("Employee name").fill("Riley Workforce");
+  await page.getByLabel("Employee code").fill(employeeCode);
+  await page.getByLabel("Work email").fill("riley.workforce@example.test");
+  await page.getByRole("button", { name: "Create employee" }).click();
+  await expect(page).toHaveURL(/\/employees$/);
+  await expect(page.getByText(employeeCode, { exact: true })).toBeVisible();
+  await expect(page.getByText("riley.workforce@example.test", { exact: true })).toHaveCount(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+  await signOut(page);
+});
+
+test("creation form returns field-level validation errors", async ({ page }) => {
+  await signIn(page, "Nora Albright");
+  await page.goto("/employees");
+  await page.getByRole("button", { name: "Add employee" }).click();
+  await page.getByRole("button", { name: "Create employee" }).click();
+  await expect(page.getByText("Enter an employee name with at least 2 characters.")).toBeVisible();
+  await expect(page.getByText("Enter an employee code with at least 2 characters.")).toBeVisible();
+  await signOut(page);
+});
+
 test("Super Admin combines designation, team, and status filters", async ({ page }) => {
   await signIn(page, "Nora Albright");
   await page.goto("/employees");
@@ -47,6 +73,7 @@ test("Admin filtering remains safe within their Team scope", async ({ page }) =>
   await expect(page.getByText("cora@example.test", { exact: true })).toHaveCount(0);
   await expect(page.getByText("100", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Private Alpha location", { exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Add employee" })).toHaveCount(0);
   await signOut(page);
 });
 

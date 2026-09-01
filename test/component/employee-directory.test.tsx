@@ -2,6 +2,9 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { EmployeeDirectory } from "@/modules/employees/employee-directory";
+import type { CreateEmployeeFormAction } from "@/modules/employees/employee-create-action";
+
+const noOpCreateEmployee: CreateEmployeeFormAction = async () => ({});
 
 describe("EmployeeDirectory", () => {
   it("renders only approved directory metadata", () => {
@@ -19,6 +22,13 @@ describe("EmployeeDirectory", () => {
   it("renders a clear safe empty state", () => {
     render(<EmployeeDirectory profiles={[]} />);
     expect(screen.getByRole("status")).toHaveTextContent("No employee records are available");
+  });
+
+  it("shows the workforce-record creation action only when the protected page supplies it", () => {
+    const { rerender } = render(<EmployeeDirectory profiles={[]} createEmployeeAction={noOpCreateEmployee} />);
+    expect(screen.getByRole("button", { name: "Add employee" })).toBeInTheDocument();
+    rerender(<EmployeeDirectory profiles={[]} />);
+    expect(screen.queryByRole("button", { name: "Add employee" })).not.toBeInTheDocument();
   });
 
   it("renders accessible active filters and a distinct no-results state", () => {

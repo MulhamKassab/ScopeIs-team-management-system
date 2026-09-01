@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { getCurrentActor } from "@/modules/auth/session-service";
 import { can } from "@/modules/authorization/authorization-service";
 import { EmployeeDirectory } from "@/modules/employees/employee-directory";
+import { createEmployeeAction } from "@/modules/employees/employee-create-action";
 import { parseEmployeeDirectorySearchParams, type DirectorySearchParams } from "@/modules/employees/employee-directory-query";
 import { employeeProfileService } from "@/modules/employees/employee-services";
 
@@ -14,5 +15,5 @@ export default async function EmployeesPage({ searchParams }: { searchParams: Pr
   const parsed = parseEmployeeDirectorySearchParams(await searchParams);
   const filterOptions = await employeeProfileService.listDirectoryFilterOptions(actor);
   const directory = parsed.valid ? await employeeProfileService.listDirectoryProfiles(actor, parsed.query) : { items: [] };
-  return <EmployeeDirectory profiles={directory.items} filters={parsed.filters} filterOptions={filterOptions} invalidQuery={!parsed.valid} />;
+  return <EmployeeDirectory profiles={directory.items} filters={parsed.filters} filterOptions={filterOptions} invalidQuery={!parsed.valid} createEmployeeAction={actor.role === "SUPER_ADMIN" ? createEmployeeAction : undefined} />;
 }

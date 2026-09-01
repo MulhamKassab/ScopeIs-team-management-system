@@ -1,15 +1,16 @@
 import "server-only";
+import { randomUUID } from "node:crypto";
 import { sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import { writeAuditEvent } from "@/modules/audit/audit-service";
 import type {
   ArrangementLabelCreateInput, ArrangementLabelUpdateInput, AuditChangeMetadata, CatalogueCreateInput,
-  CatalogueUpdateInput, CreateEmployeeProfileInput, EmployeeActor, EmployeeDirectoryFilterOptions, EmployeeDirectoryQuery, EmployeeSkillCreateInput, EmployeeSkillUpdateInput,
+  CatalogueUpdateInput, CreateEmployeeInput, CreateEmployeeProfileInput, EmployeeActor, EmployeeDirectoryFilterOptions, EmployeeDirectoryQuery, EmployeeSkillCreateInput, EmployeeSkillUpdateInput,
   ManagementProfileUpdateInput, Page, PaginationInput, SelfProfileUpdateInput, SkillCreateInput, SkillUpdateInput,
 } from "@/modules/employees/contracts";
 import { EmployeeDomainError } from "@/modules/employees/domain-error";
 import {
-  arrangementCreateSchema, arrangementUpdateSchema, catalogueCreateSchema, catalogueUpdateSchema, createEmployeeProfileSchema,
+  arrangementCreateSchema, arrangementUpdateSchema, catalogueCreateSchema, catalogueUpdateSchema, createEmployeeSchema, createEmployeeProfileSchema,
   employeeDirectoryQuerySchema, employeeSkillCreateSchema, employeeSkillUpdateSchema, managementProfileUpdateSchema, normalizeCatalogueName, skillCreateSchema, skillUpdateSchema,
   normalizeIdentifier, parseOrDomainError, selfProfileUpdateSchema,
 } from "@/modules/employees/employee-validation";
@@ -193,6 +194,28 @@ export class EmployeeProfileService {
       const profile = await employeeProfileRepository.create(tx, { ...parsed, employeeCode: parsed.employeeCode.trim().replace(/\s+/g, " ") });
       await this.audit(tx, actor, "employee_profile.created", profile.userId, { fields: changedFields(parsed) });
       return profile;
+    });
+  }
+
+  /**
+   * Creates an internal workforce record only. It intentionally does not create
+   * credentials, sessions, invitations, mock personas, scopes, or assignments.
+   */
+  async createEmployee(actor: EmployeeActor, input: CreateEmployeeInput) {
+    requireSuperAdmin(actor); const parsed = parseOrDomainError(createEmployeeSchema, input);
+    return db.transaction(async (tx) => {
+      await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${`employee-code:${normalizeIdentifier(parsed.employeeCode)}`}))`);
+      if (await employeeProfileRepository.findByNormalizedEmployeeCode(tx, parsed.employeeCode)) throw new EmployeeDomainError("CONFLICT");
+      const user = await employeeProfileRepository.createUser(tx, {
+        id: `employee-${randomUUID()}`, displayName: parsed.displayName, role: "EMPLOYEE", active: true,
+      });
+      const profile = await employeeProfileRepository.create(tx, {
+        userId: user.id, employeeCode: parsed.employeeCode, workEmail: parsed.workEmail,
+        workPhone: parsed.workPhone, professionalSummary: parsed.professionalSummary,
+      });
+      // Audit only the non-sensitive identifiers; contact details and summaries never enter metadata.
+      await this.audit(tx, actor, "employee_profile.created", profile.userId, { fields: ["displayName", "employeeCode"] });
+      return { user, profile };
     });
   }
 

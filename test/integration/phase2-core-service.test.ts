@@ -2,8 +2,8 @@ import { randomUUID } from "node:crypto";
 import { and, eq } from "drizzle-orm";
 import { describe, expect, it } from "vitest";
 import { db } from "@/db/client";
-import { auditEvents, employeeProfiles, employeeSkills, users, adminScopeGrants, designations } from "@/db/schema";
-import { EmployeeCatalogueService, employeeCatalogueService, employeeProfileService, employeeSkillService } from "@/modules/employees/employee-services";
+import { auditEvents, employeeProfiles, employeeSkills, users, adminScopeGrants, designations, sessions } from "@/db/schema";
+import { EmployeeCatalogueService, EmployeeProfileService, employeeCatalogueService, employeeProfileService, employeeSkillService } from "@/modules/employees/employee-services";
 import { designationRepository } from "@/modules/employees/employee-repositories";
 import type { EmployeeActor } from "@/modules/employees/contracts";
 
@@ -132,6 +132,33 @@ describe("Phase 2 core employee and catalogue services", () => {
     expect(deactivated.version).toBe(alphaManaged.version + 1);
     const [user] = await db.select().from(users).where(eq(users.id, f.ids.employeeAlpha)); expect(user?.active).toBe(false);
     expect(await db.select().from(auditEvents).where(eq(auditEvents.targetId, f.ids.employeeAlpha))).toEqual(expect.arrayContaining([expect.objectContaining({ action: "employee_profile.deactivated" })]));
+  });
+
+  it("creates a Super Admin-only workforce record atomically without provisioning access or auditing sensitive values", async () => {
+    const f = fixture(); await seedProfiles(f);
+    const employeeCode = `NEW-${f.ids.superAdmin}`;
+    const created = await employeeProfileService.createEmployee(f.superAdmin, {
+      displayName: "  New   Workforce  Employee ", employeeCode, workEmail: "new.workforce@example.test",
+      workPhone: "555-0100", professionalSummary: "Trusted operational summary",
+    });
+    expect(created.user).toMatchObject({ displayName: "New Workforce Employee", role: "EMPLOYEE", active: true });
+    expect(created.profile).toMatchObject({ userId: created.user.id, employeeCode, workEmail: "new.workforce@example.test", workPhone: "555-0100" });
+    expect(await db.select().from(sessions).where(eq(sessions.userId, created.user.id))).toEqual([]);
+    expect((await employeeProfileService.listDirectoryProfiles(f.superAdmin, { query: employeeCode })).items.map((profile) => profile.userId)).toContain(created.user.id);
+    await expect(employeeProfileService.createEmployee(f.adminAlpha, { displayName: "Forbidden Admin", employeeCode: `ADMIN-${f.ids.adminAlpha}` })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(employeeProfileService.createEmployee(f.employeeAlpha, { displayName: "Forbidden Employee", employeeCode: `EMPLOYEE-${f.ids.employeeAlpha}` })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(employeeProfileService.createEmployee(f.superAdmin, { displayName: "Duplicate", employeeCode: employeeCode.toLowerCase() })).rejects.toMatchObject({ code: "CONFLICT" });
+    await expect(employeeProfileService.createEmployee(f.superAdmin, { displayName: "", employeeCode: "x" })).rejects.toMatchObject({ code: "VALIDATION_ERROR" });
+    const [event] = await db.select().from(auditEvents).where(and(eq(auditEvents.targetId, created.user.id), eq(auditEvents.action, "employee_profile.created")));
+    expect(event?.metadata).toEqual({ fields: ["displayName", "employeeCode"] });
+    expect(JSON.stringify(event?.metadata)).not.toContain("new.workforce@example.test");
+    expect(JSON.stringify(event?.metadata)).not.toContain("Trusted operational summary");
+
+    const rollbackName = `Rollback Workforce ${f.ids.superAdmin}`;
+    const failingAudit = new EmployeeProfileService(async () => { throw new Error("forced employee audit failure"); });
+    await expect(failingAudit.createEmployee(f.superAdmin, { displayName: rollbackName, employeeCode: `ROLLBACK-${f.ids.superAdmin}` })).rejects.toThrow("forced employee audit failure");
+    expect(await db.select().from(users).where(eq(users.displayName, rollbackName))).toEqual([]);
+    expect(await db.select().from(employeeProfiles).where(eq(employeeProfiles.employeeCode, `ROLLBACK-${f.ids.superAdmin}`))).toEqual([]);
   });
 
   it("enforces employee-skill scope, duplicate/reference rules, optional proficiency, archive safety, and audit", async () => {

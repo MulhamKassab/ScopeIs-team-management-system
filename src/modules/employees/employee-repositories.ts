@@ -113,6 +113,7 @@ export const employeeProfileRepository = {
     return row ? { ...row.profile, user: row.user } : null;
   },
   async findUser(executor: DatabaseExecutor, userId: string) { const [row] = await executor.select().from(users).where(eq(users.id, userId)).limit(1); return row ?? null; },
+  async createUser(executor: DatabaseExecutor, input: typeof users.$inferInsert) { const [row] = await executor.insert(users).values(input).returning(); return row!; },
   async findByNormalizedEmployeeCode(executor: DatabaseExecutor, employeeCode: string) {
     const [row] = await executor.select().from(employeeProfiles).where(sql`lower(trim(${employeeProfiles.employeeCode})) = ${normalizeIdentifier(employeeCode)}`).limit(1); return row ?? null;
   },

@@ -13,6 +13,8 @@ const nonBlank = z.string().transform((value) => value.trim()).refine((value) =>
 const nullableText = z.string().transform((value) => value.trim()).nullable().optional();
 const nullableOptionalText = nullableText.transform((value) => value === "" ? null : value);
 const version = z.number().int().positive();
+const optionalText = (maximum: number) => z.string().optional().transform((value) => value?.trim() || undefined).pipe(z.string().max(maximum).optional());
+const optionalEmail = z.string().optional().transform((value) => value?.trim() || undefined).pipe(z.string().email("Enter a valid work email address.").max(254, "Work email must be 254 characters or fewer.").optional());
 
 export const paginationSchema = z.object({
   page: z.number().int().positive().optional().default(1),
@@ -56,6 +58,13 @@ export const createEmployeeProfileSchema = z.object({
   team: nullableOptionalText,
   managerUserId: nullableOptionalText,
   defaultWorkLocation: nullableOptionalText,
+}).strict();
+export const createEmployeeSchema = z.object({
+  displayName: z.string().trim().min(2, "Enter an employee name with at least 2 characters.").max(120, "Employee name must be 120 characters or fewer.").transform((value) => value.replace(/\s+/g, " ")),
+  employeeCode: z.string().trim().min(2, "Enter an employee code with at least 2 characters.").max(64, "Employee code must be 64 characters or fewer.").regex(/^[A-Za-z0-9][A-Za-z0-9 _-]*$/, "Employee code may contain letters, numbers, spaces, hyphens, and underscores only.").transform((value) => value.replace(/\s+/g, " ")),
+  workEmail: optionalEmail,
+  workPhone: optionalText(40),
+  professionalSummary: optionalText(2_000),
 }).strict();
 export const managementProfileUpdateSchema = createEmployeeProfileSchema.omit({ userId: true, employeeCode: true }).extend({
   employeeCode: nonBlank.optional(), expectedVersion: version,

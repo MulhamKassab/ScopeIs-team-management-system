@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { EmployeeDirectoryFilterOptions, EmployeeDirectorySearchFilters } from "@/modules/employees/contracts";
+import { EmployeeCreatePanel } from "@/modules/employees/employee-create-form";
+import type { CreateEmployeeFormAction } from "@/modules/employees/employee-create-action";
 
 export type DirectoryProfile = {
   userId: string;
@@ -13,11 +15,12 @@ function displayTeam(team: string | null) {
   return team.replace(/^team:/, "").replace(/[-_]+/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
-export function EmployeeDirectory({ profiles, filters = {}, filterOptions = { teams: [], designations: [] }, invalidQuery = false }: {
+export function EmployeeDirectory({ profiles, filters = {}, filterOptions = { teams: [], designations: [] }, invalidQuery = false, createEmployeeAction }: {
   profiles: DirectoryProfile[];
   filters?: EmployeeDirectorySearchFilters;
   filterOptions?: EmployeeDirectoryFilterOptions;
   invalidQuery?: boolean;
+  createEmployeeAction?: CreateEmployeeFormAction;
 }) {
   const activeFilterCount = Object.values(filters).filter((value) => value !== undefined).length;
   const filtered = invalidQuery || activeFilterCount > 0;
@@ -26,6 +29,7 @@ export function EmployeeDirectory({ profiles, filters = {}, filterOptions = { te
       <p className="eyebrow">Phase 2 · Workforce</p>
       <h2 id="employee-directory-title">Employee directory</h2>
       <p className="directory-intro">Authorized workforce records in your current management scope.</p>
+      {createEmployeeAction ? <EmployeeCreatePanel action={createEmployeeAction} /> : null}
 
       <form className="directory-filters" action="/employees" method="get" aria-label="Employee directory search and filters">
         <label><span>Search employees</span><input name="query" type="search" defaultValue={filters.query} maxLength={80} placeholder="Name or employee code" /></label>
