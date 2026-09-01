@@ -1,5 +1,15 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getCurrentActor } from "@/modules/auth/session-service";
-import { requireCapability } from "@/modules/authorization/authorization-service";
+import { can } from "@/modules/authorization/authorization-service";
+import { EmployeeDirectory } from "@/modules/employees/employee-directory";
+import { employeeProfileService } from "@/modules/employees/employee-services";
+
 export const dynamic = "force-dynamic";
-export default async function EmployeesPage() { const actor = await getCurrentActor(); if (!actor) redirect("/login"); requireCapability(actor, "module:employees:view"); return <section className="phase-two-page"><p className="eyebrow">Phase 2 · Workforce</p><h2>Employees & capabilities</h2><p>Manage internal employee profiles, documented capabilities, evidence, and private management notes within your authorized scope.</p><div className="phase-two-grid"><article><h3>{actor.role === "SUPER_ADMIN" ? "Workforce administration" : "Scoped workforce view"}</h3><p>Roles, designations, skills, and arrangement labels remain separate concepts.</p></article><article><h3>Evidence review</h3><p>Private evidence is reviewed informationally, never as an approval gate.</p></article><article><h3>Management notes</h3><p>Subjects and peer Admins never receive unauthorized notes.</p></article></div></section>; }
+
+export default async function EmployeesPage() {
+  const actor = await getCurrentActor();
+  if (!actor) redirect("/login");
+  if (!can(actor, "module:employees:view")) notFound();
+  const directory = await employeeProfileService.listDirectoryProfiles(actor);
+  return <EmployeeDirectory profiles={directory.items} />;
+}

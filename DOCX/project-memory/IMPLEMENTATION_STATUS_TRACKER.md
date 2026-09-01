@@ -8,7 +8,7 @@ The tracker uses only: `NOT_STARTED`, `READY`, `IN_PROGRESS`, `PARTIAL`, `BLOCKE
 
 **Completion rule:** backend-only work and UI shells are not completed user journeys. A phase is complete only after all applicable delivery gates and its end-to-end journey are verified.
 
-Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
+Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
 
 [roadmap]: IMPLEMENTATION_ROADMAP.md
 [context]: ../../PROJECT_CONTEXT.md
@@ -17,6 +17,7 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 [Phase 2 core R3]: ../phase-reports/SCOPEIS_PHASE_2_CORE_SERVICE_INCIDENT_REMEDIATION_AND_VERIFICATION_CLOSURE_R3.md
 [Phase 2.1 reconciliation]: ../phase-reports/SCOPEIS_PHASE_2_1_PRESERVE_AND_RECONCILE_EXISTING_EMPLOYEE_BACKEND_R1.md
 [Phase 2.1 closure]: ../phase-reports/SCOPEIS_PHASE_2_1_CUSTODY_RESOLUTION_VERIFIED_MAIN_CLOSURE_R1.md
+[Phase 2.2 directory]: ../phase-reports/SCOPEIS_PHASE_2_2_REAL_EMPLOYEE_DIRECTORY_R1.md
 [employee services]: ../../src/modules/employees/employee-services.ts
 [schema]: ../../src/db/schema/index.ts
 [navigation]: ../../src/modules/navigation/navigation.ts
@@ -28,12 +29,12 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 ## Current focus
 
 - **Current active phase:** Phase 2 — Employee management journey
-- **Current active/next sub-phase:** 2.2 Real employee directory (`NOT_STARTED`)
+- **Current active/next sub-phase:** 2.3 Employee search and filters (`NOT_STARTED`)
 - **Current phase status:** `PARTIAL`
 - **Last status date:** `2026-09-01`
-- **Most recent trustworthy evidence:** [Phase 2.1 closure]
-- **Immediate objective:** Begin no further work without explicit authorization; the next defined sub-phase is the real employee directory.
-- **Known blockers:** No Phase 2.1 custody blocker remains. The Phase 2 employee journey remains incomplete because its route, UI, and journey sub-phases are not started.
+- **Most recent trustworthy evidence:** [Phase 2.2 directory]
+- **Immediate objective:** Do not begin further work without separate authorization; the next defined sub-phase is employee search and filters.
+- **Known blockers:** Phase 2.2 is complete only as the basic read-only directory. The rest of the employee journey, including search, create, detail, edit, and self-service, remains incomplete.
 - **Explicit exclusions:** Do not expand certifications, CVs, portfolios, files, or management notes; do not begin clients/projects/locations until Phase 2 exit criteria pass.
 - **Required phase-exit journey:** Super Admin manages employees → employee signs in → employee views real profile → employee updates only permitted fields.
 
@@ -45,7 +46,7 @@ Progress measures completed roadmap sub-phases only. It is **not** engineering e
 | ----- | ---------- | -------------- | -------------------: | ---------------: | -----------------: | ---------------------- | ---------------- | ------------ | -------------- | ------------ | --------------- | --------------- |
 | 0 | Discovery and technical pilot | `COMPLETED` | 9 | 9 | 100% | — | 2026-09-01 | — | 2026-09-01 | — | None | [roadmap] |
 | 1 | Secure application foundation | `COMPLETED` | 7 | 7 | 100% | Completed only for the narrowly defined secure foundation journey | 2026-08-29 | — | 2026-08-29 | Phase 0 | None | [P1 certification] |
-| 2 | Employee management journey | `PARTIAL` | 1 | 11 | 9% | 2.2 Real employee directory (`NOT_STARTED`) | 2026-09-01 | 2026-09-01 | — | Phase 1 | Phase 2.1 backend-only closure complete; routes, real UI, and the full journey remain unstarted | [Phase 2.1 closure] |
+| 2 | Employee management journey | `PARTIAL` | 2 | 11 | 18% | 2.3 Employee search and filters (`NOT_STARTED`) | 2026-09-01 | 2026-09-01 | — | Phase 1 | Phase 2.1 backend-only closure and Phase 2.2 scoped read-only directory are complete; the remaining employee journey is unstarted | [Phase 2.2 directory] |
 | 3 | Clients, projects, and locations | `NOT_STARTED` | 0 | 10 | 0% | 3.1 Client management | 2026-09-01 | — | — | Phase 2 journey | Phase 2 exit not met | None located |
 | 4 | Scheduling, review, and publication | `NOT_STARTED` | 0 | 12 | 0% | 4.1 Schedule and assignment data foundation | 2026-09-01 | — | — | Phases 2–3 | Phase 3 exit not met | None located |
 | 5 | Leave and availability | `NOT_STARTED` | 0 | 10 | 0% | 5.1 Leave request data foundation | 2026-09-01 | — | — | Phase 4 | Published schedule unavailable | None located |
@@ -91,7 +92,7 @@ Scope note: `COMPLETED` only for the narrowly defined secure foundation journey;
 | ID | Sub-phase | Status | Last status date | Started date | Completed date | Dependencies | Implementation state | QA state | Exit evidence required | Current evidence | Blocker/notes |
 | -- | --------- | ------ | ---------------- | ------------ | -------------- | ------------ | -------------------- | -------- | ---------------------- | ---------------- | ------------- |
 | 2.1 | Preserve and reconcile existing employee backend | `COMPLETED` | 2026-09-01 | 2026-09-01 | 2026-09-01 | Phase 1 | Verified backend-only schema/migration, services, validation, authorization, scoped projection, audit, transaction, and concurrency baseline adopted to main | Focused unit and disposable PostgreSQL integration passed | Reused backend reconciled and committed with scoped Admin privacy correction | [Phase 2.1 closure] | Backend-only completion. It does not complete the Phase 2 journey or authorize 2.2+ work. |
-| 2.2 | Real employee directory | `NOT_STARTED` | 2026-09-01 | — | — | 2.1 | Documentation only | None located | Authorized real-data directory | None located | Existing `/employees` is an explanatory shell only. |
+| 2.2 | Real employee directory | `COMPLETED` | 2026-09-01 | 2026-09-01 | 2026-09-01 | 2.1 | Server-rendered `/employees` uses the employee service's management-only list and scoped projection | Focused policy/component, disposable PostgreSQL, migration/schema, desktop/mobile Playwright, typecheck, lint, and diff validation passed | Authorized real-data directory | [Phase 2.2 directory] | Basic read-only directory only: no search, filters, sorting controls, pagination controls, create, detail, edit, self-service, APIs, or Server Actions. |
 | 2.3 | Employee search and filters | `NOT_STARTED` | 2026-09-01 | — | — | 2.2 | Backend pagination/search foundation only | Integration only | Connected filters with scope/privacy tests | [employee services] | Backend support does not complete UI behavior. |
 | 2.4 | Create employee | `NOT_STARTED` | 2026-09-01 | — | — | 2.1–2.3 | Backend profile create service only | Integration only | Authorized create route/UI and journey QA | [Phase 2 core R3] | No route or UI. |
 | 2.5 | View employee details | `NOT_STARTED` | 2026-09-01 | — | — | 2.2 | Backend profile read/projection only | Integration only | Scoped real detail UI | [Phase 2 core R3] | No route or UI. |
@@ -312,23 +313,23 @@ Use this template for every phase. `NOT_APPLICABLE` is allowed only with a reaso
 | User story approved | Yes | `COMPLETED` | [roadmap] | Approved employee-management journey. |
 | Acceptance criteria approved | Yes | `PARTIAL` | [requirements](PRODUCT_REQUIREMENTS.md) | Product requirements exist; journey-specific acceptance record is still required. |
 | Schema/migration | Yes | `PARTIAL` | [Phase 2.1 closure] | Backend baseline complete; complete journey data is later work. |
-| Repository/service | Yes | `PARTIAL` | [Phase 2.1 closure] | Backend baseline complete; no route/UI journey. |
+| Repository/service | Yes | `PARTIAL` | [Phase 2.2 directory] | The basic directory reuses the verified management-only employee service; remaining journeys are later work. |
 | Validation | Yes | `PARTIAL` | [Phase 2.1 closure] | Backend validation verified only. |
-| Server authorization | Yes | `PARTIAL` | [Phase 2.1 closure] | Backend service enforcement verified only. |
-| Scope/privacy | Yes | `PARTIAL` | [Phase 2.1 closure] | Scoped skill-member projection corrected and verified; no browser boundary. |
-| Route/Server Action | Yes | `NOT_STARTED` | None located | No employee domain boundary exists. |
-| Real data-connected UI | Yes | `NOT_STARTED` | None located | Existing pages are shells/explanatory. |
+| Server authorization | Yes | `PARTIAL` | [Phase 2.2 directory] | The protected page checks management capability and the service rejects Employee directory access; later protected flows are absent. |
+| Scope/privacy | Yes | `PARTIAL` | [Phase 2.2 directory] | Browser and integration evidence confirm TEAM-scoped Admin records and omission of work contact/default location. |
+| Route/Server Action | Yes | `PARTIAL` | [Phase 2.2 directory] | Protected server-rendered `/employees` exists; no route handler or Server Action is authorized for this read-only sub-phase. |
+| Real data-connected UI | Yes | `PARTIAL` | [Phase 2.2 directory] | Basic read-only directory is PostgreSQL-backed; remaining employee UI is later work. |
 | Audit events | Yes | `PARTIAL` | [Phase 2.1 closure] | Backend mutations audit and rollback verified; complete journey not connected. |
 | Notifications | Where required | `NOT_APPLICABLE` | [roadmap] | No confirmed notification event for the basic employee journey; revisit per approved event. |
 | Transactions/rollback | Yes | `PARTIAL` | [Phase 2.1 closure] | Backend audit rollback verified only. |
 | Concurrency | Yes | `PARTIAL` | [Phase 2.1 closure] | Version-aware backend mutations verified only. |
-| Unit tests | Yes | `PARTIAL` | [Phase 2.1 closure] | Relevant policy test passed; no journey test. |
-| Disposable PostgreSQL tests | Yes | `PARTIAL` | [Phase 2.1 closure] | Focused core and migration suites passed; no journey test. |
+| Unit tests | Yes | `PARTIAL` | [Phase 2.2 directory] | Directory component and policy tests passed; remaining journey tests are later work. |
+| Disposable PostgreSQL tests | Yes | `PARTIAL` | [Phase 2.2 directory] | Core directory behavior and migration/schema tests passed through owned temporary databases. |
 | Route/API tests | Yes | `NOT_STARTED` | None located | No employee route/API. |
-| Negative authorization tests | Yes | `PARTIAL` | [Phase 2.1 closure] | Focused service scope/privacy/role negatives passed only. |
-| Component tests | Yes | `NOT_STARTED` | None located | No employee component. |
-| Desktop E2E | Yes | `NOT_STARTED` | None located | Foundation shell E2E is insufficient. |
-| Mobile E2E | Yes | `NOT_STARTED` | None located | Foundation shell E2E is insufficient. |
+| Negative authorization tests | Yes | `PARTIAL` | [Phase 2.2 directory] | Service and browser tests reject Employee directory access and omit cross-scope rows. |
+| Component tests | Yes | `PARTIAL` | [Phase 2.2 directory] | Directory metadata and safe empty state passed; later employee UI is absent. |
+| Desktop E2E | Yes | `PARTIAL` | [Phase 2.2 directory] | Read-only directory desktop coverage passed; full employee journey is later work. |
+| Mobile E2E | Yes | `PARTIAL` | [Phase 2.2 directory] | Read-only directory mobile coverage passed; full employee journey is later work. |
 | Manual walkthrough | Yes | `NOT_STARTED` | None located | No real journey. |
 | Documentation updated | Yes | `COMPLETED` | This tracker | Tracker created; update again with each status change. |
 
@@ -358,3 +359,5 @@ Append new rows; correct an existing row only for a factual error. Every `COMPLE
 | 2026-09-01 | 2.1 Preserve and reconcile existing employee backend | `PARTIAL` | `IN_PROGRESS` | [roadmap]; authorized Phase ID | Authorized Phase 2.1 custody and evidence reconciliation began. | Codex |
 | 2026-09-01 | 2.1 Preserve and reconcile existing employee backend | `IN_PROGRESS` | `BLOCKED` | [Phase 2.1 reconciliation] | Focused backend verification passed and one Admin scoped-projection privacy defect was corrected; the pre-existing R1/R3 worktree assets lack reachable Git provenance, so no safe isolated commit/push is possible. | Codex |
 | 2026-09-01 | 2.1 Preserve and reconcile existing employee backend | `BLOCKED` | `COMPLETED` | [Phase 2.1 closure] | Explicit controlled adoption authorized the fully inventoried, non-sensitive Phase 2.1 backend/harness/test/evidence set; focused disposable verification and isolated main commit/push completed. | Codex |
+| 2026-09-01 | 2.2 Real employee directory | `NOT_STARTED` | `IN_PROGRESS` | [roadmap]; authorized Phase ID | Authorized Phase 2.2 server-rendered, scope-safe real directory work began. | Codex |
+| 2026-09-01 | 2.2 Real employee directory | `IN_PROGRESS` | `COMPLETED` | [Phase 2.2 directory] | Basic server-rendered PostgreSQL directory, management-only service boundary, TEAM-scoped Admin projection, safe empty state, and desktop/mobile verification passed. | Codex |

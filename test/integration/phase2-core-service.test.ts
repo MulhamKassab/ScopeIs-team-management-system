@@ -77,6 +77,24 @@ describe("Phase 2 core employee and catalogue services", () => {
     expect(events.some((event) => event.action === "employee_profile.self_updated" && !JSON.stringify(event.metadata).includes("101"))).toBe(true);
   });
 
+  it("provides a management-only directory with server-enforced scope and safe Admin projections", async () => {
+    const f = fixture(); await seedProfiles(f);
+    const globalDirectory = await employeeProfileService.listDirectoryProfiles(f.superAdmin);
+    expect(globalDirectory.items.map((profile) => profile.userId)).toEqual(expect.arrayContaining([f.ids.employeeAlpha, f.ids.employeeBravo]));
+    const alphaDirectory = await employeeProfileService.listDirectoryProfiles(f.adminAlpha);
+    expect(alphaDirectory.items.map((profile) => profile.userId)).toContain(f.ids.employeeAlpha);
+    expect(alphaDirectory.items.map((profile) => profile.userId)).not.toContain(f.ids.employeeBravo);
+    expect(alphaDirectory.items.every((profile) => profile.team === "team:alpha")).toBe(true);
+    const alphaProfile = alphaDirectory.items.find((profile) => profile.userId === f.ids.employeeAlpha);
+    expect(alphaProfile).not.toHaveProperty("defaultWorkLocation");
+    expect(alphaProfile).not.toHaveProperty("workEmail");
+    expect(alphaProfile).not.toHaveProperty("workPhone");
+    const noScopeAdmin = actor(`admin-empty-${randomUUID()}`, "ADMIN");
+    await db.insert(users).values({ id: noScopeAdmin.id, displayName: "Empty scope Admin", role: "ADMIN" });
+    expect((await employeeProfileService.listDirectoryProfiles(noScopeAdmin)).items).toEqual([]);
+    await expect(employeeProfileService.listDirectoryProfiles(f.employeeAlpha)).rejects.toMatchObject({ code: "FORBIDDEN" });
+  });
+
   it("creates valid internal profiles, protects manager graphs and stale writes, and preserves deactivation history", async () => {
     const f = fixture(); await seedProfiles(f);
     const designation = await employeeCatalogueService.createDesignation(f.superAdmin, { name: `Planner ${f.ids.superAdmin}` });

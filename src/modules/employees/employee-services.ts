@@ -170,6 +170,12 @@ export class EmployeeProfileService {
     return { items: own ? [own] : [], total: own ? 1 : 0, page: 1, pageSize: 1 };
   }
 
+  /** Management directory reads are distinct from an Employee's future own-profile journey. */
+  async listDirectoryProfiles(actor: EmployeeActor): Promise<Page<EmployeeProfileView>> {
+    if (actor.role === "EMPLOYEE") throw new EmployeeDomainError("FORBIDDEN");
+    return this.listProfiles(actor, { page: 1, pageSize: 100 });
+  }
+
   async createProfile(actor: EmployeeActor, input: CreateEmployeeProfileInput) {
     requireSuperAdmin(actor); const parsed = parseOrDomainError(createEmployeeProfileSchema, input);
     return db.transaction(async (tx) => {
