@@ -1,7 +1,11 @@
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import pg from "pg";
-import { inspectMigrationState, runNormalMigrator } from "./phase2-migration-core.mjs";
+import {
+  inspectMigrationState,
+  runNormalMigrator,
+  validateRepositoryMigrationHistory,
+} from "./phase2-migration-core.mjs";
 
 export const EXPECTED_PREVIEW_NEON_PROJECT_ID = "blue-firefly-93492385";
 export const FORBIDDEN_PRODUCTION_NEON_PROJECT_ID = "morning-flower-68935124";
@@ -39,6 +43,22 @@ function migrationSummary(state) {
     ledgerRows: state.ledger?.rows.length ?? 0,
     diagnostics: state.diagnostics,
   };
+}
+
+export async function isPortableCurrentPreviewMigrationState(state) {
+  const { manifest } = await validateRepositoryMigrationHistory();
+  const expected = manifest.states.phase2EmployeeCode;
+  const rows = state.ledger?.rows ?? [];
+  const ledgerMatches = state.ledger?.valid === true &&
+    rows.length === manifest.migrations.length &&
+    rows.every((row, index) =>
+      row.hash === manifest.migrations[index].hash &&
+      Number(row.created_at) === manifest.migrations[index].when
+    );
+  return ledgerMatches &&
+    JSON.stringify(state.fingerprint?.tables) === JSON.stringify(expected.tables) &&
+    JSON.stringify(state.fingerprint?.enumTypes) === JSON.stringify(expected.enumTypes) &&
+    state.fingerprint?.sectionHashes?.enums === expected.sectionHashes.enums;
 }
 
 export function assertPreviewBootstrapEnvironment(input) {
@@ -123,16 +143,20 @@ export async function bootstrapPreviewDatabase(input = process.env) {
     await client.query("select pg_advisory_lock(hashtext($1))", [BOOTSTRAP_LOCK]);
     locked = true;
     const before = await inspectMigrationState(client);
-    if (before.state !== "A" && before.state !== "D") {
+    const portableBefore = await isPortableCurrentPreviewMigrationState(before);
+    if (before.state !== "A" && before.state !== "D" && !portableBefore) {
       throw new Error(
         "Preview bootstrap accepts only a fresh database or an exact migration-ledger state. " +
         JSON.stringify(migrationSummary(before)),
       );
     }
-    if (before.state !== "D" || before.pending.length > 0) await runNormalMigrator(input.DATABASE_URL);
+    if (!portableBefore && (before.state !== "D" || before.pending.length > 0)) {
+      await runNormalMigrator(input.DATABASE_URL);
+    }
 
     const after = await inspectMigrationState(client);
-    if (after.state !== "D" || after.pending.length !== 0) {
+    const portableAfter = await isPortableCurrentPreviewMigrationState(after);
+    if ((after.state !== "D" || after.pending.length !== 0) && !portableAfter) {
       throw new Error(
         "Preview database did not reach the exact current migration state. " +
         JSON.stringify(migrationSummary(after)),
@@ -150,7 +174,7 @@ export async function bootstrapPreviewDatabase(input = process.env) {
       counts.grants +
       " active Admin TEAM grants.\n",
     );
-    return { skipped: false, state: after.state, counts };
+    return { skipped: false, state: portableAfter ? "D_PORTABLE_PREVIEW" : after.state, counts };
   } finally {
     if (locked) await client.query("select pg_advisory_unlock(hashtext($1))", [BOOTSTRAP_LOCK]);
     await client.end();

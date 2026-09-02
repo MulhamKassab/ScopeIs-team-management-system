@@ -39,6 +39,8 @@ The bootstrap is disabled by default and runs as the npm prebuild hook only when
 
 After connecting, a PostgreSQL advisory lock prevents concurrent bootstrap runs. Migration inspection accepts only a fresh State A database or an exact State D ledger/schema state. Unknown, partial, ledgerless historical, or drifted states are refused.
 
+Neon PostgreSQL renders several column defaults, constraint definitions, and index definitions differently from the local PostgreSQL version used to create the canonical text fingerprint. The first clean migration run therefore produced all four exact immutable ledger rows, all 14 final tables, and the exact enum set/hash, but the text fingerprint reported State E. The canonical migration guard remains unchanged. This Preview-only bootstrap accepts that provider formatting variance only when every migration hash/timestamp, final table name, enum name, and enum hash matches the repository manifest. Missing, additional, reordered, or changed migration identity is still refused.
+
 ## Fictional data
 
 The transactionally seeded graph contains:
