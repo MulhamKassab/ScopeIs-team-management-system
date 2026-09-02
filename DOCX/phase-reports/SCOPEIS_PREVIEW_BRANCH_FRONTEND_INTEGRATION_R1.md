@@ -262,4 +262,10 @@ The launcher creates an owned loopback disposable PostgreSQL database, builds an
 
 ## Commit and push
 
-To be completed after the reviewed explicit allowlist is committed and `preview` is pushed.
+- Integration commit: `6b9aace8fb588f02f1206c3651f0a602936c97a2` — `preview: integrate redesigned application frontend`
+- Push: successful; new remote branch `preview -> origin/preview`
+- Upstream: `preview` tracks `origin/preview`
+- GitHub offered the branch PR URL: `https://github.com/MulhamKassab/ScopeIs-team-management-system/pull/new/preview`
+- No Vercel branch-preview URL was emitted by the push.
+- `main` was not merged by this task.
+- No production deployment or promotion was performed.
