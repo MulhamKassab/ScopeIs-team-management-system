@@ -64,7 +64,7 @@ The non-live notice is always rendered: `Planning status for [selected date] —
 - `npm run test:preview` — passed, 6 tests. Covers uniqueness, referential links, safe contacts, coordinate bounds/links, Published map derivation, counters, route coverage, scope, privacy, and no active persistence bootstrap.
 - `npm run lint` — passed.
 - `npm run build` with every PostgreSQL, Neon, Blob, and historical bootstrap variable absent — passed.
-- `git diff --check` — pending final reviewed diff check before commit.
+- `git diff --check` — passed before staging the reviewed allowlist.
 - Searches of the Preview route/runtime tree found no database, repository, persistence-service, Neon, Blob, geocoding, browser-geolocation, or business-data-fetch use. The only map provider string is the public OpenStreetMap tile URL.
 
 ## Browser QA evidence
@@ -76,3 +76,10 @@ The basemap-unavailable view is an intentionally local tile-error fallback path:
 ## Boundaries and limitations
 
 No Production deployment, Vercel Production configuration, production credential, Neon project, Blob store, migration, seed, or production resource was accessed or changed. No tracking or location permission is requested. The existing Vercel Preview deployment protection/SSO remains untouched. This is a static frontend demonstration: persona choice is presentational, tiles require normal public OSM availability, refresh resets temporary presentation state, and disabled controls do not store results.
+
+## Delivery
+
+- Preview feature commit: `502417efc3928800a7d2b6ba9f886989e998de5d` (`feat(preview): verify fixtures and add interactive planning map`).
+- Pushed only to `origin/preview`; after fetch, `origin/preview...preview` was `0/0`.
+- Vercel branch alias: `https://scopeis-team-management-system-git-preview-mu-ka7.vercel.app`.
+- A read-only check on 2026-09-02 returned Vercel SSO protection (`302`), so anonymous public verification is unavailable. No deployment protection, resource, production setting, or Preview credential was changed.
