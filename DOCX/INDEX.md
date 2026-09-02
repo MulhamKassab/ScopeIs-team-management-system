@@ -44,10 +44,13 @@ This directory is the canonical documentation foundation for ScopeIs Team Manage
 - [`project-memory/PHASE_5_LEAVE_DOMAIN_DECISIONS.md`](project-memory/PHASE_5_LEAVE_DOMAIN_DECISIONS.md) - Phase 5 annual leave, privacy, balance, and schedule-integrity decisions.
 - [`project-memory/DEFINITION_OF_DONE.md`](project-memory/DEFINITION_OF_DONE.md) - phase delivery gate requirements.
 - [`project-memory/IMPLEMENTATION_STATUS_LOG.md`](project-memory/IMPLEMENTATION_STATUS_LOG.md) - append-only implementation status history.
+- [`project-memory/PREVIEW_SYNC_RUNBOOK.md`](project-memory/PREVIEW_SYNC_RUNBOOK.md) - Preview-only merge and fixture-maintenance workflow; it does not alter real phase status.
 
 ## Implementation status
 
 Historical reports remain immutable evidence and are not current roadmaps or tracker replacements. Phase 2.1–2.11 are completed as the bounded employee-management journey. Phase 3's pushed implementation and scoped QA are recorded in [`phase-reports/SCOPEIS_PHASE_3_CLIENT_PROJECT_LOCATION_JOURNEY_R1.md`](phase-reports/SCOPEIS_PHASE_3_CLIENT_PROJECT_LOCATION_JOURNEY_R1.md); its final classification remains `BLOCKED` only because preserved repository-wide QA interference is unresolved. Phase 4's V1 and Phase 5's bounded leave evidence are recorded in [`phase-reports/SCOPEIS_PHASE_4_SCHEDULING_DRAFT_PROPOSED_PUBLISHED_JOURNEY_R1.md`](phase-reports/SCOPEIS_PHASE_4_SCHEDULING_DRAFT_PROPOSED_PUBLISHED_JOURNEY_R1.md) and [`phase-reports/SCOPEIS_PHASE_5_LEAVE_AND_AVAILABILITY_JOURNEY_R1.md`](phase-reports/SCOPEIS_PHASE_5_LEAVE_AND_AVAILABILITY_JOURNEY_R1.md). No production authentication, database state, migration, or deployment is certified.
+
+The Preview-only, database-free fixture conversion is documented in [`phase-reports/SCOPEIS_PREVIEW_DATABASE_FREE_FULL_FRONTEND_FIXTURE_CONVERSION_R1.md`](phase-reports/SCOPEIS_PREVIEW_DATABASE_FREE_FULL_FRONTEND_FIXTURE_CONVERSION_R1.md). It is a non-persistent demonstration stream and does not change any real implementation-phase status.
 
 ## Diagram catalog
 

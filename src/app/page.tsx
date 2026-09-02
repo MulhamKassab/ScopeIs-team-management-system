@@ -1,3 +1,2 @@
-import { redirect } from "next/navigation";
-import { getCurrentActor } from "@/modules/auth/session-service";
-export default async function Home() { redirect((await getCurrentActor()) ? "/dashboard" : "/login"); }
+import { PreviewApp } from "@/preview/preview-app";
+export default function Page() { return <PreviewApp />; }

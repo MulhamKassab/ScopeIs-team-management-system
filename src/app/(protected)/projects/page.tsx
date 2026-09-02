@@ -1,9 +1,2 @@
-import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
-import { getCurrentActor } from "@/modules/auth/session-service";
-import { operationalService } from "@/modules/operations/service";
-
-export default async function ProjectsPage({ searchParams }: { searchParams: Promise<{ query?: string; archived?: string }> }) {
-  const actor = await getCurrentActor(); if (!actor) redirect("/login"); if (actor.role === "EMPLOYEE") notFound(); const params = await searchParams; const records = await operationalService.listProjects(actor, { query: params.query ?? "", includeArchived: params.archived === "true" });
-  return <section className="operations-page"><header className="operations-heading"><div><p className="eyebrow">Phase 3 operational structure</p><h2>Projects</h2><p>Projects stay within their Client and remain separate from Locations, Responsible Admins, employees, requirements, and future schedules.</p></div><Link className="button" href="/clients">Clients</Link></header><form className="operation-search" method="get"><label>Search Project name<input name="query" defaultValue={params.query ?? ""} maxLength={100} /></label><label className="operation-check"><input type="checkbox" name="archived" value="true" defaultChecked={params.archived === "true"} /> Include archived</label><button className="button primary">Search</button></form><div className="operation-cards">{records.map(({ project, clientName }) => <article key={project.id}><span className={`directory-status ${project.status === "ARCHIVED" ? "inactive" : "active"}`}>{project.status}</span><h3>{project.name}</h3><p>{clientName}</p><Link className="button primary" href={`/projects/${project.id}`}>Manage Project</Link></article>)}</div>{!records.length ? <div className="operation-empty"><h3>No authorized Projects</h3><p>Project scope never widens to siblings or the parent Client.</p></div> : null}</section>;
-}
+import { PreviewApp } from "@/preview/preview-app";
+export default function ProjectsPage() { return <PreviewApp />; }
