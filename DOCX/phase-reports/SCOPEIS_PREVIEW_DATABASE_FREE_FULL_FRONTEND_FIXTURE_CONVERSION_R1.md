@@ -68,3 +68,5 @@ Production Neon project `morning-flower-68935124`, Production Vercel environment
 ## Known limitations
 
 This is intentionally a static frontend demonstration. Personas are presentational rather than authentication, refresh resets interactive display state, disabled controls do not perform workflows, and all planning/map/report content is fictional. It is not evidence that the corresponding production backend phases are complete.
+
+The Vercel Preview deployment for this branch is Ready, but its branch alias currently responds with a Vercel SSO redirect for anonymous requests. Deployment protection was not changed by this task. The build itself is verified; an anonymous public browser check requires the project owner to adjust Vercel deployment protection separately if that is intended.
