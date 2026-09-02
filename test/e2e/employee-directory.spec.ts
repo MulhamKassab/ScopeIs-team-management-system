@@ -8,8 +8,11 @@ async function signIn(page: import("@playwright/test").Page, name: string) {
 }
 
 async function signOut(page: import("@playwright/test").Page) {
-  const response = await page.request.post("/api/auth/logout", { headers: { Origin: new URL(page.url()).origin } });
-  expect(response.status()).toBe(200);
+  const status = await page.evaluate(async () => (await fetch("/api/auth/logout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+  })).status);
+  expect(status).toBe(200);
 }
 
 test("Super Admin searches employee name and employee code", async ({ page }) => {

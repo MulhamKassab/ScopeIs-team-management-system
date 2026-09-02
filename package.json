@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=22.0.0" },
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -31,10 +33,11 @@
     "db:schema:drift": "node scripts/run-phase2-migration-tests.mjs -t \"detects migration\"",
     "db:schema:runtime:validate": "node scripts/run-phase2-migration-tests.mjs -t \"uses all eight\"",
     "db:validate": "tsx src/db/validate.ts",
-    "audit:dependencies": "npm audit --omit=dev"
-    ,"validate:phase2-runbook": "node scripts/validate-phase2-runbook.mjs"
+    "audit:dependencies": "npm audit --omit=dev",
+    "validate:phase2-runbook": "node scripts/validate-phase2-runbook.mjs"
   },
   "dependencies": {
+    "@tabler/icons-react": "^3.46.0",
     "@vercel/blob": "^2.3.0",
     "dotenv": "latest",
     "drizzle-orm": "latest",
@@ -58,8 +61,8 @@
     "eslint": "latest",
     "eslint-config-next": "latest",
     "jsdom": "^29.0.1",
-    "typescript": "latest",
     "tsx": "latest",
+    "typescript": "latest",
     "vitest": "latest"
   }
 }
