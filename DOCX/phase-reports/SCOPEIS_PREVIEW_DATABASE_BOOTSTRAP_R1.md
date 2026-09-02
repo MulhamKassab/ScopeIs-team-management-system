@@ -65,11 +65,35 @@ The seeder refuses any pre-existing non-fixture user. It upserts only the five k
 
 ## Verification before remote execution
 
-- Unit suite: 9 files and 33 tests passed.
+- Unit suite: 9 files and 34 tests passed.
 - Focused ESLint: passed.
 - TypeScript with incremental output disabled: passed.
 - Disabled bootstrap command: passed and confirmed no database connection was opened.
 - Vercel-like Next.js 16.3.3 Turbopack build: passed using an unreachable loopback URL; the absent enable flag skipped bootstrap.
+
+## Remote execution result
+
+The one-time branch-specific SCOPEIS_PREVIEW_DATABASE_BOOTSTRAP flag was enabled for the preview Git branch only.
+
+1. The first guarded run matched the exact Preview Neon project, migrated the fresh database, then refused to seed because Neon's rendered schema text did not match the local text fingerprint.
+2. A diagnostic-only fail-closed run confirmed all four exact ledger rows, all 14 expected tables, and the exact enum set/hash.
+3. The Preview-only portability verifier was added and unit-tested without changing the canonical migration guard.
+4. Deployment b2cc730 completed successfully. Its build log verified five fictional users, five profiles, and two active Admin TEAM grants before the Next.js build passed.
+5. The one-time bootstrap flag was removed immediately. Future builds skip without opening a database connection.
+
+Ready deployment:
+
+https://scopeis-team-management-system-git-preview-mu-ka7.vercel.app
+
+## Browser QA
+
+- Login displayed all five fictional personas and the temporary mock-data notice.
+- Nora Albright opened the five-record directory, Add employee control, and Manage employee actions.
+- Cora Bell's management detail displayed Field Engineer, Ava Mercer as manager, Team Alpha, Hybrid weekdays, fictional contact details, professional summary, and private fictional location.
+- Ava Mercer saw only the three Team Alpha records, no Team Bravo records, no management controls, and View details actions.
+- Cora Bell opened the real self-service profile with her seeded summary and Save profile control, with no employee-management controls.
+
+Known pre-existing limitation: employee directory rows do not project designation names and therefore display Unassigned, although filters and employee detail correctly resolve Field Engineer. This is an application query-projection defect, not a seed failure, and was not expanded into this database task.
 
 ## Boundaries
 
