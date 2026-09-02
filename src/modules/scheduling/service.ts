@@ -9,6 +9,8 @@ import { createNotification } from "@/modules/notifications/notification-service
 import { hasClientManagementScope, hasOperationalTargetScope } from "@/modules/authorization/operational-scope";
 import type { AuthenticatedActor } from "@/shared/types/foundation";
 import { SchedulingDomainError } from "@/modules/scheduling/domain-error";
+import { LeaveDomainError } from "@/modules/leave/domain-error";
+import { assertEmployeeAvailableForSchedule } from "@/modules/leave/service";
 import { schedulingRepository, type SchedulingExecutor, type SchedulingTransaction } from "@/modules/scheduling/repositories";
 import { assignmentCreateSchema, assignmentRemoveSchema, assignmentUpdateSchema, createPeriodSchema, parseSchedule, periodVersionSchema, revisionSchema, returnPeriodSchema, scheduleMonthSchema } from "@/modules/scheduling/validation";
 
@@ -80,6 +82,7 @@ export class SchedulingService {
     if (!project || !location || !link || project.clientId !== period.clientId || location.clientId !== period.clientId || project.status === "ARCHIVED" || location.status === "ARCHIVED") throw new SchedulingDomainError("INVALID_RELATIONSHIP");
     const employee = await schedulingRepository.employee(tx, input.employeeUserId);
     if (!employee?.user.active || employee.user.role !== "EMPLOYEE") throw new SchedulingDomainError("INVALID_EMPLOYEE");
+    try { await assertEmployeeAvailableForSchedule(tx, input.employeeUserId, input.assignmentDate); } catch (error) { if (error instanceof LeaveDomainError) throw new SchedulingDomainError("CONFLICT", error.message); throw error; }
   }
 
   private async bumpPeriod(tx: SchedulingTransaction, period: typeof schedulePeriods.$inferSelect) {

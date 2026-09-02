@@ -10,6 +10,7 @@ export const noteVisibilityEnum = pgEnum("note_visibility", ["private_to_author"
 export const operationalLifecycleStatusEnum = pgEnum("operational_lifecycle_status", ["ACTIVE", "ARCHIVED"]);
 export const projectStatusEnum = pgEnum("project_status", ["PLANNED", "ACTIVE", "ON_HOLD", "COMPLETED", "ARCHIVED"]);
 export const schedulePeriodStatusEnum = pgEnum("schedule_period_status", ["DRAFT", "PROPOSED", "PUBLISHED"]);
+export const leaveRequestStatusEnum = pgEnum("leave_request_status", ["PENDING", "APPROVED", "REJECTED", "CANCELLED"]);
 
 const timestamps = {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
@@ -222,6 +223,15 @@ export const scheduleAssignments = pgTable("schedule_assignments", {
   check("schedule_assignments_time_order_check", sql`${table.endTime} > ${table.startTime}`), check("schedule_assignments_instruction_length_check", sql`${table.sharedInstruction} is null or char_length(${table.sharedInstruction}) <= 500`), check("schedule_assignments_version_check", sql`${table.version} > 0`),
 ]);
 
+export const leaveAllowanceSettings = pgTable("leave_allowance_settings", {
+  singleton: boolean("singleton").primaryKey().notNull().default(true), annualWorkingDays: integer("annual_working_days").notNull().default(22), version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [check("leave_allowance_settings_singleton_check", sql`${table.singleton} = true`), check("leave_allowance_settings_days_check", sql`${table.annualWorkingDays} between 1 and 366`), check("leave_allowance_settings_version_check", sql`${table.version} > 0`)]);
+
+export const leaveRequests = pgTable("leave_requests", {
+  id: uuid("id").defaultRandom().primaryKey(), employeeUserId: text("employee_user_id").notNull(), startDate: date("start_date").notNull(), endDate: date("end_date").notNull(), status: leaveRequestStatusEnum("status").notNull().default("PENDING"),
+  privateReason: text("private_reason"), decisionResponse: text("decision_response"), reviewedByUserId: text("reviewed_by_user_id"), decidedAt: timestamp("decided_at", { withTimezone: true }), cancelledAt: timestamp("cancelled_at", { withTimezone: true }), version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [foreignKey({ name: "leave_requests_employee_user_id_fkey", columns: [table.employeeUserId], foreignColumns: [users.id] }).onDelete("restrict"), foreignKey({ name: "leave_requests_reviewed_by_user_id_fkey", columns: [table.reviewedByUserId], foreignColumns: [users.id] }).onDelete("restrict"), index("leave_requests_employee_status_dates_idx").on(table.employeeUserId, table.status, table.startDate, table.endDate), index("leave_requests_status_created_idx").on(table.status, table.createdAt), check("leave_requests_date_order_check", sql`${table.endDate} >= ${table.startDate}`), check("leave_requests_private_reason_length_check", sql`${table.privateReason} is null or char_length(${table.privateReason}) <= 1000`), check("leave_requests_response_length_check", sql`${table.decisionResponse} is null or char_length(${table.decisionResponse}) <= 1000`), check("leave_requests_version_check", sql`${table.version} > 0`)]);
+
 export const userRelations = relations(users, ({ many, one }) => ({
   sessions: many(sessions), scopeGrants: many(adminScopeGrants),
   employeeProfile: one(employeeProfiles, { fields: [users.id], references: [employeeProfiles.userId], relationName: "employeeProfileUser" }),
@@ -275,3 +285,4 @@ export const scheduleAssignmentRelations = relations(scheduleAssignments, ({ man
   project: one(projects, { fields: [scheduleAssignments.projectId], references: [projects.id] }), location: one(locations, { fields: [scheduleAssignments.locationId], references: [locations.id] }),
   copiedFrom: one(scheduleAssignments, { fields: [scheduleAssignments.copiedFromAssignmentId], references: [scheduleAssignments.id], relationName: "scheduleAssignmentCopy" }), copies: many(scheduleAssignments, { relationName: "scheduleAssignmentCopy" }),
 }));
+export const leaveRequestRelations = relations(leaveRequests, ({ one }) => ({ employee: one(users, { fields: [leaveRequests.employeeUserId], references: [users.id], relationName: "leaveRequestEmployee" }), reviewer: one(users, { fields: [leaveRequests.reviewedByUserId], references: [users.id], relationName: "leaveRequestReviewer" }) }));

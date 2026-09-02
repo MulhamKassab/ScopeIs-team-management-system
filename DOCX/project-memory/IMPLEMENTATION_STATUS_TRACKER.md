@@ -8,7 +8,7 @@ The tracker uses only: `NOT_STARTED`, `READY`, `IN_PROGRESS`, `PARTIAL`, `BLOCKE
 
 **Completion rule:** backend-only work and UI shells are not completed user journeys. A phase is complete only after all applicable delivery gates and its end-to-end journey are verified.
 
-Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [Phase 2 journey completion], [Phase 2 manual QA readiness], [Phase 2 controls/code remediation], [Phase 3 report], [Phase 3 decisions], [Phase 4 report], [Phase 4 decisions], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
+Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [Phase 2 journey completion], [Phase 2 manual QA readiness], [Phase 2 controls/code remediation], [Phase 3 report], [Phase 3 decisions], [Phase 4 report], [Phase 4 decisions], [Phase 5 report], [Phase 5 decisions], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
 
 [roadmap]: IMPLEMENTATION_ROADMAP.md
 [context]: ../../PROJECT_CONTEXT.md
@@ -28,6 +28,8 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 [Phase 3 decisions]: PHASE_3_OPERATIONAL_DOMAIN_DECISIONS.md
 [Phase 4 report]: ../phase-reports/SCOPEIS_PHASE_4_SCHEDULING_DRAFT_PROPOSED_PUBLISHED_JOURNEY_R1.md
 [Phase 4 decisions]: PHASE_4_SCHEDULING_DOMAIN_DECISIONS.md
+[Phase 5 report]: ../phase-reports/SCOPEIS_PHASE_5_LEAVE_AND_AVAILABILITY_JOURNEY_R1.md
+[Phase 5 decisions]: PHASE_5_LEAVE_DOMAIN_DECISIONS.md
 [employee services]: ../../src/modules/employees/employee-services.ts
 [schema]: ../../src/db/schema/index.ts
 [navigation]: ../../src/modules/navigation/navigation.ts
@@ -38,15 +40,15 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 
 ## Current focus
 
-- **Current active phase:** Phase 4 — Scheduling, review, and publication
-- **Current active/next sub-phase:** Phase 4 completed; 4.5's broader assignment-type expansion is explicitly deferred by the approved V1 boundary
+- **Current active phase:** Phase 5 — Leave and availability
+- **Current active/next sub-phase:** Completed bounded leave journey; Phase 6 remains next
 - **Current phase status:** `COMPLETED`
 - **Last status date:** `2026-09-02`
-- **Most recent trustworthy evidence:** [Phase 4 report]; [Phase 4 decisions]
-- **Immediate objective:** Preserve the Phase 4 boundary; Phase 5 and later journeys remain unstarted.
-- **Known blockers:** The preserved repository-wide lint/legacy-runner interference remains outside this Phase 4 scoped gate set. No Phase 4 blocker remains.
-- **Explicit exclusions:** Phase 5 and later scheduling extensions, production access/migration/authentication/deployment, maps/geocoding/GPS, leave, coverage, replacements, notifications UI, and Ticket System integration.
-- **Required phase-exit journey:** Authorized manager creates a Client-month Draft, adds valid real-record timed assignments, proposes, Super Admin publishes, and an Employee sees only their own current Published assignments.
+- **Most recent trustworthy evidence:** [Phase 5 report]; [Phase 5 decisions]
+- **Immediate objective:** Preserve the Phase 5 boundary; Phase 6 and later journeys remain unstarted.
+- **Known blockers:** No Phase 5 blocker remains. Preserved repository-wide lint/legacy-runner interference remains outside the scoped gate set.
+- **Explicit exclusions:** Coverage, replacements, skills fulfilment, maps, tickets, payroll, attendance, production access/migration/authentication/deployment, and notification-centre redesign.
+- **Required phase-exit journey:** Employee submits leave → Super Admin reviews private balance/Published impact → Super Admin decides → Employee sees the persisted decision; Approved leave protects future scheduling.
 
 ## Master phase status
 
@@ -59,7 +61,7 @@ Progress measures completed roadmap sub-phases only. It is **not** engineering e
 | 2 | Employee management journey | `COMPLETED` | 11 | 11 | 100% | Completed employee-management journey; visible Super Admin controls, server-only employee codes, and supported disposable manual QA launcher | 2026-09-01 | 2026-09-01 | 2026-09-01 | Phase 1 | None | [Phase 2 controls/code remediation] |
 | 3 | Clients, projects, and locations | `BLOCKED` | 9 | 10 | 90% | 3.10 repository-wide QA disposition; preserved Phase 3 blocker remains separately tracked | 2026-09-02 | 2026-09-02 | — | Phase 2 journey | Preserved repository-wide QA interference | Pushed commits `b3d6286`, `bd401fe`; [Phase 3 report] |
 | 4 | Scheduling, review, and publication | `COMPLETED` | 11 | 12 | 92% | 4.5 deferred: broader assignment-type expansion is outside approved V1 | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phases 2–3 operational records and employee TEAM visibility | None for approved V1 | [Phase 4 report]; [Phase 4 decisions] |
-| 5 | Leave and availability | `NOT_STARTED` | 0 | 10 | 0% | 5.1 Leave request data foundation | 2026-09-01 | — | — | Phase 4 | Published schedule unavailable | None located |
+| 5 | Leave and availability | `COMPLETED` | 10 | 10 | 100% | Completed bounded leave journey | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phase 4 | None | [Phase 5 report]; [Phase 5 decisions] |
 | 6 | Skills and operational capabilities | `PARTIAL` | 0 | 8 | 0% | 6.1 Reuse and connect the existing verified skills backend | 2026-09-01 | — | — | Phases 2–4 | Dependent operational records unavailable | [Phase 2 core R3] |
 | 7 | Coverage and replacement | `NOT_STARTED` | 0 | 11 | 0% | 7.1 Coverage-rule foundation | 2026-09-01 | — | — | Phases 4–6 | Schedule, leave, and connected skills unavailable | None located |
 | 8 | Static planning map | `NOT_STARTED` | 0 | 10 | 0% | 8.1 Address precision and privacy decision | 2026-09-01 | — | — | Phases 4–7 | Published schedule and privacy decision unavailable | None located |
@@ -149,16 +151,16 @@ Scope note: `COMPLETED` only for the narrowly defined secure foundation journey;
 
 | ID | Sub-phase | Status | Last status date | Started date | Completed date | Dependencies | Implementation state | QA state | Exit evidence required | Current evidence | Blocker/notes |
 | -- | --------- | ------ | ---------------- | ------------ | -------------- | ------------ | -------------------- | -------- | ---------------------- | ---------------- | ------------- |
-| 5.1 | Leave request data foundation | `NOT_STARTED` | 2026-09-01 | — | — | Phase 4 | Documentation only | None located | Migrated leave model | None located | — |
-| 5.2 | Employee request submission | `NOT_STARTED` | 2026-09-01 | — | — | 5.1 | Leave shell only | Shell route E2E only | Authorized employee submission | [navigation] | — |
-| 5.3 | Pending, Approved, and Rejected states | `NOT_STARTED` | 2026-09-01 | — | — | 5.1–5.2 | Documentation only | None located | State workflow | None located | — |
-| 5.4 | Private-reason protection | `NOT_STARTED` | 2026-09-01 | — | — | 5.1 | Documentation only | None located | Server privacy enforcement | None located | — |
-| 5.5 | Admin unavailability visibility without private reason | `NOT_STARTED` | 2026-09-01 | — | — | 5.3–5.4 | Documentation only | None located | Scoped unavailability view | None located | — |
-| 5.6 | Existing assignment and schedule-impact review | `NOT_STARTED` | 2026-09-01 | — | — | 4.12, 5.1 | Documentation only | None located | Current schedule impact calculation | None located | — |
-| 5.7 | Super Admin approval/rejection | `NOT_STARTED` | 2026-09-01 | — | — | 5.3–5.6 | Documentation only | None located | Super Admin-only decision | None located | — |
-| 5.8 | Availability calculation | `NOT_STARTED` | 2026-09-01 | — | — | 5.7 | Documentation only | None located | Derived availability behavior | None located | — |
-| 5.9 | Audit, notification, transaction, and concurrency behavior | `NOT_STARTED` | 2026-09-01 | — | — | 5.2–5.8 | Foundation patterns only | Foundation integration only | Atomic leave decision | [audit service] | — |
-| 5.10 | Complete leave E2E QA | `NOT_STARTED` | 2026-09-01 | — | — | 5.1–5.9 | Documentation only | None located | Employee-to-decision journey | None located | — |
+| 5.1 | Leave request data foundation | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phase 4 | Additive lifecycle/allowance schema and migration | Migration suite | Migrated leave model | [Phase 5 report] | 22-day singleton and version constraints. |
+| 5.2 | Employee request submission | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 5.1 | Own-request action/UI | Service/E2E | Authorized employee submission | [Phase 5 report] | Pending requests do not consume balance. |
+| 5.3 | Pending, Approved, and Rejected states | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 5.1–5.2 | Persisted lifecycle and Pending cancellation | Service tests | State workflow | [Phase 5 report] | Terminal states are immutable. |
+| 5.4 | Private-reason protection | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 5.1 | Role projections and server guards | Service/E2E | Server privacy enforcement | [Phase 5 report] | Audit excludes private text. |
+| 5.5 | Admin unavailability visibility without private reason | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 5.3–5.4 | TEAM-scoped Approved-only projection | Service test | Scoped unavailability view | [Phase 5 report] | Operational scope does not elevate access. |
+| 5.6 | Existing assignment and schedule-impact review | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 4.12, 5.1 | Current Published impact query/block | Service test | Current schedule impact calculation | [Phase 5 report] | Existing work is not changed. |
+| 5.7 | Super Admin approval/rejection | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 5.3–5.6 | Versioned Super Admin decision action | Service/E2E | Super Admin-only decision | [Phase 5 report] | Rejection response required. |
+| 5.8 | Availability calculation | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 5.7 | Approved date-range scheduling guard | Service test | Derived availability behavior | [Phase 5 report] | No coverage logic. |
+| 5.9 | Audit, notification, transaction, and concurrency behavior | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 5.2–5.8 | Locks, versions, audit/notification transaction | PostgreSQL service tests | Atomic leave decision | [Phase 5 report] | Required write failure rolls back mutation. |
+| 5.10 | Complete leave E2E QA | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 5.1–5.9 | Desktop/mobile local journey | Playwright | Employee-to-decision journey | [Phase 5 report] | Both viewports pass. |
 
 ## Phase 6 — Skills and operational capabilities
 
@@ -316,6 +318,16 @@ Use this template for every phase. `NOT_APPLICABLE` is allowed only with a reaso
 | Manual walkthrough | User journey | `NOT_STARTED` | None located | — |
 | Documentation updated | Yes | `NOT_STARTED` | None located | — |
 
+### Active Phase 5 gate matrix
+
+| Gate | Required? | Status | Evidence | Notes |
+| ---- | --------- | ------ | -------- | ----- |
+| User story and acceptance criteria | Yes | `COMPLETED` | [roadmap]; [Phase 5 decisions] | Authorized bounded annual-leave journey. |
+| Schema/migration, service, validation, authorization, scope/privacy, UI | Yes | `COMPLETED` | [Phase 5 report] | Real PostgreSQL-backed implementation. |
+| Audit, notifications, transactions, concurrency | Yes | `COMPLETED` | [Phase 5 report] | Sanitized transactional writes and locking/version evidence. |
+| Unit, PostgreSQL, migration, component, desktop/mobile E2E | Yes | `COMPLETED` | [Phase 5 report] | Local-only evidence. |
+| Manual walkthrough and documentation | Yes | `COMPLETED` | [Phase 5 report] | Report and canonical records updated. |
+
 ### Active Phase 2 gate matrix
 
 | Gate | Required? | Status | Evidence | Notes |
@@ -440,3 +452,4 @@ Append new rows; correct an existing row only for a factual error. Every `COMPLE
 | 2026-09-02 | Phase 3 remote delivery | `BLOCKED` | `COMPLETED` | Pushed commits `b3d6286`, `bd401fe`; [Phase 3 report] | User switched to the authorized Git account and `git push origin main` succeeded. Phase 3 remains blocked only on preserved repository-wide QA interference; Phase 4 remains unstarted. | Codex |
 | 2026-09-02 | Phase 4 scheduling V1 | `NOT_STARTED` | `IN_PROGRESS` | Authorized `SCOPEIS_PHASE_4_SCHEDULING_DRAFT_PROPOSED_PUBLISHED_JOURNEY_R1`; [Phase 4 decisions] | Began the Client-month Draft → Proposed → Published journey after preserving the Phase 3 operational model and custody inventory. Phase 5+ remained excluded. | Codex |
 | 2026-09-02 | Phase 4 scheduling V1 | `IN_PROGRESS` | `COMPLETED` | [Phase 4 report] | PostgreSQL schema, scope-safe service/actions, responsive `/schedule` UI, employee privacy projection, lifecycle/revision behavior, transactional audit/notifications, overlap race protection, local smoke, focused tests, and desktop/mobile E2E passed. Broader assignment types are explicitly deferred by V1 decision. | Codex |
+| 2026-09-02 | Phase 5 leave and availability | `NOT_STARTED` | `COMPLETED` | [Phase 5 report]; [Phase 5 decisions] | Employee request → private Super Admin review → decision → Employee notification and future schedule integrity passed. The 22-day Dubai calendar-year Monday–Friday rule is bounded to Phase 5; later workforce domains remain excluded. | Codex |

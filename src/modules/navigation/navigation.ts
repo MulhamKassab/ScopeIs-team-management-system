@@ -12,7 +12,7 @@ export const modules: Record<ModuleKey, ModuleDefinition> = {
   locations: { key: "locations", href: "/locations", label: "Locations", purpose: "Authorized same-client operational sites; no map or live tracking.", phase: 3, capability: "module:locations:view" },
   schedule: { key: "schedule", href: "/schedule", label: "Schedule", purpose: "Monthly Draft, Proposed, Published scheduling and My Schedule.", phase: 4, capability: "module:schedule:view", mobilePrimary: true },
   map: { key: "map", href: "/map", label: "Planning map", purpose: "The static planning map will be introduced in Phase 5.", phase: 5, capability: "module:map:view" },
-  leave: { key: "leave", href: "/leave", label: "Leave", purpose: "Leave requests and decisions will be introduced in Phase 6.", phase: 6, capability: "module:leave:view", mobilePrimary: true },
+  leave: { key: "leave", href: "/leave", label: "Leave", purpose: "Annual leave requests, decisions, balances, and approved unavailability.", phase: 5, capability: "module:leave:view", mobilePrimary: true },
   coverage: { key: "coverage", href: "/coverage", label: "Coverage", purpose: "Coverage rules and visibility will be introduced in Phase 7.", phase: 7, capability: "module:coverage:view" },
   replacements: { key: "replacements", href: "/replacements", label: "Replacements", purpose: "Replacement requests will be introduced in Phase 7.", phase: 7, capability: "module:replacements:view", mobilePrimary: true },
   notifications: { key: "notifications", href: "/notifications", label: "Notifications", purpose: "A full notification centre will be introduced in Phase 8.", phase: 8, capability: "module:notifications:view" },
