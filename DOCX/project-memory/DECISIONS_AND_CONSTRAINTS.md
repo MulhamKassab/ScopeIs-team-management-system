@@ -17,6 +17,7 @@ Technical implementation direction is recorded separately in [`SYSTEM_ARCHITECTU
 - Certification/portfolio updates save immediately and notify Super Admin; review/verification is optional, not a required approval gate.
 - Version 1 uses mock test accounts with no real passwords documented.
 - The Ticket System is a Phase 12 feature, not the workforce-system foundation.
+- Phase 6 qualification is an active management-recorded skill association only. It is not a proficiency score, certification gate, coverage result, or replacement/candidate-ranking judgment; missing recorded skills are transparent, non-blocking schedule warnings only.
 
 ## Explicit constraints
 

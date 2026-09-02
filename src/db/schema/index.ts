@@ -223,6 +223,16 @@ export const scheduleAssignments = pgTable("schedule_assignments", {
   check("schedule_assignments_time_order_check", sql`${table.endTime} > ${table.startTime}`), check("schedule_assignments_instruction_length_check", sql`${table.sharedInstruction} is null or char_length(${table.sharedInstruction}) <= 500`), check("schedule_assignments_version_check", sql`${table.version} > 0`),
 ]);
 
+export const assignmentSkillRequirements = pgTable("assignment_skill_requirements", {
+  id: uuid("id").defaultRandom().primaryKey(), scheduleAssignmentId: uuid("schedule_assignment_id").notNull(), skillId: uuid("skill_id").notNull(),
+  archivedAt: timestamp("archived_at", { withTimezone: true }), version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [
+  foreignKey({ name: "assignment_skill_requirements_schedule_assignment_id_fkey", columns: [table.scheduleAssignmentId], foreignColumns: [scheduleAssignments.id] }).onDelete("restrict"),
+  foreignKey({ name: "assignment_skill_requirements_skill_id_fkey", columns: [table.skillId], foreignColumns: [skills.id] }).onDelete("restrict"),
+  unique("assignment_skill_requirements_assignment_skill_key").on(table.scheduleAssignmentId, table.skillId), index("assignment_skill_requirements_assignment_idx").on(table.scheduleAssignmentId, table.archivedAt), index("assignment_skill_requirements_skill_idx").on(table.skillId, table.archivedAt),
+  check("assignment_skill_requirements_version_check", sql`${table.version} > 0`),
+]);
+
 export const leaveAllowanceSettings = pgTable("leave_allowance_settings", {
   singleton: boolean("singleton").primaryKey().notNull().default(true), annualWorkingDays: integer("annual_working_days").notNull().default(22), version: integer("version").notNull().default(1), ...timestamps,
 }, (table) => [check("leave_allowance_settings_singleton_check", sql`${table.singleton} = true`), check("leave_allowance_settings_days_check", sql`${table.annualWorkingDays} between 1 and 366`), check("leave_allowance_settings_version_check", sql`${table.version} > 0`)]);
@@ -242,7 +252,7 @@ export const userRelations = relations(users, ({ many, one }) => ({
 }));
 export const sessionRelations = relations(sessions, ({ one }) => ({ user: one(users, { fields: [sessions.userId], references: [users.id] }) }));
 export const designationRelations = relations(designations, ({ many }) => ({ employeeProfiles: many(employeeProfiles) }));
-export const skillRelations = relations(skills, ({ many }) => ({ employeeSkills: many(employeeSkills), evidence: many(employeeEvidence) }));
+export const skillRelations = relations(skills, ({ many }) => ({ employeeSkills: many(employeeSkills), evidence: many(employeeEvidence), assignmentRequirements: many(assignmentSkillRequirements) }));
 export const employeeProfileRelations = relations(employeeProfiles, ({ one }) => ({
   user: one(users, { fields: [employeeProfiles.userId], references: [users.id], relationName: "employeeProfileUser" }),
   manager: one(users, { fields: [employeeProfiles.managerUserId], references: [users.id], relationName: "employeeProfileManager" }),
@@ -283,6 +293,7 @@ export const schedulePeriodRelations = relations(schedulePeriods, ({ many, one }
 export const scheduleAssignmentRelations = relations(scheduleAssignments, ({ many, one }) => ({
   schedulePeriod: one(schedulePeriods, { fields: [scheduleAssignments.schedulePeriodId], references: [schedulePeriods.id] }), employee: one(users, { fields: [scheduleAssignments.employeeUserId], references: [users.id] }),
   project: one(projects, { fields: [scheduleAssignments.projectId], references: [projects.id] }), location: one(locations, { fields: [scheduleAssignments.locationId], references: [locations.id] }),
-  copiedFrom: one(scheduleAssignments, { fields: [scheduleAssignments.copiedFromAssignmentId], references: [scheduleAssignments.id], relationName: "scheduleAssignmentCopy" }), copies: many(scheduleAssignments, { relationName: "scheduleAssignmentCopy" }),
+  copiedFrom: one(scheduleAssignments, { fields: [scheduleAssignments.copiedFromAssignmentId], references: [scheduleAssignments.id], relationName: "scheduleAssignmentCopy" }), copies: many(scheduleAssignments, { relationName: "scheduleAssignmentCopy" }), requirements: many(assignmentSkillRequirements),
 }));
+export const assignmentSkillRequirementRelations = relations(assignmentSkillRequirements, ({ one }) => ({ assignment: one(scheduleAssignments, { fields: [assignmentSkillRequirements.scheduleAssignmentId], references: [scheduleAssignments.id] }), skill: one(skills, { fields: [assignmentSkillRequirements.skillId], references: [skills.id] }) }));
 export const leaveRequestRelations = relations(leaveRequests, ({ one }) => ({ employee: one(users, { fields: [leaveRequests.employeeUserId], references: [users.id], relationName: "leaveRequestEmployee" }), reviewer: one(users, { fields: [leaveRequests.reviewedByUserId], references: [users.id], relationName: "leaveRequestReviewer" }) }));

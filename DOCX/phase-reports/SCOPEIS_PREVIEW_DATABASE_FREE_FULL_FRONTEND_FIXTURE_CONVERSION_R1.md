@@ -10,7 +10,7 @@ Preview-only frontend demonstration conversion. This report does not certify a p
 - Starting Preview HEAD and `origin/preview`: `ce9bd38f47fa08446c5ea9cf228c56461c16f2d1`
 - Starting `origin/main`: `c0968524d78278a87be4c10fd266fc8464affbfe`
 - The Preview worktree was five commits behind `origin/main`.
-- `origin/main` was merged into `preview` as `842837c` before the conversion. The merge preserved main’s current Phase 3–5 terminology and domain source while Preview runtime paths were replaced with fixtures.
+- `origin/main` was merged into `preview` as `842837c` before the conversion. A final follow-up merge incorporated the current `db7c193` Phase 6 custody checkpoint, including its Skills terminology and canonical source. The new real Skills route is wrapped by the Preview fixture renderer, so it cannot initialize the Phase 6 persistence service.
 - The dirty `main` worktree was not opened for changes. The five pre-existing untracked duplicate UI files in Preview remained unmodified and unstaged.
 
 ## Retired historical bootstrap

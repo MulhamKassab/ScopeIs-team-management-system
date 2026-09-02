@@ -7,7 +7,8 @@ export type ModuleDefinition = { key: ModuleKey; href: string; label: string; sh
 
 export const modules: Record<ModuleKey, ModuleDefinition> = {
   dashboard: { key: "dashboard", href: "/dashboard", label: "Dashboard", group: "Overview", purpose: "Your role-aware starting point for the working application.", phase: 1, capability: "module:dashboard:view", mobilePrimary: true },
-  employees: { key: "employees", href: "/employees", label: "Employees", shortLabel: "Team", group: "Workforce", purpose: "The working Phase 2 employee directory and management journey.", phase: 2, capability: "module:employees:view", mobilePrimary: true },
+  employees: { key: "employees", href: "/employees", label: "Employees & capabilities", shortLabel: "Team", group: "Workforce", purpose: "Employee and capability management.", phase: 2, capability: "module:employees:view", mobilePrimary: true },
+  skills: { key: "skills", href: "/skills", label: "Skills", group: "Workforce", purpose: "Controlled skills, Team-scoped planning filters, and transparent requirement warnings.", phase: 6, capability: "module:skills:view" },
   clients: { key: "clients", href: "/clients", label: "Clients", group: "Operations", purpose: "Client records are planned for Phase 3 and are not implemented in this preview.", phase: 3, capability: "module:clients:view" },
   projects: { key: "projects", href: "/projects", label: "Projects", group: "Operations", purpose: "Project relationships are planned for Phase 3 and are not implemented in this preview.", phase: 3, capability: "module:projects:view" },
   locations: { key: "locations", href: "/locations", label: "Locations", group: "Operations", purpose: "Operational locations are planned for Phase 3 and are not implemented in this preview.", phase: 3, capability: "module:locations:view" },
