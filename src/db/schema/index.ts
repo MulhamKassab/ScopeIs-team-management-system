@@ -1,5 +1,5 @@
 import { relations, sql } from "drizzle-orm";
-import { boolean, check, date, doublePrecision, foreignKey, index, integer, jsonb, pgEnum, pgTable, text, timestamp, unique, uuid } from "drizzle-orm/pg-core";
+import { boolean, check, date, doublePrecision, foreignKey, index, integer, jsonb, pgEnum, pgTable, text, time, timestamp, unique, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 
 export const systemRoleEnum = pgEnum("system_role", ["SUPER_ADMIN", "ADMIN", "EMPLOYEE"]);
 export const scopeTypeEnum = pgEnum("scope_type", ["TEAM", "CLIENT", "PROJECT", "LOCATION"]);
@@ -9,6 +9,7 @@ export const evidenceKindEnum = pgEnum("evidence_kind", ["certification", "cv", 
 export const noteVisibilityEnum = pgEnum("note_visibility", ["private_to_author", "shared_upward"]);
 export const operationalLifecycleStatusEnum = pgEnum("operational_lifecycle_status", ["ACTIVE", "ARCHIVED"]);
 export const projectStatusEnum = pgEnum("project_status", ["PLANNED", "ACTIVE", "ON_HOLD", "COMPLETED", "ARCHIVED"]);
+export const schedulePeriodStatusEnum = pgEnum("schedule_period_status", ["DRAFT", "PROPOSED", "PUBLISHED"]);
 
 const timestamps = {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
@@ -194,6 +195,33 @@ export const operationalNotes = pgTable("operational_notes", {
   check("operational_notes_archive_fields_check", sql`(${table.archivedAt} is null and ${table.archivedByUserId} is null and ${table.archiveReason} is null) or (${table.archivedAt} is not null and ${table.archivedByUserId} is not null and char_length(${table.archiveReason}) > 0)`),
 ]);
 
+export const schedulePeriods = pgTable("schedule_periods", {
+  id: uuid("id").defaultRandom().primaryKey(), clientId: uuid("client_id").notNull(), planningMonth: date("planning_month").notNull(),
+  lineageId: uuid("lineage_id").notNull(), revisionNumber: integer("revision_number").notNull().default(1), parentPeriodId: uuid("parent_period_id"),
+  status: schedulePeriodStatusEnum("status").notNull().default("DRAFT"), isCurrent: boolean("is_current").notNull().default(false), lastReturnReason: text("last_return_reason"),
+  proposedAt: timestamp("proposed_at", { withTimezone: true }), publishedAt: timestamp("published_at", { withTimezone: true }), version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [
+  foreignKey({ name: "schedule_periods_client_id_fkey", columns: [table.clientId], foreignColumns: [clients.id] }).onDelete("restrict"),
+  foreignKey({ name: "schedule_periods_parent_period_id_fkey", columns: [table.parentPeriodId], foreignColumns: [table.id] }).onDelete("restrict"),
+  unique("schedule_periods_revision_key").on(table.clientId, table.planningMonth, table.revisionNumber), uniqueIndex("schedule_periods_active_draft_proposed_key").on(table.clientId, table.planningMonth).where(sql`${table.status} in ('DRAFT', 'PROPOSED')`), uniqueIndex("schedule_periods_current_published_key").on(table.clientId, table.planningMonth).where(sql`${table.status} = 'PUBLISHED' and ${table.isCurrent} = true`), index("schedule_periods_client_month_idx").on(table.clientId, table.planningMonth, table.status), index("schedule_periods_lineage_idx").on(table.lineageId, table.status),
+  check("schedule_periods_month_first_day_check", sql`extract(day from ${table.planningMonth}) = 1`), check("schedule_periods_revision_check", sql`${table.revisionNumber} > 0`), check("schedule_periods_version_check", sql`${table.version} > 0`), check("schedule_periods_current_only_published_check", sql`${table.isCurrent} = false or ${table.status} = 'PUBLISHED'`),
+]);
+
+export const scheduleAssignments = pgTable("schedule_assignments", {
+  id: uuid("id").defaultRandom().primaryKey(), schedulePeriodId: uuid("schedule_period_id").notNull(), employeeUserId: text("employee_user_id").notNull(),
+  projectId: uuid("project_id").notNull(), locationId: uuid("location_id").notNull(), assignmentDate: date("assignment_date").notNull(),
+  startTime: time("start_time", { precision: 0 }).notNull(), endTime: time("end_time", { precision: 0 }).notNull(), sharedInstruction: text("shared_instruction"), copiedFromAssignmentId: uuid("copied_from_assignment_id"),
+  version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [
+  foreignKey({ name: "schedule_assignments_period_id_fkey", columns: [table.schedulePeriodId], foreignColumns: [schedulePeriods.id] }).onDelete("restrict"),
+  foreignKey({ name: "schedule_assignments_employee_user_id_fkey", columns: [table.employeeUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  foreignKey({ name: "schedule_assignments_project_id_fkey", columns: [table.projectId], foreignColumns: [projects.id] }).onDelete("restrict"),
+  foreignKey({ name: "schedule_assignments_location_id_fkey", columns: [table.locationId], foreignColumns: [locations.id] }).onDelete("restrict"),
+  foreignKey({ name: "schedule_assignments_copied_from_fkey", columns: [table.copiedFromAssignmentId], foreignColumns: [table.id] }).onDelete("restrict"),
+  index("schedule_assignments_employee_date_idx").on(table.employeeUserId, table.assignmentDate), index("schedule_assignments_period_idx").on(table.schedulePeriodId, table.assignmentDate), index("schedule_assignments_project_location_idx").on(table.projectId, table.locationId),
+  check("schedule_assignments_time_order_check", sql`${table.endTime} > ${table.startTime}`), check("schedule_assignments_instruction_length_check", sql`${table.sharedInstruction} is null or char_length(${table.sharedInstruction}) <= 500`), check("schedule_assignments_version_check", sql`${table.version} > 0`),
+]);
+
 export const userRelations = relations(users, ({ many, one }) => ({
   sessions: many(sessions), scopeGrants: many(adminScopeGrants),
   employeeProfile: one(employeeProfiles, { fields: [users.id], references: [employeeProfiles.userId], relationName: "employeeProfileUser" }),
@@ -236,4 +264,14 @@ export const locationRelations = relations(locations, ({ many, one }) => ({
 }));
 export const projectLocationRelations = relations(projectLocations, ({ one }) => ({
   project: one(projects, { fields: [projectLocations.projectId], references: [projects.id] }), location: one(locations, { fields: [projectLocations.locationId], references: [locations.id] }),
+}));
+export const schedulePeriodRelations = relations(schedulePeriods, ({ many, one }) => ({
+  client: one(clients, { fields: [schedulePeriods.clientId], references: [clients.id] }),
+  parentPeriod: one(schedulePeriods, { fields: [schedulePeriods.parentPeriodId], references: [schedulePeriods.id], relationName: "schedulePeriodParent" }),
+  childPeriods: many(schedulePeriods, { relationName: "schedulePeriodParent" }), assignments: many(scheduleAssignments),
+}));
+export const scheduleAssignmentRelations = relations(scheduleAssignments, ({ many, one }) => ({
+  schedulePeriod: one(schedulePeriods, { fields: [scheduleAssignments.schedulePeriodId], references: [schedulePeriods.id] }), employee: one(users, { fields: [scheduleAssignments.employeeUserId], references: [users.id] }),
+  project: one(projects, { fields: [scheduleAssignments.projectId], references: [projects.id] }), location: one(locations, { fields: [scheduleAssignments.locationId], references: [locations.id] }),
+  copiedFrom: one(scheduleAssignments, { fields: [scheduleAssignments.copiedFromAssignmentId], references: [scheduleAssignments.id], relationName: "scheduleAssignmentCopy" }), copies: many(scheduleAssignments, { relationName: "scheduleAssignmentCopy" }),
 }));

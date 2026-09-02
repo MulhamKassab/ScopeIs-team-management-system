@@ -2,7 +2,7 @@
 
 ## Purpose and status
 
-This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is `COMPLETED` only in its narrow foundation scope; Phase 2 — Employee management journey is `COMPLETED` (11/11). Phase 3 is pushed but remains `BLOCKED`: its scoped implementation and QA pass, while preserved repository-wide QA interference remains unresolved. Phase 4 and later are unstarted.
+This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is `COMPLETED` only in its narrow foundation scope; Phase 2 — Employee management journey is `COMPLETED` (11/11). Phase 3's scoped implementation remains `BLOCKED` only by preserved repository-wide QA interference. Phase 4 scheduling V1 is `COMPLETED` for its approved journey; broader assignment types remain explicitly deferred, and Phase 5+ remain unstarted.
 
 ## Reader path
 
@@ -40,10 +40,11 @@ This directory is the canonical documentation foundation for ScopeIs Team Manage
 - [`project-memory/UI_UX_FOUNDATION.md`](project-memory/UI_UX_FOUNDATION.md) - approved Phase 1 visual, responsive, accessibility, theme, and RTL foundation.
 - [`project-memory/PHASE_2_EMPLOYEE_DOMAIN_DECISIONS.md`](project-memory/PHASE_2_EMPLOYEE_DOMAIN_DECISIONS.md) - approved Phase 2 employee, capability, evidence, privacy, and production-operational boundaries.
 - [`project-memory/PHASE_3_OPERATIONAL_DOMAIN_DECISIONS.md`](project-memory/PHASE_3_OPERATIONAL_DOMAIN_DECISIONS.md) - implemented Phase 3 normalized operational model, explicit scope inheritance, lifecycle, privacy, audit, and no-scheduling boundary.
+- [`project-memory/PHASE_4_SCHEDULING_DOMAIN_DECISIONS.md`](project-memory/PHASE_4_SCHEDULING_DOMAIN_DECISIONS.md) - implemented V1 Client-month schedule lifecycle, assignment/time model, scope/privacy boundary, overlap/concurrency rules, and explicit non-goals.
 
 ## Implementation status
 
-Historical reports remain immutable evidence and are not current roadmaps or tracker replacements. Phase 2.1–2.11 are completed as the bounded employee-management journey. Phase 3's pushed implementation and scoped QA are recorded in [`phase-reports/SCOPEIS_PHASE_3_CLIENT_PROJECT_LOCATION_JOURNEY_R1.md`](phase-reports/SCOPEIS_PHASE_3_CLIENT_PROJECT_LOCATION_JOURNEY_R1.md); its final classification is `BLOCKED` only until preserved repository-wide QA interference is resolved or explicitly dispositioned. Phase 3 manual QA uses `node scripts/run-phase3-manual-qa.mjs`. Phase 4 and later remain unstarted; no production authentication, database state, migration, or deployment is certified.
+Historical reports remain immutable evidence and are not current roadmaps or tracker replacements. Phase 2.1–2.11 are completed as the bounded employee-management journey. Phase 3's pushed implementation and scoped QA are recorded in [`phase-reports/SCOPEIS_PHASE_3_CLIENT_PROJECT_LOCATION_JOURNEY_R1.md`](phase-reports/SCOPEIS_PHASE_3_CLIENT_PROJECT_LOCATION_JOURNEY_R1.md); its final classification remains `BLOCKED` only because preserved repository-wide QA interference is unresolved. Phase 4's V1 implementation and evidence are recorded in [`phase-reports/SCOPEIS_PHASE_4_SCHEDULING_DRAFT_PROPOSED_PUBLISHED_JOURNEY_R1.md`](phase-reports/SCOPEIS_PHASE_4_SCHEDULING_DRAFT_PROPOSED_PUBLISHED_JOURNEY_R1.md). Phase 5 and later remain unstarted; no production authentication, database state, migration, or deployment is certified.
 
 ## Diagram catalog
 

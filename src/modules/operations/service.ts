@@ -2,7 +2,8 @@ import "server-only";
 import { db } from "@/db/client";
 import { writeAuditEvent } from "@/modules/audit/audit-service";
 import { OperationalDomainError } from "@/modules/operations/domain-error";
-import { operationalRepository, scopeGrantRepository, type OperationalExecutor, type OperationalTransaction, type ScopeRow } from "@/modules/operations/repositories";
+import { hasOperationalTargetScope } from "@/modules/authorization/operational-scope";
+import { operationalRepository, scopeGrantRepository, type OperationalExecutor, type OperationalTransaction } from "@/modules/operations/repositories";
 import {
   contactSchema, createClientSchema, createLocationSchema, createProjectSchema, employeeRelationSchema, grantSchema, lifecycleSchema, listQuerySchema, noteArchiveSchema, noteCreateSchema, noteUpdateSchema,
   operationalTargetSchema, parseOperational, projectLocationSchema, revokeGrantSchema, staffingRequirementSchema, supportingArchiveSchema, updateClientSchema, updateLocationSchema, updateProjectSchema,
@@ -23,7 +24,6 @@ export class OperationalService {
     return this.auditWriter(tx, { actor, action, targetType, targetId, metadata });
   }
   private async grants(executor: OperationalExecutor, actor: AuthenticatedActor) { return actor.role === "ADMIN" ? scopeGrantRepository.activeForUser(executor, actor.id) : []; }
-  private hasGrant(grants: ScopeRow[], type: "CLIENT" | "PROJECT" | "LOCATION", reference: string) { return grants.some((grant) => grant.scopeType === type && grant.scopeReference === reference); }
   private async target(executor: OperationalExecutor, input: OperationalTarget) {
     if (input.type === "CLIENT") { const client = await operationalRepository.client(executor, input.id); if (!client) throw new OperationalDomainError("NOT_FOUND"); return { target: input, client, record: client }; }
     if (input.type === "PROJECT") { const project = await operationalRepository.project(executor, input.id); if (!project) throw new OperationalDomainError("NOT_FOUND"); const client = await operationalRepository.client(executor, project.clientId); if (!client) throw new OperationalDomainError("NOT_FOUND"); return { target: input, client, project, record: project }; }
@@ -33,9 +33,7 @@ export class OperationalService {
     if (actor.role === "EMPLOYEE") throw new OperationalDomainError("FORBIDDEN");
     const loaded = await this.target(executor, input); if (actor.role === "SUPER_ADMIN") return loaded;
     const grants = await this.grants(executor, actor);
-    const allowed = this.hasGrant(grants, "CLIENT", loaded.client.id)
-      || (input.type === "PROJECT" && this.hasGrant(grants, "PROJECT", input.id))
-      || (input.type === "LOCATION" && this.hasGrant(grants, "LOCATION", input.id));
+    const allowed = hasOperationalTargetScope(actor, grants, input.type, input.id, loaded.client.id);
     if (!allowed) throw new OperationalDomainError("OUT_OF_SCOPE"); return loaded;
   }
   private ensureActive(loaded: Awaited<ReturnType<OperationalService["target"]>>) {
@@ -69,7 +67,7 @@ export class OperationalService {
   async getProjectDetail(actor: AuthenticatedActor, id: string) {
     const target = parseOperational(operationalTargetSchema, { type: "PROJECT", id }); const loaded = await this.requireTarget(db, actor, target);
     const [details, linkedLocations] = await Promise.all([operationalRepository.details(db, target), operationalRepository.linkedLocations(db, id)]);
-    const grants = await this.grants(db, actor); const allLocationIds = actor.role === "SUPER_ADMIN" || this.hasGrant(grants, "CLIENT", loaded.client.id) ? undefined : grants.filter((g) => g.scopeType === "LOCATION").map((g) => g.scopeReference);
+    const grants = await this.grants(db, actor); const allLocationIds = actor.role === "SUPER_ADMIN" || grants.some((g) => g.scopeType === "CLIENT" && g.scopeReference === loaded.client.id) ? undefined : grants.filter((g) => g.scopeType === "LOCATION").map((g) => g.scopeReference);
     const locationMatches = await operationalRepository.listLocations(db, { query: "", includeArchived: false, clientId: loaded.client.id, locationIds: allLocationIds });
     return { project: loaded.project!, client: loaded.client, details, linkedLocations, locationMatches };
   }

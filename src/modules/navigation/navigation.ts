@@ -10,7 +10,7 @@ export const modules: Record<ModuleKey, ModuleDefinition> = {
   clients: { key: "clients", href: "/clients", label: "Clients", purpose: "Authorized Client records and operational relationships.", phase: 3, capability: "module:clients:view" },
   projects: { key: "projects", href: "/projects", label: "Projects", purpose: "Authorized Projects and their deliberately linked Locations.", phase: 3, capability: "module:projects:view" },
   locations: { key: "locations", href: "/locations", label: "Locations", purpose: "Authorized same-client operational sites; no map or live tracking.", phase: 3, capability: "module:locations:view" },
-  schedule: { key: "schedule", href: "/schedule", label: "Schedule", purpose: "Planning and published schedules will be introduced in Phase 4.", phase: 4, capability: "module:schedule:view", mobilePrimary: true },
+  schedule: { key: "schedule", href: "/schedule", label: "Schedule", purpose: "Monthly Draft, Proposed, Published scheduling and My Schedule.", phase: 4, capability: "module:schedule:view", mobilePrimary: true },
   map: { key: "map", href: "/map", label: "Planning map", purpose: "The static planning map will be introduced in Phase 5.", phase: 5, capability: "module:map:view" },
   leave: { key: "leave", href: "/leave", label: "Leave", purpose: "Leave requests and decisions will be introduced in Phase 6.", phase: 6, capability: "module:leave:view", mobilePrimary: true },
   coverage: { key: "coverage", href: "/coverage", label: "Coverage", purpose: "Coverage rules and visibility will be introduced in Phase 7.", phase: 7, capability: "module:coverage:view" },
