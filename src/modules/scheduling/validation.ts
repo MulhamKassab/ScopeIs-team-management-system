@@ -10,7 +10,7 @@ const text = (max: number) => z.string().trim().max(max).nullable().optional().t
 const targetFields = z.object({ projectId: id, locationId: id, assignmentDate: date, startTime: localTime, endTime: localTime, sharedInstruction: text(500) }).strict()
   .refine((value) => value.endTime > value.startTime, { message: "End time must be after start time." });
 
-export const scheduleMonthSchema = z.object({ month }).strict();
+export const scheduleMonthSchema = z.object({ month, skillId: id.optional() }).strict();
 export const createPeriodSchema = z.object({ clientId: id, month }).strict();
 export const periodVersionSchema = z.object({ periodId: id, expectedVersion: version }).strict();
 export const returnPeriodSchema = periodVersionSchema.extend({ reason: z.string().trim().min(3).max(500) }).strict();

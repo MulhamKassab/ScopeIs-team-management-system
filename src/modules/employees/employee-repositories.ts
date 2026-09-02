@@ -2,7 +2,7 @@ import "server-only";
 import { and, asc, count, eq, ilike, inArray, isNull, lte, or, sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import {
-  adminScopeGrants, arrangementLabels, designations, employeeCodeSequence, employeeEvidence, employeeProfiles, employeeSkills, sessions, skills, users,
+  adminScopeGrants, arrangementLabels, assignmentSkillRequirements, designations, employeeCodeSequence, employeeEvidence, employeeProfiles, employeeSkills, sessions, skills, staffingRequirements, users,
 } from "@/db/schema";
 import type { EmployeeDirectoryQuery, PaginationInput } from "@/modules/employees/contracts";
 import { normalizeCatalogueName, normalizeIdentifier, parseOrDomainError, paginationSchema } from "@/modules/employees/employee-validation";
@@ -81,11 +81,13 @@ export const skillRepository = {
       .where(and(eq(skills.id, id), eq(skills.version, expectedVersion))).returning(); return row ?? null;
   },
   async isReferenced(executor: DatabaseExecutor, id: string) {
-    const [associationRows, evidenceRows] = await Promise.all([
+    const [associationRows, evidenceRows, staffingRows, assignmentRequirementRows] = await Promise.all([
       executor.select({ value: count() }).from(employeeSkills).where(eq(employeeSkills.skillId, id)),
       executor.select({ value: count() }).from(employeeEvidence).where(eq(employeeEvidence.relatedSkillId, id)),
+      executor.select({ value: count() }).from(staffingRequirements).where(eq(staffingRequirements.requiredSkillId, id)),
+      executor.select({ value: count() }).from(assignmentSkillRequirements).where(eq(assignmentSkillRequirements.skillId, id)),
     ]);
-    return Number(associationRows[0]?.value ?? 0) + Number(evidenceRows[0]?.value ?? 0) > 0;
+    return Number(associationRows[0]?.value ?? 0) + Number(evidenceRows[0]?.value ?? 0) + Number(staffingRows[0]?.value ?? 0) + Number(assignmentRequirementRows[0]?.value ?? 0) > 0;
   },
 };
 

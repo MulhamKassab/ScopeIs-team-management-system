@@ -8,7 +8,7 @@ The tracker uses only: `NOT_STARTED`, `READY`, `IN_PROGRESS`, `PARTIAL`, `BLOCKE
 
 **Completion rule:** backend-only work and UI shells are not completed user journeys. A phase is complete only after all applicable delivery gates and its end-to-end journey are verified.
 
-Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [Phase 2 journey completion], [Phase 2 manual QA readiness], [Phase 2 controls/code remediation], [Phase 3 report], [Phase 3 decisions], [Phase 4 report], [Phase 4 decisions], [Phase 5 report], [Phase 5 decisions], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
+Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [Phase 2 journey completion], [Phase 2 manual QA readiness], [Phase 2 controls/code remediation], [Phase 3 report], [Phase 3 decisions], [Phase 4 report], [Phase 4 decisions], [Phase 5 report], [Phase 5 decisions], [Phase 6 report], [Phase 6 decisions], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
 
 [roadmap]: IMPLEMENTATION_ROADMAP.md
 [context]: ../../PROJECT_CONTEXT.md
@@ -30,6 +30,8 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 [Phase 4 decisions]: PHASE_4_SCHEDULING_DOMAIN_DECISIONS.md
 [Phase 5 report]: ../phase-reports/SCOPEIS_PHASE_5_LEAVE_AND_AVAILABILITY_JOURNEY_R1.md
 [Phase 5 decisions]: PHASE_5_LEAVE_DOMAIN_DECISIONS.md
+[Phase 6 report]: ../phase-reports/SCOPEIS_PHASE_6_SKILLS_AND_OPERATIONAL_CAPABILITIES_JOURNEY_R1.md
+[Phase 6 decisions]: PHASE_6_SKILLS_CAPABILITIES_DECISIONS.md
 [employee services]: ../../src/modules/employees/employee-services.ts
 [schema]: ../../src/db/schema/index.ts
 [navigation]: ../../src/modules/navigation/navigation.ts
@@ -40,15 +42,15 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 
 ## Current focus
 
-- **Current active phase:** Phase 5 — Leave and availability
-- **Current active/next sub-phase:** Completed bounded leave journey; Phase 6 remains next
+- **Current active phase:** Phase 6 — Skills and operational capabilities
+- **Current active/next sub-phase:** Completed controlled-skills and non-blocking warning journey; Phase 7 remains next
 - **Current phase status:** `COMPLETED`
 - **Last status date:** `2026-09-02`
-- **Most recent trustworthy evidence:** [Phase 5 report]; [Phase 5 decisions]
-- **Immediate objective:** Preserve the Phase 5 boundary; Phase 6 and later journeys remain unstarted.
-- **Known blockers:** No Phase 5 blocker remains. Preserved repository-wide lint/legacy-runner interference remains outside the scoped gate set.
-- **Explicit exclusions:** Coverage, replacements, skills fulfilment, maps, tickets, payroll, attendance, production access/migration/authentication/deployment, and notification-centre redesign.
-- **Required phase-exit journey:** Employee submits leave → Super Admin reviews private balance/Published impact → Super Admin decides → Employee sees the persisted decision; Approved leave protects future scheduling.
+- **Most recent trustworthy evidence:** [Phase 6 report]; [Phase 6 decisions]
+- **Immediate objective:** Preserve the Phase 6 boundary; Phase 7 and later journeys remain unstarted.
+- **Known blockers:** No Phase 6 blocker remains. Preserved repository-wide lint/legacy-runner interference remains outside the scoped gate set.
+- **Explicit exclusions:** Coverage, replacements, candidate ranking, certifications as gates, maps, tickets, payroll, attendance, production access/migration/authentication/deployment, and notification-centre redesign.
+- **Required phase-exit journey:** Management records controlled employee skills and work requirements → authorized planners filter TEAM-visible recorded skills → Super Admin sees an explainable non-blocking missing-skill schedule warning.
 
 ## Master phase status
 
@@ -62,7 +64,7 @@ Progress measures completed roadmap sub-phases only. It is **not** engineering e
 | 3 | Clients, projects, and locations | `BLOCKED` | 9 | 10 | 90% | 3.10 repository-wide QA disposition; preserved Phase 3 blocker remains separately tracked | 2026-09-02 | 2026-09-02 | — | Phase 2 journey | Preserved repository-wide QA interference | Pushed commits `b3d6286`, `bd401fe`; [Phase 3 report] |
 | 4 | Scheduling, review, and publication | `COMPLETED` | 11 | 12 | 92% | 4.5 deferred: broader assignment-type expansion is outside approved V1 | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phases 2–3 operational records and employee TEAM visibility | None for approved V1 | [Phase 4 report]; [Phase 4 decisions] |
 | 5 | Leave and availability | `COMPLETED` | 10 | 10 | 100% | Completed bounded leave journey | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phase 4 | None | [Phase 5 report]; [Phase 5 decisions] |
-| 6 | Skills and operational capabilities | `PARTIAL` | 0 | 8 | 0% | 6.1 Reuse and connect the existing verified skills backend | 2026-09-01 | — | — | Phases 2–4 | Dependent operational records unavailable | [Phase 2 core R3] |
+| 6 | Skills and operational capabilities | `COMPLETED` | 8 | 8 | 100% | Completed controlled-skills and non-blocking warning journey | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phases 2–5 | None | [Phase 6 report]; [Phase 6 decisions] |
 | 7 | Coverage and replacement | `NOT_STARTED` | 0 | 11 | 0% | 7.1 Coverage-rule foundation | 2026-09-01 | — | — | Phases 4–6 | Schedule, leave, and connected skills unavailable | None located |
 | 8 | Static planning map | `NOT_STARTED` | 0 | 10 | 0% | 8.1 Address precision and privacy decision | 2026-09-01 | — | — | Phases 4–7 | Published schedule and privacy decision unavailable | None located |
 | 9 | Certifications, CVs, portfolios, and files | `PARTIAL` | 0 | 10 | 0% | 9.1 Certification records | 2026-09-01 | — | — | Phase 2 profile journey | Intentionally deferred; existing structures must only be preserved | [Phase 2 database] |
@@ -166,14 +168,14 @@ Scope note: `COMPLETED` only for the narrowly defined secure foundation journey;
 
 | ID | Sub-phase | Status | Last status date | Started date | Completed date | Dependencies | Implementation state | QA state | Exit evidence required | Current evidence | Blocker/notes |
 | -- | --------- | ------ | ---------------- | ------------ | -------------- | ------------ | -------------------- | -------- | ---------------------- | ---------------- | ------------- |
-| 6.1 | Reuse and connect the existing verified skills backend | `PARTIAL` | 2026-09-01 | — | — | Phases 2–4 | Schema; repository/service; validation; authorization; audit; concurrency | Unit; disposable PostgreSQL integration | Connected skills backend in operational journey | [Phase 2 core R3] | Existing backend is reusable, not connected. |
-| 6.2 | Skill catalogue UI and routes | `NOT_STARTED` | 2026-09-01 | — | — | 6.1 | Backend only | Integration only | Authorized real catalogue UI/routes | [employee services] | — |
-| 6.3 | Employee-skill management | `NOT_STARTED` | 2026-09-01 | — | — | 6.1–6.2 | Backend association service only | Integration only | Management UI/routes and E2E | [Phase 2 core R3] | — |
-| 6.4 | Proficiency and operational experience where confirmed | `NOT_STARTED` | 2026-09-01 | — | — | 6.3 | Optional backend text fields only | Integration only | Confirmed policy and connected behavior | [schema] | No fixed scale confirmed. |
-| 6.5 | Skill requirements for clients, projects, locations, and assignments | `NOT_STARTED` | 2026-09-01 | — | — | Phases 3–4 | Documentation only | None located | Distinct requirements relationships | None located | — |
-| 6.6 | Planner skill filters | `NOT_STARTED` | 2026-09-01 | — | — | 6.3, 6.5 | Backend list/search only | Integration only | Connected planner filters | [employee services] | — |
-| 6.7 | Missing-skill schedule warnings | `NOT_STARTED` | 2026-09-01 | — | — | 4.12, 6.5–6.6 | Documentation only | None located | Explainable warnings | None located | — |
-| 6.8 | Scope, authorization, concurrency, and complete E2E QA | `NOT_STARTED` | 2026-09-01 | — | — | 6.1–6.7 | Partial backend policy | Unit/integration only | Full operational-capability journey QA | [Phase 2 core R3] | — |
+| 6.1 | Reuse and connect the existing verified skills backend | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phases 2–5 | Reused catalogue/employee-skill stores with additive assignment requirements and server services | Migration, unit, disposable PostgreSQL | Connected capability facts | [Phase 6 report] | No parallel catalogue created. |
+| 6.2 | Skill catalogue UI and routes | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 6.1 | Super Admin `/skills` catalogue actions use existing governed service | Component, browser | Authorized real catalogue UI | [Phase 6 report] | Archive preserves references. |
+| 6.3 | Employee-skill management | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 6.1–6.2 | Super Admin management; Employee own read-only projection | PostgreSQL service; desktop/mobile browser | Management and self-service views | [Phase 6 report] | No employee self-declaration. |
+| 6.4 | Proficiency and operational experience where confirmed | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 6.3 | Existing optional fields preserved but deliberately excluded from qualification logic | Unit/component/service | Explicit boundary verified | [Phase 6 decisions] | No scale, ranking, certification, or verification gate. |
+| 6.5 | Skill requirements for clients, projects, locations, and assignments | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phases 3–4 | Reused scoped C/P/L requirements plus versioned Draft assignment associations | Migration; PostgreSQL service | Independent source records | [Phase 6 report] | Existing count is not coverage. |
+| 6.6 | Planner skill filters | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 6.3, 6.5 | `/skills` and Schedule filters return only explicit-TEAM visible recorded skills | Service, privacy tests, browser | Connected scoped filters | [Phase 6 report] | Operational scope never broadens employee visibility. |
+| 6.7 | Missing-skill schedule warnings | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 4.12, 6.5–6.6 | Server effective-union and source-attributed Super Admin warning in existing schedule review | PostgreSQL integration, component | Explainable non-blocking warning | [Phase 6 report] | No override, mutation, coverage, or replacement assertion. |
+| 6.8 | Scope, authorization, concurrency, and complete E2E QA | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 6.1–6.7 | Transactions, audit rollback, version guards, authorization projections, responsive UI | Migration, unit, component, service, desktop/mobile browser, typecheck | Full approved journey evidence | [Phase 6 report] | Local-only test targets; no production access. |
 
 ## Phase 7 — Coverage and replacement
 

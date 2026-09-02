@@ -9,3 +9,7 @@ Phase 5 leave and availability implementation resumed from local `main` at `0c00
 ## 2026-09-02 — Phase 5 completed
 
 The bounded annual-leave journey passed migration, unit, PostgreSQL integration, targeted lint, typecheck, build, desktop/mobile browser, and diff checks. The Phase 5 report, tracker, context, index, decision record, Definition of Done, and closure evidence were updated. Coverage, replacement, skills, maps, tickets, payroll, attendance, production access, and deployment remain outside Phase 5.
+
+## 2026-09-02 — Phase 6 completed
+
+The controlled skill and operational-capability journey reused the Phase 2 catalogue and employee-skill stores, added only versioned archival assignment requirements, connected the existing Client/Project/Location requirement records, and surfaced source-attributed server-calculated Super Admin warnings in the Phase 4 review flow. Targeted migration, unit, component, disposable PostgreSQL service, desktop/mobile browser, typecheck, build, and diff evidence is recorded in the Phase 6 report. Coverage, replacements, candidate ranking, certification gates, maps, tickets, payroll, attendance, production access, and deployment remain outside Phase 6.
