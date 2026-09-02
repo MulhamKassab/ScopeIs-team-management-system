@@ -1,0 +1,9 @@
+import Link from "next/link";
+import { notFound, redirect } from "next/navigation";
+import { getCurrentActor } from "@/modules/auth/session-service";
+import { operationalService } from "@/modules/operations/service";
+
+export default async function LocationsPage({ searchParams }: { searchParams: Promise<{ query?: string; archived?: string }> }) {
+  const actor = await getCurrentActor(); if (!actor) redirect("/login"); if (actor.role === "EMPLOYEE") notFound(); const params = await searchParams; const records = await operationalService.listLocations(actor, { query: params.query ?? "", includeArchived: params.archived === "true" });
+  return <section className="operations-page"><header className="operations-heading"><div><p className="eyebrow">Phase 3 operational structure</p><h2>Locations</h2><p>Stored operational sites only. Coordinates are manual and optional; there is no map, GPS, geocoding, or live tracking.</p></div><Link className="button" href="/clients">Clients</Link></header><form className="operation-search" method="get"><label>Search name or address<input name="query" defaultValue={params.query ?? ""} maxLength={100} /></label><label className="operation-check"><input type="checkbox" name="archived" value="true" defaultChecked={params.archived === "true"} /> Include archived</label><button className="button primary">Search</button></form><div className="operation-cards">{records.map(({ location, clientName }) => <article key={location.id}><span className={`directory-status ${location.status === "ACTIVE" ? "active" : "inactive"}`}>{location.status}</span><h3>{location.name}</h3><p>{clientName}<br />{location.address}</p><Link className="button primary" href={`/locations/${location.id}`}>Manage Location</Link></article>)}</div>{!records.length ? <div className="operation-empty"><h3>No authorized Locations</h3><p>Location scope never widens to its Client or related Projects.</p></div> : null}</section>;
+}

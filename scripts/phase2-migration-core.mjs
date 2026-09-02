@@ -49,6 +49,9 @@ function expectedStage(manifest, count) {
   if (count === 2) return manifest.states.phase1And2;
   if (count === 3) return manifest.states.phase2EmployeeJourney;
   if (count === 4) return manifest.states.phase2EmployeeCode;
+  if (count === 5) return manifest.states.phase3OperationalStructure;
+  if (count === 6) return manifest.states.phase4Scheduling;
+  if (count === 7) return manifest.states.phase5LeaveAvailability;
   return null;
 }
 
@@ -122,7 +125,10 @@ export async function inspectMigrationState(client) {
     return { state: "F", description: "Exact ledgerless Phase 2 employee-journey database", pending: manifest.migrations.slice(3).map((migration) => migration.tag), adopt: manifest.migrations.slice(0, 3), fingerprint, ledger, diagnostics: schemaDiagnostics(fingerprint, manifest.states.phase2EmployeeJourney) };
   }
   if (!ledger.schemaExists && fingerprint.hash === manifest.states.phase2EmployeeCode.hash) {
-    return { state: "G", description: "Exact ledgerless Phase 2 employee-code database", pending: [], adopt: manifest.migrations, fingerprint, ledger, diagnostics: schemaDiagnostics(fingerprint, manifest.states.phase2EmployeeCode) };
+    return { state: "G", description: "Exact ledgerless Phase 2 employee-code database", pending: manifest.migrations.slice(4).map((migration) => migration.tag), adopt: manifest.migrations.slice(0, 4), fingerprint, ledger, diagnostics: schemaDiagnostics(fingerprint, manifest.states.phase2EmployeeCode) };
+  }
+  if (!ledger.schemaExists && fingerprint.hash === manifest.states.phase3OperationalStructure.hash) {
+    return { state: "H", description: "Exact ledgerless Phase 3 operational-structure database", pending: manifest.migrations.slice(5).map((migration) => migration.tag), adopt: manifest.migrations.slice(0, 5), fingerprint, ledger, diagnostics: schemaDiagnostics(fingerprint, manifest.states.phase3OperationalStructure) };
   }
   if (ledger.schemaExists && ledgerValidation.valid) {
     const expected = expectedStage(manifest, ledgerValidation.count);
@@ -131,7 +137,7 @@ export async function inspectMigrationState(client) {
     }
   }
 
-  const candidate = fingerprint.tables.length <= manifest.states.phase1.tables.length ? manifest.states.phase1 : manifest.states.phase1And2;
+  const candidate = fingerprint.tables.length <= manifest.states.phase1.tables.length ? manifest.states.phase1 : fingerprint.tables.length <= manifest.states.phase1And2.tables.length ? manifest.states.phase1And2 : fingerprint.tables.length <= manifest.states.phase3OperationalStructure.tables.length ? manifest.states.phase3OperationalStructure : manifest.states.phase5LeaveAvailability;
   return {
     state: "E",
     description: "Partial, contradictory, or unknown database state",
@@ -199,7 +205,7 @@ export async function reconcileMigrationState(connectionString, options = {}) {
     const before = await inspectMigrationState(client);
     if (before.state === "E") return { safety, before, applied: false, refused: true };
     if (!options.apply) return { safety, before, applied: false, refused: false, dryRun: true };
-    if (before.state === "B" || before.state === "C" || before.state === "F" || before.state === "G") await createAndAdoptLedger(client, before.adopt);
+    if (before.state === "B" || before.state === "C" || before.state === "F" || before.state === "G" || before.state === "H") await createAndAdoptLedger(client, before.adopt);
     await client.end();
     clientClosed = true;
     await runNormalMigrator(connectionString);
