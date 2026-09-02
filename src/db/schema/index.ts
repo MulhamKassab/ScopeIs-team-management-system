@@ -1,5 +1,5 @@
 import { relations, sql } from "drizzle-orm";
-import { boolean, check, date, foreignKey, index, integer, jsonb, pgEnum, pgTable, text, timestamp, unique, uuid } from "drizzle-orm/pg-core";
+import { boolean, check, date, doublePrecision, foreignKey, index, integer, jsonb, pgEnum, pgTable, text, timestamp, unique, uuid } from "drizzle-orm/pg-core";
 
 export const systemRoleEnum = pgEnum("system_role", ["SUPER_ADMIN", "ADMIN", "EMPLOYEE"]);
 export const scopeTypeEnum = pgEnum("scope_type", ["TEAM", "CLIENT", "PROJECT", "LOCATION"]);
@@ -7,6 +7,8 @@ export const authenticationModeEnum = pgEnum("authentication_mode", ["mock"]);
 export const evidenceReviewStateEnum = pgEnum("evidence_review_state", ["unreviewed", "reviewed", "verified"]);
 export const evidenceKindEnum = pgEnum("evidence_kind", ["certification", "cv", "portfolio", "project_example", "supporting_document"]);
 export const noteVisibilityEnum = pgEnum("note_visibility", ["private_to_author", "shared_upward"]);
+export const operationalLifecycleStatusEnum = pgEnum("operational_lifecycle_status", ["ACTIVE", "ARCHIVED"]);
+export const projectStatusEnum = pgEnum("project_status", ["PLANNED", "ACTIVE", "ON_HOLD", "COMPLETED", "ARCHIVED"]);
 
 const timestamps = {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
@@ -101,6 +103,97 @@ export const employeeManagementNotes = pgTable("employee_management_notes", {
   version: integer("version").notNull().default(1), ...timestamps,
 }, (table) => [foreignKey({ name: "employee_management_notes_subject_user_id_fkey", columns: [table.subjectUserId], foreignColumns: [users.id] }).onDelete("restrict"), foreignKey({ name: "employee_management_notes_author_user_id_fkey", columns: [table.authorUserId], foreignColumns: [users.id] }).onDelete("restrict"), index("employee_management_notes_subject_idx").on(table.subjectUserId, table.archivedAt), check("employee_management_notes_version_check", sql`${table.version} > 0`)]);
 
+export const clients = pgTable("clients", {
+  id: uuid("id").defaultRandom().primaryKey(), companyName: text("company_name").notNull(), status: operationalLifecycleStatusEnum("status").notNull().default("ACTIVE"),
+  accountManagerUserId: text("account_manager_user_id"), serviceSummary: text("service_summary"), serviceStartDate: date("service_start_date"), serviceEndDate: date("service_end_date"),
+  version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [
+  foreignKey({ name: "clients_account_manager_user_id_fkey", columns: [table.accountManagerUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  index("clients_status_name_idx").on(table.status, table.companyName), check("clients_version_check", sql`${table.version} > 0`),
+  check("clients_service_dates_check", sql`${table.serviceEndDate} is null or ${table.serviceStartDate} is null or ${table.serviceEndDate} >= ${table.serviceStartDate}`),
+]);
+
+export const projects = pgTable("projects", {
+  id: uuid("id").defaultRandom().primaryKey(), clientId: uuid("client_id").notNull(), name: text("name").notNull(), status: projectStatusEnum("status").notNull().default("PLANNED"),
+  responsibleAdminUserId: text("responsible_admin_user_id"), startDate: date("start_date"), endDate: date("end_date"), version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [
+  foreignKey({ name: "projects_client_id_fkey", columns: [table.clientId], foreignColumns: [clients.id] }).onDelete("restrict"),
+  foreignKey({ name: "projects_responsible_admin_user_id_fkey", columns: [table.responsibleAdminUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  unique("projects_client_name_key").on(table.clientId, table.name), index("projects_client_status_idx").on(table.clientId, table.status),
+  check("projects_version_check", sql`${table.version} > 0`), check("projects_dates_check", sql`${table.endDate} is null or ${table.startDate} is null or ${table.endDate} >= ${table.startDate}`),
+]);
+
+export const locations = pgTable("locations", {
+  id: uuid("id").defaultRandom().primaryKey(), clientId: uuid("client_id").notNull(), name: text("name").notNull(), address: text("address").notNull(),
+  status: operationalLifecycleStatusEnum("status").notNull().default("ACTIVE"), latitude: doublePrecision("latitude"), longitude: doublePrecision("longitude"),
+  siteHours: text("site_hours"), accessInstructions: text("access_instructions"), visitRequirements: text("visit_requirements"), version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [
+  foreignKey({ name: "locations_client_id_fkey", columns: [table.clientId], foreignColumns: [clients.id] }).onDelete("restrict"),
+  index("locations_client_status_name_idx").on(table.clientId, table.status, table.name), check("locations_version_check", sql`${table.version} > 0`),
+  check("locations_coordinate_pair_check", sql`(${table.latitude} is null and ${table.longitude} is null) or (${table.latitude} between -90 and 90 and ${table.longitude} between -180 and 180)`),
+]);
+
+export const projectLocations = pgTable("project_locations", {
+  id: uuid("id").defaultRandom().primaryKey(), projectId: uuid("project_id").notNull(), locationId: uuid("location_id").notNull(), archivedAt: timestamp("archived_at", { withTimezone: true }),
+  version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [
+  foreignKey({ name: "project_locations_project_id_fkey", columns: [table.projectId], foreignColumns: [projects.id] }).onDelete("restrict"),
+  foreignKey({ name: "project_locations_location_id_fkey", columns: [table.locationId], foreignColumns: [locations.id] }).onDelete("restrict"),
+  unique("project_locations_project_location_key").on(table.projectId, table.locationId), index("project_locations_location_idx").on(table.locationId, table.archivedAt),
+  check("project_locations_version_check", sql`${table.version} > 0`),
+]);
+
+export const operationalContacts = pgTable("operational_contacts", {
+  id: uuid("id").defaultRandom().primaryKey(), clientId: uuid("client_id"), projectId: uuid("project_id"), locationId: uuid("location_id"),
+  name: text("name").notNull(), roleTitle: text("role_title"), workPhone: text("work_phone"), workEmail: text("work_email"), archivedAt: timestamp("archived_at", { withTimezone: true }),
+  version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [
+  foreignKey({ name: "operational_contacts_client_id_fkey", columns: [table.clientId], foreignColumns: [clients.id] }).onDelete("restrict"),
+  foreignKey({ name: "operational_contacts_project_id_fkey", columns: [table.projectId], foreignColumns: [projects.id] }).onDelete("restrict"),
+  foreignKey({ name: "operational_contacts_location_id_fkey", columns: [table.locationId], foreignColumns: [locations.id] }).onDelete("restrict"),
+  index("operational_contacts_client_idx").on(table.clientId, table.archivedAt), index("operational_contacts_project_idx").on(table.projectId, table.archivedAt), index("operational_contacts_location_idx").on(table.locationId, table.archivedAt),
+  check("operational_contacts_one_parent_check", sql`num_nonnulls(${table.clientId}, ${table.projectId}, ${table.locationId}) = 1`), check("operational_contacts_version_check", sql`${table.version} > 0`),
+]);
+
+export const staffingRequirements = pgTable("staffing_requirements", {
+  id: uuid("id").defaultRandom().primaryKey(), clientId: uuid("client_id"), projectId: uuid("project_id"), locationId: uuid("location_id"), requiredSkillId: uuid("required_skill_id").notNull(),
+  requiredEmployeeCount: integer("required_employee_count").notNull(), note: text("note"), archivedAt: timestamp("archived_at", { withTimezone: true }), version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [
+  foreignKey({ name: "staffing_requirements_client_id_fkey", columns: [table.clientId], foreignColumns: [clients.id] }).onDelete("restrict"),
+  foreignKey({ name: "staffing_requirements_project_id_fkey", columns: [table.projectId], foreignColumns: [projects.id] }).onDelete("restrict"),
+  foreignKey({ name: "staffing_requirements_location_id_fkey", columns: [table.locationId], foreignColumns: [locations.id] }).onDelete("restrict"),
+  foreignKey({ name: "staffing_requirements_required_skill_id_fkey", columns: [table.requiredSkillId], foreignColumns: [skills.id] }).onDelete("restrict"),
+  index("staffing_requirements_client_idx").on(table.clientId, table.archivedAt), index("staffing_requirements_project_idx").on(table.projectId, table.archivedAt), index("staffing_requirements_location_idx").on(table.locationId, table.archivedAt),
+  check("staffing_requirements_one_parent_check", sql`num_nonnulls(${table.clientId}, ${table.projectId}, ${table.locationId}) = 1`), check("staffing_requirements_count_check", sql`${table.requiredEmployeeCount} > 0`), check("staffing_requirements_version_check", sql`${table.version} > 0`),
+]);
+
+export const operationalEmployeeRelations = pgTable("operational_employee_relations", {
+  id: uuid("id").defaultRandom().primaryKey(), clientId: uuid("client_id"), projectId: uuid("project_id"), locationId: uuid("location_id"), employeeUserId: text("employee_user_id").notNull(),
+  archivedAt: timestamp("archived_at", { withTimezone: true }), version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [
+  foreignKey({ name: "operational_employee_relations_client_id_fkey", columns: [table.clientId], foreignColumns: [clients.id] }).onDelete("restrict"),
+  foreignKey({ name: "operational_employee_relations_project_id_fkey", columns: [table.projectId], foreignColumns: [projects.id] }).onDelete("restrict"),
+  foreignKey({ name: "operational_employee_relations_location_id_fkey", columns: [table.locationId], foreignColumns: [locations.id] }).onDelete("restrict"),
+  foreignKey({ name: "operational_employee_relations_employee_user_id_fkey", columns: [table.employeeUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  unique("operational_employee_relations_client_key").on(table.clientId, table.employeeUserId), unique("operational_employee_relations_project_key").on(table.projectId, table.employeeUserId), unique("operational_employee_relations_location_key").on(table.locationId, table.employeeUserId),
+  index("operational_employee_relations_employee_idx").on(table.employeeUserId, table.archivedAt), check("operational_employee_relations_one_parent_check", sql`num_nonnulls(${table.clientId}, ${table.projectId}, ${table.locationId}) = 1`), check("operational_employee_relations_version_check", sql`${table.version} > 0`),
+]);
+
+export const operationalNotes = pgTable("operational_notes", {
+  id: uuid("id").defaultRandom().primaryKey(), clientId: uuid("client_id"), projectId: uuid("project_id"), locationId: uuid("location_id"), authorUserId: text("author_user_id").notNull(),
+  content: text("content").notNull(), archivedAt: timestamp("archived_at", { withTimezone: true }), archivedByUserId: text("archived_by_user_id"), archiveReason: text("archive_reason"),
+  version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [
+  foreignKey({ name: "operational_notes_client_id_fkey", columns: [table.clientId], foreignColumns: [clients.id] }).onDelete("restrict"),
+  foreignKey({ name: "operational_notes_project_id_fkey", columns: [table.projectId], foreignColumns: [projects.id] }).onDelete("restrict"),
+  foreignKey({ name: "operational_notes_location_id_fkey", columns: [table.locationId], foreignColumns: [locations.id] }).onDelete("restrict"),
+  foreignKey({ name: "operational_notes_author_user_id_fkey", columns: [table.authorUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  foreignKey({ name: "operational_notes_archived_by_user_id_fkey", columns: [table.archivedByUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  index("operational_notes_client_idx").on(table.clientId, table.archivedAt), index("operational_notes_project_idx").on(table.projectId, table.archivedAt), index("operational_notes_location_idx").on(table.locationId, table.archivedAt),
+  check("operational_notes_one_parent_check", sql`num_nonnulls(${table.clientId}, ${table.projectId}, ${table.locationId}) = 1`), check("operational_notes_version_check", sql`${table.version} > 0`),
+  check("operational_notes_archive_fields_check", sql`(${table.archivedAt} is null and ${table.archivedByUserId} is null and ${table.archiveReason} is null) or (${table.archivedAt} is not null and ${table.archivedByUserId} is not null and char_length(${table.archiveReason}) > 0)`),
+]);
+
 export const userRelations = relations(users, ({ many, one }) => ({
   sessions: many(sessions), scopeGrants: many(adminScopeGrants),
   employeeProfile: one(employeeProfiles, { fields: [users.id], references: [employeeProfiles.userId], relationName: "employeeProfileUser" }),
@@ -128,4 +221,19 @@ export const employeeFileRelations = relations(employeeFiles, ({ one }) => ({ ev
 export const employeeManagementNoteRelations = relations(employeeManagementNotes, ({ one }) => ({
   subject: one(users, { fields: [employeeManagementNotes.subjectUserId], references: [users.id], relationName: "managementNoteSubject" }),
   author: one(users, { fields: [employeeManagementNotes.authorUserId], references: [users.id], relationName: "managementNoteAuthor" }),
+}));
+export const clientRelations = relations(clients, ({ many, one }) => ({
+  accountManager: one(users, { fields: [clients.accountManagerUserId], references: [users.id] }), projects: many(projects), locations: many(locations),
+  contacts: many(operationalContacts), staffingRequirements: many(staffingRequirements), employeeRelations: many(operationalEmployeeRelations), notes: many(operationalNotes),
+}));
+export const projectRelations = relations(projects, ({ many, one }) => ({
+  client: one(clients, { fields: [projects.clientId], references: [clients.id] }), responsibleAdmin: one(users, { fields: [projects.responsibleAdminUserId], references: [users.id] }),
+  projectLocations: many(projectLocations), contacts: many(operationalContacts), staffingRequirements: many(staffingRequirements), employeeRelations: many(operationalEmployeeRelations), notes: many(operationalNotes),
+}));
+export const locationRelations = relations(locations, ({ many, one }) => ({
+  client: one(clients, { fields: [locations.clientId], references: [clients.id] }), projectLocations: many(projectLocations), contacts: many(operationalContacts),
+  staffingRequirements: many(staffingRequirements), employeeRelations: many(operationalEmployeeRelations), notes: many(operationalNotes),
+}));
+export const projectLocationRelations = relations(projectLocations, ({ one }) => ({
+  project: one(projects, { fields: [projectLocations.projectId], references: [projects.id] }), location: one(locations, { fields: [projectLocations.locationId], references: [locations.id] }),
 }));

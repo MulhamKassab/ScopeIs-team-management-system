@@ -4,7 +4,8 @@
     { "tag": "0000_phase_1_foundation", "idx": 0, "when": 1787814000000, "hash": "cd7965d9b11f756075d76c0a9ef2adb4159827391224233cc143b05dfbe22e34" },
     { "tag": "0001_phase_2_employee_capabilities", "idx": 1, "when": 1787827000000, "hash": "d0dc109b1cca66b727ea2843186559c1b9e0f802ad001d8013322f6a2beddd60" },
     { "tag": "0002_phase_2_employee_management_journey", "idx": 2, "when": 1787830000000, "hash": "11913dffe54013a53021896f7c57d7357cbab8cf12e674ae86366bddd039c62c" },
-    { "tag": "0003_phase_2_employee_code_sequence", "idx": 3, "when": 1787831000000, "hash": "fac18923754fb6f8049a69356749770280722d272a1b83bc42d313ccaf3b2be9" }
+    { "tag": "0003_phase_2_employee_code_sequence", "idx": 3, "when": 1787831000000, "hash": "fac18923754fb6f8049a69356749770280722d272a1b83bc42d313ccaf3b2be9" },
+    { "tag": "0004_phase_3_operational_structure", "idx": 4, "when": 1788325200000, "hash": "9847376cc77dd89bf3332dd50f8612b0db3b5e388b5c6f398863ffd1fafde4b3" }
   ],
   "states": {
     "phase1": {
@@ -103,6 +104,41 @@
       },
       "tables": ["admin_scope_grants", "arrangement_labels", "audit_events", "designations", "employee_code_sequence", "employee_evidence", "employee_files", "employee_management_notes", "employee_profiles", "employee_skills", "notifications", "sessions", "skills", "users"],
       "enumTypes": ["authentication_mode", "evidence_kind", "evidence_review_state", "note_visibility", "scope_type", "system_role"]
+    },
+    "phase3OperationalStructure": {
+      "hash": "8a91c378b154a394933c8a63eaf2a076305b8a76a612e25938d0b54e1950484c",
+      "sectionHashes": {
+        "enums": "ef7674f43aa3381dafae936b58e546bdf09950ff65e186f3fcfe49752668663d",
+        "columns": "29d34f27f54987a0ae1419a7d68e1ff7a0ce6dc2904c20071637e77f9548bd3b",
+        "constraints": "133285d20c2285f26b34b60dad7097214ffcd4b8c3bf29b9cd3b3d78d3f66de1",
+        "indexes": "9140a06d4f75a3bf0c4d30fea029347a5ee0bf68ded2ebfe164bdc784ebabd0f"
+      },
+      "tableHashes": {
+        "admin_scope_grants": "532a21bb52d51df346aa1b0b4960a4e802ff300d1a4defe6b6c670463c0b039b",
+        "arrangement_labels": "589ef8c44b7a3e6b2e13e5876599a7685b24baec65d58f8b81b530f7563c0dc1",
+        "audit_events": "cf944aa48d66a79b4af2dee2465144828ea5a3cb60ebc58becd81d63f993045e",
+        "clients": "baa6b92e92c385792093db694277a86f107da610d26060649b1f5c86cd037d9e",
+        "designations": "10a61e717a9c720fc5f72686f17d045403e88b8e361fdd746aa04739d6264095",
+        "employee_code_sequence": "1d8048f2d467c33d2a411d905053396cdddf5aadc1dc2f21e01ed239144309a0",
+        "employee_evidence": "554a248349ceda2da969f5968b8de253c25ca82dbb9c1d3d40e255f457978ea1",
+        "employee_files": "49eb32d34e43b74d938f8b3cebf191054c64e53a8476a447ddb096a40ef3b86c",
+        "employee_management_notes": "59e8a4e3b222e50ec8a9cd91212a14342f469956f5acd37f9c43ae22179e7b74",
+        "employee_profiles": "a4fefb743e1ed5e41da1f7c3392e3f2e014b803b7c5a6658f07a6cda7b3001d5",
+        "employee_skills": "1d76d44c2941e3c020decbfd0b702530ff18e367e653a75dd74e9723b6abb85e",
+        "locations": "71b2066f3247603cc2f011037bd24ce4acdbfdec3b878cbcf11a460ccc1763bf",
+        "notifications": "0445b9a5e570865f7dbc4d6e463bd9d4f6313e07693bfd6f08d60213b92ad166",
+        "operational_contacts": "291a3b393d208183a7ce6fb9fce9d7d9b4dc8083f29d069aa8d36e11cfc1a5ad",
+        "operational_employee_relations": "1b843fc210162c1357da3e4b24ad39e43d07881d1ffd0fa9b18370ab37ce130e",
+        "operational_notes": "698d69eb2d2a707fc33fc90f674f1a8fedb93da5530127a43c3177fb73776bde",
+        "project_locations": "7b4bc093cdf8359846e6a5012a90d3263cc0d8382c560f097e57b7749291a4c2",
+        "projects": "82d65d6fd38e2ec8aa38569ecacb82f321d6bd5680955b0735afc0381f216df9",
+        "sessions": "6402b0286967f08a327b86774d8942718cc0fe5093e1d5a8c4fbf037878d8b67",
+        "skills": "baea1f13432a2d3b602d5819d57afa56b7a2d4b811af6a29635ae0be7a4ecdc8",
+        "staffing_requirements": "142e9aa7679f6c6244f5bfde0ee273c96cf85f038e55be0f817201ef8e4cefe5",
+        "users": "1d0b0156834d5ad932fbd5d35b3b3a742d2752f76e7103cf534f040269a47dad"
+      },
+      "tables": ["admin_scope_grants", "arrangement_labels", "audit_events", "clients", "designations", "employee_code_sequence", "employee_evidence", "employee_files", "employee_management_notes", "employee_profiles", "employee_skills", "locations", "notifications", "operational_contacts", "operational_employee_relations", "operational_notes", "project_locations", "projects", "sessions", "skills", "staffing_requirements", "users"],
+      "enumTypes": ["authentication_mode", "evidence_kind", "evidence_review_state", "note_visibility", "operational_lifecycle_status", "project_status", "scope_type", "system_role"]
     }
   }
 }

@@ -7,9 +7,9 @@ export type ModuleDefinition = { key: ModuleKey; href: string; label: string; pu
 export const modules: Record<ModuleKey, ModuleDefinition> = {
   dashboard: { key: "dashboard", href: "/dashboard", label: "Dashboard", purpose: "A role-aware starting point for the Team Management System.", phase: 1, capability: "module:dashboard:view", mobilePrimary: true },
   employees: { key: "employees", href: "/employees", label: "Employees & capabilities", purpose: "Employee and capability management will be introduced in Phase 2.", phase: 2, capability: "module:employees:view", mobilePrimary: true },
-  clients: { key: "clients", href: "/clients", label: "Clients", purpose: "Client records will be introduced in Phase 3.", phase: 3, capability: "module:clients:view" },
-  projects: { key: "projects", href: "/projects", label: "Projects", purpose: "Project relationships will be introduced in Phase 3.", phase: 3, capability: "module:projects:view" },
-  locations: { key: "locations", href: "/locations", label: "Locations", purpose: "Operational locations will be introduced in Phase 3.", phase: 3, capability: "module:locations:view" },
+  clients: { key: "clients", href: "/clients", label: "Clients", purpose: "Authorized Client records and operational relationships.", phase: 3, capability: "module:clients:view" },
+  projects: { key: "projects", href: "/projects", label: "Projects", purpose: "Authorized Projects and their deliberately linked Locations.", phase: 3, capability: "module:projects:view" },
+  locations: { key: "locations", href: "/locations", label: "Locations", purpose: "Authorized same-client operational sites; no map or live tracking.", phase: 3, capability: "module:locations:view" },
   schedule: { key: "schedule", href: "/schedule", label: "Schedule", purpose: "Planning and published schedules will be introduced in Phase 4.", phase: 4, capability: "module:schedule:view", mobilePrimary: true },
   map: { key: "map", href: "/map", label: "Planning map", purpose: "The static planning map will be introduced in Phase 5.", phase: 5, capability: "module:map:view" },
   leave: { key: "leave", href: "/leave", label: "Leave", purpose: "Leave requests and decisions will be introduced in Phase 6.", phase: 6, capability: "module:leave:view", mobilePrimary: true },
