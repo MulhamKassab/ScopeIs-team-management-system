@@ -2,6 +2,10 @@
 
 This is append-only. The tracker remains the live status authority.
 
+## 2026-09-02 — Phase 7 implementation
+
+Implemented the bounded coverage/replacement journey with additive request persistence, independent staffing-rule gaps, scoped candidate filtering, Super Admin-only decisions, and non-published schedule effects. Targeted migration, typecheck, and disposable PostgreSQL tests passed; no production access occurred.
+
 ## 2026-09-02 — Phase 5 closure continuation
 
 Phase 5 leave and availability implementation resumed from local `main` at `0c00b91e0613cbd7d98c8c5af5282a20da22e2a9`, aligned with `origin/main`. The prior `BLOCKED` classification had no external blocker; remaining work was in-scope verification, documentation, focused review, and delivery. No production system was accessed.

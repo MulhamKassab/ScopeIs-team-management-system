@@ -53,6 +53,7 @@ function expectedStage(manifest, count) {
   if (count === 6) return manifest.states.phase4Scheduling;
   if (count === 7) return manifest.states.phase5LeaveAvailability;
   if (count === 8) return manifest.states.phase6SkillsCapabilities;
+  if (count === 9) return manifest.states.phase7CoverageReplacement;
   return null;
 }
 
@@ -138,7 +139,7 @@ export async function inspectMigrationState(client) {
     }
   }
 
-  const candidate = fingerprint.tables.length <= manifest.states.phase1.tables.length ? manifest.states.phase1 : fingerprint.tables.length <= manifest.states.phase1And2.tables.length ? manifest.states.phase1And2 : fingerprint.tables.length <= manifest.states.phase3OperationalStructure.tables.length ? manifest.states.phase3OperationalStructure : manifest.states.phase6SkillsCapabilities;
+  const candidate = fingerprint.tables.length <= manifest.states.phase1.tables.length ? manifest.states.phase1 : fingerprint.tables.length <= manifest.states.phase1And2.tables.length ? manifest.states.phase1And2 : fingerprint.tables.length <= manifest.states.phase3OperationalStructure.tables.length ? manifest.states.phase3OperationalStructure : manifest.states.phase7CoverageReplacement ?? manifest.states.phase6SkillsCapabilities;
   return {
     state: "E",
     description: "Partial, contradictory, or unknown database state",

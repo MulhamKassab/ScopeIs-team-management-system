@@ -11,6 +11,9 @@ export const operationalLifecycleStatusEnum = pgEnum("operational_lifecycle_stat
 export const projectStatusEnum = pgEnum("project_status", ["PLANNED", "ACTIVE", "ON_HOLD", "COMPLETED", "ARCHIVED"]);
 export const schedulePeriodStatusEnum = pgEnum("schedule_period_status", ["DRAFT", "PROPOSED", "PUBLISHED"]);
 export const leaveRequestStatusEnum = pgEnum("leave_request_status", ["PENDING", "APPROVED", "REJECTED", "CANCELLED"]);
+export const replacementRequestIntentEnum = pgEnum("replacement_request_intent", ["REPLACE_ASSIGNMENT", "ADD_COVERAGE_ASSIGNMENT"]);
+export const replacementRequestStatusEnum = pgEnum("replacement_request_status", ["PENDING", "APPROVED", "REJECTED"]);
+export const replacementEffectStatusEnum = pgEnum("replacement_effect_status", ["PENDING", "APPLIED_TO_DRAFT", "PUBLISHED_REVISION_CREATED"]);
 
 const timestamps = {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
@@ -242,6 +245,16 @@ export const leaveRequests = pgTable("leave_requests", {
   privateReason: text("private_reason"), decisionResponse: text("decision_response"), reviewedByUserId: text("reviewed_by_user_id"), decidedAt: timestamp("decided_at", { withTimezone: true }), cancelledAt: timestamp("cancelled_at", { withTimezone: true }), version: integer("version").notNull().default(1), ...timestamps,
 }, (table) => [foreignKey({ name: "leave_requests_employee_user_id_fkey", columns: [table.employeeUserId], foreignColumns: [users.id] }).onDelete("restrict"), foreignKey({ name: "leave_requests_reviewed_by_user_id_fkey", columns: [table.reviewedByUserId], foreignColumns: [users.id] }).onDelete("restrict"), index("leave_requests_employee_status_dates_idx").on(table.employeeUserId, table.status, table.startDate, table.endDate), index("leave_requests_status_created_idx").on(table.status, table.createdAt), check("leave_requests_date_order_check", sql`${table.endDate} >= ${table.startDate}`), check("leave_requests_private_reason_length_check", sql`${table.privateReason} is null or char_length(${table.privateReason}) <= 1000`), check("leave_requests_response_length_check", sql`${table.decisionResponse} is null or char_length(${table.decisionResponse}) <= 1000`), check("leave_requests_version_check", sql`${table.version} > 0`)]);
 
+/** Phase 7 records the review decision separately from its non-published schedule effect. */
+export const replacementRequests = pgTable("replacement_requests", {
+  id: uuid("id").defaultRandom().primaryKey(), intent: replacementRequestIntentEnum("intent").notNull(), status: replacementRequestStatusEnum("status").notNull().default("PENDING"), effectStatus: replacementEffectStatusEnum("effect_status").notNull().default("PENDING"),
+  staffingRequirementId: uuid("staffing_requirement_id"), anchorAssignmentId: uuid("anchor_assignment_id").notNull(), requesterUserId: text("requester_user_id").notNull(), nominatedEmployeeUserId: text("nominated_employee_user_id"), selectedEmployeeUserId: text("selected_employee_user_id"),
+  observedRequiredEmployeeCount: integer("observed_required_employee_count").notNull(), observedEligibleEmployeeCount: integer("observed_eligible_employee_count").notNull(), decidedByUserId: text("decided_by_user_id"), decidedAt: timestamp("decided_at", { withTimezone: true }), effectSchedulePeriodId: uuid("effect_schedule_period_id"), version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [
+  foreignKey({ name: "replacement_requests_staffing_requirement_id_fkey", columns: [table.staffingRequirementId], foreignColumns: [staffingRequirements.id] }).onDelete("restrict"), foreignKey({ name: "replacement_requests_anchor_assignment_id_fkey", columns: [table.anchorAssignmentId], foreignColumns: [scheduleAssignments.id] }).onDelete("restrict"), foreignKey({ name: "replacement_requests_requester_user_id_fkey", columns: [table.requesterUserId], foreignColumns: [users.id] }).onDelete("restrict"), foreignKey({ name: "replacement_requests_nominated_employee_user_id_fkey", columns: [table.nominatedEmployeeUserId], foreignColumns: [users.id] }).onDelete("restrict"), foreignKey({ name: "replacement_requests_selected_employee_user_id_fkey", columns: [table.selectedEmployeeUserId], foreignColumns: [users.id] }).onDelete("restrict"), foreignKey({ name: "replacement_requests_decided_by_user_id_fkey", columns: [table.decidedByUserId], foreignColumns: [users.id] }).onDelete("restrict"), foreignKey({ name: "replacement_requests_effect_schedule_period_id_fkey", columns: [table.effectSchedulePeriodId], foreignColumns: [schedulePeriods.id] }).onDelete("restrict"),
+  index("replacement_requests_status_created_idx").on(table.status, table.createdAt), index("replacement_requests_requester_status_idx").on(table.requesterUserId, table.status), index("replacement_requests_anchor_status_idx").on(table.anchorAssignmentId, table.status), check("replacement_requests_required_count_check", sql`${table.observedRequiredEmployeeCount} > 0`), check("replacement_requests_eligible_count_check", sql`${table.observedEligibleEmployeeCount} >= 0`), check("replacement_requests_version_check", sql`${table.version} > 0`),
+]);
+
 export const userRelations = relations(users, ({ many, one }) => ({
   sessions: many(sessions), scopeGrants: many(adminScopeGrants),
   employeeProfile: one(employeeProfiles, { fields: [users.id], references: [employeeProfiles.userId], relationName: "employeeProfileUser" }),
@@ -249,6 +262,7 @@ export const userRelations = relations(users, ({ many, one }) => ({
   ownedEvidence: many(employeeEvidence, { relationName: "evidenceOwner" }), uploadedEvidence: many(employeeEvidence, { relationName: "evidenceUploader" }),
   reviewedEvidence: many(employeeEvidence, { relationName: "evidenceReviewer" }), ownedFiles: many(employeeFiles),
   authoredManagementNotes: many(employeeManagementNotes, { relationName: "managementNoteAuthor" }), subjectManagementNotes: many(employeeManagementNotes, { relationName: "managementNoteSubject" }),
+  requestedReplacementRequests: many(replacementRequests, { relationName: "replacementRequester" }), nominatedReplacementRequests: many(replacementRequests, { relationName: "replacementNominee" }), selectedReplacementRequests: many(replacementRequests, { relationName: "replacementSelected" }), decidedReplacementRequests: many(replacementRequests, { relationName: "replacementDecider" }),
 }));
 export const sessionRelations = relations(sessions, ({ one }) => ({ user: one(users, { fields: [sessions.userId], references: [users.id] }) }));
 export const designationRelations = relations(designations, ({ many }) => ({ employeeProfiles: many(employeeProfiles) }));
@@ -269,6 +283,15 @@ export const employeeFileRelations = relations(employeeFiles, ({ one }) => ({ ev
 export const employeeManagementNoteRelations = relations(employeeManagementNotes, ({ one }) => ({
   subject: one(users, { fields: [employeeManagementNotes.subjectUserId], references: [users.id], relationName: "managementNoteSubject" }),
   author: one(users, { fields: [employeeManagementNotes.authorUserId], references: [users.id], relationName: "managementNoteAuthor" }),
+}));
+export const replacementRequestRelations = relations(replacementRequests, ({ one }) => ({
+  staffingRequirement: one(staffingRequirements, { fields: [replacementRequests.staffingRequirementId], references: [staffingRequirements.id] }),
+  anchorAssignment: one(scheduleAssignments, { fields: [replacementRequests.anchorAssignmentId], references: [scheduleAssignments.id] }),
+  requester: one(users, { fields: [replacementRequests.requesterUserId], references: [users.id], relationName: "replacementRequester" }),
+  nominee: one(users, { fields: [replacementRequests.nominatedEmployeeUserId], references: [users.id], relationName: "replacementNominee" }),
+  selected: one(users, { fields: [replacementRequests.selectedEmployeeUserId], references: [users.id], relationName: "replacementSelected" }),
+  decider: one(users, { fields: [replacementRequests.decidedByUserId], references: [users.id], relationName: "replacementDecider" }),
+  effectPeriod: one(schedulePeriods, { fields: [replacementRequests.effectSchedulePeriodId], references: [schedulePeriods.id] }),
 }));
 export const clientRelations = relations(clients, ({ many, one }) => ({
   accountManager: one(users, { fields: [clients.accountManagerUserId], references: [users.id] }), projects: many(projects), locations: many(locations),

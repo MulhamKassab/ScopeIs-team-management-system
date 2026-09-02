@@ -1,5 +1,9 @@
 # Definition of Done
 
+## Phase 7 — Coverage and replacement
+
+Phase 7 is complete only when independent operational staffing rules produce server-calculated, explainable non-blocking gaps; authorized managers can request the two approved intents; Super Admin alone decides; and schedule effects remain Draft-safe without Published mutation or auto-publication. Candidate facts are limited to active status, recorded skills, Approved leave, overlap, operational scope, and TEAM visibility. No coverage override, ranking, certification gate, or sufficiency claim is introduced.
+
 ## Phase 6 — Skills and operational capabilities
 
 The Phase 6 journey is complete only when controlled skills and independent work requirements can be recorded by their authorized managers, authorized planners can filter only TEAM-visible employees by recorded skill, and Super Admin can see an explainable non-blocking missing-skill warning during schedule review.

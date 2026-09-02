@@ -2,7 +2,7 @@ import "server-only";
 import { randomUUID } from "node:crypto";
 import { and, asc, eq, sql } from "drizzle-orm";
 import { db } from "@/db/client";
-import { clients, locations, projects, scheduleAssignments, schedulePeriods } from "@/db/schema";
+import { assignmentSkillRequirements, clients, locations, projects, scheduleAssignments, schedulePeriods } from "@/db/schema";
 import { canReadEmployee } from "@/modules/employees/employee-policy";
 import { writeAuditEvent } from "@/modules/audit/audit-service";
 import { createNotification } from "@/modules/notifications/notification-service";
@@ -162,6 +162,47 @@ export class SchedulingService {
   async publish(actor: AuthenticatedActor, input: unknown) { if (actor.role !== "SUPER_ADMIN") throw new SchedulingDomainError("FORBIDDEN"); const parsed = parseSchedule(periodVersionSchema, input); return db.transaction(async (tx) => { await schedulingRepository.lockPeriod(tx, parsed.periodId); const current = await schedulingRepository.period(tx, parsed.periodId); if (!current) throw new SchedulingDomainError("NOT_FOUND"); if (current.status !== "PROPOSED") throw new SchedulingDomainError("INVALID_STATE"); if (current.version !== parsed.expectedVersion) throw new SchedulingDomainError("STALE_VERSION"); await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${`schedule-period:${current.clientId}:${current.planningMonth}`}))`); const assignments = await this.validatePeriodAssignments(tx, current, actor); const previous = await schedulingRepository.currentPublished(tx, current.clientId, current.planningMonth); if (previous) { await tx.update(schedulePeriods).set({ isCurrent: false, updatedAt: new Date() }).where(and(eq(schedulePeriods.id, previous.id), eq(schedulePeriods.isCurrent, true))); } const row = await schedulingRepository.updatePeriod(tx, current.id, current.version, { status: "PUBLISHED", isCurrent: true, publishedAt: new Date() }); if (!row) throw new SchedulingDomainError("STALE_VERSION"); const affected = new Set(assignments.map((assignment) => assignment.employeeUserId)); if (previous) for (const assignment of await schedulingRepository.allAssignments(tx, previous.id)) affected.add(assignment.employeeUserId); for (const recipientUserId of affected) await createNotification(tx, { recipientUserId, eventType: "schedule.published", relatedRecordType: "schedule_period", relatedRecordId: row.id }); await this.audit(tx, actor, "schedule.published", row.id, { clientId: row.clientId, month: row.planningMonth, status: row.status, assignmentCount: assignments.length, affectedEmployeeCount: affected.size }); return row; }); }
 
   async createRevision(actor: AuthenticatedActor, input: unknown) { if (actor.role !== "SUPER_ADMIN") throw new SchedulingDomainError("FORBIDDEN"); const parsed = parseSchedule(revisionSchema, input); return db.transaction(async (tx) => { await schedulingRepository.lockPeriod(tx, parsed.periodId); const source = await schedulingRepository.period(tx, parsed.periodId); if (!source) throw new SchedulingDomainError("NOT_FOUND"); if (source.status !== "PUBLISHED" || !source.isCurrent) throw new SchedulingDomainError("INVALID_STATE"); if (source.version !== parsed.expectedVersion) throw new SchedulingDomainError("STALE_VERSION"); await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${`schedule-period:${source.clientId}:${source.planningMonth}`}))`); const assignments = await schedulingRepository.allAssignments(tx, source.id); const revision = await schedulingRepository.createPeriod(tx, { clientId: source.clientId, planningMonth: source.planningMonth, lineageId: source.lineageId, revisionNumber: await schedulingRepository.nextRevisionNumber(tx, source.clientId, source.planningMonth), parentPeriodId: source.id, status: "DRAFT" }); for (const assignment of assignments) await schedulingRepository.createAssignment(tx, { schedulePeriodId: revision.id, employeeUserId: assignment.employeeUserId, projectId: assignment.projectId, locationId: assignment.locationId, assignmentDate: assignment.assignmentDate, startTime: assignment.startTime, endTime: assignment.endTime, sharedInstruction: assignment.sharedInstruction, copiedFromAssignmentId: assignment.id }); await this.audit(tx, actor, "schedule.revision.created", revision.id, { clientId: revision.clientId, month: revision.planningMonth, sourcePeriodId: source.id, assignmentCount: assignments.length, revisionNumber: revision.revisionNumber }); return revision; }); }
+
+  /** Used by the Phase 7 decision transaction; it deliberately reuses schedule validation and never publishes. */
+  async applyReplacementEffect(tx: SchedulingTransaction, actor: AuthenticatedActor, input: { anchorAssignmentId: string; selectedEmployeeUserId: string; intent: "REPLACE_ASSIGNMENT" | "ADD_COVERAGE_ASSIGNMENT" }) {
+    if (actor.role !== "SUPER_ADMIN") throw new SchedulingDomainError("FORBIDDEN");
+    const original = await schedulingRepository.assignment(tx, input.anchorAssignmentId); if (!original) throw new SchedulingDomainError("NOT_FOUND");
+    await schedulingRepository.lockPeriod(tx, original.schedulePeriodId);
+    let period = await schedulingRepository.period(tx, original.schedulePeriodId); if (!period) throw new SchedulingDomainError("NOT_FOUND");
+    let anchor = original; let effectStatus: "APPLIED_TO_DRAFT" | "PUBLISHED_REVISION_CREATED" = "APPLIED_TO_DRAFT";
+    if (period.status === "PROPOSED") {
+      const returned = await schedulingRepository.updatePeriod(tx, period.id, period.version, { status: "DRAFT", lastReturnReason: "Approved replacement request requires an editable Draft." });
+      if (!returned) throw new SchedulingDomainError("STALE_VERSION"); period = returned;
+      await this.audit(tx, actor, "schedule.returned_to_draft", period.id, { clientId: period.clientId, month: period.planningMonth, status: period.status, replacementRequest: true });
+    } else if (period.status === "PUBLISHED") {
+      if (!period.isCurrent) throw new SchedulingDomainError("INVALID_STATE");
+      await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${`schedule-period:${period.clientId}:${period.planningMonth}`}))`);
+      const originals = await schedulingRepository.allAssignments(tx, period.id);
+      const revision = await schedulingRepository.createPeriod(tx, { clientId: period.clientId, planningMonth: period.planningMonth, lineageId: period.lineageId, revisionNumber: await schedulingRepository.nextRevisionNumber(tx, period.clientId, period.planningMonth), parentPeriodId: period.id, status: "DRAFT" });
+      for (const assignment of originals) {
+        const copied = await schedulingRepository.createAssignment(tx, { schedulePeriodId: revision.id, employeeUserId: assignment.employeeUserId, projectId: assignment.projectId, locationId: assignment.locationId, assignmentDate: assignment.assignmentDate, startTime: assignment.startTime, endTime: assignment.endTime, sharedInstruction: assignment.sharedInstruction, copiedFromAssignmentId: assignment.id });
+        const requirements = await tx.select({ skillId: assignmentSkillRequirements.skillId }).from(assignmentSkillRequirements).where(and(eq(assignmentSkillRequirements.scheduleAssignmentId, assignment.id), sql`${assignmentSkillRequirements.archivedAt} is null`));
+        if (requirements.length) await tx.insert(assignmentSkillRequirements).values(requirements.map((requirement) => ({ scheduleAssignmentId: copied.id, skillId: requirement.skillId })));
+      }
+      const copiedAnchor = (await schedulingRepository.allAssignments(tx, revision.id)).find((assignment) => assignment.copiedFromAssignmentId === original.id); if (!copiedAnchor) throw new SchedulingDomainError("CONFLICT");
+      period = revision; anchor = copiedAnchor; effectStatus = "PUBLISHED_REVISION_CREATED";
+      await this.audit(tx, actor, "schedule.revision.created", revision.id, { clientId: revision.clientId, month: revision.planningMonth, sourcePeriodId: original.schedulePeriodId, assignmentCount: originals.length, revisionNumber: revision.revisionNumber, replacementRequest: true });
+    } else if (period.status !== "DRAFT") throw new SchedulingDomainError("INVALID_STATE");
+    await this.visibleEmployee(tx, actor, input.selectedEmployeeUserId);
+    const target = { employeeUserId: input.selectedEmployeeUserId, projectId: anchor.projectId, locationId: anchor.locationId, assignmentDate: anchor.assignmentDate, startTime: anchor.startTime, endTime: anchor.endTime };
+    await this.validateReferences(tx, period, target); await this.assertNoOverlap(tx, period, target, input.intent === "REPLACE_ASSIGNMENT" ? anchor.id : undefined);
+    let changed: typeof scheduleAssignments.$inferSelect | null;
+    if (input.intent === "REPLACE_ASSIGNMENT") changed = await schedulingRepository.updateAssignment(tx, anchor.id, anchor.version, { employeeUserId: input.selectedEmployeeUserId });
+    else {
+      const created = await schedulingRepository.createAssignment(tx, { ...target, schedulePeriodId: period.id, sharedInstruction: anchor.sharedInstruction }); changed = created;
+      const requirements = await tx.select({ skillId: assignmentSkillRequirements.skillId }).from(assignmentSkillRequirements).where(and(eq(assignmentSkillRequirements.scheduleAssignmentId, anchor.id), sql`${assignmentSkillRequirements.archivedAt} is null`));
+      if (requirements.length) await tx.insert(assignmentSkillRequirements).values(requirements.map((requirement) => ({ scheduleAssignmentId: created.id, skillId: requirement.skillId })));
+    }
+    if (!changed) throw new SchedulingDomainError("STALE_VERSION"); const changedAssignment = changed;
+    const current = await this.bumpPeriod(tx, period);
+    await this.audit(tx, actor, input.intent === "REPLACE_ASSIGNMENT" ? "schedule_assignment.replaced" : "schedule_assignment.coverage_added", current.id, { assignmentId: changedAssignment.id, anchorAssignmentId: anchor.id, employeeUserId: input.selectedEmployeeUserId, date: anchor.assignmentDate, status: current.status, replacementRequest: true });
+    return { period: current, assignment: changedAssignment, effectStatus };
+  }
 }
 
 export const schedulingService = new SchedulingService();

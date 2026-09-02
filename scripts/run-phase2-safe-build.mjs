@@ -5,7 +5,7 @@ import { basename, join } from "node:path";
 import { assertPhase1TestDatabaseSafety, loadPhase1TestConfiguration, repositoryRoot } from "./phase1-test-environment.mjs";
 
 const COPY_ALLOWLIST = ["src", "public", "next.config.ts", "tsconfig.json", "next-env.d.ts", "package.json", "package-lock.json"];
-const EXCLUDED_NAMES = new Set([".git", ".next", "coverage", "test-results", "playwright-report", "logs", "backups"]);
+const EXCLUDED_NAMES = new Set([".git", ".next", "test-results", "playwright-report", "logs", "backups"]);
 const SAFE_BUILD_DATABASE_URL = "postgresql://scopeis_safe_build@127.0.0.1:1/scopeis_phase2_safe_build_test";
 const serveIndex = process.argv.indexOf("--serve-port");
 const servePort = serveIndex >= 0 ? Number(process.argv[serveIndex + 1]) : null;

@@ -42,15 +42,15 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 
 ## Current focus
 
-- **Current active phase:** Phase 6 — Skills and operational capabilities
-- **Current active/next sub-phase:** Completed controlled-skills and non-blocking warning journey; Phase 7 remains next
+- **Current active phase:** Phase 7 — Coverage and replacement
+- **Current active/next sub-phase:** Completed independent-gap and controlled replacement journey
 - **Current phase status:** `COMPLETED`
 - **Last status date:** `2026-09-02`
-- **Most recent trustworthy evidence:** [Phase 6 report]; [Phase 6 decisions]
-- **Immediate objective:** Preserve the Phase 6 boundary; Phase 7 and later journeys remain unstarted.
-- **Known blockers:** No Phase 6 blocker remains. Preserved repository-wide lint/legacy-runner interference remains outside the scoped gate set.
-- **Explicit exclusions:** Coverage, replacements, candidate ranking, certifications as gates, maps, tickets, payroll, attendance, production access/migration/authentication/deployment, and notification-centre redesign.
-- **Required phase-exit journey:** Management records controlled employee skills and work requirements → authorized planners filter TEAM-visible recorded skills → Super Admin sees an explainable non-blocking missing-skill schedule warning.
+- **Most recent trustworthy evidence:** [Phase 7 report]; [Phase 7 decisions]
+- **Immediate objective:** Preserve the Phase 7 boundary; Phase 8 and later journeys remain unstarted.
+- **Known blockers:** No Phase 7 blocker remains. Preserved repository-wide lint/legacy-runner interference remains outside the scoped gate set.
+- **Explicit exclusions:** Candidate ranking, certifications as gates, maps, tickets, payroll, attendance, production access/migration/authentication/deployment, and notification-centre redesign.
+- **Required phase-exit journey:** System detects an explainable non-blocking gap → authorized Admin requests a controlled replacement/addition → Super Admin decides → Draft-safe schedule effect awaits normal publication.
 
 ## Master phase status
 
@@ -181,17 +181,17 @@ Scope note: `COMPLETED` only for the narrowly defined secure foundation journey;
 
 | ID | Sub-phase | Status | Last status date | Started date | Completed date | Dependencies | Implementation state | QA state | Exit evidence required | Current evidence | Blocker/notes |
 | -- | --------- | ------ | ---------------- | ------------ | -------------- | ------------ | -------------------- | -------- | ---------------------- | ---------------- | ------------- |
-| 7.1 | Coverage-rule foundation | `NOT_STARTED` | 2026-09-01 | — | — | Phases 4–6 | Coverage shell only | Shell route E2E only | Migrated rule model | [navigation] | — |
-| 7.2 | Requirements by skill, count, client, project, location, date, and time | `NOT_STARTED` | 2026-09-01 | — | — | 7.1 | Documentation only | None located | Scoped requirement model | None located | — |
-| 7.3 | Explainable coverage engine | `NOT_STARTED` | 2026-09-01 | — | — | 7.1–7.2 | Documentation only | None located | Independently tested findings | None located | — |
-| 7.4 | Leave and schedule coverage integration | `NOT_STARTED` | 2026-09-01 | — | — | 5.10, 7.3 | Documentation only | None located | Current-data integration | None located | — |
-| 7.5 | Scarce-skill and zero-coverage warnings | `NOT_STARTED` | 2026-09-01 | — | — | 7.3–7.4 | Documentation only | None located | Actionable warnings | None located | — |
-| 7.6 | Replacement candidate search and explanation | `NOT_STARTED` | 2026-09-01 | — | — | 7.3–7.5 | Documentation only | None located | Advisory, explainable candidates | None located | — |
-| 7.7 | Admin replacement request | `NOT_STARTED` | 2026-09-01 | — | — | 7.6 | Replacement shell only | Shell route E2E only | Scoped request workflow | [navigation] | — |
-| 7.8 | Super Admin approval/change/rejection | `NOT_STARTED` | 2026-09-01 | — | — | 7.7 | Documentation only | None located | Super Admin final decision | None located | — |
-| 7.9 | Schedule update | `NOT_STARTED` | 2026-09-01 | — | — | 7.8 | Documentation only | None located | Correct Draft/Published update | None located | — |
-| 7.10 | Audit, notification, transaction, override, and concurrency behavior | `NOT_STARTED` | 2026-09-01 | — | — | 7.7–7.9 | Foundation patterns only | Foundation integration only | Atomic governed workflow | [audit service] | — |
-| 7.11 | Complete coverage/replacement E2E QA | `NOT_STARTED` | 2026-09-01 | — | — | 7.1–7.10 | Documentation only | None located | Gap-to-decision journey | None located | — |
+| 7.1 | Coverage-rule foundation | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phases 4–6 | Reused independent staffing requirements; additive request migration | Migration/service tests | Migrated rule model | [Phase 7 report] | No parallel rules engine. |
+| 7.2 | Requirements by skill, count, client, project, location, date, and time | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.1 | Same-date/interval C/P/L evaluation; assignment skill qualification warning | Service tests | Scoped requirement model | [Phase 7 decisions] | Counts are never summed. |
+| 7.3 | Explainable coverage engine | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.1–7.2 | Server gaps with source, count, skill, and context | Unit/integration | Independently tested findings | [Phase 7 report] | Non-blocking only. |
+| 7.4 | Leave and schedule coverage integration | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 5.10, 7.3 | Approved leave and overlap eliminate candidate/count eligibility | PostgreSQL tests | Current-data integration | [Phase 7 report] | Reuses Phase 4/5 checks. |
+| 7.5 | Scarce-skill and zero-coverage warnings | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.3–7.4 | Explainable count and qualification gaps in Super Admin schedule review | Browser/service | Actionable warnings | [Phase 7 report] | No scarcity or sufficiency claim. |
+| 7.6 | Replacement candidate search and explanation | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.3–7.5 | Unranked TEAM-visible active/skill/leave/overlap candidates | Privacy/service | Advisory, explainable candidates | [Phase 7 decisions] | No ranking. |
+| 7.7 | Admin replacement request | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.6 | Both approved intents persisted with versions | Service/component | Scoped request workflow | [Phase 7 report] | Employee excluded. |
+| 7.8 | Super Admin approval/change/rejection | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.7 | Super Admin-only decision with eligible nominee replacement | Authority tests | Super Admin final decision | [Phase 7 report] | Requester notification only. |
+| 7.9 | Schedule update | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.8 | Draft direct, Proposed→Draft, Published→Draft revision | PostgreSQL lifecycle tests | Correct Draft/Published update | [Phase 7 report] | Never auto-publishes. |
+| 7.10 | Audit, notification, transaction, override, and concurrency behavior | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.7–7.9 | Transactional sanitized audit/notification; advisory gap lock and versions | Rollback/stale tests | Atomic governed workflow | [Phase 7 report] | No override workflow. |
+| 7.11 | Complete coverage/replacement E2E QA | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.1–7.10 | Desktop/mobile guarded journey, component, service, migration/type/build | Playwright desktop/mobile | Gap-to-decision journey | [Phase 7 report] | Local loopback only. |
 
 ## Phase 8 — Static planning map
 
