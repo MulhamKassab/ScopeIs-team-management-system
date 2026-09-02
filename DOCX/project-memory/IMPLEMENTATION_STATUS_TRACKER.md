@@ -37,12 +37,12 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 ## Current focus
 
 - **Current active phase:** Phase 3 — Clients, projects, and locations
-- **Current active/next sub-phase:** 3.10 delivery-gate closure; Phase 4 is not authorized to start
+- **Current active/next sub-phase:** 3.10 repository-wide QA disposition; Phase 4 is not authorized to start
 - **Current phase status:** `BLOCKED`
 - **Last status date:** `2026-09-02`
-- **Most recent trustworthy evidence:** [Phase 3 report]; local implementation commit `b3d6286`
-- **Immediate objective:** Restore authorized GitHub credentials and resolve or explicitly disposition the preserved user-owned repository-wide lint/legacy-runner interference; do not begin Phase 4.
-- **Known blockers:** GitHub rejected `git push origin main` with HTTP 403 because the configured `m-kassab`/`MulhamKassab` tokens are invalid; repository-wide `npm run lint` scans the preserved untracked compiled prototype, and preserved Phase 1 route/browser runners lack Phase 2 profiles and current Phase 3 fixtures. Phase-scoped Phase 3 gates pass.
+- **Most recent trustworthy evidence:** [Phase 3 report]; pushed commits `b3d6286` and `bd401fe`
+- **Immediate objective:** Resolve or explicitly disposition the preserved user-owned repository-wide lint/legacy-runner interference; do not begin Phase 4.
+- **Known blockers:** Repository-wide `npm run lint` scans the preserved untracked compiled prototype, and preserved Phase 1 route/browser runners lack Phase 2 profiles and current Phase 3 fixtures. Phase-scoped Phase 3 gates pass; remote delivery is complete.
 - **Explicit exclusions:** Phase 4 scheduling and all later journeys; production access, migration, authentication, deployment, maps/geocoding/GPS, and Ticket System integration.
 - **Required phase-exit journey:** Authorized manager creates Client → creates Project → creates or deliberately reuses a same-client Location → structure is available for future scheduling.
 
@@ -55,7 +55,7 @@ Progress measures completed roadmap sub-phases only. It is **not** engineering e
 | 0 | Discovery and technical pilot | `COMPLETED` | 9 | 9 | 100% | — | 2026-09-01 | — | 2026-09-01 | — | None | [roadmap] |
 | 1 | Secure application foundation | `COMPLETED` | 7 | 7 | 100% | Completed only for the narrowly defined secure foundation journey | 2026-08-29 | — | 2026-08-29 | Phase 0 | None | [P1 certification] |
 | 2 | Employee management journey | `COMPLETED` | 11 | 11 | 100% | Completed employee-management journey; visible Super Admin controls, server-only employee codes, and supported disposable manual QA launcher | 2026-09-01 | 2026-09-01 | 2026-09-01 | Phase 1 | None | [Phase 2 controls/code remediation] |
-| 3 | Clients, projects, and locations | `BLOCKED` | 9 | 10 | 90% | 3.10 delivery-gate closure; Phase 4 remains unstarted | 2026-09-02 | 2026-09-02 | — | Phase 2 journey | Remote push authorization and preserved repository-wide QA interference | Local commit `b3d6286`; [Phase 3 report] |
+| 3 | Clients, projects, and locations | `BLOCKED` | 9 | 10 | 90% | 3.10 repository-wide QA disposition; Phase 4 remains unstarted | 2026-09-02 | 2026-09-02 | — | Phase 2 journey | Preserved repository-wide QA interference | Pushed commits `b3d6286`, `bd401fe`; [Phase 3 report] |
 | 4 | Scheduling, review, and publication | `NOT_STARTED` | 0 | 12 | 0% | 4.1 Schedule and assignment data foundation | 2026-09-01 | — | — | Phases 2–3 | Phase 3 exit not met | None located |
 | 5 | Leave and availability | `NOT_STARTED` | 0 | 10 | 0% | 5.1 Leave request data foundation | 2026-09-01 | — | — | Phase 4 | Published schedule unavailable | None located |
 | 6 | Skills and operational capabilities | `PARTIAL` | 0 | 8 | 0% | 6.1 Reuse and connect the existing verified skills backend | 2026-09-01 | — | — | Phases 2–4 | Dependent operational records unavailable | [Phase 2 core R3] |
@@ -124,7 +124,7 @@ Scope note: `COMPLETED` only for the narrowly defined secure foundation journey;
 | 3.7 | Basic staffing requirements | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 3.3–3.5 | Queryable target/skill/count/note requirement records | Positive count, target, lifecycle, transaction tests | Distinct requirements model | [Phase 3 report] | No dates, shifts, people, proficiency, or coverage logic. |
 | 3.8 | Shared operational notes required by these records | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 3.1–3.3 | Active notes, author edit, Super Admin archive/reason, retained history | Authorization, privacy, sanitized audit, rollback tests | Shared-note behavior | [Phase 3 report] | Phase 10 still owns the central notes interface. |
 | 3.9 | Scoped Admin access | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 3.1–3.8 | Explicit CLIENT descendant inheritance plus non-climbing PROJECT/LOCATION grants | Six-persona and adversarial desktop/mobile/service matrix | Domain scope filtering and negative tests | [Phase 3 report] | TEAM behavior remains separate. |
-| 3.10 | Relationship, concurrency, authorization, and E2E QA | `BLOCKED` | 2026-09-02 | 2026-09-02 | — | 3.1–3.9 | Phase-scoped implementation and QA complete in local commit `b3d6286` | Phase 3 suites pass; repository-wide inherited gates have preserved-work interference | Full client/project/location journey QA and delivery | [Phase 3 report] | Push is rejected by invalid GitHub credentials; full lint and legacy Phase 1 runners remain red for preserved user-owned inputs. |
+| 3.10 | Relationship, concurrency, authorization, and E2E QA | `BLOCKED` | 2026-09-02 | 2026-09-02 | — | 3.1–3.9 | Phase-scoped implementation and QA complete and pushed | Phase 3 suites pass; repository-wide inherited gates have preserved-work interference | Full client/project/location journey QA and delivery | [Phase 3 report] | Full lint and legacy Phase 1 runners remain red for preserved user-owned inputs; remote delivery is complete. |
 
 ## Phase 4 — Scheduling, review, and publication
 
@@ -358,7 +358,7 @@ Use this template for every phase. `NOT_APPLICABLE` is allowed only with a reaso
 | Manual walkthrough | Yes | `COMPLETED` | `node scripts/run-phase3-manual-qa.mjs --smoke` | Safe build, fictional fixtures, routes, and Employee denial passed. |
 | Typecheck/safe build/diff | Yes | `COMPLETED` | Typecheck; isolated no-`.env*` Next build; `git diff --check` | Direct `npm run build` intentionally replaced by the canonical guarded build. |
 | Repository-wide lint and inherited runners | Yes | `BLOCKED` | [Phase 3 report] | Full lint scans preserved compiled prototype; preserved Phase 1 runners lack Phase 2/3 fixtures. Phase 3 scoped lint passes. |
-| Commit/push | Yes | `BLOCKED` | Local `b3d6286`; `git push origin main` HTTP 403 | Active GitHub tokens are invalid; local branch is ahead of `origin/main`. |
+| Commit/push | Yes | `COMPLETED` | Pushed `b3d6286` and `bd401fe` to `origin/main` | Push succeeded after the user switched to the authorized Git account. |
 
 ## Tracker maintenance protocol
 
@@ -414,3 +414,4 @@ Append new rows; correct an existing row only for a factual error. Every `COMPLE
 | 2026-09-01 | Phase 2 manual QA employee controls/code remediation | `IN_PROGRESS` | `COMPLETED` | [Phase 2 controls/code remediation] | Labelled management entry/control groups, strict server-only sequential code allocation, disposable migration/core/component/unit/browser/manual-QA verification, and isolated build all passed. | Codex |
 | 2026-09-02 | Phase 3 clients, projects, and locations | `NOT_STARTED` | `IN_PROGRESS` | Authorized `SCOPEIS_PHASE_3_CLIENT_PROJECT_LOCATION_JOURNEY_R1`; [Phase 3 decisions](PHASE_3_OPERATIONAL_DOMAIN_DECISIONS.md) | Began the bounded operational journey after custody, architecture, migration, authorization, audit, UI, and test-convention reconciliation. Phase 4 and later remain excluded. | Codex |
 | 2026-09-02 | Phase 3 clients, projects, and locations | `IN_PROGRESS` | `BLOCKED` | Local commit `b3d6286`; [Phase 3 report] | Product journey and all Phase 3-scoped gates passed. Certification/delivery is blocked by invalid GitHub credentials (push HTTP 403) and preserved user-owned repository-wide lint/legacy-runner interference. Phase 4 remains unstarted. | Codex |
+| 2026-09-02 | Phase 3 remote delivery | `BLOCKED` | `COMPLETED` | Pushed commits `b3d6286`, `bd401fe`; [Phase 3 report] | User switched to the authorized Git account and `git push origin main` succeeded. Phase 3 remains blocked only on preserved repository-wide QA interference; Phase 4 remains unstarted. | Codex |

@@ -2,7 +2,7 @@
 
 ## Purpose and status
 
-This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is `COMPLETED` only in its narrow foundation scope; Phase 2 — Employee management journey is `COMPLETED` (11/11). Phase 3 is `BLOCKED`: its scoped implementation and QA pass locally, but remote delivery and preserved repository-wide QA interference remain unresolved. Phase 4 and later are unstarted.
+This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is `COMPLETED` only in its narrow foundation scope; Phase 2 — Employee management journey is `COMPLETED` (11/11). Phase 3 is pushed but remains `BLOCKED`: its scoped implementation and QA pass, while preserved repository-wide QA interference remains unresolved. Phase 4 and later are unstarted.
 
 ## Reader path
 
@@ -43,7 +43,7 @@ This directory is the canonical documentation foundation for ScopeIs Team Manage
 
 ## Implementation status
 
-Historical reports remain immutable evidence and are not current roadmaps or tracker replacements. Phase 2.1–2.11 are completed as the bounded employee-management journey. Phase 3's local implementation and scoped QA are recorded in [`phase-reports/SCOPEIS_PHASE_3_CLIENT_PROJECT_LOCATION_JOURNEY_R1.md`](phase-reports/SCOPEIS_PHASE_3_CLIENT_PROJECT_LOCATION_JOURNEY_R1.md); its final classification is `BLOCKED` until GitHub push authorization and preserved repository-wide QA interference are resolved. Phase 3 manual QA uses `node scripts/run-phase3-manual-qa.mjs`. Phase 4 and later remain unstarted; no production authentication, database state, migration, or deployment is certified.
+Historical reports remain immutable evidence and are not current roadmaps or tracker replacements. Phase 2.1–2.11 are completed as the bounded employee-management journey. Phase 3's pushed implementation and scoped QA are recorded in [`phase-reports/SCOPEIS_PHASE_3_CLIENT_PROJECT_LOCATION_JOURNEY_R1.md`](phase-reports/SCOPEIS_PHASE_3_CLIENT_PROJECT_LOCATION_JOURNEY_R1.md); its final classification is `BLOCKED` only until preserved repository-wide QA interference is resolved or explicitly dispositioned. Phase 3 manual QA uses `node scripts/run-phase3-manual-qa.mjs`. Phase 4 and later remain unstarted; no production authentication, database state, migration, or deployment is certified.
 
 ## Diagram catalog
 
