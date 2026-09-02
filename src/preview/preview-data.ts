@@ -27,6 +27,15 @@ export type PreviewEmployee = {
   certificationExpires?: string;
 };
 
+export type PlanningCoordinate = {
+  id: string;
+  entityType: "employee-area" | "location";
+  entityId: string;
+  latitude: number;
+  longitude: number;
+  label: string;
+};
+
 export const previewConfig = {
   label: "Frontend demonstration · fictional data · no persistence",
   date: "18 September 2026",
@@ -64,40 +73,54 @@ export const employees: PreviewEmployee[] = [
 ];
 
 export const clients = [
-  { id: "client-northstar", name: "Northstar Medical Group", team: "alpha" as Team, contact: "Mira Sutton", location: "Business Bay office", projects: 2, status: "Active" },
-  { id: "client-horizon", name: "Horizon Retail Holdings", team: "alpha" as Team, contact: "Theo Lynn", location: "Al Quoz workshop", projects: 1, status: "Active" },
-  { id: "client-marina", name: "Marina Heights Residences", team: "bravo" as Team, contact: "Elena Park", location: "Dubai Investment Park warehouse", projects: 1, status: "Active" },
-  { id: "client-vertex", name: "Vertex Logistics", team: "bravo" as Team, contact: "Ira Fields", location: "Jebel Ali operations site", projects: 2, status: "At risk" },
-  { id: "client-crestline", name: "Crestline Schools", team: "alpha" as Team, contact: "Samira Cole", location: "Sharjah service centre", projects: 1, status: "Active" },
-  { id: "client-cedar", name: "Cedar Finance House", team: "bravo" as Team, contact: "Noel Hart", location: "Abu Dhabi branch", projects: 1, status: "Planning" },
+  { id: "client-northstar", name: "Northstar Medical Group", team: "alpha" as Team, contact: "Mira Sutton", location: "Business Bay office", primaryLocationId: "loc-business-bay", projects: 2, status: "Active" },
+  { id: "client-horizon", name: "Horizon Retail Holdings", team: "alpha" as Team, contact: "Theo Lynn", location: "Al Quoz workshop", primaryLocationId: "loc-al-quoz", projects: 1, status: "Active" },
+  { id: "client-marina", name: "Marina Heights Residences", team: "bravo" as Team, contact: "Elena Park", location: "Dubai Investment Park warehouse", primaryLocationId: "loc-dip", projects: 1, status: "Active" },
+  { id: "client-vertex", name: "Vertex Logistics", team: "bravo" as Team, contact: "Ira Fields", location: "Jebel Ali operations site", primaryLocationId: "loc-jebel-ali", projects: 2, status: "At risk" },
+  { id: "client-crestline", name: "Crestline Schools", team: "alpha" as Team, contact: "Samira Cole", location: "Sharjah service centre", primaryLocationId: "loc-sharjah", projects: 1, status: "Active" },
+  { id: "client-cedar", name: "Cedar Finance House", team: "bravo" as Team, contact: "Noel Hart", location: "Abu Dhabi branch", primaryLocationId: "loc-abu-dhabi", projects: 1, status: "Planning" },
 ];
 
 export const projects = [
-  { id: "project-clinic", name: "Clinical network refresh", clientId: "client-northstar", team: "alpha" as Team, location: "Business Bay office", stage: "Delivery", staffing: "Network design + Wi-Fi", leadId: "emp-cora" },
-  { id: "project-retail", name: "Retail security uplift", clientId: "client-horizon", team: "alpha" as Team, location: "Al Quoz workshop", stage: "Delivery", staffing: "CCTV + access control", leadId: "emp-elias" },
-  { id: "project-residence", name: "Residence access modernization", clientId: "client-marina", team: "bravo" as Team, location: "Dubai Investment Park warehouse", stage: "Proposed", staffing: "Access control + cabling", leadId: "emp-farah" },
-  { id: "project-logistics", name: "Warehouse edge resilience", clientId: "client-vertex", team: "bravo" as Team, location: "Jebel Ali operations site", stage: "Delivery", staffing: "Cloud/DevOps + network", leadId: "emp-dan" },
-  { id: "project-school", name: "Campus wireless survey", clientId: "client-crestline", team: "alpha" as Team, location: "Sharjah service centre", stage: "Draft", staffing: "Site survey + Wi-Fi", leadId: "emp-omar" },
-  { id: "project-finance", name: "Branch cooling assessment", clientId: "client-cedar", team: "bravo" as Team, location: "Abu Dhabi branch", stage: "Delivery", staffing: "Precision cooling/HVAC", leadId: "emp-hana" },
+  { id: "project-clinic", name: "Clinical network refresh", clientId: "client-northstar", team: "alpha" as Team, location: "Business Bay office", locationId: "loc-business-bay", stage: "Delivery", staffing: "Network design + Wi-Fi", leadId: "emp-cora" },
+  { id: "project-retail", name: "Retail security uplift", clientId: "client-horizon", team: "alpha" as Team, location: "Al Quoz workshop", locationId: "loc-al-quoz", stage: "Delivery", staffing: "CCTV + access control", leadId: "emp-elias" },
+  { id: "project-residence", name: "Residence access modernization", clientId: "client-marina", team: "bravo" as Team, location: "Dubai Investment Park warehouse", locationId: "loc-dip", stage: "Proposed", staffing: "Access control + cabling", leadId: "emp-farah" },
+  { id: "project-logistics", name: "Warehouse edge resilience", clientId: "client-vertex", team: "bravo" as Team, location: "Jebel Ali operations site", locationId: "loc-jebel-ali", stage: "Delivery", staffing: "Cloud/DevOps + network", leadId: "emp-dan" },
+  { id: "project-school", name: "Campus wireless survey", clientId: "client-crestline", team: "alpha" as Team, location: "Sharjah service centre", locationId: "loc-sharjah", stage: "Draft", staffing: "Site survey + Wi-Fi", leadId: "emp-omar" },
+  { id: "project-finance", name: "Branch cooling assessment", clientId: "client-cedar", team: "bravo" as Team, location: "Abu Dhabi branch", locationId: "loc-abu-dhabi", stage: "Delivery", staffing: "Precision cooling/HVAC", leadId: "emp-hana" },
 ];
 
 export const locations = [
-  { id: "loc-business-bay", name: "Business Bay office", team: "alpha" as Team, city: "Dubai", type: "Office", client: "Northstar Medical Group" },
-  { id: "loc-dip", name: "Dubai Investment Park warehouse", team: "bravo" as Team, city: "Dubai", type: "Warehouse", client: "Marina Heights Residences" },
-  { id: "loc-jebel-ali", name: "Jebel Ali operations site", team: "bravo" as Team, city: "Dubai", type: "Operations", client: "Vertex Logistics" },
-  { id: "loc-sharjah", name: "Sharjah service centre", team: "alpha" as Team, city: "Sharjah", type: "Service centre", client: "Crestline Schools" },
-  { id: "loc-abu-dhabi", name: "Abu Dhabi branch", team: "bravo" as Team, city: "Abu Dhabi", type: "Branch", client: "Cedar Finance House" },
-  { id: "loc-al-quoz", name: "Al Quoz workshop", team: "alpha" as Team, city: "Dubai", type: "Workshop", client: "Horizon Retail Holdings" },
+  { id: "loc-business-bay", name: "Business Bay office", team: "alpha" as Team, city: "Dubai", type: "Office", client: "Northstar Medical Group", clientId: "client-northstar" },
+  { id: "loc-dip", name: "Dubai Investment Park warehouse", team: "bravo" as Team, city: "Dubai", type: "Warehouse", client: "Marina Heights Residences", clientId: "client-marina" },
+  { id: "loc-jebel-ali", name: "Jebel Ali operations site", team: "bravo" as Team, city: "Dubai", type: "Operations", client: "Vertex Logistics", clientId: "client-vertex" },
+  { id: "loc-sharjah", name: "Sharjah service centre", team: "alpha" as Team, city: "Sharjah", type: "Service centre", client: "Crestline Schools", clientId: "client-crestline" },
+  { id: "loc-abu-dhabi", name: "Abu Dhabi branch", team: "bravo" as Team, city: "Abu Dhabi", type: "Branch", client: "Cedar Finance House", clientId: "client-cedar" },
+  { id: "loc-al-quoz", name: "Al Quoz workshop", team: "alpha" as Team, city: "Dubai", type: "Workshop", client: "Horizon Retail Holdings", clientId: "client-horizon" },
 ];
 
 export const assignments = [
-  { id: "asg-1", employeeId: "emp-cora", projectId: "project-clinic", date: "2026-09-18", time: "08:30–16:30", type: "Timed visit", state: "Published", location: "Business Bay office", warning: "" },
-  { id: "asg-2", employeeId: "emp-elias", projectId: "project-retail", date: "2026-09-18", time: "Full day", type: "Full-day assignment", state: "Published", location: "Al Quoz workshop", warning: "" },
-  { id: "asg-3", employeeId: "emp-dan", projectId: "project-logistics", date: "2026-09-18", time: "09:00–17:00", type: "Recurring assignment", state: "Published", location: "Jebel Ali operations site", warning: "Overlap warning overridden: client cutover window" },
-  { id: "asg-4", employeeId: "emp-hana", projectId: "project-finance", date: "2026-09-19", time: "Full day", type: "Scheduled visit", state: "Proposed", location: "Abu Dhabi branch", warning: "" },
-  { id: "asg-5", employeeId: "emp-isla", projectId: "project-clinic", date: "2026-09-21", time: "13:00–17:00", type: "Temporary placement", state: "Draft", location: "Business Bay office", warning: "Missing-skill warning: database support reviewer needed" },
-  { id: "asg-6", employeeId: "emp-lina", projectId: "project-residence", date: "2026-09-22", time: "Full day", type: "Full-day assignment", state: "Proposed", location: "Dubai Investment Park warehouse", warning: "Unavailable: approved leave" },
-  { id: "asg-7", employeeId: "emp-priya", projectId: "project-logistics", date: "2026-09-23", time: "On call", type: "On-call assignment", state: "Published", location: "Jebel Ali operations site", warning: "" },
+  { id: "asg-1", employeeId: "emp-cora", projectId: "project-clinic", locationId: "loc-business-bay", date: "2026-09-18", time: "08:30–16:30", type: "Timed visit", state: "Published", location: "Business Bay office", warning: "" },
+  { id: "asg-2", employeeId: "emp-elias", projectId: "project-retail", locationId: "loc-al-quoz", date: "2026-09-18", time: "Full day", type: "Full-day assignment", state: "Published", location: "Al Quoz workshop", warning: "" },
+  { id: "asg-3", employeeId: "emp-dan", projectId: "project-logistics", locationId: "loc-jebel-ali", date: "2026-09-18", time: "09:00–17:00", type: "Recurring assignment", state: "Published", location: "Jebel Ali operations site", warning: "Overlap warning overridden: client cutover window" },
+  { id: "asg-4", employeeId: "emp-hana", projectId: "project-finance", locationId: "loc-abu-dhabi", date: "2026-09-19", time: "Full day", type: "Scheduled visit", state: "Proposed", location: "Abu Dhabi branch", warning: "" },
+  { id: "asg-5", employeeId: "emp-isla", projectId: "project-clinic", locationId: "loc-business-bay", date: "2026-09-21", time: "13:00–17:00", type: "Temporary placement", state: "Draft", location: "Business Bay office", warning: "Missing-skill warning: database support reviewer needed" },
+  { id: "asg-6", employeeId: "emp-lina", projectId: "project-residence", locationId: "loc-dip", date: "2026-09-22", time: "Full day", type: "Full-day assignment", state: "Proposed", location: "Dubai Investment Park warehouse", warning: "Unavailable: approved leave" },
+  { id: "asg-7", employeeId: "emp-priya", projectId: "project-logistics", locationId: "loc-jebel-ali", date: "2026-09-23", time: "On call", type: "On-call assignment", state: "Published", location: "Jebel Ali operations site", warning: "" },
+];
+
+// These are approximate fictional planning areas and worksites, never homes or live positions.
+export const planningCoordinates: PlanningCoordinate[] = [
+  { id: "coord-loc-business-bay", entityType: "location", entityId: "loc-business-bay", latitude: 25.1867, longitude: 55.2647, label: "Business Bay office" },
+  { id: "coord-loc-al-quoz", entityType: "location", entityId: "loc-al-quoz", latitude: 25.1564, longitude: 55.2302, label: "Al Quoz workshop" },
+  { id: "coord-loc-sharjah", entityType: "location", entityId: "loc-sharjah", latitude: 25.3296, longitude: 55.4505, label: "Sharjah service centre" },
+  { id: "coord-loc-dip", entityType: "location", entityId: "loc-dip", latitude: 25.0008, longitude: 55.1741, label: "Dubai Investment Park warehouse" },
+  { id: "coord-loc-jebel-ali", entityType: "location", entityId: "loc-jebel-ali", latitude: 24.9856, longitude: 55.0573, label: "Jebel Ali operations site" },
+  { id: "coord-loc-abu-dhabi", entityType: "location", entityId: "loc-abu-dhabi", latitude: 24.4539, longitude: 54.3773, label: "Abu Dhabi branch" },
+  { id: "coord-emp-cora", entityType: "employee-area", entityId: "emp-cora", latitude: 25.2042, longitude: 55.2720, label: "Cora Bell · approximate planning area" },
+  { id: "coord-emp-elias", entityType: "employee-area", entityId: "emp-elias", latitude: 25.1781, longitude: 55.2441, label: "Elias Noor · approximate planning area" },
+  { id: "coord-emp-dan", entityType: "employee-area", entityId: "emp-dan", latitude: 25.0478, longitude: 55.1371, label: "Dan Rowan · approximate planning area" },
+  { id: "coord-emp-priya", entityType: "employee-area", entityId: "emp-priya", latitude: 25.0234, longitude: 55.0891, label: "Priya Wells · approximate planning area" },
 ];
 
 export const leaveRequests = [
@@ -107,13 +130,13 @@ export const leaveRequests = [
 ];
 
 export const coverageGaps = [
-  { id: "gap-1", title: "Software delivery review", team: "alpha" as Team, date: "21 Sep", skill: "Software development", severity: "High", reason: "Isla is assigned; Nadia is outside Team Alpha scope." },
-  { id: "gap-2", title: "Residence access visit", team: "bravo" as Team, date: "22 Sep", skill: "Access control", severity: "Medium", reason: "Lina is on approved leave." },
+  { id: "gap-1", assignmentId: "asg-5", employeeId: "emp-isla", title: "Software delivery review", team: "alpha" as Team, date: "21 Sep", skill: "Software development", severity: "High", reason: "Isla is assigned; Nadia is outside Team Alpha scope." },
+  { id: "gap-2", assignmentId: "asg-6", employeeId: "emp-lina", title: "Residence access visit", team: "bravo" as Team, date: "22 Sep", skill: "Access control", severity: "Medium", reason: "Lina is on approved leave." },
 ];
 
 export const replacements = [
-  { id: "replacement-1", title: "Residence access visit", team: "bravo" as Team, requestedFor: "Lina Hayes", candidates: ["Farah Voss", "Priya Wells"], status: "Awaiting Super Admin decision", rationale: "Both hold access-control skills; Farah has the closest availability match." },
-  { id: "replacement-2", title: "Software delivery review", team: "alpha" as Team, requestedFor: "Isla Vale", candidates: ["Nadia Price", "Jamal Reed"], status: "Scope conflict", rationale: "Nadia matches skills but is Team Bravo; Jamal can provide Cloud/DevOps support." },
+  { id: "replacement-1", assignmentId: "asg-6", requestedForId: "emp-lina", candidateIds: ["emp-farah", "emp-priya"], title: "Residence access visit", team: "bravo" as Team, requestedFor: "Lina Hayes", candidates: ["Farah Voss", "Priya Wells"], status: "Awaiting Super Admin decision", rationale: "Both hold access-control skills; Farah has the closest availability match." },
+  { id: "replacement-2", assignmentId: "asg-5", requestedForId: "emp-isla", candidateIds: ["emp-nadia", "emp-jamal"], title: "Software delivery review", team: "alpha" as Team, requestedFor: "Isla Vale", candidates: ["Nadia Price", "Jamal Reed"], status: "Scope conflict", rationale: "Nadia matches skills but is Team Bravo; Jamal can provide Cloud/DevOps support." },
 ];
 
 export const notes = [
@@ -121,6 +144,13 @@ export const notes = [
   { id: "note-2", title: "Warehouse cutover window", scope: "Shared", team: "bravo" as Team, body: "Keep the approved overlap rationale visible in the schedule review.", author: "Ben Iqbal" },
   { id: "note-3", title: "Coaching follow-up", scope: "Management private", team: "alpha" as Team, body: "Private-to-author management note; visible only to Nora Albright.", author: "Nora Albright" },
   { id: "note-4", title: "Capacity escalation", scope: "Shared upward", team: "bravo" as Team, body: "Team Bravo requests an additional access-control resource for October planning.", author: "Ben Iqbal" },
+  { id: "note-5", title: "Handover coaching", scope: "Management private", team: "alpha" as Team, body: "Private-to-author coaching reminder for the next client handover.", author: "Ava Mercer" },
+];
+
+export const discussions = [
+  { id: "discussion-clinic", title: "Clinical network handover", participantIds: ["emp-cora", "emp-ava"], team: "alpha" as Team, summary: "Clarify the fictional access-window handover before the published visit." },
+  { id: "discussion-logistics", title: "On-call readiness", participantIds: ["emp-dan", "emp-ben"], team: "bravo" as Team, summary: "Confirm the fictional on-call contact sequence for the published operations coverage." },
+  { id: "discussion-governance", title: "September staffing review", participantIds: ["emp-nora", "emp-ava", "emp-ben"], team: "alpha" as Team, summary: "Participant-only management discussion about fixture planning quality." },
 ];
 
 export const notifications = [
@@ -144,4 +174,29 @@ export function inScope<T extends { team: Team }>(records: T[], persona: Preview
 export function visibleEmployees(persona: PreviewPersona) { return persona.role === "SUPER_ADMIN" ? employees : persona.role === "ADMIN" ? employees.filter((employee) => employee.team === persona.team) : employees.filter((employee) => employee.id === persona.employeeId); }
 export function visibleAssignments(persona: PreviewPersona) { return persona.role === "SUPER_ADMIN" ? assignments : persona.role === "ADMIN" ? assignments.filter((assignment) => employeeFor(assignment.employeeId)?.team === persona.team) : assignments.filter((assignment) => assignment.employeeId === persona.employeeId && assignment.state === "Published"); }
 export function visibleLeave(persona: PreviewPersona) { return persona.role === "SUPER_ADMIN" ? leaveRequests : persona.role === "ADMIN" ? leaveRequests.filter((request) => request.team === persona.team).map(({ reason: _reason, ...request }) => request) : leaveRequests.filter((request) => request.employeeId === persona.employeeId); }
-export function visibleNotes(persona: PreviewPersona) { if (persona.role === "EMPLOYEE") return notes.filter((note) => note.scope === "Shared" && note.team === employeeFor(persona.employeeId)?.team); if (persona.role === "SUPER_ADMIN") return notes; return notes.filter((note) => note.team === persona.team && note.scope !== "Management private"); }
+export function visibleNotes(persona: PreviewPersona) {
+  if (persona.role === "EMPLOYEE") return notes.filter((note) => note.scope === "Shared" && note.team === employeeFor(persona.employeeId)?.team);
+  if (persona.role === "SUPER_ADMIN") return notes.filter((note) => note.scope !== "Management private" || note.author === persona.name);
+  return notes.filter((note) => note.team === persona.team && note.scope !== "Management private");
+}
+export function visibleDiscussions(persona: PreviewPersona) { return discussions.filter((discussion) => discussion.participantIds.includes(persona.employeeId)); }
+export function dashboardCounts(persona: PreviewPersona) {
+  return {
+    employees: visibleEmployees(persona).length,
+    publishedAssignments: visibleAssignments(persona).filter((assignment) => assignment.state === "Published").length,
+    leave: visibleLeave(persona).length,
+    coverage: persona.role === "EMPLOYEE" ? 0 : inScope(coverageGaps, persona).length,
+  };
+}
+export const fixtureCounts = {
+  employees: employees.length,
+  clients: clients.length,
+  projects: projects.length,
+  locations: locations.length,
+  assignments: assignments.length,
+  publishedAssignments: assignments.filter((assignment) => assignment.state === "Published").length,
+  leave: leaveRequests.length,
+  coverage: coverageGaps.length,
+  replacements: replacements.length,
+  coordinates: planningCoordinates.length,
+} as const;
