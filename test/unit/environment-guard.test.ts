@@ -16,8 +16,10 @@ describe("temporary mock-auth environment policy", () => {
     expect(result.APP_ENV).toBe("test");
     expect(result.MOCK_AUTH_ENABLED).toBe("true");
   });
-  it("requires DATABASE_URL without selecting a compatibility fallback", () => {
-    expect(() => parseEnvironment({ POSTGRES_URL: database, APP_ENV: "development", MOCK_AUTH_ENABLED: "false" })).toThrow();
+  it("requires canonical DATABASE_URL and explains Vercel environment scoping", () => {
+    expect(() => parseEnvironment({ POSTGRES_URL: database, APP_ENV: "development", MOCK_AUTH_ENABLED: "false" })).toThrow(
+      "connect the PostgreSQL resource to the deployment environment",
+    );
   });
   it("rejects a non-PostgreSQL DATABASE_URL before client construction", () => {
     expect(() => parseEnvironment({ DATABASE_URL: "https://database.example.com", APP_ENV: "development", MOCK_AUTH_ENABLED: "false" })).toThrow("DATABASE_URL must use a PostgreSQL URL scheme");

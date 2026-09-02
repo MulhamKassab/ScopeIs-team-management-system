@@ -5,6 +5,11 @@ let cached: ReturnType<typeof environmentSchema.parse> | undefined;
 export function parseEnvironment(input: NodeJS.ProcessEnv) {
   const isE2e = input.SCOPEIS_E2E_TEST === "true";
   const isVercelProduction = !isE2e && (input.VERCEL_ENV === "production" || input.NODE_ENV === "production");
+  if (!input.DATABASE_URL) {
+    throw new Error(
+      "DATABASE_URL is required. On Vercel, connect the PostgreSQL resource to the deployment environment (Preview or Production) so DATABASE_URL is injected for that target.",
+    );
+  }
   const config = environmentSchema.parse({
     DATABASE_URL: input.DATABASE_URL,
     APP_ENV: isE2e ? "test" : (isVercelProduction ? "production" : (input.APP_ENV ?? "development")),
