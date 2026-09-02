@@ -31,6 +31,16 @@ const profiles = [
   ["mock-employee-dan", "EMP-BRAVO-001", "dan@example.test", "200", "Bravo profile", "team:bravo", "mock-admin-ben", "Private Bravo location", "Remote weekdays"],
 ];
 
+function migrationSummary(state) {
+  return {
+    state: state.state,
+    description: state.description,
+    pending: state.pending,
+    ledgerRows: state.ledger?.rows.length ?? 0,
+    diagnostics: state.diagnostics,
+  };
+}
+
 export function assertPreviewBootstrapEnvironment(input) {
   if (input.SCOPEIS_PREVIEW_DATABASE_BOOTSTRAP !== "true") return false;
   if (input.VERCEL !== "1") throw new Error("Preview database bootstrap requires the Vercel build environment.");
@@ -114,13 +124,19 @@ export async function bootstrapPreviewDatabase(input = process.env) {
     locked = true;
     const before = await inspectMigrationState(client);
     if (before.state !== "A" && before.state !== "D") {
-      throw new Error("Preview bootstrap accepts only a fresh database or an exact migration-ledger state.");
+      throw new Error(
+        "Preview bootstrap accepts only a fresh database or an exact migration-ledger state. " +
+        JSON.stringify(migrationSummary(before)),
+      );
     }
     if (before.state !== "D" || before.pending.length > 0) await runNormalMigrator(input.DATABASE_URL);
 
     const after = await inspectMigrationState(client);
     if (after.state !== "D" || after.pending.length !== 0) {
-      throw new Error("Preview database did not reach the exact current migration state.");
+      throw new Error(
+        "Preview database did not reach the exact current migration state. " +
+        JSON.stringify(migrationSummary(after)),
+      );
     }
 
     await seedFictionalPreviewData(client);
