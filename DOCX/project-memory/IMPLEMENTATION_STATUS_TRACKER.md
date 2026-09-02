@@ -8,7 +8,7 @@ The tracker uses only: `NOT_STARTED`, `READY`, `IN_PROGRESS`, `PARTIAL`, `BLOCKE
 
 **Completion rule:** backend-only work and UI shells are not completed user journeys. A phase is complete only after all applicable delivery gates and its end-to-end journey are verified.
 
-Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [Phase 2 journey completion], [Phase 2 manual QA readiness], [Phase 2 controls/code remediation], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
+Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [Phase 2 journey completion], [Phase 2 manual QA readiness], [Phase 2 controls/code remediation], [Phase 3 report], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
 
 [roadmap]: IMPLEMENTATION_ROADMAP.md
 [context]: ../../PROJECT_CONTEXT.md
@@ -24,6 +24,8 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 [Phase 2 journey completion]: ../phase-reports/SCOPEIS_PHASE_2_EMPLOYEE_MANAGEMENT_JOURNEY_COMPLETION_R1.md
 [Phase 2 manual QA readiness]: ../phase-reports/SCOPEIS_PHASE_2_MANUAL_QA_RUNTIME_READINESS_AND_DEFECT_REMEDIATION_R1.md
 [Phase 2 controls/code remediation]: ../phase-reports/SCOPEIS_PHASE_2_MANUAL_QA_EMPLOYEE_CONTROLS_AND_CODE_REMEDIATION_R2.md
+[Phase 3 report]: ../phase-reports/SCOPEIS_PHASE_3_CLIENT_PROJECT_LOCATION_JOURNEY_R1.md
+[Phase 3 decisions]: PHASE_3_OPERATIONAL_DOMAIN_DECISIONS.md
 [employee services]: ../../src/modules/employees/employee-services.ts
 [schema]: ../../src/db/schema/index.ts
 [navigation]: ../../src/modules/navigation/navigation.ts
@@ -34,15 +36,15 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 
 ## Current focus
 
-- **Current active phase:** None — Phase 2 is complete after the verified controls/code remediation; Phase 3 remains not started
-- **Current active/next sub-phase:** Phase 2 journey complete; Phase 3 remains `NOT_STARTED`
-- **Current phase status:** `COMPLETED`
-- **Last status date:** `2026-09-01`
-- **Most recent trustworthy evidence:** [Phase 2 controls/code remediation]
-- **Immediate objective:** Preserve the completed employee-management journey, use its disposable manual-QA launcher for local verification, and do not begin Phase 3 without authorization.
-- **Known blockers:** None for the documented Phase 2 journey. Phase 3 remains unstarted and separately authorized.
-- **Explicit exclusions:** Do not expand certifications, CVs, portfolios, files, or management notes; do not begin clients/projects/locations until Phase 2 exit criteria pass.
-- **Required phase-exit journey:** Super Admin manages employees → employee signs in → employee views real profile → employee updates only permitted fields.
+- **Current active phase:** Phase 3 — Clients, projects, and locations
+- **Current active/next sub-phase:** 3.10 delivery-gate closure; Phase 4 is not authorized to start
+- **Current phase status:** `BLOCKED`
+- **Last status date:** `2026-09-02`
+- **Most recent trustworthy evidence:** [Phase 3 report]; local implementation commit `b3d6286`
+- **Immediate objective:** Restore authorized GitHub credentials and resolve or explicitly disposition the preserved user-owned repository-wide lint/legacy-runner interference; do not begin Phase 4.
+- **Known blockers:** GitHub rejected `git push origin main` with HTTP 403 because the configured `m-kassab`/`MulhamKassab` tokens are invalid; repository-wide `npm run lint` scans the preserved untracked compiled prototype, and preserved Phase 1 route/browser runners lack Phase 2 profiles and current Phase 3 fixtures. Phase-scoped Phase 3 gates pass.
+- **Explicit exclusions:** Phase 4 scheduling and all later journeys; production access, migration, authentication, deployment, maps/geocoding/GPS, and Ticket System integration.
+- **Required phase-exit journey:** Authorized manager creates Client → creates Project → creates or deliberately reuses a same-client Location → structure is available for future scheduling.
 
 ## Master phase status
 
@@ -53,7 +55,7 @@ Progress measures completed roadmap sub-phases only. It is **not** engineering e
 | 0 | Discovery and technical pilot | `COMPLETED` | 9 | 9 | 100% | — | 2026-09-01 | — | 2026-09-01 | — | None | [roadmap] |
 | 1 | Secure application foundation | `COMPLETED` | 7 | 7 | 100% | Completed only for the narrowly defined secure foundation journey | 2026-08-29 | — | 2026-08-29 | Phase 0 | None | [P1 certification] |
 | 2 | Employee management journey | `COMPLETED` | 11 | 11 | 100% | Completed employee-management journey; visible Super Admin controls, server-only employee codes, and supported disposable manual QA launcher | 2026-09-01 | 2026-09-01 | 2026-09-01 | Phase 1 | None | [Phase 2 controls/code remediation] |
-| 3 | Clients, projects, and locations | `NOT_STARTED` | 0 | 10 | 0% | 3.1 Client management | 2026-09-01 | — | — | Phase 2 journey | Phase 2 exit not met | None located |
+| 3 | Clients, projects, and locations | `BLOCKED` | 9 | 10 | 90% | 3.10 delivery-gate closure; Phase 4 remains unstarted | 2026-09-02 | 2026-09-02 | — | Phase 2 journey | Remote push authorization and preserved repository-wide QA interference | Local commit `b3d6286`; [Phase 3 report] |
 | 4 | Scheduling, review, and publication | `NOT_STARTED` | 0 | 12 | 0% | 4.1 Schedule and assignment data foundation | 2026-09-01 | — | — | Phases 2–3 | Phase 3 exit not met | None located |
 | 5 | Leave and availability | `NOT_STARTED` | 0 | 10 | 0% | 5.1 Leave request data foundation | 2026-09-01 | — | — | Phase 4 | Published schedule unavailable | None located |
 | 6 | Skills and operational capabilities | `PARTIAL` | 0 | 8 | 0% | 6.1 Reuse and connect the existing verified skills backend | 2026-09-01 | — | — | Phases 2–4 | Dependent operational records unavailable | [Phase 2 core R3] |
@@ -113,16 +115,16 @@ Scope note: `COMPLETED` only for the narrowly defined secure foundation journey;
 
 | ID | Sub-phase | Status | Last status date | Started date | Completed date | Dependencies | Implementation state | QA state | Exit evidence required | Current evidence | Blocker/notes |
 | -- | --------- | ------ | ---------------- | ------------ | -------------- | ------------ | -------------------- | -------- | ---------------------- | ---------------- | ------------- |
-| 3.1 | Client management | `NOT_STARTED` | 2026-09-01 | — | — | Phase 2 | Documentation; navigation shell only | Shell route E2E only | Authorized client journey | None located | Shell is not implementation. |
-| 3.2 | Account Manager relationships | `NOT_STARTED` | 2026-09-01 | — | — | 3.1 | Documentation only | None located | Distinct persisted relationship | None located | — |
-| 3.3 | Project management | `NOT_STARTED` | 2026-09-01 | — | — | 3.1 | Documentation; navigation shell only | Shell route E2E only | Authorized project journey | None located | — |
-| 3.4 | Responsible Admin and employee relationships | `NOT_STARTED` | 2026-09-01 | — | — | 3.2–3.3 | Documentation only | None located | Distinct relationship/scope behavior | None located | — |
-| 3.5 | Location management | `NOT_STARTED` | 2026-09-01 | — | — | 3.1 | Documentation; navigation shell only | Shell route E2E only | Authorized location journey | None located | — |
-| 3.6 | Coordinates, site hours, contacts, and access instructions | `NOT_STARTED` | 2026-09-01 | — | — | 3.5 | Documentation only | None located | Confirmed fields/privacy/UI | None located | — |
-| 3.7 | Basic staffing requirements | `NOT_STARTED` | 2026-09-01 | — | — | 3.3–3.5 | Documentation only | None located | Distinct requirements model | None located | — |
-| 3.8 | Shared operational notes required by these records | `NOT_STARTED` | 2026-09-01 | — | — | 3.1–3.3 | Documentation only | None located | Shared-note behavior | None located | Phase 10 completes central notes interface. |
-| 3.9 | Scoped Admin access | `NOT_STARTED` | 2026-09-01 | — | — | 3.1–3.8 | Foundation scope seam only | Foundation scope tests | Domain scope filtering and negative tests | [P1 certification] | — |
-| 3.10 | Relationship, concurrency, authorization, and E2E QA | `NOT_STARTED` | 2026-09-01 | — | — | 3.1–3.9 | Documentation only | None located | Full client/project/location journey QA | None located | — |
+| 3.1 | Client management | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phase 2 | PostgreSQL Client repository/service/actions/routes/UI with archive and optimistic versions | Unit, integration, desktop/mobile browser, manual smoke | Authorized client journey | Local commit `b3d6286`; [Phase 3 report] | Super Admin alone creates Client authorization roots. |
+| 3.2 | Account Manager relationships | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 3.1 | Optional active-employee coordinator relationship | Adversarial no-hidden-authority service/browser tests | Distinct persisted relationship | [Phase 3 report] | Relationship grants no authorization or assignment. |
+| 3.3 | Project management | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 3.1 | Client-owned Project repository/service/actions/routes/UI | Validation, lifecycle, scope, stale-write, desktop/mobile browser | Authorized project journey | [Phase 3 report] | Project creation requires Client manage authority. |
+| 3.4 | Responsible Admin and employee relationships | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 3.2–3.3 | Separate coordinator and operational-association records | Active-employee, duplicate, privacy, and hidden-authority tests | Distinct relationship/scope behavior | [Phase 3 report] | Neither relationship authorizes or schedules. |
+| 3.5 | Location management | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 3.1 | Client-owned Location and archived/versioned same-client Project link | Cross-client, deliberate reuse, archive, desktop/mobile browser | Authorized location journey | [Phase 3 report] | No automatic merge or link. |
+| 3.6 | Coordinates, site hours, contacts, and access instructions | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 3.5 | Manual coordinate pair and bounded operational detail/contact model | Pair/range validation and Employee privacy projection tests | Confirmed fields/privacy/UI | [Phase 3 report] | No maps, GPS, geocoding, or provider dependency. |
+| 3.7 | Basic staffing requirements | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 3.3–3.5 | Queryable target/skill/count/note requirement records | Positive count, target, lifecycle, transaction tests | Distinct requirements model | [Phase 3 report] | No dates, shifts, people, proficiency, or coverage logic. |
+| 3.8 | Shared operational notes required by these records | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 3.1–3.3 | Active notes, author edit, Super Admin archive/reason, retained history | Authorization, privacy, sanitized audit, rollback tests | Shared-note behavior | [Phase 3 report] | Phase 10 still owns the central notes interface. |
+| 3.9 | Scoped Admin access | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 3.1–3.8 | Explicit CLIENT descendant inheritance plus non-climbing PROJECT/LOCATION grants | Six-persona and adversarial desktop/mobile/service matrix | Domain scope filtering and negative tests | [Phase 3 report] | TEAM behavior remains separate. |
+| 3.10 | Relationship, concurrency, authorization, and E2E QA | `BLOCKED` | 2026-09-02 | 2026-09-02 | — | 3.1–3.9 | Phase-scoped implementation and QA complete in local commit `b3d6286` | Phase 3 suites pass; repository-wide inherited gates have preserved-work interference | Full client/project/location journey QA and delivery | [Phase 3 report] | Push is rejected by invalid GitHub credentials; full lint and legacy Phase 1 runners remain red for preserved user-owned inputs. |
 
 ## Phase 4 — Scheduling, review, and publication
 
@@ -339,6 +341,25 @@ Use this template for every phase. `NOT_APPLICABLE` is allowed only with a reaso
 | Manual walkthrough | Yes | `COMPLETED` | [Phase 2 controls/code remediation] | Disposable launcher smoke and equivalent desktop/mobile browser journey prove visible controls and Cora's real self-service form. |
 | Documentation updated | Yes | `COMPLETED` | This tracker | Tracker created; update again with each status change. |
 
+### Active Phase 3 gate matrix
+
+| Gate | Required? | Status | Evidence | Notes |
+| ---- | --------- | ------ | -------- | ----- |
+| User story and acceptance criteria | Yes | `COMPLETED` | Authorized Phase ID; [Phase 3 decisions] | Bounded Client → Project → deliberate same-client Location journey. |
+| Schema/migration | Yes | `COMPLETED` | Migration `0004`; [Phase 3 report] | Immutable `0000`–`0003` preserved; clean/upgrade/drift verification passed. |
+| Repository/service/validation | Yes | `COMPLETED` | Local commit `b3d6286`; [Phase 3 report] | Strict Zod inputs, repositories, centralized service authorization/lifecycle/transactions. |
+| Server authorization and privacy | Yes | `COMPLETED` | Service and browser adversarial matrices | Super Admin, three scoped Admin shapes, unscoped/relationship-only Admin, and Employee covered. |
+| Route/Server Action and real UI | Yes | `COMPLETED` | Unit/component/browser/manual smoke | PostgreSQL-backed responsive management routes; safe unauthorized/stale/archive states. |
+| Audit/transactions/concurrency | Yes | `COMPLETED` | 7/7 focused service; 25/25 integration | Sanitized metadata, forced audit rollback, and stale versions verified. |
+| Notifications | Confirmed event only | `NOT_APPLICABLE` | [Phase 3 decisions] | Confirmed event list has no Phase 3 source event; no event invented. |
+| Unit/component tests | Yes | `COMPLETED` | 33/33 unit; 12/12 component | Phase 3 validation, form semantics, and boundaries included. |
+| Disposable PostgreSQL tests | Yes | `COMPLETED` | 7/7 focused; 25/25 integration; 8/8 migration | Owned loopback-only databases cleaned up. |
+| Desktop/mobile E2E | Yes | `COMPLETED` | 14/14 Phase 3 Playwright | Seven journeys on each viewport. |
+| Manual walkthrough | Yes | `COMPLETED` | `node scripts/run-phase3-manual-qa.mjs --smoke` | Safe build, fictional fixtures, routes, and Employee denial passed. |
+| Typecheck/safe build/diff | Yes | `COMPLETED` | Typecheck; isolated no-`.env*` Next build; `git diff --check` | Direct `npm run build` intentionally replaced by the canonical guarded build. |
+| Repository-wide lint and inherited runners | Yes | `BLOCKED` | [Phase 3 report] | Full lint scans preserved compiled prototype; preserved Phase 1 runners lack Phase 2/3 fixtures. Phase 3 scoped lint passes. |
+| Commit/push | Yes | `BLOCKED` | Local `b3d6286`; `git push origin main` HTTP 403 | Active GitHub tokens are invalid; local branch is ahead of `origin/main`. |
+
 ## Tracker maintenance protocol
 
 1. Read [context], [roadmap], and this tracker before development.
@@ -391,3 +412,5 @@ Append new rows; correct an existing row only for a factual error. Every `COMPLE
 | 2026-09-01 | Phase 2 manual QA runtime readiness | `IN_PROGRESS` | `COMPLETED` | [Phase 2 manual QA readiness] | Root cause was an unsupported/unseeded local manual environment, not a Phase 2 product regression; disposable seeded launcher smoke passed for `/employees` and `/profile`. | Codex |
 | 2026-09-01 | Phase 2 manual QA employee controls/code remediation | `COMPLETED` | `IN_PROGRESS` | authorized R2 remediation Phase ID | Manual QA showed that Super Admin controls were technically implemented but not discoverable from an unlabelled directory link, and employee code was incorrectly caller-supplied. Phase 2 acceptance was reopened while the visible journey and server-only allocator were corrected. | Codex |
 | 2026-09-01 | Phase 2 manual QA employee controls/code remediation | `IN_PROGRESS` | `COMPLETED` | [Phase 2 controls/code remediation] | Labelled management entry/control groups, strict server-only sequential code allocation, disposable migration/core/component/unit/browser/manual-QA verification, and isolated build all passed. | Codex |
+| 2026-09-02 | Phase 3 clients, projects, and locations | `NOT_STARTED` | `IN_PROGRESS` | Authorized `SCOPEIS_PHASE_3_CLIENT_PROJECT_LOCATION_JOURNEY_R1`; [Phase 3 decisions](PHASE_3_OPERATIONAL_DOMAIN_DECISIONS.md) | Began the bounded operational journey after custody, architecture, migration, authorization, audit, UI, and test-convention reconciliation. Phase 4 and later remain excluded. | Codex |
+| 2026-09-02 | Phase 3 clients, projects, and locations | `IN_PROGRESS` | `BLOCKED` | Local commit `b3d6286`; [Phase 3 report] | Product journey and all Phase 3-scoped gates passed. Certification/delivery is blocked by invalid GitHub credentials (push HTTP 403) and preserved user-owned repository-wide lint/legacy-runner interference. Phase 4 remains unstarted. | Codex |

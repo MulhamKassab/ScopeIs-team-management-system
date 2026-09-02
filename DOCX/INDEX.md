@@ -2,7 +2,7 @@
 
 ## Purpose and status
 
-This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is `COMPLETED` only in its narrow foundation scope; Phase 2 — Employee management journey is `COMPLETED` (11/11) in its documented bounded scope after the verified controls/code remediation. Phase 3 remains `NOT_STARTED`.
+This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is `COMPLETED` only in its narrow foundation scope; Phase 2 — Employee management journey is `COMPLETED` (11/11). Phase 3 is `BLOCKED`: its scoped implementation and QA pass locally, but remote delivery and preserved repository-wide QA interference remain unresolved. Phase 4 and later are unstarted.
 
 ## Reader path
 
@@ -39,10 +39,11 @@ This directory is the canonical documentation foundation for ScopeIs Team Manage
 - [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) - sole authoritative live tracker for phase/sub-phase status, dates, evidence, blockers, QA state, and update protocol; it does not redefine roadmap scope.
 - [`project-memory/UI_UX_FOUNDATION.md`](project-memory/UI_UX_FOUNDATION.md) - approved Phase 1 visual, responsive, accessibility, theme, and RTL foundation.
 - [`project-memory/PHASE_2_EMPLOYEE_DOMAIN_DECISIONS.md`](project-memory/PHASE_2_EMPLOYEE_DOMAIN_DECISIONS.md) - approved Phase 2 employee, capability, evidence, privacy, and production-operational boundaries.
+- [`project-memory/PHASE_3_OPERATIONAL_DOMAIN_DECISIONS.md`](project-memory/PHASE_3_OPERATIONAL_DOMAIN_DECISIONS.md) - implemented Phase 3 normalized operational model, explicit scope inheritance, lifecycle, privacy, audit, and no-scheduling boundary.
 
 ## Implementation status
 
-Historical reports remain immutable evidence and are not current roadmaps or tracker replacements. Phase 2.1–2.11 are completed as the bounded employee-management journey. Manual QA must use the supported disposable launcher, `node scripts/run-phase2-manual-qa.mjs`; it supplies complete fictional data and an isolated no-`.env*` build. The reported generic boundary errors were an unseeded/manual-runtime readiness gap; a subsequent genuine Super Admin discoverability/manual-code defect was remediated and verified in [`phase-reports/SCOPEIS_PHASE_2_MANUAL_QA_EMPLOYEE_CONTROLS_AND_CODE_REMEDIATION_R2.md`](phase-reports/SCOPEIS_PHASE_2_MANUAL_QA_EMPLOYEE_CONTROLS_AND_CODE_REMEDIATION_R2.md). Phase 3 and all later journeys remain unstarted; no production authentication, database state, or deployment is certified.
+Historical reports remain immutable evidence and are not current roadmaps or tracker replacements. Phase 2.1–2.11 are completed as the bounded employee-management journey. Phase 3's local implementation and scoped QA are recorded in [`phase-reports/SCOPEIS_PHASE_3_CLIENT_PROJECT_LOCATION_JOURNEY_R1.md`](phase-reports/SCOPEIS_PHASE_3_CLIENT_PROJECT_LOCATION_JOURNEY_R1.md); its final classification is `BLOCKED` until GitHub push authorization and preserved repository-wide QA interference are resolved. Phase 3 manual QA uses `node scripts/run-phase3-manual-qa.mjs`. Phase 4 and later remain unstarted; no production authentication, database state, migration, or deployment is certified.
 
 ## Diagram catalog
 
