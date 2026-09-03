@@ -75,10 +75,15 @@ In-app Browser QA used `http://localhost:3201` with no credentials or external b
 
 Public OpenStreetMap tile requests remain the only map-related network request. The fixture map has no GPS, geocoding, route service, or live tracking.
 
+## Preview deployment
+
+- Branch alias: `https://scopeis-team-management-system-git-preview-mu-ka7.vercel.app`.
+- After the `preview` push, a read-only HTTPS header request returned `200 OK` from Vercel on 2026-09-03. No Vercel settings, Preview resource, credential, or Production deployment was changed.
+
 ## Known limitations
 
 - This is a presentation-only in-memory fixture demonstration, not a Production-ready, persistent, or authenticated system.
 - Persona selection is illustrative rather than a security mechanism.
 - Request, assignment, approval, and publication controls reset on refresh.
 - Ticket System is still deferred and not a workforce module.
-- Deployment identity is verified after the Preview commit is pushed; no production promotion is allowed.
+- No production promotion is allowed.
