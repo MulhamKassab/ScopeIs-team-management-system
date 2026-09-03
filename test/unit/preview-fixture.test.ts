@@ -7,6 +7,7 @@ import {
 } from "@/preview/preview-data";
 import { mapDates, planningMapAssignments, planningMapWorksites } from "@/preview/preview-map-data";
 import { previewRoutes, visiblePreviewRoutes } from "@/preview/preview-routes";
+import { capabilityRecords, certifications, coverageEvaluations, historicalLeave, managementHistory, operationalAudit, operationalClients, operationalLocations, operationalNotifications, operationalProjects, operationalRequests, operationalWork, portfolioItems, replacementDecisions, visibleManagementHistory, visibleOperationalLeave } from "@/preview/rich-operational-data";
 
 describe("database-free Preview fixtures", () => {
   it("contains a deterministic, internally consistent fictional graph", () => {
@@ -106,5 +107,38 @@ describe("database-free Preview fixtures", () => {
     expect(fixtureCounts.clients).toBe(clients.length);
     expect(fixtureCounts.projects).toBe(projects.length);
     expect(fixtureCounts.coverage).toBe(coverageGaps.length);
+  });
+
+  it("keeps the rich multi-year operational fixture graph deterministic and connected", () => {
+    expect(operationalClients).toHaveLength(10);
+    expect(operationalProjects).toHaveLength(30);
+    expect(operationalLocations.length).toBeGreaterThanOrEqual(20);
+    expect(capabilityRecords.length).toBeGreaterThanOrEqual(80);
+    expect(certifications.length).toBeGreaterThanOrEqual(45);
+    expect(portfolioItems.length).toBeGreaterThanOrEqual(60);
+    expect(assignments.length).toBeGreaterThanOrEqual(300);
+    expect(operationalWork.length).toBeGreaterThanOrEqual(300);
+    expect(historicalLeave.length).toBeGreaterThanOrEqual(50);
+    expect(operationalRequests.length).toBeGreaterThanOrEqual(75);
+    expect(operationalNotifications.length).toBeGreaterThanOrEqual(100);
+    expect(operationalAudit.length).toBeGreaterThanOrEqual(100);
+    expect(operationalProjects.every((project) => operationalClients.some((client) => client.id === project.clientId && client.team === project.team))).toBe(true);
+    expect(operationalLocations.every((location) => operationalProjects.some((project) => project.id === location.projectId && project.clientId === location.clientId))).toBe(true);
+    expect(operationalWork.every((work) => operationalProjects.some((project) => project.id === work.projectId && project.clientId === work.clientId) && employeeFor(work.employeeId))).toBe(true);
+    expect(operationalRequests.every((request) => operationalProjects.some((project) => project.id === request.projectId) && operationalLocations.some((location) => location.id === request.locationId))).toBe(true);
+    expect(replacementDecisions.every((request) => coverageEvaluations.some((coverage) => coverage.id === request.coverageId) && request.candidateIds.every(employeeFor))).toBe(true);
+    expect(historicalLeave.every((leave) => employeeFor(leave.employeeId)?.team === leave.team && leave.start <= leave.end)).toBe(true);
+    expect(operationalWork.every((work) => !work.id.includes("random"))).toBe(true);
+  });
+
+  it("keeps rich leave and management history inside persona privacy boundaries", () => {
+    const nora = selectedPersona("nora"); const ava = selectedPersona("ava"); const ben = selectedPersona("ben"); const cora = selectedPersona("cora");
+    expect(visibleOperationalLeave(ava).every((leave) => leave.team === "alpha")).toBe(true);
+    expect(visibleOperationalLeave(ben).every((leave) => leave.team === "bravo")).toBe(true);
+    expect(visibleOperationalLeave(cora).every((leave) => leave.employeeId === cora.employeeId)).toBe(true);
+    expect(visibleManagementHistory(nora, "emp-cora")).toEqual(managementHistory.filter((note) => note.subjectId === "emp-cora"));
+    expect(visibleManagementHistory(ava, "emp-cora").every((note) => note.authorId === ava.employeeId)).toBe(true);
+    expect(visibleManagementHistory(ben, "emp-cora")).toEqual([]);
+    expect(visibleManagementHistory(cora, "emp-cora")).toEqual([]);
   });
 });

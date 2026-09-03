@@ -42,6 +42,10 @@
     "src/app/**/* 2.tsx",
     "src/modules/**/* 2.tsx",
     "src/shared/**/* 2.tsx",
-    ".next/types/**/* 2.ts"
+    ".next/types/**/* 2.ts",
+    "src/db/**/*",
+    "src/modules/**/*",
+    "src/server/**/*",
+    "test/**/*"
   ]
 }

@@ -9,8 +9,9 @@ import {
   notes, notifications, personas, previewConfig, projects, replacements, selectedPersona, type PreviewPersona,
   visibleAssignments, visibleDiscussions, visibleEmployees, visibleLeave, visibleNotes,
 } from "@/preview/preview-data";
-import { visiblePreviewRoutes } from "@/preview/preview-routes";
+import { previewRoutes, visiblePreviewRoutes } from "@/preview/preview-routes";
 import { ScheduleWorkspace } from "@/preview/schedule-workspace";
+import { RichPreviewModule } from "@/preview/rich-operational-workspaces";
 
 const InteractivePlanningMap = dynamic(
   () => import("@/preview/interactive-planning-map").then((module) => module.InteractivePlanningMap),
@@ -60,28 +61,31 @@ function Login({ persona, choose }: { persona: PreviewPersona; choose: (id: Prev
 
 function PageContent({ pathname, persona }: { pathname: string; persona: PreviewPersona }) {
   const segment = pathname.split("/")[1] || "dashboard";
+  const route = previewRoutes.find((candidate) => candidate.href === `/${segment}`);
+  if (route && !route.roles.includes(persona.role)) return <NotAuthorized />;
   if (segment === "employees" && pathname.split("/").length > 2) return <EmployeeDetail persona={persona} id={pathname.split("/")[2]} />;
   if (["clients", "projects", "locations"].includes(segment) && pathname.split("/").length > 2) return <RecordDetail persona={persona} type={segment} id={pathname.split("/")[2]} />;
   switch (segment) {
     case "dashboard": return <Dashboard persona={persona} />;
-    case "employees": return <EmployeeDirectory persona={persona} />;
-    case "profile": return <Profile persona={persona} />;
-    case "clients": return <Directory persona={persona} title="Clients" description="Fictional client relationships, contacts, and delivery status." records={inScope(clients, persona)} hrefBase="/clients" fields={(record) => [record.contact, record.location, `${record.projects} project${record.projects === 1 ? "" : "s"}`, record.status]} />;
-    case "projects": return <Directory persona={persona} title="Projects" description="Fictional project delivery, staffing requirements, and linked locations." records={inScope(projects, persona)} hrefBase="/projects" fields={(record) => [clientName(record.clientId), record.location, record.stage, record.staffing]} />;
-    case "locations": return <Directory persona={persona} title="Locations" description="Operational locations shown as fictional planning records, not live places." records={inScope(locations, persona)} hrefBase="/locations" fields={(record) => [record.client, record.city, record.type]} />;
+    case "employees": return <RichPreviewModule module="employees" persona={persona} />;
+    case "profile": return <RichPreviewModule module="profile" persona={persona} />;
+    case "clients": return <RichPreviewModule module="clients" persona={persona} />;
+    case "projects": return <RichPreviewModule module="projects" persona={persona} />;
+    case "locations": return <RichPreviewModule module="locations" persona={persona} />;
     case "schedule": return <Schedule persona={persona} />;
     case "leave": return <Leave persona={persona} />;
-    case "coverage": return <Coverage persona={persona} />;
-    case "replacements": return <Replacements persona={persona} />;
+    case "coverage": return <RichPreviewModule module="coverage" persona={persona} />;
+    case "replacements": return <RichPreviewModule module="replacements" persona={persona} />;
     case "map": return <PlanningMap persona={persona} />;
-    case "skills": return <Skills persona={persona} />;
-    case "evidence": return <Evidence persona={persona} />;
-    case "requests": return <Requests persona={persona} />;
+    case "skills": return <RichPreviewModule module="skills" persona={persona} />;
+    case "evidence": return <RichPreviewModule module="evidence" persona={persona} />;
+    case "requests": return <RichPreviewModule module="requests" persona={persona} />;
     case "notes": return <Notes persona={persona} management={false} />;
     case "management-notes": return <Notes persona={persona} management />;
     case "discussions": return <Discussions persona={persona} />;
     case "notifications": return <Notifications persona={persona} />;
-    case "reports": return <Reports persona={persona} />;
+    case "analytics": return <RichPreviewModule module="analytics" persona={persona} />;
+    case "reports": return <RichPreviewModule module="reports" persona={persona} />;
     case "audit": return <Audit persona={persona} />;
     case "settings": return <Settings persona={persona} />;
     case "tickets": return <TicketDeferred />;

@@ -95,3 +95,31 @@ final result: passed
 - [x] Verify desktop and mobile rendering, filtering, persona limits, build, lint, typecheck, unit tests, and diff whitespace.
 
 final result: passed
+
+---
+
+# R2 rich operational demonstration — design QA
+
+## Source and method
+
+- Visual baseline: the existing ScopeIs Preview design system and the approved Schedule planning-board reference recorded above.
+- Desktop QA: 1440 × 900 in the Codex in-app Browser.
+- Mobile QA: 390 × 844 in the Codex in-app Browser.
+- Tested source: local `preview` worktree at `http://localhost:3201`, using only fictional fixture personas.
+
+## Results
+
+| Surface | Result |
+| --- | --- |
+| Rich data hierarchy | Passed — concise cards, dense tables, overview metrics, and large drill-down overlays reuse the existing ScopeIs visual language. |
+| Employee capability overlay | Passed — skills, certification, portfolio, schedule, leave, and authorized management sections are grouped in an Escape-closeable dialog. |
+| Client/project drill-down | Passed — project details open above client context and expose Back to client. |
+| Schedule alternatives | Passed — Schedule 1, 2, and 3 are visually distinct while preserving filters and fixture state. |
+| Desktop density | Passed — the 1440 px planner retains dense rows, visible detail rail, and non-persistent action explanation without clipping. |
+| Mobile resilience | Passed — 390 px Cora schedule measured 375 px document width, stacked controls, and no page-level horizontal overflow. |
+| Role/privacy presentation | Passed — Cora and Dan are rejected from direct management URLs; Ava’s inspected skill detail omits Ben; opposite-team map labels are absent. |
+| Console | Passed — no browser console errors on exercised schedule, overlay, map, or role views. |
+
+No P0, P1, or P2 visual issues remained in the exercised R2 flows. The intentional constraint is that all mutations remain non-persistent Preview demonstrations.
+
+final result: passed

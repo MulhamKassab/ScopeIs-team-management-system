@@ -1,12 +1,3 @@
-import { redirect } from "next/navigation";
-import { getCurrentActor } from "@/modules/auth/session-service";
-import { CoverageDomainError } from "@/modules/coverage/domain-error";
-import { coverageService } from "@/modules/coverage/service";
-import { ReplacementRequestForm } from "@/modules/coverage/forms";
+import { PreviewApp } from "@/preview/preview-app";
 
-export default async function CoveragePage({ searchParams }: { searchParams: Promise<{ assignment?: string }> }) {
-  const actor = await getCurrentActor(); if (!actor) redirect("/login"); if (actor.role === "EMPLOYEE") return <section className="operations-page"><h2>Coverage is management-only</h2><p>Employees do not receive a management candidate directory or coverage review information.</p></section>;
-  const params = await searchParams; let gaps: Awaited<ReturnType<typeof coverageService.gaps>> = []; let candidates: Awaited<ReturnType<typeof coverageService.candidates>>["candidates"] = [];
-  if (params.assignment) { try { gaps = await coverageService.gaps(actor, params.assignment); candidates = (await coverageService.candidates(actor, params.assignment)).candidates; } catch (error) { if (!(error instanceof CoverageDomainError)) throw error; } }
-  return <section className="operations-page"><header className="operations-heading"><div><p className="eyebrow">Phase 7 coverage review</p><h2>Explainable coverage gaps</h2><p>Client, Project, and Location rules remain independent. Gaps are non-blocking operational information; they do not determine coverage adequacy or publish schedules.</p></div></header><section className="operation-panel"><h3>Review one schedule assignment</h3><form method="get"><label>Assignment ID<input name="assignment" defaultValue={params.assignment ?? ""} required /></label><button className="button primary">Review gaps</button></form><p className="schedule-help">Use an assignment ID from the authorized schedule workspace. Admin review is limited by operational scope and explicit TEAM employee visibility.</p></section>{params.assignment ? <section className="operation-panel"><h3>Current gaps</h3>{gaps.length ? <div className="operation-list">{gaps.map((gap, index) => <article key={`${gap.anchorAssignmentId}-${gap.staffingRequirementId ?? gap.skillName}-${index}`}><div><strong>{gap.kind === "STAFFING" ? `${gap.source} staffing rule` : "Assignment qualification warning"}</strong><span>{gap.assignmentDate} · {gap.startTime}–{gap.endTime} · {gap.skillName} · required {gap.requiredEmployeeCount}, currently counted {gap.eligibleEmployeeCount}</span></div><ReplacementRequestForm gap={gap} candidates={candidates} /></article>)}</div> : <p className="operation-empty">No current coverage or qualification gap was found for this assignment.</p>}</section> : null}</section>;
-}
+export default function CoveragePage() { return <PreviewApp />; }

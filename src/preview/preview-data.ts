@@ -139,6 +139,33 @@ const busyWeekAssignments = busyWeekDates.flatMap((date, dayIndex) => busyPlanni
   }] : [];
 }));
 
+const historicalAssignmentMonths = Array.from({ length: 36 }, (_, index) => {
+  const absoluteMonth = 9 + index;
+  return { year: 2023 + Math.floor(absoluteMonth / 12), month: (absoluteMonth % 12) + 1 };
+});
+const schedulableEmployeeIds = employees.filter((employee) => employee.id !== "emp-nora").map((employee) => employee.id);
+const historicalAssignments = Array.from({ length: 320 }, (_, index) => {
+  const employeeId = schedulableEmployeeIds[index % schedulableEmployeeIds.length];
+  const employee = employeeFor(employeeId)!;
+  const candidateProjects = projects.filter((project) => project.team === employee.team);
+  const project = candidateProjects[index % candidateProjects.length];
+  const location = locations.find((candidate) => candidate.id === project.locationId)!;
+  const month = historicalAssignmentMonths[index % historicalAssignmentMonths.length];
+  const day = String(1 + ((index * 3) % 25)).padStart(2, "0");
+  return {
+    id: `asg-history-${String(index + 1).padStart(3, "0")}`,
+    employeeId,
+    projectId: project.id,
+    locationId: location.id,
+    date: `${month.year}-${String(month.month).padStart(2, "0")}-${day}`,
+    time: index % 5 === 0 ? "On call" : index % 3 === 0 ? "08:30–16:30" : "09:00–17:00",
+    type: index % 5 === 0 ? "On-call assignment" : index % 4 === 0 ? "Recurring assignment" : "Scheduled visit",
+    state: "Published",
+    location: location.name,
+    warning: "",
+  };
+});
+
 export const assignments = [
   { id: "asg-1", employeeId: "emp-cora", projectId: "project-clinic", locationId: "loc-business-bay", date: "2026-09-18", time: "08:30–16:30", type: "Timed visit", state: "Published", location: "Business Bay office", warning: "" },
   { id: "asg-2", employeeId: "emp-elias", projectId: "project-retail", locationId: "loc-al-quoz", date: "2026-09-18", time: "Full day", type: "Full-day assignment", state: "Published", location: "Al Quoz workshop", warning: "" },
@@ -148,6 +175,7 @@ export const assignments = [
   { id: "asg-6", employeeId: "emp-lina", projectId: "project-residence", locationId: "loc-dip", date: "2026-09-22", time: "Full day", type: "Full-day assignment", state: "Proposed", location: "Dubai Investment Park warehouse", warning: "Unavailable: approved leave" },
   { id: "asg-7", employeeId: "emp-priya", projectId: "project-logistics", locationId: "loc-jebel-ali", date: "2026-09-23", time: "On call", type: "On-call assignment", state: "Published", location: "Jebel Ali operations site", warning: "" },
   ...busyWeekAssignments,
+  ...historicalAssignments,
 ];
 
 // These are approximate fictional planning areas and worksites, never homes or live positions.
