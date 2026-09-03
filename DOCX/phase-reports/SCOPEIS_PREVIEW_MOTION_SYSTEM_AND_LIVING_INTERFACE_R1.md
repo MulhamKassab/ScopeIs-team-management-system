@@ -64,6 +64,13 @@ The motion test covers centralized timing/reduced motion, skeleton/route transit
 
 The local `.next/static/chunks` directory changed from 912 KiB blocks before the library install to 1072 KiB blocks after the build: approximately **+160 KiB blocks**. This is a coarse emitted-directory comparison, not a gzip or route-specific transfer metric. Map code remains dynamically imported and Motion uses `LazyMotion` with `domAnimation`.
 
+## Commit and deployment
+
+- Implementation commit: `9e8ca8670ebd7a602fb609398056d696651b7955` — `feat(preview): add cohesive motion and loading system`.
+- Pushed only to `origin/preview`; after the push, `origin/preview...preview` was `0/0`.
+- Vercel Preview URL: <https://scopeis-team-management-system-git-preview-mu-ka7.vercel.app/dashboard?persona=nora>.
+- After Vercel finished the branch deployment, the selected in-app Browser confirmed the deployed CSS exposes the new `--motion-fast: .16s` token. No Production deployment was opened, promoted, or changed.
+
 ## Browser interaction QA
 
 The selected Codex in-app Browser exercised the local Preview at `http://localhost:3201` at its available 1280 × 720 viewport. The existing R2 1440 × 900 and 390 × 844 visual evidence remains recorded in `design-qa.md`; this phase additionally checked live interaction, not only screenshots.
