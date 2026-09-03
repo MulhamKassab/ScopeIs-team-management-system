@@ -144,7 +144,7 @@ This phase precedes coverage and replacement.
 
 ## Phase 7 — Coverage and replacement
 
-**Main journey:** System detects staffing gap → Admin reviews candidates and requests replacement → Super Admin decides → schedule updates and affected users are notified.
+**Main journey:** System detects staffing gap → Admin reviews TEAM-visible unranked candidates and requests replacement → Super Admin decides → a Draft-safe schedule effect awaits normal publication.
 
 **Sub-phases:**
 
@@ -160,7 +160,7 @@ This phase precedes coverage and replacement.
 - 7.10 Audit, notification, transaction, override, and concurrency behavior
 - 7.11 Complete coverage/replacement E2E QA
 
-Candidate ranking is advisory and never makes the final decision automatically.
+Candidate ranking is explicitly out of scope; candidate facts are unranked and never make the final decision automatically.
 
 ## Phase 8 — Static planning map
 

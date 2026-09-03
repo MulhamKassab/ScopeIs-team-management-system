@@ -42,15 +42,15 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 
 ## Current focus
 
-- **Current active phase:** Phase 6 — Skills and operational capabilities
-- **Current active/next sub-phase:** Completed controlled-skills and non-blocking warning journey; Phase 7 remains next
-- **Current phase status:** `COMPLETED`
-- **Last status date:** `2026-09-02`
-- **Most recent trustworthy evidence:** [Phase 6 report]; [Phase 6 decisions]
-- **Immediate objective:** Preserve the Phase 6 boundary; Phase 7 and later journeys remain unstarted.
-- **Known blockers:** No Phase 6 blocker remains. Preserved repository-wide lint/legacy-runner interference remains outside the scoped gate set.
-- **Explicit exclusions:** Coverage, replacements, candidate ranking, certifications as gates, maps, tickets, payroll, attendance, production access/migration/authentication/deployment, and notification-centre redesign.
-- **Required phase-exit journey:** Management records controlled employee skills and work requirements → authorized planners filter TEAM-visible recorded skills → Super Admin sees an explainable non-blocking missing-skill schedule warning.
+- **Current active phase:** Phase 9 — Certifications, CVs, portfolios, and files
+- **Current active/next sub-phase:** 9.1 Certification records; preserve the completed Phase 8 static non-tracking boundary.
+- **Current phase status:** `NOT_STARTED`
+- **Last status date:** `2026-09-03`
+- **Most recent trustworthy evidence:** [Phase 8 report]; [Phase 8 decisions]
+- **Immediate objective:** Preserve completed Phase 8; later journeys remain unstarted.
+- **Known blockers:** Preserved repository-wide lint/legacy-runner interference remains outside scoped phase gates.
+- **Explicit exclusions:** GPS/live tracking, geocoding, routes/travel, tickets, production access/migration/authentication/deployment, and notification-centre redesign.
+- **Required phase-exit journey:** Phase 9: confirmed certification/document journey only after its product decisions are approved.
 
 ## Master phase status
 
@@ -65,8 +65,8 @@ Progress measures completed roadmap sub-phases only. It is **not** engineering e
 | 4 | Scheduling, review, and publication | `COMPLETED` | 11 | 12 | 92% | 4.5 deferred: broader assignment-type expansion is outside approved V1 | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phases 2–3 operational records and employee TEAM visibility | None for approved V1 | [Phase 4 report]; [Phase 4 decisions] |
 | 5 | Leave and availability | `COMPLETED` | 10 | 10 | 100% | Completed bounded leave journey | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phase 4 | None | [Phase 5 report]; [Phase 5 decisions] |
 | 6 | Skills and operational capabilities | `COMPLETED` | 8 | 8 | 100% | Completed controlled-skills and non-blocking warning journey | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phases 2–5 | None | [Phase 6 report]; [Phase 6 decisions] |
-| 7 | Coverage and replacement | `NOT_STARTED` | 0 | 11 | 0% | 7.1 Coverage-rule foundation | 2026-09-01 | — | — | Phases 4–6 | Schedule, leave, and connected skills unavailable | None located |
-| 8 | Static planning map | `NOT_STARTED` | 0 | 10 | 0% | 8.1 Address precision and privacy decision | 2026-09-01 | — | — | Phases 4–7 | Published schedule and privacy decision unavailable | None located |
+| 7 | Coverage and replacement | `COMPLETED` | 11 | 11 | 100% | Completed bounded coverage/replacement journey | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phases 4–6 | None | [Phase 7 report] |
+| 8 | Static planning map | `COMPLETED` | 10 | 10 | 100% | Completed static Published-planning map journey | 2026-09-03 | 2026-09-02 | 2026-09-03 | Phases 4–7 | None | [Phase 8 report]; [Phase 8 decisions] |
 | 9 | Certifications, CVs, portfolios, and files | `PARTIAL` | 0 | 10 | 0% | 9.1 Certification records | 2026-09-01 | — | — | Phase 2 profile journey | Intentionally deferred; existing structures must only be preserved | [Phase 2 database] |
 | 10 | Notes, discussions, notification centre, and audit interface | `PARTIAL` | 0 | 9 | 0% | 10.1 Shared client and project notes | 2026-09-01 | — | — | Source workflows | Source records/workflows unavailable | [schema] |
 | 11 | Dashboards, reports, and exports | `NOT_STARTED` | 0 | 9 | 0% | 11.1 Super Admin dashboard | 2026-09-01 | — | — | Trustworthy source journeys | Source data unavailable | None located |
@@ -181,32 +181,32 @@ Scope note: `COMPLETED` only for the narrowly defined secure foundation journey;
 
 | ID | Sub-phase | Status | Last status date | Started date | Completed date | Dependencies | Implementation state | QA state | Exit evidence required | Current evidence | Blocker/notes |
 | -- | --------- | ------ | ---------------- | ------------ | -------------- | ------------ | -------------------- | -------- | ---------------------- | ---------------- | ------------- |
-| 7.1 | Coverage-rule foundation | `NOT_STARTED` | 2026-09-01 | — | — | Phases 4–6 | Coverage shell only | Shell route E2E only | Migrated rule model | [navigation] | — |
-| 7.2 | Requirements by skill, count, client, project, location, date, and time | `NOT_STARTED` | 2026-09-01 | — | — | 7.1 | Documentation only | None located | Scoped requirement model | None located | — |
-| 7.3 | Explainable coverage engine | `NOT_STARTED` | 2026-09-01 | — | — | 7.1–7.2 | Documentation only | None located | Independently tested findings | None located | — |
-| 7.4 | Leave and schedule coverage integration | `NOT_STARTED` | 2026-09-01 | — | — | 5.10, 7.3 | Documentation only | None located | Current-data integration | None located | — |
-| 7.5 | Scarce-skill and zero-coverage warnings | `NOT_STARTED` | 2026-09-01 | — | — | 7.3–7.4 | Documentation only | None located | Actionable warnings | None located | — |
-| 7.6 | Replacement candidate search and explanation | `NOT_STARTED` | 2026-09-01 | — | — | 7.3–7.5 | Documentation only | None located | Advisory, explainable candidates | None located | — |
-| 7.7 | Admin replacement request | `NOT_STARTED` | 2026-09-01 | — | — | 7.6 | Replacement shell only | Shell route E2E only | Scoped request workflow | [navigation] | — |
-| 7.8 | Super Admin approval/change/rejection | `NOT_STARTED` | 2026-09-01 | — | — | 7.7 | Documentation only | None located | Super Admin final decision | None located | — |
-| 7.9 | Schedule update | `NOT_STARTED` | 2026-09-01 | — | — | 7.8 | Documentation only | None located | Correct Draft/Published update | None located | — |
-| 7.10 | Audit, notification, transaction, override, and concurrency behavior | `NOT_STARTED` | 2026-09-01 | — | — | 7.7–7.9 | Foundation patterns only | Foundation integration only | Atomic governed workflow | [audit service] | — |
-| 7.11 | Complete coverage/replacement E2E QA | `NOT_STARTED` | 2026-09-01 | — | — | 7.1–7.10 | Documentation only | None located | Gap-to-decision journey | None located | — |
+| 7.1 | Coverage-rule foundation | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phases 4–6 | Reused independent staffing requirements; additive request migration | Migration/service tests | Migrated rule model | [Phase 7 report] | No parallel rules engine. |
+| 7.2 | Requirements by skill, count, client, project, location, date, and time | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.1 | Same-date/interval C/P/L evaluation; assignment skill qualification warning | Service tests | Scoped requirement model | [Phase 7 decisions] | Counts are never summed. |
+| 7.3 | Explainable coverage engine | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.1–7.2 | Server gaps with source, count, skill, and context | Unit/integration | Independently tested findings | [Phase 7 report] | Non-blocking only. |
+| 7.4 | Leave and schedule coverage integration | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 5.10, 7.3 | Approved leave and overlap eliminate candidate/count eligibility | PostgreSQL tests | Current-data integration | [Phase 7 report] | Reuses Phase 4/5 checks. |
+| 7.5 | Scarce-skill and zero-coverage warnings | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.3–7.4 | Explainable count and qualification gaps in Super Admin schedule review | Browser/service | Actionable warnings | [Phase 7 report] | No scarcity or sufficiency claim. |
+| 7.6 | Replacement candidate search and explanation | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.3–7.5 | Unranked TEAM-visible active/skill/leave/overlap candidates | Privacy/service | Advisory, explainable candidates | [Phase 7 decisions] | No ranking. |
+| 7.7 | Admin replacement request | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.6 | Both approved intents persisted with versions | Service/component | Scoped request workflow | [Phase 7 report] | Employee excluded. |
+| 7.8 | Super Admin approval/change/rejection | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.7 | Super Admin-only decision with eligible nominee replacement | Authority tests | Super Admin final decision | [Phase 7 report] | Requester notification only. |
+| 7.9 | Schedule update | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.8 | Draft direct, Proposed→Draft, Published→Draft revision | PostgreSQL lifecycle tests | Correct Draft/Published update | [Phase 7 report] | Never auto-publishes. |
+| 7.10 | Audit, notification, transaction, override, and concurrency behavior | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.7–7.9 | Transactional sanitized audit/notification; advisory gap lock and versions | Rollback/stale tests | Atomic governed workflow | [Phase 7 report] | No override workflow. |
+| 7.11 | Complete coverage/replacement E2E QA | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 7.1–7.10 | Desktop/mobile guarded journey, component, service, migration/type/build | Playwright desktop/mobile | Gap-to-decision journey | [Phase 7 report] | Local loopback only. |
 
 ## Phase 8 — Static planning map
 
 | ID | Sub-phase | Status | Last status date | Started date | Completed date | Dependencies | Implementation state | QA state | Exit evidence required | Current evidence | Blocker/notes |
 | -- | --------- | ------ | ---------------- | ------------ | -------------- | ------------ | -------------------- | -------- | ---------------------- | ---------------- | ------------- |
-| 8.1 | Address precision and privacy decision | `BLOCKED` | 2026-09-01 | — | — | Product decision | Documentation only | None located | Confirmed privacy decision | [decisions](DECISIONS_AND_CONSTRAINTS.md) | Blocker: exact address precision/permission unresolved; decision required; other phases may continue. |
-| 8.2 | Provider-neutral map adapter | `NOT_STARTED` | 2026-09-01 | — | — | 8.1 | Unconfigured placeholder only | None located | Configured provider-neutral adapter | None located | Placeholder does not count as implementation. |
-| 8.3 | Stored employee planning locations | `NOT_STARTED` | 2026-09-01 | — | — | 8.1, Phase 2 | Documentation only | None located | Protected location model | None located | — |
-| 8.4 | Client/project/location coordinates | `NOT_STARTED` | 2026-09-01 | — | — | 8.1, Phase 3 | Documentation only | None located | Operational coordinates | None located | — |
-| 8.5 | Published schedule map data | `NOT_STARTED` | 2026-09-01 | — | — | Phase 4 | Documentation only | None located | Published-only map query | None located | — |
-| 8.6 | Selected-date and period filtering | `NOT_STARTED` | 2026-09-01 | — | — | 8.5 | Documentation only | None located | Filtered planning data | None located | — |
-| 8.7 | Employee, skill, client, project, location, availability, leave, and coverage filters | `NOT_STARTED` | 2026-09-01 | — | — | 5–7, 8.6 | Documentation only | None located | Scoped filter behavior | None located | — |
-| 8.8 | Admin scope and Employee exclusion | `NOT_STARTED` | 2026-09-01 | — | — | 8.5 | Foundation authorization only | Foundation negative E2E | Domain map authorization | [P1 certification] | — |
-| 8.9 | Explicit non-live-tracking wording | `NOT_STARTED` | 2026-09-01 | — | — | 8.5 | Documentation only | None located | Visible non-live statement | None located | — |
-| 8.10 | Privacy, scope, responsive, and E2E QA | `NOT_STARTED` | 2026-09-01 | — | — | 8.1–8.9 | Documentation only | None located | Full map journey QA | None located | — |
+| 8.1 | Address precision and privacy decision | `COMPLETED` | 2026-09-03 | 2026-09-02 | 2026-09-03 | Product decision | Exact Super Admin/coarse Admin projection | Unit/service/browser | Confirmed privacy decision | [Phase 8 decisions] | No raw Admin coordinate/address projection. |
+| 8.2 | Provider-neutral map adapter | `COMPLETED` | 2026-09-03 | 2026-09-02 | 2026-09-03 | 8.1 | Browser-only OSM raster adapter | Component/browser | Attribution and fallback | [Phase 8 report] | Server makes no provider request. |
+| 8.3 | Stored employee planning locations | `COMPLETED` | 2026-09-03 | 2026-09-02 | 2026-09-03 | 8.1, Phase 2 | Additive protected coordinate store | Migration/service | Protected location model | [Phase 8 report] | Missing coordinates omit marker. |
+| 8.4 | Client/project/location coordinates | `COMPLETED` | 2026-09-03 | 2026-09-02 | 2026-09-03 | 8.1, Phase 3 | Existing operational coordinate reuse | Service/browser | Authorized worksite markers | [Phase 8 report] | No geocoding. |
+| 8.5 | Published schedule map data | `COMPLETED` | 2026-09-03 | 2026-09-02 | 2026-09-03 | Phase 4 | Current Published server projection | PostgreSQL/browser | Published-only map query | [Phase 8 report] | Draft/Proposed excluded. |
+| 8.6 | Selected-date and period filtering | `COMPLETED` | 2026-09-03 | 2026-09-02 | 2026-09-03 | 8.5 | Dubai selected-date/filter validation | Unit/service/browser | Filtered planning data | [Phase 8 report] | Invalid IDs fail safely. |
+| 8.7 | Employee, skill, client, project, location, availability, leave, and coverage filters | `COMPLETED` | 2026-09-03 | 2026-09-02 | 2026-09-03 | 5–7, 8.6 | Same-projection options and facts | Service/browser | Scoped filter behavior | [Phase 8 report] | No enumeration. |
+| 8.8 | Admin scope and Employee exclusion | `COMPLETED` | 2026-09-03 | 2026-09-02 | 2026-09-03 | 8.5 | Strict Team × operational scope | PostgreSQL/browser | Domain map authorization | [Phase 8 report] | Employee gets 404/no navigation. |
+| 8.9 | Explicit non-live-tracking wording | `COMPLETED` | 2026-09-03 | 2026-09-02 | 2026-09-03 | 8.5 | Persistent visible disclaimer | Component/browser | Visible non-live statement | [Phase 8 report] | Static association, never route. |
+| 8.10 | Privacy, scope, responsive, and E2E QA | `COMPLETED` | 2026-09-03 | 2026-09-02 | 2026-09-03 | 8.1–8.9 | Unit/component/PostgreSQL/desktop/mobile evidence | Playwright desktop/mobile | Full map journey QA | [Phase 8 report] | Loopback fictional data only. |
 
 ## Phase 9 — Certifications, CVs, portfolios, and files
 

@@ -1,0 +1,6 @@
+/** @vitest-environment jsdom */
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { PlanningMapClient } from "@/modules/maps/planning-map-client";
+const projection = { selectedDate: "2026-09-02", invalidFilter: false, role: "ADMIN" as const, lastPublishedAt: null, noCoordinateCount: 0, filterOptions: { employees: [], skills: [], clients: [], projects: [], locations: [] }, assignments: [{ id: "a", employeeId: "e", employeeName: "Fictional Employee", employeeCoordinate: { latitude: 25.2125, longitude: 55.2625 }, employeePrecision: "coarse" as const, worksite: { id: "l", name: "Fictional Site", coordinate: { latitude: 25.2, longitude: 55.27 } }, client: { id: "c", name: "Fictional Client" }, project: { id: "p", name: "Fictional Project" }, unavailable: true, skills: [], coverageGap: true, label: "Fictional" }] };
+describe("Phase 8 planning map fallback", () => { it("keeps the accessible list and coarse detail when tiles fail", () => { render(<PlanningMapClient projection={projection} />); fireEvent.error(document.querySelector("img")!); expect(screen.getByRole("alert")).toHaveTextContent("tiles could not be loaded"); expect(screen.getByRole("button", { name: /Fictional Employee/ })).toBeVisible(); expect(screen.getAllByText(/Coarse planning area/)).toHaveLength(2); }); });

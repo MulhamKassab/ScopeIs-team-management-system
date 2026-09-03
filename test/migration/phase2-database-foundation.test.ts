@@ -113,8 +113,8 @@ describe("Phase 2 database foundation reconciliation", () => {
     expect(first.before.state).toBe("A");
     expect(first.after?.state).toBe("D");
     expect(first.after?.pending).toEqual([]);
-    expect(first.after?.fingerprint.tables).toHaveLength(27);
-    expect(first.after?.ledger.rows).toHaveLength(8);
+    expect(first.after?.fingerprint.tables).toHaveLength(29);
+    expect(first.after?.ledger.rows).toHaveLength(10);
     const second = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
     expect(second.before.state).toBe("D");
     expect(second.after?.state).toBe("D");
@@ -129,7 +129,7 @@ describe("Phase 2 database foundation reconciliation", () => {
     expect((await inspect(url)).state).toBe("B");
     const applied = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
     expect(applied.after?.state).toBe("D");
-    expect(applied.after?.ledger.rows).toHaveLength(8);
+    expect(applied.after?.ledger.rows).toHaveLength(10);
     expect((await reconcileMigrationState(url, { allowDisposableTest: true })).before.state).toBe("D");
   }));
 
@@ -140,7 +140,7 @@ describe("Phase 2 database foundation reconciliation", () => {
     expect((await inspect(url)).state).toBe("C");
     const applied = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
     expect(applied.after?.state).toBe("D");
-    expect(applied.after?.ledger.rows).toHaveLength(8);
+    expect(applied.after?.ledger.rows).toHaveLength(10);
     expect((await reconcileMigrationState(url, { allowDisposableTest: true, apply: true })).after?.state).toBe("D");
   }));
 
