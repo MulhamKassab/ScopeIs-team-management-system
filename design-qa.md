@@ -41,6 +41,35 @@
 
 final result: passed
 
+---
+
+# Motion system and living interface R1 — design QA
+
+## Source and method
+
+- Visual baseline: the existing ScopeIs Preview system and the approved Schedule reference already recorded in this file.
+- Implementation: local isolated `preview` worktree, exercised with the selected Codex in-app Browser.
+- The browser's available viewport was 1280 × 720. Existing R2 captures remain the 1440 × 900 / 390 × 844 visual evidence; this pass concentrated on interactive transitions, focus, scope, and error state rather than treating a screenshot as proof of motion.
+
+## Results
+
+| Surface | Result |
+| --- | --- |
+| Motion language | Passed — 100/160/240/380 ms shared timing, small transform distances, property-specific transitions, capped reveal groups, and no continuous decorative motion. |
+| Shell and controls | Passed — active navigation, hover/press feedback, persona changes, dark-theme switch, and route content transitions were exercised. |
+| Schedules | Passed — Schedule 1, 2, and 3 switched without a layout flash; week navigation and the selection/warning treatment retained a dense readable grid. |
+| Detail dialog | Passed — open dialog focuses Close, has `role="dialog"`, and Escape closes it without console error. |
+| Planning map | Passed — skeleton-to-ready state, OSM attribution, Leaflet markers/zoom, fit/reset, marker popup, and project/location links worked. Markers represent no live movement. |
+| Scope and privacy | Passed — Ava showed no Team Bravo map label; Cora's navigation omitted Planning map and direct navigation did not disclose map content. |
+| Reduced motion | Passed in implementation/test — CSS media query disables reveal/shimmer/warning/marker motion and Motion uses the user preference. |
+| Errors and overflow | Passed — no application console errors were reported; document width did not exceed the available 1280 px viewport. |
+
+## Limitation
+
+The selected in-app Browser did not expose a viewport-resize API during this pass. The live interactive motion checks therefore used 1280 × 720; the existing R2 mobile evidence remains valid for responsive layout, while the new reduced-motion behavior is automated and declarative.
+
+final result: passed
+
 ## Follow-up: busy fixture week and map routes
 
 - The same schedule surface now derives 82 additional deterministic fixture assignments across 14–18 September 2026. The global board contains 89 assignments in total; this adds density without adding a second data graph or a persistence claim.

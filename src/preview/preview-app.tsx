@@ -12,10 +12,11 @@ import {
 import { previewRoutes, visiblePreviewRoutes } from "@/preview/preview-routes";
 import { ScheduleWorkspace } from "@/preview/schedule-workspace";
 import { RichPreviewModule } from "@/preview/rich-operational-workspaces";
+import { AnimatedCounter, LoadingSkeleton, MotionProvider, PageTransition } from "@/preview/motion-system";
 
 const InteractivePlanningMap = dynamic(
   () => import("@/preview/interactive-planning-map").then((module) => module.InteractivePlanningMap),
-  { ssr: false, loading: () => <p className="demo-callout">Loading the fictional planning canvas…</p> },
+  { ssr: false, loading: () => <LoadingSkeleton variant="map" label="Loading the fictional planning map" /> },
 );
 
 
@@ -24,7 +25,7 @@ function subjectName(id: string) { return employeeFor(id)?.name ?? "Unknown fict
 function clientName(id: string) { return clients.find((client) => client.id === id)?.name ?? "Fictional client"; }
 function href(path: string, persona: PreviewPersona) { return `${path}?persona=${persona.id}`; }
 
-export function PreviewApp() { return <Suspense fallback={<main className="login-page"><p className="preview-notice">Loading fictional Preview…</p></main>}><PreviewAppContent /></Suspense>; }
+export function PreviewApp() { return <MotionProvider><Suspense fallback={<main className="login-page"><LoadingSkeleton label="Loading fictional Preview" /></main>}><PreviewAppContent /></Suspense></MotionProvider>; }
 
 function PreviewAppContent() {
   const pathname = usePathname();
@@ -50,7 +51,7 @@ function PreviewAppContent() {
     </aside>
     <div className="preview-workspace">
       <header className="preview-header"><button className="icon-button mobile-menu" aria-label="Open navigation" onClick={() => setMenuOpen(!menuOpen)}>☰</button><div><strong>ScopeIs Preview</strong><small>{previewConfig.date}</small></div><div className="header-tools"><label className="persona-select"><span className="visually-hidden">Preview persona</span><select aria-label="Preview persona" value={persona.id} onChange={(event) => router.push(href(pathname, selectedPersona(event.target.value)))}>{personas.map((candidate) => <option key={candidate.id} value={candidate.id}>{candidate.name} — {friendlyRole(candidate.role)}</option>)}</select></label><button className="icon-button" aria-label={`Use ${theme === "light" ? "dark" : "light"} theme`} onClick={() => setTheme(theme === "light" ? "dark" : "light")}>{theme === "light" ? "◐" : "☼"}</button><Link className="logout-link" href="/login">Change persona</Link></div></header>
-      <main id="preview-content" className="preview-content"><PageContent pathname={pathname} persona={persona} /></main>
+      <main id="preview-content" className="preview-content" tabIndex={-1}><PageTransition routeKey={pathname}><PageContent pathname={pathname} persona={persona} /></PageTransition></main>
     </div>
   </div>;
 }
@@ -103,7 +104,7 @@ function Dashboard({ persona }: { persona: PreviewPersona }) {
   const scopedAssignments = visibleAssignments(persona); const counts = dashboardCounts(persona);
   return <><PageHeading eyebrow="Overview" title={`${persona.name.split(" ")[0]}'s dashboard`}>Role-aware fixture data for {persona.role === "SUPER_ADMIN" ? "both teams" : persona.role === "ADMIN" ? `Team ${persona.team === "alpha" ? "Alpha" : "Bravo"}` : "your published work"}.</PageHeading><Notice>{previewConfig.label}. Counts reconcile with the fixtures shown in this Preview.</Notice><section className="metric-grid"><Metric label="Visible employees" value={String(counts.employees)} note={persona.role === "SUPER_ADMIN" ? "18 across two teams" : "filtered by role and scope"} /><Metric label="Published assignments" value={String(counts.publishedAssignments)} note="September 2026" /><Metric label="Leave items" value={String(counts.leave)} note={persona.role === "EMPLOYEE" ? "your leave history" : "privacy-filtered"} /><Metric label="Coverage attention" value={String(counts.coverage)} note="fixture planning findings" /></section><section className="two-column"><Panel title="Today’s planning"><ul className="timeline">{scopedAssignments.slice(0, 4).map((assignment) => <li key={assignment.id}><strong>{subjectName(assignment.employeeId)}</strong><span>{assignment.type} · {assignment.time}</span><small>{assignment.location} · <Pill kind={assignment.state === "Published" ? "good" : "warning"}>{assignment.state}</Pill></small></li>)}</ul></Panel><Panel title="Attention items">{persona.role === "EMPLOYEE" ? <ul className="timeline"><li><strong>Published schedule only</strong><span>Draft and Proposed planning are intentionally not available to Employee views.</span></li><li><strong>Portfolio review</strong><span>Your fictional portfolio update is awaiting review.</span></li></ul> : <ul className="timeline">{inScope(coverageGaps, persona).map((gap) => <li key={gap.id}><strong>{gap.title}</strong><span>{gap.skill} · {gap.date}</span><small>{gap.reason}</small></li>)}</ul>}</Panel></section><Panel title="Demonstration controls"><div className="button-row">{persona.role === "SUPER_ADMIN" ? <><DemoAction>Publish schedule</DemoAction><DemoAction>Approve leave</DemoAction><DemoAction>Override warning</DemoAction></> : <DemoAction>Open workflow preview</DemoAction>}<span className="muted">Actions are intentionally disabled; this demo never stores a result.</span></div></Panel></>;
 }
-function Metric({ label, value, note }: { label: string; value: string; note: string }) { return <article className="metric"><small>{label}</small><strong>{value}</strong><span>{note}</span></article>; }
+function Metric({ label, value, note }: { label: string; value: string; note: string }) { return <article className="metric"><small>{label}</small><strong><AnimatedCounter value={value} /></strong><span>{note}</span></article>; }
 function Panel({ title, children }: { title: string; children: React.ReactNode }) { return <section className="panel"><h2>{title}</h2>{children}</section>; }
 
 function EmployeeDirectory({ persona }: { persona: PreviewPersona }) {

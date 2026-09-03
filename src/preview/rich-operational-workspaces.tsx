@@ -1,5 +1,6 @@
 "use client";
 
+import { m } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { employeeFor, employees, type PreviewPersona } from "@/preview/preview-data";
 import {
@@ -18,7 +19,7 @@ function Notice({ children }: { children: React.ReactNode }) { return <p classNa
 function Overlay({ title, children, onClose }: { title: string; children: React.ReactNode; onClose: () => void }) {
   const closeRef = useRef<HTMLButtonElement>(null); const dialogRef = useRef<HTMLElement>(null);
   useEffect(() => { closeRef.current?.focus(); const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") { onClose(); return; } if (event.key !== "Tab") return; const focusable = [...(dialogRef.current?.querySelectorAll<HTMLElement>('button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])') ?? [])]; if (!focusable.length) return; const first = focusable[0]; const last = focusable[focusable.length - 1]; if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); } else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); } }; window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); }, [onClose]);
-  return <div className="preview-overlay-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}><section ref={dialogRef} className="preview-overlay" role="dialog" aria-modal="true" aria-label={title}><header><div><p className="eyebrow">Operational detail</p><h2>{title}</h2></div><button ref={closeRef} className="button secondary" type="button" onClick={onClose}>Close</button></header>{children}</section></div>;
+  return <m.div className="preview-overlay-backdrop" role="presentation" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}><m.section ref={dialogRef} className="preview-overlay" role="dialog" aria-modal="true" aria-label={title} initial={{ opacity: 0, y: 12, scale: 0.99 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 6, scale: 0.99 }}><header><div><p className="eyebrow">Operational detail</p><h2>{title}</h2></div><button ref={closeRef} className="button secondary" type="button" onClick={onClose}>Close</button></header>{children}</m.section></m.div>;
 }
 
 function EmployeeOverlay({ employeeId, persona, onClose }: { employeeId: string; persona: PreviewPersona; onClose: () => void }) {

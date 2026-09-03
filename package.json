@@ -12,12 +12,13 @@
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
-    "test:preview": "vitest run test/unit/preview-fixture.test.ts",
+    "test:preview": "vitest run test/unit/preview-fixture.test.ts test/unit/preview-motion.test.ts",
     "test": "npm run test:preview",
     "test:all": "npm run lint && npm run typecheck && npm run test:preview && npm run build"
   },
   "dependencies": {
     "leaflet": "^1.9.4",
+    "motion": "^13.2.0",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
