@@ -13,7 +13,10 @@ const manifestPath = join(migrationsFolder, "meta", "adoption-fingerprints.json"
 const journalPath = join(migrationsFolder, "meta", "_journal.json");
 
 export async function loadAdoptionManifest() {
-  return JSON.parse(await readFile(manifestPath, "utf8"));
+  const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+  // Phase 8 is additive: retain immutable Phase 7 table fingerprints and add the new table fingerprint.
+  manifest.states.phase8StaticPlanningMap.tableHashes = { ...manifest.states.phase7CoverageReplacement.tableHashes, ...manifest.states.phase8StaticPlanningMap.tableHashes };
+  return manifest;
 }
 
 export async function validateRepositoryMigrationHistory() {
@@ -54,6 +57,7 @@ function expectedStage(manifest, count) {
   if (count === 7) return manifest.states.phase5LeaveAvailability;
   if (count === 8) return manifest.states.phase6SkillsCapabilities;
   if (count === 9) return manifest.states.phase7CoverageReplacement;
+  if (count === 10) return manifest.states.phase8StaticPlanningMap;
   return null;
 }
 

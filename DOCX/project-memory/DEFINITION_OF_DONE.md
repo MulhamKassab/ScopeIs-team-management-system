@@ -1,5 +1,9 @@
 # Definition of Done
 
+## Phase 8 — Static planning map
+
+Phase 8 is complete only when management receives one server-authorized, selected-Dubai-date projection of current Published assignments, with the strict TEAM × operational-scope intersection applied consistently to markers, associations, filters, counts, rows, coverage facts, and last-publication timestamp. Exact employee coordinates are Super-Admin-only; scoped Admin coordinates are deterministic coarse markers; employees are denied. OSM tiles are browser-only with attribution and an accessible failure/list fallback. The map explicitly says it is not live tracking and contains no GPS, movement history, geocoding, routes, travel calculation, tickets, deployment, production access, or automatic staffing. Its migration, focused unit/component/PostgreSQL service, guarded desktop/mobile browser, targeted lint, typecheck, safe build, fictional seed/development smoke, manual QA, and diff evidence are recorded in the Phase 8 report; unrelated user-owned repository-wide lint interference is not represented as a Phase 8 pass.
+
 ## Phase 7 — Coverage and replacement
 
 Phase 7 is complete only when independent operational staffing rules produce server-calculated, explainable non-blocking gaps; authorized managers can request the two approved intents; Super Admin alone decides; and schedule effects remain Draft-safe without Published mutation or auto-publication. Candidate facts are limited to active status, recorded skills, Approved leave, overlap, operational scope, and TEAM visibility. No coverage override, ranking, certification gate, or sufficiency claim is introduced.

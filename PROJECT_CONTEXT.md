@@ -16,4 +16,6 @@ Phase 4 V1 is implemented as a PostgreSQL-backed Client-month Draft → Proposed
 
 Phase 7 adds bounded, non-blocking coverage/replacement workflow: independent staffing rules calculate explainable gaps, scoped TEAM-visible managers request controlled changes, and Super Admin applies Draft-safe effects only. No ranking, override, automatic publication, production access, or deployment is introduced.
 
+Phase 8 adds a management-only selected-date static planning map. It derives only current Published assignments in `Asia/Dubai`, applies strict TEAM × operational scope server-side, returns exact stored employee planning markers only to Super Admin and deterministic coarse markers to scoped Admin, and uses browser-only OSM tiles plus an accessible fallback. It never tracks anyone and introduces no GPS, routes, travel calculation, geocoding, tickets, production access, or deployment.
+
 Git custody was established on 2026-08-27: [`origin/main`](https://github.com/MulhamKassab/ScopeIs-team-management-system/tree/main) contains initial commit `6e0c0046aef366115ec90caf394f5950f7f043bb`. No deployment occurred.

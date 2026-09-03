@@ -77,6 +77,16 @@ export const employeeProfiles = pgTable("employee_profiles", {
   workingPattern: text("working_pattern"),
 }, (table) => [foreignKey({ name: "employee_profiles_user_id_fkey", columns: [table.userId], foreignColumns: [users.id] }).onDelete("restrict"), foreignKey({ name: "employee_profiles_designation_id_fkey", columns: [table.designationId], foreignColumns: [designations.id] }).onDelete("restrict"), foreignKey({ name: "employee_profiles_manager_user_id_fkey", columns: [table.managerUserId], foreignColumns: [users.id] }).onDelete("restrict"), unique("employee_profiles_employee_code_key").on(table.employeeCode), index("employee_profiles_team_idx").on(table.team), check("employee_profiles_version_check", sql`${table.version} > 0`), check("employee_profiles_working_pattern_length_check", sql`${table.workingPattern} is null or char_length(${table.workingPattern}) <= 120`)]);
 
+/** Exact employee planning coordinates are protected source data. Map reads project a coarse marker for scoped Admins. */
+export const employeePlanningLocations = pgTable("employee_planning_locations", {
+  employeeUserId: text("employee_user_id").primaryKey(), latitude: doublePrecision("latitude").notNull(), longitude: doublePrecision("longitude").notNull(),
+  version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [
+  foreignKey({ name: "employee_planning_locations_employee_user_id_fkey", columns: [table.employeeUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  check("employee_planning_locations_coordinate_check", sql`${table.latitude} between -90 and 90 and ${table.longitude} between -180 and 180`),
+  check("employee_planning_locations_version_check", sql`${table.version} > 0`),
+]);
+
 /** One locked row allocates temporary Phase 2 employee codes without browser input or COUNT/MAX races. */
 export const employeeCodeSequence = pgTable("employee_code_sequence", {
   singleton: boolean("singleton").primaryKey().notNull().default(true),
@@ -272,6 +282,7 @@ export const employeeProfileRelations = relations(employeeProfiles, ({ one }) =>
   manager: one(users, { fields: [employeeProfiles.managerUserId], references: [users.id], relationName: "employeeProfileManager" }),
   designation: one(designations, { fields: [employeeProfiles.designationId], references: [designations.id] }),
 }));
+export const employeePlanningLocationRelations = relations(employeePlanningLocations, ({ one }) => ({ employee: one(users, { fields: [employeePlanningLocations.employeeUserId], references: [users.id] }) }));
 export const employeeSkillRelations = relations(employeeSkills, ({ one }) => ({ employee: one(users, { fields: [employeeSkills.employeeUserId], references: [users.id] }), skill: one(skills, { fields: [employeeSkills.skillId], references: [skills.id] }) }));
 export const employeeEvidenceRelations = relations(employeeEvidence, ({ many, one }) => ({
   owner: one(users, { fields: [employeeEvidence.ownerUserId], references: [users.id], relationName: "evidenceOwner" }),

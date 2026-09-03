@@ -12,7 +12,7 @@ export const modules: Record<ModuleKey, ModuleDefinition> = {
   projects: { key: "projects", href: "/projects", label: "Projects", purpose: "Authorized Projects and their deliberately linked Locations.", phase: 3, capability: "module:projects:view" },
   locations: { key: "locations", href: "/locations", label: "Locations", purpose: "Authorized same-client operational sites; no map or live tracking.", phase: 3, capability: "module:locations:view" },
   schedule: { key: "schedule", href: "/schedule", label: "Schedule", purpose: "Monthly Draft, Proposed, Published scheduling and My Schedule.", phase: 4, capability: "module:schedule:view", mobilePrimary: true },
-  map: { key: "map", href: "/map", label: "Planning map", purpose: "The static planning map will be introduced in Phase 5.", phase: 5, capability: "module:map:view" },
+  map: { key: "map", href: "/map", label: "Planning map", purpose: "Published, selected-date static planning facts; never live tracking.", phase: 8, capability: "module:map:view" },
   leave: { key: "leave", href: "/leave", label: "Leave", purpose: "Annual leave requests, decisions, balances, and approved unavailability.", phase: 5, capability: "module:leave:view", mobilePrimary: true },
   coverage: { key: "coverage", href: "/coverage", label: "Coverage", purpose: "Explainable independent staffing and qualification gaps.", phase: 7, capability: "module:coverage:view" },
   replacements: { key: "replacements", href: "/replacements", label: "Replacements", purpose: "Super Admin-reviewed replacement requests with Draft-only effects.", phase: 7, capability: "module:replacements:view", mobilePrimary: true },

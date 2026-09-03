@@ -2,10 +2,12 @@
 
 - [Phase 7 coverage and replacement decisions](project-memory/PHASE_7_COVERAGE_REPLACEMENT_DECISIONS.md)
 - [Phase 7 implementation report](phase-reports/SCOPEIS_PHASE_7_COVERAGE_AND_REPLACEMENT_JOURNEY_R1.md)
+- [Phase 8 static planning map decisions](project-memory/PHASE_8_STATIC_PLANNING_MAP_DECISIONS.md)
+- [Phase 8 implementation report](phase-reports/SCOPEIS_PHASE_8_STATIC_PLANNING_MAP_JOURNEY_R1.md)
 
 ## Purpose and status
 
-This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is `COMPLETED` only in its narrow foundation scope; Phase 2 — Employee management journey is `COMPLETED` (11/11). Phase 3's scoped implementation remains `BLOCKED` only by preserved repository-wide QA interference. Phase 4 scheduling V1, Phase 5 leave, and Phase 6 controlled skills/non-blocking warning journey are `COMPLETED`; coverage and later phases remain deferred/unstarted.
+This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is `COMPLETED` only in its narrow foundation scope; Phase 2 — Employee management journey is `COMPLETED` (11/11). Phase 3's scoped implementation remains `BLOCKED` only by preserved repository-wide QA interference. Phases 4 scheduling V1, 5 leave, 6 controlled skills/non-blocking warning, 7 coverage/replacement, and 8 static planning map are `COMPLETED`; later phases remain deferred/unstarted.
 
 ## Reader path
 

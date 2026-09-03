@@ -10,6 +10,7 @@
     { "idx": 5, "version": "7", "when": 1788411600000, "tag": "0005_phase_4_scheduling", "breakpoints": true },
     { "idx": 6, "version": "7", "when": 1788498000000, "tag": "0006_phase_5_leave_availability", "breakpoints": true },
     { "idx": 7, "version": "7", "when": 1788584400000, "tag": "0007_phase_6_skill_requirements", "breakpoints": true },
-    { "idx": 8, "version": "7", "when": 1788670800000, "tag": "0008_phase_7_coverage_replacements", "breakpoints": true }
+    { "idx": 8, "version": "7", "when": 1788670800000, "tag": "0008_phase_7_coverage_replacements", "breakpoints": true },
+    { "idx": 9, "version": "7", "when": 1788757200000, "tag": "0009_phase_8_static_planning_map", "breakpoints": true }
   ]
 }
