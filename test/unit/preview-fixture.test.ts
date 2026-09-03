@@ -5,7 +5,7 @@ import {
   locations, notes, notifications, personas, planningCoordinates, previewConfig, projects, replacements,
   selectedPersona, visibleAssignments, visibleDiscussions, visibleEmployees, visibleLeave, visibleNotes,
 } from "@/preview/preview-data";
-import { mapDates, planningMapAssignments } from "@/preview/preview-map-data";
+import { mapDates, planningMapAssignments, planningMapWorksites } from "@/preview/preview-map-data";
 import { previewRoutes, visiblePreviewRoutes } from "@/preview/preview-routes";
 
 describe("database-free Preview fixtures", () => {
@@ -71,6 +71,21 @@ describe("database-free Preview fixtures", () => {
       expect(planningMapAssignments(cora, date)).toEqual([]);
     }
     expect(planningMapAssignments(nora, "2026-09-18").every((item) => assignments.some((assignment) => assignment.id === item.id && assignment.state === "Published"))).toBe(true);
+  });
+
+  it("keeps a dense fixture planning week and route-ready worksite popups internally consistent", () => {
+    expect(assignments.length).toBeGreaterThan(80);
+    expect(new Set(assignments.map((assignment) => assignment.id)).size).toBe(assignments.length);
+    const nora = selectedPersona("nora");
+    for (const date of mapDates) {
+      const entries = planningMapAssignments(nora, date);
+      const worksites = planningMapWorksites(entries);
+      expect(entries.length).toBeGreaterThan(4);
+      expect(worksites.length).toBeGreaterThan(1);
+      expect(worksites.every((worksite) => locations.some((location) => location.id === worksite.locationId))).toBe(true);
+      expect(worksites.every((worksite) => projects.some((project) => project.id === worksite.projectId && project.locationId === worksite.locationId))).toBe(true);
+      expect(worksites.reduce((count, worksite) => count + worksite.assignmentCount, 0)).toBe(entries.length);
+    }
   });
 
   it("keeps route coverage, role visibility, and private records consistent", () => {

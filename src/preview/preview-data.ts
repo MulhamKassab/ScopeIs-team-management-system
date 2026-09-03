@@ -99,6 +99,46 @@ export const locations = [
   { id: "loc-al-quoz", name: "Al Quoz workshop", team: "alpha" as Team, city: "Dubai", type: "Workshop", client: "Horizon Retail Holdings", clientId: "client-horizon" },
 ];
 
+const busyWeekDates = ["2026-09-14", "2026-09-15", "2026-09-16", "2026-09-17", "2026-09-18"] as const;
+
+// A stable, fixture-only roster makes the primary weekly planning board feel like a working team,
+// while keeping every relationship inspectable from the same source graph.
+const busyPlanningRoster = [
+  { employeeId: "emp-ava", projectId: "project-clinic", locationId: "loc-business-bay", location: "Business Bay office", time: "09:00–17:00", type: "Scheduled visit", states: ["Proposed", "Proposed", "Published", "Proposed", "Published"] },
+  { employeeId: "emp-ben", projectId: "project-logistics", locationId: "loc-jebel-ali", location: "Jebel Ali operations site", time: "09:00–17:00", type: "Scheduled visit", states: ["Proposed", "Published", "Proposed", "Published", "Proposed"] },
+  { employeeId: "emp-cora", projectId: "project-clinic", locationId: "loc-business-bay", location: "Business Bay office", time: "08:30–16:30", type: "Timed visit", states: ["Published", "Published", "Proposed", "Published", null] },
+  { employeeId: "emp-dan", projectId: "project-logistics", locationId: "loc-jebel-ali", location: "Jebel Ali operations site", time: "09:00–17:00", type: "Recurring assignment", states: ["Published", "Published", "Proposed", "Published", null] },
+  { employeeId: "emp-elias", projectId: "project-retail", locationId: "loc-al-quoz", location: "Al Quoz workshop", time: "09:00–17:00", type: "Full-day assignment", states: ["Published", "Proposed", "Published", "Proposed", null] },
+  { employeeId: "emp-farah", projectId: "project-residence", locationId: "loc-dip", location: "Dubai Investment Park warehouse", time: "08:30–16:30", type: "Scheduled visit", states: ["Proposed", "Published", "Proposed", "Published", "Proposed"] },
+  { employeeId: "emp-gabriel", projectId: "project-retail", locationId: "loc-al-quoz", location: "Al Quoz workshop", time: "Full day", type: "Full-day assignment", states: ["Proposed", "Published", "Proposed", "Published", "Proposed"] },
+  { employeeId: "emp-hana", projectId: "project-finance", locationId: "loc-abu-dhabi", location: "Abu Dhabi branch", time: "09:00–17:00", type: "Scheduled visit", states: ["Published", "Proposed", "Published", "Proposed", "Published"] },
+  { employeeId: "emp-isla", projectId: "project-clinic", locationId: "loc-business-bay", location: "Business Bay office", time: "10:00–18:00", type: "Temporary placement", states: ["Draft", "Proposed", "Draft", "Proposed", "Published"] },
+  { employeeId: "emp-jamal", projectId: "project-logistics", locationId: "loc-jebel-ali", location: "Jebel Ali operations site", time: "08:00–16:00", type: "Timed visit", states: ["Draft", "Proposed", "Published", "Draft", "Proposed"] },
+  { employeeId: "emp-kai", projectId: "project-clinic", locationId: "loc-business-bay", location: "Business Bay office", time: "09:00–17:00", type: "Scheduled visit", states: ["Proposed", "Published", "Proposed", "Published", "Proposed"] },
+  { employeeId: "emp-lina", projectId: "project-residence", locationId: "loc-dip", location: "Dubai Investment Park warehouse", time: "Full day", type: "Full-day assignment", states: ["Proposed", "Published", "Proposed", "Published", "Proposed"] },
+  { employeeId: "emp-malik", projectId: "project-school", locationId: "loc-sharjah", location: "Sharjah service centre", time: "09:00–17:00", type: "Scheduled visit", states: ["Draft", "Proposed", "Published", "Draft", "Proposed"] },
+  { employeeId: "emp-nadia", projectId: "project-finance", locationId: "loc-abu-dhabi", location: "Abu Dhabi branch", time: "10:00–18:00", type: "Temporary placement", states: ["Draft", "Published", "Proposed", "Published", "Proposed"] },
+  { employeeId: "emp-omar", projectId: "project-school", locationId: "loc-sharjah", location: "Sharjah service centre", time: "08:00–16:00", type: "Timed visit", states: ["Proposed", "Published", "Draft", "Proposed", "Published"] },
+  { employeeId: "emp-priya", projectId: "project-logistics", locationId: "loc-jebel-ali", location: "Jebel Ali operations site", time: "On call", type: "On-call assignment", states: ["Published", "Proposed", "Published", "Proposed", "Published"] },
+  { employeeId: "emp-rory", projectId: "project-clinic", locationId: "loc-business-bay", location: "Business Bay office", time: "09:00–17:00", type: "Scheduled visit", states: ["Published", "Draft", "Proposed", "Published", "Proposed"] },
+] as const;
+
+const busyWeekAssignments = busyWeekDates.flatMap((date, dayIndex) => busyPlanningRoster.flatMap((entry) => {
+  const state = entry.states[dayIndex];
+  return state ? [{
+    id: `asg-busy-${date.slice(-2)}-${entry.employeeId.slice(4)}`,
+    employeeId: entry.employeeId,
+    projectId: entry.projectId,
+    locationId: entry.locationId,
+    date,
+    time: entry.time,
+    type: entry.type,
+    state,
+    location: entry.location,
+    warning: "",
+  }] : [];
+}));
+
 export const assignments = [
   { id: "asg-1", employeeId: "emp-cora", projectId: "project-clinic", locationId: "loc-business-bay", date: "2026-09-18", time: "08:30–16:30", type: "Timed visit", state: "Published", location: "Business Bay office", warning: "" },
   { id: "asg-2", employeeId: "emp-elias", projectId: "project-retail", locationId: "loc-al-quoz", date: "2026-09-18", time: "Full day", type: "Full-day assignment", state: "Published", location: "Al Quoz workshop", warning: "" },
@@ -107,6 +147,7 @@ export const assignments = [
   { id: "asg-5", employeeId: "emp-isla", projectId: "project-clinic", locationId: "loc-business-bay", date: "2026-09-21", time: "13:00–17:00", type: "Temporary placement", state: "Draft", location: "Business Bay office", warning: "Missing-skill warning: database support reviewer needed" },
   { id: "asg-6", employeeId: "emp-lina", projectId: "project-residence", locationId: "loc-dip", date: "2026-09-22", time: "Full day", type: "Full-day assignment", state: "Proposed", location: "Dubai Investment Park warehouse", warning: "Unavailable: approved leave" },
   { id: "asg-7", employeeId: "emp-priya", projectId: "project-logistics", locationId: "loc-jebel-ali", date: "2026-09-23", time: "On call", type: "On-call assignment", state: "Published", location: "Jebel Ali operations site", warning: "" },
+  ...busyWeekAssignments,
 ];
 
 // These are approximate fictional planning areas and worksites, never homes or live positions.
@@ -121,6 +162,19 @@ export const planningCoordinates: PlanningCoordinate[] = [
   { id: "coord-emp-elias", entityType: "employee-area", entityId: "emp-elias", latitude: 25.1781, longitude: 55.2441, label: "Elias Noor · approximate planning area" },
   { id: "coord-emp-dan", entityType: "employee-area", entityId: "emp-dan", latitude: 25.0478, longitude: 55.1371, label: "Dan Rowan · approximate planning area" },
   { id: "coord-emp-priya", entityType: "employee-area", entityId: "emp-priya", latitude: 25.0234, longitude: 55.0891, label: "Priya Wells · approximate planning area" },
+  { id: "coord-emp-ava", entityType: "employee-area", entityId: "emp-ava", latitude: 25.1902, longitude: 55.2699, label: "Ava Mercer · approximate planning area" },
+  { id: "coord-emp-ben", entityType: "employee-area", entityId: "emp-ben", latitude: 24.9928, longitude: 55.0631, label: "Ben Iqbal · approximate planning area" },
+  { id: "coord-emp-farah", entityType: "employee-area", entityId: "emp-farah", latitude: 25.0109, longitude: 55.1798, label: "Farah Voss · approximate planning area" },
+  { id: "coord-emp-gabriel", entityType: "employee-area", entityId: "emp-gabriel", latitude: 25.1606, longitude: 55.2359, label: "Gabriel Tan · approximate planning area" },
+  { id: "coord-emp-hana", entityType: "employee-area", entityId: "emp-hana", latitude: 24.4694, longitude: 54.3896, label: "Hana Ortiz · approximate planning area" },
+  { id: "coord-emp-isla", entityType: "employee-area", entityId: "emp-isla", latitude: 25.1991, longitude: 55.2748, label: "Isla Vale · approximate planning area" },
+  { id: "coord-emp-jamal", entityType: "employee-area", entityId: "emp-jamal", latitude: 25.0415, longitude: 55.1198, label: "Jamal Reed · approximate planning area" },
+  { id: "coord-emp-kai", entityType: "employee-area", entityId: "emp-kai", latitude: 25.1947, longitude: 55.2583, label: "Kai Morgan · approximate planning area" },
+  { id: "coord-emp-lina", entityType: "employee-area", entityId: "emp-lina", latitude: 25.0221, longitude: 55.1694, label: "Lina Hayes · approximate planning area" },
+  { id: "coord-emp-malik", entityType: "employee-area", entityId: "emp-malik", latitude: 25.3188, longitude: 55.4436, label: "Malik Chen · approximate planning area" },
+  { id: "coord-emp-nadia", entityType: "employee-area", entityId: "emp-nadia", latitude: 24.4617, longitude: 54.3831, label: "Nadia Price · approximate planning area" },
+  { id: "coord-emp-omar", entityType: "employee-area", entityId: "emp-omar", latitude: 25.3243, longitude: 55.4471, label: "Omar Sloan · approximate planning area" },
+  { id: "coord-emp-rory", entityType: "employee-area", entityId: "emp-rory", latitude: 25.1795, longitude: 55.2552, label: "Rory Blake · approximate planning area" },
 ];
 
 export const leaveRequests = [

@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 import L, { type Map as LeafletMap } from "leaflet";
 import { useEffect, useMemo, useState } from "react";
 import { MapContainer, Marker, Polyline, Popup, TileLayer, useMap } from "react-leaflet";
-import { mapDates, mapFilterOptions, planningMapAssignments, type MapFilters, type PlanningMapAssignment } from "@/preview/preview-map-data";
+import { mapDates, mapFilterOptions, planningMapAssignments, planningMapWorksites, type MapFilters, type PlanningMapAssignment } from "@/preview/preview-map-data";
 import type { PreviewPersona } from "@/preview/preview-data";
 
 const defaultCenter: [number, number] = [25.062, 55.175];
@@ -45,6 +45,10 @@ function labelForDate(date: string) {
   return new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(`${date}T00:00:00Z`));
 }
 
+function previewHref(path: string, persona: PreviewPersona) {
+  return `${path}?persona=${persona.id}`;
+}
+
 export function InteractivePlanningMap({ persona }: { persona: PreviewPersona }) {
   const [date, setDate] = useState<(typeof mapDates)[number]>(mapDates[0]);
   const [filters, setFilters] = useState<MapFilters>({});
@@ -53,6 +57,7 @@ export function InteractivePlanningMap({ persona }: { persona: PreviewPersona })
   const [tilesUnavailable, setTilesUnavailable] = useState(false);
   const options = useMemo(() => mapFilterOptions(persona), [persona]);
   const entries = useMemo(() => planningMapAssignments(persona, date, filters), [persona, date, filters]);
+  const worksites = useMemo(() => planningMapWorksites(entries), [entries]);
   const selected = entries.find((entry) => entry.id === selectedId) ?? entries[0];
 
   useEffect(() => {
@@ -74,7 +79,7 @@ export function InteractivePlanningMap({ persona }: { persona: PreviewPersona })
       <label>Availability<select aria-label="Filter by availability" value={filters.availability ?? ""} onChange={(event) => update("availability", event.target.value)}><option value="">All states</option>{options.availability.map((item) => <option key={item} value={item}>{item}</option>)}</select></label>
       <div className="map-actions"><button className="button secondary" type="button" onClick={() => fitMap(map, entries)}>Fit visible markers</button><button className="button secondary" type="button" onClick={reset}>Reset map</button></div>
     </section>
-    <p className="map-summary"><strong>{entries.length} Published assignment{entries.length === 1 ? "" : "s"}</strong> · {entries.length * 2} planning markers · {persona.role === "SUPER_ADMIN" ? "both authorized teams" : `Team ${persona.team === "alpha" ? "Alpha" : "Bravo"} only`}</p>
+    <p className="map-summary"><strong>{entries.length} Published assignment{entries.length === 1 ? "" : "s"}</strong> · {entries.length + worksites.length} planning markers · {persona.role === "SUPER_ADMIN" ? "both authorized teams" : `Team ${persona.team === "alpha" ? "Alpha" : "Bravo"} only`}</p>
     {tilesUnavailable ? <p className="map-fallback" role="status">Basemap unavailable. The filtered fictional planning list remains available below; no live location data is used.</p> : null}
     <section className="planning-map-shell" aria-label="Interactive published planning map">
       <MapContainer center={defaultCenter} zoom={defaultZoom} scrollWheelZoom className="planning-map" aria-label="Published schedule planning map">
@@ -82,7 +87,7 @@ export function InteractivePlanningMap({ persona }: { persona: PreviewPersona })
         <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" eventHandlers={{ tileerror: () => setTilesUnavailable(true), load: () => setTilesUnavailable(false) }} />
         {entries.map((entry) => <Polyline key={`line-${entry.id}`} positions={[[entry.employeeArea.latitude, entry.employeeArea.longitude], [entry.worksite.latitude, entry.worksite.longitude]]} pathOptions={{ color: entry.id === selected?.id ? "#163b99" : "#6b7b93", weight: entry.id === selected?.id ? 4 : 2, dashArray: "5 7" }} />)}
         {entries.map((entry) => <Marker key={`employee-${entry.id}`} position={[entry.employeeArea.latitude, entry.employeeArea.longitude]} icon={markerIcon("employee", entry.id === selected?.id, entry.employeeInitials)} alt={`${entry.employeeName} approximate planning area`} keyboard eventHandlers={{ click: () => setSelectedId(entry.id) }}><Popup><h2>{entry.employeeName}</h2><p>Approximate fictional planning area · {entry.availability}</p><p>{entry.type} · {entry.time}</p></Popup></Marker>)}
-        {entries.map((entry) => <Marker key={`worksite-${entry.id}`} position={[entry.worksite.latitude, entry.worksite.longitude]} icon={markerIcon("worksite", entry.id === selected?.id, "⌂")} alt={`${entry.locationName} fictional worksite`} keyboard eventHandlers={{ click: () => setSelectedId(entry.id) }}><Popup><h2>{entry.locationName}</h2><p>{entry.clientName} · {entry.projectName}</p><p>Published assignment for {entry.employeeName}</p></Popup></Marker>)}
+        {worksites.map((worksite) => <Marker key={worksite.id} position={[worksite.worksite.latitude, worksite.worksite.longitude]} icon={markerIcon("worksite", worksite.entries.some((entry) => entry.id === selected?.id), "WS")} alt={`${worksite.locationName} fictional worksite`} keyboard eventHandlers={{ click: () => setSelectedId(worksite.entries[0]?.id) }}><Popup><h2>{worksite.locationName}</h2><p><strong>Client:</strong> {worksite.clientName}</p><p><strong>Project:</strong> {worksite.projectName}</p><p>{worksite.assignmentCount} Published fixture assignment{worksite.assignmentCount === 1 ? "" : "s"} for {labelForDate(date)}.</p><div className="map-popup-actions"><a className="map-popup-link" href={previewHref(`/projects/${worksite.projectId}`, persona)}>Open project</a><a className="map-popup-link secondary" href={previewHref(`/locations/${worksite.locationId}`, persona)}>Open location</a></div></Popup></Marker>)}
       </MapContainer>
     </section>
     <section className="map-legend" aria-label="Planning map legend"><span><i className="legend-dot employee" />Approximate employee planning area</span><span><i className="legend-dot worksite" />Fictional worksite</span><span><i className="legend-line" />Published assignment connection</span></section>

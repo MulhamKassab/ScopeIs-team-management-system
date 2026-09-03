@@ -41,7 +41,19 @@ export type PlanningMapAssignment = {
   worksite: PlanningCoordinate;
 };
 
-export const mapDates = ["2026-09-18", "2026-09-23"] as const;
+export type PlanningMapWorksite = {
+  id: string;
+  locationId: string;
+  locationName: string;
+  clientName: string;
+  projectId: string;
+  projectName: string;
+  assignmentCount: number;
+  worksite: PlanningCoordinate;
+  entries: PlanningMapAssignment[];
+};
+
+export const mapDates = ["2026-09-14", "2026-09-15", "2026-09-16", "2026-09-17", "2026-09-18"] as const;
 
 const coordinateFor = (entityType: "employee-area" | "location", entityId: string) =>
   planningCoordinates.find((coordinate) => coordinate.entityType === entityType && coordinate.entityId === entityId);
@@ -88,6 +100,25 @@ export function planningMapAssignments(persona: PreviewPersona, date: string, fi
     .filter((assignment) => !filters.projectId || assignment.projectId === filters.projectId)
     .filter((assignment) => !filters.locationId || assignment.locationId === filters.locationId)
     .filter((assignment) => !filters.availability || assignment.availability === filters.availability);
+}
+
+export function planningMapWorksites(entries: PlanningMapAssignment[]): PlanningMapWorksite[] {
+  const groups = new Map<string, PlanningMapAssignment[]>();
+  for (const entry of entries) groups.set(entry.locationId, [...(groups.get(entry.locationId) ?? []), entry]);
+  return [...groups.values()].map((group) => {
+    const first = group[0];
+    return {
+      id: `map-worksite-${first.locationId}`,
+      locationId: first.locationId,
+      locationName: first.locationName,
+      clientName: first.clientName,
+      projectId: first.projectId,
+      projectName: first.projectName,
+      assignmentCount: group.length,
+      worksite: first.worksite,
+      entries: group,
+    } satisfies PlanningMapWorksite;
+  });
 }
 
 export function mapFilterOptions(persona: PreviewPersona) {
