@@ -8,6 +8,8 @@ import { employeeProfileService, type ManagementEmployeeDetail } from "@/modules
 import { CertificationSummaryPanel, EvidenceReviewPanel } from "@/modules/evidence/forms";
 import { evidenceRepository } from "@/modules/evidence/repositories";
 import { evidenceService } from "@/modules/evidence/service";
+import { ManagementNotePanel } from "@/modules/notes/forms";
+import { managementNoteService } from "@/modules/notes/service";
 import { db } from "@/db/client";
 
 export const dynamic = "force-dynamic";
@@ -31,5 +33,10 @@ export default async function EmployeeDetailPage({ params }: { params: Promise<{
     : evidence.certificationSummary
       ? <CertificationSummaryPanel rows={evidence.certificationSummary} employeeName={employee.user.displayName} />
       : undefined;
-  return <><EmployeeDetail employee={employee} canManage={actor.role === "SUPER_ADMIN"} managementPanel={options ? <EmployeeManagementPanel employee={employee} options={options} /> : undefined} />{evidencePanel}</>;
+  // Phase 10 management notes: the service returns null for the subject, an Employee, or an out-of-scope Admin.
+  const notes = await managementNoteService.panel(actor, employee.userId);
+  const notesPanel = notes
+    ? <ManagementNotePanel subjectUserId={notes.subject.userId} subjectName={notes.subject.displayName} notes={notes.notes} canCreate={notes.canCreate} />
+    : undefined;
+  return <><EmployeeDetail employee={employee} canManage={actor.role === "SUPER_ADMIN"} managementPanel={options ? <EmployeeManagementPanel employee={employee} options={options} /> : undefined} />{evidencePanel}{notesPanel}</>;
 }

@@ -76,26 +76,45 @@
 
 ![Static planning map workflow](../diagrams/08_static_planning_map_data_flow.png)
 
-## 9. Project and client shared notes
+## 9. Shared Client, Project, and Location notes
 
-1. Any authenticated user opens a project or client.
-2. User reads all work-related shared notes and may add a note.
-3. System records author and create/update times; edit/deletion permissions remain open.
-4. These notes are not split into unnecessary categories and are not private.
+1. An authenticated user authorized on the parent record opens that Client, Project, or Location. Super Admin may open any; Admin only one their operational scope authorizes; an Employee cannot reach this surface.
+2. The user reads the shared notes and may add a plain-text note of up to 5,000 characters.
+3. The system records the author and the create/update times. Only the author may edit; every edit writes the superseded content to `operational_note_revisions` in the same transaction, so nothing is silently overwritten.
+4. Only Super Admin may archive a note, and the required reason is retained. Nothing is hard-deleted, and shared-note activity creates no Phase 10 notification.
+
+Implemented in Phase 10. Phase 3 delivered the note record, scope-checked reading and creation, author-only editing, and Super Admin-only reasoned archive; Phase 10 added the preserved revision history and confirmed the access boundary.
 
 ## 10. Employee-management note
 
 1. Super Admin selects an Admin or Employee, or scoped Admin selects an Employee.
 2. Author writes a management note and selects Private to author or Shared upward.
 3. System records subject, author, role at creation, visibility, timestamps/history, and archive/delete state.
-4. Subject employee never sees the note. Shared-upward access is limited to the author and higher authorized roles.
+4. The subject employee never sees the note. A private note is readable only by its author, including from another Super Admin. A shared-upward note is readable by its author and by an authorized Super Admin whose current scope covers the subject.
+5. Content is immutable: a correction archives the old note and creates another. The author or a Super Admin may archive with a reason, and nothing is hard-deleted.
+6. The subject, an Employee actor, a peer Admin, and an out-of-scope Admin all receive the same non-enumerating refusal as a nonexistent note.
 
-## 11. Private assignment/request discussion
+Implemented in Phase 10 over the schema and policy preserved from Phase 2.
 
-1. Requester creates or opens an assignment/request involving one or more assignees.
-2. Requester and assignee(s) exchange clarification messages.
-3. System notifies the other participants of new messages.
-4. No nonparticipant can view the discussion.
+## 11. Participant-only replacement-request discussion
+
+1. A requester or a named employee opens the discussion on a replacement request they participate in.
+2. Participants exchange plain-text messages of up to 2,000 characters, ordered by creation time.
+3. The system writes the message, a safe audit event with no message content, and one notification per other current participant in a single transaction.
+4. No nonparticipant can view the discussion, and role never confers participation. The participant list is recalculated from the request on every read and write.
+5. Messages are append-only and immutable; only the author may archive their own message, and nothing is hard-deleted.
+
+Implemented in Phase 10. `replacement_request` is the only supported discussion parent; assignment and Ticket discussions remain out of scope.
+
+## 11a. Notification centre and audit history
+
+1. Each notification belongs to exactly one recipient, who alone may read, mark read or unread, archive, restore, or mark all read.
+2. Notification rows store no private display content; titles and summaries derive from the event type, and a related-record link is reauthorized server-side before it is offered.
+3. Read state and archive state remain independent, both operations are idempotent, and an inaccessible or unknown target renders a neutral unavailable state.
+4. Super Admin can open `/audit` to review recorded actions newest-first, filtered by action, target type, actor, and a bounded date range.
+5. Audit rendering uses a per-action safe metadata allowlist; unknown actions show a generic label with no metadata, and raw JSON is never displayed.
+
+Implemented in Phase 10. The central interface completes the persistence foundations delivered in Phase 1; email, SMS, push, and real-time delivery remain out of scope.
 
 ![Notes and communication visibility](../diagrams/06_notes_and_communication_visibility.png)
 

@@ -38,6 +38,8 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 [Checkpoint Sub-phase A report]: ../phase-reports/SCOPEIS_POST_PHASE_8_CHECKPOINT_SUBPHASE_A_REMEDIATION_R1.md
 [Checkpoint Sub-phase B closure]: ../phase-reports/SCOPEIS_POST_PHASE_8_CHECKPOINT_SUBPHASE_B_CLOSURE_R1.md
 [Phase 9 report]: ../phase-reports/SCOPEIS_PHASE_9_CERTIFICATIONS_CVS_PORTFOLIOS_AND_PRIVATE_FILES_JOURNEY_R1.md
+[Phase 10 report]: ../phase-reports/SCOPEIS_PHASE_10_NOTES_DISCUSSIONS_NOTIFICATION_CENTRE_AND_AUDIT_INTERFACE_R1.md
+[Phase 10 decisions]: PHASE_10_COLLABORATION_AND_GOVERNANCE_DECISIONS.md
 [employee services]: ../../src/modules/employees/employee-services.ts
 [schema]: ../../src/db/schema/index.ts
 [navigation]: ../../src/modules/navigation/navigation.ts
@@ -48,15 +50,15 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 
 ## Current focus
 
-- **Current active phase:** Phase 10 — Notes, discussions, notification centre, and audit interface
-- **Current active/next sub-phase:** 10.1 Shared client and project notes, under its own approved Phase ID. Phase 9 is complete and its coverage-linkage question (9.9) stays deferred.
-- **Current phase status:** `NOT_STARTED` (Phase 10 is the next journey)
+- **Current active phase:** Phase 11 — Dashboards, reports, and exports
+- **Current active/next sub-phase:** 11.1 Super Admin dashboard, under its own approved Phase ID. Phase 10 is complete, including the Phase 9 evidence-integrity prerequisite; the Phase 9 coverage-linkage question (9.9) stays deferred.
+- **Current phase status:** `NEXT` (Phase 11 is the next journey and has not started)
 - **Last status date:** `2026-09-15`
-- **Most recent trustworthy evidence:** [Phase 9 report]; [Checkpoint Sub-phase B closure]; [Phase 8 report]
-- **Immediate objective:** Prepare Phase 10 planning under an approved Phase ID; preserve the completed Phase 9 evidence journey and its locked privacy matrix.
-- **Known blockers:** None. Phase 9 passed every mandatory gate; remaining items are documented non-blocking debt and the deferred 9.9 coverage-linkage decision.
-- **Explicit exclusions:** Phase 10 implementation, Preview-worktree merge or modification, GPS/live tracking, geocoding, routes/travel, tickets, production access/migration/authentication/deployment, credential reorganisation, and notification-centre redesign.
-- **Required phase-exit journey:** Phase 9: the confirmed employee evidence journey (certifications, CVs, portfolios, and files) only under its own approved Phase ID and product decisions.
+- **Most recent trustworthy evidence:** [Phase 10 report]; [Phase 10 decisions]; [Phase 9 report]
+- **Immediate objective:** Prepare Phase 11 planning under an approved Phase ID; preserve the completed Phase 10 collaboration-and-governance journey and its locked privacy matrix.
+- **Known blockers:** None. Phase 10 passed every mandatory gate; remaining items are documented non-blocking debt and the deferred Phase 9 9.9 coverage-linkage decision.
+- **Explicit exclusions:** Phase 11 implementation, Preview-worktree merge or modification, external email/SMS/push notifications, real-time delivery, assignment or Ticket discussions, audit export or mutation, notification retention automation, GPS/live tracking, geocoding, routes/travel, and production access/migration/authentication/deployment.
+- **Required phase-exit journey:** Phase 10: the confirmed collaboration-and-governance journey (shared operational notes, employee-management notes, participant-only replacement-request discussions, notification centre, and audit history) plus the Phase 9 evidence-integrity prerequisite.
 
 ## Master phase status
 
@@ -74,8 +76,8 @@ Progress measures completed roadmap sub-phases only. It is **not** engineering e
 | 7 | Coverage and replacement | `COMPLETED` | 11 | 11 | 100% | Completed bounded coverage/replacement journey | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phases 4–6 | None | [Phase 7 report] |
 | 8 | Static planning map | `COMPLETED` | 10 | 10 | 100% | Completed static Published-planning map journey | 2026-09-03 | 2026-09-02 | 2026-09-03 | Phases 4–7 | None | [Phase 8 report]; [Phase 8 decisions] |
 | 9 | Certifications, CVs, portfolios, and files | `COMPLETED` | 9 | 10 | 90% | 9.9 deferred: whether verification affects coverage remains an unapproved product decision | 2026-09-15 | 2026-09-15 | 2026-09-15 | Phase 2 profile journey | None for the approved journey | [Phase 9 report] |
-| 10 | Notes, discussions, notification centre, and audit interface | `PARTIAL` | 0 | 9 | 0% | 10.1 Shared client and project notes | 2026-09-01 | — | — | Source workflows | Source records/workflows unavailable | [schema] |
-| 11 | Dashboards, reports, and exports | `NOT_STARTED` | 0 | 9 | 0% | 11.1 Super Admin dashboard | 2026-09-01 | — | — | Trustworthy source journeys | Source data unavailable | None located |
+| 10 | Notes, discussions, notification centre, and audit interface | `COMPLETED` | 9 | 9 | 100% | Completed bounded collaboration-and-governance journey, including the Phase 9 evidence-integrity prerequisite | 2026-09-15 | 2026-09-15 | 2026-09-15 | Phases 3–9 source workflows | None for the approved journey | [Phase 10 report]; [Phase 10 decisions] |
+| 11 | Dashboards, reports, and exports | `NEXT` | 0 | 9 | 0% | 11.1 Super Admin dashboard | 2026-09-15 | — | — | Trustworthy source journeys | Phase 11 planning not started | None located |
 | 12 | Ticket System integration | `NOT_STARTED` | 0 | 9 | 0% | 12.1 Existing Ticket System reuse assessment | 2026-09-01 | — | — | Phases 1–11 | Workforce journeys incomplete | None located |
 | 13 | Production readiness and internal rollout | `NOT_STARTED` | 0 | 10 | 0% | 13.1 Production identity-provider selection and integration | 2026-09-01 | — | — | Product journeys and Phase 12 | Product not ready; production choices unresolved | None located |
 
@@ -248,15 +250,15 @@ Canonical commands are recorded in the [Checkpoint Sub-phase A report] and in `R
 
 | ID | Sub-phase | Status | Last status date | Started date | Completed date | Dependencies | Implementation state | QA state | Exit evidence required | Current evidence | Blocker/notes |
 | -- | --------- | ------ | ---------------- | ------------ | -------------- | ------------ | -------------------- | -------- | ---------------------- | ---------------- | ------------- |
-| 10.1 | Shared client and project notes | `NOT_STARTED` | 2026-09-01 | — | — | Phase 3 | Documentation only | None located | Shared note workflow | None located | — |
-| 10.2 | Employee-management notes | `PARTIAL` | 2026-09-01 | — | — | Phase 2 | Note schema and policy only | Unit; disposable migration | Authorized note persistence/UI | [note policy] | Preserve; no repository/service/route/UI. |
-| 10.3 | Private-to-author and shared-upward visibility | `PARTIAL` | 2026-09-01 | — | — | 10.2 | Pure policy only | Unit | Persisted visibility enforcement | [note policy] | — |
-| 10.4 | Subject-employee exclusion | `PARTIAL` | 2026-09-01 | — | — | 10.2 | Pure policy only | Unit | Server-side persisted exclusion | [note policy] | — |
-| 10.5 | Participant-only assignment/request discussions | `NOT_STARTED` | 2026-09-01 | — | — | Phase 4/7 | Documentation only | None located | Participant-only discussion | None located | — |
-| 10.6 | Complete in-application notification centre | `PARTIAL` | 2026-09-01 | — | — | Source workflows | Notification schema/service only | Foundation integration | Readable notification centre | [notification service] | No event-specific workflows or UI. |
-| 10.7 | Read, unread, related record, direct navigation, and archive behavior | `NOT_STARTED` | 2026-09-01 | — | — | 10.6 | Schema fields only | Disposable migration | Complete notification interaction | [schema] | — |
-| 10.8 | Authorized audit-history interface | `PARTIAL` | 2026-09-01 | — | — | Source workflows | Audit schema/write service only | Unit; foundation integration | Authorized audit UI | [audit service] | `/audit` is a shell only. |
-| 10.9 | Visibility, privacy, authorization, audit, notification, and E2E QA | `NOT_STARTED` | 2026-09-01 | — | — | 10.1–10.8 | Documentation only | None located | Full collaboration/governance QA | None located | — |
+| 10.1 | Shared Client, Project, and Location notes | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | Phase 3 | Additive `operational_note_revisions`, author-only edit, Super Admin-only archive with reason, plain-text 5,000-character boundary | Integration/component/desktop+mobile browser/seed smoke | Authorized shared-note workflow with preserved history | [Phase 10 report] | Employee access is refused; no notification is created for note activity. |
+| 10.2 | Employee-management notes | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | Phase 2 | Repository, service, validation, actions, and `/employees/[userId]` panel over the existing schema and policy | Integration/component/browser | Authorized note persistence and UI | [Phase 10 report] | Content is immutable; corrections archive and supersede. |
+| 10.3 | Private-to-author and shared-upward visibility | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | 10.2 | Visibility fixed at creation and enforced server-side on every read | Integration/component/browser | Persisted visibility enforcement | [Phase 10 report] | Visibility cannot change after creation. |
+| 10.4 | Subject-employee exclusion | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | 10.2 | Subject, Employee, peer Admin, and out-of-scope Admin receive one non-enumerating refusal | Integration/browser | Server-side persisted exclusion | [Phase 10 report] | The panel is never rendered for the subject. |
+| 10.5 | Participant-only replacement-request discussions | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | Phase 4/7 | Additive `discussion_threads` and `discussion_messages`, participants derived live from the request, unsupported parents fail closed | Integration/browser | Participant-only discussion | [Phase 10 report] | Only `replacement_request` is supported; role never confers participation. |
+| 10.6 | Complete in-application notification centre | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | Source workflows | Real `/notifications` inbox for every role over the existing notification persistence | Integration/component/browser/route certification | Readable notification centre | [Phase 10 report] | Rows carry no display content; titles derive from the event type. |
+| 10.7 | Read, unread, related record, direct navigation, archive, and restore behavior | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | 10.6 | Independent, idempotent read/archive operations, recipient-scoped mark-all-read, stable `(created_at, id)` pages of 25, server-reauthorized navigation | Integration/component/browser | Complete notification interaction | [Phase 10 report] | Unavailable targets render a neutral state, never a probe. |
+| 10.8 | Authorized audit-history interface | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | Source workflows | Super Admin-only read-only `/audit` with action, target, actor, and bounded date filters and a per-action safe metadata allowlist | Integration/browser/route certification | Authorized audit UI | [Phase 10 report] | Unknown actions render a generic label with no metadata. |
+| 10.9 | Phase 9 evidence integrity, visibility, privacy, authorization, audit, notification, rollback, concurrency, and E2E QA | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | 10.1–10.8 | Material owner evidence edits reset review and verification provenance in the same transaction; failure-injection, stale-version, and concurrency coverage across every Phase 10 surface | Unit/component/PostgreSQL/route/browser/seed smoke | Full collaboration/governance QA | [Phase 10 report] | Phase 7 coverage results are proven unchanged. |
 
 ## Phase 11 — Dashboards, reports, and exports
 
@@ -308,8 +310,8 @@ Canonical commands are recorded in the [Checkpoint Sub-phase A report] and in `R
 | 6.1–6.4 | Skills, catalogue, and employee-skill repositories/services | `PARTIAL` | Verified backend only; no operational routes/UI or scheduling use | [Phase 2 core R3] | Preserve and connect in Phase 6; do not rebuild. |
 | 9.1–9.3, 9.6–9.8 | Evidence and file tables, review/expiry fields | `COMPLETED` | Completed in Phase 9 with the additive `0010` migration and the evidence module | [Phase 9 report] | Preserve the additive columns and the review lifecycle semantics. |
 | 9.4–9.5 | Vercel Blob validation/storage helper | `COMPLETED` | Encapsulated behind the Phase 9 neutral storage interface as the production adapter candidate | [Phase 9 report] | Keep behind the interface; never use the SDK in tests. |
-| 10.2–10.4 | Employee-management-note table and visibility policy | `PARTIAL` | No repository/service/route/UI | [note policy] | Preserve without expanding before Phase 10. |
-| 10.6–10.8 | Generic notification and audit persistence | `PARTIAL` | No central UI or source-workflow integration | [notification service] | Reuse in source workflows; complete central interfaces in Phase 10. |
+| 10.2–10.4 | Employee-management-note table and visibility policy | `COMPLETED` | Completed in Phase 10 over the existing table and policy; no schema change was needed | [Phase 10 report] | Preserve the visibility matrix, immutable content, and non-enumerating refusals. |
+| 10.6–10.8 | Generic notification and audit persistence | `COMPLETED` | Completed in Phase 10 with the `/notifications` and `/audit` interfaces over the existing persistence | [Phase 10 report] | Preserve recipient ownership, the safe metadata allowlist, and read/archive independence. |
 | 3–12 | Role-aware navigation and empty module shells | `PARTIAL` | Shell visibility/protection only; no business behavior | [navigation] | Retain as clearly labelled shells until each owning journey is built. |
 
 ## Phase Definition of Done matrix
@@ -415,8 +417,28 @@ Use this template for every phase. `NOT_APPLICABLE` is allowed only with a reaso
 | Mobile E2E | Yes | `COMPLETED` | [Phase 4 report] | Same permitted journey passed at 390×844 viewport with horizontal-overflow assertion. |
 | Manual walkthrough | Yes | `COMPLETED` | [Phase 4 report] | Local `db:migrate`, `db:seed`, `dev` smoke and guarded browser journey passed; no production target used. |
 | Typecheck/safe build/diff | Yes | `COMPLETED` | [Phase 4 report] | Typecheck, targeted ESLint, isolated safe-build through Playwright runner, and `git diff --check` passed. |
-| Repository-wide lint and inherited runners | Informational | `BLOCKED` | [Phase 3 report] | Preserved prototype/legacy runner interference remains unchanged and is outside the Phase 4 scoped gate set. |
+| Repository-wide lint and inherited runners | Informational | `COMPLETED` | [Checkpoint Sub-phase A report] | The earlier repository-wide lint/legacy-runner interference no longer represents product status: the historical prototype sits outside the authoritative lint boundary and the aggregate runners were settled in the Post-Phase-8 checkpoint. |
 | Commit/push | Yes | `VERIFICATION_PENDING` | [Phase 4 report] | Final explicit allowlist review and one focused delivery commit/push follow this documentation update. |
+
+### Active Phase 10 gate matrix
+
+| Gate | Required? | Status | Evidence | Notes |
+| ---- | --------- | ------ | -------- | ----- |
+| User story and acceptance criteria | Yes | `COMPLETED` | Authorized `SCOPEIS_PHASE_10_NOTES_DISCUSSIONS_NOTIFICATION_CENTRE_AND_AUDIT_INTERFACE_R1`; [Phase 10 decisions] | Shared notes, employee-management notes, participant-only replacement-request discussions, notification centre, audit history, plus the Phase 9 evidence-integrity prerequisite. |
+| Schema/migration | Yes | `COMPLETED` | Migration `0011_phase_10_collaboration_governance.sql`; [Phase 10 report] | Additive `operational_note_revisions`, `discussion_threads`, and `discussion_messages` plus four indexes; 32 tables and 12 ledger rows verified; journal, manifest, and Drizzle fingerprints agree. |
+| Repository/service/validation | Yes | `COMPLETED` | [Phase 10 report] | Strict Zod boundaries, PostgreSQL repositories, optimistic versions, advisory locks, and idempotency keys where required. |
+| Server authorization and scope/privacy | Yes | `COMPLETED` | [Phase 10 report] | Manager-scoped shared notes, the management-note visibility matrix, live participant derivation, recipient-owned notifications, Super Admin-only audit, and non-enumerating refusals throughout. |
+| Route/Server Action and real UI | Yes | `COMPLETED` | [Phase 10 report] | Real data-connected `/notifications`, `/audit`, and `/requests` pages plus the employee-detail notes panel, the shared-note revision disclosure, and the replacement-discussion panels. |
+| Audit/transactions/concurrency/rollback | Yes | `COMPLETED` | [Phase 10 report] | Same-transaction audit and notification writes, failure-injection rollback, stale-version rejection, one-thread-per-request concurrency proof, and deterministic pagination. |
+| Notifications | Required source event | `COMPLETED` | [Phase 10 report] | Source workflows write notifications transactionally; the central inbox completes read, unread, archive, restore, and authorized navigation. |
+| Unit/component tests | Yes | `COMPLETED` | [Phase 10 report] | 56 unit and 32 component tests passed; the component suite stays database-free with an explicit boundary assertion. |
+| Disposable PostgreSQL tests | Yes | `COMPLETED` | [Phase 10 report] | 8 migration and 63 aggregate integration tests passed across 10 isolated disposable databases. |
+| Route/API and negative authorization tests | Yes | `COMPLETED` | [Phase 10 report] | 12 route-certification tests plus negative role, scope, privacy, cross-recipient, subject, and peer cases. |
+| Desktop E2E | Yes | `COMPLETED` | [Phase 10 report] | 66 aggregate E2E tests across 10 suites with zero skips, including the Phase 10 governance journey at 1440×900. |
+| Mobile E2E | Yes | `COMPLETED` | [Phase 10 report] | The same journey passed at 390×844 with horizontal-overflow assertions on every visited page. |
+| Manual walkthrough | Yes | `COMPLETED` | [Phase 10 report] | Guarded browser journey and fictional seed smoke; no production target used. |
+| Typecheck/safe build/diff | Yes | `COMPLETED` | [Phase 10 report] | Typecheck, `npm run lint`, isolated `npm run build:safe`, `git diff --check`, and `git diff --cached --check` all passed. |
+| Commit/push | Yes | `VERIFICATION_PENDING` | [Phase 10 report] | Final explicit allowlist review and one focused delivery commit/push follow this documentation update. |
 
 ## Tracker maintenance protocol
 
@@ -483,3 +505,4 @@ Append new rows; correct an existing row only for a factual error. Every `COMPLE
 | 2026-09-15 | Post-Phase-8 Checkpoint Sub-phase A | `NOT_STARTED` | `VERIFICATION_PENDING` | [Checkpoint Sub-phase A report] | Application behavior, permissions, privacy projections, workflows, schemas, and Phase 8 map behavior were left unchanged. Aggregate component, integration, E2E, route-certification, migration, seed-smoke, lint, typecheck, and isolated safe-build gates pass. Formal closure is deferred to Sub-phase B. | Codex |
 | 2026-09-15 | Post-Phase-8 Checkpoint Sub-phase B | `VERIFICATION_PENDING` | `COMPLETED` | [Checkpoint Sub-phase B closure] | Independent re-verification of `decb377` from the committed `main` state: all 20 mandatory gates passed, Phases 0–8 verified with no P0/P1 defect, isolation 9/9, `.env.production` and Preview untouched, documentation consistent. Classification `SCOPEIS_POST_PHASE_8_CHECKPOINT_COMPLETED_WITH_NON_BLOCKING_CAVEATS_READY_FOR_PHASE_9`. Phase 9 remains `NOT_STARTED`. | Codex |
 | 2026-09-15 | Phase 9 capability evidence journey | `NOT_STARTED` | `COMPLETED` | [Phase 9 report] | Employee certifications, portfolio links/files, project examples, one active CV, and supporting documents save immediately, flag new/updated, and transactionally notify active Super Admins; Super Admin reviews, verifies, removes verification, or resets; owners update, replace files, and archive. Additive migration `0010`, provider-neutral private storage with a fail-closed production default, locked privacy matrix (scoped Admin receives certification summary only), derived Dubai expiry, idempotent creates, optimistic concurrency, storage compensation, and a proven unchanged Phase 7 coverage result. Sub-phase 9.9 (coverage linkage) remains deferred. | Codex |
+| 2026-09-15 | Phase 10 collaboration and governance journey | `NOT_STARTED` | `COMPLETED` | [Phase 10 report] | Shared Client/Project/Location notes preserve previous content as a transactional revision with author-only editing and Super Admin-only reasoned archive; the product owner confirmed the manager-only shared-note interpretation. Employee-management notes enforce private-to-author and shared-upward visibility with immutable content and non-enumerating refusals. Participant-only replacement-request discussions derive participants live from the request. The notification centre and the Super Admin audit history complete the central interfaces over existing persistence. Additive migration `0011` (32 tables, 12 ledger rows). The approved Phase 9 evidence-integrity prerequisite resets review and verification provenance on every material owner edit. Phase 10 passed every mandatory gate from commit `64fd480`. | Codex |

@@ -33,8 +33,10 @@ export function canCreateManagementNote(actor: AuthenticatedActor, subject: Empl
 }
 
 export function canReadManagementNote(actor: AuthenticatedActor, note: { authorUserId: string; subjectUserId: string; authorRole: SystemRole; visibility: NoteVisibility; subject: EmployeeAccessRecord }) {
-  if (actor.id === note.subjectUserId || actor.role === "EMPLOYEE") return false;
+  // An author keeps access to what they wrote even if their role later changes; the stored author role is
+  // historical context only. An author and their subject can never be the same user.
   if (actor.id === note.authorUserId) return true;
+  if (actor.id === note.subjectUserId || actor.role === "EMPLOYEE") return false;
   if (note.visibility !== "shared_upward") return false;
   if (actor.role !== "SUPER_ADMIN") return false;
   return canReadEmployee(actor, note.subject);

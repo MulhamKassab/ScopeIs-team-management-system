@@ -12,12 +12,16 @@ Technical implementation direction is recorded separately in [`SYSTEM_ARCHITECTU
 - Employees see published schedules only.
 - The planning map is static, selected-date based, and available only to Super Admin and scoped Admin.
 - Employee-management notes are private-to-author or shared-upward; subjects cannot view them.
-- Project/client notes are shared with all authenticated users.
-- Assignment/request discussions are private to requester and assignee(s).
+- Shared Client, Project, and Location notes are readable and creatable by every authenticated user already authorized on the parent record: Super Admin globally, and Admin only within their Client, Project, or Location scope. The product owner confirmed this interpretation of the earlier "all authenticated users" wording during Phase 10; Employees hold no shared-note access. Editing is author-only, archive is Super Admin-only with a retained reason, and every edit preserves the superseded content as a revision.
+- Replacement-request discussions are private to the participants derived live from the request: the requester and the named employee(s). Role never confers participation, and only a `replacement_request` parent is supported. Assignee or Ticket discussions remain unimplemented.
 - Certification/portfolio updates save immediately and notify Super Admin; review/verification is optional, not a required approval gate.
 - Version 1 uses mock test accounts with no real passwords documented.
 - The Ticket System is a Phase 12 feature, not the workforce-system foundation.
 - Phase 6 qualification is an active management-recorded skill association only. It is not a proficiency score, certification gate, coverage result, or replacement/candidate-ranking judgment; missing recorded skills are transparent, non-blocking schedule warnings only.
+- Phase 10 confirmed that the employee-management note subject, an Employee actor, a peer Admin, and an out-of-scope Admin all receive the same non-enumerating refusal as a nonexistent note; note content is immutable and corrections archive-and-supersede.
+- Phase 10 notification ownership is per recipient: only the recipient may read, mark, archive, or restore a notification, and a notification row stores no private display content.
+- Phase 10 audit rendering uses a per-action safe metadata allowlist; unknown actions render a generic label with no metadata and raw JSON is never displayed.
+- Phase 9 evidence integrity: when an owner materially changes verified or reviewed evidence, the item resets to `unreviewed` and its review and verification provenance is cleared in the same transaction. Review actions themselves never reset state and never change `last_submitted_at`.
 
 ## Explicit constraints
 
@@ -60,11 +64,13 @@ Every item below is **not finalized**. The safe documentation default prevents a
 | Public holidays | Availability and coverage calendars | No hard-coded holiday calendar |
 | Weekend rules | Working/non-working conflicts | Use employee working pattern once defined |
 | Skill proficiency scale | Search, qualification, coverage | Store a future-configurable concept without selecting a scale |
-| Certification verification before coverage | Safety and candidate eligibility | Surface verification separately; do not require or ignore it until decided |
+| Certification verification before coverage | Safety and candidate eligibility | Still deferred (Phase 9 sub-phase 9.9). Phase 9 surfaces verification state and Phase 10 preserves the review lifecycle, but verification deliberately does not change Phase 7 coverage or replacement eligibility. |
 | Exact Admin scope model | Authorization across all management modules | Enforce abstract assigned scope; choose dimensions later |
 | Admin employee creation | Account lifecycle and authority | Super Admin only until explicitly delegated |
 | Formal proposal submit action | Schedule workflow and audit | Retain Draft/Proposed/Published states; exact interaction later |
-| Project/client note edit rights | Collaboration integrity and moderation | Authors edit own; Super Admin moderation is a candidate, not confirmed |
+| Project/client note edit rights | Collaboration integrity and moderation | **Resolved in Phase 10:** authors edit their own notes, Super Admin archives with a retained reason, and every edit preserves the superseded content as a revision. Hard deletion is not available. |
+| Whether an Employee may read shared Client/Project/Location notes | Role boundary and privacy | **Resolved in Phase 10:** no. Shared notes are limited to authenticated users already authorized on the parent record: Super Admin globally, Admin only within scope. |
+| Scoped Admin evidence visibility | Employee privacy beyond the certification summary | **Resolved in Phase 9:** scoped Admin receives certification summary facts only; CVs, supporting documents, portfolio links and files, project-example detail, previews, and downloads are withheld. |
 | Profile/client/project attachments | Storage, security, retention | Certifications/portfolio uploads confirmed; other attachments deferred |
 | Map provider | Cost, licensing, implementation | Provider-neutral map requirements |
 | Geocoding approach | Privacy, quality, external service use | Store coordinates when available; no provider selected |

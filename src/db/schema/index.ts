@@ -44,14 +44,14 @@ export const auditEvents = pgTable("audit_events", {
   actorRole: systemRoleEnum("actor_role"), authenticationMode: authenticationModeEnum("authentication_mode").notNull(), action: text("action").notNull(),
   targetType: text("target_type").notNull(), targetId: text("target_id"), metadata: jsonb("metadata").notNull().default({}),
   correlationId: uuid("correlation_id").defaultRandom().notNull(), occurredAt: timestamp("occurred_at", { withTimezone: true }).notNull().defaultNow(),
-}, (table) => [foreignKey({ name: "audit_events_actor_user_id_fkey", columns: [table.actorUserId], foreignColumns: [users.id] }).onDelete("set null"), index("audit_events_actor_occurred_idx").on(table.actorUserId, table.occurredAt)]);
+}, (table) => [foreignKey({ name: "audit_events_actor_user_id_fkey", columns: [table.actorUserId], foreignColumns: [users.id] }).onDelete("set null"), index("audit_events_actor_occurred_idx").on(table.actorUserId, table.occurredAt), index("audit_events_occurred_idx").on(table.occurredAt, table.id), index("audit_events_target_idx").on(table.targetType, table.targetId)]);
 
 export const notifications = pgTable("notifications", {
   id: uuid("id").defaultRandom().primaryKey(), recipientUserId: text("recipient_user_id").notNull(),
   eventType: text("event_type").notNull(), relatedRecordType: text("related_record_type"), relatedRecordId: text("related_record_id"),
   readAt: timestamp("read_at", { withTimezone: true }), archivedAt: timestamp("archived_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-}, (table) => [foreignKey({ name: "notifications_recipient_user_id_fkey", columns: [table.recipientUserId], foreignColumns: [users.id] }).onDelete("cascade"), index("notifications_recipient_unread_idx").on(table.recipientUserId, table.readAt)]);
+}, (table) => [foreignKey({ name: "notifications_recipient_user_id_fkey", columns: [table.recipientUserId], foreignColumns: [users.id] }).onDelete("cascade"), index("notifications_recipient_unread_idx").on(table.recipientUserId, table.readAt), index("notifications_recipient_created_idx").on(table.recipientUserId, table.createdAt, table.id)]);
 
 export const designations = pgTable("designations", {
   id: uuid("id").defaultRandom().primaryKey(), name: text("name").notNull(), sortOrder: integer("sort_order").notNull().default(0),
@@ -293,6 +293,43 @@ export const replacementRequests = pgTable("replacement_requests", {
 }, (table) => [
   foreignKey({ name: "replacement_requests_staffing_requirement_id_fkey", columns: [table.staffingRequirementId], foreignColumns: [staffingRequirements.id] }).onDelete("restrict"), foreignKey({ name: "replacement_requests_anchor_assignment_id_fkey", columns: [table.anchorAssignmentId], foreignColumns: [scheduleAssignments.id] }).onDelete("restrict"), foreignKey({ name: "replacement_requests_requester_user_id_fkey", columns: [table.requesterUserId], foreignColumns: [users.id] }).onDelete("restrict"), foreignKey({ name: "replacement_requests_nominated_employee_user_id_fkey", columns: [table.nominatedEmployeeUserId], foreignColumns: [users.id] }).onDelete("restrict"), foreignKey({ name: "replacement_requests_selected_employee_user_id_fkey", columns: [table.selectedEmployeeUserId], foreignColumns: [users.id] }).onDelete("restrict"), foreignKey({ name: "replacement_requests_decided_by_user_id_fkey", columns: [table.decidedByUserId], foreignColumns: [users.id] }).onDelete("restrict"), foreignKey({ name: "replacement_requests_effect_schedule_period_id_fkey", columns: [table.effectSchedulePeriodId], foreignColumns: [schedulePeriods.id] }).onDelete("restrict"),
   index("replacement_requests_status_created_idx").on(table.status, table.createdAt), index("replacement_requests_requester_status_idx").on(table.requesterUserId, table.status), index("replacement_requests_anchor_status_idx").on(table.anchorAssignmentId, table.status), check("replacement_requests_required_count_check", sql`${table.observedRequiredEmployeeCount} > 0`), check("replacement_requests_eligible_count_check", sql`${table.observedEligibleEmployeeCount} >= 0`), check("replacement_requests_version_check", sql`${table.version} > 0`),
+]);
+
+/** Phase 10 preserves the previous content of an edited shared operational note. Archive-only, never destructive. */
+export const operationalNoteRevisions = pgTable("operational_note_revisions", {
+  id: uuid("id").defaultRandom().primaryKey(), noteId: uuid("note_id").notNull(), version: integer("version").notNull(),
+  content: text("content").notNull(), editedByUserId: text("edited_by_user_id").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+}, (table) => [
+  foreignKey({ name: "operational_note_revisions_note_id_fkey", columns: [table.noteId], foreignColumns: [operationalNotes.id] }).onDelete("restrict"),
+  foreignKey({ name: "operational_note_revisions_edited_by_user_id_fkey", columns: [table.editedByUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  unique("operational_note_revisions_note_version_unique").on(table.noteId, table.version),
+  index("operational_note_revisions_note_idx").on(table.noteId, table.version),
+  check("operational_note_revisions_version_check", sql`${table.version} > 0`),
+]);
+
+/** Phase 10 discussion threads. The only supported parent is a replacement request; other types fail closed. */
+export const discussionThreads = pgTable("discussion_threads", {
+  id: uuid("id").defaultRandom().primaryKey(), parentType: text("parent_type").notNull(), parentId: uuid("parent_id").notNull(),
+  ...timestamps,
+}, (table) => [
+  foreignKey({ name: "discussion_threads_parent_id_fkey", columns: [table.parentId], foreignColumns: [replacementRequests.id] }).onDelete("restrict"),
+  unique("discussion_threads_parent_unique").on(table.parentType, table.parentId),
+  check("discussion_threads_parent_type_check", sql`${table.parentType} = 'replacement_request'`),
+]);
+
+/** Phase 10 participant-only messages. Append-only and immutable; the author may archive their own message. */
+export const discussionMessages = pgTable("discussion_messages", {
+  id: uuid("id").defaultRandom().primaryKey(), threadId: uuid("thread_id").notNull(), authorUserId: text("author_user_id").notNull(),
+  content: text("content").notNull(), archivedAt: timestamp("archived_at", { withTimezone: true }), archivedByUserId: text("archived_by_user_id"),
+  version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [
+  foreignKey({ name: "discussion_messages_thread_id_fkey", columns: [table.threadId], foreignColumns: [discussionThreads.id] }).onDelete("restrict"),
+  foreignKey({ name: "discussion_messages_author_user_id_fkey", columns: [table.authorUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  foreignKey({ name: "discussion_messages_archived_by_user_id_fkey", columns: [table.archivedByUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  index("discussion_messages_thread_created_idx").on(table.threadId, table.createdAt, table.id),
+  check("discussion_messages_content_length_check", sql`char_length(${table.content}) between 1 and 2000`),
+  check("discussion_messages_version_check", sql`${table.version} > 0`),
 ]);
 
 export const userRelations = relations(users, ({ many, one }) => ({

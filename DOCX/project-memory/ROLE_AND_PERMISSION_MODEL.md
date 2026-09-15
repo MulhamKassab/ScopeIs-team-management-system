@@ -12,15 +12,15 @@ Has global management authority: employee accounts and roles, designations, skil
 
 ### Admin
 
-May be an account manager, team senior, coordinator, or other trusted employee. Can view necessary employee capabilities and availability; manage assigned clients/projects/locations; create schedule drafts and assignments within scope; propose schedules; review conflicts; find candidates; submit replacement requests; use the scoped planning map; create shared project/client notes; create permitted employee-management notes about Employees below their role; and participate in private requester-assignee discussions.
+May be an account manager, team senior, coordinator, or other trusted employee. Can view necessary employee capabilities and availability; manage assigned clients/projects/locations; create schedule drafts and assignments within scope; propose schedules; review conflicts; find candidates; submit replacement requests; use the scoped planning map; create and edit their own shared Client, Project, and Location notes where their scope authorizes the parent; create permitted employee-management notes about Employees below their role; and participate in private requester-assignee discussions.
 
 Admin cannot publish schedules, make final schedule approvals, approve or reject leave, recommend leave decisions, access private leave reasons by default, manage global permissions, change global coverage policies without permission, assign replacements without required Super Admin approval, or access data outside scope.
 
 ### Employee
 
-Can use a mock account; view their own published daily/weekly/monthly schedule; view relevant client/project/location/time/instructions; submit and track annual leave; cancel a pending request when allowed; maintain permitted profile, skills evidence, certifications, portfolio, CV, and project experience; receive notifications; read and add shared project/client notes; and participate in private discussions when requester or assignee.
+Can use a mock account; view their own published daily/weekly/monthly schedule; view relevant client/project/location/time/instructions; submit and track annual leave; cancel a pending request when allowed; maintain permitted profile, skills evidence, certifications, portfolio, CV, and project experience; use the notification centre for their own notifications; and participate in private replacement-request discussions when they are the requester or a named employee on that request.
 
-Employee cannot publish or finalize schedules, approve leave, manage roles, access the management planning map, view others' private leave details, view employee-management notes, or view discussions in which they are not a participant.
+Employee cannot publish or finalize schedules, approve leave, manage roles, access the management planning map, view others' private leave details, view employee-management notes, read or add shared Client/Project/Location notes, or view discussions in which they are not a participant.
 
 ## Admin scope
 
@@ -56,10 +56,11 @@ An Admin's effective access is the intersection of role permission and assigned 
 | Create employee-management note | About Admin/Employee | About scoped Employee | No |
 | See private-to-author management note | Author only | Author only | No |
 | See shared-upward management note | Authorized higher role and author | If author or authorized higher role | No |
-| Read/add client and project notes | Yes | Yes | Yes |
-| Read assignment/request discussion | If participant | If participant | If participant |
-| Notifications | Yes | Yes | Yes |
-| Audit history, reports, exports | Yes | Scoped/later-defined | No unless later confirmed |
+| Read/add shared Client, Project, and Location notes | Yes | Only for a parent their scope authorizes | No |
+| Read and post replacement-request discussion | Only if a named participant | Only if a named participant | Only if a named participant |
+| Manage own notifications (read, unread, archive, restore) | Yes | Yes | Yes |
+| Audit history | Yes | No — non-enumerating refusal | No — non-enumerating refusal |
+| Reports and exports | Yes | Scoped/later-defined | No unless later confirmed |
 | Integrated tickets | Later, global | Later, scoped | Later, assigned/owned |
 
 ## Explicit safeguards
@@ -69,7 +70,9 @@ An Admin's effective access is the intersection of role permission and assigned 
 - Admin does not recommend leave decisions.
 - Employee cannot access the management planning map.
 - Only requester and assigned employee(s) can see an assignment/request discussion.
-- Project and client notes are not private notes; every authenticated user can read and add them.
+- Shared Client, Project, and Location notes are not private notes, but "shared" means shared with everyone already authorized on the parent record, not with every authenticated user. Super Admin holds global access; Admin access follows their Client, Project, or Location scope; Employees hold no Client, Project, Location, or shared-note access in Phase 10. This interpretation was confirmed by the product owner during Phase 10 and replaces the earlier ambiguous "every authenticated user" reading.
 - The subject of an employee-management note cannot see it.
+- Only the author of an employee-management note and, for a shared-upward note, an authorized Super Admin may read it. Peer Admins and an out-of-scope Admin receive the same non-enumerating refusal as a nonexistent note.
+- A notification belongs to exactly one recipient. Only that recipient may read, mark, archive, or restore it, and a cross-recipient notification id is non-enumerating.
+- The audit-history interface is Super Admin only, read-only, and never renders raw metadata; Admin and Employee receive a non-enumerating refusal.
 - Assignment labels never grant permissions or determine availability.
-

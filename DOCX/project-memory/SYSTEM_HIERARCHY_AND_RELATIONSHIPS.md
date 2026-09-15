@@ -49,8 +49,8 @@ The product has a workforce core (employees, roles, designations, skills, certif
 ### Notes and discussions
 
 - An Employee-Management Note links subject employee, author, author role at creation, visibility, audit timestamps/history, and archived/deleted state. Visibility is private to author or shared upward.
-- A Project/Client Note links its parent, author, timestamps, content, and edit/deletion history; all authenticated users can read and add notes.
-- An Assignment/Request Discussion belongs to the assignment/request and includes only requester and assigned employee(s).
+- A shared Client, Project, or Location Note links its parent, author, timestamps, content, and preserved edit history. It is readable and creatable only by an authenticated user already authorized on the parent record: any authorized parent for Super Admin, and a parent inside their operational scope for Admin. Phase 10 added an additive `operational_note_revisions` table so every edit preserves the superseded content; nothing is hard-deleted.
+- A replacement-request Discussion belongs to the request and includes only the requester and the currently named employee(s). Phase 10 supports no other discussion parent.
 
 ![Notes and communication visibility](../diagrams/06_notes_and_communication_visibility.png)
 

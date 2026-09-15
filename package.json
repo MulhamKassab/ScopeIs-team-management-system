@@ -54,7 +54,9 @@
     "db:schema:runtime:validate": "node scripts/run-phase2-migration-tests.mjs -t \"uses all eight\"",
     "db:validate": "tsx src/db/validate.ts",
     "audit:dependencies": "npm audit --omit=dev"
-    ,"validate:phase2-runbook": "node scripts/validate-phase2-runbook.mjs"
+    ,"validate:phase2-runbook": "node scripts/validate-phase2-runbook.mjs",
+    "test:phase10-service": "node scripts/run-phase10-service-tests.mjs",
+    "test:phase10-e2e": "node scripts/run-phase10-playwright.mjs"
   },
   "dependencies": {
     "@vercel/blob": "^2.3.0",

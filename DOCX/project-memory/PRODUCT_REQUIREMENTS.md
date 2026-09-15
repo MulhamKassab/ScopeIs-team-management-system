@@ -97,8 +97,8 @@
 - **NTE-002:** The author must choose Private to author or Shared upward; the subject Employee must never see the note.
 - **NTE-003:** Shared upward must mean the author and higher authorized roles only, subject to scope.
 - **NTE-004:** Each employee-management note must record subject, author, author role at creation, visibility, created/updated time, history/audit reference, and archive/delete state.
-- **NTE-005:** Every authenticated user must be able to read and add work-related project and client notes.
-- **NTE-006:** Project/client notes must remain a simple shared model and record parent, author, timestamps, content, and edit/deletion history; edit rights are open.
+- **NTE-005:** Shared Client, Project, and Location notes are readable and creatable by every authenticated user who is already authorized to open the parent record — Super Admin globally, and Admin only where their Client, Project, or Location scope authorizes that parent. Phase 10 confirmed this interpretation of the earlier "all authenticated users" wording; Employees hold no Client, Project, Location, or shared-note access and the rule must not be used to widen Employee permissions.
+- **NTE-006:** Project/client notes must remain a simple shared model and record parent, author, timestamps, content, and edit/deletion history. Phase 10 implemented the concrete lifecycle: plain text only, author-only editing, Super Admin-only archive with a retained reason, and a preserved previous-content revision on every edit. Archive retains history; nothing is hard-deleted.
 - **COM-001:** Assignment/request discussions must be separate from general notes and visible only to requester and assigned employee(s).
 - **COM-002:** A new private discussion message must notify the other participant(s).
 

@@ -18,6 +18,8 @@ export async function loadAdoptionManifest() {
   manifest.states.phase8StaticPlanningMap.tableHashes = { ...manifest.states.phase7CoverageReplacement.tableHashes, ...manifest.states.phase8StaticPlanningMap.tableHashes };
   // Phase 9 is additive: retain immutable Phase 8 table fingerprints and add the changed evidence/file fingerprints.
   manifest.states.phase9EvidenceFiles.tableHashes = { ...manifest.states.phase8StaticPlanningMap.tableHashes, ...manifest.states.phase9EvidenceFiles.tableHashes };
+  // Phase 10 is additive: retain immutable Phase 9 table fingerprints and add the changed collaboration/governance fingerprints.
+  manifest.states.phase10Collaboration.tableHashes = { ...manifest.states.phase9EvidenceFiles.tableHashes, ...manifest.states.phase10Collaboration.tableHashes };
   return manifest;
 }
 
@@ -61,6 +63,7 @@ function expectedStage(manifest, count) {
   if (count === 9) return manifest.states.phase7CoverageReplacement;
   if (count === 10) return manifest.states.phase8StaticPlanningMap;
   if (count === 11) return manifest.states.phase9EvidenceFiles;
+  if (count === 12) return manifest.states.phase10Collaboration;
   return null;
 }
 

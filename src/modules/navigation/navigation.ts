@@ -16,12 +16,12 @@ export const modules: Record<ModuleKey, ModuleDefinition> = {
   leave: { key: "leave", href: "/leave", label: "Leave", purpose: "Annual leave requests, decisions, balances, and approved unavailability.", phase: 5, capability: "module:leave:view", mobilePrimary: true },
   coverage: { key: "coverage", href: "/coverage", label: "Coverage", purpose: "Explainable independent staffing and qualification gaps.", phase: 7, capability: "module:coverage:view" },
   replacements: { key: "replacements", href: "/replacements", label: "Replacements", purpose: "Super Admin-reviewed replacement requests with Draft-only effects.", phase: 7, capability: "module:replacements:view", mobilePrimary: true },
-  notifications: { key: "notifications", href: "/notifications", label: "Notifications", purpose: "The complete in-application notification centre belongs to Phase 10; source journeys already persist notifications.", phase: 10, capability: "module:notifications:view" },
+  notifications: { key: "notifications", href: "/notifications", label: "Notifications", purpose: "Your in-application notification centre, delivered in Phase 10. Read, unread, and archive states stay independent.", phase: 10, capability: "module:notifications:view" },
   reports: { key: "reports", href: "/reports", label: "Reports", purpose: "Dashboards, reports, and authorized exports belong to Phase 11.", phase: 11, capability: "module:reports:view" },
-  audit: { key: "audit", href: "/audit", label: "Audit", purpose: "The authorized audit-history interface belongs to Phase 10; the audit foundation already records selected actions.", phase: 10, capability: "module:audit:view" },
+  audit: { key: "audit", href: "/audit", label: "Audit", purpose: "Super Admin-only read-only audit history, delivered in Phase 10. Filtering and safe per-action metadata only.", phase: 10, capability: "module:audit:view" },
   settings: { key: "settings", href: "/settings", label: "Settings", purpose: "Foundation configuration surfaces will be introduced only when confirmed.", phase: 1, capability: "module:settings:view" },
   profile: { key: "profile", href: "/profile", label: "My profile", purpose: "Your own work email, work phone, and professional summary, delivered in Phase 2.", phase: 2, capability: "module:profile:view", mobilePrimary: true },
-  requests: { key: "requests", href: "/requests", label: "Requests & assignments", purpose: "Assignment and request workflows will be introduced in later approved phases.", phase: 4, capability: "module:requests:view" },
+  requests: { key: "requests", href: "/requests", label: "Requests & assignments", purpose: "The coverage and replacement requests you are named on, with participant-only discussion, delivered in Phase 10.", phase: 10, capability: "module:requests:view" },
 };
 
 export function moduleForPathSegment(segment: string) { return Object.values(modules).find((module) => module.key === segment) ?? null; }

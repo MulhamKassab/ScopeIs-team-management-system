@@ -1,7 +1,7 @@
 import "server-only";
 import { and, asc, desc, eq, ilike, inArray, isNull, ne, or, sql } from "drizzle-orm";
 import { db } from "@/db/client";
-import { adminScopeGrants, clients, employeeProfiles, locations, operationalContacts, operationalEmployeeRelations, operationalNotes, projectLocations, projects, skills, staffingRequirements, users } from "@/db/schema";
+import { adminScopeGrants, clients, employeeProfiles, locations, operationalContacts, operationalEmployeeRelations, operationalNoteRevisions, operationalNotes, projectLocations, projects, skills, staffingRequirements, users } from "@/db/schema";
 
 export type OperationalTransaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 export type OperationalExecutor = typeof db | OperationalTransaction;
@@ -61,7 +61,15 @@ export const operationalRepository = {
   reactivateEmployeeRelation(executor: OperationalExecutor, id: string, expectedVersion: number) { return executor.update(operationalEmployeeRelations).set({ archivedAt: null, version: sql`${operationalEmployeeRelations.version} + 1`, updatedAt: new Date() }).where(and(eq(operationalEmployeeRelations.id, id), eq(operationalEmployeeRelations.version, expectedVersion))).returning().then(([row]) => row ?? null); },
   createNote(executor: OperationalExecutor, values: typeof operationalNotes.$inferInsert) { return executor.insert(operationalNotes).values(values).returning().then(([row]) => row!); },
   note(executor: OperationalExecutor, id: string) { return executor.select().from(operationalNotes).where(eq(operationalNotes.id, id)).limit(1).then(([row]) => row ?? null); },
+  /** Serializes concurrent edits so two authors cannot both write a revision against the same version. */
+  lockNote(executor: OperationalExecutor, id: string) { return executor.execute(sql`select id from operational_notes where id = ${id} for update`); },
   updateNote(executor: OperationalExecutor, id: string, expectedVersion: number, content: string) { return executor.update(operationalNotes).set({ content, version: sql`${operationalNotes.version} + 1`, updatedAt: new Date() }).where(and(eq(operationalNotes.id, id), eq(operationalNotes.version, expectedVersion), isNull(operationalNotes.archivedAt))).returning().then(([row]) => row ?? null); },
+  /** Phase 10: the previous content is preserved before the edit replaces it, so an edit is never lossy. */
+  createNoteRevision(executor: OperationalExecutor, values: typeof operationalNoteRevisions.$inferInsert) { return executor.insert(operationalNoteRevisions).values(values).returning().then(([row]) => row!); },
+  noteRevisions(executor: OperationalExecutor, noteIds: string[]) {
+    if (!noteIds.length) return Promise.resolve([] as (typeof operationalNoteRevisions.$inferSelect)[]);
+    return executor.select().from(operationalNoteRevisions).where(inArray(operationalNoteRevisions.noteId, noteIds)).orderBy(desc(operationalNoteRevisions.version));
+  },
   archiveNote(executor: OperationalExecutor, id: string, expectedVersion: number, actorId: string, reason: string) { return executor.update(operationalNotes).set({ archivedAt: new Date(), archivedByUserId: actorId, archiveReason: reason, version: sql`${operationalNotes.version} + 1`, updatedAt: new Date() }).where(and(eq(operationalNotes.id, id), eq(operationalNotes.version, expectedVersion), isNull(operationalNotes.archivedAt))).returning().then(([row]) => row ?? null); },
   archiveSupporting(executor: OperationalExecutor, kind: "CONTACT" | "REQUIREMENT" | "EMPLOYEE_RELATION", id: string, expectedVersion: number) {
     const table = kind === "CONTACT" ? operationalContacts : kind === "REQUIREMENT" ? staffingRequirements : operationalEmployeeRelations;
@@ -78,6 +86,10 @@ export const operationalRepository = {
       executor.select({ requirement: staffingRequirements, skillName: skills.name }).from(staffingRequirements).innerJoin(skills, eq(skills.id, staffingRequirements.requiredSkillId)).where(and(reqCondition, isNull(staffingRequirements.archivedAt))).orderBy(asc(skills.name)),
       executor.select({ relation: operationalEmployeeRelations, displayName: users.displayName }).from(operationalEmployeeRelations).innerJoin(users, eq(users.id, operationalEmployeeRelations.employeeUserId)).where(and(employeeCondition, isNull(operationalEmployeeRelations.archivedAt))).orderBy(asc(users.displayName)),
       executor.select({ note: operationalNotes, authorName: users.displayName }).from(operationalNotes).innerJoin(users, eq(users.id, operationalNotes.authorUserId)).where(and(noteCondition, isNull(operationalNotes.archivedAt))).orderBy(desc(operationalNotes.createdAt)),
-    ]).then(([contacts, requirements, employees, notes]) => ({ contacts, requirements, employees, notes }));
+    ]).then(async ([contacts, requirements, employees, notes]) => {
+      // Phase 10 revision history is attached to each note so the panel can show previous content without a second round trip.
+      const revisions = await this.noteRevisions(executor, notes.map(({ note }) => note.id));
+      return { contacts, requirements, employees, notes: notes.map((entry) => ({ ...entry, revisions: revisions.filter((revision) => revision.noteId === entry.note.id) })) };
+    });
   },
 };

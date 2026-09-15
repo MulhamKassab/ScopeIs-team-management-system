@@ -66,6 +66,31 @@ await withDisposableTestDatabase("seed_smoke", async ({ databaseUrl, env }) => {
       await client.query("commit");
       process.stdout.write("Fictional seed smoke verified capability evidence with an opaque private file object.\n");
     } finally { await rm(storageRoot, { recursive: true, force: true }); }
+
+    // Phase 10 fictional collaboration smoke: proves the seeded developer state can hold a shared-note
+    // revision, a recipient notification, an audit event, and that an unsupported discussion parent is
+    // refused by the database check constraint rather than silently accepted.
+    const smokeClientId = randomUUID();
+    await client.query("begin");
+    await client.query("insert into clients (id, company_name, service_summary) values ($1,'Fictional Seed Smoke Client','Fictional collaboration smoke')", [smokeClientId]);
+    const smokeNote = await client.query("insert into operational_notes (client_id, author_user_id, content) values ($1,'mock-admin-ava','Fictional Phase 10 seed briefing') returning id, version", [smokeClientId]);
+    await client.query("insert into operational_note_revisions (note_id, version, content, edited_by_user_id) values ($1,$2,'Fictional superseded Phase 10 briefing','mock-admin-ava')", [smokeNote.rows[0].id, smokeNote.rows[0].version]);
+    await client.query("insert into notifications (recipient_user_id, event_type, related_record_type, related_record_id) values ('mock-super-admin-nora','evidence.created','employee_evidence',null)");
+    await client.query("insert into audit_events (actor_user_id, actor_role, authentication_mode, action, target_type, target_id, metadata) values ('mock-admin-ava','ADMIN','mock','operational_note.revision_created','operational_note',$1,'{\"contentLength\":42}'::jsonb)", [smokeNote.rows[0].id]);
+    await client.query("commit");
+    const revisionRows = await client.query("select count(*)::int as count from operational_note_revisions where note_id=$1", [smokeNote.rows[0].id]);
+    if (revisionRows.rows[0].count !== 1) throw new Error("Fictional shared-note revision seed smoke verification failed.");
+    // The discussion parent guard must live in the database, not only in application code.
+    const parentGuard = await client.query("select count(*)::int as count from pg_constraint where conname = 'discussion_threads_parent_type_check' and contype = 'c'");
+    if (parentGuard.rows[0].count !== 1) throw new Error("The discussion parent-type constraint is missing.");
+    await client.query("begin");
+    await client.query("delete from audit_events where target_id=$1", [smokeNote.rows[0].id]);
+    await client.query("delete from notifications where recipient_user_id='mock-super-admin-nora' and related_record_id is null");
+    await client.query("delete from operational_note_revisions where note_id=$1", [smokeNote.rows[0].id]);
+    await client.query("delete from operational_notes where id=$1", [smokeNote.rows[0].id]);
+    await client.query("delete from clients where id=$1", [smokeClientId]);
+    await client.query("commit");
+    process.stdout.write("Fictional seed smoke verified shared-note revision history, notification, audit event, and the discussion parent guard.\n");
   } finally { await client.end(); }
 }).catch((error) => {
   process.stderr.write(`${error instanceof Error ? error.message : String(error)}\n`);

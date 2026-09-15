@@ -36,8 +36,8 @@ Architecture must implement, not reinterpret, these canonical product decisions:
 - Admin is scope-limited and cannot publish schedules, approve/reject leave, or recommend leave outcomes.
 - Employee sees Published schedule entries only and cannot access the management planning map.
 - Employee-management notes are private to author or shared upward; the subject cannot see them.
-- Project/client notes remain shared with all authenticated users.
-- Assignment/request discussions remain participant-only.
+- Shared Client, Project, and Location notes remain limited to authenticated users already authorized on the parent record; the Phase 10 note module enforces this server-side and Employees hold no access.
+- Replacement-request discussions remain participant-only, with participants derived from the request rather than from a role.
 - The static map remains non-live and introduces no GPS or movement tracking.
 - Replacement ranking remains advisory; Super Admin retains final authority.
 - Ticket System integration remains the bounded Phase 12 feature, not the product foundation.
@@ -313,8 +313,8 @@ Confirmed restrictions:
 - Employee cannot access the management planning map.
 - Employee cannot see employee-management notes.
 - The subject of an employee-management note cannot see it.
-- Project/client notes are shared with all authenticated users.
-- Assignment/request discussions are participant-only.
+- Shared Client, Project, and Location notes are limited to authenticated users already authorized on the parent record.
+- Replacement-request discussions are participant-only.
 
 Authorization policy should be centralized and testable. Server Components, Server Actions, Route Handlers, repositories, and background jobs must not invent conflicting permission rules.
 

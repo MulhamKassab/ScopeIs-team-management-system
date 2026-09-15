@@ -230,25 +230,27 @@ Phase 9 delivered the bounded capability-evidence journey: employees maintain ce
 
 ## Phase 10 — Notes, discussions, notification centre, and audit interface
 
-**Status:** `NOT_STARTED`
+**Status:** `COMPLETED`
 
 **Sub-phases:**
 
-- 10.1 Shared client and project notes
-- 10.2 Employee-management notes
-- 10.3 Private-to-author and shared-upward visibility
-- 10.4 Subject-employee exclusion
-- 10.5 Participant-only assignment/request discussions
-- 10.6 Complete in-application notification centre
-- 10.7 Read, unread, related record, direct navigation, and archive behavior
-- 10.8 Authorized audit-history interface
-- 10.9 Visibility, privacy, authorization, audit, notification, and E2E QA
+- 10.1 Shared Client, Project, and Location notes — `COMPLETED`
+- 10.2 Employee-management notes — `COMPLETED`
+- 10.3 Private-to-author and shared-upward visibility — `COMPLETED`
+- 10.4 Subject-employee exclusion — `COMPLETED`
+- 10.5 Participant-only replacement-request discussions — `COMPLETED`
+- 10.6 Complete in-application notification centre — `COMPLETED`
+- 10.7 Read, unread, related record, direct navigation, archive, and restore behavior — `COMPLETED`
+- 10.8 Super Admin audit-history interface — `COMPLETED`
+- 10.9 Phase 9 evidence-integrity prerequisite, visibility, privacy, authorization, audit, notification, rollback, concurrency, and E2E QA — `COMPLETED`
 
-Earlier source workflows add their own required audit and notification events. This phase completes the shared central interfaces.
+Phase 10 delivered the bounded collaboration-and-governance journey. Shared Client, Project, and Location notes preserve the previous content as a transactional revision on every edit, keep editing author-only, and keep archive Super Admin-only with a retained reason; the product owner confirmed that "shared" means shared with everyone already authorized on the parent record, so Employees hold no shared-note access. Employee-management notes enforce the private-to-author and shared-upward visibility matrix with immutable content, archive-only corrections, and non-enumerating refusals for the subject, peers, and out-of-scope Admins. The only supported discussion parent is `replacement_request`, with participants derived live from the request and notifications written transactionally to every other participant. The notification centre completes read, unread, archive, restore, mark-all-read, stable `(created_at, id)` pagination, and server-reauthorized related-record navigation for all roles. The audit-history interface is read-only, Super Admin-only, newest-first, filterable, and renders only a per-action safe metadata allowlist. The approved Phase 9 evidence-integrity correction resets review and verification provenance when an owner materially changes verified or reviewed evidence.
+
+An assignment or Ticket discussion, notification retention automation, audit mutation or export, and any Phase 11 report surface remain out of scope.
 
 ## Phase 11 — Dashboards, reports, and exports
 
-**Status:** `NOT_STARTED`
+**Status:** `NEXT`
 
 **Sub-phases:**
 

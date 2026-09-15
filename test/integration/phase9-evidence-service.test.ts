@@ -232,4 +232,28 @@ describe("Phase 9 capability evidence service", () => {
     const [skill] = await db.select().from(employeeProfiles).where(eq(employeeProfiles.userId, cora.id));
     expect(skill.userId).toBe(cora.id);
   });
+
+  it("resets review and verification provenance when the owner materially changes evidence", async () => {
+    const { evidence } = await service().create(cora, { ...phase9Evidence.certification, title: "Fictional Reset Journey" });
+    const verified = await service().review(nora, { evidenceId: evidence.id, expectedVersion: evidence.version, state: "verified" });
+    expect(verified.evidence.reviewState).toBe("verified");
+
+    const edited = await service().update(cora, { evidenceId: evidence.id, expectedVersion: verified.evidence.version, title: "Fictional Reset Journey (edited)", issuer: "Fictional Safety Institute", issueDate: "2026-01-15", expiryDate: "2027-01-15" });
+    expect(edited.evidence).toMatchObject({ reviewState: "unreviewed", reviewedByUserId: null, reviewedAt: null, verifiedByUserId: null, verifiedAt: null });
+    expect(await auditCount("evidence.review_reset", evidence.id)).toBe(1);
+    expect((await service().listMine(cora)).items.find((item) => item.id === evidence.id)?.isNewOrUpdated).toBe(true);
+    // The owner still sees it and Super Admin still receives the updated notification.
+    expect(await notificationCount("mock-super-admin-nora", "evidence.updated", evidence.id)).toBe(1);
+
+    const reVerified = await service().review(nora, { evidenceId: evidence.id, expectedVersion: edited.evidence.version, state: "verified" });
+    const attached = await service().attachFile(cora, { evidenceId: evidence.id, expectedVersion: reVerified.evidence.version, bytes: evidenceFixtures.pdf("reset"), contentType: "application/pdf", filename: "Reset Evidence.pdf" });
+    expect(attached.evidence).toMatchObject({ reviewState: "unreviewed", verifiedByUserId: null, verifiedAt: null });
+    expect(await auditCount("evidence.review_reset", evidence.id)).toBe(2);
+
+    // Review actions never touch last_submitted_at and never trigger a reset.
+    const reviewed = await service().review(nora, { evidenceId: evidence.id, expectedVersion: attached.evidence.version, state: "reviewed" });
+    expect(reviewed.evidence.lastSubmittedAt).toEqual(attached.evidence.lastSubmittedAt);
+    expect(await auditCount("evidence.review_reset", evidence.id)).toBe(2);
+  });
+
 });

@@ -30,6 +30,14 @@ function fileView(row: { id: string; originalFilename: string; contentType: stri
   return { id: row.id, originalFilename: row.originalFilename, contentType: row.contentType, sizeBytes: row.sizeBytes, version: row.version, uploadedAt: row.createdAt.toISOString(), canPreview: inlinePreviewTypes.has(row.contentType), archivedAt: row.archivedAt ? row.archivedAt.toISOString() : null };
 }
 
+/**
+ * A material owner change invalidates the previous review claim. Without this, an item could be edited
+ * after verification and silently keep a verification that no longer describes its content.
+ */
+function resetReviewProvenance() {
+  return { reviewState: "unreviewed" as const, reviewedByUserId: null, reviewedAt: null, verifiedByUserId: null, verifiedAt: null };
+}
+
 export class EvidenceService {
   constructor(
     private readonly auditWriter: AuditWriter = writeAuditEvent,
@@ -41,6 +49,12 @@ export class EvidenceService {
 
   /** Only safe, non-content metadata reaches the audit log. Titles, issuers, filenames, and URLs never do. */
   private auditFileSafety(actor: AuthenticatedActor, action: string, targetId: string, metadata: Record<string, unknown>) { return this.auditWriter(db, { actor, action, targetType: "employee_evidence", targetId, metadata }); }
+
+  /** Records the review reset only when the owner actually removed a review claim. */
+  private async auditOwnerReset(tx: EvidenceTransaction, actor: AuthenticatedActor, evidenceId: string, kind: string, previousState: string, cause = "owner_material_change") {
+    if (previousState === "unreviewed") return;
+    await this.audit(tx, actor, "evidence.review_reset", evidenceId, { kind, previousState, cause });
+  }
 
   private async notifySuperAdmins(tx: EvidenceTransaction, ownerUserId: string, eventType: string, evidenceId: string) {
     for (const recipient of await evidenceRepository.activeSuperAdmins(tx)) if (recipient.id !== ownerUserId) await this.notificationWriter(tx, { recipientUserId: recipient.id, eventType, relatedRecordType: "employee_evidence", relatedRecordId: evidenceId });
@@ -125,14 +139,16 @@ export class EvidenceService {
     return db.transaction(async (tx) => {
       await evidenceRepository.lockOwner(tx, actor.id);
       await evidenceRepository.lockEvidence(tx, parsed.evidenceId);
-      await this.requireOwnedActiveEvidence(tx, actor, parsed.evidenceId);
+      const current = await this.requireOwnedActiveEvidence(tx, actor, parsed.evidenceId);
       const row = await evidenceRepository.updateEvidence(tx, parsed.evidenceId, parsed.expectedVersion, {
         title: parsed.title, issuer: parsed.issuer ?? null, issueDate: parsed.issueDate ?? null, expiryDate: parsed.expiryDate ?? null,
         details: parsed.details ?? null, relatedSkillId: parsed.relatedSkillId ?? null, externalUrl: parsed.externalUrl ?? null, lastSubmittedAt: new Date(),
+        // A material owner change invalidates the previous review claim: verified must keep meaning something.
+        ...resetReviewProvenance(),
       });
       if (!row) throw new EvidenceDomainError("STALE_VERSION");
-      // Review state stays Super Admin authority; the item is flagged new/updated for the review queue.
-      await this.audit(tx, actor, "evidence.updated", row.id, { kind: row.kind, reviewedBeforeUpdate: row.reviewState !== "unreviewed", hasExpiry: Boolean(row.expiryDate), hasExternalUrl: Boolean(row.externalUrl), hasDetails: Boolean(row.details) });
+      await this.audit(tx, actor, "evidence.updated", row.id, { kind: row.kind, reviewedBeforeUpdate: current.reviewState !== "unreviewed", hasExpiry: Boolean(row.expiryDate), hasExternalUrl: Boolean(row.externalUrl), hasDetails: Boolean(row.details) });
+      await this.auditOwnerReset(tx, actor, row.id, row.kind, current.reviewState);
       await this.notifySuperAdmins(tx, actor.id, "evidence.updated", row.id);
       return { evidence: row };
     });
@@ -188,9 +204,10 @@ export class EvidenceService {
         }
         const version = await evidenceRepository.nextFileVersion(tx, parsed.evidenceId);
         const file = await evidenceRepository.createFile(tx, { evidenceId: parsed.evidenceId, ownerUserId: actor.id, uploaderUserId: actor.id, storageKey, originalFilename: validated.displayFilename, contentType: validated.contentType, sizeBytes: validated.sizeBytes, version });
-        const row = await evidenceRepository.updateEvidence(tx, parsed.evidenceId, parsed.expectedVersion, { lastSubmittedAt: new Date() });
+        const row = await evidenceRepository.updateEvidence(tx, parsed.evidenceId, parsed.expectedVersion, { lastSubmittedAt: new Date(), ...resetReviewProvenance() });
         if (!row) throw new EvidenceDomainError("STALE_VERSION");
         await this.audit(tx, actor, replaced ? "evidence.file_replaced" : "evidence.file_attached", parsed.evidenceId, { kind: row.kind, fileVersion: file.version, contentType: file.contentType, sizeBytes: file.sizeBytes, replacedFile: Boolean(replaced), malwareScanned: malware.scanned });
+        await this.auditOwnerReset(tx, actor, row.id, row.kind, locked.reviewState);
         await this.notifySuperAdmins(tx, actor.id, "evidence.updated", parsed.evidenceId);
         return { file, evidence: row };
       });
