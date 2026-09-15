@@ -205,7 +205,7 @@ Phase 8 closed with the application itself valid, but with defects in the aggreg
 
 ## Phase 9 — Certifications, CVs, portfolios, and files
 
-**Status:** `NEXT`
+**Status:** `COMPLETED`
 
 **Main journey:** Employee submits capability evidence → evidence saves immediately → Super Admin is notified → Super Admin reviews or verifies it.
 
@@ -224,7 +224,9 @@ Phase 8 closed with the application itself valid, but with defects in the aggreg
 
 Existing incomplete schema and code are preserved until this phase; they must not be expanded prematurely.
 
-Existing incomplete certification/portfolio schema preserved for later work does not by itself mean the Phase 9 journey has started. Phase 9 is the next journey and remains `NOT_STARTED` until its own sub-phase work begins under an approved Phase ID.
+The incomplete certification/portfolio schema preserved from Phase 2 was extended additively in Phase 9 rather than rebuilt; it was evidence, not a completed journey, until the Phase 9 workflow existed end to end.
+
+Phase 9 delivered the bounded capability-evidence journey: employees maintain certifications, portfolio links and files, project examples, one active CV, and supporting documents from `/profile`; submissions save immediately without an approval gate, flag new/updated state, and transactionally notify active Super Admins; Super Admin reviews and optionally verifies from the employee detail context; private files stay behind a provider-neutral storage boundary with per-request authorization. Sub-phase 9.9 (whether verification affects coverage or replacement eligibility) remains `DEFERRED` as an unapproved product decision, and Phase 10 remains the next journey.
 
 ## Phase 10 — Notes, discussions, notification centre, and audit interface
 

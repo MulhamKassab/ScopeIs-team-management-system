@@ -38,6 +38,8 @@
     "test:phase7-e2e": "node scripts/run-phase7-playwright.mjs",
     "test:phase8-service": "node scripts/run-phase8-service-tests.mjs",
     "test:phase8-e2e": "node scripts/run-phase8-playwright.mjs",
+    "test:phase9-service": "node scripts/run-phase9-service-tests.mjs",
+    "test:phase9-e2e": "node scripts/run-phase9-playwright.mjs",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:seed": "tsx src/db/seed/index.ts",

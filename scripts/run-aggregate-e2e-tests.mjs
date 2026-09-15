@@ -11,6 +11,7 @@
 //   Phase 6  skills journey                          (Phase 4 fixtures)
 //   Phase 7  coverage/replacement journey            (Phase 4 fixtures)
 //   Phase 8  static planning map journey             (Phase 4 + Phase 8 fixtures)
+//   Phase 9  capability evidence journey             (Phase 3 + Phase 4 fixtures, private local storage)
 //
 // The phase specs carry `test.skip(<guard>)` statements. Invoking them individually is what keeps
 // those guards satisfied, so no journey is silently skipped, and no journey runs against another
@@ -29,6 +30,7 @@ const suites = [
   { name: "Phase 6 skills and capabilities", script: "run-phase6-playwright.mjs" },
   { name: "Phase 7 coverage and replacement", script: "run-phase7-playwright.mjs" },
   { name: "Phase 8 static planning map", script: "run-phase8-playwright.mjs" },
+  { name: "Phase 9 capability evidence", script: "run-phase9-playwright.mjs" },
 ];
 
 function runSuite(script) {

@@ -20,4 +20,13 @@ export const vercelBlobPrivateStorage = {
   },
   async read(storageKey: string) { return get(storageKey, { access: "private" }); },
   async archive(storageKey: string) { await del(storageKey); },
+  // Phase 9 byte-oriented members so the neutral evidence-storage adapter can reuse this helper.
+  async putBytes(storageKey: string, bytes: Uint8Array, contentType: string) {
+    await put(storageKey, Buffer.from(bytes), { access: "private", addRandomSuffix: false, contentType });
+  },
+  async readBytes(storageKey: string): Promise<Uint8Array | null> {
+    const result = await get(storageKey, { access: "private" });
+    if (!result || !result.stream) return null;
+    return new Uint8Array(await new Response(result.stream).arrayBuffer());
+  },
 };

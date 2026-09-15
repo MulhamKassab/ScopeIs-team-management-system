@@ -103,14 +103,44 @@ export const employeeEvidence = pgTable("employee_evidence", {
   id: uuid("id").defaultRandom().primaryKey(), ownerUserId: text("owner_user_id").notNull(), uploaderUserId: text("uploader_user_id").notNull(), kind: evidenceKindEnum("kind").notNull(),
   title: text("title").notNull(), issuer: text("issuer"), issueDate: date("issue_date"), expiryDate: date("expiry_date"),
   relatedSkillId: uuid("related_skill_id"), externalUrl: text("external_url"), reviewState: evidenceReviewStateEnum("review_state").notNull().default("unreviewed"), reviewedByUserId: text("reviewed_by_user_id"),
-  reviewedAt: timestamp("reviewed_at", { withTimezone: true }), archivedAt: timestamp("archived_at", { withTimezone: true }), version: integer("version").notNull().default(1), ...timestamps,
-}, (table) => [foreignKey({ name: "employee_evidence_owner_user_id_fkey", columns: [table.ownerUserId], foreignColumns: [users.id] }).onDelete("restrict"), foreignKey({ name: "employee_evidence_uploader_user_id_fkey", columns: [table.uploaderUserId], foreignColumns: [users.id] }).onDelete("restrict"), foreignKey({ name: "employee_evidence_related_skill_id_fkey", columns: [table.relatedSkillId], foreignColumns: [skills.id] }).onDelete("restrict"), foreignKey({ name: "employee_evidence_reviewed_by_user_id_fkey", columns: [table.reviewedByUserId], foreignColumns: [users.id] }).onDelete("restrict"), index("employee_evidence_owner_idx").on(table.ownerUserId, table.archivedAt), check("employee_evidence_version_check", sql`${table.version} > 0`), check("employee_evidence_check", sql`${table.expiryDate} is null or ${table.issueDate} is null or ${table.expiryDate} >= ${table.issueDate}`)]);
+  reviewedAt: timestamp("reviewed_at", { withTimezone: true }),
+  archivedAt: timestamp("archived_at", { withTimezone: true }), version: integer("version").notNull().default(1), ...timestamps,
+  // Phase 9 provenance: owner submissions, verification actor/time, and an optional idempotency key.
+  // Declared last so the additive ALTER column order matches the Drizzle-exported column order exactly.
+  lastSubmittedAt: timestamp("last_submitted_at", { withTimezone: true }), submissionKey: text("submission_key"),
+  verifiedByUserId: text("verified_by_user_id"), verifiedAt: timestamp("verified_at", { withTimezone: true }), details: text("details"),
+}, (table) => [
+  foreignKey({ name: "employee_evidence_owner_user_id_fkey", columns: [table.ownerUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  foreignKey({ name: "employee_evidence_uploader_user_id_fkey", columns: [table.uploaderUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  foreignKey({ name: "employee_evidence_related_skill_id_fkey", columns: [table.relatedSkillId], foreignColumns: [skills.id] }).onDelete("restrict"),
+  foreignKey({ name: "employee_evidence_reviewed_by_user_id_fkey", columns: [table.reviewedByUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  foreignKey({ name: "employee_evidence_verified_by_user_id_fkey", columns: [table.verifiedByUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  index("employee_evidence_owner_idx").on(table.ownerUserId, table.archivedAt),
+  index("employee_evidence_review_idx").on(table.reviewState, table.lastSubmittedAt),
+  uniqueIndex("employee_evidence_submission_key_unique").on(table.ownerUserId, table.submissionKey).where(sql`${table.submissionKey} is not null`),
+  uniqueIndex("employee_evidence_active_cv_unique").on(table.ownerUserId).where(sql`${table.kind} = 'cv' and ${table.archivedAt} is null`),
+  check("employee_evidence_version_check", sql`${table.version} > 0`),
+  check("employee_evidence_check", sql`${table.expiryDate} is null or ${table.issueDate} is null or ${table.expiryDate} >= ${table.issueDate}`),
+]);
 
 export const employeeFiles = pgTable("employee_files", {
   id: uuid("id").defaultRandom().primaryKey(), evidenceId: uuid("evidence_id").notNull(), ownerUserId: text("owner_user_id").notNull(), storageKey: text("storage_key").notNull(),
   originalFilename: text("original_filename").notNull(), contentType: text("content_type").notNull(), sizeBytes: integer("size_bytes").notNull(),
   archivedAt: timestamp("archived_at", { withTimezone: true }), createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-}, (table) => [foreignKey({ name: "employee_files_evidence_id_fkey", columns: [table.evidenceId], foreignColumns: [employeeEvidence.id] }).onDelete("restrict"), foreignKey({ name: "employee_files_owner_user_id_fkey", columns: [table.ownerUserId], foreignColumns: [users.id] }).onDelete("restrict"), unique("employee_files_storage_key_key").on(table.storageKey), index("employee_files_evidence_idx").on(table.evidenceId), check("employee_files_size_bytes_check", sql`${table.sizeBytes} > 0`)]);
+  // Phase 9: uploader provenance and an immutable per-evidence file version so replacement keeps history.
+  // Declared last so the additive ALTER column order matches the Drizzle-exported column order exactly.
+  uploaderUserId: text("uploader_user_id"), version: integer("version").notNull().default(1),
+}, (table) => [
+  foreignKey({ name: "employee_files_evidence_id_fkey", columns: [table.evidenceId], foreignColumns: [employeeEvidence.id] }).onDelete("restrict"),
+  foreignKey({ name: "employee_files_owner_user_id_fkey", columns: [table.ownerUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  foreignKey({ name: "employee_files_uploader_user_id_fkey", columns: [table.uploaderUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  unique("employee_files_storage_key_key").on(table.storageKey),
+  index("employee_files_evidence_idx").on(table.evidenceId),
+  index("employee_files_evidence_active_idx").on(table.evidenceId, table.archivedAt),
+  uniqueIndex("employee_files_active_version_unique").on(table.evidenceId, table.version).where(sql`${table.archivedAt} is null`),
+  check("employee_files_size_bytes_check", sql`${table.sizeBytes} > 0`),
+  check("employee_files_version_check", sql`${table.version} > 0`),
+]);
 
 export const employeeManagementNotes = pgTable("employee_management_notes", {
   id: uuid("id").defaultRandom().primaryKey(), subjectUserId: text("subject_user_id").notNull(), authorUserId: text("author_user_id").notNull(), authorRole: systemRoleEnum("author_role").notNull(),
@@ -270,7 +300,7 @@ export const userRelations = relations(users, ({ many, one }) => ({
   employeeProfile: one(employeeProfiles, { fields: [users.id], references: [employeeProfiles.userId], relationName: "employeeProfileUser" }),
   managedProfiles: many(employeeProfiles, { relationName: "employeeProfileManager" }), employeeSkills: many(employeeSkills),
   ownedEvidence: many(employeeEvidence, { relationName: "evidenceOwner" }), uploadedEvidence: many(employeeEvidence, { relationName: "evidenceUploader" }),
-  reviewedEvidence: many(employeeEvidence, { relationName: "evidenceReviewer" }), ownedFiles: many(employeeFiles),
+  reviewedEvidence: many(employeeEvidence, { relationName: "evidenceReviewer" }), verifiedEvidence: many(employeeEvidence, { relationName: "evidenceVerifier" }), ownedFiles: many(employeeFiles),
   authoredManagementNotes: many(employeeManagementNotes, { relationName: "managementNoteAuthor" }), subjectManagementNotes: many(employeeManagementNotes, { relationName: "managementNoteSubject" }),
   requestedReplacementRequests: many(replacementRequests, { relationName: "replacementRequester" }), nominatedReplacementRequests: many(replacementRequests, { relationName: "replacementNominee" }), selectedReplacementRequests: many(replacementRequests, { relationName: "replacementSelected" }), decidedReplacementRequests: many(replacementRequests, { relationName: "replacementDecider" }),
 }));
@@ -288,9 +318,10 @@ export const employeeEvidenceRelations = relations(employeeEvidence, ({ many, on
   owner: one(users, { fields: [employeeEvidence.ownerUserId], references: [users.id], relationName: "evidenceOwner" }),
   uploader: one(users, { fields: [employeeEvidence.uploaderUserId], references: [users.id], relationName: "evidenceUploader" }),
   reviewer: one(users, { fields: [employeeEvidence.reviewedByUserId], references: [users.id], relationName: "evidenceReviewer" }),
+  verifier: one(users, { fields: [employeeEvidence.verifiedByUserId], references: [users.id], relationName: "evidenceVerifier" }),
   relatedSkill: one(skills, { fields: [employeeEvidence.relatedSkillId], references: [skills.id] }), files: many(employeeFiles),
 }));
-export const employeeFileRelations = relations(employeeFiles, ({ one }) => ({ evidence: one(employeeEvidence, { fields: [employeeFiles.evidenceId], references: [employeeEvidence.id] }), owner: one(users, { fields: [employeeFiles.ownerUserId], references: [users.id] }) }));
+export const employeeFileRelations = relations(employeeFiles, ({ one }) => ({ evidence: one(employeeEvidence, { fields: [employeeFiles.evidenceId], references: [employeeEvidence.id] }), owner: one(users, { fields: [employeeFiles.ownerUserId], references: [users.id] }), uploader: one(users, { fields: [employeeFiles.uploaderUserId], references: [users.id] }) }));
 export const employeeManagementNoteRelations = relations(employeeManagementNotes, ({ one }) => ({
   subject: one(users, { fields: [employeeManagementNotes.subjectUserId], references: [users.id], relationName: "managementNoteSubject" }),
   author: one(users, { fields: [employeeManagementNotes.authorUserId], references: [users.id], relationName: "managementNoteAuthor" }),

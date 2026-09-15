@@ -8,7 +8,7 @@ The tracker uses only: `NOT_STARTED`, `READY`, `IN_PROGRESS`, `PARTIAL`, `BLOCKE
 
 **Completion rule:** backend-only work and UI shells are not completed user journeys. A phase is complete only after all applicable delivery gates and its end-to-end journey are verified.
 
-Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [Phase 2 journey completion], [Phase 2 manual QA readiness], [Phase 2 controls/code remediation], [Phase 3 report], [Phase 3 decisions], [Phase 4 report], [Phase 4 decisions], [Phase 5 report], [Phase 5 decisions], [Phase 6 report], [Phase 6 decisions], [Phase 7 report], [Phase 8 report], [Phase 8 decisions], [Checkpoint Sub-phase A report], [Checkpoint Sub-phase B closure], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
+Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [Phase 2 journey completion], [Phase 2 manual QA readiness], [Phase 2 controls/code remediation], [Phase 3 report], [Phase 3 decisions], [Phase 4 report], [Phase 4 decisions], [Phase 5 report], [Phase 5 decisions], [Phase 6 report], [Phase 6 decisions], [Phase 7 report], [Phase 8 report], [Phase 8 decisions], [Checkpoint Sub-phase A report], [Checkpoint Sub-phase B closure], [Phase 9 report], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
 
 [roadmap]: IMPLEMENTATION_ROADMAP.md
 [context]: ../../PROJECT_CONTEXT.md
@@ -37,6 +37,7 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 [Phase 8 decisions]: PHASE_8_STATIC_PLANNING_MAP_DECISIONS.md
 [Checkpoint Sub-phase A report]: ../phase-reports/SCOPEIS_POST_PHASE_8_CHECKPOINT_SUBPHASE_A_REMEDIATION_R1.md
 [Checkpoint Sub-phase B closure]: ../phase-reports/SCOPEIS_POST_PHASE_8_CHECKPOINT_SUBPHASE_B_CLOSURE_R1.md
+[Phase 9 report]: ../phase-reports/SCOPEIS_PHASE_9_CERTIFICATIONS_CVS_PORTFOLIOS_AND_PRIVATE_FILES_JOURNEY_R1.md
 [employee services]: ../../src/modules/employees/employee-services.ts
 [schema]: ../../src/db/schema/index.ts
 [navigation]: ../../src/modules/navigation/navigation.ts
@@ -47,14 +48,14 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 
 ## Current focus
 
-- **Current active phase:** Phase 9 — Certifications, CVs, portfolios, and files
-- **Current active/next sub-phase:** 9.1 Certification records, under its own approved Phase ID. The Post-Phase-8 checkpoint is closed.
-- **Current phase status:** `NOT_STARTED` (Phase 9 is the next journey)
+- **Current active phase:** Phase 10 — Notes, discussions, notification centre, and audit interface
+- **Current active/next sub-phase:** 10.1 Shared client and project notes, under its own approved Phase ID. Phase 9 is complete and its coverage-linkage question (9.9) stays deferred.
+- **Current phase status:** `NOT_STARTED` (Phase 10 is the next journey)
 - **Last status date:** `2026-09-15`
-- **Most recent trustworthy evidence:** [Checkpoint Sub-phase B closure]; [Checkpoint Sub-phase A report]; [Phase 8 report]
-- **Immediate objective:** Begin Phase 9 planning under an approved Phase ID; preserve the closed Phase 0–8 record and the Phase 9 `NOT_STARTED` journey boundary.
-- **Known blockers:** None. The Post-Phase-8 checkpoint closed on 2026-09-15 with every mandatory gate passing; remaining items are documented non-blocking debt only.
-- **Explicit exclusions:** Phase 9 implementation, Preview-worktree merge or modification, GPS/live tracking, geocoding, routes/travel, tickets, production access/migration/authentication/deployment, credential reorganisation, and notification-centre redesign.
+- **Most recent trustworthy evidence:** [Phase 9 report]; [Checkpoint Sub-phase B closure]; [Phase 8 report]
+- **Immediate objective:** Prepare Phase 10 planning under an approved Phase ID; preserve the completed Phase 9 evidence journey and its locked privacy matrix.
+- **Known blockers:** None. Phase 9 passed every mandatory gate; remaining items are documented non-blocking debt and the deferred 9.9 coverage-linkage decision.
+- **Explicit exclusions:** Phase 10 implementation, Preview-worktree merge or modification, GPS/live tracking, geocoding, routes/travel, tickets, production access/migration/authentication/deployment, credential reorganisation, and notification-centre redesign.
 - **Required phase-exit journey:** Phase 9: the confirmed employee evidence journey (certifications, CVs, portfolios, and files) only under its own approved Phase ID and product decisions.
 
 ## Master phase status
@@ -72,7 +73,7 @@ Progress measures completed roadmap sub-phases only. It is **not** engineering e
 | 6 | Skills and operational capabilities | `COMPLETED` | 8 | 8 | 100% | Completed controlled-skills and non-blocking warning journey | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phases 2–5 | None | [Phase 6 report]; [Phase 6 decisions] |
 | 7 | Coverage and replacement | `COMPLETED` | 11 | 11 | 100% | Completed bounded coverage/replacement journey | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phases 4–6 | None | [Phase 7 report] |
 | 8 | Static planning map | `COMPLETED` | 10 | 10 | 100% | Completed static Published-planning map journey | 2026-09-03 | 2026-09-02 | 2026-09-03 | Phases 4–7 | None | [Phase 8 report]; [Phase 8 decisions] |
-| 9 | Certifications, CVs, portfolios, and files | `NOT_STARTED` | 0 | 10 | 0% | 9.1 Certification records | 2026-09-15 | — | — | Phase 2 profile journey | Intentionally deferred; preserved schema-only structures must only be preserved and do not mean the journey has started | [Phase 2 database] |
+| 9 | Certifications, CVs, portfolios, and files | `COMPLETED` | 9 | 10 | 90% | 9.9 deferred: whether verification affects coverage remains an unapproved product decision | 2026-09-15 | 2026-09-15 | 2026-09-15 | Phase 2 profile journey | None for the approved journey | [Phase 9 report] |
 | 10 | Notes, discussions, notification centre, and audit interface | `PARTIAL` | 0 | 9 | 0% | 10.1 Shared client and project notes | 2026-09-01 | — | — | Source workflows | Source records/workflows unavailable | [schema] |
 | 11 | Dashboards, reports, and exports | `NOT_STARTED` | 0 | 9 | 0% | 11.1 Super Admin dashboard | 2026-09-01 | — | — | Trustworthy source journeys | Source data unavailable | None located |
 | 12 | Ticket System integration | `NOT_STARTED` | 0 | 9 | 0% | 12.1 Existing Ticket System reuse assessment | 2026-09-01 | — | — | Phases 1–11 | Workforce journeys incomplete | None located |
@@ -232,16 +233,16 @@ Canonical commands are recorded in the [Checkpoint Sub-phase A report] and in `R
 
 | ID | Sub-phase | Status | Last status date | Started date | Completed date | Dependencies | Implementation state | QA state | Exit evidence required | Current evidence | Blocker/notes |
 | -- | --------- | ------ | ---------------- | ------------ | -------------- | ------------ | -------------------- | -------- | ---------------------- | ---------------- | ------------- |
-| 9.1 | Certification records | `PARTIAL` | 2026-09-01 | — | — | Phase 2 | Evidence schema only | Disposable migration | Authorized certification workflow | [Phase 2 database] | Preserve; no repository/service/UI. |
-| 9.2 | Portfolio links and project examples | `PARTIAL` | 2026-09-01 | — | — | Phase 2 | Evidence-kind schema only | Disposable migration | Authorized portfolio workflow | [Phase 2 database] | Preserve; no repository/service/UI. |
-| 9.3 | CV and supporting documents | `PARTIAL` | 2026-09-01 | — | — | Phase 2 | Evidence/file schema only | Disposable migration | Authorized CV/document workflow | [Phase 2 database] | Preserve; no repository/service/UI. |
-| 9.4 | Provider-neutral private storage adapter | `PARTIAL` | 2026-09-01 | — | — | 9.1–9.3 | Provider-specific Blob helper only | None located | Authorized provider-neutral adapter | [storage helper] | Helper is unconnected and not a complete adapter boundary. |
-| 9.5 | Authorized upload, preview, and download | `NOT_STARTED` | 2026-09-01 | — | — | 9.4 | Validation helper only | None located | Full authorized storage journey | [storage helper] | — |
-| 9.6 | New/updated evidence state | `PARTIAL` | 2026-09-01 | — | — | 9.1 | Review-state schema only | Disposable migration | Immediate saved-state behavior | [schema] | No application workflow. |
-| 9.7 | Super Admin review and verification | `PARTIAL` | 2026-09-01 | — | — | 9.6 | Reviewer fields/state schema only | Disposable migration | Informational review workflow | [Phase 2 database] | No service/route/UI. |
-| 9.8 | Expiry handling | `PARTIAL` | 2026-09-01 | — | — | 9.1 | Expiry fields/date constraint only | Disposable migration | Expiry behavior and notifications | [schema] | — |
+| 9.1 | Certification records | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | Phase 2 | Real certification create/update/archive with issuer, dates, optional related skill, and derived expiry | Unit/component/disposable PostgreSQL/desktop+mobile browser | Authorized certification workflow | [Phase 9 report] | No approval gate; owners archive rather than delete. |
+| 9.2 | Portfolio links and project examples | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | 9.1 | HTTPS-only portfolio links (never fetched server-side) and project-example evidence items | Unit/component/PostgreSQL/browser | Authorized portfolio workflow | [Phase 9 report] | No client/project foreign key was introduced. |
+| 9.3 | CV and supporting documents | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | 9.1 | One active CV per owner enforced by a partial unique index; replacement archives the previous CV atomically | PostgreSQL/service/browser | Authorized CV/document workflow | [Phase 9 report] | Supporting documents stay private to owner and Super Admin. |
+| 9.4 | Provider-neutral private storage adapter | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | 9.1–9.3 | One put/read/remove interface with local, encapsulated vercel, and fail-closed unconfigured adapters selected by EVIDENCE_STORAGE_MODE | Unit/storage adapter/service | Authorized provider-neutral adapter | [Phase 9 report] | Production provider selection remains Phase 13. |
+| 9.5 | Authorized upload, preview, and download | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | 9.4 | Route handlers resolve by database file id, enforce ownership and role, audit Super Admin reads, preview PDF/JPEG/PNG inline and download DOCX | Route certification/Playwright header assertions | Full authorized storage journey | [Phase 9 report] | No public, permanent, or signed public URL exists. |
+| 9.6 | New/updated evidence state | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | 9.1 | last_submitted_at is set only by owner submissions; new/updated is derived against reviewed_at | Unit/service/browser | Immediate saved-state behavior | [Phase 9 report] | Review actions never change the marker. |
+| 9.7 | Super Admin review and verification | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | 9.6 | Linear unreviewed→reviewed→verified with separate verifier provenance, verification removal, reset, audit, and owner notification | Unit/service/browser | Informational review workflow | [Phase 9 report] | Verification never gates saving or owner visibility. |
+| 9.8 | Expiry handling | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | 9.1 | Derived at read time from the Asia/Dubai business date (no_expiry/valid/expired) with the exact date displayed | Unit/service/browser | Expiry behavior and notifications | [Phase 9 report] | No persisted expired flag and no expiring-soon threshold. |
 | 9.9 | Optional configurable connection to coverage | `DEFERRED` | 2026-09-01 | — | — | Phase 7, confirmed policy | Documentation only | None located | Confirmed coverage policy | [decisions](DECISIONS_AND_CONSTRAINTS.md) | Certification eligibility remains an open decision. |
-| 9.10 | Audit, notification, storage rollback, privacy, and E2E QA | `NOT_STARTED` | 2026-09-01 | — | — | 9.1–9.9 | Foundation patterns only | Foundation integration only | Full evidence journey QA | [P1 certification] | — |
+| 9.10 | Audit, notification, storage rollback, privacy, and E2E QA | `COMPLETED` | 2026-09-15 | 2026-09-15 | 2026-09-15 | 9.1–9.9 | Transactional audit and notification, failure-injection rollback with storage compensation, locked privacy matrix, idempotency, concurrency, and active-CV uniqueness | Unit/component/PostgreSQL/route/browser/seed smoke | Full evidence journey QA | [Phase 9 report] | Phase 7 coverage results are proven unchanged. |
 
 ## Phase 10 — Notes, discussions, notification centre, and audit interface
 
@@ -305,8 +306,8 @@ Canonical commands are recorded in the [Checkpoint Sub-phase A report] and in `R
 | Related future phase/sub-phase | Existing reusable work | Current classification | Why it is not complete | Evidence | Preservation instruction |
 | ------------------------------ | ---------------------- | ---------------------- | ---------------------- | -------- | ------------------------ |
 | 6.1–6.4 | Skills, catalogue, and employee-skill repositories/services | `PARTIAL` | Verified backend only; no operational routes/UI or scheduling use | [Phase 2 core R3] | Preserve and connect in Phase 6; do not rebuild. |
-| 9.1–9.3, 9.6–9.8 | Evidence and file tables, review/expiry fields | `PARTIAL` | Schema only; no workflow | [Phase 2 database] | Preserve without expanding before Phase 9. |
-| 9.4–9.5 | Vercel Blob validation/storage helper | `PARTIAL` | Unconnected provider-specific helper; no authorized transaction | [storage helper] | Preserve; replace/encapsulate only in approved Phase 9 work. |
+| 9.1–9.3, 9.6–9.8 | Evidence and file tables, review/expiry fields | `COMPLETED` | Completed in Phase 9 with the additive `0010` migration and the evidence module | [Phase 9 report] | Preserve the additive columns and the review lifecycle semantics. |
+| 9.4–9.5 | Vercel Blob validation/storage helper | `COMPLETED` | Encapsulated behind the Phase 9 neutral storage interface as the production adapter candidate | [Phase 9 report] | Keep behind the interface; never use the SDK in tests. |
 | 10.2–10.4 | Employee-management-note table and visibility policy | `PARTIAL` | No repository/service/route/UI | [note policy] | Preserve without expanding before Phase 10. |
 | 10.6–10.8 | Generic notification and audit persistence | `PARTIAL` | No central UI or source-workflow integration | [notification service] | Reuse in source workflows; complete central interfaces in Phase 10. |
 | 3–12 | Role-aware navigation and empty module shells | `PARTIAL` | Shell visibility/protection only; no business behavior | [navigation] | Retain as clearly labelled shells until each owning journey is built. |
@@ -481,3 +482,4 @@ Append new rows; correct an existing row only for a factual error. Every `COMPLE
 | 2026-09-15 | Phase 3 repository-wide QA disposition | `BLOCKED` | `COMPLETED` | [Checkpoint Sub-phase A report] | The preserved repository-wide QA interference was remediated as verification-harness work: shared component tests repaired, aggregate integration isolated per file, aggregate E2E and Playwright port/database contract settled, and the historical prototype placed outside the authoritative lint boundary. No Phase 3 product behavior changed. | Codex |
 | 2026-09-15 | Post-Phase-8 Checkpoint Sub-phase A | `NOT_STARTED` | `VERIFICATION_PENDING` | [Checkpoint Sub-phase A report] | Application behavior, permissions, privacy projections, workflows, schemas, and Phase 8 map behavior were left unchanged. Aggregate component, integration, E2E, route-certification, migration, seed-smoke, lint, typecheck, and isolated safe-build gates pass. Formal closure is deferred to Sub-phase B. | Codex |
 | 2026-09-15 | Post-Phase-8 Checkpoint Sub-phase B | `VERIFICATION_PENDING` | `COMPLETED` | [Checkpoint Sub-phase B closure] | Independent re-verification of `decb377` from the committed `main` state: all 20 mandatory gates passed, Phases 0–8 verified with no P0/P1 defect, isolation 9/9, `.env.production` and Preview untouched, documentation consistent. Classification `SCOPEIS_POST_PHASE_8_CHECKPOINT_COMPLETED_WITH_NON_BLOCKING_CAVEATS_READY_FOR_PHASE_9`. Phase 9 remains `NOT_STARTED`. | Codex |
+| 2026-09-15 | Phase 9 capability evidence journey | `NOT_STARTED` | `COMPLETED` | [Phase 9 report] | Employee certifications, portfolio links/files, project examples, one active CV, and supporting documents save immediately, flag new/updated, and transactionally notify active Super Admins; Super Admin reviews, verifies, removes verification, or resets; owners update, replace files, and archive. Additive migration `0010`, provider-neutral private storage with a fail-closed production default, locked privacy matrix (scoped Admin receives certification summary only), derived Dubai expiry, idempotent creates, optimistic concurrency, storage compensation, and a proven unchanged Phase 7 coverage result. Sub-phase 9.9 (coverage linkage) remains deferred. | Codex |

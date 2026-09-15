@@ -16,6 +16,8 @@ export async function loadAdoptionManifest() {
   const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
   // Phase 8 is additive: retain immutable Phase 7 table fingerprints and add the new table fingerprint.
   manifest.states.phase8StaticPlanningMap.tableHashes = { ...manifest.states.phase7CoverageReplacement.tableHashes, ...manifest.states.phase8StaticPlanningMap.tableHashes };
+  // Phase 9 is additive: retain immutable Phase 8 table fingerprints and add the changed evidence/file fingerprints.
+  manifest.states.phase9EvidenceFiles.tableHashes = { ...manifest.states.phase8StaticPlanningMap.tableHashes, ...manifest.states.phase9EvidenceFiles.tableHashes };
   return manifest;
 }
 
@@ -58,6 +60,7 @@ function expectedStage(manifest, count) {
   if (count === 8) return manifest.states.phase6SkillsCapabilities;
   if (count === 9) return manifest.states.phase7CoverageReplacement;
   if (count === 10) return manifest.states.phase8StaticPlanningMap;
+  if (count === 11) return manifest.states.phase9EvidenceFiles;
   return null;
 }
 

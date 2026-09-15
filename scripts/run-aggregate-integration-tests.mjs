@@ -15,6 +15,7 @@ import { repositoryRoot } from "./phase1-test-environment.mjs";
 import { runChild, withDisposableTestDatabase } from "./disposable-test-database.mjs";
 import { seedPhase4Journey } from "./phase4-test-fixtures.mjs";
 import { seedPhase8MapJourney } from "./phase8-test-fixtures.mjs";
+import { seedPhase9Journey } from "./phase9-test-fixtures.mjs";
 
 const vitest = join(repositoryRoot, "node_modules", "vitest", "vitest.mjs");
 
@@ -27,6 +28,7 @@ const suites = [
   { name: "Phase 6 capabilities service", label: "phase6_capabilities", files: ["test/integration/phase6-capabilities-service.test.ts"], seed: seedPhase4Journey, timeoutMs: 240_000 },
   { name: "Phase 7 coverage service", label: "phase7_coverage", files: ["test/integration/phase7-coverage-service.test.ts"], seed: seedPhase4Journey, timeoutMs: 240_000 },
   { name: "Phase 8 planning map service", label: "phase8_map", files: ["test/integration/phase8-planning-map-service.test.ts"], seed: async (databaseUrl) => { await seedPhase4Journey(databaseUrl); await seedPhase8MapJourney(databaseUrl); }, timeoutMs: 240_000 },
+  { name: "Phase 9 capability evidence service", label: "phase9_evidence", files: ["test/integration/phase9-evidence-service.test.ts"], seed: seedPhase9Journey, timeoutMs: 240_000 },
 ];
 
 // Guard against silently ignoring a newly added integration file.

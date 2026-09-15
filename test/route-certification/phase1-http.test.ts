@@ -266,4 +266,33 @@ describe("Phase 1 public HTTP route certification", () => {
     expect(afterSessions.rows[0].count).toBe(beforeSessions.rows[0].count);
     expect(afterAudits.rows[0].count).toBe(beforeAudits.rows[0].count);
   });
+
+  it("keeps private evidence files and uploads unauthorized for anonymous and unscoped callers", async () => {
+    const unknownEvidence = "00000000-0000-4000-8000-000000000999";
+    const anonymous = await request(`/api/evidence/files/${unknownEvidence}`);
+    expect(anonymous.status).toBe(401);
+    safeResponse(await anonymous.text());
+
+    const employee = await login("mock-employee-cora");
+    const missing = await request(`/api/evidence/files/${unknownEvidence}`, { headers: { Cookie: employee.cookie } });
+    expect(missing.status).toBe(404);
+    safeResponse(await missing.text(), employee.token);
+
+    // A traversal-shaped or guessed identifier never resolves to a storage object.
+    const traversal = await request("/api/evidence/files/..%2F..%2Fetc%2Fpasswd", { headers: { Cookie: employee.cookie } });
+    expect([400, 404]).toContain(traversal.status);
+    safeResponse(await traversal.text(), employee.token);
+
+    const missingOrigin = await request(`/api/evidence/${unknownEvidence}/files`, { method: "POST", headers: { Cookie: employee.cookie } });
+    expect(missingOrigin.status).toBe(403);
+    // A well-formed upload for an unknown evidence id is a non-enumerating not-found, not a leak.
+    const upload = new FormData();
+    upload.set("expectedVersion", "1");
+    upload.set("file", new File([new Uint8Array([0x25, 0x50, 0x44, 0x46, 0x2d])], "Fictional.pdf", { type: "application/pdf" }));
+    const denied = await request(`/api/evidence/${unknownEvidence}/files`, { method: "POST", headers: { Cookie: employee.cookie, Origin: baseUrl }, body: upload });
+    expect(denied.status).toBe(404);
+    safeResponse(await denied.text(), employee.token);
+    await logout(employee.cookie);
+  });
+
 });

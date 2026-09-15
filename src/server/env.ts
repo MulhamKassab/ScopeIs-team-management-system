@@ -5,12 +5,15 @@ let cached: ReturnType<typeof environmentSchema.parse> | undefined;
 export function parseEnvironment(input: NodeJS.ProcessEnv) {
   const isE2e = input.SCOPEIS_E2E_TEST === "true";
   const isVercelProduction = !isE2e && (input.VERCEL_ENV === "production" || input.NODE_ENV === "production");
+  const appEnv = isE2e ? "test" : (isVercelProduction ? "production" : (input.APP_ENV ?? "development"));
   const config = environmentSchema.parse({
     DATABASE_URL: input.DATABASE_URL,
-    APP_ENV: isE2e ? "test" : (isVercelProduction ? "production" : (input.APP_ENV ?? "development")),
+    APP_ENV: appEnv,
     // Temporary fictional mock access is an explicit deployment choice.
     MOCK_AUTH_ENABLED: isE2e ? "true" : (input.MOCK_AUTH_ENABLED ?? "false"),
     SESSION_TTL_HOURS: input.SESSION_TTL_HOURS && Number(input.SESSION_TTL_HOURS) > 0 ? input.SESSION_TTL_HOURS : "12",
+    // Production must never silently fall back to local disk storage; the explicit choice is required.
+    EVIDENCE_STORAGE_MODE: input.EVIDENCE_STORAGE_MODE ?? (appEnv === "production" ? "unconfigured" : "local"),
   });
   const databaseTarget = new URL(config.DATABASE_URL);
   if (databaseTarget.protocol !== "postgresql:" && databaseTarget.protocol !== "postgres:") {

@@ -6,6 +6,8 @@ export const environmentSchema = z.object({
   APP_ENV: z.enum(["development", "test", "production"]).default("development"),
   MOCK_AUTH_ENABLED: z.enum(["true", "false"]).default("false"),
   SESSION_TTL_HOURS: z.coerce.number().int().positive().max(168).default(12),
+  // Phase 9 private evidence storage. `unconfigured` fails closed; `local` is development/test only.
+  EVIDENCE_STORAGE_MODE: z.enum(["local", "vercel", "unconfigured"]).default("local"),
 });
 
 export const mockPersonaSelectionSchema = z.object({ personaId: z.string().min(3).max(80) });
