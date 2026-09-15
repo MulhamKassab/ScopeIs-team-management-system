@@ -54,9 +54,11 @@ Additional implemented rules:
 - Content is immutable. Corrections archive the old note and create another; nothing is hard-deleted.
 - Visibility is fixed at creation and cannot change.
 - Access always uses the reader's current role and scope; the stored `author_role` is historical context only.
-- An author who is later demoted keeps access to what they wrote through the author-scoped listing, and the shared-upward projection follows the reader's current scope.
+- Current authorization is required for every read, including an author reading their own note: a demoted, deactivated, re-scoped, or out-of-scope author loses access, and the shared-upward projection follows the reader's current scope.
 - HTML-shaped input is refused at the validation boundary; rendering is plain text.
 - The panel is only composed for an actor the service authorizes; it renders nothing for the subject or an unauthorized actor.
+
+> **Corrected after Phase 10.** The rule above was **not** what the Phase 10 commit enforced. The shipped `canReadManagementNote` returned `true` for the author before evaluating role or scope, and `listAuthoredByActor` admitted any current role, so a demoted or out-of-scope author retained access to notes they had written. This was corrected by the post-Phase-10 access-control remediation recorded in [`SCOPEIS_PHASE_10_MANAGEMENT_NOTE_AUTHORIZATION_REMEDIATION_R1.md`](SCOPEIS_PHASE_10_MANAGEMENT_NOTE_AUTHORIZATION_REMEDIATION_R1.md). This report's section 11 totals for Phase 10 are likewise superseded by that remediation's gate table.
 
 ## 5. Replacement-request discussions
 
@@ -176,3 +178,17 @@ The focused Phase 7 service runner also loads `test/unit/phase7-coverage-validat
 - Every `.env*` file was preserved untouched; no secret value was read or printed, and no production database, storage, authentication, hosting, or deployment was contacted.
 - The separate Preview worktree (`preview` at `7c401c6add34db14c43b2139aebc9c8878618927` with its five pre-existing untracked duplicate artifacts) was not modified, merged, rebased, staged, cleaned, or pushed.
 - The commit and push result are recorded in the delivery message; Phase 11 was not started.
+
+## 14. Authoritative commit manifest
+
+Independently obtained from Git for commit `c534e7357a38c2e8594c75baa656f3a2950f7a5d` (`feat: implement Phase 10 collaboration and governance journey`).
+
+| Category | Count | Composition |
+| --- | ---: | --- |
+| Documentation | 15 | `DOCX/` 13 (index, 10 project-memory records, the Phase 10 decisions record, this report) + `PROJECT_CONTEXT.md` + `README.md` |
+| Harness and configuration | 9 | `scripts/` 7 (`phase10-test-fixtures`, `run-phase10-service-tests`, `run-phase10-playwright`, `run-aggregate-integration-tests`, `run-aggregate-e2e-tests`, `run-seed-smoke`, `phase2-migration-core`) + `package.json` + `playwright.phase10.config.ts` |
+| Application | 39 | `src/` (3 new route pages, 2 updated route pages, `layout.tsx`, `phase10.css`, migration `0011`, journal, adoption manifest, schema, 20 new module files, 4 updated module files, 3 updated operations files, `navigation` and `evidence/service`) |
+| Tests | 5 | `phase10-collaboration-service.test.ts`, `phase10-collaboration-forms.test.tsx`, `phase10-collaboration.spec.ts`, and the two Phase 9/migration files touched by the prerequisite |
+| **Total** | **68** | 36 added + 32 modified |
+
+**Correction recorded.** The Phase 10 delivery message reported "Documentation (12)", "Application (41)", and "Tests (6)". The independent manifest shows 15, 39, and 5 respectively. The enumerated file names in that message were themselves correct and summed to 68; only the category labels were wrong. The Git manifest above is authoritative, and the Phase 10 commit was not amended or rewritten.

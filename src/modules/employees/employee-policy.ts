@@ -33,11 +33,16 @@ export function canCreateManagementNote(actor: AuthenticatedActor, subject: Empl
 }
 
 export function canReadManagementNote(actor: AuthenticatedActor, note: { authorUserId: string; subjectUserId: string; authorRole: SystemRole; visibility: NoteVisibility; subject: EmployeeAccessRecord }) {
-  // An author keeps access to what they wrote even if their role later changes; the stored author role is
-  // historical context only. An author and their subject can never be the same user.
+  // Subject exclusion is absolute: no role change and no authorship edge case re-admits the subject.
+  if (actor.id === note.subjectUserId) return false;
+  // Authorship never bypasses current authorization. The stored author role is historical context only,
+  // so an actor must still hold a management role right now.
+  if (actor.role === "EMPLOYEE") return false;
+  // Current authorization for the subject is required on every path, including an author's own note, so
+  // losing the TEAM/scope grant removes access even to what that actor previously wrote.
+  if (!canReadEmployee(actor, note.subject)) return false;
+  // Note-level visibility on top of current subject authorization.
   if (actor.id === note.authorUserId) return true;
-  if (actor.id === note.subjectUserId || actor.role === "EMPLOYEE") return false;
   if (note.visibility !== "shared_upward") return false;
-  if (actor.role !== "SUPER_ADMIN") return false;
-  return canReadEmployee(actor, note.subject);
+  return actor.role === "SUPER_ADMIN";
 }

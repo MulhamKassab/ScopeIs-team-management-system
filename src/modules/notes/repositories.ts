@@ -1,5 +1,5 @@
 import "server-only";
-import { and, asc, desc, eq, inArray, isNull, sql } from "drizzle-orm";
+import { and, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import { employeeManagementNotes, employeeProfiles, users } from "@/db/schema";
 
@@ -7,6 +7,14 @@ export type NoteTransaction = Parameters<Parameters<typeof db.transaction>[0]>[0
 export type NoteExecutor = typeof db | NoteTransaction;
 
 export const noteRepository = {
+  /**
+   * Current actor facts. Role, active status, and grants are re-read on every note operation so a stale
+   * session or an already-constructed actor object can never retain management-note access after a
+   * demotion, deactivation, or scope revocation.
+   */
+  actor(executor: NoteExecutor, userId: string) {
+    return executor.select({ id: users.id, role: users.role, active: users.active }).from(users).where(eq(users.id, userId)).limit(1).then(([row]) => row ?? null);
+  },
   /** Role/team facts for the note subject, so visibility uses the canonical employee record. */
   subject(executor: NoteExecutor, userId: string) {
     return executor.select({ userId: users.id, role: users.role, active: users.active, team: employeeProfiles.team }).from(users).leftJoin(employeeProfiles, eq(employeeProfiles.userId, users.id))
@@ -25,9 +33,6 @@ export const noteRepository = {
   /** Notes authored by the actor, so an author keeps access to their own notes without a subject page. */
   notesByAuthor(executor: NoteExecutor, authorUserId: string) {
     return executor.select().from(employeeManagementNotes).where(eq(employeeManagementNotes.authorUserId, authorUserId)).orderBy(desc(employeeManagementNotes.createdAt));
-  },
-  activeNoteCount(executor: NoteExecutor, subjectUserId: string) {
-    return executor.select({ id: employeeManagementNotes.id }).from(employeeManagementNotes).where(and(eq(employeeManagementNotes.subjectUserId, subjectUserId), isNull(employeeManagementNotes.archivedAt))).orderBy(asc(employeeManagementNotes.createdAt));
   },
   create(tx: NoteTransaction, values: typeof employeeManagementNotes.$inferInsert) { return tx.insert(employeeManagementNotes).values(values).returning().then(([row]) => row!); },
   archive(tx: NoteTransaction, noteId: string, expectedVersion: number) {

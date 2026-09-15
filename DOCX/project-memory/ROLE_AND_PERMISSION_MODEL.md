@@ -54,8 +54,9 @@ An Admin's effective access is the intersection of role permission and assigned 
 | Override significant warning with reason | Yes when authorized | No | No |
 | Access static planning map | Global | Within scope | No |
 | Create employee-management note | About Admin/Employee | About scoped Employee | No |
-| See private-to-author management note | Author only | Author only | No |
-| See shared-upward management note | Authorized higher role and author | If author or authorized higher role | No |
+| See private-to-author management note | Author only, while that Super Admin still has current access | Author only, while that Admin still has current access | No |
+| See shared-upward management note | Authorized higher role and author | Author, or an authorized Super Admin, only while current access remains | No |
+| Keep reading a management note after demotion, deactivation, or scope loss | No | No | No |
 | Read/add shared Client, Project, and Location notes | Yes | Only for a parent their scope authorizes | No |
 | Read and post replacement-request discussion | Only if a named participant | Only if a named participant | Only if a named participant |
 | Manage own notifications (read, unread, archive, restore) | Yes | Yes | Yes |
@@ -73,6 +74,7 @@ An Admin's effective access is the intersection of role permission and assigned 
 - Shared Client, Project, and Location notes are not private notes, but "shared" means shared with everyone already authorized on the parent record, not with every authenticated user. Super Admin holds global access; Admin access follows their Client, Project, or Location scope; Employees hold no Client, Project, Location, or shared-note access in Phase 10. This interpretation was confirmed by the product owner during Phase 10 and replaces the earlier ambiguous "every authenticated user" reading.
 - The subject of an employee-management note cannot see it.
 - Only the author of an employee-management note and, for a shared-upward note, an authorized Super Admin may read it. Peer Admins and an out-of-scope Admin receive the same non-enumerating refusal as a nonexistent note.
+- Management-note access requires **both** note-level visibility permission **and** current authorization to manage/read the subject. Authorship never overrides current role, active status, or scope: a demoted author who is now an Employee, a deactivated or removed user, and an author whose subject scope was revoked all lose access, including through a direct note id. The stored author role at creation is historical information only. Archived rows are not a route back to access, and note content never appears in audit metadata, notifications, logs, or error messages.
 - A notification belongs to exactly one recipient. Only that recipient may read, mark, archive, or restore it, and a cross-recipient notification id is non-enumerating.
 - The audit-history interface is Super Admin only, read-only, and never renders raw metadata; Admin and Employee receive a non-enumerating refusal.
 - Assignment labels never grant permissions or determine availability.

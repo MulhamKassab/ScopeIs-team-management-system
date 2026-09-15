@@ -30,7 +30,7 @@ const suites = [
   { name: "Phase 7 coverage service", label: "phase7_coverage", files: ["test/integration/phase7-coverage-service.test.ts"], seed: seedPhase4Journey, timeoutMs: 240_000 },
   { name: "Phase 8 planning map service", label: "phase8_map", files: ["test/integration/phase8-planning-map-service.test.ts"], seed: async (databaseUrl) => { await seedPhase4Journey(databaseUrl); await seedPhase8MapJourney(databaseUrl); }, timeoutMs: 240_000 },
   { name: "Phase 9 capability evidence service", label: "phase9_evidence", files: ["test/integration/phase9-evidence-service.test.ts"], seed: seedPhase9Journey, timeoutMs: 240_000 },
-  { name: "Phase 10 collaboration and governance service", label: "phase10_collaboration", files: ["test/integration/phase10-collaboration-service.test.ts"], seed: seedPhase10Journey, timeoutMs: 300_000 },
+  { name: "Phase 10 collaboration and governance service", label: "phase10_collaboration", files: ["test/integration/phase10-collaboration-service.test.ts", "test/integration/phase10-management-note-authorization.test.ts"], seed: seedPhase10Journey, timeoutMs: 300_000 },
 ];
 
 // Guard against silently ignoring a newly added integration file.

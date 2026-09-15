@@ -104,9 +104,15 @@ describe("Phase 10 employee-management notes", () => {
     const metadata = JSON.stringify((await db.select().from(auditEvents).where(eq(auditEvents.targetId, priv.note.id))).map((event) => event.metadata));
     expect(metadata).not.toContain(phase10Notes.managementPrivate);
 
-    // A demoted or re-scoped author keeps access to what they already wrote.
-    const demoted = actor(ava.id, "EMPLOYEE");
-    expect((await managementNoteService.listAuthoredByActor(demoted)).notes.map((note) => note.id).sort()).toEqual([priv.note.id, shared.note.id].sort());
+    // Authorship never survives a loss of current authorization: once the author is demoted in the
+    // database, the same call returns nothing and the row content stays preserved.
+    await db.update(users).set({ role: "EMPLOYEE" }).where(eq(users.id, ava.id));
+    expect((await managementNoteService.listAuthoredByActor(actor(ava.id, "EMPLOYEE"))).notes).toEqual([]);
+    await expect(managementNoteService.archive(actor(ava.id, "EMPLOYEE"), { noteId: shared.note.id, expectedVersion: shared.note.version, reason: "Fictional demoted archive" })).rejects.toMatchObject({ code: "NOT_FOUND" });
+    expect((await db.select().from(employeeManagementNotes).where(eq(employeeManagementNotes.id, shared.note.id)))[0]?.content).toBe(phase10Notes.managementShared);
+    // Restoring the current role and scope restores access only through that current authorization.
+    await db.update(users).set({ role: "ADMIN" }).where(eq(users.id, ava.id));
+    expect((await managementNoteService.listAuthoredByActor(actor(ava.id, "ADMIN"))).notes.map((note) => note.id).sort()).toEqual([priv.note.id, shared.note.id].sort());
   });
 
   it("rolls the note back when the audit write fails", async () => {

@@ -11,7 +11,7 @@ Technical implementation direction is recorded separately in [`SYSTEM_ARCHITECTU
 - Admin can create scoped drafts/proposals and replacement requests but cannot publish or advise on leave outcomes.
 - Employees see published schedules only.
 - The planning map is static, selected-date based, and available only to Super Admin and scoped Admin.
-- Employee-management notes are private-to-author or shared-upward; subjects cannot view them.
+- Employee-management notes are private-to-author or shared-upward; subjects cannot view them. Reading a note requires both its visibility permission and the reader's current authorization for the subject, so authorship never overrides a later demotion, deactivation, or scope loss.
 - Shared Client, Project, and Location notes are readable and creatable by every authenticated user already authorized on the parent record: Super Admin globally, and Admin only within their Client, Project, or Location scope. The product owner confirmed this interpretation of the earlier "all authenticated users" wording during Phase 10; Employees hold no shared-note access. Editing is author-only, archive is Super Admin-only with a retained reason, and every edit preserves the superseded content as a revision.
 - Replacement-request discussions are private to the participants derived live from the request: the requester and the named employee(s). Role never confers participation, and only a `replacement_request` parent is supported. Assignee or Ticket discussions remain unimplemented.
 - Certification/portfolio updates save immediately and notify Super Admin; review/verification is optional, not a required approval gate.
@@ -19,6 +19,7 @@ Technical implementation direction is recorded separately in [`SYSTEM_ARCHITECTU
 - The Ticket System is a Phase 12 feature, not the workforce-system foundation.
 - Phase 6 qualification is an active management-recorded skill association only. It is not a proficiency score, certification gate, coverage result, or replacement/candidate-ranking judgment; missing recorded skills are transparent, non-blocking schedule warnings only.
 - Phase 10 confirmed that the employee-management note subject, an Employee actor, a peer Admin, and an out-of-scope Admin all receive the same non-enumerating refusal as a nonexistent note; note content is immutable and corrections archive-and-supersede.
+- Post-Phase-10 remediation corrected the management-note authorization rule: authorship alone never grants or preserves access, and current role, active status, and current scope grants are re-read on every read, list, count, direct-id lookup, archive attempt, and employee-detail panel render. Historical authorship and author role at creation remain stored as history.
 - Phase 10 notification ownership is per recipient: only the recipient may read, mark, archive, or restore a notification, and a notification row stores no private display content.
 - Phase 10 audit rendering uses a per-action safe metadata allowlist; unknown actions render a generic label with no metadata and raw JSON is never displayed.
 - Phase 9 evidence integrity: when an owner materially changes verified or reviewed evidence, the item resets to `unreviewed` and its review and verification provenance is cleared in the same transaction. Review actions themselves never reset state and never change `last_submitted_at`.
