@@ -46,7 +46,7 @@ This phase proves the secure foundation journey: fictional persona sign-in, serv
 
 ## Phase 2 — Employee management journey
 
-**Status:** `NEXT`
+**Status:** `COMPLETED`
 
 **Main journey:** Super Admin manages employees → employee signs in → employee views real profile → employee updates only permitted fields.
 
@@ -68,6 +68,8 @@ Reuse the verified employee profile, catalogue, and employee-skill backend servi
 
 ## Phase 3 — Clients, projects, and locations
 
+**Status:** `COMPLETED`
+
 **Main journey:** Authorized manager creates client → creates project → creates/reuses location → structure becomes available for scheduling.
 
 **Sub-phases:**
@@ -86,6 +88,8 @@ Reuse the verified employee profile, catalogue, and employee-skill backend servi
 Client, Project, Location, Employee, Account Manager, responsible Admin, and staffing requirements remain distinct relationships.
 
 ## Phase 4 — Scheduling, review, and publication
+
+**Status:** `COMPLETED`
 
 **Main journey:** Admin creates Draft → Admin submits Proposed schedule → Super Admin reviews and publishes → employee views Published schedule.
 
@@ -108,6 +112,8 @@ Scheduling is not complete until the employee can view the Published result. Ski
 
 ## Phase 5 — Leave and availability
 
+**Status:** `COMPLETED`
+
 **Main journey:** Employee submits leave → Super Admin reviews schedule impact → Super Admin decides → availability updates → employee is notified.
 
 **Sub-phases:**
@@ -127,6 +133,8 @@ Leave balances, half-days, holidays, weekends, payroll, and attendance rules rem
 
 ## Phase 6 — Skills and operational capabilities
 
+**Status:** `COMPLETED`
+
 **Main journey:** Management records employee skills and work requirements → planner finds qualified employees → scheduler warns about missing skills.
 
 **Sub-phases:**
@@ -143,6 +151,8 @@ Leave balances, half-days, holidays, weekends, payroll, and attendance rules rem
 This phase precedes coverage and replacement.
 
 ## Phase 7 — Coverage and replacement
+
+**Status:** `COMPLETED`
 
 **Main journey:** System detects staffing gap → Admin reviews TEAM-visible unranked candidates and requests replacement → Super Admin decides → a Draft-safe schedule effect awaits normal publication.
 
@@ -164,6 +174,8 @@ Candidate ranking is explicitly out of scope; candidate facts are unranked and n
 
 ## Phase 8 — Static planning map
 
+**Status:** `COMPLETED`
+
 **Main journey:** Authorized management views stored locations and Published workforce assignments for a selected date without live tracking.
 
 **Sub-phases:**
@@ -181,7 +193,19 @@ Candidate ranking is explicitly out of scope; candidate facts are unranked and n
 
 No GPS ingestion, movement history, live employee position, or route surveillance may be introduced.
 
+## Post-Phase-8 checkpoint — verification-harness remediation
+
+**Status:** `IN_PROGRESS` (Checkpoint Sub-phase A)
+
+Phase 8 closed with the application itself valid, but with defects in the aggregate verification system and in the documentation that reported it. This checkpoint sub-phase is bounded to repairing the shared component tests, isolating aggregate integration-test databases, settling the test-runner and Playwright contract, defining the lint boundary around the historical prototype, and reconciling the status documentation. It is not a product phase.
+
+- It does not begin Phase 9, does not convert known product limitations into features, and does not change business behavior, permissions, privacy projections, workflows, schemas, or Phase 8 map behavior.
+- Checkpoint Sub-phase A authorizes the remediation and its scoped commit. Independent re-verification and formal checkpoint closure are owned by Checkpoint Sub-phase B, performed by a separate agent.
+- The historical root prototype (`prototype/full-frontend-r1/`) is preserved reference work: it is outside the authoritative application lint boundary and is not deleted, edited, formatted, migrated, or relabelled.
+
 ## Phase 9 — Certifications, CVs, portfolios, and files
+
+**Status:** `NEXT`
 
 **Main journey:** Employee submits capability evidence → evidence saves immediately → Super Admin is notified → Super Admin reviews or verifies it.
 
@@ -200,7 +224,11 @@ No GPS ingestion, movement history, live employee position, or route surveillanc
 
 Existing incomplete schema and code are preserved until this phase; they must not be expanded prematurely.
 
+Existing incomplete certification/portfolio schema preserved for later work does not by itself mean the Phase 9 journey has started. Phase 9 is the next journey and remains `NOT_STARTED` until its own sub-phase work begins under an approved Phase ID.
+
 ## Phase 10 — Notes, discussions, notification centre, and audit interface
+
+**Status:** `NOT_STARTED`
 
 **Sub-phases:**
 
@@ -218,6 +246,8 @@ Earlier source workflows add their own required audit and notification events. T
 
 ## Phase 11 — Dashboards, reports, and exports
 
+**Status:** `NOT_STARTED`
+
 **Sub-phases:**
 
 - 11.1 Super Admin dashboard
@@ -234,6 +264,8 @@ Trustworthy dashboard cards may be introduced with their source journeys; this p
 
 ## Phase 12 — Ticket System integration
 
+**Status:** `NOT_STARTED`
+
 **Sub-phases:**
 
 - 12.1 Existing Ticket System reuse assessment
@@ -249,6 +281,8 @@ Trustworthy dashboard cards may be introduced with their source journeys; this p
 Ticket, Assignment, Schedule, Project, Client, and Work Log remain distinct. Ticket System integration is late and never becomes this product's architectural foundation.
 
 ## Phase 13 — Production readiness and internal rollout
+
+**Status:** `NOT_STARTED`
 
 This is the real application rollout pilot; it is distinct from the completed discovery/technical pilot.
 

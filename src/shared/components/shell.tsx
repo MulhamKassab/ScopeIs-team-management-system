@@ -11,7 +11,7 @@ import type { AuthenticatedActor } from "@/shared/types/foundation";
 function initials(name: string) { return name.split(" ").map((word) => word[0]).join("").slice(0, 2); }
 function NavLinks({ items, close }: { items: ModuleDefinition[]; close?: () => void }) {
   const pathname = usePathname();
-  return <nav aria-label="Primary navigation" className="nav-links">{items.map((item) => <Link key={item.key} href={item.href} aria-current={pathname === item.href ? "page" : undefined} onClick={close}><span aria-hidden="true">{item.label[0]}</span><span>{item.label}</span></Link>)}<span className="future-link" aria-disabled="true"><span aria-hidden="true">T</span><span>Ticket System <small>Phase 9</small></span></span></nav>;
+  return <nav aria-label="Primary navigation" className="nav-links">{items.map((item) => <Link key={item.key} href={item.href} aria-current={pathname === item.href ? "page" : undefined} onClick={close}><span aria-hidden="true">{item.label[0]}</span><span>{item.label}</span></Link>)}<span className="future-link" aria-disabled="true"><span aria-hidden="true">T</span><span>Ticket System <small>Phase 12</small></span></span></nav>;
 }
 async function logout(router: ReturnType<typeof useRouter>) { await fetch("/api/auth/logout", { method: "POST", headers: { "Content-Type": "application/json" } }); router.push("/login"); router.refresh(); }
 

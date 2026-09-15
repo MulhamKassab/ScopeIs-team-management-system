@@ -13,7 +13,7 @@ import type { AuthenticatedActor } from "@/shared/types/foundation";
 
 export const SESSION_COOKIE = "scopeis_session";
 const tokenHash = (token: string) => createHash("sha256").update(token).digest("hex");
-const cookieOptions = { httpOnly: true, sameSite: "lax" as const, secure: process.env.NODE_ENV === "production", path: "/" };
+const cookieOptions = { httpOnly: true, sameSite: "lax" as const, secure: env().APP_ENV === "production", path: "/" };
 
 function expiresAt() { return new Date(Date.now() + env().SESSION_TTL_HOURS * 60 * 60 * 1000); }
 

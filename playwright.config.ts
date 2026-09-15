@@ -1,12 +1,23 @@
 import { defineConfig } from "@playwright/test";
 
+// Canonical Playwright rule: direct invocation is intentionally unsupported. ScopeIs E2E runs need a
+// fresh disposable loopback database and an isolated port, which only the guarded runners provide.
+// Use `npm run test:e2e` (aggregate) or `npm run test:phaseN-e2e`; the root config therefore fails
+// closed instead of inventing a default that could reach a persistent or production database.
+const port = Number(process.env.SCOPEIS_PLAYWRIGHT_PORT);
+if (!Number.isInteger(port) || port < 1024 || port > 65_535) throw new Error("Playwright requires a runner-allocated loopback port. Run `npm run test:e2e` or a phase runner instead of invoking Playwright directly.");
+const baseURL = `http://127.0.0.1:${port}`;
+
 export default defineConfig({
   testDir: "./test/e2e",
+  // Phase 1 shell/persona/scope journey only. Phases 2-8 have their own guarded configs and fixtures;
+  // running the whole directory here would exercise those specs against Phase 1-only seed data.
+  testMatch: "foundation.spec.ts",
   timeout: 30_000,
-  use: { baseURL: "http://127.0.0.1:3000", trace: "on-first-retry" },
+  use: { baseURL, trace: "on-first-retry" },
   webServer: {
-    command: `env -u NODE_OPTIONS -u DATABASE_URL -u DATABASE_URL_UNPOOLED -u POSTGRES_URL -u POSTGRES_URL_NON_POOLING -u POSTGRES_URL_NO_SSL -u PGHOST -u PGHOST_UNPOOLED -u PGDATABASE -u PGUSER -u PGPASSWORD -u APP_ENV -u MOCK_AUTH_ENABLED -u SESSION_TTL_HOURS /bin/sh -c 'set -a; . .env.test; set +a; unset DATABASE_URL_UNPOOLED POSTGRES_URL POSTGRES_URL_NON_POOLING POSTGRES_URL_NO_SSL PGHOST PGHOST_UNPOOLED PGDATABASE PGUSER PGPASSWORD; SCOPEIS_E2E_DATABASE_URL="$DATABASE_URL" SCOPEIS_E2E_TEST=true NODE_OPTIONS= exec ./node_modules/.bin/next dev'`,
-    url: "http://127.0.0.1:3000",
+    command: `node scripts/start-phase1-test-server.mjs --port ${port}`,
+    url: baseURL,
     reuseExistingServer: false,
   },
   projects: [

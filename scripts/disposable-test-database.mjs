@@ -52,6 +52,31 @@ async function seedFixtures(url) {
   } catch (error) { await client.query("rollback"); throw error; } finally { await client.end(); }
 }
 
+/**
+ * Completes the Phase 1 fictional fixture contract for gates that exercise real protected pages.
+ * Phases 2-8 implemented routes such as `/profile` that require a real `employee_profiles` row, so a
+ * users-and-grants-only database is no longer enough for route certification. Fictional data only.
+ */
+async function seedPhase1EmployeeProfiles(url) {
+  const client = new pg.Client({ connectionString: url }); await client.connect();
+  try {
+    await client.query("begin");
+    const designation = await client.query("insert into designations (name, sort_order) values ('Field Engineer', 1) returning id");
+    await client.query(
+      `insert into employee_profiles (user_id, employee_code, work_email, work_phone, professional_summary, designation_id, team, manager_user_id, default_work_location, working_pattern)
+       values ('mock-super-admin-nora','P1C-SA-001','nora@example.test','555-0100','Fictional team manager',$1,'team:alpha',null,'Fictional Alpha office','Office weekdays'),
+              ('mock-admin-ava','P1C-ADM-A','ava@example.test','555-0101','Fictional scoped Admin',$1,'team:alpha','mock-super-admin-nora','Fictional Alpha office','Office weekdays'),
+              ('mock-admin-ben','P1C-ADM-B','ben@example.test','555-0102','Fictional scoped Admin',$1,'team:bravo','mock-super-admin-nora','Fictional Bravo office','Office weekdays'),
+              ('mock-employee-cora','P1C-EMP-C','cora@example.test','555-0103','Fictional Employee',$1,'team:alpha','mock-admin-ava','Fictional Alpha office','Hybrid weekdays'),
+              ('mock-employee-dan','P1C-EMP-D','dan@example.test','555-0104','Fictional Employee',$1,'team:bravo','mock-admin-ava','Fictional Bravo office','Hybrid weekdays')`,
+      [designation.rows[0].id],
+    );
+    await client.query("commit");
+    const profileCount = await client.query("select count(*)::int as count from employee_profiles where user_id = any($1::text[])", [personaIds]);
+    if (profileCount.rows[0].count !== 5) throw new Error("Disposable Phase 1 profile fixture verification failed.");
+  } catch (error) { await client.query("rollback"); throw error; } finally { await client.end(); }
+}
+
 async function createDatabase(configuration, name) {
   const client = new pg.Client({ connectionString: configuration.databaseUrl }); await client.connect();
   try {
@@ -69,7 +94,7 @@ async function dropDatabase(configuration, name) {
   } finally { await client.end(); }
 }
 
-export async function withDisposableTestDatabase(label, callback) {
+export async function withDisposableTestDatabase(label, callback, options = {}) {
   const configuration = await loadPhase1TestConfiguration(); await assertPhase1TestDatabaseSafety(configuration);
   const name = `scopeis_${label}_${process.pid}_${randomUUID().replaceAll("-", "").slice(0, 10)}_test`.toLowerCase(); assertDisposableName(name);
   const url = new URL(configuration.databaseUrl); url.pathname = `/${name}`;
@@ -79,6 +104,7 @@ export async function withDisposableTestDatabase(label, callback) {
     const migration = await reconcileMigrationState(url.toString(), { allowDisposableTest: true, apply: true });
     if (migration.after?.state !== "D" || migration.after.pending.length !== 0) throw new Error("Disposable database migration did not reach State D.");
     await seedFixtures(url.toString());
+    if (options.phase1EmployeeProfiles) await seedPhase1EmployeeProfiles(url.toString());
     return await callback({ databaseName: name, databaseUrl: url.toString(), env: phase1TestProcessEnvironment({ ...configuration, databaseUrl: url.toString() }), migration });
   } finally { if (ownedDatabases.has(name)) await dropDatabase(configuration, name); }
 }

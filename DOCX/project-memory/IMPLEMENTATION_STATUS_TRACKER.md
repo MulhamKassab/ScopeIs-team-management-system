@@ -8,7 +8,7 @@ The tracker uses only: `NOT_STARTED`, `READY`, `IN_PROGRESS`, `PARTIAL`, `BLOCKE
 
 **Completion rule:** backend-only work and UI shells are not completed user journeys. A phase is complete only after all applicable delivery gates and its end-to-end journey are verified.
 
-Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [Phase 2 journey completion], [Phase 2 manual QA readiness], [Phase 2 controls/code remediation], [Phase 3 report], [Phase 3 decisions], [Phase 4 report], [Phase 4 decisions], [Phase 5 report], [Phase 5 decisions], [Phase 6 report], [Phase 6 decisions], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
+Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [Phase 2 journey completion], [Phase 2 manual QA readiness], [Phase 2 controls/code remediation], [Phase 3 report], [Phase 3 decisions], [Phase 4 report], [Phase 4 decisions], [Phase 5 report], [Phase 5 decisions], [Phase 6 report], [Phase 6 decisions], [Phase 7 report], [Phase 8 report], [Phase 8 decisions], [Checkpoint Sub-phase A report], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
 
 [roadmap]: IMPLEMENTATION_ROADMAP.md
 [context]: ../../PROJECT_CONTEXT.md
@@ -32,6 +32,10 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 [Phase 5 decisions]: PHASE_5_LEAVE_DOMAIN_DECISIONS.md
 [Phase 6 report]: ../phase-reports/SCOPEIS_PHASE_6_SKILLS_AND_OPERATIONAL_CAPABILITIES_JOURNEY_R1.md
 [Phase 6 decisions]: PHASE_6_SKILLS_CAPABILITIES_DECISIONS.md
+[Phase 7 report]: ../phase-reports/SCOPEIS_PHASE_7_COVERAGE_AND_REPLACEMENT_JOURNEY_R1.md
+[Phase 8 report]: ../phase-reports/SCOPEIS_PHASE_8_STATIC_PLANNING_MAP_JOURNEY_R1.md
+[Phase 8 decisions]: PHASE_8_STATIC_PLANNING_MAP_DECISIONS.md
+[Checkpoint Sub-phase A report]: ../phase-reports/SCOPEIS_POST_PHASE_8_CHECKPOINT_SUBPHASE_A_REMEDIATION_R1.md
 [employee services]: ../../src/modules/employees/employee-services.ts
 [schema]: ../../src/db/schema/index.ts
 [navigation]: ../../src/modules/navigation/navigation.ts
@@ -42,15 +46,15 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 
 ## Current focus
 
-- **Current active phase:** Phase 9 — Certifications, CVs, portfolios, and files
-- **Current active/next sub-phase:** 9.1 Certification records; preserve the completed Phase 8 static non-tracking boundary.
-- **Current phase status:** `NOT_STARTED`
-- **Last status date:** `2026-09-03`
-- **Most recent trustworthy evidence:** [Phase 8 report]; [Phase 8 decisions]
-- **Immediate objective:** Preserve completed Phase 8; later journeys remain unstarted.
-- **Known blockers:** Preserved repository-wide lint/legacy-runner interference remains outside scoped phase gates.
-- **Explicit exclusions:** GPS/live tracking, geocoding, routes/travel, tickets, production access/migration/authentication/deployment, and notification-centre redesign.
-- **Required phase-exit journey:** Phase 9: confirmed certification/document journey only after its product decisions are approved.
+- **Current active phase:** Post-Phase-8 checkpoint — verification-harness and documentation remediation (Checkpoint Sub-phase A)
+- **Current active/next sub-phase:** Sub-phase A remediation is implemented and pushed; Checkpoint Sub-phase B (independent re-verification and formal closure) is next.
+- **Current phase status:** `VERIFICATION_PENDING`
+- **Last status date:** `2026-09-15`
+- **Most recent trustworthy evidence:** [Phase 8 report]; [Phase 8 decisions]; [Checkpoint Sub-phase A report]
+- **Immediate objective:** Hand the Sub-phase A remediation commit to a separate Sub-phase B agent for independent Phase 0–8 re-verification and formal checkpoint closure.
+- **Known blockers:** None for the maintained application. The preserved historical root prototype is outside the documented lint boundary and legacy Phase 1 aggregate runners were replaced by isolated aggregate commands.
+- **Explicit exclusions:** Phase 9 implementation, Preview-worktree merge or modification, GPS/live tracking, geocoding, routes/travel, tickets, production access/migration/authentication/deployment, credential reorganisation, and notification-centre redesign.
+- **Required phase-exit journey:** Checkpoint Sub-phase B: independent re-verification, then Phase 9 only under its own approved Phase ID.
 
 ## Master phase status
 
@@ -61,13 +65,13 @@ Progress measures completed roadmap sub-phases only. It is **not** engineering e
 | 0 | Discovery and technical pilot | `COMPLETED` | 9 | 9 | 100% | — | 2026-09-01 | — | 2026-09-01 | — | None | [roadmap] |
 | 1 | Secure application foundation | `COMPLETED` | 7 | 7 | 100% | Completed only for the narrowly defined secure foundation journey | 2026-08-29 | — | 2026-08-29 | Phase 0 | None | [P1 certification] |
 | 2 | Employee management journey | `COMPLETED` | 11 | 11 | 100% | Completed employee-management journey; visible Super Admin controls, server-only employee codes, and supported disposable manual QA launcher | 2026-09-01 | 2026-09-01 | 2026-09-01 | Phase 1 | None | [Phase 2 controls/code remediation] |
-| 3 | Clients, projects, and locations | `BLOCKED` | 9 | 10 | 90% | 3.10 repository-wide QA disposition; preserved Phase 3 blocker remains separately tracked | 2026-09-02 | 2026-09-02 | — | Phase 2 journey | Preserved repository-wide QA interference | Pushed commits `b3d6286`, `bd401fe`; [Phase 3 report] |
+| 3 | Clients, projects, and locations | `COMPLETED` | 10 | 10 | 100% | Completed Client → Project → deliberate same-client Location journey | 2026-09-15 | 2026-09-02 | 2026-09-15 | Phase 2 journey | None | Pushed commits `b3d6286`, `bd401fe`; [Phase 3 report]; repository-wide QA disposition closed by [Checkpoint Sub-phase A report] |
 | 4 | Scheduling, review, and publication | `COMPLETED` | 11 | 12 | 92% | 4.5 deferred: broader assignment-type expansion is outside approved V1 | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phases 2–3 operational records and employee TEAM visibility | None for approved V1 | [Phase 4 report]; [Phase 4 decisions] |
 | 5 | Leave and availability | `COMPLETED` | 10 | 10 | 100% | Completed bounded leave journey | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phase 4 | None | [Phase 5 report]; [Phase 5 decisions] |
 | 6 | Skills and operational capabilities | `COMPLETED` | 8 | 8 | 100% | Completed controlled-skills and non-blocking warning journey | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phases 2–5 | None | [Phase 6 report]; [Phase 6 decisions] |
 | 7 | Coverage and replacement | `COMPLETED` | 11 | 11 | 100% | Completed bounded coverage/replacement journey | 2026-09-02 | 2026-09-02 | 2026-09-02 | Phases 4–6 | None | [Phase 7 report] |
 | 8 | Static planning map | `COMPLETED` | 10 | 10 | 100% | Completed static Published-planning map journey | 2026-09-03 | 2026-09-02 | 2026-09-03 | Phases 4–7 | None | [Phase 8 report]; [Phase 8 decisions] |
-| 9 | Certifications, CVs, portfolios, and files | `PARTIAL` | 0 | 10 | 0% | 9.1 Certification records | 2026-09-01 | — | — | Phase 2 profile journey | Intentionally deferred; existing structures must only be preserved | [Phase 2 database] |
+| 9 | Certifications, CVs, portfolios, and files | `NOT_STARTED` | 0 | 10 | 0% | 9.1 Certification records | 2026-09-15 | — | — | Phase 2 profile journey | Intentionally deferred; preserved schema-only structures must only be preserved and do not mean the journey has started | [Phase 2 database] |
 | 10 | Notes, discussions, notification centre, and audit interface | `PARTIAL` | 0 | 9 | 0% | 10.1 Shared client and project notes | 2026-09-01 | — | — | Source workflows | Source records/workflows unavailable | [schema] |
 | 11 | Dashboards, reports, and exports | `NOT_STARTED` | 0 | 9 | 0% | 11.1 Super Admin dashboard | 2026-09-01 | — | — | Trustworthy source journeys | Source data unavailable | None located |
 | 12 | Ticket System integration | `NOT_STARTED` | 0 | 9 | 0% | 12.1 Existing Ticket System reuse assessment | 2026-09-01 | — | — | Phases 1–11 | Workforce journeys incomplete | None located |
@@ -130,7 +134,7 @@ Scope note: `COMPLETED` only for the narrowly defined secure foundation journey;
 | 3.7 | Basic staffing requirements | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 3.3–3.5 | Queryable target/skill/count/note requirement records | Positive count, target, lifecycle, transaction tests | Distinct requirements model | [Phase 3 report] | No dates, shifts, people, proficiency, or coverage logic. |
 | 3.8 | Shared operational notes required by these records | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 3.1–3.3 | Active notes, author edit, Super Admin archive/reason, retained history | Authorization, privacy, sanitized audit, rollback tests | Shared-note behavior | [Phase 3 report] | Phase 10 still owns the central notes interface. |
 | 3.9 | Scoped Admin access | `COMPLETED` | 2026-09-02 | 2026-09-02 | 2026-09-02 | 3.1–3.8 | Explicit CLIENT descendant inheritance plus non-climbing PROJECT/LOCATION grants | Six-persona and adversarial desktop/mobile/service matrix | Domain scope filtering and negative tests | [Phase 3 report] | TEAM behavior remains separate. |
-| 3.10 | Relationship, concurrency, authorization, and E2E QA | `BLOCKED` | 2026-09-02 | 2026-09-02 | — | 3.1–3.9 | Phase-scoped implementation and QA complete and pushed | Phase 3 suites pass; repository-wide inherited gates have preserved-work interference | Full client/project/location journey QA and delivery | [Phase 3 report] | Full lint and legacy Phase 1 runners remain red for preserved user-owned inputs; remote delivery is complete. |
+| 3.10 | Relationship, concurrency, authorization, and E2E QA | `COMPLETED` | 2026-09-15 | 2026-09-02 | 2026-09-15 | 3.1–3.9 | Phase-scoped implementation and QA complete and pushed | Phase 3 suites pass; the former repository-wide lint/legacy-runner interference is resolved | Full client/project/location journey QA and delivery | [Phase 3 report]; [Checkpoint Sub-phase A report] | The maintained application now lints clean with a documented historical-prototype boundary, and one isolated aggregate integration command replaced the legacy Phase 1 aggregate runner. No Phase 3 product behavior changed. |
 
 ## Phase 4 — Scheduling, review, and publication
 
@@ -207,6 +211,21 @@ Scope note: `COMPLETED` only for the narrowly defined secure foundation journey;
 | 8.8 | Admin scope and Employee exclusion | `COMPLETED` | 2026-09-03 | 2026-09-02 | 2026-09-03 | 8.5 | Strict Team × operational scope | PostgreSQL/browser | Domain map authorization | [Phase 8 report] | Employee gets 404/no navigation. |
 | 8.9 | Explicit non-live-tracking wording | `COMPLETED` | 2026-09-03 | 2026-09-02 | 2026-09-03 | 8.5 | Persistent visible disclaimer | Component/browser | Visible non-live statement | [Phase 8 report] | Static association, never route. |
 | 8.10 | Privacy, scope, responsive, and E2E QA | `COMPLETED` | 2026-09-03 | 2026-09-02 | 2026-09-03 | 8.1–8.9 | Unit/component/PostgreSQL/desktop/mobile evidence | Playwright desktop/mobile | Full map journey QA | [Phase 8 report] | Loopback fictional data only. |
+
+## Post-Phase-8 checkpoint — verification-harness and documentation remediation
+
+This checkpoint is not a product phase. It exists because the Post-Phase-8 audit classified the application as `CHECKPOINT_PASS_WITH_CAVEATS_READY_FOR_PHASE_9`: product journeys, authorization, privacy, security, and data integrity were sound, while the aggregate verification system and the documentation reporting it were not. Phase 8 remains validly completed and no product behavior changed here.
+
+| Workstream | Scope | Status | Evidence |
+| ---------- | ----- | ------ | -------- |
+| A1 | Shared component tests repaired and made database-independent | `COMPLETED` | [Checkpoint Sub-phase A report] |
+| A2 | Aggregate integration isolated to one disposable database per file | `COMPLETED` | [Checkpoint Sub-phase A report] |
+| A3 | Test-runner, aggregate E2E, and Playwright port/database contract settled | `COMPLETED` | [Checkpoint Sub-phase A report] |
+| A4 | Lint boundary defined around the historical root prototype | `COMPLETED` | [Checkpoint Sub-phase A report] |
+| A5 | Roadmap and status documentation reconciled | `COMPLETED` | [Checkpoint Sub-phase A report] |
+| B | Independent re-verification and formal checkpoint closure | `NOT_STARTED` | Owned by a separate Sub-phase B agent |
+
+Canonical commands are recorded in the [Checkpoint Sub-phase A report] and in `README.md`. The aggregate component, integration, lint, route-certification, migration, seed-smoke, typecheck, and safe-build gates pass for the maintained application; only the intentional `prototype/**` lint boundary and the deliberately guarded Phase 5–8 E2E skips remain excluded, and both are documented.
 
 ## Phase 9 — Certifications, CVs, portfolios, and files
 
@@ -455,3 +474,8 @@ Append new rows; correct an existing row only for a factual error. Every `COMPLE
 | 2026-09-02 | Phase 4 scheduling V1 | `NOT_STARTED` | `IN_PROGRESS` | Authorized `SCOPEIS_PHASE_4_SCHEDULING_DRAFT_PROPOSED_PUBLISHED_JOURNEY_R1`; [Phase 4 decisions] | Began the Client-month Draft → Proposed → Published journey after preserving the Phase 3 operational model and custody inventory. Phase 5+ remained excluded. | Codex |
 | 2026-09-02 | Phase 4 scheduling V1 | `IN_PROGRESS` | `COMPLETED` | [Phase 4 report] | PostgreSQL schema, scope-safe service/actions, responsive `/schedule` UI, employee privacy projection, lifecycle/revision behavior, transactional audit/notifications, overlap race protection, local smoke, focused tests, and desktop/mobile E2E passed. Broader assignment types are explicitly deferred by V1 decision. | Codex |
 | 2026-09-02 | Phase 5 leave and availability | `NOT_STARTED` | `COMPLETED` | [Phase 5 report]; [Phase 5 decisions] | Employee request → private Super Admin review → decision → Employee notification and future schedule integrity passed. The 22-day Dubai calendar-year Monday–Friday rule is bounded to Phase 5; later workforce domains remain excluded. | Codex |
+| 2026-09-02 | Phase 6 skills and operational capabilities | `NOT_STARTED` | `COMPLETED` | [Phase 6 report]; [Phase 6 decisions] | Controlled skill catalogue, recorded employee skills, Client/Project/Location/assignment requirement union, TEAM-scoped planner filtering, and transparent non-blocking Super Admin warnings passed. Certification gates and candidate ranking remained excluded. | Codex |
+| 2026-09-02 | Phase 7 coverage and replacement | `NOT_STARTED` | `COMPLETED` | [Phase 7 report] | Independent staffing-rule gaps, unranked TEAM-visible candidate facts, Admin requests, Super Admin-only decisions, and Draft-safe effects without auto-publication passed. | Codex |
+| 2026-09-03 | Phase 8 static planning map | `NOT_STARTED` | `COMPLETED` | [Phase 8 report]; [Phase 8 decisions] | Management-only selected-Dubai-date Published projection, strict TEAM × operational scope, Super Admin exact and scoped-Admin coarse markers, and an accessible tile-failure/list fallback passed with no GPS, tracking, geocoding, routing, tickets, production access, or deployment. | Codex |
+| 2026-09-15 | Phase 3 repository-wide QA disposition | `BLOCKED` | `COMPLETED` | [Checkpoint Sub-phase A report] | The preserved repository-wide QA interference was remediated as verification-harness work: shared component tests repaired, aggregate integration isolated per file, aggregate E2E and Playwright port/database contract settled, and the historical prototype placed outside the authoritative lint boundary. No Phase 3 product behavior changed. | Codex |
+| 2026-09-15 | Post-Phase-8 Checkpoint Sub-phase A | `NOT_STARTED` | `VERIFICATION_PENDING` | [Checkpoint Sub-phase A report] | Application behavior, permissions, privacy projections, workflows, schemas, and Phase 8 map behavior were left unchanged. Aggregate component, integration, E2E, route-certification, migration, seed-smoke, lint, typecheck, and isolated safe-build gates pass. Formal closure is deferred to Sub-phase B. | Codex |

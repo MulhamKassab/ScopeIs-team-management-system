@@ -25,7 +25,13 @@ describe("Phase 3 operational forms", () => {
   });
   it("renders separate contact, requirement, employee-association, and shared-note boundaries", () => {
     render(<SupportingDetailsPanel target={{ type: "CLIENT", id }} details={{ contacts: [], requirements: [], employees: [], notes: [] }} employees={employees} skills={[{ id, name: "Industrial Controls" }]} actorId="mock-admin-ava" isSuperAdmin={false} />);
-    expect(screen.getByRole("form", { name: "Add operational contact" })).toBeInTheDocument(); expect(screen.getByRole("form", { name: "Add basic staffing requirement" })).toHaveTextContent(/No dates, shifts/); expect(screen.getByRole("form", { name: "Add operational employee association" })).toHaveTextContent(/grants no access/); expect(screen.getByRole("form", { name: "Add shared operational note" })).toBeInTheDocument();
+    expect(screen.getByRole("form", { name: "Add operational contact" })).toBeInTheDocument();
+    // Phase 6 renamed the requirements form and its explanatory copy; assert the current authorized purpose, not the superseded wording.
+    const requirementForm = screen.getByRole("form", { name: /operational required skill/i });
+    expect(requirementForm).toHaveTextContent(/Each Client, Project, or Location rule is independent/);
+    expect(requirementForm).toHaveTextContent(/never sums rules or publishes a change/);
+    expect(screen.getByRole("form", { name: "Add operational employee association" })).toHaveTextContent(/grants no access/);
+    expect(screen.getByRole("form", { name: "Add shared operational note" })).toBeInTheDocument();
   });
   it("makes operational grants visibly explicit and Super-Admin controlled", () => {
     render(<ScopeManagementPanel target={{ type: "CLIENT", id }} employees={employees} grants={[]} />);

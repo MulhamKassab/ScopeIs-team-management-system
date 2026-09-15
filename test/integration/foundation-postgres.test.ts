@@ -23,6 +23,32 @@ describe("PostgreSQL Phase 1 foundation", () => {
     const events = await db.select().from(auditEvents).where(eq(auditEvents.targetId, started.actor.sessionId));
     expect(events.some((event) => event.action === "auth.mock_session.started")).toBe(true);
   });
+  it("rolls back both session and audit state when their transaction fails", async () => {
+    const marker = randomUUID();
+    let sessionId: string | undefined;
+    await expect(db.transaction(async (tx) => {
+      const [created] = await tx.insert(sessions).values({
+        userId: "mock-employee-dan",
+        tokenHash: marker.replaceAll("-", "").padEnd(64, "0"),
+        sessionVersion: 1,
+        expiresAt: new Date(Date.now() + 60_000),
+      }).returning({ id: sessions.id });
+      sessionId = created?.id;
+      await tx.insert(auditEvents).values({
+        actorUserId: "mock-employee-dan",
+        actorRole: "EMPLOYEE",
+        authenticationMode: "mock",
+        action: "auth.mock_session.started",
+        targetType: "session",
+        targetId: sessionId,
+        metadata: {},
+      });
+      throw new Error("forced certification rollback");
+    })).rejects.toThrow("forced certification rollback");
+    expect(sessionId).toBeDefined();
+    expect((await db.select().from(sessions).where(eq(sessions.id, sessionId!))).length).toBe(0);
+    expect((await db.select().from(auditEvents).where(eq(auditEvents.targetId, sessionId!))).length).toBe(0);
+  });
   it("writes primary state, audit, and notification in one transaction and rolls back failures", async () => {
     const actor = { id: "mock-super-admin-nora", role: "SUPER_ADMIN" as const, displayName: "Nora", sessionId: "test", sessionVersion: 1, scopes: [], authenticationMode: "mock" as const };
     const suffix = randomUUID(); const scopeReference = `team:transaction-${suffix}`;
