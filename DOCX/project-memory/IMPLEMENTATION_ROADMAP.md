@@ -195,12 +195,12 @@ No GPS ingestion, movement history, live employee position, or route surveillanc
 
 ## Post-Phase-8 checkpoint — verification-harness remediation
 
-**Status:** `IN_PROGRESS` (Checkpoint Sub-phase A)
+**Status:** `COMPLETED` (Sub-phase A remediation and Sub-phase B independent closure)
 
-Phase 8 closed with the application itself valid, but with defects in the aggregate verification system and in the documentation that reported it. This checkpoint sub-phase is bounded to repairing the shared component tests, isolating aggregate integration-test databases, settling the test-runner and Playwright contract, defining the lint boundary around the historical prototype, and reconciling the status documentation. It is not a product phase.
+Phase 8 closed with the application itself valid, but with defects in the aggregate verification system and in the documentation that reported it. This checkpoint was bounded to repairing the shared component tests, isolating aggregate integration-test databases, settling the test-runner and Playwright contract, defining the lint boundary around the historical prototype, and reconciling the status documentation. It is not a product phase. Sub-phase A delivered the remediation in commit `decb377decb32b3d064b14024c3079879dd932c0`; Sub-phase B independently re-verified every mandatory gate and formally closed the checkpoint on 2026-09-15.
 
 - It does not begin Phase 9, does not convert known product limitations into features, and does not change business behavior, permissions, privacy projections, workflows, schemas, or Phase 8 map behavior.
-- Checkpoint Sub-phase A authorizes the remediation and its scoped commit. Independent re-verification and formal checkpoint closure are owned by Checkpoint Sub-phase B, performed by a separate agent.
+- Checkpoint Sub-phase A authored the remediation and its scoped commit; Checkpoint Sub-phase B independently re-verified the Phase 0–8 record and closed the checkpoint. See the [Sub-phase A remediation report](../phase-reports/SCOPEIS_POST_PHASE_8_CHECKPOINT_SUBPHASE_A_REMEDIATION_R1.md) and the [Sub-phase B closure report](../phase-reports/SCOPEIS_POST_PHASE_8_CHECKPOINT_SUBPHASE_B_CLOSURE_R1.md).
 - The historical root prototype (`prototype/full-frontend-r1/`) is preserved reference work: it is outside the authoritative application lint boundary and is not deleted, edited, formatted, migrated, or relabelled.
 
 ## Phase 9 — Certifications, CVs, portfolios, and files

@@ -1,6 +1,8 @@
 # ScopeIs Post-Phase-8 Checkpoint — Sub-phase A remediation R1
 
-**Classification:** `SCOPEIS_CHECKPOINT_SUBPHASE_A_IMPLEMENTED_AND_PUSHED`
+**Classification:** `SCOPEIS_CHECKPOINT_SUBPHASE_A_COMPLETED_AND_PUSHED`
+
+**Remediation commit:** `decb377decb32b3d064b14024c3079879dd932c0` (`test: remediate post-phase-8 verification gates`). Verified and closed by [Checkpoint Sub-phase B](SCOPEIS_POST_PHASE_8_CHECKPOINT_SUBPHASE_B_CLOSURE_R1.md).
 
 **Scope:** verification-harness remediation and documentation reconciliation only. This sub-phase does not start Phase 9, does not merge or modify the Preview worktree, does not change business behavior, permissions, privacy projections, workflows, database schemas, or Phase 8 map behavior, and does not access any production system or secret.
 
@@ -13,7 +15,7 @@
 | Starting branch | `main` |
 | Starting HEAD | `99199353f92057184cb7bd2ea97b010915a7f40d` (`feat: implement Phase 8 static planning map`) |
 | Starting tracking | `main...origin/main` `0/0` |
-| Final HEAD | recorded in the delivery message for this commit (`test: remediate post-phase-8 verification gates`) |
+| Final HEAD | `decb377decb32b3d064b14024c3079879dd932c0` (`test: remediate post-phase-8 verification gates`), pushed to `origin/main` |
 | Preview worktree | `/Users/mulhamkassab/Desktop/For Me/ScopeIs Team Management System-preview`, branch `preview` at `7c401c6add34db14c43b2139aebc9c8878618927`, aligned `0/0` with `origin/preview` |
 | Preview handling | Inspected read-only. Not modified, merged, rebased, pushed, or staged. Its pre-existing untracked `* 2.tsx` / `* 2.css` duplicate files were left untouched. |
 
@@ -236,7 +238,7 @@ Six E2E specs carry `test.skip(<guard>)` statements — `phase3-operations.spec.
 
 ## 13. Handoff to Checkpoint Sub-phase B
 
-1. Check out the Sub-phase A remediation commit recorded in the delivery message (`test: remediate post-phase-8 verification gates`) on `main`, aligned `0/0` with `origin/main`.
+1. Check out the Sub-phase A remediation commit `decb377decb32b3d064b14024c3079879dd932c0` (`test: remediate post-phase-8 verification gates`) on `main`, aligned `0/0` with `origin/main`.
 2. Independently re-run every gate in section 10, including the negative `.env.production` check and the isolation proof.
 3. Independently re-walk the Phase 0–8 documents and confirm the Phase 0–9 status table in section 7.
 4. Confirm the Preview worktree is still untouched at `7c401c6` and that the preserved uncommitted files are still present.

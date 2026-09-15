@@ -1,5 +1,6 @@
 # Documentation Index
 
+- [Post-Phase-8 Checkpoint Sub-phase B closure report](phase-reports/SCOPEIS_POST_PHASE_8_CHECKPOINT_SUBPHASE_B_CLOSURE_R1.md)
 - [Post-Phase-8 Checkpoint Sub-phase A remediation report](phase-reports/SCOPEIS_POST_PHASE_8_CHECKPOINT_SUBPHASE_A_REMEDIATION_R1.md)
 - [Phase 7 coverage and replacement decisions](project-memory/PHASE_7_COVERAGE_REPLACEMENT_DECISIONS.md)
 - [Phase 7 implementation report](phase-reports/SCOPEIS_PHASE_7_COVERAGE_AND_REPLACEMENT_JOURNEY_R1.md)
@@ -8,7 +9,7 @@
 
 ## Purpose and status
 
-This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is `COMPLETED_IN_NARROW_FOUNDATION_SCOPE`; Phase 2 — Employee management journey is `COMPLETED` (11/11); Phases 3 clients/projects/locations, 4 scheduling V1, 5 leave, 6 controlled skills/non-blocking warning, 7 coverage/replacement, and 8 static planning map are `COMPLETED`. The repository is at the Post-Phase-8 Checkpoint Sub-phase A (aggregate verification-harness and documentation remediation), and Phase 9 — Certifications, CVs, portfolios, and files is the next journey, `NOT_STARTED`. Notes/discussions/notification centre/audit interface remain Phase 10, dashboards/reports/exports remain Phase 11, Ticket System integration remains Phase 12, and production identity and rollout remain Phase 13.
+This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is `COMPLETED_IN_NARROW_FOUNDATION_SCOPE`; Phase 2 — Employee management journey is `COMPLETED` (11/11); Phases 3 clients/projects/locations, 4 scheduling V1, 5 leave, 6 controlled skills/non-blocking warning, 7 coverage/replacement, and 8 static planning map are `COMPLETED`. The Post-Phase-8 checkpoint is `COMPLETED` at remediation commit `decb377decb32b3d064b14024c3079879dd932c0` (Sub-phase A remediation, Sub-phase B independent closure), and Phase 9 — Certifications, CVs, portfolios, and files is the next journey, `NOT_STARTED`. Notes/discussions/notification centre/audit interface remain Phase 10, dashboards/reports/exports remain Phase 11, Ticket System integration remains Phase 12, and production identity and rollout remain Phase 13.
 
 ## Reader path
 

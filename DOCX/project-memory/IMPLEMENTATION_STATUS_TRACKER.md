@@ -8,7 +8,7 @@ The tracker uses only: `NOT_STARTED`, `READY`, `IN_PROGRESS`, `PARTIAL`, `BLOCKE
 
 **Completion rule:** backend-only work and UI shells are not completed user journeys. A phase is complete only after all applicable delivery gates and its end-to-end journey are verified.
 
-Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [Phase 2 journey completion], [Phase 2 manual QA readiness], [Phase 2 controls/code remediation], [Phase 3 report], [Phase 3 decisions], [Phase 4 report], [Phase 4 decisions], [Phase 5 report], [Phase 5 decisions], [Phase 6 report], [Phase 6 decisions], [Phase 7 report], [Phase 8 report], [Phase 8 decisions], [Checkpoint Sub-phase A report], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
+Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [Phase 2 journey completion], [Phase 2 manual QA readiness], [Phase 2 controls/code remediation], [Phase 3 report], [Phase 3 decisions], [Phase 4 report], [Phase 4 decisions], [Phase 5 report], [Phase 5 decisions], [Phase 6 report], [Phase 6 decisions], [Phase 7 report], [Phase 8 report], [Phase 8 decisions], [Checkpoint Sub-phase A report], [Checkpoint Sub-phase B closure], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], and [note policy].
 
 [roadmap]: IMPLEMENTATION_ROADMAP.md
 [context]: ../../PROJECT_CONTEXT.md
@@ -36,6 +36,7 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 [Phase 8 report]: ../phase-reports/SCOPEIS_PHASE_8_STATIC_PLANNING_MAP_JOURNEY_R1.md
 [Phase 8 decisions]: PHASE_8_STATIC_PLANNING_MAP_DECISIONS.md
 [Checkpoint Sub-phase A report]: ../phase-reports/SCOPEIS_POST_PHASE_8_CHECKPOINT_SUBPHASE_A_REMEDIATION_R1.md
+[Checkpoint Sub-phase B closure]: ../phase-reports/SCOPEIS_POST_PHASE_8_CHECKPOINT_SUBPHASE_B_CLOSURE_R1.md
 [employee services]: ../../src/modules/employees/employee-services.ts
 [schema]: ../../src/db/schema/index.ts
 [navigation]: ../../src/modules/navigation/navigation.ts
@@ -46,15 +47,15 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 
 ## Current focus
 
-- **Current active phase:** Post-Phase-8 checkpoint — verification-harness and documentation remediation (Checkpoint Sub-phase A)
-- **Current active/next sub-phase:** Sub-phase A remediation is implemented and pushed; Checkpoint Sub-phase B (independent re-verification and formal closure) is next.
-- **Current phase status:** `VERIFICATION_PENDING`
+- **Current active phase:** Phase 9 — Certifications, CVs, portfolios, and files
+- **Current active/next sub-phase:** 9.1 Certification records, under its own approved Phase ID. The Post-Phase-8 checkpoint is closed.
+- **Current phase status:** `NOT_STARTED` (Phase 9 is the next journey)
 - **Last status date:** `2026-09-15`
-- **Most recent trustworthy evidence:** [Phase 8 report]; [Phase 8 decisions]; [Checkpoint Sub-phase A report]
-- **Immediate objective:** Hand the Sub-phase A remediation commit to a separate Sub-phase B agent for independent Phase 0–8 re-verification and formal checkpoint closure.
-- **Known blockers:** None for the maintained application. The preserved historical root prototype is outside the documented lint boundary and legacy Phase 1 aggregate runners were replaced by isolated aggregate commands.
+- **Most recent trustworthy evidence:** [Checkpoint Sub-phase B closure]; [Checkpoint Sub-phase A report]; [Phase 8 report]
+- **Immediate objective:** Begin Phase 9 planning under an approved Phase ID; preserve the closed Phase 0–8 record and the Phase 9 `NOT_STARTED` journey boundary.
+- **Known blockers:** None. The Post-Phase-8 checkpoint closed on 2026-09-15 with every mandatory gate passing; remaining items are documented non-blocking debt only.
 - **Explicit exclusions:** Phase 9 implementation, Preview-worktree merge or modification, GPS/live tracking, geocoding, routes/travel, tickets, production access/migration/authentication/deployment, credential reorganisation, and notification-centre redesign.
-- **Required phase-exit journey:** Checkpoint Sub-phase B: independent re-verification, then Phase 9 only under its own approved Phase ID.
+- **Required phase-exit journey:** Phase 9: the confirmed employee evidence journey (certifications, CVs, portfolios, and files) only under its own approved Phase ID and product decisions.
 
 ## Master phase status
 
@@ -214,7 +215,7 @@ Scope note: `COMPLETED` only for the narrowly defined secure foundation journey;
 
 ## Post-Phase-8 checkpoint — verification-harness and documentation remediation
 
-This checkpoint is not a product phase. It exists because the Post-Phase-8 audit classified the application as `CHECKPOINT_PASS_WITH_CAVEATS_READY_FOR_PHASE_9`: product journeys, authorization, privacy, security, and data integrity were sound, while the aggregate verification system and the documentation reporting it were not. Phase 8 remains validly completed and no product behavior changed here.
+This checkpoint is not a product phase. It exists because the Post-Phase-8 audit classified the application as `CHECKPOINT_PASS_WITH_CAVEATS_READY_FOR_PHASE_9`: product journeys, authorization, privacy, security, and data integrity were sound, while the aggregate verification system and the documentation reporting it were not. Phase 8 remains validly completed and no product behavior changed. **The checkpoint is closed as of 2026-09-15 with the classification `SCOPEIS_POST_PHASE_8_CHECKPOINT_COMPLETED_WITH_NON_BLOCKING_CAVEATS_READY_FOR_PHASE_9`; the last verified checkpoint commit is `decb377decb32b3d064b14024c3079879dd932c0`.**
 
 | Workstream | Scope | Status | Evidence |
 | ---------- | ----- | ------ | -------- |
@@ -223,7 +224,7 @@ This checkpoint is not a product phase. It exists because the Post-Phase-8 audit
 | A3 | Test-runner, aggregate E2E, and Playwright port/database contract settled | `COMPLETED` | [Checkpoint Sub-phase A report] |
 | A4 | Lint boundary defined around the historical root prototype | `COMPLETED` | [Checkpoint Sub-phase A report] |
 | A5 | Roadmap and status documentation reconciled | `COMPLETED` | [Checkpoint Sub-phase A report] |
-| B | Independent re-verification and formal checkpoint closure | `NOT_STARTED` | Owned by a separate Sub-phase B agent |
+| B | Independent re-verification and formal checkpoint closure | `COMPLETED` | [Checkpoint Sub-phase B closure] — 20/20 mandatory gates passed; Phase 0–8 `VERIFIED`; no P0/P1 defect |
 
 Canonical commands are recorded in the [Checkpoint Sub-phase A report] and in `README.md`. The aggregate component, integration, lint, route-certification, migration, seed-smoke, typecheck, and safe-build gates pass for the maintained application; only the intentional `prototype/**` lint boundary and the deliberately guarded Phase 5–8 E2E skips remain excluded, and both are documented.
 
@@ -479,3 +480,4 @@ Append new rows; correct an existing row only for a factual error. Every `COMPLE
 | 2026-09-03 | Phase 8 static planning map | `NOT_STARTED` | `COMPLETED` | [Phase 8 report]; [Phase 8 decisions] | Management-only selected-Dubai-date Published projection, strict TEAM × operational scope, Super Admin exact and scoped-Admin coarse markers, and an accessible tile-failure/list fallback passed with no GPS, tracking, geocoding, routing, tickets, production access, or deployment. | Codex |
 | 2026-09-15 | Phase 3 repository-wide QA disposition | `BLOCKED` | `COMPLETED` | [Checkpoint Sub-phase A report] | The preserved repository-wide QA interference was remediated as verification-harness work: shared component tests repaired, aggregate integration isolated per file, aggregate E2E and Playwright port/database contract settled, and the historical prototype placed outside the authoritative lint boundary. No Phase 3 product behavior changed. | Codex |
 | 2026-09-15 | Post-Phase-8 Checkpoint Sub-phase A | `NOT_STARTED` | `VERIFICATION_PENDING` | [Checkpoint Sub-phase A report] | Application behavior, permissions, privacy projections, workflows, schemas, and Phase 8 map behavior were left unchanged. Aggregate component, integration, E2E, route-certification, migration, seed-smoke, lint, typecheck, and isolated safe-build gates pass. Formal closure is deferred to Sub-phase B. | Codex |
+| 2026-09-15 | Post-Phase-8 Checkpoint Sub-phase B | `VERIFICATION_PENDING` | `COMPLETED` | [Checkpoint Sub-phase B closure] | Independent re-verification of `decb377` from the committed `main` state: all 20 mandatory gates passed, Phases 0–8 verified with no P0/P1 defect, isolation 9/9, `.env.production` and Preview untouched, documentation consistent. Classification `SCOPEIS_POST_PHASE_8_CHECKPOINT_COMPLETED_WITH_NON_BLOCKING_CAVEATS_READY_FOR_PHASE_9`. Phase 9 remains `NOT_STARTED`. | Codex |
