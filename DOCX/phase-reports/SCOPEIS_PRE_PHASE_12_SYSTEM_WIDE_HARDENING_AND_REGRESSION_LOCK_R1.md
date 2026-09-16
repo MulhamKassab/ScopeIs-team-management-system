@@ -16,7 +16,7 @@
 | Remote | `https://github.com/MulhamKassab/ScopeIs-team-management-system.git` (no embedded credentials) |
 | Upstream | `origin/main` |
 | Worktrees | `main` (`aa5729e`) and `preview` (`7c401c6`) |
-| Final HEAD | (recorded after the hardening commit; see section 17) |
+| Final HEAD | `6926e989c8ad7df100eaf69a90c2c432446b63e9` |
 
 The repository was inspected before any change. No staged paths, unstaged tracked paths, or tracked
 modifications existed at the start beyond the preserved untracked paths listed below. Phase 0-11
@@ -227,4 +227,5 @@ excluded. `main` was pushed and verified `main...origin/main = 0/0`. No tag was 
 
 ## 17. Final SHA
 
-(Recorded after the hardening commit and reflected in the git history.)
+`6926e989c8ad7df100eaf69a90c2c432446b63e9` (the hardening commit; this document's own finalization
+is a one-line documentation follow-up).
