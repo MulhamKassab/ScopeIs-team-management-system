@@ -1,5 +1,6 @@
 # Documentation Index
 
+- [Phase 11 dashboard acceptance and manifest reconciliation report](phase-reports/SCOPEIS_PHASE_11_DASHBOARD_ACCEPTANCE_AND_MANIFEST_RECONCILIATION_R1.md)
 - [Phase 11 dashboards, reports and exports report](phase-reports/SCOPEIS_PHASE_11_DASHBOARDS_REPORTS_AND_AUTHORIZED_EXPORTS_R1.md)
 - [Phase 11 reporting decisions](project-memory/PHASE_11_REPORTING_DECISIONS.md)
 - [Phase 10 management-note authorization remediation report](phase-reports/SCOPEIS_PHASE_10_MANAGEMENT_NOTE_AUTHORIZATION_REMEDIATION_R1.md)

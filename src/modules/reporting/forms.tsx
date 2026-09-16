@@ -7,9 +7,11 @@ import { asOfLabel, dashboardIntro, missingSourceLabel, planningBanner, reportIn
 export type ReportIndexEntry = { key: string; label: string; question: string; grain: string; privacy: string; planning: boolean; exportable: boolean };
 export type ReportIndexOptions = { clientOptions: { id: string; name: string }[]; projectOptions: { id: string; name: string }[]; locationOptions: { id: string; name: string }[] };
 
-function DataTable({ columns, rows, caption }: { columns: ReportColumn[]; rows: ReportRow[]; caption: string }) {
-  if (!rows.length) return <p className="operation-empty">No row matches this view.</p>;
+function DataTable({ columns, rows, caption, emptyState }: { columns: ReportColumn[]; rows: ReportRow[]; caption: string; emptyState?: string }) {
+  // The labelled region always renders, so an empty surface is still named, focusable and announced
+  // rather than disappearing from the accessibility tree.
   return <div className="report-table-wrap" tabIndex={0} role="region" aria-label={caption}>
+    {rows.length ? (
     <table className="report-table">
       <caption>{caption}</caption>
       <thead><tr>{columns.map((column) => <th key={column.key} scope="col">{column.label}</th>)}</tr></thead>
@@ -19,6 +21,7 @@ function DataTable({ columns, rows, caption }: { columns: ReportColumn[]; rows: 
         </tr>)}
       </tbody>
     </table>
+    ) : <p className="operation-empty">{emptyState ?? "No row matches this view."}</p>}
   </div>;
 }
 
@@ -43,9 +46,10 @@ export function DashboardCards({ view }: { view: DashboardView }) {
       </li>)}
     </ul>
     {view.cards.some((card) => card.unavailable) ? <p className="reporting-missing-source" role="alert">{missingSourceLabel("a required reporting source")}</p> : null}
-    {view.sections.map((section) => <section className="operation-panel" key={section.key}>
-      <h2>{section.label}</h2>
-      <DataTable columns={section.columns} rows={section.rows} caption={section.label} />
+    {view.sections.map((section) => <section className="operation-panel reporting-section" key={section.key}>
+      <div className="reporting-section-head"><h2>{section.label}</h2>{section.href ? <Link className="button" href={section.href}>Open</Link> : null}</div>
+      <p className="reporting-card-question">{section.question}</p>
+      <DataTable columns={section.columns} rows={section.rows} caption={section.label} emptyState={section.emptyState} />
     </section>)}
     <ul className="reporting-notes">{view.notes.map((note) => <li key={note}>{note}</li>)}</ul>
     <p className="reporting-zero-note">{zeroStateNote}</p>
@@ -109,7 +113,7 @@ export function ReportView({ view, filters }: { view: ReportView; filters: { cli
       <label>Location<select name="locationId" defaultValue=""><option value="">Any authorized location</option>{filters.locationOptions.map((option) => <option key={option.id} value={option.id}>{option.name}</option>)}</select></label>
       <div className="reporting-filter-actions"><button className="button primary" type="submit">Apply filters</button><Link className="button" href={`/reports/${view.key}`}>Reset</Link></div>
     </form>
-    <DataTable columns={view.columns} rows={view.rows} caption={`${view.label} rows`} />
+    <DataTable columns={view.columns} rows={view.rows} caption={`${view.label} rows`} emptyState={view.emptyState} />
     <nav className="notification-pagination" aria-label="Report pages">
       {view.hasPrevious ? <Link className="button" href={`/reports/${view.key}?page=${view.page - 1}`}>Previous</Link> : null}
       <span>Page {view.page}{view.totalRows === null ? "" : ` of ${Math.max(1, Math.ceil(view.totalRows / view.pageSize))}`}{view.totalRows === null ? "" : ` · ${view.totalRows} row${view.totalRows === 1 ? "" : "s"}`}</span>

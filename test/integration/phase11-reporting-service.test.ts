@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { db } from "@/db/client";
 import { adminScopeGrants, auditEvents, employeeEvidence, users } from "@/db/schema";
 import { coverageService } from "@/modules/coverage/service";
+import { leaveService } from "@/modules/leave/service";
 import { ReportDomainError } from "@/modules/reporting/domain-error";
 import { reportExportService } from "@/modules/reporting/export-service";
 import { reportingService } from "@/modules/reporting/service";
@@ -212,8 +213,91 @@ describe("Phase 11 dashboards", () => {
     expect(admin.cards.map((card) => card.key)).not.toContain("expired-certifications");
 
     const employee = await reportingService.dashboard(cora());
-    expect(employee.cards.map((card) => card.key)).toEqual(["my-assignments", "my-skills", "my-evidence", "my-unread"]);
+    expect(employee.cards.map((card) => card.key)).toEqual(["my-leave", "my-skills", "my-evidence", "my-unread"]);
     expect(JSON.stringify(employee)).not.toContain("Dan Unscoped");
+  });
+
+  it("presents all twelve approved Super Admin information surfaces, each independently named and backed", async () => {
+    const view = await reportingService.dashboard(nora());
+    // Nine cards plus three sections: the approved contract counts a table as a surface.
+    expect(view.cards).toHaveLength(9);
+    expect(view.sections).toHaveLength(3);
+
+    const surfaces = [...view.cards.map((card) => card.label), ...view.sections.map((section) => section.label)];
+    for (const required of [
+      "Active employees",
+      "Employees by team",
+      "Current Published client-months",
+      "Published assignments this month",
+      "Employees with no Published assignment this month",
+      "Pending leave requests",
+      "Approved leave days this month",
+      "Pending replacement requests",
+      "Evidence awaiting review",
+      "Expired certifications",
+      "Schedule lifecycle",
+      "Recent recorded actions",
+    ]) {
+      expect(surfaces).toContain(required);
+    }
+    // Every section independently declares a question, an empty state and a drill-down.
+    for (const section of view.sections) {
+      expect(section.question.length).toBeGreaterThan(0);
+      expect(section.emptyState.length).toBeGreaterThan(0);
+      expect(section.href).toBeTruthy();
+    }
+
+    // Schedule lifecycle: each client-month is counted once in its effective state.
+    const lifecycle = view.sections.find((section) => section.key === "schedule-lifecycle")!;
+    const counted = lifecycle.rows.reduce((total, row) => total + Number(row.client_months), 0);
+    expect(counted).toBe((await reportingService.report(nora(), "schedule-lifecycle", { from: "2027-01-01", to: "2027-12-31" })).totalRows);
+
+    // Recent recorded actions: newest five through the Phase 10 allowlist, never raw metadata.
+    const recent = view.sections.find((section) => section.key === "recent-actions")!;
+    expect(recent.rows.length).toBeLessThanOrEqual(5);
+    expect(recent.emptyState.length).toBeGreaterThan(0);
+    expect(recent.rows.every((row) => !row.action.includes("{"))).toBe(true);
+    // Once an audited action exists the surface reflects it, newest first, rendered through the allowlist.
+    await reportExportService.generate(nora(), "published-allocation", PUBLISHED_WINDOW);
+    const refreshed = (await reportingService.dashboard(nora())).sections.find((section) => section.key === "recent-actions")!;
+    expect(refreshed.rows.length).toBeGreaterThan(0);
+    expect(refreshed.rows[0].action).toBe("Report export generated");
+  });
+
+  it("presents all five approved Employee information areas with a leave balance taken from the leave service", async () => {
+    const view = await reportingService.dashboard(cora());
+    expect(view.cards).toHaveLength(4);
+    expect(view.sections.map((section) => section.key)).toEqual(["my-upcoming", "my-leave-requests"]);
+
+    const areas = [...view.cards.map((card) => card.label), ...view.sections.map((section) => section.label)];
+    for (const required of ["My published assignments (next 7 days)", "My leave and balance", "My leave", "Skills I have recorded", "My capability evidence", "My unread notifications"]) {
+      expect(areas).toContain(required);
+    }
+
+    // The balance equals the authoritative leave-service computation for the same actor.
+    const authoritative = await leaveService.getMyLeave(cora());
+    const leaveCard = view.cards.find((card) => card.key === "my-leave")!;
+    expect(leaveCard.value).toBe(String(authoritative.balance.remaining));
+    expect(leaveCard.detail).toContain(String(authoritative.balance.allowance));
+    // The private reason and decision response never reach the dashboard projection.
+    expect(JSON.stringify(view)).not.toContain(PRIVATE_MARKER);
+  });
+
+  it("keeps the approved scoped Admin shape and no Super-Admin-only surface", async () => {
+    const view = await reportingService.dashboard(ava());
+    const surfaces = [...view.cards.map((card) => card.label), ...view.sections.map((section) => section.label)];
+    for (const required of [
+      "Active employees in my scope", "Published assignments this month", "Employees with no Published assignment this month",
+      "Approved leave days this month", "Replacement requests I raised", "Certifications in my scope",
+    ]) {
+      expect(surfaces).toContain(required);
+    }
+    expect(view.cards.map((card) => card.key)).not.toContain("awaiting-review");
+    expect(view.cards.map((card) => card.key)).not.toContain("expired-certifications");
+    expect(view.sections.map((section) => section.key)).not.toContain("recent-actions");
+    expect(view.sections.map((section) => section.key)).not.toContain("schedule-lifecycle");
+    // The authorized filter options are the only entities exposed.
+    expect(JSON.stringify(view)).not.toContain("Bravo Engineering");
   });
 
   it("keeps a Draft or Proposed assignment invisible from the Employee dashboard", async () => {

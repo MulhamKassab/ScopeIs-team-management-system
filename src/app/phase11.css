@@ -29,11 +29,15 @@
 .report-table thead th { background:var(--surface-muted); color:var(--muted); font-size:.74rem; letter-spacing:.04em; text-transform:uppercase; }
 .report-table tbody tr:last-child td { border-block-end:0; }
 .report-table td { overflow-wrap:anywhere; }
+.reporting-section-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.reporting-section-head .button { border-color:var(--border); background:var(--surface-muted); flex:0 0 auto; }
 @media (max-width:1000px) { .reporting-cards { grid-template-columns:repeat(2,minmax(0,1fr)); } .reporting-filters { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width:760px) {
   .reporting-cards, .reporting-filters { grid-template-columns:1fr; }
   .reporting-report-list li { flex-direction:column; }
   .reporting-report-list .button, .reporting-filter-actions .button { width:100%; }
+  .reporting-section-head { flex-direction:column; }
+  .reporting-section-head .button { width:100%; }
   .report-table { min-width:0; }
   .report-table thead { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
   .report-table tbody, .report-table tr, .report-table td { display:block; width:100%; }

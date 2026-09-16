@@ -12,6 +12,8 @@
 
 `/dashboard` replaced its Phase 1 shell with a role-branched operational summary. `/reports` became a scope-enforced index over thirteen registered metric contracts. Authoritative staffing metrics read only the current **Published** schedule; the Draft and Proposed planning view is a separate, explicitly labelled report. Availability terminology was removed in favour of a bounded conflict fact. Exports stream bounded CSV with per-request reauthorization.
 
+> **Post-completion reconciliation.** An independent acceptance check against the approved dashboard contract found that this commit delivered ten of the twelve required Super Admin surfaces and four of the five required Employee areas. The missing `Schedule lifecycle`, `Recent recorded actions` and `My leave and balance` surfaces were added afterwards, together with the tests that prove all twelve and all five, and the commit-manifest categories reported in the conversational completion receipt were corrected from `10/7/21/5` to the authoritative `11/7/20/5`. No metric definition, authorization rule, privacy rule, export rule or R4/R10 boundary changed. See [`SCOPEIS_PHASE_11_DASHBOARD_ACCEPTANCE_AND_MANIFEST_RECONCILIATION_R1.md`](SCOPEIS_PHASE_11_DASHBOARD_ACCEPTANCE_AND_MANIFEST_RECONCILIATION_R1.md).
+
 ## 2. Final metric definitions
 
 Every registered metric declares its source of truth, grain, inclusion rule, exclusion rule, date interpretation, role policy, privacy class, deterministic ordering, empty-state behaviour and scope predicate in `src/modules/reporting/definitions.ts`. Nothing is rendered or exported that is not registered there.

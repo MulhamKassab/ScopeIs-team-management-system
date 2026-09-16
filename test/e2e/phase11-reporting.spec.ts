@@ -37,6 +37,12 @@ test("Super Admin reporting: dashboard, published allocation drill-down, plannin
   await expect(page.locator(".reporting-cards li")).toHaveCount(9);
   await expect(page.getByText("Active employees", { exact: true })).toBeVisible();
   await expect(page.getByText("Evidence awaiting review", { exact: true })).toBeVisible();
+  // All twelve approved surfaces are individually reachable: nine cards plus three tables.
+  await expect(page.getByRole("heading", { name: "Employees by team" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Schedule lifecycle" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Recent recorded actions" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Schedule lifecycle" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "Recent recorded actions" })).toBeVisible();
   await expectCleanTerminology(page);
   await expectNoHorizontalOverflow(page);
 
@@ -82,6 +88,10 @@ test("Scoped Admin reporting is scope-bounded, may open planning, may not reach 
   await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
   await expect(page.getByText("Active employees in my scope", { exact: true })).toBeVisible();
   await expect(page.getByText("Evidence awaiting review", { exact: true })).toHaveCount(0);
+  // The scoped Admin keeps the approved shape and never receives the Super-Admin-only tables.
+  await expect(page.getByRole("heading", { name: "Schedule lifecycle" })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Recent recorded actions" })).toHaveCount(0);
+  await expect(page.getByText("Certifications in my scope", { exact: true })).toBeVisible();
   await expectCleanTerminology(page);
 
   // 2. The Admin reaches the report index and the planning report inside their scope.
@@ -118,6 +128,12 @@ test("Employee dashboard is self-only and reporting stays closed", async ({ page
   await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
   await expect(page.getByText("My unread notifications", { exact: true })).toBeVisible();
   await expect(page.locator(".reporting-cards li")).toHaveCount(4);
+  // All five approved Employee areas are individually labelled.
+  await expect(page.getByText("My leave and balance", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "My leave" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "My published assignments (next 7 days)" })).toBeVisible();
+  await expect(page.getByText("Skills I have recorded", { exact: true })).toBeVisible();
+  await expect(page.getByText("My capability evidence", { exact: true })).toBeVisible();
   // No organisational total and no other employee's name.
   await expect(page.getByText("Active employees", { exact: true })).toHaveCount(0);
   await expect(page.locator("body")).not.toContainText("Dan Unscoped");

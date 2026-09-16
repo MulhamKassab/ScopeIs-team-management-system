@@ -2,6 +2,7 @@ import "server-only";
 import { resolveCurrentActor, resolveScope, type CurrentActor, type ResolvedScope } from "@/modules/authorization/current-actor";
 import { auditService } from "@/modules/audit/service";
 import { deriveExpiryStatus } from "@/modules/evidence/validation";
+import { leaveService } from "@/modules/leave/service";
 import {
   canExportReport, canViewReport, CONFLICT_COLUMN_HEADER, conflictValues, PLANNING_DATA_STATE, PUBLISHED_DATA_STATE,
   reportDefinition, reports, type ConflictValue, type ReportKey,
@@ -43,7 +44,9 @@ export type ReportView = {
 };
 
 export type DashboardCard = { key: string; label: string; question: string; value: string; detail?: string; href?: string; unavailable?: boolean };
-export type DashboardView = { role: SystemRole; asOf: string; cards: DashboardCard[]; sections: { key: string; label: string; columns: ReportColumn[]; rows: ReportRow[] }[]; notes: string[] };
+/** A dashboard section is an information surface in its own right: named, sourced, ordered and testable. */
+export type DashboardSection = { key: string; label: string; question: string; columns: ReportColumn[]; rows: ReportRow[]; emptyState: string; href?: string };
+export type DashboardView = { role: SystemRole; asOf: string; cards: DashboardCard[]; sections: DashboardSection[]; notes: string[] };
 
 const asOfNow = () => new Intl.DateTimeFormat("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Dubai" }).format(new Date());
 const formatDateRange = (window: DateWindow) => `${window.from} to ${window.to}`;
@@ -495,11 +498,14 @@ export class ReportingService {
 
     if (current.role === "EMPLOYEE") {
       const upcoming = { from: today, to: addDays(today, 6) };
-      const [assignments, skills, evidence, unread] = await Promise.all([
+      const [assignments, skills, evidence, unread, myLeave] = await Promise.all([
         reportingRepository.myPublishedAssignments(current.id, upcoming, 20),
         reportingRepository.myRecordedSkillCount(current.id),
         reportingRepository.evidenceStateCounts(current.id),
         reportingRepository.myUnreadNotificationCount(current.id),
+        // The balance is taken from the leave service itself, so the dashboard cannot drift from the
+        // authoritative allowance-minus-approved-working-days computation.
+        leaveService.getMyLeave(actor),
       ]);
       const evidenceCounts = evidence.reduce((totals, item) => {
         totals.byReview[item.reviewState] = (totals.byReview[item.reviewState] ?? 0) + 1;
@@ -509,21 +515,34 @@ export class ReportingService {
       return {
         role: current.role, asOf,
         cards: [
-          { key: "my-assignments", label: "My published assignments (next 7 days)", question: "What am I scheduled for this week?", value: String(assignments.length), href: "/schedule" },
+          { key: "my-leave", label: "My leave and balance", question: "How much annual leave do I have left?", value: String(myLeave.balance.remaining), detail: `${myLeave.balance.used} of ${myLeave.balance.allowance} working days used in ${myLeave.balance.year}`, href: "/leave" },
           { key: "my-skills", label: "Skills I have recorded", question: "How many skills are on my profile?", value: String(skills), href: "/profile" },
           { key: "my-evidence", label: "My capability evidence", question: "What evidence have I recorded?", value: String(evidence.length), detail: `${evidenceCounts.expired} expired`, href: "/profile" },
           { key: "my-unread", label: "My unread notifications", question: "Do I have anything new?", value: String(unread), href: "/notifications" },
         ],
-        sections: [{
-          key: "my-upcoming", label: "My published assignments (next 7 days)",
-          columns: [{ key: "assignment_date", label: "Date" }, { key: "time", label: "Time" }, { key: "project_name", label: "Project" }, { key: "location_name", label: "Location" }, { key: "client_name", label: "Client" }],
-          rows: assignments.map((row) => ({ assignment_date: row.assignmentDate, time: `${String(row.startTime).slice(0, 5)}–${String(row.endTime).slice(0, 5)}`, project_name: row.projectName, location_name: row.locationName, client_name: row.clientName })),
-        }],
+        sections: [
+          {
+            key: "my-upcoming", label: "My published assignments (next 7 days)", question: "What am I scheduled for this week?",
+            columns: [{ key: "assignment_date", label: "Date" }, { key: "time", label: "Time" }, { key: "project_name", label: "Project" }, { key: "location_name", label: "Location" }, { key: "client_name", label: "Client" }],
+            rows: assignments.map((row) => ({ assignment_date: row.assignmentDate, time: `${String(row.startTime).slice(0, 5)}–${String(row.endTime).slice(0, 5)}`, project_name: row.projectName, location_name: row.locationName, client_name: row.clientName })),
+            emptyState: "You have no current Published assignment in the next seven days.",
+            href: "/schedule",
+          },
+          {
+            key: "my-leave-requests", label: "My leave", question: "What leave have I requested?",
+            columns: [{ key: "start_date", label: "Start date" }, { key: "end_date", label: "End date" }, { key: "working_days", label: "Working days" }, { key: "status", label: "Status" }],
+            // The owner's own leave rows, limited to dates, duration and status. The private reason and the
+            // decision response are never projected onto the dashboard.
+            rows: myLeave.requests.map((request) => ({ start_date: request.startDate, end_date: request.endDate, working_days: String(request.requestedWorkingDays), status: request.status })),
+            emptyState: "You have no leave request recorded.",
+            href: "/leave",
+          },
+        ],
         notes: ["Your dashboard reads only the current Published schedule and your own records."],
       };
     }
 
-    const [activeEmployees, teams, publishedPeriods, publishedAssignments, unallocated, pendingLeave, approvedLeaveRows, pendingReplacements, awaitingReview, expiredCertifications] = await Promise.all([
+    const [activeEmployees, teams, publishedPeriods, publishedAssignments, unallocated, pendingLeave, approvedLeaveRows, pendingReplacements, awaitingReview, expiredCertifications, lifecycleRows, recentActions] = await Promise.all([
       reportingRepository.activeEmployeeCount(scope),
       reportingRepository.employeesByTeam(scope),
       reportingRepository.currentPublishedPeriodCount(scope, month),
@@ -534,7 +553,15 @@ export class ReportingService {
       reportingRepository.pendingReplacementCount(scope),
       current.role === "SUPER_ADMIN" ? reportingRepository.evidenceAwaitingReviewCount() : Promise.resolve(null),
       current.role === "SUPER_ADMIN" ? reportingRepository.expiredCertificationCount(scope, today) : Promise.resolve(null),
+      // Schedule lifecycle: each client-month is counted once in its effective state.
+      current.role === "SUPER_ADMIN" ? reportingRepository.scheduleLifecycle(scope, MAX_EXPORT_ROWS, 0) : Promise.resolve([]),
+      // Recent recorded actions reuse the Phase 10 safe-rendering allowlist and write no audit event.
+      current.role === "SUPER_ADMIN" ? auditService.history({ ...actor, role: current.role }, { page: 1 }) : Promise.resolve(null),
     ]);
+    const lifecycleStates = ["PUBLISHED", "PROPOSED", "DRAFT"].map((state) => ({
+      effective_state: state,
+      client_months: String(lifecycleRows.filter((row) => row.effectiveState === state).length),
+    }));
     const approvedDays = approvedLeaveRows.reduce((total, row) => {
       const from = row.startDate > window.from ? row.startDate : window.from;
       const to = row.endDate < window.to ? row.endDate : window.to;
@@ -558,7 +585,7 @@ export class ReportingService {
           { key: "my-replacements", label: "Replacement requests I raised", question: "What did I request?", value: String(myRequests), href: "/replacements" },
           { key: "certifications", label: "Certifications in my scope", question: "How many certifications are recorded?", value: String(certifications), href: "/reports/certification-status" },
         ],
-        sections: [{ key: "employees-by-team", label: "Employees by team", columns: [{ key: "team", label: "Team" }, { key: "count", label: "Employees" }], rows: teams.map((row) => ({ team: row.team ?? "No team recorded", count: String(row.value) })) }],
+        sections: [{ key: "employees-by-team", label: "Employees by team", question: "How is the workforce distributed across teams?", columns: [{ key: "team", label: "Team" }, { key: "count", label: "Employees" }], rows: teams.map((row) => ({ team: row.team ?? "No team recorded", count: String(row.value) })), emptyState: "No active employee is recorded in your current scope.", href: "/employees" }],
         notes: ["Every card is recalculated from your current scope on each request.", "Private leave reasons, management notes, evidence files and audit history are outside your reporting scope."],
       };
     }
@@ -576,8 +603,17 @@ export class ReportingService {
         { key: "awaiting-review", label: "Evidence awaiting review", question: "What needs a Super Admin review?", value: awaitingReview === null ? "—" : String(awaitingReview), href: "/reports/evidence-review-queue" },
         { key: "expired-certifications", label: "Expired certifications", question: "Which certifications have lapsed?", value: expiredCertifications === null ? "—" : String(expiredCertifications), href: "/reports/certification-status" },
       ],
-      sections: [{ key: "employees-by-team", label: "Employees by team", columns: [{ key: "team", label: "Team" }, { key: "count", label: "Employees" }], rows: teams.map((row) => ({ team: row.team ?? "No team recorded", count: String(row.value) })) }],
-      notes: ["Every card reads a named source under your current authorization and shows its own as-of time."],
+      sections: [
+        { key: "employees-by-team", label: "Employees by team", question: "How is the workforce distributed across teams?", columns: [{ key: "team", label: "Team" }, { key: "count", label: "Employees" }], rows: teams.map((row) => ({ team: row.team ?? "No team recorded", count: String(row.value) })), emptyState: "No active employee is recorded yet.", href: "/employees" },
+        { key: "schedule-lifecycle", label: "Schedule lifecycle", question: "Where does each client-month sit in the Draft, Proposed and Published lifecycle?", columns: [{ key: "effective_state", label: "Effective state" }, { key: "client_months", label: "Client-months" }], rows: lifecycleStates, emptyState: "No schedule period exists yet.", href: "/reports/schedule-lifecycle" },
+        { key: "recent-actions", label: "Recent recorded actions", question: "What happened most recently?", columns: [{ key: "occurred_at", label: "Occurred at" }, { key: "action", label: "Action" }, { key: "target", label: "Target" }, { key: "actor", label: "Actor" }],
+          rows: (recentActions?.items ?? []).slice(0, 5).map((item) => ({
+            occurred_at: new Intl.DateTimeFormat("en-GB", { dateStyle: "short", timeStyle: "short", timeZone: "Asia/Dubai" }).format(new Date(item.occurredAt)),
+            action: item.label, target: `${item.targetType}${item.targetId ? ` · ${item.targetId}` : ""}`, actor: item.actorName ?? "Removed actor",
+          })),
+          emptyState: "No recorded action matches the current history.", href: "/audit" },
+      ],
+      notes: ["Every card and section reads a named source under your current authorization and shows its own as-of time."],
     };
   }
 }
