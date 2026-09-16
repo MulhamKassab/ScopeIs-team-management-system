@@ -61,7 +61,9 @@ An Admin's effective access is the intersection of role permission and assigned 
 | Read and post replacement-request discussion | Only if a named participant | Only if a named participant | Only if a named participant |
 | Manage own notifications (read, unread, archive, restore) | Yes | Yes | Yes |
 | Audit history | Yes | No — non-enumerating refusal | No — non-enumerating refusal |
-| Reports and exports | Yes | Scoped/later-defined | No unless later confirmed |
+| Open authorized reports | Yes, all registered reports | Yes: Published allocation, unallocated employees, scheduled hours, `PLANNING (unpublished)`, approved leave, replacement status, recorded skills, required-versus-recorded gaps, certification summary, schedule lifecycle — scoped | No |
+| Open Super-Admin-only reports | Yes: leave balance, evidence review queue, audit history | No — non-enumerating refusal | No |
+| Export CSV | Yes, every exportable report including `PLANNING (unpublished)`; never audit history | Yes, Published allocation and the certification-summary projection only | No |
 | Integrated tickets | Later, global | Later, scoped | Later, assigned/owned |
 
 ## Explicit safeguards
@@ -77,4 +79,7 @@ An Admin's effective access is the intersection of role permission and assigned 
 - Management-note access requires **both** note-level visibility permission **and** current authorization to manage/read the subject. Authorship never overrides current role, active status, or scope: a demoted author who is now an Employee, a deactivated or removed user, and an author whose subject scope was revoked all lose access, including through a direct note id. The stored author role at creation is historical information only. Archived rows are not a route back to access, and note content never appears in audit metadata, notifications, logs, or error messages.
 - A notification belongs to exactly one recipient. Only that recipient may read, mark, archive, or restore it, and a cross-recipient notification id is non-enumerating.
 - The audit-history interface is Super Admin only, read-only, and never renders raw metadata; Admin and Employee receive a non-enumerating refusal.
+- Reporting reads the reader's current role, active status and scope grants on every request, so a demotion, a deactivation or a revoked grant changes what a report returns on the very next request without a re-login.
+- Reporting never classifies a person as generally available. The only permitted derived fact is the conflict fact, whose values are `No known schedule or approved-leave conflict`, `Approved leave on the selected date`, `Published assignment overlaps the selected time window`, and `Approved leave and published assignment overlap`.
+- `PLANNING (unpublished)` is Draft and Proposed scheduling. It is a separate report rather than a filter on Published reporting, is view-only for a scoped Admin, is never visible to an Employee, and is never blended into a Published metric.
 - Assignment labels never grant permissions or determine availability.

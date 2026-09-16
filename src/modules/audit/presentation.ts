@@ -79,6 +79,9 @@ export const auditActions: Record<string, { label: string; fields: readonly stri
   "evidence.review_reset": { label: "Capability evidence review reset after an owner change", fields: [...shared, "kind", "cause"] },
   "discussion.message_created": { label: "Discussion message posted", fields: [...shared, "parentType", "parentId", "messageId", "contentLength", "participantCount"] },
   "discussion.message_archived": { label: "Discussion message archived by its author", fields: [...shared, "parentType", "parentId", "messageId"] },
+  // Phase 11 reporting: export provenance only. Row contents, employee names and file bytes are never recorded.
+  "report.export.generated": { label: "Report export generated", fields: ["reportKey", "format", "from", "to", "rowCount", "outcome"] },
+  "report.export.refused": { label: "Report export refused", fields: ["reportKey", "reason"] },
 };
 
 export function auditActionLabel(action: string) { return auditActions[action]?.label ?? GENERIC_AUDIT_LABEL; }

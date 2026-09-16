@@ -40,6 +40,8 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 [Phase 9 report]: ../phase-reports/SCOPEIS_PHASE_9_CERTIFICATIONS_CVS_PORTFOLIOS_AND_PRIVATE_FILES_JOURNEY_R1.md
 [Phase 10 report]: ../phase-reports/SCOPEIS_PHASE_10_NOTES_DISCUSSIONS_NOTIFICATION_CENTRE_AND_AUDIT_INTERFACE_R1.md
 [Phase 10 authorization remediation]: ../phase-reports/SCOPEIS_PHASE_10_MANAGEMENT_NOTE_AUTHORIZATION_REMEDIATION_R1.md
+[Phase 11 report]: ../phase-reports/SCOPEIS_PHASE_11_DASHBOARDS_REPORTS_AND_AUTHORIZED_EXPORTS_R1.md
+[Phase 11 decisions]: PHASE_11_REPORTING_DECISIONS.md
 [Phase 10 decisions]: PHASE_10_COLLABORATION_AND_GOVERNANCE_DECISIONS.md
 [employee services]: ../../src/modules/employees/employee-services.ts
 [schema]: ../../src/db/schema/index.ts
@@ -51,15 +53,15 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 
 ## Current focus
 
-- **Current active phase:** Phase 11 — Dashboards, reports, and exports
-- **Current active/next sub-phase:** 11.1 Super Admin dashboard, under its own approved Phase ID. Phase 10 is complete, including the Phase 9 evidence-integrity prerequisite; the Phase 9 coverage-linkage question (9.9) stays deferred.
-- **Current phase status:** `NEXT` (Phase 11 is the next journey and has not started)
+- **Current active phase:** Phase 12 — Ticket System integration
+- **Current active/next sub-phase:** 12.1 Existing Ticket System reuse assessment, under its own approved Phase ID. Phase 11 is complete; the Phase 9 coverage-linkage question (9.9) stays deferred.
+- **Current phase status:** `NEXT` (Phase 12 is the next journey and has not started)
 - **Last status date:** `2026-09-15`
-- **Most recent trustworthy evidence:** [Phase 10 report]; [Phase 10 decisions]; [Phase 9 report]
-- **Immediate objective:** Prepare Phase 11 planning under an approved Phase ID; preserve the completed Phase 10 collaboration-and-governance journey and its locked privacy matrix.
-- **Known blockers:** None. Phase 10 passed every mandatory gate; remaining items are documented non-blocking debt and the deferred Phase 9 9.9 coverage-linkage decision.
-- **Explicit exclusions:** Phase 11 implementation, Preview-worktree merge or modification, external email/SMS/push notifications, real-time delivery, assignment or Ticket discussions, audit export or mutation, notification retention automation, GPS/live tracking, geocoding, routes/travel, and production access/migration/authentication/deployment.
-- **Required phase-exit journey:** Phase 10: the confirmed collaboration-and-governance journey (shared operational notes, employee-management notes, participant-only replacement-request discussions, notification centre, and audit history) plus the Phase 9 evidence-integrity prerequisite.
+- **Most recent trustworthy evidence:** [Phase 11 report]; [Phase 11 decisions]; [Phase 10 report]
+- **Immediate objective:** Prepare Phase 12 planning under an approved Phase ID; preserve the completed Phase 11 reporting journey and its locked role/scope/export matrix.
+- **Known blockers:** None. Phase 11 passed every mandatory gate; remaining items are documented non-blocking debt and the deferred Phase 9 9.9 coverage-linkage decision.
+- **Explicit exclusions:** Phase 12 implementation, Preview-worktree merge or modification, payroll or financial reporting, attendance, performance scoring, employee ranking, live location, GPS, movement history, AI staffing decisions, a generic query builder, public or permanent export links, background export infrastructure, and production access/migration/authentication/deployment.
+- **Required phase-exit journey:** Phase 11: the confirmed reporting journey (role dashboards, the thirteen registered report contracts, the separate unpublished planning report, the derived conflict fact, and bounded authorized CSV exports).
 
 ## Master phase status
 
@@ -78,8 +80,8 @@ Progress measures completed roadmap sub-phases only. It is **not** engineering e
 | 8 | Static planning map | `COMPLETED` | 10 | 10 | 100% | Completed static Published-planning map journey | 2026-09-03 | 2026-09-02 | 2026-09-03 | Phases 4–7 | None | [Phase 8 report]; [Phase 8 decisions] |
 | 9 | Certifications, CVs, portfolios, and files | `COMPLETED` | 9 | 10 | 90% | 9.9 deferred: whether verification affects coverage remains an unapproved product decision | 2026-09-15 | 2026-09-15 | 2026-09-15 | Phase 2 profile journey | None for the approved journey | [Phase 9 report] |
 | 10 | Notes, discussions, notification centre, and audit interface | `COMPLETED` | 9 | 9 | 100% | Completed bounded collaboration-and-governance journey, including the Phase 9 evidence-integrity prerequisite | 2026-09-15 | 2026-09-15 | 2026-09-15 | Phases 3–9 source workflows | None for the approved journey | [Phase 10 report]; [Phase 10 decisions] |
-| 11 | Dashboards, reports, and exports | `NEXT` | 0 | 9 | 0% | 11.1 Super Admin dashboard | 2026-09-15 | — | — | Trustworthy source journeys | Phase 11 planning not started | None located |
-| 12 | Ticket System integration | `NOT_STARTED` | 0 | 9 | 0% | 12.1 Existing Ticket System reuse assessment | 2026-09-01 | — | — | Phases 1–11 | Workforce journeys incomplete | None located |
+| 11 | Dashboards, reports, and exports | `COMPLETED` | 9 | 9 | 100% | Completed bounded reporting journey with a separate unpublished planning report and bounded CSV exports | 2026-09-16 | 2026-09-16 | 2026-09-16 | Phases 1–10 source journeys | None for the approved journey | [Phase 11 report]; [Phase 11 decisions] |
+| 12 | Ticket System integration | `NEXT` | 0 | 9 | 0% | 12.1 Existing Ticket System reuse assessment | 2026-09-16 | — | — | Phases 1–11 | Phase 12 planning not started | None located |
 | 13 | Production readiness and internal rollout | `NOT_STARTED` | 0 | 10 | 0% | 13.1 Production identity-provider selection and integration | 2026-09-01 | — | — | Product journeys and Phase 12 | Product not ready; production choices unresolved | None located |
 
 ## Phase 0 — Discovery and technical pilot
@@ -265,15 +267,15 @@ Canonical commands are recorded in the [Checkpoint Sub-phase A report] and in `R
 
 | ID | Sub-phase | Status | Last status date | Started date | Completed date | Dependencies | Implementation state | QA state | Exit evidence required | Current evidence | Blocker/notes |
 | -- | --------- | ------ | ---------------- | ------------ | -------------- | ------------ | -------------------- | -------- | ---------------------- | ---------------- | ------------- |
-| 11.1 | Super Admin dashboard | `NOT_STARTED` | 2026-09-01 | — | — | Source journeys | Dashboard shell only | Shell route E2E only | Trustworthy real dashboard | [navigation] | — |
-| 11.2 | Scoped Admin dashboard | `NOT_STARTED` | 2026-09-01 | — | — | Source journeys | Dashboard shell only | Shell route E2E only | Scoped real dashboard | [navigation] | — |
-| 11.3 | Employee dashboard | `NOT_STARTED` | 2026-09-01 | — | — | Source journeys | Dashboard shell only | Shell route E2E only | Published/personal dashboard | [navigation] | — |
-| 11.4 | Employee allocation reports | `NOT_STARTED` | 2026-09-01 | — | — | Phase 4 | Documentation only | None located | Scoped accurate report | None located | — |
-| 11.5 | Availability, leave, and coverage reports | `NOT_STARTED` | 2026-09-01 | — | — | Phases 5–7 | Documentation only | None located | Scoped accurate report | None located | — |
-| 11.6 | Skill and certification reports | `NOT_STARTED` | 2026-09-01 | — | — | Phases 6, 9 | Documentation only | None located | Scoped accurate report | None located | — |
-| 11.7 | Schedule and audit reports | `NOT_STARTED` | 2026-09-01 | — | — | Phases 4, 10 | Documentation only | None located | Scoped accurate report | None located | — |
-| 11.8 | Authorized exports | `NOT_STARTED` | 2026-09-01 | — | — | 11.1–11.7 | Documentation only | None located | Export privacy/scope behavior | None located | — |
-| 11.9 | Accuracy, scope, privacy, responsive, and E2E QA | `NOT_STARTED` | 2026-09-01 | — | — | 11.1–11.8 | Documentation only | None located | Complete reporting QA | None located | — |
+| 11.1 | Super Admin dashboard | `COMPLETED` | 2026-09-16 | 2026-09-16 | 2026-09-16 | Source journeys | Real `/dashboard` replacing the shell: nine cards plus an employees-by-team table, each traced to a named source under current authorization | Integration/component/desktop+mobile browser/route certification | Trustworthy real dashboard | [Phase 11 report] | No capacity or utilization metric; no audit export. |
+| 11.2 | Scoped Admin dashboard | `COMPLETED` | 2026-09-16 | 2026-09-16 | 2026-09-16 | Source journeys | The same operational shape recomputed under current TEAM/CLIENT/PROJECT/LOCATION grants, with no audit card, no leave balance and no evidence queue | Integration/component/browser | Scoped real dashboard | [Phase 11 report] | Scope is re-read per request; revoking a grant changes the numbers without a re-login. |
+| 11.3 | Employee dashboard | `COMPLETED` | 2026-09-16 | 2026-09-16 | 2026-09-16 | Source journeys | Self-only cards: next seven days of current Published assignments, leave and balance, recorded skills, own evidence state, unread notifications | Integration/component/browser | Published/personal dashboard | [Phase 11 report] | No totals, no peer data, no Draft or Proposed scheduling. |
+| 11.4 | Employee allocation reports | `COMPLETED` | 2026-09-16 | 2026-09-16 | 2026-09-16 | Phase 4 | `published-allocation`, `unallocated-employees`, `scheduled-hours` and the separate `planning-unpublished` key labelled `PLANNING (unpublished)` on the page, heading, filename and every row | Integration/component/browser/route certification | Scoped accurate report | [Phase 11 report] | Admin holds in-scope view-only access to planning; Employees are always refused. |
+| 11.5 | Availability, leave, and coverage reports | `COMPLETED` | 2026-09-16 | 2026-09-16 | 2026-09-16 | Phases 5–7 | `approved-leave` with approved-day totals and the derived conflict fact, `leave-balance` for Super Admin and self only, and `coverage-replacement` anchored to current scope | Integration/component/browser | Scoped accurate report | [Phase 11 report] | No availability concept: only the four approved conflict values. |
+| 11.6 | Skill and certification reports | `COMPLETED` | 2026-09-16 | 2026-09-16 | 2026-09-16 | Phases 6, 9 | `skills-coverage`, `skill-gaps` using only `recorded`/`not recorded`, `certification-status` with the locked summary projection for scoped Admins, and the Super-Admin-only review queue | Integration/component/browser | Scoped accurate report | [Phase 11 report] | Certification state never affects coverage, candidates or `employee_skills`. |
+| 11.7 | Schedule and audit reports | `COMPLETED` | 2026-09-16 | 2026-09-16 | 2026-09-16 | Phases 4, 10 | `schedule-lifecycle` with one row per client-month and its effective state, and `audit-history` reusing the Phase 10 safe metadata allowlist | Integration/browser/route certification | Scoped accurate report | [Phase 11 report] | Audit history is Super Admin only and has no export. |
+| 11.8 | Authorized exports | `COMPLETED` | 2026-09-16 | 2026-09-16 | 2026-09-16 | 11.1–11.7 | Streamed, non-persisted CSV exports re-authorized per request, capped at 5,000 rows with refusal rather than truncation, formula-neutralised and audited with safe metadata | Integration/browser/route certification | Export privacy/scope behavior | [Phase 11 report] | Admin exports are limited to Published allocation and the certification summary. |
+| 11.9 | Accuracy, scope, privacy, responsive, and E2E QA | `COMPLETED` | 2026-09-16 | 2026-09-16 | 2026-09-16 | 11.1–11.8 | Reconciliation, role/scope/demotion/deactivation/revocation, redaction, terminology, formula-injection, row-cap, audit-rollback and desktop/mobile coverage | Unit/component/PostgreSQL/route/browser | Complete reporting QA | [Phase 11 report] | Every Phase 1–10 gate remains green. |
 
 ## Phase 12 — Ticket System integration
 
@@ -441,6 +443,26 @@ Use this template for every phase. `NOT_APPLICABLE` is allowed only with a reaso
 | Typecheck/safe build/diff | Yes | `COMPLETED` | [Phase 10 report] | Typecheck, `npm run lint`, isolated `npm run build:safe`, `git diff --check`, and `git diff --cached --check` all passed. |
 | Commit/push | Yes | `VERIFICATION_PENDING` | [Phase 10 report] | Final explicit allowlist review and one focused delivery commit/push follow this documentation update. |
 
+### Active Phase 11 gate matrix
+
+| Gate | Required? | Status | Evidence | Notes |
+| ---- | --------- | ------ | -------- | ----- |
+| User story and acceptance criteria | Yes | `COMPLETED` | Authorized `SCOPEIS_PHASE_11_DASHBOARDS_REPORTS_AND_AUTHORIZED_EXPORTS_R1`; [Phase 11 decisions] | Role dashboards, thirteen registered reports, a separate unpublished planning report and bounded CSV exports. |
+| Schema/migration | As applicable | `NOT_APPLICABLE` | [Phase 11 report] | Every metric reads existing columns; the database remains at 32 tables and 12 ledger rows. No migration was added. |
+| Repository/service/validation | Yes | `COMPLETED` | [Phase 11 report] | A reporting module with a metric-contract registry, strict Zod validation, read-only grouped queries and a shared current-actor resolver. |
+| Server authorization and scope/privacy | Yes | `COMPLETED` | [Phase 11 report] | Current role, active status and grants re-read per request; employee and assignment scope predicates mirror the existing Phase 2 and Phase 4 rules; counts and filter options are scope-filtered. |
+| Route/Server Action and real UI | Yes | `COMPLETED` | [Phase 11 report] | Real `/dashboard`, `/reports`, `/reports/[reportKey]` and `/api/reports/[reportKey]/export`. |
+| Audit/transactions/concurrency | Yes | `COMPLETED` | [Phase 11 report] | Reporting is read-only; exports write exactly one content-free audit event before the response, and a forced audit failure prevents the export. |
+| Notifications | As applicable | `NOT_APPLICABLE` | [Phase 11 report] | Phase 11 generates no notifications; reporting is a pull-only surface. |
+| Unit/component tests | Yes | `COMPLETED` | [Phase 11 report] | 16 new unit assertions in one file and 9 component assertions; the component suite stays database-free. |
+| Disposable PostgreSQL tests | Yes | `COMPLETED` | [Phase 11 report] | 24 reporting scenarios in their own disposable database, plus the unchanged Phase 1–10 suites. |
+| Route/API and negative authorization tests | Yes | `COMPLETED` | [Phase 11 report] | Route certification now covers `/dashboard`, `/reports`, the planning report and export refusals for all five personas. |
+| Desktop E2E | Yes | `COMPLETED` | [Phase 11 report] | Super Admin, scoped Admin and Employee journeys at 1440×900 within the aggregate E2E run. |
+| Mobile E2E | Yes | `COMPLETED` | [Phase 11 report] | The same journeys at 390×844 with a horizontal-overflow assertion. |
+| Manual walkthrough | Yes | `COMPLETED` | [Phase 11 report] | Terminology scan plus guarded browser journeys; no production target used. |
+| Typecheck/safe build/diff | Yes | `COMPLETED` | [Phase 11 report] | Typecheck, `npm run lint`, isolated `npm run build:safe`, `git diff --check` and `git diff --cached --check` all passed. |
+| Commit/push | Yes | `VERIFICATION_PENDING` | [Phase 11 report] | Final explicit allowlist review and one focused delivery commit/push follow this documentation update. |
+
 ## Tracker maintenance protocol
 
 1. Read [context], [roadmap], and this tracker before development.
@@ -508,3 +530,4 @@ Append new rows; correct an existing row only for a factual error. Every `COMPLE
 | 2026-09-15 | Phase 9 capability evidence journey | `NOT_STARTED` | `COMPLETED` | [Phase 9 report] | Employee certifications, portfolio links/files, project examples, one active CV, and supporting documents save immediately, flag new/updated, and transactionally notify active Super Admins; Super Admin reviews, verifies, removes verification, or resets; owners update, replace files, and archive. Additive migration `0010`, provider-neutral private storage with a fail-closed production default, locked privacy matrix (scoped Admin receives certification summary only), derived Dubai expiry, idempotent creates, optimistic concurrency, storage compensation, and a proven unchanged Phase 7 coverage result. Sub-phase 9.9 (coverage linkage) remains deferred. | Codex |
 | 2026-09-15 | Phase 10 collaboration and governance journey | `NOT_STARTED` | `COMPLETED` | [Phase 10 report] | Shared Client/Project/Location notes preserve previous content as a transactional revision with author-only editing and Super Admin-only reasoned archive; the product owner confirmed the manager-only shared-note interpretation. Employee-management notes enforce private-to-author and shared-upward visibility with immutable content and non-enumerating refusals. Participant-only replacement-request discussions derive participants live from the request. The notification centre and the Super Admin audit history complete the central interfaces over existing persistence. Additive migration `0011` (32 tables, 12 ledger rows). The approved Phase 9 evidence-integrity prerequisite resets review and verification provenance on every material owner edit. Phase 10 passed every mandatory gate from commit `64fd480`. | Codex |
 | 2026-09-15 | Post-Phase-10 management-note authorization remediation | `NOT_STARTED` | `COMPLETED` | [Phase 10 authorization remediation] | Verified and corrected a real defect: the shipped Phase 10 policy let authorship override current role and scope, so a demoted, deactivated, or re-scoped author retained access to notes they had written. Management-note access now requires both note-level visibility permission and current authorization for the subject, re-read per request for reads, lists, counts, direct-id lookups, archive attempts, and the employee-detail panel. Phase 10 stays `COMPLETED`; Phase 11 remains the next journey and was not started. | Codex |
+| 2026-09-16 | Phase 11 dashboards, reports and exports | `NOT_STARTED` | `COMPLETED` | [Phase 11 report] | Replaced the dashboard shell with a role-branched operational summary and delivered thirteen registered report contracts behind a scope-enforced `/reports`. Authoritative staffing metrics read only the current Published schedule; the Draft/Proposed planning view is a separate `planning-unpublished` report labelled `PLANNING (unpublished)` on every surface and row, reachable by a scoped Admin only within current scope and never by an Employee. Availability terminology was replaced by a four-value conflict fact computed from active status, approved leave and Published overlap only. Exports are streamed CSV, re-authorized per request, capped at 5,000 rows with refusal rather than truncation, formula-neutralised and audited with safe metadata; Admin exports are limited to Published allocation and the certification summary. No migration was needed. Phase 12 remains the next journey and was not started. | Codex |

@@ -250,25 +250,33 @@ An assignment or Ticket discussion, notification retention automation, audit mut
 
 ## Phase 11 — Dashboards, reports, and exports
 
-**Status:** `NEXT`
+**Status:** `COMPLETED`
 
 **Sub-phases:**
 
-- 11.1 Super Admin dashboard
-- 11.2 Scoped Admin dashboard
-- 11.3 Employee dashboard
-- 11.4 Employee allocation reports
-- 11.5 Availability, leave, and coverage reports
-- 11.6 Skill and certification reports
-- 11.7 Schedule and audit reports
-- 11.8 Authorized exports
-- 11.9 Accuracy, scope, privacy, responsive, and E2E QA
+- 11.1 Super Admin dashboard — `COMPLETED`
+- 11.2 Scoped Admin dashboard — `COMPLETED`
+- 11.3 Employee dashboard — `COMPLETED`
+- 11.4 Employee allocation reports, including the separate unpublished planning report — `COMPLETED`
+- 11.5 Leave, conflict-fact and replacement-status reports — `COMPLETED`
+- 11.6 Skill and certification reports — `COMPLETED`
+- 11.7 Schedule-lifecycle and sanitized audit reports — `COMPLETED`
+- 11.8 Authorized CSV exports — `COMPLETED`
+- 11.9 Accuracy, scope, privacy, responsive, and E2E QA — `COMPLETED`
 
-Trustworthy dashboard cards may be introduced with their source journeys; this phase completes and consolidates them.
+Phase 11 delivered the bounded reporting journey. `/dashboard` is now a real, role-branched operational summary instead of a shell, and `/reports` is a scope-enforced report index with thirteen registered metric contracts, each declaring its source of truth, grain, inclusion and exclusion rules, date interpretation, role policy, privacy class, ordering and empty-state behaviour.
+
+Authoritative staffing reporting reads only the **current Published** schedule. The unpublished planning view is a separate report key (`planning-unpublished`), labelled `PLANNING (unpublished)` in the page, heading, filename and on every exported row, and is reachable by a scoped Admin only for records inside their current effective scope while remaining permanently invisible to Employees. Employee-facing data never receives Draft or Proposed scheduling.
+
+Availability terminology was replaced with a single derived **conflict fact** whose permitted values are `No known schedule or approved-leave conflict`, `Approved leave on the selected date`, `Published assignment overlaps the selected time window`, and `Approved leave and published assignment overlap`. It is computed only from active status, approved leave, and current Published assignment overlap, never from `working_pattern`, and never presented as a general staffing verdict.
+
+Exports are streamed CSV, bounded at 5,000 rows with refusal rather than truncation, re-authorized on the export request, protected against spreadsheet formula injection, and audited with safe metadata only. A scoped Admin may export exactly the Published allocation and the certification-summary projection; the planning report is view-only for Admin, audit history has no export, and Employees have no export.
+
+No schema change was required: every metric reads existing columns, so the database remains at 32 tables and 12 migration-ledger rows.
 
 ## Phase 12 — Ticket System integration
 
-**Status:** `NOT_STARTED`
+**Status:** `NEXT`
 
 **Sub-phases:**
 

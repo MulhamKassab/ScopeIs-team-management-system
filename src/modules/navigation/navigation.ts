@@ -5,7 +5,7 @@ import type { AuthenticatedActor } from "@/shared/types/foundation";
 export type ModuleDefinition = { key: ModuleKey; href: string; label: string; purpose: string; phase: number; capability: `module:${ModuleKey}:view`; mobilePrimary?: boolean };
 
 export const modules: Record<ModuleKey, ModuleDefinition> = {
-  dashboard: { key: "dashboard", href: "/dashboard", label: "Dashboard", purpose: "A role-aware starting point for the Team Management System.", phase: 1, capability: "module:dashboard:view", mobilePrimary: true },
+  dashboard: { key: "dashboard", href: "/dashboard", label: "Dashboard", purpose: "Role- and scope-aware operational summaries over the current Published schedule, delivered in Phase 11.", phase: 11, capability: "module:dashboard:view", mobilePrimary: true },
   employees: { key: "employees", href: "/employees", label: "Employees & capabilities", purpose: "Employee records, directory, search, lifecycle, and self-service profile delivered in Phase 2.", phase: 2, capability: "module:employees:view", mobilePrimary: true },
   skills: { key: "skills", href: "/skills", label: "Skills", purpose: "Controlled skills, Team-scoped planning filters, and transparent requirement warnings.", phase: 6, capability: "module:skills:view" },
   clients: { key: "clients", href: "/clients", label: "Clients", purpose: "Authorized Client records and operational relationships.", phase: 3, capability: "module:clients:view" },
@@ -17,7 +17,7 @@ export const modules: Record<ModuleKey, ModuleDefinition> = {
   coverage: { key: "coverage", href: "/coverage", label: "Coverage", purpose: "Explainable independent staffing and qualification gaps.", phase: 7, capability: "module:coverage:view" },
   replacements: { key: "replacements", href: "/replacements", label: "Replacements", purpose: "Super Admin-reviewed replacement requests with Draft-only effects.", phase: 7, capability: "module:replacements:view", mobilePrimary: true },
   notifications: { key: "notifications", href: "/notifications", label: "Notifications", purpose: "Your in-application notification centre, delivered in Phase 10. Read, unread, and archive states stay independent.", phase: 10, capability: "module:notifications:view" },
-  reports: { key: "reports", href: "/reports", label: "Reports", purpose: "Dashboards, reports, and authorized exports belong to Phase 11.", phase: 11, capability: "module:reports:view" },
+  reports: { key: "reports", href: "/reports", label: "Reports", purpose: "Authorized operational reports with bounded CSV exports, delivered in Phase 11.", phase: 11, capability: "module:reports:view" },
   audit: { key: "audit", href: "/audit", label: "Audit", purpose: "Super Admin-only read-only audit history, delivered in Phase 10. Filtering and safe per-action metadata only.", phase: 10, capability: "module:audit:view" },
   settings: { key: "settings", href: "/settings", label: "Settings", purpose: "Foundation configuration surfaces will be introduced only when confirmed.", phase: 1, capability: "module:settings:view" },
   profile: { key: "profile", href: "/profile", label: "My profile", purpose: "Your own work email, work phone, and professional summary, delivered in Phase 2.", phase: 2, capability: "module:profile:view", mobilePrimary: true },

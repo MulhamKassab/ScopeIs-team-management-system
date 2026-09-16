@@ -57,6 +57,8 @@
     ,"validate:phase2-runbook": "node scripts/validate-phase2-runbook.mjs",
     "test:phase10-service": "node scripts/run-phase10-service-tests.mjs",
     "test:phase10-e2e": "node scripts/run-phase10-playwright.mjs"
+    ,"test:phase11-service": "node scripts/run-phase11-service-tests.mjs"
+    ,"test:phase11-e2e": "node scripts/run-phase11-playwright.mjs"
   },
   "dependencies": {
     "@vercel/blob": "^2.3.0",

@@ -13,7 +13,7 @@ const createdSessionIds = new Set<string>();
 // persona can never silently skip a route check.
 const moduleKeys = ["dashboard", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "audit", "settings", "profile", "requests"] as const;
 const superAdminModules = [...moduleKeys];
-const adminModules = ["dashboard", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "profile"];
+const adminModules = ["dashboard", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "profile"];
 const employeeModules = ["dashboard", "skills", "schedule", "leave", "profile", "notifications", "requests"];
 
 type Persona = {
@@ -211,6 +211,48 @@ describe("Phase 1 public HTTP route certification", () => {
     expect((await request("/api/foundation/scope/team:alpha", { method: "POST", headers: { Cookie: session.cookie } })).status).toBe(405);
     expect((await logout(session.cookie)).status).toBe(200);
   });
+
+  it("certifies Phase 11 reporting routes, role boundaries and export refusals", async () => {
+    const superAdmin = await login("mock-super-admin-nora");
+    const scopedAdmin = await login("mock-admin-ava");
+    const employee = await login("mock-employee-cora");
+    const window = "from=2027-01-01&to=2027-12-31";
+    try {
+      // The dashboard is available to every authenticated role.
+      for (const session of [superAdmin, scopedAdmin, employee]) {
+        const dashboard = await request("/dashboard", { headers: { Cookie: session.cookie } });
+        expect(dashboard.status).toBe(200);
+        safeResponse(await dashboard.text(), session.token);
+      }
+      // Reports are management-only; an Employee receives a non-enumerating 404.
+      expect((await request("/reports", { headers: { Cookie: superAdmin.cookie } })).status).toBe(200);
+      expect((await request("/reports", { headers: { Cookie: scopedAdmin.cookie } })).status).toBe(200);
+      expect((await request("/reports", { headers: { Cookie: employee.cookie } })).status).toBe(404);
+      expect((await request(`/reports/published-allocation?${window}`, { headers: { Cookie: superAdmin.cookie } })).status).toBe(200);
+      // Planning is reachable for both management roles in scope and closed to an Employee.
+      expect((await request(`/reports/planning-unpublished?${window}`, { headers: { Cookie: superAdmin.cookie } })).status).toBe(200);
+      expect((await request(`/reports/planning-unpublished?${window}`, { headers: { Cookie: scopedAdmin.cookie } })).status).toBe(200);
+      expect((await request(`/reports/planning-unpublished?${window}`, { headers: { Cookie: employee.cookie } })).status).toBe(404);
+      // Super-Admin-only and unknown report keys behave identically for a scoped Admin.
+      for (const path of ["/reports/leave-balance", "/reports/evidence-review-queue", "/reports/audit-history", "/reports/not-a-report"]) {
+        expect((await request(`${path}?${window}`, { headers: { Cookie: scopedAdmin.cookie } })).status, path).toBe(404);
+      }
+      // Export authorization mirrors the view authorization.
+      const allowedExport = await request(`/api/reports/published-allocation/export?${window}`, { headers: { Cookie: scopedAdmin.cookie } });
+      expect(allowedExport.status).toBe(200);
+      expect(allowedExport.headers.get("x-content-type-options")).toBe("nosniff");
+      expect(allowedExport.headers.get("cache-control")).toContain("no-store");
+      safeResponse(await allowedExport.text(), scopedAdmin.token);
+      for (const path of ["/api/reports/planning-unpublished/export", "/api/reports/not-a-report/export"]) {
+        const refused = await request(`${path}?${window}`, { headers: { Cookie: scopedAdmin.cookie } });
+        expect(refused.status, path).toBe(404);
+        safeResponse(await refused.text(), scopedAdmin.token);
+      }
+      expect((await request(`/api/reports/published-allocation/export?${window}`, { headers: { Cookie: employee.cookie } })).status).toBe(404);
+    } finally {
+      for (const session of [superAdmin, scopedAdmin, employee]) expect((await logout(session.cookie)).status).toBe(200);
+    }
+  }, 20_000);
 
   it("fails closed for forged, expired, revoked, and session-version-invalidated cookies", async () => {
     const forged = `scopeis_session=${randomBytes(32).toString("base64url")}`;

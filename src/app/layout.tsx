@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import "@/app/styles.css";
 import "@/app/phase10.css";
+import "@/app/phase11.css";
 import { directionSchema } from "@/shared/validation/foundation";
 import { ThemeBootScript } from "@/shared/components/theme-provider";
 

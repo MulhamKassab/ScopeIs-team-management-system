@@ -23,6 +23,10 @@ Technical implementation direction is recorded separately in [`SYSTEM_ARCHITECTU
 - Phase 10 notification ownership is per recipient: only the recipient may read, mark, archive, or restore a notification, and a notification row stores no private display content.
 - Phase 10 audit rendering uses a per-action safe metadata allowlist; unknown actions render a generic label with no metadata and raw JSON is never displayed.
 - Phase 9 evidence integrity: when an owner materially changes verified or reviewed evidence, the item resets to `unreviewed` and its review and verification provenance is cleared in the same transaction. Review actions themselves never reset state and never change `last_submitted_at`.
+- Phase 11 reporting reads only the current Published schedule for authoritative staffing metrics. Draft and Proposed scheduling is a separate, explicitly labelled `PLANNING (unpublished)` report that is view-only for a scoped Admin, never visible to an Employee, and never blended into a Published figure.
+- Phase 11 removed general availability terminology. The only permitted employee-related derived fact is the conflict fact: `No known schedule or approved-leave conflict`, `Approved leave on the selected date`, `Published assignment overlaps the selected time window`, or `Approved leave and published assignment overlap`. It never uses `working_pattern` and never implies contractual or working-hours status.
+- Phase 11 exports are streamed CSV, re-authorized per request, capped at 5,000 rows with refusal rather than truncation, formula-neutralised, and audited with `report.export.generated` or `report.export.refused` carrying safe metadata only. No export is stored and no public or permanent export URL exists.
+- Phase 11 reports never present `capacity`, `utilization`, `contracted hours`, `worked hours`, `attendance`, `performance`, `productive`, `qualified`, `compliant` or `eligible`, and introduce no target or threshold.
 
 ## Explicit constraints
 
@@ -83,7 +87,7 @@ Every item below is **not finalized**. The safe documentation default prevents a
 | Repository strategy | Ownership and long-term architecture | Keep new workforce project independent; later decision may absorb selected code |
 | Warning severity by conflict | Whether users may proceed | Identify confirmed conflicts; final blocker/warning/info policies later |
 | Leave cancellation rules | Schedule/coverage reversals | Pending cancellation when permitted; exact cutoff unresolved |
-| Reports/exports by Admin | Data scope and privacy | Super Admin confirmed; scoped Admin access later-defined |
+| Reports/exports by Admin | Data scope and privacy | **Resolved in Phase 11:** a scoped Admin may open an approved report set limited to their current effective scope, including the separate `PLANNING (unpublished)` Draft/Proposed report as view-only, and may export only the Published allocation report and the certification-summary projection. Leave balance, the evidence review queue and audit history stay Super Admin only, and audit history has no export. |
 
 ## Deferred provider and policy decisions
 

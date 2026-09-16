@@ -13,6 +13,7 @@
 //   Phase 8  static planning map journey             (Phase 4 + Phase 8 fixtures)
 //   Phase 9  capability evidence journey             (Phase 3 + Phase 4 fixtures, private local storage)
 //   Phase 10 collaboration/governance journey        (Phase 3 + Phase 4 fixtures, participant request)
+//   Phase 11 dashboards, reports and exports         (Phase 11 reporting fixtures, published + planning)
 //
 // The phase specs carry `test.skip(<guard>)` statements. Invoking them individually is what keeps
 // those guards satisfied, so no journey is silently skipped, and no journey runs against another
@@ -33,6 +34,7 @@ const suites = [
   { name: "Phase 8 static planning map", script: "run-phase8-playwright.mjs" },
   { name: "Phase 9 capability evidence", script: "run-phase9-playwright.mjs" },
   { name: "Phase 10 collaboration and governance", script: "run-phase10-playwright.mjs" },
+  { name: "Phase 11 dashboards, reports and exports", script: "run-phase11-playwright.mjs" },
 ];
 
 function runSuite(script) {
