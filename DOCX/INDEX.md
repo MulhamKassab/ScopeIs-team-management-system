@@ -1,5 +1,5 @@
-# Documentation Index
-
+- [Pre-Phase-12 system-wide hardening and regression lock report](phase-reports/SCOPEIS_PRE_PHASE_12_SYSTEM_WIDE_HARDENING_AND_REGRESSION_LOCK_R1.md)
+- [System-wide test scenario catalogue](project-memory/SYSTEM_WIDE_TEST_SCENARIO_CATALOG.md)
 - [Phase 11 dashboard acceptance and manifest reconciliation report](phase-reports/SCOPEIS_PHASE_11_DASHBOARD_ACCEPTANCE_AND_MANIFEST_RECONCILIATION_R1.md)
 - [Phase 11 dashboards, reports and exports report](phase-reports/SCOPEIS_PHASE_11_DASHBOARDS_REPORTS_AND_AUTHORIZED_EXPORTS_R1.md)
 - [Phase 11 reporting decisions](project-memory/PHASE_11_REPORTING_DECISIONS.md)
@@ -49,6 +49,7 @@ This directory is the canonical documentation foundation for ScopeIs Team Manage
 - [`project-memory/WORKFLOWS.md`](project-memory/WORKFLOWS.md) - principal workflows and practical scenarios.
 - [`project-memory/DECISIONS_AND_CONSTRAINTS.md`](project-memory/DECISIONS_AND_CONSTRAINTS.md) - confirmed decisions, constraints, non-goals, unsafe assumptions, open/deferred decisions.
 - [`project-memory/SYSTEM_ARCHITECTURE_DECISIONS.md`](project-memory/SYSTEM_ARCHITECTURE_DECISIONS.md) - current recommended Phase 1 architecture; translates product rules into modular, server-side, database, transaction, adapter, testing, and deployment boundaries without finalizing providers.
+- [`project-memory/SYSTEM_WIDE_TEST_SCENARIO_CATALOG.md`](project-memory/SYSTEM_WIDE_TEST_SCENARIO_CATALOG.md) - pre-Phase-12 scenario catalogue and traceability matrix; the machine-readable registry is `test/system-lock/scenario-manifest.json`.
 - [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) - sole authoritative journey-first phases 0-13, completion standard, and cross-cutting delivery rules; it supersedes the former module-first order.
 - [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) - sole authoritative live tracker for phase/sub-phase status, dates, evidence, blockers, QA state, and update protocol; it does not redefine roadmap scope.
 - [`project-memory/UI_UX_FOUNDATION.md`](project-memory/UI_UX_FOUNDATION.md) - approved Phase 1 visual, responsive, accessibility, theme, and RTL foundation.

@@ -47,8 +47,11 @@ Each concept has exactly one meaning. Every gate below is safe to run locally: i
 | Lint | `npm run lint` | Authoritative application lint (`eslint . --max-warnings=0`). |
 | Typecheck | `npm run typecheck` | `tsc --noEmit`. |
 | Safe build | `npm run build:safe` | Authoritative isolated build gate. |
+| Fresh-system smoke | `npm run test:system-smoke` | Migrates a disposable database, seeds idempotently, signs in every persona, opens permitted and forbidden routes, verifies audit and notification records, runs the safe build, and leaves no resource behind. |
+| Concurrency/rollback repeat | `npm run test:system-concurrency` | The concurrency- and rollback-sensitive integration suites, three consecutive passes in fresh disposable databases. |
+| System lock | `npm run test:system-lock` | The fail-closed aggregate that validates the scenario manifest and runs the complete verification contract in a deterministic order. |
 
-`npm run test` runs unit, component, and aggregate integration. `npm run test:all` runs the whole contract: lint, typecheck, unit, component, integration, migration, route certification, seed smoke, safe build, and aggregate E2E.
+`npm run test` runs unit, component, and aggregate integration. `npm run test:all` runs the whole contract: lint, typecheck, unit, component, integration, migration, route certification, seed smoke, safe build, and aggregate E2E. `npm run test:system-lock` adds scenario-manifest validation, the fresh-system smoke, isolation, and a diff whitespace check and is the authoritative fail-closed pre-Phase-12 baseline gate.
 
 ### Build safety
 

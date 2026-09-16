@@ -274,6 +274,18 @@ Exports are streamed CSV, bounded at 5,000 rows with refusal rather than truncat
 
 No schema change was required: every metric reads existing columns, so the database remains at 32 tables and 12 migration-ledger rows.
 
+## Pre-Phase-12 hardening checkpoint
+
+**Status:** `COMPLETED`
+
+Before Phase 12, the Phase 0-11 baseline was hardened and locked. `npm run test:system-lock` is the
+fail-closed aggregate gate, `npm run test:system-smoke` proves a fresh install boots and signs in every
+fictional persona, and `npm run test:system-concurrency` repeats the concurrency- and
+rollback-sensitive suites three times. The machine-readable scenario registry is
+`test/system-lock/scenario-manifest.json` and the human-readable catalogue is
+`SYSTEM_WIDE_TEST_SCENARIO_CATALOG.md`. This is not a roadmap phase and does not implement any Phase 12
+functionality; see the [Pre-Phase-12 hardening report](../phase-reports/SCOPEIS_PRE_PHASE_12_SYSTEM_WIDE_HARDENING_AND_REGRESSION_LOCK_R1.md).
+
 ## Phase 12 — Ticket System integration
 
 **Status:** `NEXT`
