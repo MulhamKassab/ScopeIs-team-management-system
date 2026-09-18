@@ -7,6 +7,7 @@ export type ModuleDefinition = { key: ModuleKey; href: string; label: string; pu
 export const modules: Record<ModuleKey, ModuleDefinition> = {
   dashboard: { key: "dashboard", href: "/dashboard", label: "Dashboard", purpose: "Role- and scope-aware operational summaries over the current Published schedule, delivered in Phase 11.", phase: 11, capability: "module:dashboard:view", mobilePrimary: true },
   employees: { key: "employees", href: "/employees", label: "Employees & capabilities", purpose: "Employee records, directory, search, lifecycle, and self-service profile delivered in Phase 2.", phase: 2, capability: "module:employees:view", mobilePrimary: true },
+  accounts: { key: "accounts", href: "/accounts", label: "Account administration", purpose: "Super Admin-only account, credential, and password-reset administration. Passwords are never viewable.", phase: 2, capability: "module:accounts:view" },
   skills: { key: "skills", href: "/skills", label: "Skills", purpose: "Controlled skills, Team-scoped planning filters, and transparent requirement warnings.", phase: 6, capability: "module:skills:view" },
   clients: { key: "clients", href: "/clients", label: "Clients", purpose: "Authorized Client records and operational relationships.", phase: 3, capability: "module:clients:view" },
   projects: { key: "projects", href: "/projects", label: "Projects", purpose: "Authorized Projects and their deliberately linked Locations.", phase: 3, capability: "module:projects:view" },

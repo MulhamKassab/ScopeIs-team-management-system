@@ -20,6 +20,8 @@ export async function loadAdoptionManifest() {
   manifest.states.phase9EvidenceFiles.tableHashes = { ...manifest.states.phase8StaticPlanningMap.tableHashes, ...manifest.states.phase9EvidenceFiles.tableHashes };
   // Phase 10 is additive: retain immutable Phase 9 table fingerprints and add the changed collaboration/governance fingerprints.
   manifest.states.phase10Collaboration.tableHashes = { ...manifest.states.phase9EvidenceFiles.tableHashes, ...manifest.states.phase10Collaboration.tableHashes };
+  // Credential account-management (0013) is additive: retain the 0012 table fingerprints and add the changed user_credentials fingerprint.
+  manifest.states.superAdminAccountManagement.tableHashes = { ...manifest.states.credentialAuthentication.tableHashes, ...manifest.states.superAdminAccountManagement.tableHashes };
   return manifest;
 }
 
@@ -65,6 +67,7 @@ function expectedStage(manifest, count) {
   if (count === 11) return manifest.states.phase9EvidenceFiles;
   if (count === 12) return manifest.states.phase10Collaboration;
   if (count === 13) return manifest.states.credentialAuthentication;
+  if (count === 14) return manifest.states.superAdminAccountManagement;
   return null;
 }
 

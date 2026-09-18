@@ -12,7 +12,7 @@ const createdSessionIds = new Set<string>();
 // These per-role module sets are the certified contract and must mirror
 // `src/modules/authorization/capabilities.ts`. `moduleKeys` deliberately lists every module so a
 // persona can never silently skip a route check.
-const moduleKeys = ["dashboard", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "audit", "settings", "profile", "requests"] as const;
+const moduleKeys = ["dashboard", "employees", "accounts", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "audit", "settings", "profile", "requests"] as const;
 const superAdminModules = [...moduleKeys];
 const adminModules = ["dashboard", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "profile"];
 const employeeModules = ["dashboard", "skills", "schedule", "leave", "profile", "notifications", "requests"];
@@ -207,6 +207,38 @@ describe("Phase 1 public HTTP route certification", () => {
       expect((await request("/api/foundation/scope/team:alpha", { headers: { Cookie: session.cookie } })).status).toBe(401);
     }, 20_000);
   }
+
+  it("keeps /accounts Super Admin-only and never returns credential secrets", async () => {
+    const superAdmin = await login("mock-super-admin-nora");
+    const scopedAdmin = await login("mock-admin-ava");
+    const employee = await login("mock-employee-cora");
+    try {
+      const allowed = await request("/accounts", { headers: { Cookie: superAdmin.cookie } });
+      expect(allowed.status).toBe(200);
+      const html = await allowed.text();
+      expect(html).toContain("Account administration");
+      expect(html).toContain("Passwords cannot be viewed");
+      expect(html).not.toMatch(/scrypt\$|password_hash|passwordHash/i);
+      safeResponse(html, superAdmin.token);
+
+      // Admin and Employee receive a non-enumerating 404 on the page and cannot post mutations.
+      expect((await request("/accounts", { headers: { Cookie: scopedAdmin.cookie } })).status).toBe(404);
+      expect((await request("/accounts", { headers: { Cookie: employee.cookie } })).status).toBe(404);
+      for (const cookie of [scopedAdmin.cookie, employee.cookie]) {
+        expect((await request("/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json", Origin: baseUrl, Cookie: cookie }, body: JSON.stringify({ identifier: "x", password: "y" }) })).status).not.toBe(200);
+      }
+    } finally {
+      await logout(superAdmin.cookie);
+      await logout(scopedAdmin.cookie);
+      await logout(employee.cookie);
+    }
+  });
+
+  it("redirects an anonymous caller away from /accounts", async () => {
+    const response = await request("/accounts");
+    expect([303, 307, 308]).toContain(response.status);
+    expect(response.headers.get("location")).toBe("/login");
+  });
 
   it("certifies credential login, generic refusals, and no-store headers", async () => {
     const cases: Array<[RequestInit, number]> = [

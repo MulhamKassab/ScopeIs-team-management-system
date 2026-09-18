@@ -1,6 +1,6 @@
 import type { SystemRole } from "@/shared/types/foundation";
 
-export const moduleKeys = ["dashboard", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "audit", "settings", "profile", "requests"] as const;
+export const moduleKeys = ["dashboard", "employees", "accounts", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "audit", "settings", "profile", "requests"] as const;
 export type ModuleKey = (typeof moduleKeys)[number];
 export type Capability = `module:${ModuleKey}:view` | "foundation:scope_probe:view";
 

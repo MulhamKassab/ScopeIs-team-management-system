@@ -87,6 +87,8 @@ notification, privacy, transaction, and concurrency expectations) lives in the m
 | AUTH-03 | 1 | application shell | all personas | e2e | test/e2e/foundation.spec.ts |
 | AUTH-04 | R1 | credential authentication | all five fictional users | unit + integration | test/unit/credential-authentication.test.ts; test/integration/credential-authentication.test.ts |
 | AUTH-05 | R1 | credential login journey | all five fictional users | e2e | test/e2e/credential-login.spec.ts |
+| AUTH-06 | R1 account administration | account and credential administration | Super Admin and prohibited roles | unit + integration | test/unit/account-administration.test.ts; test/integration/account-administration.test.ts |
+| AUTH-07 | R1 account administration | account administration journey | Super Admin and prohibited roles | component + e2e | test/component/account-administration.test.tsx; test/e2e/account-administration.spec.ts |
 
 ### Employee management (EMP)
 

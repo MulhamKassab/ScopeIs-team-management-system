@@ -10,6 +10,8 @@
     "/dashboard",
     "/employees",
     "/employees/[userId]",
+    "/accounts",
+    "/account/change-password",
     "/skills",
     "/clients",
     "/clients/[clientId]",
@@ -51,7 +53,8 @@
         "test/integration/phase10-collaboration-service.test.ts",
         "test/integration/phase10-management-note-authorization.test.ts",
         "test/integration/phase11-reporting-service.test.ts",
-        "test/integration/credential-authentication.test.ts"
+        "test/integration/credential-authentication.test.ts",
+        "test/integration/account-administration.test.ts"
       ]
     },
     "test:migration": { "files": ["test/migration/phase2-database-foundation.test.ts"] },
@@ -69,7 +72,8 @@
         "test/e2e/phase9-evidence.spec.ts",
         "test/e2e/phase10-collaboration.spec.ts",
         "test/e2e/phase11-reporting.spec.ts",
-        "test/e2e/credential-login.spec.ts"
+        "test/e2e/credential-login.spec.ts",
+        "test/e2e/account-administration.spec.ts"
       ]
     }
   },
@@ -479,6 +483,54 @@
       "concurrencyExpectation": "Not applicable.",
       "automatedTestFile": "test/e2e/credential-login.spec.ts",
       "testName": "credential login creates an opaque session and reaches the dashboard",
+      "testLayer": "e2e",
+      "status": "automated"
+    },
+    {
+      "scenarioId": "AUTH-06",
+      "owningPhase": "Phase R1 account administration",
+      "module": "account-administration",
+      "requirementRef": "AUT-001..AUT-002; ROL-001..ROL-006",
+      "actor": "Active Super Admin; scoped Admin, Employee, inactive, demoted and anonymous callers",
+      "startingRole": "SUPER_ADMIN",
+      "activeStatus": "active",
+      "scopeGrants": "None.",
+      "preconditions": "A disposable database with the five existing users and their credentials.",
+      "input": "Account create, credential enable, password reset and self password change payloads.",
+      "action": "Create an Employee/Admin/Super Admin account, enable sign-in for an existing record, reset and self-change passwords, and attempt the same as unauthorized actors.",
+      "expectedResult": "Only an active Super Admin may administer accounts, passwords are one-way and never returned, resets revoke sessions and bump the credential version, and prohibited actors receive a non-enumerating refusal.",
+      "expectedDataMutation": "User, employee-profile, credential, session and audit rows.",
+      "expectedAuditEvent": "auth.account.created, auth.credentials.enabled, auth.password.reset, auth.password.changed.",
+      "expectedNotification": "None.",
+      "privacyExpectation": "No password, hash, salt, pepper, token, cookie or raw identity value appears in responses, projections or audit metadata.",
+      "transactionExpectation": "Account creation and password reset are atomic; audit failure rolls everything back.",
+      "concurrencyExpectation": "Concurrent account creation cannot duplicate a username or email; stale resets are refused.",
+      "automatedTestFile": "test/integration/account-administration.test.ts",
+      "testName": "account administration service",
+      "testLayer": "integration",
+      "status": "automated"
+    },
+    {
+      "scenarioId": "AUTH-07",
+      "owningPhase": "Phase R1 account administration",
+      "module": "account-administration",
+      "requirementRef": "AUT-001..AUT-002; ROL-001..ROL-006",
+      "actor": "Super Admin creating and resetting an account; Admin and Employee callers",
+      "startingRole": "SUPER_ADMIN",
+      "activeStatus": "active",
+      "scopeGrants": "TEAM team:alpha and team:bravo",
+      "preconditions": "A fresh disposable database and runner-allocated port with the credential login form deployed.",
+      "input": "The /accounts administration page and /account/change-password page on desktop and mobile.",
+      "action": "Create an Employee login account, sign in with the temporary password, complete the required change, reset the password, and probe /accounts as other roles.",
+      "expectedResult": "The account journey completes, temporary-password users are forced to change before entry, resets revoke earlier sessions, and Admin/Employee receive 404 with no navigation entry.",
+      "expectedDataMutation": "Session, credential and audit rows.",
+      "expectedAuditEvent": "auth.account.created, auth.password.reset, auth.password.changed.",
+      "expectedNotification": "None.",
+      "privacyExpectation": "No visited page displays a password, hash, or account list to an unauthorized role.",
+      "transactionExpectation": "Not applicable.",
+      "concurrencyExpectation": "Not applicable.",
+      "automatedTestFile": "test/e2e/account-administration.spec.ts",
+      "testName": "Super Admin creates and resets an account; other roles cannot reach /accounts",
       "testLayer": "e2e",
       "status": "automated"
     },

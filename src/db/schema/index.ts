@@ -33,6 +33,8 @@ export const userCredentials = pgTable("user_credentials", {
   failedAttemptCount: integer("failed_attempt_count").notNull().default(0),
   failureWindowStartedAt: timestamp("failure_window_started_at", { withTimezone: true }), lockedUntil: timestamp("locked_until", { withTimezone: true }),
   ...timestamps,
+  mustChangePassword: boolean("must_change_password").notNull().default(false),
+  version: integer("version").notNull().default(1),
 }, (table) => [
   foreignKey({ name: "user_credentials_user_id_fkey", columns: [table.userId], foreignColumns: [users.id] }).onDelete("cascade"),
   uniqueIndex("user_credentials_username_unique").on(table.normalizedUsername), uniqueIndex("user_credentials_email_unique").on(table.normalizedEmail),
@@ -40,6 +42,7 @@ export const userCredentials = pgTable("user_credentials", {
   check("user_credentials_email_check", sql`char_length(${table.email}) between 3 and 254 and ${table.normalizedEmail} = lower(btrim(${table.email})) and position('@' in ${table.normalizedEmail}) > 1`),
   check("user_credentials_hash_check", sql`char_length(${table.passwordHash}) between 100 and 256`),
   check("user_credentials_failures_check", sql`${table.failedAttemptCount} between 0 and 5`),
+  check("user_credentials_version_check", sql`${table.version} > 0`),
 ]);
 
 export const adminScopeGrants = pgTable("admin_scope_grants", {

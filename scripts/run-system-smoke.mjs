@@ -14,7 +14,7 @@ import { inspectMigrationState } from "./phase2-migration-core.mjs";
 const tsx = join(repositoryRoot, "node_modules", "tsx", "dist", "cli.mjs");
 const seedEntry = join(repositoryRoot, "src", "db", "seed", "index.ts");
 
-const moduleKeys = ["dashboard", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "audit", "settings", "profile", "requests"];
+const moduleKeys = ["dashboard", "employees", "accounts", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "audit", "settings", "profile", "requests"];
 const superAdminModules = [...moduleKeys];
 const adminModules = ["dashboard", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "profile"];
 const employeeModules = ["dashboard", "skills", "schedule", "leave", "profile", "notifications", "requests"];

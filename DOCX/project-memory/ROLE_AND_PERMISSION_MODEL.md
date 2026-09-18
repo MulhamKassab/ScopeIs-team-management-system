@@ -6,6 +6,8 @@
 
 Authentication is separate from authorization. Users sign in with username/email and password (or, only inside the guarded local/test harness, a mock account), and the server re-reads the current role, active state, scope grants, and session version from PostgreSQL on every protected request. Credential login never grants, widens, or redefines a capability. Mock accounts are not usable in Production.
 
+Account administration (`/accounts`) is Super Admin only. A currently active Super Admin may create accounts, enable sign-in for existing workforce records, and reset passwords; scoped Admins and Employees receive a non-enumerating `404`. Existing passwords are one-way hashes and can never be viewed or recovered. A user flagged `must_change_password` must change their password at `/account/change-password` before entering the application; that page is self-only.
+
 ## Role summaries
 
 ### Super Admin

@@ -38,6 +38,12 @@ Backend-only work must be labelled backend-only. UI shells must be labelled shel
 > now test-only and Production rejects it regardless of the flag. Authentication proves identity only
 > and the established authorization system is unchanged. See
 > `phase-reports/SCOPEIS_EXISTING_USER_CREDENTIAL_AUTHENTICATION_R1.md`. Phase 12 has not started.
+>
+> Account-administration remediation (2026-09-18): a Super Admin-only account, credential, and
+> password-reset journey was added under `SCOPEIS_SUPER_ADMIN_ACCOUNT_AND_CREDENTIAL_MANAGEMENT_R1`.
+> Existing passwords can never be viewed or recovered; a Super Admin sets a temporary password
+> instead. Account creation and password reset are transactional and revoke sessions. See
+> `phase-reports/SCOPEIS_SUPER_ADMIN_ACCOUNT_AND_CREDENTIAL_MANAGEMENT_R1.md`. Phase 12 has not started.
 
 **Sub-phases:**
 

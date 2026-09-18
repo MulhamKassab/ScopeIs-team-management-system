@@ -45,6 +45,22 @@ invoked by startup, development, build, or deployment, requires an explicit
 Production confirmation guard and exact target verification, and never prints the
 password, hash, salt, pepper, or database URL.
 
+## Account administration
+
+A currently active Super Admin can open `/accounts` to create application
+accounts (and their workforce profile) atomically, enable sign-in for an
+existing workforce record, and reset passwords. Passwords are one-way scrypt
+hashes and **can never be viewed or recovered**; the UI states this explicitly
+and offers a temporary-password reset instead. A reset clears any sign-in lock,
+increments the target's `session_version`, revokes all of that user's sessions,
+and optionally requires a password change at next login. Scoped Admins and
+Employees receive a non-enumerating `404` on `/accounts`.
+
+When `must_change_password` is set, the user authenticates but is redirected to
+`/account/change-password` and cannot reach the rest of the application until
+they set a new password. That page is self-only: a Super Admin cannot use it to
+change another user's password.
+
 ## Verification contract
 
 Each concept has exactly one meaning. Every gate below is safe to run locally: it uses only freshly created disposable loopback-only PostgreSQL databases and fictional data, and none of them read `.env.production`.

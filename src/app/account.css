@@ -1,0 +1,39 @@
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+.form-success { color:var(--success); margin:12px 0 0; font-size:.85rem; font-weight:700; }
+.account-page { max-width:1220px; display:grid; gap:18px; min-width:0; }
+.account-page > * { min-width:0; }
+.account-page-header h2 { margin:4px 0 8px; font-size:1.8rem; }
+.account-page-header p:not(.eyebrow) { margin:0; color:var(--muted); line-height:1.55; max-width:78ch; }
+.account-summary { display:grid; gap:8px; padding:16px; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); box-shadow:var(--shadow); }
+.account-summary dl { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; margin:0; }
+.account-summary div { display:grid; gap:4px; min-width:0; }
+.account-summary dt { color:var(--muted); font-size:.74rem; font-weight:750; text-transform:uppercase; }
+.account-summary dd { margin:0; font-weight:800; font-size:1.05rem; }
+.account-asof { margin:0; color:var(--muted); font-size:.8rem; }
+.account-filters { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)) auto; gap:10px; align-items:end; padding:14px; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); }
+.account-filters label { display:grid; gap:5px; color:var(--muted); font-size:.78rem; font-weight:750; }
+.account-filters input,.account-filters select { min-height:40px; min-width:0; border:1px solid var(--border); border-radius:8px; background:var(--surface); color:var(--text); padding:8px; font:inherit; }
+.account-actions-row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+.account-password-notice { margin:0; padding:10px 12px; border-inline-start:4px solid var(--accent); background:var(--surface-muted); border-radius:0 8px 8px 0; color:var(--muted); line-height:1.5; }
+.account-panel { display:grid; gap:12px; padding:18px; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); box-shadow:var(--shadow); }
+.account-panel-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:14px; }
+.account-panel-heading h3 { margin:0 0 6px; font-size:1.05rem; }
+.account-form { display:grid; gap:10px; }
+.account-form label { display:grid; gap:5px; color:var(--muted); font-size:.8rem; font-weight:750; }
+.account-form input,.account-form select,.account-form textarea { width:100%; min-width:0; min-height:40px; border:1px solid var(--border); border-radius:8px; background:var(--surface); color:var(--text); padding:9px; font:inherit; }
+.account-form textarea { resize:vertical; }
+.account-form .account-check { display:flex; align-items:flex-start; gap:8px; font-weight:600; }
+.account-form .account-check input { width:auto; min-height:auto; }
+.account-form-actions { display:flex; justify-content:flex-end; }
+.account-help { margin:0; color:var(--muted); font-size:.84rem; line-height:1.5; }
+.account-empty { margin:0; padding:16px; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); color:var(--muted); }
+.account-table-scroll { overflow-x:auto; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); }
+.account-table { width:100%; border-collapse:collapse; min-width:1080px; }
+.account-table caption { text-align:start; }
+.account-table th,.account-table td { padding:10px 12px; text-align:start; border-block-end:1px solid var(--border); font-size:.84rem; vertical-align:top; }
+.account-table thead th { color:var(--muted); font-size:.74rem; text-transform:uppercase; white-space:nowrap; }
+.account-table tbody th { font-weight:800; }
+.account-row-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.account-pagination { display:flex; align-items:center; gap:12px; }
+@media (max-width:900px) { .account-summary dl { grid-template-columns:repeat(2,minmax(0,1fr)); } .account-filters { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:760px) { .account-page-header h2 { font-size:1.5rem; } .account-summary dl { grid-template-columns:1fr 1fr; } .account-filters { grid-template-columns:1fr; } .account-filters .button { min-height:44px; } .account-panel-heading { flex-direction:column; } .account-actions-row .button { width:100%; } .account-form .button { min-height:44px; } .account-form-actions .button { width:100%; } }
