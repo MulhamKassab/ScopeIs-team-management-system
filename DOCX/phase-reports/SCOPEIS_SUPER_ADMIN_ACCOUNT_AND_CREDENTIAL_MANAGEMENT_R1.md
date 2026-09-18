@@ -202,11 +202,17 @@ the Preview worktree, generated output, and unrelated files were excluded. The
 literal `user1234` appears only in controlled automated test fixtures and this
 operator-facing document; it is not application source behavior.
 
-Production was not deployed or migrated: the commit is pushed but the Production
-cutover remains blocked on the same prerequisites recorded above. The already
-deployed Vercel production build does not yet include this commit and continues
-to return a safe `503 AUTH_UNAVAILABLE` on credential login until the pepper and
-migration sequence are in place.
+No Production database mutation, migration, or bootstrap was performed, and no
+Production cutover action was taken by this task. Vercel's Git integration
+auto-deployed the pushed commits to Production (the canonical alias
+`https://scopeis-team-management-system.vercel.app` now serves the
+account-administration build), but the feature is **not functionally usable or
+verified in Production**: `AUTH_PASSWORD_PEPPER` is still unset, migrations
+`0012`/`0013` have not been applied, and the five-user credential bootstrap has
+not run, so `/login` still returns a safe `503 AUTH_UNAVAILABLE` and `/accounts`
+cannot be reached. Per the task's Section 18, the classification is the
+implemented-and-pushed-but-not-deployed outcome, because the Production
+prerequisites could not be independently verified.
 
 ## Remaining limitations
 
