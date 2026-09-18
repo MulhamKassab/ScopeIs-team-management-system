@@ -166,11 +166,47 @@ reset, session revocation, the change-password journey, Admin/Employee `404` on
 - Starting HEAD: `54e9432adb2c97bb43695d881dbec134cb894d33` (`docs: record
   credential auth R1 delivery and blocked production cutover`), `main...origin/main`
   at `0/0`.
-- Final SHA and commit are recorded in the delivery receipt below.
+- Final implementation SHA: `29244883b84961995bbbb9aa8c77755ac3192991`
+  (`feat: add Super Admin account and password management`), pushed to
+  `origin/main`; `main...origin/main` returned to `0/0`.
 
 ## Push result
 
-Recorded in the delivery receipt below.
+`git push origin main` succeeded after switching the active GitHub CLI account
+from `m-kassab` (403 on the `MulhamKassab` repository) to `MulhamKassab`. `main`
+and `origin/main` both resolve to `29244883b84961995bbbb9aa8c77755ac3192991`
+(`0/0`). The Preview worktree remained at `7c401c6`; the prototype and the
+historical remediation script remained untracked and untouched.
+
+## Delivery receipt
+
+**Classification: `SCOPEIS_ACCOUNT_ADMINISTRATION_IMPLEMENTED_AND_PUSHED_NOT_DEPLOYED`.**
+
+48 files were committed in one commit. Source: the `src/modules/account-administration/`
+module (`actions`, `domain-error`, `forms`, `messages`, `presentation`, `query`,
+`repositories`, `service`, `table`, `validation`); `src/app/(protected)/accounts/page.tsx`,
+`src/app/account/change-password/page.tsx`, `src/app/account.css`,
+`src/app/layout.tsx`, `src/app/(protected)/layout.tsx`; and updates to
+`src/db/schema/index.ts`, `src/db/migrations/0013_super_admin_account_management.sql`,
+the migration journal and adoption fingerprints, `src/modules/audit/presentation.ts`,
+`src/modules/auth/session-service.ts`, `src/modules/authorization/capabilities.ts`,
+and `src/modules/navigation/navigation.ts`. Tests and harness: the four new
+account-administration test files, `playwright.account.config.ts`,
+`scripts/run-account-administration-service-tests.mjs`, `scripts/run-account-e2e.mjs`,
+and the aggregate-runner / migration-core / system-smoke / manifest updates.
+Documentation: the roadmap, tracker, status log, decisions and constraints, role
+model, scenario catalogue, README, INDEX, the decisions record, and this report.
+
+`.env*`, `prototype/full-frontend-r1/`, `scripts/remediate-r2-persistent-test-incident.mjs`,
+the Preview worktree, generated output, and unrelated files were excluded. The
+literal `user1234` appears only in controlled automated test fixtures and this
+operator-facing document; it is not application source behavior.
+
+Production was not deployed or migrated: the commit is pushed but the Production
+cutover remains blocked on the same prerequisites recorded above. The already
+deployed Vercel production build does not yet include this commit and continues
+to return a safe `503 AUTH_UNAVAILABLE` on credential login until the pepper and
+migration sequence are in place.
 
 ## Remaining limitations
 
