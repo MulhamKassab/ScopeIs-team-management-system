@@ -15,7 +15,7 @@ Technical implementation direction is recorded separately in [`SYSTEM_ARCHITECTU
 - Shared Client, Project, and Location notes are readable and creatable by every authenticated user already authorized on the parent record: Super Admin globally, and Admin only within their Client, Project, or Location scope. The product owner confirmed this interpretation of the earlier "all authenticated users" wording during Phase 10; Employees hold no shared-note access. Editing is author-only, archive is Super Admin-only with a retained reason, and every edit preserves the superseded content as a revision.
 - Replacement-request discussions are private to the participants derived live from the request: the requester and the named employee(s). Role never confers participation, and only a `replacement_request` parent is supported. Assignee or Ticket discussions remain unimplemented.
 - Certification/portfolio updates save immediately and notify Super Admin; review/verification is optional, not a required approval gate.
-- Version 1 uses mock test accounts with no real passwords documented.
+- Version 1 authenticates the existing fictional users with username/email and password over opaque server sessions, using scrypt hashing with a server-only pepper. Mock accounts remain only for the guarded local/test automation harness, and Production rejects mock login regardless of the flag. Credential authentication proves identity only; role and scope authorization is unchanged. The shared fictional demo password is temporary and must be replaced before any real employee or operational data is entered. See `CREDENTIAL_AUTHENTICATION_DECISIONS.md`.
 - The Ticket System is a Phase 12 feature, not the workforce-system foundation.
 - Phase 6 qualification is an active management-recorded skill association only. It is not a proficiency score, certification gate, coverage result, or replacement/candidate-ranking judgment; missing recorded skills are transparent, non-blocking schedule warnings only.
 - Phase 10 confirmed that the employee-management note subject, an Employee actor, a peer Admin, and an out-of-scope Admin all receive the same non-enumerating refusal as a nonexistent note; note content is immutable and corrections archive-and-supersede.
@@ -82,7 +82,7 @@ Every item below is **not finalized**. The safe documentation default prevents a
 | Route vs straight-line distance | Replacement ranking accuracy | Treat geography as optional ranking information only |
 | Travel-time estimates | Schedule feasibility | Not required until confirmed |
 | External notification channels | Identity, delivery, cost | In-application notification centre only |
-| Final authentication provider | Enterprise identity and migration | Mock accounts only in version 1 |
+| Final authentication provider | Enterprise identity and migration | **Resolved for R1:** username/email and password credential login over the existing opaque server-session model, with mock accounts retained only for the guarded local/test harness. A future enterprise identity provider remains open. |
 | Ticket migration strategy | Reuse, data migration, risk | Inspect and select candidates in Phase 12 |
 | Repository strategy | Ownership and long-term architecture | Keep new workforce project independent; later decision may absorb selected code |
 | Warning severity by conflict | Whether users may proceed | Identify confirmed conflicts; final blocker/warning/info policies later |

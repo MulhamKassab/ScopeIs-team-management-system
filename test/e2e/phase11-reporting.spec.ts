@@ -1,18 +1,7 @@
 import { expect, test } from "@playwright/test";
+import { signIn, signOut } from "./sign-in";
 
 test.skip(process.env.SCOPEIS_PHASE11_E2E !== "true", "Run with the guarded Phase 11 fixture runner.");
-
-async function signIn(page: import("@playwright/test").Page, name: string) {
-  await page.goto("/login");
-  await page.getByText(name, { exact: true }).click();
-  await page.getByRole("button", { name: "Continue with mock persona" }).click();
-  await expect(page).toHaveURL(/\/dashboard$/);
-}
-
-async function signOut(page: import("@playwright/test").Page) {
-  const response = await page.request.post("/api/auth/logout", { headers: { Origin: new URL(page.url()).origin } });
-  expect(response.status()).toBe(200);
-}
 
 async function expectNoHorizontalOverflow(page: import("@playwright/test").Page) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);

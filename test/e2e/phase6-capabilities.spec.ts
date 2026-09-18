@@ -1,8 +1,7 @@
 import { expect, test } from "@playwright/test";
+import { signIn, signOut } from "./sign-in";
 
 test.skip(process.env.SCOPEIS_PHASE6_E2E !== "true", "Run with the guarded Phase 6 fixture runner.");
-async function signIn(page: import("@playwright/test").Page, name: string) { await page.goto("/login"); await page.getByText(name, { exact: true }).click(); await page.getByRole("button", { name: "Continue with mock persona" }).click(); await expect(page).toHaveURL(/\/dashboard$/); }
-async function signOut(page: import("@playwright/test").Page) { await page.request.post("/api/auth/logout", { headers: { Origin: new URL(page.url()).origin } }); }
 
 test("Super Admin records a skill and the Employee sees only their own recorded fact", async ({ page }) => {
   const skillName = `Browser capability ${test.info().project.name}`;

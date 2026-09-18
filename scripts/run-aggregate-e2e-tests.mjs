@@ -35,6 +35,7 @@ const suites = [
   { name: "Phase 9 capability evidence", script: "run-phase9-playwright.mjs" },
   { name: "Phase 10 collaboration and governance", script: "run-phase10-playwright.mjs" },
   { name: "Phase 11 dashboards, reports and exports", script: "run-phase11-playwright.mjs" },
+  { name: "Credential authentication login", script: "run-credential-e2e.mjs" },
 ];
 
 function runSuite(script) {

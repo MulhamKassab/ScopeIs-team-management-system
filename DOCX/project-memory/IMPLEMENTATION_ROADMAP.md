@@ -32,6 +32,13 @@ Backend-only work must be labelled backend-only. UI shells must be labelled shel
 
 **Status:** `COMPLETED_IN_NARROW_FOUNDATION_SCOPE`
 
+> Credential-login remediation (2026-09-18): the fictional Persona selection screen was replaced with
+> username/email-and-password authentication under `SCOPEIS_EXISTING_USER_CREDENTIAL_AUTHENTICATION_R1`.
+> The five existing users, roles, scopes, and data relationships are preserved; mock authentication is
+> now test-only and Production rejects it regardless of the flag. Authentication proves identity only
+> and the established authorization system is unchanged. See
+> `phase-reports/SCOPEIS_EXISTING_USER_CREDENTIAL_AUTHENTICATION_R1.md`. Phase 12 has not started.
+
 **Sub-phases:**
 
 - 1.1 Application structure and protected shell

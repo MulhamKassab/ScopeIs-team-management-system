@@ -5,6 +5,8 @@ export type AppErrorCode =
   | "VALIDATION"
   | "SESSION_EXPIRED"
   | "MOCK_AUTH_UNAVAILABLE"
+  | "INVALID_CREDENTIALS"
+  | "AUTH_UNAVAILABLE"
   | "STALE_UPDATE"
   | "PROVIDER_NOT_CONFIGURED"
   | "DATABASE_FAILURE";
@@ -21,6 +23,8 @@ export class AppError extends Error {
 }
 
 export const errors = {
+  invalidCredentials: () => new AppError("INVALID_CREDENTIALS", "The username/email or password is incorrect.", 401),
+  authUnavailable: () => new AppError("AUTH_UNAVAILABLE", "Sign in is temporarily unavailable. Please contact your administrator.", 503),
   unauthenticated: () => new AppError("UNAUTHENTICATED", "Please sign in to continue.", 401),
   forbidden: () => new AppError("FORBIDDEN", "You do not have access to this resource.", 403),
   outOfScope: () => new AppError("OUT_OF_SCOPE", "This resource is outside your assigned scope.", 403),

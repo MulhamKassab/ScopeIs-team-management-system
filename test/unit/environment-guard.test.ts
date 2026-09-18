@@ -12,7 +12,7 @@ describe("temporary mock-auth environment policy", () => {
     expect(() => parseEnvironment({ DATABASE_URL: "postgresql://database.example.com/scopeis", APP_ENV: "test", MOCK_AUTH_ENABLED: "true" })).toThrow("Test mode requires");
   });
   it("uses the explicit E2E marker rather than a local environment file's app mode", () => {
-    const result = parseEnvironment({ DATABASE_URL: database, APP_ENV: "production", MOCK_AUTH_ENABLED: "false", SCOPEIS_E2E_TEST: "true" });
+    const result = parseEnvironment({ DATABASE_URL: database, APP_ENV: "production", MOCK_AUTH_ENABLED: "true", SCOPEIS_E2E_TEST: "true", SCOPEIS_DISPOSABLE_TEST_DATABASE: "true" });
     expect(result.APP_ENV).toBe("test");
     expect(result.MOCK_AUTH_ENABLED).toBe("true");
   });
@@ -22,8 +22,9 @@ describe("temporary mock-auth environment policy", () => {
   it("rejects a non-PostgreSQL DATABASE_URL before client construction", () => {
     expect(() => parseEnvironment({ DATABASE_URL: "https://database.example.com", APP_ENV: "development", MOCK_AUTH_ENABLED: "false" })).toThrow("DATABASE_URL must use a PostgreSQL URL scheme");
   });
-  it("allows explicitly enabled mock authentication in Production", () => {
-    expect(isMockAuthenticationEnabled(parseEnvironment({ DATABASE_URL: database, APP_ENV: "production", MOCK_AUTH_ENABLED: "true" }))).toBe(true);
+  it("rejects explicitly enabled mock authentication in Production", () => {
+    expect(isMockAuthenticationEnabled(parseEnvironment({ DATABASE_URL: database, APP_ENV: "production", MOCK_AUTH_ENABLED: "true" }))).toBe(false);
+    expect(isMockAuthenticationEnabled(parseEnvironment({ DATABASE_URL: database, APP_ENV: "test", VERCEL_ENV: "production", MOCK_AUTH_ENABLED: "true", SCOPEIS_E2E_TEST: "true", SCOPEIS_DISPOSABLE_TEST_DATABASE: "true" }))).toBe(false);
   });
   it("keeps Production mock authentication unavailable when disabled", () => {
     expect(isMockAuthenticationEnabled(parseEnvironment({ DATABASE_URL: database, APP_ENV: "production", MOCK_AUTH_ENABLED: "false" }))).toBe(false);

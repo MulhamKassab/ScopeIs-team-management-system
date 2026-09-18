@@ -64,6 +64,7 @@ function expectedStage(manifest, count) {
   if (count === 10) return manifest.states.phase8StaticPlanningMap;
   if (count === 11) return manifest.states.phase9EvidenceFiles;
   if (count === 12) return manifest.states.phase10Collaboration;
+  if (count === 13) return manifest.states.credentialAuthentication;
   return null;
 }
 

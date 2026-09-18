@@ -1,3 +1,5 @@
+- [Credential authentication remediation report](phase-reports/SCOPEIS_EXISTING_USER_CREDENTIAL_AUTHENTICATION_R1.md)
+- [Credential authentication decisions](project-memory/CREDENTIAL_AUTHENTICATION_DECISIONS.md)
 - [Pre-Phase-12 system-wide hardening and regression lock report](phase-reports/SCOPEIS_PRE_PHASE_12_SYSTEM_WIDE_HARDENING_AND_REGRESSION_LOCK_R1.md)
 - [System-wide test scenario catalogue](project-memory/SYSTEM_WIDE_TEST_SCENARIO_CATALOG.md)
 - [Phase 11 dashboard acceptance and manifest reconciliation report](phase-reports/SCOPEIS_PHASE_11_DASHBOARD_ACCEPTANCE_AND_MANIFEST_RECONCILIATION_R1.md)

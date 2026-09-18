@@ -2,15 +2,9 @@ import { mkdtemp, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
+import { signIn } from "./sign-in";
 
 test.skip(process.env.SCOPEIS_PHASE9_E2E !== "true", "Run with the guarded Phase 9 fixture runner.");
-
-async function signIn(page: import("@playwright/test").Page, name: string) {
-  await page.goto("/login");
-  await page.getByText(name, { exact: true }).click();
-  await page.getByRole("button", { name: "Continue with mock persona" }).click();
-  await expect(page).toHaveURL(/\/dashboard$/);
-}
 
 async function signOut(page: import("@playwright/test").Page) {
   const response = await page.request.post("/api/auth/logout", { headers: { Origin: new URL(page.url()).origin } });

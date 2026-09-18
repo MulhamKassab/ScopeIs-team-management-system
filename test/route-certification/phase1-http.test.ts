@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import pg from "pg";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { fictionalTestPassword } from "../../scripts/phase1-test-environment.mjs";
 
 const baseUrl = process.env.SCOPEIS_ROUTE_BASE_URL;
 if (!baseUrl || !/^http:\/\/127\.0\.0\.1:\d+$/.test(baseUrl)) throw new Error("A loopback Phase 1 route-certification server is required.");
@@ -117,7 +118,13 @@ describe("Phase 1 public HTTP route certification", () => {
     const loginPage = await request("/login");
     expect(loginPage.status).toBe(200);
     const loginHtml = await loginPage.text();
-    expect(loginHtml).toContain("Temporary mock authentication");
+    // The Production-facing page exposes a credential form only; no persona picker or account list.
+    expect(loginHtml).toContain("Sign in");
+    expect(loginHtml).toContain("Username or email");
+    expect(loginHtml).toMatch(/autocomplete="username"/i);
+    expect(loginHtml).toMatch(/autocomplete="current-password"/i);
+    expect(loginHtml).not.toMatch(/mock persona|Temporary mock|Continue with mock/i);
+    for (const persona of ["Nora", "Ava", "Ben", "Cora", "Dan"]) expect(loginHtml).not.toMatch(new RegExp(`\\b${persona}\\b`));
     expect(loginHtml).not.toContain('href="/map"');
     expect(loginHtml).not.toContain('href="/audit"');
 
@@ -200,6 +207,61 @@ describe("Phase 1 public HTTP route certification", () => {
       expect((await request("/api/foundation/scope/team:alpha", { headers: { Cookie: session.cookie } })).status).toBe(401);
     }, 20_000);
   }
+
+  it("certifies credential login, generic refusals, and no-store headers", async () => {
+    const cases: Array<[RequestInit, number]> = [
+      [{ method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ identifier: "nora", password: fictionalTestPassword }) }, 403],
+      [{ method: "POST", headers: { "Content-Type": "application/json", Origin: baseUrl }, body: "{" }, 400],
+      [{ method: "POST", headers: { "Content-Type": "application/json", Origin: baseUrl }, body: JSON.stringify({ identifier: "nora" }) }, 400],
+      [{ method: "POST", headers: { "Content-Type": "application/json", Origin: baseUrl }, body: JSON.stringify({ identifier: "nora", password: fictionalTestPassword, role: "SUPER_ADMIN" }) }, 400],
+    ];
+    for (const [options, status] of cases) {
+      const response = await request("/api/auth/login", options);
+      expect(response.status).toBe(status);
+      expect(response.headers.get("cache-control")).toContain("no-store");
+      expect(response.headers.get("x-content-type-options")).toBe("nosniff");
+      safeResponse(await response.text());
+    }
+    expect((await request("/api/auth/login")).status).toBe(405);
+
+    // Unknown identifiers and wrong passwords are indistinguishable, byte for byte.
+    const unknown = await request("/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json", Origin: baseUrl }, body: JSON.stringify({ identifier: "no-such-account", password: fictionalTestPassword }) });
+    const wrong = await request("/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json", Origin: baseUrl }, body: JSON.stringify({ identifier: "nora", password: "definitely-wrong" }) });
+    expect(unknown.status).toBe(401);
+    expect(wrong.status).toBe(401);
+    expect(await unknown.text()).toBe(await wrong.text());
+  });
+
+  it("accepts a valid same-origin credential login and rejects reuse after logout", async () => {
+    const login = await request("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Origin: baseUrl },
+      body: JSON.stringify({ identifier: "nora", password: fictionalTestPassword }),
+    });
+    expect(login.status).toBe(200);
+    expect(await login.json()).toEqual({ redirectTo: "/dashboard" });
+    expect(login.headers.get("cache-control")).toContain("no-store");
+    const setCookie = login.headers.get("set-cookie") ?? "";
+    const token = setCookie.match(/scopeis_session=([^;]+)/)?.[1];
+    expect(token).toHaveLength(43);
+    expect(setCookie.toLowerCase()).toContain("httponly");
+    expect(setCookie.toLowerCase()).toContain("samesite=lax");
+    const cookie = `scopeis_session=${token}`;
+    expect((await request("/dashboard", { headers: { Cookie: cookie } })).status).toBe(200);
+    expect((await logout(cookie)).status).toBe(200);
+    expect([303, 307, 308]).toContain((await request("/dashboard", { headers: { Cookie: cookie } })).status);
+  });
+
+  it("keeps mock login unavailable under the Production prohibition", async () => {
+    // This server runs the disposable test harness, where mock auth stays explicitly allowed; the
+    // Production prohibition itself is asserted by the environment-guard unit test.
+    const response = await request("/api/auth/mock-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Origin: baseUrl },
+      body: JSON.stringify({ personaId: "mock-admin-ava" }),
+    });
+    expect(response.status).toBe(200);
+  });
 
   it("rejects malformed and unknown scope references server-side", async () => {
     const session = await login("mock-super-admin-nora");

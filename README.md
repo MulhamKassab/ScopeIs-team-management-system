@@ -12,7 +12,8 @@ Shared Client, Project, and Location notes are readable and creatable only by au
 
 - Next.js App Router and TypeScript
 - PostgreSQL with Drizzle migrations
-- Development/test mock server sessions
+- Credential (username/email + password) authentication over opaque server sessions; scrypt hashing with a server-only pepper
+- Mock authentication retained only for the guarded local/test automation harness
 - Centralized Super Admin, Admin, and Employee role/scope authorization
 
 ## Local setup
@@ -28,6 +29,21 @@ npm run dev
 ```
 
 Use only a local development database in `.env`. The supplied mock personas are fictional and mock authentication is restricted to development/test; it must never be enabled for production use.
+
+Sign in with `username or email` and password. The five fictional users accept
+either their username (`nora`, `ava`, `ben`, `cora`, `dan`) or their email
+address. Credential login requires the server-only `AUTH_PASSWORD_PEPPER`
+(minimum 32 characters); a missing Production pepper fails closed. The shared
+fictional demo password is temporary and must be replaced before any real
+employee or operational data is entered. Production sign-in never uses mock
+authentication: `/api/auth/mock-login` returns a neutral refusal outside the
+explicit disposable test harness.
+
+An operator may initialize the five existing users' credentials with the guarded
+one-time bootstrap (`scripts/bootstrap-existing-user-credentials.ts`). It is not
+invoked by startup, development, build, or deployment, requires an explicit
+Production confirmation guard and exact target verification, and never prints the
+password, hash, salt, pepper, or database URL.
 
 ## Verification contract
 

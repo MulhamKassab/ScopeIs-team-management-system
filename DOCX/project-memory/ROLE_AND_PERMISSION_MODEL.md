@@ -4,11 +4,13 @@
 
 `Super Admin > Admin > Employee` is the system-access hierarchy. A system role is not a job designation, skill, department, employment type, or assignment arrangement. Authorization combines role, Admin scope where applicable, record participation, publication state, and data sensitivity.
 
+Authentication is separate from authorization. Users sign in with username/email and password (or, only inside the guarded local/test harness, a mock account), and the server re-reads the current role, active state, scope grants, and session version from PostgreSQL on every protected request. Credential login never grants, widens, or redefines a capability. Mock accounts are not usable in Production.
+
 ## Role summaries
 
 ### Super Admin
 
-Has global management authority: employee accounts and roles, designations, skills, clients, projects, locations, arrangement labels, schedules, publication, leave decisions, coverage rules, replacements, warnings and overrides, management map, authorized management notes, notifications, audit, reports, exports, mock accounts, and later integrated tickets.
+Has global management authority: employee accounts and roles, designations, skills, clients, projects, locations, arrangement labels, schedules, publication, leave decisions, coverage rules, replacements, warnings and overrides, management map, authorized management notes, notifications, audit, reports, exports, account credentials (through the guarded operator bootstrap only), and later integrated tickets.
 
 ### Admin
 
@@ -18,7 +20,7 @@ Admin cannot publish schedules, make final schedule approvals, approve or reject
 
 ### Employee
 
-Can use a mock account; view their own published daily/weekly/monthly schedule; view relevant client/project/location/time/instructions; submit and track annual leave; cancel a pending request when allowed; maintain permitted profile, skills evidence, certifications, portfolio, CV, and project experience; use the notification centre for their own notifications; and participate in private replacement-request discussions when they are the requester or a named employee on that request.
+Can sign in; view their own published daily/weekly/monthly schedule; view relevant client/project/location/time/instructions; submit and track annual leave; cancel a pending request when allowed; maintain permitted profile, skills evidence, certifications, portfolio, CV, and project experience; use the notification centre for their own notifications; and participate in private replacement-request discussions when they are the requester or a named employee on that request.
 
 Employee cannot publish or finalize schedules, approve leave, manage roles, access the management planning map, view others' private leave details, view employee-management notes, read or add shared Client/Project/Location notes, or view discussions in which they are not a participant.
 

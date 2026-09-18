@@ -3,7 +3,7 @@ import { boolean, check, date, doublePrecision, foreignKey, index, integer, json
 
 export const systemRoleEnum = pgEnum("system_role", ["SUPER_ADMIN", "ADMIN", "EMPLOYEE"]);
 export const scopeTypeEnum = pgEnum("scope_type", ["TEAM", "CLIENT", "PROJECT", "LOCATION"]);
-export const authenticationModeEnum = pgEnum("authentication_mode", ["mock"]);
+export const authenticationModeEnum = pgEnum("authentication_mode", ["mock", "password"]);
 export const evidenceReviewStateEnum = pgEnum("evidence_review_state", ["unreviewed", "reviewed", "verified"]);
 export const evidenceKindEnum = pgEnum("evidence_kind", ["certification", "cv", "portfolio", "project_example", "supporting_document"]);
 export const noteVisibilityEnum = pgEnum("note_visibility", ["private_to_author", "shared_upward"]);
@@ -25,6 +25,22 @@ export const users = pgTable("users", {
   active: boolean("active").notNull().default(true), sessionVersion: integer("session_version").notNull().default(1),
   version: integer("version").notNull().default(1), ...timestamps,
 }, (table) => [check("users_session_version_check", sql`${table.sessionVersion} > 0`), check("users_version_check", sql`${table.version} > 0`)]);
+
+export const userCredentials = pgTable("user_credentials", {
+  userId: text("user_id").primaryKey(), username: text("username").notNull(), normalizedUsername: text("normalized_username").notNull(),
+  email: text("email").notNull(), normalizedEmail: text("normalized_email").notNull(), passwordHash: text("password_hash").notNull(),
+  passwordChangedAt: timestamp("password_changed_at", { withTimezone: true }).notNull().defaultNow(),
+  failedAttemptCount: integer("failed_attempt_count").notNull().default(0),
+  failureWindowStartedAt: timestamp("failure_window_started_at", { withTimezone: true }), lockedUntil: timestamp("locked_until", { withTimezone: true }),
+  ...timestamps,
+}, (table) => [
+  foreignKey({ name: "user_credentials_user_id_fkey", columns: [table.userId], foreignColumns: [users.id] }).onDelete("cascade"),
+  uniqueIndex("user_credentials_username_unique").on(table.normalizedUsername), uniqueIndex("user_credentials_email_unique").on(table.normalizedEmail),
+  check("user_credentials_username_check", sql`char_length(${table.username}) between 1 and 80 and ${table.normalizedUsername} = lower(btrim(${table.username})) and ${table.normalizedUsername} ~ '^[a-z0-9._-]+$'`),
+  check("user_credentials_email_check", sql`char_length(${table.email}) between 3 and 254 and ${table.normalizedEmail} = lower(btrim(${table.email})) and position('@' in ${table.normalizedEmail}) > 1`),
+  check("user_credentials_hash_check", sql`char_length(${table.passwordHash}) between 100 and 256`),
+  check("user_credentials_failures_check", sql`${table.failedAttemptCount} between 0 and 5`),
+]);
 
 export const adminScopeGrants = pgTable("admin_scope_grants", {
   id: uuid("id").defaultRandom().primaryKey(), userId: text("user_id").notNull(),

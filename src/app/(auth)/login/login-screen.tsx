@@ -3,8 +3,43 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Brand } from "@/shared/components/brand";
 
-const personas = [
-  ["mock-super-admin-nora", "Nora Albright", "Super Admin", "Global foundation access"], ["mock-admin-ava", "Ava Mercer", "Admin", "Mock Team Alpha scope"], ["mock-admin-ben", "Ben Iqbal", "Admin", "Mock Team Bravo scope"], ["mock-employee-cora", "Cora Bell", "Employee", "Mock Team Alpha association"], ["mock-employee-dan", "Dan Rowan", "Employee", "Mock Team Bravo association"],
-] as const;
-export function LoginScreen() { const router = useRouter(); const [selected, setSelected] = useState<string>(personas[0][0]); const [error, setError] = useState<string | null>(null); const [pending, setPending] = useState(false); async function signIn() { setPending(true); setError(null); const response = await fetch("/api/auth/mock-login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ personaId: selected }) }); const payload = await response.json(); if (!response.ok) { setError(payload.message ?? "Unable to start a mock session."); setPending(false); return; } router.push(payload.redirectTo); router.refresh(); }
-  return <main className="login-page"><section className="login-card"><Brand /><p className="eyebrow">Temporary mock-data environment</p><h1>Team Management System</h1><p className="intro">Select a fictional persona to test the real server-side access boundaries.</p><div className="mock-callout"><strong>Temporary mock authentication</strong><span>Personas are fictional. No passwords or real employee data are used. This is temporary and not real authentication.</span></div><fieldset><legend>Choose a fictional persona</legend><div className="persona-list">{personas.map(([id, name, role, scope]) => <label key={id} className={`persona-option ${selected === id ? "selected" : ""}`}><input type="radio" name="persona" value={id} checked={selected === id} onChange={() => setSelected(id)} /><span><strong>{name}</strong><small>{role} · {scope}</small></span></label>)}</div></fieldset>{error && <p className="form-error" role="alert">{error}</p>}<button className="button primary login-submit" type="button" disabled={pending} onClick={signIn}>{pending ? "Starting session…" : "Continue with mock persona"}</button></section></main>; }
+const invalidCredentialMessages = new Set(["INVALID_CREDENTIALS", "VALIDATION"]);
+export function LoginScreen() {
+  const router = useRouter();
+  const [identifier, setIdentifier] = useState("");
+  const [password, setPassword] = useState("");
+  const [visible, setVisible] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+  async function signIn(event: React.FormEvent) {
+    event.preventDefault();
+    setPending(true); setError(null);
+    try {
+      const response = await fetch("/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ identifier, password }) });
+      const payload = await response.json();
+      if (!response.ok) {
+        setError(invalidCredentialMessages.has(payload.error) ? "The username/email or password is incorrect."
+          : response.status === 503 ? "Sign in is temporarily unavailable. Please contact your administrator." : "Unable to sign in. Please try again.");
+        setPending(false);
+        return;
+      }
+      router.push(payload.redirectTo); router.refresh();
+    } catch {
+      setError("Unable to sign in. Please try again.");
+      setPending(false);
+    }
+  }
+  return <main className="login-page"><section className="login-card"><Brand /><h1>Sign in</h1>
+    <form onSubmit={signIn}>
+      <label htmlFor="login-identifier">Username or email</label>
+      <input id="login-identifier" type="text" autoComplete="username" required value={identifier} onChange={(event) => setIdentifier(event.target.value)} disabled={pending} />
+      <label htmlFor="login-password">Password</label>
+      <div className="login-password-field">
+        <input id="login-password" type={visible ? "text" : "password"} autoComplete="current-password" required value={password} onChange={(event) => setPassword(event.target.value)} disabled={pending} />
+        <button type="button" className="icon-button" aria-label={visible ? "Hide password" : "Show password"} aria-pressed={visible} onClick={() => setVisible(!visible)}>{visible ? "Hide" : "Show"}</button>
+      </div>
+      {error && <p className="form-error" role="alert">{error}</p>}
+      <button className="button primary login-submit" type="submit" disabled={pending}>{pending ? "Signing in…" : "Sign in"}</button>
+    </form>
+  </section></main>;
+}

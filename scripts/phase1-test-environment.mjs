@@ -7,6 +7,14 @@ import pg from "pg";
 
 export const repositoryRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 
+// Fictional, non-secret pepper used only by the disposable loopback test harness. It is never a
+// Production value and never reaches a non-test process.
+export const fictionalTestPasswordPepper = "fictional-e2e-pepper-only-0000000000000000";
+
+// Fictional password seeded into disposable credential rows so the real login form can be exercised.
+// It is deliberately different from the approved temporary Production credential.
+export const fictionalTestPassword = "fictional-e2e-credential-only";
+
 export async function allocateLoopbackPort() {
   return new Promise((resolve, reject) => {
     const probe = createServer();
@@ -52,6 +60,7 @@ export function phase1TestProcessEnvironment(configuration, extra = {}) {
     ...inherited,
     DATABASE_URL: configuration.databaseUrl,
     APP_ENV: "test",
+    AUTH_PASSWORD_PEPPER: fictionalTestPasswordPepper,
     MOCK_AUTH_ENABLED: "true",
     SESSION_TTL_HOURS: configuration.sessionTtlHours,
     SCOPEIS_E2E_TEST: "true",

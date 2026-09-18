@@ -48,7 +48,7 @@ describe("mock authentication boundaries", () => {
   });
 
   it("revokes the server-side session and clears its cookie on logout", async () => {
-    state.findActiveSession.mockResolvedValue({ session: { id: "session-1" }, user: { id: "mock-admin-ava", role: "ADMIN" } });
+    state.findActiveSession.mockResolvedValue({ session: { id: "session-1", authenticationMode: "mock" }, user: { id: "mock-admin-ava", role: "ADMIN" } });
     await endCurrentSession();
     expect(state.updateWhere).toHaveBeenCalledOnce();
     expect(state.writeAuditEvent).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ action: "auth.mock_session.ended", targetId: "session-1" }));

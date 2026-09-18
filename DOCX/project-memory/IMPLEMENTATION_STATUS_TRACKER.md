@@ -8,7 +8,7 @@ The tracker uses only: `NOT_STARTED`, `READY`, `IN_PROGRESS`, `PARTIAL`, `BLOCKE
 
 **Completion rule:** backend-only work and UI shells are not completed user journeys. A phase is complete only after all applicable delivery gates and its end-to-end journey are verified.
 
-Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [Phase 2 journey completion], [Phase 2 manual QA readiness], [Phase 2 controls/code remediation], [Phase 3 report], [Phase 3 decisions], [Phase 4 report], [Phase 4 decisions], [Phase 5 report], [Phase 5 decisions], [Phase 6 report], [Phase 6 decisions], [Phase 7 report], [Phase 8 report], [Phase 8 decisions], [Checkpoint Sub-phase A report], [Checkpoint Sub-phase B closure], [Phase 9 report], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], [note policy], and [Pre-Phase-12 hardening].
+Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database], [Phase 2 core R3], [Phase 2.1 reconciliation], [Phase 2.1 closure], [Phase 2.2 directory], [Phase 2.3 search], [Phase 2.4 blocked], [Phase 2.4 closure], [Phase 2 journey completion], [Phase 2 manual QA readiness], [Phase 2 controls/code remediation], [Phase 3 report], [Phase 3 decisions], [Phase 4 report], [Phase 4 decisions], [Phase 5 report], [Phase 5 decisions], [Phase 6 report], [Phase 6 decisions], [Phase 7 report], [Phase 8 report], [Phase 8 decisions], [Checkpoint Sub-phase A report], [Checkpoint Sub-phase B closure], [Phase 9 report], [employee services], [schema], [navigation], [notification service], [audit service], [storage helper], [note policy], [Pre-Phase-12 hardening], and [Credential auth R1].
 
 [roadmap]: IMPLEMENTATION_ROADMAP.md
 [context]: ../../PROJECT_CONTEXT.md
@@ -45,6 +45,8 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 [Phase 11 reconciliation]: ../phase-reports/SCOPEIS_PHASE_11_DASHBOARD_ACCEPTANCE_AND_MANIFEST_RECONCILIATION_R1.md
 [Phase 10 decisions]: PHASE_10_COLLABORATION_AND_GOVERNANCE_DECISIONS.md
 [Pre-Phase-12 hardening]: ../phase-reports/SCOPEIS_PRE_PHASE_12_SYSTEM_WIDE_HARDENING_AND_REGRESSION_LOCK_R1.md
+[Credential auth R1]: ../phase-reports/SCOPEIS_EXISTING_USER_CREDENTIAL_AUTHENTICATION_R1.md
+[Credential auth decisions]: CREDENTIAL_AUTHENTICATION_DECISIONS.md
 [employee services]: ../../src/modules/employees/employee-services.ts
 [schema]: ../../src/db/schema/index.ts
 [navigation]: ../../src/modules/navigation/navigation.ts
@@ -58,11 +60,11 @@ Evidence shorthand: [roadmap], [context], [P1 certification], [Phase 2 database]
 - **Current active phase:** Phase 12 — Ticket System integration
 - **Current active/next sub-phase:** 12.1 Existing Ticket System reuse assessment, under its own approved Phase ID. Phase 11 is complete; the Phase 9 coverage-linkage question (9.9) stays deferred.
 - **Current phase status:** `NEXT` (Phase 12 is the next journey and has not started)
-- **Last status date:** `2026-09-15`
-- **Most recent trustworthy evidence:** [Pre-Phase-12 hardening]; [Phase 11 report]; [Phase 11 decisions]; [Phase 10 report]
-- **Immediate objective:** Prepare Phase 12 planning under an approved Phase ID against the locked Phase 0-11 baseline established by [Pre-Phase-12 hardening]; preserve the completed Phase 11 reporting journey and its locked role/scope/export matrix.
+- **Last status date:** `2026-09-18`
+- **Most recent trustworthy evidence:** [Credential auth R1]; [Credential auth decisions]; [Pre-Phase-12 hardening]; [Phase 11 report]
+- **Immediate objective:** Prepare Phase 12 planning under an approved Phase ID against the locked Phase 0-11 baseline established by [Pre-Phase-12 hardening]; preserve the completed Phase 11 reporting journey and its locked role/scope/export matrix. The `SCOPEIS_EXISTING_USER_CREDENTIAL_AUTHENTICATION_R1` remediation replaced the persona picker with credential login and did not begin Phase 12.
 - **Known blockers:** None. Phase 11 passed every mandatory gate; remaining items are documented non-blocking debt and the deferred Phase 9 9.9 coverage-linkage decision.
-- **Explicit exclusions:** Phase 12 implementation, Preview-worktree merge or modification, payroll or financial reporting, attendance, performance scoring, employee ranking, live location, GPS, movement history, AI staffing decisions, a generic query builder, public or permanent export links, background export infrastructure, and production access/migration/authentication/deployment.
+- **Explicit exclusions:** Phase 12 implementation, Preview-worktree merge or modification, payroll or financial reporting, attendance, performance scoring, employee ranking, live location, GPS, movement history, AI staffing decisions, a generic query builder, public or permanent export links, background export infrastructure, and any production access/migration/authentication/deployment beyond the narrow credential-login remediation.
 - **Required phase-exit journey:** Phase 11: the confirmed reporting journey (role dashboards, the thirteen registered report contracts, the separate unpublished planning report, the derived conflict fact, and bounded authorized CSV exports).
 
 ## Master phase status

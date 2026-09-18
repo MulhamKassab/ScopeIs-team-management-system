@@ -10,6 +10,13 @@ export function errorResponse(error: unknown) {
 
 export function requireSameOrigin(request: Request) {
   const origin = request.headers.get("origin");
-  const host = request.headers.get("host");
-  if (!origin || !host || new URL(origin).host !== host) throw new AppError("FORBIDDEN", "This request origin is not allowed.", 403);
+  let safe = false;
+  try {
+    const source = origin ? new URL(origin) : null;
+    const target = new URL(request.url);
+    // Next can reconstruct an internal URL with a different hostname. Host is the browser's authority.
+    const host = request.headers.get("host") ?? target.host;
+    safe = source !== null && origin === source.origin && source.host === host && source.protocol === target.protocol;
+  } catch { /* Invalid origins fail closed. */ }
+  if (!safe) throw new AppError("FORBIDDEN", "This request origin is not allowed.", 403);
 }

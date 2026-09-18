@@ -1,7 +1,6 @@
 import { expect, test } from "@playwright/test";
+import { signIn, signOut } from "./sign-in";
 test.skip(process.env.SCOPEIS_PHASE4_E2E !== "true", "Run with the guarded Phase 4 fixture runner.");
-async function signIn(page: import("@playwright/test").Page, name: string) { await page.goto("/login"); await page.getByText(name, { exact: true }).click(); await page.getByRole("button", { name: "Continue with mock persona" }).click(); await expect(page).toHaveURL(/\/dashboard$/); }
-async function signOut(page: import("@playwright/test").Page) { await page.request.post("/api/auth/logout", { headers: { Origin: new URL(page.url()).origin } }); }
 async function selectContaining(select: import("@playwright/test").Locator, text: string) { const value = await select.locator("option").filter({ hasText: text }).getAttribute("value"); if (!value) throw new Error(`Missing option: ${text}`); await select.selectOption(value); }
 
 test("Super Admin publishes a monthly assignment and Employee sees only My Schedule", async ({ page }) => {

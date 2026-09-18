@@ -50,7 +50,8 @@
         "test/integration/phase9-evidence-service.test.ts",
         "test/integration/phase10-collaboration-service.test.ts",
         "test/integration/phase10-management-note-authorization.test.ts",
-        "test/integration/phase11-reporting-service.test.ts"
+        "test/integration/phase11-reporting-service.test.ts",
+        "test/integration/credential-authentication.test.ts"
       ]
     },
     "test:migration": { "files": ["test/migration/phase2-database-foundation.test.ts"] },
@@ -67,7 +68,8 @@
         "test/e2e/phase8-planning-map.spec.ts",
         "test/e2e/phase9-evidence.spec.ts",
         "test/e2e/phase10-collaboration.spec.ts",
-        "test/e2e/phase11-reporting.spec.ts"
+        "test/e2e/phase11-reporting.spec.ts",
+        "test/e2e/credential-login.spec.ts"
       ]
     }
   },
@@ -429,6 +431,54 @@
       "concurrencyExpectation": "Not applicable.",
       "automatedTestFile": "test/e2e/foundation.spec.ts",
       "testName": "foundation shell, personas, and scope",
+      "testLayer": "e2e",
+      "status": "automated"
+    },
+    {
+      "scenarioId": "AUTH-04",
+      "owningPhase": "Phase R1",
+      "module": "authentication",
+      "requirementRef": "AUT-001..AUT-002",
+      "actor": "All five fictional users",
+      "startingRole": "N/A",
+      "activeStatus": "active",
+      "scopeGrants": "None.",
+      "preconditions": "A disposable database with the five existing users and no credential rows, plus a fictional test pepper.",
+      "input": "Username/email and password, throttle attempts, and audit-failure injection.",
+      "action": "Bootstrap credentials, log in every account by username and email, and exercise refusals, lockout, session invalidation, and audit rollback.",
+      "expectedResult": "All five accounts authenticate, refusals are identical and non-enumerating, lockout holds under concurrency, unique non-plaintext hashes are stored, and audit failure rolls back session creation.",
+      "expectedDataMutation": "Credential rows, sessions, and audit rows.",
+      "expectedAuditEvent": "auth.password_session.started, auth.password_session.refused, auth.credentials.bootstrapped.",
+      "expectedNotification": "None.",
+      "privacyExpectation": "No password, hash, salt, pepper, identifier, token, or cookie appears in audit, logs, or responses.",
+      "transactionExpectation": "Session and success audit are atomic; bootstrap writes all five or none.",
+      "concurrencyExpectation": "Concurrent failures serialize so the five-attempt threshold cannot be bypassed.",
+      "automatedTestFile": "test/integration/credential-authentication.test.ts",
+      "testName": "credential authentication service",
+      "testLayer": "integration",
+      "status": "automated"
+    },
+    {
+      "scenarioId": "AUTH-05",
+      "owningPhase": "Phase R1",
+      "module": "authentication",
+      "requirementRef": "AUT-001..AUT-002",
+      "actor": "All five fictional users",
+      "startingRole": "N/A",
+      "activeStatus": "active",
+      "scopeGrants": "TEAM team:alpha and team:bravo",
+      "preconditions": "A fresh disposable database and runner-allocated port with the credential form deployed.",
+      "input": "The credential login form on desktop and mobile.",
+      "action": "Sign in through the real form and confirm the dashboard loads with no persona list and no horizontal overflow.",
+      "expectedResult": "Credential login creates an opaque session and reaches the dashboard, and the page reveals no account list.",
+      "expectedDataMutation": "Session and audit rows.",
+      "expectedAuditEvent": "auth.password_session.started.",
+      "expectedNotification": "None.",
+      "privacyExpectation": "The login page discloses no usernames, emails, roles, or passwords.",
+      "transactionExpectation": "Not applicable.",
+      "concurrencyExpectation": "Not applicable.",
+      "automatedTestFile": "test/e2e/credential-login.spec.ts",
+      "testName": "credential login creates an opaque session and reaches the dashboard",
       "testLayer": "e2e",
       "status": "automated"
     },

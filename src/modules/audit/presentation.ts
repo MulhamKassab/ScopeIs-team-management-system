@@ -18,6 +18,10 @@ const shared = ["version", "previousVersion", "state", "previousState", "status"
 
 /** Per-action label plus the safe metadata keys that action may display. */
 export const auditActions: Record<string, { label: string; fields: readonly string[] }> = {
+  "auth.password_session.started": { label: "Signed in", fields: [] },
+  "auth.password_session.refused": { label: "Sign in refused", fields: ["reason"] },
+  "auth.password_session.ended": { label: "Signed out", fields: [] },
+  "auth.credentials.bootstrapped": { label: "Existing-user credentials initialized", fields: ["count", "outcome"] },
   "foundation.scope_grant.created": { label: "Scope grant created", fields: [...shared, "scopeType"] },
   "foundation.scope_grant.updated": { label: "Scope grant updated", fields: [...shared, "scopeType"] },
   "employee_profile.created": { label: "Employee record created", fields: [...shared, "role"] },
@@ -103,6 +107,8 @@ export function auditMetadataFields(action: string, metadata: unknown): { key: s
   if (!allowed || typeof metadata !== "object" || metadata === null || Array.isArray(metadata)) return [];
   const record = metadata as Record<string, unknown>;
   return allowed.flatMap((key) => {
+    if (action === "auth.password_session.refused" && !["invalid_credentials", "inactive", "locked"].includes(String(record[key]))) return [];
+    if (action === "auth.credentials.bootstrapped" && key === "outcome" && record[key] !== "initialized" && record[key] !== "unchanged") return [];
     const value = displayValue(record[key]);
     return value === null ? [] : [{ key, value }];
   });

@@ -13,6 +13,7 @@
     { "idx": 8, "version": "7", "when": 1788670800000, "tag": "0008_phase_7_coverage_replacements", "breakpoints": true },
     { "idx": 9, "version": "7", "when": 1788757200000, "tag": "0009_phase_8_static_planning_map", "breakpoints": true },
     { "idx": 10, "version": "7", "when": 1788843600000, "tag": "0010_phase_9_evidence_files", "breakpoints": true },
-    { "idx": 11, "version": "7", "when": 1788930000000, "tag": "0011_phase_10_collaboration_governance", "breakpoints": true }
+    { "idx": 11, "version": "7", "when": 1788930000000, "tag": "0011_phase_10_collaboration_governance", "breakpoints": true },
+    { "idx": 12, "version": "7", "when": 1789707600000, "tag": "0012_existing_user_credential_authentication", "breakpoints": true }
   ]
 }

@@ -85,6 +85,8 @@ notification, privacy, transaction, and concurrency expectations) lives in the m
 | AUTH-01 | 1 | authentication | login caller | unit | test/unit/mock-auth-boundaries.test.ts |
 | AUTH-02 | 1 | route certification | all personas | route-certification | test/route-certification/phase1-http.test.ts |
 | AUTH-03 | 1 | application shell | all personas | e2e | test/e2e/foundation.spec.ts |
+| AUTH-04 | R1 | credential authentication | all five fictional users | unit + integration | test/unit/credential-authentication.test.ts; test/integration/credential-authentication.test.ts |
+| AUTH-05 | R1 | credential login journey | all five fictional users | e2e | test/e2e/credential-login.spec.ts |
 
 ### Employee management (EMP)
 

@@ -33,6 +33,7 @@ const suites = [
   { name: "Phase 9 capability evidence service", label: "phase9_evidence", files: ["test/integration/phase9-evidence-service.test.ts"], seed: seedPhase9Journey, timeoutMs: 240_000 },
   { name: "Phase 10 collaboration and governance service", label: "phase10_collaboration", files: ["test/integration/phase10-collaboration-service.test.ts", "test/integration/phase10-management-note-authorization.test.ts"], seed: seedPhase10Journey, timeoutMs: 300_000 },
   { name: "Phase 11 reporting service", label: "phase11_reporting", files: ["test/integration/phase11-reporting-service.test.ts"], seed: seedPhase11Journey, timeoutMs: 300_000 },
+  { name: "Credential authentication service", label: "credential_authentication", files: ["test/integration/credential-authentication.test.ts"], timeoutMs: 180_000, credentials: false },
 ];
 
 // Guard against silently ignoring a newly added integration file.
@@ -54,7 +55,7 @@ for (const suite of suites) {
       const result = await runChild(process.execPath, [vitest, "run", ...suite.files, ...process.argv.slice(2)], { cwd: repositoryRoot, env, timeoutMs: suite.timeoutMs });
       exitCode = result.exitCode;
       if (result.timedOut) throw new Error(`${suite.name} timed out.`);
-    });
+    }, { credentials: suite.credentials !== false });
   } catch (error) {
     exitCode = 1;
     failure = error instanceof Error ? error.message : String(error);

@@ -13,7 +13,7 @@ export type AuthenticatedActor = {
   sessionId: string;
   sessionVersion: number;
   scopes: ScopeGrant[];
-  authenticationMode: "mock";
+  authenticationMode: "mock" | "password";
 };
 
 export type Direction = "ltr" | "rtl";
