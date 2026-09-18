@@ -185,16 +185,111 @@ revocation, demotion, deactivation, and stale-session handling still work.
 
 - Starting HEAD: `e3e2c2643255de7445c5ad80d82e8baa178e6a0e` (`docs: record
   pre-Phase12 hardening final SHA`), `main...origin/main` at `0/0`.
-- Final SHA and commit are recorded in the delivery receipt appended below after
-  the gates pass.
+- Final implementation SHA: `1b7e47fa8c5758da4f17138218de76457c0654ce`
+  (`feat: add credential authentication for existing users`), pushed to
+  `origin/main`; `main...origin/main` returned to `0/0`.
+- This report's receipt commit is recorded at the end of this section.
 
 ## Exact committed files
 
-Recorded in the delivery receipt appended below.
+60 files, committed in one commit.
+
+Source:
+
+- `src/app/(auth)/login/login-screen.tsx`, `src/app/api/auth/login/route.ts`,
+  `src/app/api/auth/mock-login/route.ts`
+- `src/modules/auth/{credential-bootstrap,credential-repository,credential-service,credential-validation,password,session-record,session-service}.ts`
+- `src/modules/audit/presentation.ts`, `src/server/env.ts`, `src/server/http.ts`,
+  `src/shared/errors/app-error.ts`, `src/shared/types/foundation.ts`
+- `src/db/schema/index.ts`, `src/db/migrations/0012_existing_user_credential_authentication.sql`,
+  `src/db/migrations/meta/_journal.json`, `src/db/migrations/meta/adoption-fingerprints.json`
+
+Scripts and harness:
+
+- `scripts/bootstrap-existing-user-credentials.ts`
+- `scripts/disposable-test-database.mjs`, `scripts/phase1-test-environment.mjs`,
+  `scripts/phase2-migration-core.mjs`, `scripts/run-phase2-safe-build.mjs`
+- `scripts/run-aggregate-integration-tests.mjs`, `scripts/run-aggregate-e2e-tests.mjs`
+- `scripts/run-credential-service-tests.mjs`, `scripts/run-credential-e2e.mjs`,
+  `playwright.credential.config.ts`
+
+Tests:
+
+- `test/unit/credential-authentication.test.ts`, `test/unit/environment-guard.test.ts`,
+  `test/unit/mock-auth-boundaries.test.ts`
+- `test/component/credential-login.test.tsx`
+- `test/integration/credential-authentication.test.ts`
+- `test/migration/phase2-database-foundation.test.ts`
+- `test/route-certification/phase1-http.test.ts`
+- `test/e2e/credential-login.spec.ts`, `test/e2e/sign-in.ts`, and the Phase 1–11
+  `test/e2e/*.spec.ts` files that now sign in through the credential form
+- `test/system-lock/scenario-manifest.json`
+
+Documentation:
+
+- `README.md`, `DOCX/INDEX.md`
+- `DOCX/project-memory/CREDENTIAL_AUTHENTICATION_DECISIONS.md`
+- `DOCX/project-memory/{DECISIONS_AND_CONSTRAINTS,IMPLEMENTATION_ROADMAP,IMPLEMENTATION_STATUS_LOG,IMPLEMENTATION_STATUS_TRACKER,ROLE_AND_PERMISSION_MODEL,SYSTEM_WIDE_TEST_SCENARIO_CATALOG}.md`
+- `DOCX/phase-reports/SCOPEIS_EXISTING_USER_CREDENTIAL_AUTHENTICATION_R1.md`
+
+`.env*`, `prototype/full-frontend-r1/`, `scripts/remediate-r2-persistent-test-incident.mjs`,
+and the Preview worktree were excluded.
 
 ## Push result
 
-Recorded in the delivery receipt appended below.
+`git push origin main` succeeded after switching the active GitHub CLI account from
+`m-kassab` (403 on the `MulhamKassab` repository) to `MulhamKassab`. `main` and
+`origin/main` both resolve to `1b7e47fa8c5758da4f17138218de76457c0654ce` (`0/0`).
+The Preview worktree remained at `7c401c6`; the prototype and the historical
+remediation script remained untracked and untouched.
+
+## Delivery receipt and Production status
+
+**Status: `SCOPEIS_CREDENTIAL_AUTH_BLOCKED`.**
+
+What completed and was verified:
+
+- All local gates above passed on the committed tree, including two consecutive
+  `npm run test:system-lock` runs, each GREEN at 14/14 steps.
+- The commit was pushed; Vercel's Git integration auto-deployed `main` to
+  Production at `https://scopeis-team-management-system.vercel.app` (deployment
+  `dpl_GJUPUUJRWNQSyhYzbKB2aSVruWz4`, created 2026-09-18 09:27 GST).
+- The deployed login page renders the credential form (`Sign in`,
+  `Username or email`) with no persona list.
+- `POST /api/auth/mock-login` returns `404` in Production regardless of the flag.
+- `POST /api/auth/login` returns the safe no-store/nosniff response (currently
+  `503 AUTH_UNAVAILABLE`, because `AUTH_PASSWORD_PEPPER` is not yet configured).
+
+Why Production login is not yet functional, and why the remaining Production
+mutation was stopped:
+
+1. `AUTH_PASSWORD_PEPPER` is not configured in the Vercel Production
+   environment, so the credential service fails closed with `503`.
+2. Migration `0012_existing_user_credential_authentication.sql` has not been
+   confirmed applied to the Production database, and no `user_credentials`
+   bootstrap has run.
+3. The Production `DATABASE_URL` is a write-only Vercel Secret. It cannot be
+   materialized locally (`vercel env pull` writes `[SENSITIVE]`; `vercel env run`
+   reports the secret cannot be pulled), and no Neon CLI credential, API key, or
+   `.pgpass` is available. There is therefore no verified path to confirm the
+   Production target identity, current migration state, or an appropriate
+   backup/recovery point, and no way to run the guarded migration and bootstrap.
+
+Because target identity, migration state, and recovery-point evidence are
+unconfirmed, Production mutation was stopped per the remediation's own gate. The
+remaining cutover steps are exactly:
+
+1. Confirm the Neon/PostgreSQL target identity and a verified recovery point.
+2. Add `AUTH_PASSWORD_PEPPER` (32+ random bytes) as a Vercel Production secret.
+3. Apply `0012_existing_user_credential_authentication.sql` once via the guarded
+   migration CLI and confirm State D at 13 ledger rows.
+4. Run `scripts/bootstrap-existing-user-credentials.ts` once with the approved
+   temporary password, the Production confirmation guard, and the exact target
+   verification; confirm five credential rows with five distinct non-plaintext
+   hashes.
+5. Redeploy so the new environment takes effect, then verify all five accounts
+   through the deployed login, each role/scope boundary, mock-login unavailability,
+   logout/session invalidation, and no secret or password in Vercel logs.
 
 ## Remaining limitations
 
