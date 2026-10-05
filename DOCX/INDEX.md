@@ -2,7 +2,7 @@
 
 ## Latest task discovery and planning-map experience — 2026-10-05
 
-See the [experience review](phase-reports/SCOPEIS_UI_EXPERIENCE_AND_PLANNING_MAP_2026_10_05.md) for the dashboard-to-task journey, role-aware feature discovery, usable planning map, authorized schedule/coverage handoffs and fresh desktop/mobile screenshots. The approved requirements extend the [UI foundation](project-memory/UI_UX_FOUNDATION.md) and [map decisions](project-memory/PHASE_8_STATIC_PLANNING_MAP_DECISIONS.md). Evidence is separate from earlier responsive, visual and audit receipts; the [live tracker](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) records current verification and Git delivery.
+See the [experience review](phase-reports/SCOPEIS_UI_EXPERIENCE_AND_PLANNING_MAP_2026_10_05.md) for the dashboard-to-task journey, role-aware feature discovery, usable planning map, authorized schedule/coverage handoffs and fresh desktop/mobile screenshots. The approved requirements extend the [UI foundation](project-memory/UI_UX_FOUNDATION.md) and [map decisions](project-memory/PHASE_8_STATIC_PLANNING_MAP_DECISIONS.md). The clean 14/14 system lock includes all 11 responsive checks. Implementation commit `22d2b4d` is pushed and verified on `origin/main`; see the [delivery receipt](phase-reports/evidence/ui-experience-2026-10-05/delivery.json). Evidence is separate from earlier receipts, and production deployment remains unverified.
 
 ## Latest visual refinement — 2026-10-05
 
