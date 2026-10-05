@@ -12,12 +12,15 @@ import "@/app/secondary.css";
 import "@/app/responsive.css";
 import "@/app/visuals.css";
 import "@/app/experience.css";
+import "@/app/route-motion.css";
+import "@/app/motion.css";
 import { directionSchema } from "@/shared/validation/foundation";
 import { ThemeBootScript } from "@/shared/components/theme-provider";
+import { AppMotion } from "@/shared/components/app-motion";
 
 export const metadata: Metadata = { title: "ScopeIs Team Management", description: "ScopeIs internal workforce planning foundation" };
 export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", interactiveWidget: "resizes-content" };
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const candidate = (await cookies()).get("scopeis-direction")?.value; const direction = directionSchema.safeParse(candidate).data ?? "ltr";
-  return <html lang="en" dir={direction} suppressHydrationWarning><body><ThemeBootScript />{children}</body></html>;
+  return <html lang="en" dir={direction} suppressHydrationWarning><body><ThemeBootScript /><AppMotion />{children}</body></html>;
 }

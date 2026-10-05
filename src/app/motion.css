@@ -1,0 +1,209 @@
+/* ScopeIs motion: short arrivals, clear direction and a tactile response to real interaction.
+   This final layer never changes layout, geographic positions or native control semantics. */
+:root {
+  --motion-touch: 160ms;
+  --motion-control: 220ms;
+  --motion-arrival: 440ms;
+  --motion-dialog-enter: 320ms;
+  --motion-dialog-exit: 180ms;
+  --motion-ease-arrive: cubic-bezier(.16, 1, .3, 1);
+  --motion-ease-depart: cubic-bezier(.4, 0, .7, .2);
+  --motion-inline-origin: -22px;
+  --motion-inline-forward: 4px;
+  --motion-inline-back: -4px;
+  --motion-press-ink: color-mix(in srgb, currentColor 16%, transparent);
+}
+html[dir="rtl"] {
+  --motion-inline-origin: 22px;
+  --motion-inline-forward: -4px;
+  --motion-inline-back: 4px;
+}
+:root[data-theme="dark"] { --motion-press-ink: color-mix(in srgb, currentColor 20%, transparent); }
+
+/* The runtime opts in real content once. Unobserved content remains readable, including
+   with JavaScript unavailable. Never animate a whole page wrapper containing a map. */
+#page-content > :first-child { animation: none; }
+:is([data-motion][data-motion-visible="true"], #page-content > [data-motion][data-motion-visible="true"]) {
+  animation-duration: var(--motion-arrival);
+  animation-timing-function: var(--motion-ease-arrive);
+  animation-delay: var(--motion-delay, 0ms);
+  animation-iteration-count: 1;
+  animation-fill-mode: backwards;
+}
+:is([data-motion="rise"][data-motion-visible="true"], #page-content > [data-motion="rise"][data-motion-visible="true"]) { animation-name: scopeis-content-rise; }
+:is([data-motion="inline"][data-motion-visible="true"], #page-content > [data-motion="inline"][data-motion-visible="true"]) { animation-name: scopeis-content-inline; }
+:is([data-motion="drop"][data-motion-visible="true"], #page-content > [data-motion="drop"][data-motion-visible="true"]) { animation-name: scopeis-content-drop; animation-duration: 500ms; }
+
+/* Translation composes with existing icon flips and centering. Hit targets never scale. */
+:is(.button, .icon-button, .collapse-button, .logout-button, .nav-links a,
+  .record-navigation a, .account-popover a, .account-popover button,
+  .workspace-shortcuts a, .workspace-feature-group a, .map-detail-actions a,
+  .map-attention-controls button, .map-layer-controls button, .map-assignment-results button,
+  .bottom-nav a, .bottom-nav button, .persona, summary) {
+  transition: translate var(--motion-control) var(--motion-ease-arrive),
+    background-color var(--motion-touch) ease, color var(--motion-touch) ease,
+    border-color var(--motion-touch) ease, box-shadow var(--motion-control) ease;
+}
+:is(.button, .icon-button, .collapse-button, .logout-button,
+  .map-attention-controls button, .map-layer-controls button, .map-assignment-results button):active:not(:disabled):not([aria-disabled="true"]) {
+  translate: 0 1px;
+}
+:is(.nav-links a, .record-navigation a, .workspace-shortcuts a,
+  .workspace-feature-group a, .account-popover a, .account-popover button):active { translate: 0 1px; }
+:is(.button, .icon-button, .collapse-button, .logout-button):disabled { translate: none; }
+
+/* A single bloom is emitted only after a pointer or keyboard press. ::before remains
+   available to the real pending spinner and selected mobile-navigation accent. */
+:where(button, .button, .icon-button, .collapse-button, .logout-button, summary, .persona,
+  .nav-links a, .record-navigation a, .workspace-shortcuts a,
+  .workspace-feature-group a, .map-detail-actions a, .account-popover a,
+  .bottom-nav a, .reporting-card-link):not(.map-marker):not(.skip-link)[data-motion-press] {
+  position: relative;
+  isolation: isolate;
+}
+:is(button, .button, .icon-button, .collapse-button, .logout-button, summary, .persona,
+  .nav-links a, .record-navigation a, .workspace-shortcuts a,
+  .workspace-feature-group a, .map-detail-actions a, .account-popover a,
+  .bottom-nav a, .reporting-card-link):not(.map-marker):not(.skip-link)[data-motion-press]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: radial-gradient(circle at var(--motion-press-x, 50%) var(--motion-press-y, 50%), var(--motion-press-ink) 0%, var(--motion-press-ink) 16%, transparent 68%);
+  animation: scopeis-control-bloom 520ms var(--motion-ease-arrive) both;
+}
+.task-dialog-heading .icon-button[data-motion-press] { position: sticky; }
+
+/* Inner icons give direction without making the surrounding text or touch target jump. */
+:is(.button, .reporting-text-link, .reporting-report-title, .workspace-shortcuts a,
+  .workspace-feature-group a, .map-detail-actions a, .record-breadcrumbs a) :is(.lucide-arrow-right, .lucide-chevron-right),
+:is(.button, .reporting-back-link, .record-breadcrumbs a) :is(.lucide-arrow-left, .lucide-chevron-left) {
+  transition: translate var(--motion-control) var(--motion-ease-arrive);
+}
+:is(.button, .reporting-text-link, .reporting-report-title, .workspace-shortcuts a,
+  .workspace-feature-group a, .map-detail-actions a):focus-visible :is(.lucide-arrow-right, .lucide-chevron-right) { translate: var(--motion-inline-forward) 0; }
+:is(.button, .reporting-back-link, .record-breadcrumbs a):focus-visible :is(.lucide-arrow-left, .lucide-chevron-left) { translate: var(--motion-inline-back) 0; }
+.nav-links a > svg, .bottom-nav :is(a, button) > svg, .header-actions .icon-button > svg {
+  transition: translate var(--motion-control) var(--motion-ease-arrive), rotate var(--motion-control) var(--motion-ease-arrive);
+}
+.bottom-nav a[aria-current="page"] > svg { animation: scopeis-nav-settle 360ms var(--motion-ease-arrive); }
+.bottom-nav a[aria-current="page"]::before { animation: scopeis-accent-arrive 320ms var(--motion-ease-arrive); }
+.account-menu summary > svg { transition: rotate 260ms var(--motion-ease-arrive); }
+.account-menu[open] summary > svg { rotate: 180deg; }
+
+/* Field focus rises through its label and ring, while native input geometry stays fixed. */
+label { transition: color var(--motion-control) ease; }
+label > span:first-child:not([aria-hidden="true"]) { transition: translate var(--motion-control) var(--motion-ease-arrive), color var(--motion-control) ease; }
+label:focus-within > span:first-child:not([aria-hidden="true"]) { translate: 0 -1px; }
+:is(.app-shell, .task-dialog, .login-card) :is(input, select, textarea):focus-visible {
+  transition: border-color var(--motion-touch) ease, box-shadow 260ms var(--motion-ease-arrive), background-color var(--motion-touch) ease;
+}
+:is(.workspace-feature-search, .map-list-search):focus-within > svg { color: var(--primary); }
+:is(.workspace-feature-search, .map-list-search) > svg { transition: color var(--motion-control) ease; }
+
+/* Native dialogs retain transform: translateY(-50%) from the viewport-aware layout.
+   The finite exit name is part of TaskDialog's dismissal lifecycle. */
+.task-dialog[open] { animation: scopeis-dialog-enter var(--motion-dialog-enter) var(--motion-ease-arrive) both; }
+.task-dialog[open]::backdrop { animation: scopeis-reveal 260ms ease both; }
+.task-dialog[open][data-motion-state="closing"] {
+  animation: scopeis-dialog-exit var(--motion-dialog-exit) var(--motion-ease-depart) forwards;
+}
+.task-dialog[open][data-motion-state="closing"]::backdrop { animation: scopeis-backdrop-exit var(--motion-dialog-exit) ease forwards; }
+.task-dialog[open] .task-dialog-heading h2 { animation: scopeis-content-inline 400ms var(--motion-ease-arrive) 40ms backwards; }
+.task-dialog[open] .task-dialog-heading p { animation: scopeis-content-rise 420ms var(--motion-ease-arrive) 75ms backwards; }
+.task-dialog[open] .task-dialog-heading > .icon-button { animation: scopeis-content-drop 340ms var(--motion-ease-arrive) 45ms backwards; }
+.task-dialog[open][data-motion-state="closing"] :is(.task-dialog-heading h2, .task-dialog-heading p, .task-dialog-heading > .icon-button) { animation: none; }
+
+/* Popovers descend from their source; disclosures reveal into the reading flow. */
+.account-menu[open] .account-popover { animation: scopeis-popover-enter 280ms var(--motion-ease-arrive) both; }
+.account-menu[open] .account-popover > :is(a, button) { animation: scopeis-content-inline 300ms var(--motion-ease-arrive) backwards; }
+.account-menu[open] .account-popover > a { animation-delay: 30ms; }
+.account-menu[open] .account-popover > button { animation-delay: 60ms; }
+details[open]:not(.account-menu) > :not(summary):not([data-motion]) { animation: scopeis-disclosure-arrive 300ms var(--motion-ease-arrive) backwards; }
+:is(.form-error, .form-success, .operation-error, .operation-success, .schedule-error,
+  .schedule-success, .workflow-feedback):not(:empty):not([data-motion]) { animation: scopeis-feedback-arrive 300ms var(--motion-ease-arrive) backwards; }
+
+/* More navigation is a vertical sheet; its links arrive from the logical inline edge. */
+.mobile-sheet-backdrop { animation: scopeis-reveal 240ms ease both; }
+.mobile-sheet { animation: scopeis-sheet-enter 360ms var(--motion-ease-arrive) both; }
+.mobile-sheet-backdrop:has(> .mobile-sheet[data-motion-state="closing"]) { animation: scopeis-backdrop-exit 180ms ease forwards; }
+.mobile-sheet[data-motion-state="closing"] { animation: scopeis-sheet-exit 180ms var(--motion-ease-depart) forwards; }
+.mobile-sheet .sheet-header { animation: scopeis-content-drop 380ms var(--motion-ease-arrive) 35ms backwards; }
+.mobile-sheet .nav-group { animation: scopeis-content-inline 390ms var(--motion-ease-arrive) backwards; }
+.mobile-sheet .nav-group:nth-child(1) { animation-delay: 45ms; }
+.mobile-sheet .nav-group:nth-child(2) { animation-delay: 75ms; }
+.mobile-sheet .nav-group:nth-child(3) { animation-delay: 105ms; }
+.mobile-sheet .nav-group:nth-child(4) { animation-delay: 135ms; }
+.mobile-sheet .nav-group:nth-child(5) { animation-delay: 165ms; }
+.mobile-sheet .logout-button { animation: scopeis-content-rise 390ms var(--motion-ease-arrive) 140ms backwards; }
+.mobile-sheet[data-motion-state="closing"] :is(.sheet-header, .nav-group, .logout-button) { animation: none; }
+
+/* Marker anchors remain completely still. Only their decoration reacts to selection. */
+.planning-map-canvas, .planning-map-tiles, .planning-map-associations { animation: none; }
+.map-marker { translate: none !important; animation: none !important; }
+.map-marker > svg { transition: translate var(--motion-control) var(--motion-ease-arrive); }
+.map-marker.selected > svg { animation: scopeis-marker-settle 360ms var(--motion-ease-arrive); }
+.map-marker.selected { animation: none; }
+
+@media (max-width: 1024px) {
+  :root { --motion-inline-origin: -12px; }
+  html[dir="rtl"] { --motion-inline-origin: 12px; }
+}
+@media (min-width: 1025px) {
+  .sidebar { animation: scopeis-sidebar-arrive 440ms var(--motion-ease-arrive) backwards; }
+  .top-header { animation: scopeis-content-drop 420ms var(--motion-ease-arrive) backwards; }
+  .sidebar .nav-group { animation: scopeis-content-inline 420ms var(--motion-ease-arrive) backwards; }
+  .sidebar .nav-group:nth-child(1) { animation-delay: 35ms; }
+  .sidebar .nav-group:nth-child(2) { animation-delay: 60ms; }
+  .sidebar .nav-group:nth-child(3) { animation-delay: 85ms; }
+  .sidebar .nav-group:nth-child(4) { animation-delay: 110ms; }
+  .sidebar .nav-group:nth-child(5) { animation-delay: 135ms; }
+}
+@media (hover: hover) and (pointer: fine) {
+  :is(.button, .icon-button, .collapse-button, .logout-button):hover:not(:disabled):not([aria-disabled="true"]) { translate: 0 -1px; }
+  :is(.button, .icon-button, .collapse-button, .logout-button):active:not(:disabled) { translate: 0 1px; }
+  .nav-links a:hover > svg { translate: var(--motion-inline-forward) 0; }
+  .bottom-nav :is(a, button):hover > svg, .header-actions .icon-button:hover > svg { translate: 0 -2px; }
+  :is(.button, .reporting-text-link, .reporting-report-title, .workspace-shortcuts a,
+    .workspace-feature-group a, .map-detail-actions a):hover :is(.lucide-arrow-right, .lucide-chevron-right) { translate: var(--motion-inline-forward) 0; }
+  :is(.button, .reporting-back-link, .record-breadcrumbs a):hover :is(.lucide-arrow-left, .lucide-chevron-left) { translate: var(--motion-inline-back) 0; }
+  .map-marker:hover > svg { translate: 0 -2px; }
+}
+
+@keyframes scopeis-content-rise { from { opacity: 0; translate: 0 20px; } to { opacity: 1; translate: 0 0; } }
+@keyframes scopeis-content-inline { from { opacity: 0; translate: var(--motion-inline-origin) 0; } to { opacity: 1; translate: 0 0; } }
+@keyframes scopeis-content-drop { from { opacity: 0; translate: 0 -14px; } to { opacity: 1; translate: 0 0; } }
+@keyframes scopeis-control-bloom { 0% { opacity: 0; clip-path: circle(0 at var(--motion-press-x, 50%) var(--motion-press-y, 50%)); } 18% { opacity: 1; } 100% { opacity: 0; clip-path: circle(150% at var(--motion-press-x, 50%) var(--motion-press-y, 50%)); } }
+@keyframes scopeis-nav-settle { from { translate: 0 4px; } to { translate: 0 0; } }
+@keyframes scopeis-accent-arrive { from { opacity: 0; scale: .3 1; } to { opacity: 1; scale: 1 1; } }
+@keyframes scopeis-dialog-enter { from { opacity: 0; translate: 0 22px; } to { opacity: 1; translate: 0 0; } }
+@keyframes scopeis-dialog-exit { from { opacity: 1; translate: 0 0; } to { opacity: 0; translate: 0 12px; } }
+@keyframes scopeis-backdrop-exit { from { opacity: 1; } to { opacity: 0; } }
+@keyframes scopeis-popover-enter { from { opacity: 0; translate: 0 -10px; } to { opacity: 1; translate: 0 0; } }
+@keyframes scopeis-disclosure-arrive { from { opacity: 0; translate: 0 -7px; } to { opacity: 1; translate: 0 0; } }
+@keyframes scopeis-feedback-arrive { from { opacity: 0; translate: var(--motion-inline-origin) 0; } to { opacity: 1; translate: 0 0; } }
+@keyframes scopeis-sheet-enter { from { opacity: .6; translate: 0 32px; } to { opacity: 1; translate: 0 0; } }
+@keyframes scopeis-sheet-exit { from { opacity: 1; translate: 0 0; } to { opacity: 0; translate: 0 24px; } }
+@keyframes scopeis-sidebar-arrive { from { opacity: .5; translate: var(--motion-inline-origin) 0; } to { opacity: 1; translate: 0 0; } }
+@keyframes scopeis-marker-settle { 0% { translate: 0 3px; } 60% { translate: 0 -2px; } 100% { translate: 0 0; } }
+
+@media (forced-colors: active) {
+  [data-motion-press]::after { display: none; }
+  :is(.button, .icon-button, .collapse-button, .logout-button):focus-visible { outline-color: Highlight; }
+  label:focus-within { color: LinkText; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after, *::backdrop { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  [data-motion] { opacity: 1; translate: none !important; }
+  :is(.button, .icon-button, .collapse-button, .logout-button, .nav-links a,
+    .record-navigation a, .workspace-shortcuts a, .workspace-feature-group a,
+    .account-popover a, .account-popover button, .map-attention-controls button,
+    .map-layer-controls button, .map-assignment-results button) { translate: none !important; }
+  :is(.button, .icon-button, .nav-links a, .bottom-nav a, .bottom-nav button,
+    .reporting-text-link, .reporting-back-link, .reporting-report-title,
+    .workspace-shortcuts a, .workspace-feature-group a, .map-detail-actions a,
+    .record-breadcrumbs a, .map-marker) svg { translate: none !important; }
+  label > span:first-child:not([aria-hidden="true"]) { translate: none !important; }
+  [data-motion-press]::after { display: none; }
+}

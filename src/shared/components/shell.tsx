@@ -32,6 +32,7 @@ export function ApplicationShell({ actor, navigation, title, children }: { actor
   const [collapsed, setCollapsed] = useState(false); const [moreOpen, setMoreOpen] = useState(false);
   const [logoutError, setLogoutError] = useState(""); const [loggingOut, setLoggingOut] = useState(false);
   const moreTrigger = useRef<HTMLButtonElement>(null); const moreDialog = useRef<HTMLElement>(null); const accountMenu = useRef<HTMLDetailsElement>(null);
+  const moreExit = useRef<(() => void) | null>(null);
   const active = navigation.find((item) => selected(pathname, item.href));
   useEffect(() => {
     if (!moreOpen) return;
@@ -42,13 +43,29 @@ export function ApplicationShell({ actor, navigation, title, children }: { actor
     const closeOnDesktop = (event: MediaQueryListEvent) => { if (event.matches) setMoreOpen(false); };
     desktop?.addEventListener("change", closeOnDesktop);
     return () => {
+      moreExit.current?.(); moreExit.current = null;
       desktop?.removeEventListener("change", closeOnDesktop); document.body.style.overflow = previousOverflow;
       if (desktop?.matches) document.querySelector<HTMLAnchorElement>('.sidebar a[aria-current="page"]')?.focus();
       else trigger?.focus();
     };
   }, [moreOpen]);
+  function closeMore(animate = true) {
+    const sheet = moreDialog.current;
+    const finish = () => { moreExit.current?.(); moreExit.current = null; setMoreOpen(false); };
+    if (!animate || !sheet || window.matchMedia?.("(prefers-reduced-motion: reduce)").matches || typeof sheet.getAnimations !== "function") { finish(); return; }
+    if (moreExit.current) return;
+    sheet.dataset.motionState = "closing";
+    const style = getComputedStyle(sheet);
+    const duration = Number.parseFloat(style.animationDuration) * (style.animationDuration.endsWith("ms") ? 1 : 1000);
+    if (style.animationName !== "scopeis-sheet-exit" || !Number.isFinite(duration) || duration <= 0) { finish(); return; }
+    const ended = (event: AnimationEvent) => { if (event.target === sheet && !event.pseudoElement && event.animationName === "scopeis-sheet-exit") finish(); };
+    sheet.addEventListener("animationend", ended);
+    sheet.addEventListener("animationcancel", ended);
+    const timeout = window.setTimeout(finish, Math.min(duration, 2000) + 80);
+    moreExit.current = () => { window.clearTimeout(timeout); sheet.removeEventListener("animationend", ended); sheet.removeEventListener("animationcancel", ended); };
+  }
   function handleDialogKeyDown(event: KeyboardEvent<HTMLElement>) {
-    if (event.key === "Escape") { event.preventDefault(); setMoreOpen(false); return; }
+    if (event.key === "Escape") { event.preventDefault(); closeMore(); return; }
     if (event.key !== "Tab") return;
     const controls = event.currentTarget.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex="0"]');
     const first = controls[0]; const last = controls[controls.length - 1];
@@ -82,6 +99,6 @@ export function ApplicationShell({ actor, navigation, title, children }: { actor
     </header>
     <main id="main-content" className="main-content" inert={moreOpen}><div id="page-content" tabIndex={-1}>{children}</div></main>
     <nav className="bottom-nav" aria-label="Mobile primary navigation" style={{ gridTemplateColumns: `repeat(${mobilePrimary.length + 1}, minmax(0, 1fr))` }} inert={moreOpen}>{mobilePrimary.map((item) => { const Icon = icons[item.key]; return <Link key={item.key} href={item.href} aria-label={item.label} aria-current={selected(pathname, item.href) ? "page" : undefined}><Icon size={21} aria-hidden="true" /><small>{mobileLabels[item.key] ?? item.label}</small></Link>; })}<button ref={moreTrigger} type="button" aria-haspopup="dialog" aria-controls="more-navigation" aria-expanded={moreOpen} onClick={() => setMoreOpen(true)}><MoreHorizontal size={23} aria-hidden="true" /><small>More</small></button></nav>
-    {moreOpen && <div className="mobile-sheet-backdrop" role="presentation" onMouseDown={() => setMoreOpen(false)}><section ref={moreDialog} id="more-navigation" className="mobile-sheet" role="dialog" aria-modal="true" aria-label="More navigation" onKeyDown={handleDialogKeyDown} onMouseDown={(event) => event.stopPropagation()}><div className="sheet-header"><strong>More</strong><button className="icon-button" aria-label="Close more navigation" onClick={() => setMoreOpen(false)}><X size={20} aria-hidden="true" /></button></div><NavLinks items={remaining} close={() => setMoreOpen(false)} /><button className="logout-button" onClick={logout} disabled={loggingOut}>{loggingOut ? "Signing out…" : "Log out"}</button>{logoutError ? <p role="alert" className="form-error">{logoutError}</p> : null}</section></div>}
+    {moreOpen && <div className="mobile-sheet-backdrop" role="presentation" onMouseDown={() => closeMore()}><section ref={moreDialog} id="more-navigation" className="mobile-sheet" role="dialog" aria-modal="true" aria-label="More navigation" onKeyDown={handleDialogKeyDown} onMouseDown={(event) => event.stopPropagation()}><div className="sheet-header"><strong>More</strong><button className="icon-button" aria-label="Close more navigation" onClick={() => closeMore()}><X size={20} aria-hidden="true" /></button></div><NavLinks items={remaining} close={() => closeMore(false)} /><button className="logout-button" onClick={logout} disabled={loggingOut}>{loggingOut ? "Signing out…" : "Log out"}</button>{logoutError ? <p role="alert" className="form-error">{logoutError}</p> : null}</section></div>}
   </div>;
 }

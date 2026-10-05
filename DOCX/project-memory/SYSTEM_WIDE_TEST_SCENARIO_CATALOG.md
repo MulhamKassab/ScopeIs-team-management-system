@@ -27,15 +27,15 @@ exceptions are rare and carry an explicit justification.
 | Skills and operational requirements | SKL | 4 |
 | Coverage and replacement | CVR | 4 |
 | Static planning map | MAP | 5 |
-| Responsive presentation and task discovery | UI | 2 |
+| Responsive presentation, task discovery and motion | UI | 3 |
 | Certifications, evidence, CVs, portfolios, files | EVD | 4 |
 | Notes, discussions | COL | 4 |
 | Notifications | NTF | 2 |
 | Audit | AUD | 2 |
 | Dashboards, reports, exports | RPT | 4 |
-| **Total** | | **70** |
+| **Total** | | **71** |
 
-70 scenarios total: 69 automated and 1 justified manual-only (performance/resource sanity). The October 5 presentation extension adds `UI-01`, `UI-02` and `MAP-05`; the inventory also includes the previously registered credential/account scenarios. Historical hardening receipts retain their original counts.
+71 scenarios total: 70 automated and 1 justified manual-only (performance/resource sanity). The October 5 presentation extensions add `UI-01`, `UI-02`, `UI-03` and `MAP-05`; the inventory also includes the previously registered credential/account scenarios. The final motion verification passed the full 14/14 system lock, including all 12 responsive checks and the `UI-03` finite-motion journey. See the [motion verification receipt](../phase-reports/evidence/motion-refinement-2026-10-05/verification.json). Historical hardening receipts retain their original counts.
 
 ## Automated evidence inventory
 
@@ -175,6 +175,7 @@ notification, privacy, transaction, and concurrency expectations) lives in the m
 |---|---|---|---|---|
 | UI-01 | 1–11 | role-aware feature discovery | component | test/component/workspace-guide.test.tsx |
 | UI-02 | 1–11 | responsive, visual, discovery and map journeys | e2e | test/e2e/responsive.spec.ts |
+| UI-03 | 1–11 | finite motion, modal focus and desktop/phone interactions | e2e | test/e2e/responsive.spec.ts |
 
 The aggregate E2E runner includes the guarded responsive runner as its fourteenth suite. Each suite owns its disposable database and port; the UI runner uses an isolated safe build and fictional edge-case fixtures. Presentation checks do not replace service authorization evidence or certify physical devices.
 

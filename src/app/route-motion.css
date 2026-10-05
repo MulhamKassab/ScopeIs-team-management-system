@@ -1,0 +1,13 @@
+/* Route snapshots leave navigation fixed and let pointer events reach the live UI. */
+::view-transition { pointer-events: none; }
+::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+::view-transition-group(.scopeis-route-arrive), ::view-transition-group(.scopeis-route-depart) { animation-duration: 320ms; }
+::view-transition-new(.scopeis-route-arrive) { animation: scopeis-route-arrive 320ms var(--ease-out) both; }
+::view-transition-old(.scopeis-route-depart) { animation: scopeis-route-depart 160ms ease-out both; }
+:root { --route-inline: 18px; }
+html[dir="rtl"] { --route-inline: -18px; }
+@keyframes scopeis-route-arrive { from { opacity: 0; translate: var(--route-inline) 0; } to { opacity: 1; translate: 0 0; } }
+@keyframes scopeis-route-depart { from { opacity: 1; translate: 0 0; } to { opacity: 0; translate: calc(-1 * var(--route-inline)) 0; } }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; animation-duration: 0s !important; animation-delay: 0s !important; }
+}

@@ -1,5 +1,9 @@
 - [Super Admin account and credential management report](phase-reports/SCOPEIS_SUPER_ADMIN_ACCOUNT_AND_CREDENTIAL_MANAGEMENT_R1.md)
 
+## Latest expressive motion — 2026-10-05
+
+See the [motion implementation and evidence](phase-reports/SCOPEIS_EXPRESSIVE_MOTION_2026_10_05.md) for directional content and route transitions, press feedback, native popup/sheet entrances and exits, and fresh desktop/phone visuals. The [motion foundation](project-memory/UI_UX_FOUNDATION.md) preserves responsive layout, roles, RTL, native controls and reduced-motion behavior. The final system lock passed 14/14 gates with all 12 responsive checks, 523 unique automated cases and 369 matching frozen inputs. Implementation and verification are complete; authorized main delivery is pending. Earlier receipts remain historical evidence.
+
 ## Latest task discovery and planning-map experience — 2026-10-05
 
 See the [experience review](phase-reports/SCOPEIS_UI_EXPERIENCE_AND_PLANNING_MAP_2026_10_05.md) for the dashboard-to-task journey, role-aware feature discovery, usable planning map, authorized schedule/coverage handoffs and fresh desktop/mobile screenshots. The approved requirements extend the [UI foundation](project-memory/UI_UX_FOUNDATION.md) and [map decisions](project-memory/PHASE_8_STATIC_PLANNING_MAP_DECISIONS.md). The clean 14/14 system lock includes all 11 responsive checks. Implementation commit `22d2b4d` is pushed and verified on `origin/main`; see the [delivery receipt](phase-reports/evidence/ui-experience-2026-10-05/delivery.json). Evidence is separate from earlier receipts, and production deployment remains unverified.

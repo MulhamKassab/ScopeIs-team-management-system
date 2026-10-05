@@ -20,13 +20,103 @@ const viewports = [
   { width: 1280, height: 800 }, { width: 1920, height: 1080 },
 ];
 
+test.describe("expressive motion", () => {
+  test("motion stays finite, preserves modal focus and works across desktop and phone", async ({ browser, baseURL }, testInfo) => {
+    const context = await browser.newContext({ baseURL, hasTouch: true, viewport: { width: 1280, height: 900 }, recordVideo: { dir: testInfo.outputPath("motion-video"), size: { width: 1280, height: 900 } } });
+    const page = await context.newPage();
+    try {
+      await page.addInitScript(() => {
+        const evidence = window as Window & { scopeisMotionNames: string[] };
+        evidence.scopeisMotionNames = [];
+        document.addEventListener("animationstart", (event) => evidence.scopeisMotionNames.push(event.animationName));
+      });
+      await signIn(page, "Nora Albright");
+      await expect(page.locator('.reporting-cards > li[data-motion]').first()).toBeVisible();
+      // Completed CSS effects can lose their finished promise when an enhancement
+      // removes its opt-in attribute. Poll live movement instead of awaiting stale effects.
+      const settle = () => expect.poll(() => page.evaluate(() => document.getAnimations().filter((animation) => animation.playState === "running" && animation.effect?.getComputedTiming().iterations !== Infinity).length)).toBe(0);
+      await settle();
+      await page.locator('.sidebar a[href="/reports"]').click();
+      await expect(page).toHaveURL(/\/reports$/);
+      await settle();
+      const names = await page.evaluate(() => (window as Window & { scopeisMotionNames: string[] }).scopeisMotionNames);
+      expect(names).toContain("scopeis-content-drop");
+      expect(names).toContain("scopeis-content-inline");
+      if (await page.evaluate(() => CSS.supports("view-transition-name", "scopeis"))) expect(names).toContain("scopeis-route-arrive");
+
+      const featureTrigger = page.getByRole("button", { name: "Find a feature" });
+      await featureTrigger.focus();
+      await page.keyboard.press("Space");
+      const dialog = page.getByRole("dialog", { name: "What would you like to do?" });
+      await expect(dialog).toBeVisible();
+      await expect(page.getByRole("searchbox", { name: "Search workspace features" })).toBeFocused();
+      await settle();
+      await captureVisual(page, testInfo, "1280-motion-feature-dialog.png");
+      const close = dialog.getByRole("button", { name: "Close", exact: true });
+      await close.hover();
+      await page.mouse.down();
+      await expect(close).toHaveAttribute("data-motion-press", "true");
+      expect(await close.evaluate((element) => getComputedStyle(element).position)).toBe("sticky");
+      await page.mouse.up();
+      await expect(dialog).toHaveAttribute("data-motion-state", "closing");
+      expect(await dialog.evaluate((element) => element.matches(":modal"))).toBe(true);
+      expect(await dialog.evaluate((element) => getComputedStyle(element).pointerEvents)).toBe("auto");
+      expect(await page.evaluate(() => document.body.style.overflow)).toBe("hidden");
+      await page.keyboard.press("Escape");
+      await expect(dialog).not.toBeVisible();
+      await expect(featureTrigger).toBeFocused();
+      // A new action immediately after dismissal must wait for the native modal
+      // to leave, then activate successfully rather than hit an inert background.
+      await featureTrigger.click();
+      await expect(dialog).toBeVisible();
+      await dialog.getByRole("button", { name: "Close", exact: true }).click();
+      await featureTrigger.click();
+      await expect(dialog).toBeVisible();
+      await page.keyboard.press("Escape");
+      await expect(dialog).not.toBeVisible();
+
+      await page.setViewportSize({ width: 390, height: 844 });
+      const more = page.getByRole("button", { name: "More", exact: true });
+      await more.click();
+      const sheet = page.getByRole("dialog", { name: "More navigation" });
+      await expect(sheet).toBeVisible();
+      await settle();
+      await captureVisual(page, testInfo, "390-motion-more-navigation.png");
+      await sheet.getByRole("button", { name: "Close more navigation" }).click();
+      await expect(sheet).toHaveAttribute("data-motion-state", "closing");
+      expect(await sheet.evaluate((element) => getComputedStyle(element).pointerEvents)).toBe("auto");
+      await expect(page.locator("main")).toHaveAttribute("inert", "");
+      await expect(sheet).not.toBeVisible();
+      await expect(more).toBeFocused();
+      await expect(page.locator("main")).not.toHaveAttribute("inert", "");
+
+      // Changing the preference while an entrance is active also removes all movement.
+      await more.click();
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await expect.poll(() => page.evaluate(() => document.getAnimations().filter((animation) => animation.playState === "running").length)).toBe(0);
+      await page.keyboard.press("Escape");
+      await expect(sheet).not.toBeVisible();
+      await expect(more).toBeFocused();
+      await expect(more).not.toHaveAttribute("data-motion-press", "true");
+      await page.emulateMedia({ reducedMotion: "no-preference" });
+      await expect(page.locator('[data-motion-visible="true"]')).toHaveCount(0);
+      await settle();
+      await attachIssues(testInfo, await layoutIssues(page, "motion phone after dismissal"));
+    } finally {
+      await context.close();
+      const video = page.video();
+      if (video) await testInfo.attach("motion-desktop-and-phone", { path: await video.path(), contentType: "video/webm" });
+    }
+  });
+});
+
 async function layoutIssues(page: Page, context: string) {
   // Measure modal touch targets once their finite entrance animation has settled.
-  await page.evaluate(async () => {
+  await expect.poll(() => page.evaluate(() => {
     const modal = document.querySelector(".task-dialog[open], .mobile-sheet");
-    if (!modal) return;
-    await Promise.all(modal.getAnimations({ subtree: true }).filter((animation) => animation.effect?.getComputedTiming().iterations !== Infinity).map((animation) => animation.finished.catch(() => {})));
-  });
+    if (!modal) return 0;
+    return modal.getAnimations({ subtree: true }).filter((animation) => animation.playState === "running" && animation.effect?.getComputedTiming().iterations !== Infinity).length;
+  })).toBe(0);
   const issues = await page.evaluate(() => {
     const problems: string[] = [];
     const width = document.documentElement.clientWidth;
@@ -103,6 +193,9 @@ test("all management screens and report tables fit from phone to wide desktop", 
 });
 
 test("create and review dialogs fit phones, tablets, and short landscape screens", async ({ page }, testInfo) => {
+  // This exhaustively opens every task at three viewport sizes, including finite
+  // entrances and exits. Give the complete journey a bounded larger budget.
+  test.setTimeout(360_000);
   await signIn(page, "Nora Albright");
   const issues: string[] = [];
   for (const viewport of [{ width: 320, height: 640 }, { width: 768, height: 360 }, { width: 1024, height: 768 }]) {
@@ -224,7 +317,8 @@ test("task dialogs keep fields and actions above a simulated mobile keyboard", a
   await page.setViewportSize({ width: 390, height: 844 });
   await signIn(page, "Nora Albright");
   await page.goto("/accounts");
-  await page.getByRole("button", { name: "Create account", exact: true }).click();
+  const trigger = page.getByRole("button", { name: "Create account", exact: true }).and(page.locator('[aria-haspopup="dialog"]'));
+  await trigger.click();
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
   await page.evaluate(() => {
@@ -244,7 +338,8 @@ test("task dialogs keep fields and actions above a simulated mobile keyboard", a
   expect(rect!.y + rect!.height).toBeLessThanOrEqual(400);
   await expect(dialog.getByRole("button", { name: "Close", exact: true })).toBeInViewport();
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("button", { name: "Create account", exact: true })).toBeFocused();
+  await expect(dialog).not.toBeVisible();
+  await expect(trigger).toBeFocused();
 });
 
 test("visual controls keep contrast, focus and native modal behavior in both themes", async ({ page }, testInfo) => {
@@ -267,7 +362,7 @@ test("visual controls keep contrast, focus and native modal behavior in both the
     await sheet.getByRole("button", { name: "Close more navigation" }).click();
 
     await page.goto("/accounts");
-    const trigger = page.getByRole("button", { name: "Create account", exact: true });
+    const trigger = page.getByRole("button", { name: "Create account", exact: true }).and(page.locator('[aria-haspopup="dialog"]'));
     await trigger.click();
     const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible();
@@ -319,6 +414,7 @@ test("visual controls keep contrast, focus and native modal behavior in both the
     await page.locator("#page-content").focus();
     expect(await dialog.evaluate((element) => element.contains(document.activeElement))).toBe(true);
     await page.keyboard.press("Escape");
+    await expect(dialog).not.toBeVisible();
     await expect(trigger).toBeFocused();
   }
   await page.evaluate(() => localStorage.setItem("scopeis-theme", "light"));
