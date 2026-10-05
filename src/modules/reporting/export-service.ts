@@ -35,13 +35,13 @@ export class ReportExportService {
   }
 
   /**
-   * Records the refusal and raises the single non-enumerating error. An audit failure here must not turn
-   * a refusal into a success, and the refusal itself must stay indistinguishable from an unknown key.
+   * Authorization refusals remain non-enumerating. Authorized size refusals explain how to narrow the
+   * request. An audit failure must never turn a refusal into a success.
    */
-  private async refuse(actor: AuthenticatedActor, reportKey: string, reason: RefusalReason): Promise<never> {
+  private async refuse(actor: AuthenticatedActor, reportKey: string, reason: RefusalReason, sizeError?: ReportDomainError): Promise<never> {
     const key = this.normalizedKey(reportKey);
     try { await this.audit(actor, "report.export.refused", key, { reportKey: key, reason }); } catch { /* contained by design */ }
-    throw new ReportDomainError("NOT_FOUND");
+    throw reason === "too_large" ? sizeError ?? new ReportDomainError("EXPORT_TOO_LARGE") : new ReportDomainError("NOT_FOUND");
   }
 
   async generate(actor: AuthenticatedActor, reportKey: string, input: unknown = {}): Promise<ExportPayload> {
@@ -62,7 +62,7 @@ export class ReportExportService {
     try {
       payload = await reportingService.exportPayload(actor, definition.key, query);
     } catch (error) {
-      if (error instanceof ReportDomainError && error.code === "WINDOW_TOO_LARGE") return this.refuse(actor, reportKey, "too_large");
+      if (error instanceof ReportDomainError && error.code === "WINDOW_TOO_LARGE") return this.refuse(actor, reportKey, "too_large", error);
       if (error instanceof ReportDomainError && error.status === 404) return this.refuse(actor, reportKey, "out_of_scope");
       throw error;
     }

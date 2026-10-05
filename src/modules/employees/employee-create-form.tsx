@@ -1,21 +1,22 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState } from "react";
+import { TaskDialog } from "@/shared/components/task-dialog";
+import Link from "next/link";
 import type { CreateEmployeeFormAction, CreateEmployeeFormState } from "@/modules/employees/employee-create-action";
 
 const initialCreateEmployeeFormState: CreateEmployeeFormState = {};
 
 export function EmployeeCreatePanel({ action }: { action: CreateEmployeeFormAction }) {
-  const [open, setOpen] = useState(false);
+  return <TaskDialog triggerLabel="Add employee" title="Add employee" description="Create a workforce record. Login access can be enabled separately from Account administration." triggerClassName="button primary"><EmployeeCreateForm action={action} /></TaskDialog>;
+}
+
+function EmployeeCreateForm({ action }: { action: CreateEmployeeFormAction }) {
   const [state, formAction, pending] = useActionState(action, initialCreateEmployeeFormState);
-  if (!open) return <button className="button primary directory-create-trigger" type="button" onClick={() => setOpen(true)}>Add employee</button>;
 
   return (
-    <section className="employee-create-panel" aria-labelledby="employee-create-title">
-      <div className="employee-create-heading">
-        <div><h3 id="employee-create-title">Add employee</h3><p>Create a workforce record only. It does not create access, a session, an invitation, or a mock-login account.</p></div>
-        <button className="button directory-clear" type="button" onClick={() => setOpen(false)} disabled={pending}>Cancel</button>
-      </div>
+    <div className="people-task-content">
+      <p className="operation-help">Need a record and login together? Use <Link href="/accounts">Create account</Link> instead.</p>
       <form className="employee-create-form" action={formAction} noValidate>
         <label htmlFor="employee-display-name">Employee name <span aria-hidden="true">*</span></label>
         <input id="employee-display-name" name="displayName" type="text" autoComplete="name" maxLength={120} aria-invalid={Boolean(state.fieldErrors?.displayName)} aria-describedby={state.fieldErrors?.displayName ? "employee-display-name-error" : undefined} />
@@ -38,6 +39,6 @@ export function EmployeeCreatePanel({ action }: { action: CreateEmployeeFormActi
         {state.formError ? <p className="employee-form-error" role="alert">{state.formError}</p> : null}
         <div className="employee-create-actions"><button className="button primary" type="submit" disabled={pending}>{pending ? "Creating employee…" : "Create employee"}</button></div>
       </form>
-    </section>
+    </div>
   );
 }

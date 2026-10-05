@@ -11,7 +11,10 @@ async function expectAuthorizedLink(page: import("@playwright/test").Page, label
     await more.click({ force: true });
     await expect(more).toHaveAttribute("aria-expanded", "true");
   }
-  await expect(page.getByRole("link", { name: label })).toBeVisible();
+  const navigation = test.info().project.name === "mobile"
+    ? page.getByRole("dialog", { name: "More navigation" }).getByRole("navigation", { name: "Primary navigation", exact: true })
+    : page.getByRole("navigation", { name: "Primary navigation", exact: true });
+  await expect(navigation.getByRole("link", { name: label, exact: true })).toBeVisible();
 }
 
 test("unauthenticated users do not receive protected shell navigation", async ({ page }) => {
@@ -82,8 +85,10 @@ test("theme preference and RTL shell state persist safely", async ({ page, conte
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
-  await expect(page.getByRole("link", { name: "Schedule" })).toBeVisible();
-  await page.getByRole("link", { name: "Schedule" }).click({ force: true });
+  const navigation = page.getByRole("navigation", { name: test.info().project.name === "mobile" ? "Mobile primary navigation" : "Primary navigation", exact: true });
+  const scheduleLink = navigation.getByRole("link", { name: "Schedule", exact: true });
+  await expect(scheduleLink).toBeVisible();
+  await scheduleLink.click();
   await expect(page).toHaveURL(/\/schedule$/);
   await expectNoHorizontalOverflow(page);
   if (test.info().project.name === "mobile") {

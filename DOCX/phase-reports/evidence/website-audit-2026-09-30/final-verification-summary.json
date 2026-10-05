@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-09-30T10:40:01.614Z",
+  "verificationDate": "2026-09-30",
+  "baseCommit": "e55d8f9a6837a5bd21f337d73c92473ad7959a6c",
+  "result": "PASS",
+  "systemLock": {
+    "command": "npm run test:system-lock",
+    "exitCode": 0,
+    "status": "GREEN",
+    "passed": 14,
+    "total": 14,
+    "failed": 0,
+    "interrupted": 0,
+    "gates": [
+      {
+        "name": "scenario-manifest",
+        "status": "PASS",
+        "scenarios": 67,
+        "automatedScenarios": 66,
+        "manualScenarios": 1,
+        "registeredTestFiles": 67,
+        "manifestProtectedRoutes": 30
+      },
+      {
+        "name": "typecheck",
+        "status": "PASS"
+      },
+      {
+        "name": "lint",
+        "status": "PASS",
+        "warnings": 0
+      },
+      {
+        "name": "unit",
+        "status": "PASS",
+        "files": 20,
+        "cases": 123
+      },
+      {
+        "name": "component",
+        "status": "PASS",
+        "files": 18,
+        "cases": 77
+      },
+      {
+        "name": "integration",
+        "status": "PASS",
+        "suites": 13,
+        "files": 14,
+        "cases": 169
+      },
+      {
+        "name": "migration",
+        "status": "PASS",
+        "files": 1,
+        "cases": 8
+      },
+      {
+        "name": "route-certification",
+        "status": "PASS",
+        "files": 1,
+        "cases": 18
+      },
+      {
+        "name": "isolation",
+        "status": "PASS",
+        "checks": 9
+      },
+      {
+        "name": "seed-smoke",
+        "status": "PASS",
+        "seedPasses": 2,
+        "fictionalPersonas": 5,
+        "scopeGrants": 2
+      },
+      {
+        "name": "system-smoke",
+        "status": "PASS",
+        "seedPasses": 2,
+        "personas": 5,
+        "moduleContractsPerPersona": 18,
+        "includesIsolatedBuild": true
+      },
+      {
+        "name": "e2e",
+        "status": "PASS",
+        "suites": 13,
+        "cases": 80,
+        "failed": 0,
+        "skipped": 0,
+        "details": [
+          {
+            "name": "Phase 1 foundation",
+            "cases": 14
+          },
+          {
+            "name": "Phase 2 employees",
+            "cases": 20
+          },
+          {
+            "name": "Phase 3 clients/projects/locations",
+            "cases": 14
+          },
+          {
+            "name": "Phase 4 scheduling",
+            "cases": 2
+          },
+          {
+            "name": "Phase 5 leave",
+            "cases": 2
+          },
+          {
+            "name": "Phase 6 capabilities",
+            "cases": 2
+          },
+          {
+            "name": "Phase 7 coverage/replacement",
+            "cases": 2
+          },
+          {
+            "name": "Phase 8 map",
+            "cases": 6
+          },
+          {
+            "name": "Phase 9 evidence",
+            "cases": 4
+          },
+          {
+            "name": "Phase 10 collaboration/governance",
+            "cases": 2
+          },
+          {
+            "name": "Phase 11 reporting",
+            "cases": 8
+          },
+          {
+            "name": "Credential login",
+            "cases": 2
+          },
+          {
+            "name": "Account administration",
+            "cases": 2
+          }
+        ]
+      },
+      {
+        "name": "safe-build",
+        "status": "PASS"
+      },
+      {
+        "name": "diff-check",
+        "status": "PASS"
+      }
+    ],
+    "testCases": 475
+  },
+  "concurrency": {
+    "command": "npm run test:system-concurrency",
+    "exitCode": 0,
+    "status": "PASS",
+    "passes": 3,
+    "suitesPerPass": 7,
+    "passedRuns": 21,
+    "totalRuns": 21,
+    "failedRuns": 0,
+    "testExecutions": 186,
+    "testsPerPass": 62
+  },
+  "focusedBrowserRechecks": [
+    {
+      "command": "npm run test:phase11-e2e",
+      "cases": 8,
+      "result": "PASS"
+    },
+    {
+      "command": "npm run test:phase8-e2e",
+      "cases": 6,
+      "result": "PASS"
+    }
+  ],
+  "sourceIntegrity": {
+    "method": "SHA-256 content comparison before and after final serial verification",
+    "scope": [
+      "src/**",
+      "test/**",
+      "package.json",
+      "package-lock.json"
+    ],
+    "files": 268,
+    "matched": true,
+    "changedFiles": [],
+    "addedFiles": [],
+    "manifestFile": "green-source-hashes.json"
+  },
+  "environment": {
+    "data": "Fictional fixtures in owned disposable loopback PostgreSQL databases",
+    "builds": "Isolated copies excluding .env files; sanctioned build:safe",
+    "browser": "Playwright Chromium",
+    "viewports": [
+      {
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "mobileEmulation": true
+      }
+    ],
+    "productionEnvironmentRead": false,
+    "productionDataMutated": false
+  },
+  "initialFailuresResolved": [
+    {
+      "test": "Phase 11 new report-filter browser regression",
+      "cause": "Exact getByLabel selector could not identify implicit select label",
+      "resolution": "Accessible combobox role locator; final 8/8 pass",
+      "evidence": "initial-phase11-failure/error-context.md"
+    },
+    {
+      "test": "Phase 8 new map-filter browser regression",
+      "cause": "Exact getByLabel selector could not identify implicit select label",
+      "resolution": "Accessible combobox role locator; final 6/6 pass",
+      "evidence": "final-phase8-failure/error-context.md"
+    }
+  ],
+  "limitations": [
+    "Passing checks do not prove absence of every possible defect.",
+    "Browser automation covers Chromium desktop and mobile emulation, not Safari, Firefox, or physical devices.",
+    "Ticket integration and production identity/deployment/provider behavior were not exercised.",
+    "No production load, endurance, backup/restore, disaster-recovery, or external-provider reliability certification was performed.",
+    "The scenario manifest has one manual performance scenario; this gate does not execute that manual scenario.",
+    "The manifest validator checks route-list/evidence presence but does not mechanically prove each implemented route maps to executable tests.",
+    "Concurrency is a separate command and is not included by test:system-lock; it was explicitly run in this final serial chain."
+  ],
+  "nonBlockingWarnings": [
+    "pg emitted a deprecation warning for concurrent client.query calls on one client; this is expected to become unsupported in pg 9."
+  ],
+  "logs": {
+    "systemLock": "system-lock-green.log",
+    "concurrency": "system-concurrency-final.log",
+    "focusedMap": "phase8-e2e-final.log",
+    "focusedReports": "phase11-e2e-final.log"
+  }
+}

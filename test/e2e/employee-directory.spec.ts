@@ -93,10 +93,11 @@ test("management details preserve Admin privacy and provide visible Super Admin 
   await expect(page.getByRole("heading", { name: "Cora Bell" })).toBeVisible();
   await expect(page.getByText("cora@example.test", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Super Admin controls" })).toBeVisible();
-  await expect(page.getByRole("form", { name: "Edit basic employee information" })).toBeVisible();
-  await expect(page.getByRole("form", { name: "Employee assignments" })).toBeVisible();
-  await expect(page.getByRole("form", { name: "Change system role" })).toBeVisible();
-  await expect(page.getByRole("form", { name: "Employee lifecycle" })).toBeVisible();
+  for (const task of ["Edit basic employee information", "Employee assignments", "Change system role", "Employee lifecycle"]) {
+    await page.getByRole("button", { name: task, exact: true }).click();
+    await expect(page.getByRole("form", { name: task })).toBeVisible();
+    await page.getByRole("dialog").getByRole("button", { name: "Close", exact: true }).click();
+  }
   await signOut(page);
 
   await signIn(page, "Ava Mercer");
@@ -119,10 +120,13 @@ test("Super Admin can use visible management controls without granting manager o
   await page.getByRole("button", { name: "Create employee" }).click();
   await page.getByRole("row", { name: new RegExp(name) }).getByRole("link", { name: "Manage employee" }).click();
   await expect(page.getByRole("heading", { name })).toBeVisible();
+  await page.getByRole("button", { name: "Edit basic employee information", exact: true }).click();
   const basic = page.getByRole("form", { name: "Edit basic employee information" });
   await basic.getByLabel("Display name").fill(`${name} Updated`);
   await basic.getByRole("button", { name: "Save changes" }).click();
   await expect(basic.getByText("Basic employee information saved.")).toBeVisible();
+  await page.getByRole("dialog").getByRole("button", { name: "Close", exact: true }).click();
+  await page.getByRole("button", { name: "Employee assignments", exact: true }).click();
   const assignments = page.getByRole("form", { name: "Employee assignments" });
   await assignments.getByLabel("Designation").selectOption({ label: "Field Engineer" });
   await assignments.getByLabel("Manager").selectOption("mock-employee-cora");
@@ -130,15 +134,21 @@ test("Super Admin can use visible management controls without granting manager o
   await assignments.getByLabel(/Working pattern/).fill("Hybrid weekdays");
   await assignments.getByRole("button", { name: "Save changes" }).click();
   await expect(assignments.getByText("Employee assignments saved.")).toBeVisible();
+  await page.getByRole("dialog").getByRole("button", { name: "Close", exact: true }).click();
+  await page.getByRole("button", { name: "Change system role", exact: true }).click();
   const role = page.getByRole("form", { name: "Change system role" });
   await role.getByLabel("System role").selectOption("ADMIN");
   await role.getByRole("button", { name: "Save changes" }).click();
   await expect(role.getByText("System role saved. Existing sessions were revoked.")).toBeVisible();
+  await page.getByRole("dialog").getByRole("button", { name: "Close", exact: true }).click();
+  await page.getByRole("button", { name: "Grant Admin TEAM scope", exact: true }).click();
   const grant = page.getByRole("form", { name: "Grant Admin TEAM scope" });
   await expect(grant).toBeVisible();
   await grant.getByLabel("TEAM scope").fill("team:alpha");
   await grant.getByRole("button", { name: "Save changes" }).click();
   await expect(grant.getByText("TEAM scope grant added.")).toBeVisible();
+  await page.getByRole("dialog").getByRole("button", { name: "Close", exact: true }).click();
+  await page.getByRole("button", { name: "Employee lifecycle", exact: true }).click();
   const lifecycle = page.getByRole("form", { name: "Employee lifecycle" });
   page.once("dialog", (dialog) => dialog.accept());
   await lifecycle.getByRole("button", { name: "Deactivate employee" }).click();
@@ -154,11 +164,13 @@ test("Employee views and updates only the self-service profile", async ({ page }
   await page.goto("/profile");
   await expect(page.getByRole("heading", { name: "My professional profile" })).toBeVisible();
   await expect(page.getByLabel("My professional profile").getByText("Cora Bell", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Edit profile", exact: true }).click();
   await page.getByLabel("Work phone").fill("101");
   await page.getByLabel("Professional summary").fill("Updated fictional profile");
   await page.getByRole("button", { name: "Save profile" }).click();
   await expect(page.locator(".employee-form-success, .employee-form-error")).toContainText(/saved|changed/i);
   await page.reload();
+  await page.getByRole("button", { name: "Edit profile", exact: true }).click();
   await expect(page.getByLabel("Work phone")).toHaveValue("101");
   await expect(page.getByLabel("Professional summary")).toHaveValue("Updated fictional profile");
   const management = await page.goto("/employees/mock-employee-cora");

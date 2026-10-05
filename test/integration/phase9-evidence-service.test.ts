@@ -233,6 +233,31 @@ describe("Phase 9 capability evidence service", () => {
     expect(skill.userId).toBe(cora.id);
   });
 
+  it("preserves a verified record on unchanged saves but still checks ownership and version", async () => {
+    const input = { title: "Fictional Unchanged Certification", issuer: "Fictional Institute", issueDate: "2026-01-15", expiryDate: "2027-01-15", details: "Fictional reviewed details", externalUrl: "https://example.test/unchanged" };
+    const { evidence } = await service().create(cora, { kind: "certification", ...input });
+    const verified = await service().review(nora, { evidenceId: evidence.id, expectedVersion: evidence.version, state: "verified" });
+    const updateInput = { ...input, evidenceId: evidence.id, expectedVersion: verified.evidence.version, title: `  ${input.title}  `, issuer: ` ${input.issuer} `, details: ` ${input.details} ` };
+
+    const unchanged = await service().update(cora, updateInput);
+    expect(unchanged.evidence).toEqual(verified.evidence);
+    const [persisted] = await db.select().from(employeeEvidence).where(eq(employeeEvidence.id, evidence.id));
+    expect(persisted).toEqual(verified.evidence);
+    expect((await service().listMine(cora)).items.find((item) => item.id === evidence.id)).toMatchObject({ reviewState: "verified", isNewOrUpdated: false });
+    expect(await auditCount("evidence.updated", evidence.id)).toBe(0);
+    expect(await auditCount("evidence.review_reset", evidence.id)).toBe(0);
+    expect(await notificationCount(nora.id, "evidence.updated", evidence.id)).toBe(0);
+    await expect(service().update(cora, { ...updateInput, expectedVersion: evidence.version })).rejects.toMatchObject({ code: "STALE_VERSION" });
+    await expect(service().update(bravoEmployee, updateInput)).rejects.toMatchObject({ code: "NOT_FOUND" });
+
+    const changed = await service().update(cora, { ...updateInput, issuer: "Fictional Replacement Institute" });
+    expect(changed.evidence).toMatchObject({ version: verified.evidence.version + 1, reviewState: "unreviewed", reviewedByUserId: null, reviewedAt: null, verifiedByUserId: null, verifiedAt: null });
+    expect(changed.evidence.lastSubmittedAt!.getTime()).toBeGreaterThan(verified.evidence.lastSubmittedAt!.getTime());
+    expect(await auditCount("evidence.updated", evidence.id)).toBe(1);
+    expect(await auditCount("evidence.review_reset", evidence.id)).toBe(1);
+    expect(await notificationCount(nora.id, "evidence.updated", evidence.id)).toBe(1);
+  });
+
   it("resets review and verification provenance when the owner materially changes evidence", async () => {
     const { evidence } = await service().create(cora, { ...phase9Evidence.certification, title: "Fictional Reset Journey" });
     const verified = await service().review(nora, { evidenceId: evidence.id, expectedVersion: evidence.version, state: "verified" });

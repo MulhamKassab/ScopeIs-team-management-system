@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { db } from "@/db/client";
-import { staffingRequirements } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { adminScopeGrants, staffingRequirements, users } from "@/db/schema";
+import { and, eq } from "drizzle-orm";
 import { employeeCatalogueService, employeeSkillService } from "@/modules/employees/employee-services";
 import { operationalService } from "@/modules/operations/service";
 import { coverageService } from "@/modules/coverage/service";
@@ -19,6 +19,7 @@ describe("Phase 7 coverage and replacement journey", () => {
     await employeeSkillService.add(nora, { employeeUserId: cora.id, skillId: skill.id }); await employeeSkillService.add(nora, { employeeUserId: eli.id, skillId: skill.id }); const inherited = await db.select().from(staffingRequirements).where(eq(staffingRequirements.projectId, phase3Ids.alphaProjectOne)).then(([row]) => row!); await employeeSkillService.add(nora, { employeeUserId: cora.id, skillId: inherited.requiredSkillId }); await employeeSkillService.add(nora, { employeeUserId: eli.id, skillId: inherited.requiredSkillId });
     const rule = await operationalService.addRequirement(nora, { type: "LOCATION", id: phase3Ids.alphaLocation, requiredSkillId: skill.id, requiredEmployeeCount: 2 });
     const period = await schedulingService.createPeriod(nora, { clientId: phase3Ids.alphaClient, month: "2027-05" }); const anchor = await schedulingService.addAssignment(nora, { periodId: period.id, expectedPeriodVersion: period.version, employeeUserId: cora.id, projectId: phase3Ids.alphaProjectOne, locationId: phase3Ids.alphaLocation, assignmentDate: "2027-05-12", startTime: "09:00", endTime: "11:00" });
+    const context = await coverageService.assignmentContext(ava, anchor.id); expect(context).toMatchObject({ employeeName: "Cora Bell", clientName: "Alpha Facilities", projectName: "Alpha Modernization", locationName: "Alpha Shared Site", assignmentDate: "2027-05-12", startTime: "09:00", endTime: "11:00" }); expect(Object.keys(context).sort()).toEqual(["id", "periodId", "month", "status", "employeeName", "clientName", "projectName", "locationName", "assignmentDate", "startTime", "endTime"].sort());
     const gaps = await coverageService.gaps(ava, anchor.id); const gap = gaps.find((item) => item.staffingRequirementId === rule.id); expect(gap?.missingEmployeeCount).toBe(1);
     const candidates = await coverageService.candidates(ava, anchor.id); expect(candidates.candidates.map((item) => item.id)).toContain(eli.id); await expect(coverageService.gaps(cora, anchor.id)).rejects.toMatchObject({ code: "FORBIDDEN" });
     const request = await coverageService.create(ava, { staffingRequirementId: rule.id, anchorAssignmentId: anchor.id, intent: "ADD_COVERAGE_ASSIGNMENT", nominatedEmployeeUserId: eli.id }); expect(request.status).toBe("PENDING");
@@ -31,4 +32,34 @@ describe("Phase 7 coverage and replacement journey", () => {
     const published = await schedulingService.createPeriod(nora, { clientId: phase3Ids.alphaClient, month: "2027-08" }); const publishedAnchor = await schedulingService.addAssignment(nora, { periodId: published.id, expectedPeriodVersion: published.version, employeeUserId: cora.id, projectId: phase3Ids.alphaProjectOne, locationId: phase3Ids.alphaLocation, assignmentDate: "2027-08-12", startTime: "09:00", endTime: "11:00" }); const publishedSkill = await employeeCatalogueService.createSkill(nora, { name: "Phase 7 Published Skill" }); await employeeSkillService.add(nora, { employeeUserId: eli.id, skillId: publishedSkill.id }); await capabilityService.addAssignmentRequirement(nora, { assignmentId: publishedAnchor.id, skillId: publishedSkill.id }); const publishedRequest = await coverageService.create(ava, { anchorAssignmentId: publishedAnchor.id, intent: "REPLACE_ASSIGNMENT", nominatedEmployeeUserId: eli.id }); const publishedRow = await schedulingService.publish(nora, { periodId: (await schedulingService.propose(nora, { periodId: published.id, expectedVersion: published.version + 1 })).id, expectedVersion: published.version + 2 }); const decidedPublished = await coverageService.decide(nora, { replacementRequestId: publishedRequest.id, expectedVersion: publishedRequest.version, decision: "APPROVED", selectedEmployeeUserId: eli.id }); expect(decidedPublished.effectStatus).toBe("PUBLISHED_REVISION_CREATED"); expect((await schedulingService.getPeriodEditor(nora, publishedRow.id)).period.status).toBe("PUBLISHED"); expect((await schedulingService.getPeriodEditor(nora, decidedPublished.effectSchedulePeriodId!)).period.status).toBe("DRAFT");
   });
   it("rolls back a request when its required notification write fails", async () => { const period = await schedulingService.createPeriod(nora, { clientId: phase3Ids.alphaClient, month: "2027-09" }); const anchor = await schedulingService.addAssignment(nora, { periodId: period.id, expectedPeriodVersion: period.version, employeeUserId: cora.id, projectId: phase3Ids.alphaProjectOne, locationId: phase3Ids.alphaLocation, assignmentDate: "2027-09-12", startTime: "09:00", endTime: "11:00" }); const missing = await employeeCatalogueService.createSkill(nora, { name: "Phase 7 Rollback Skill" }); await capabilityService.addAssignmentRequirement(nora, { assignmentId: anchor.id, skillId: missing.id }); const failing = new CoverageService(undefined, async () => { throw new Error("forced notification failure"); }); await expect(failing.create(ava, { anchorAssignmentId: anchor.id, intent: "REPLACE_ASSIGNMENT" })).rejects.toThrow("forced notification failure"); expect((await coverageRepository.requestsForRequester(db, ava.id)).filter((item) => item.anchorAssignmentId === anchor.id)).toHaveLength(0); });
+});
+
+describe("Coverage authorization and employee lifecycle regressions", () => {
+  it("requires TEAM visibility of the anchor for gaps, candidates, and requests without nominees", async () => {
+    const period = await schedulingService.createPeriod(nora, { clientId: phase3Ids.alphaClient, month: "2032-01" });
+    const anchor = await schedulingService.addAssignment(nora, { periodId: period.id, expectedPeriodVersion: period.version, employeeUserId: phase4Ids.bravoEmployee, projectId: phase3Ids.alphaProjectOne, locationId: phase3Ids.alphaLocation, assignmentDate: "2032-01-12", startTime: "09:00", endTime: "11:00" });
+    await expect(coverageService.assignmentContext(ava, anchor.id)).rejects.toMatchObject({ code: "OUT_OF_SCOPE" });
+    await expect(coverageService.assignmentContext(nora, "invalid-id")).rejects.toMatchObject({ code: "NOT_FOUND" });
+    await expect(coverageService.gaps(ava, anchor.id)).rejects.toMatchObject({ code: "OUT_OF_SCOPE" });
+    await expect(coverageService.candidates(ava, anchor.id)).rejects.toMatchObject({ code: "OUT_OF_SCOPE" });
+    await expect(coverageService.create(ava, { anchorAssignmentId: anchor.id, intent: "REPLACE_ASSIGNMENT" })).rejects.toMatchObject({ code: "OUT_OF_SCOPE" });
+    expect((await coverageRepository.requestsForRequester(db, ava.id)).filter((request) => request.anchorAssignmentId === anchor.id)).toHaveLength(0);
+    await db.insert(adminScopeGrants).values({ userId: ava.id, scopeType: "TEAM", scopeReference: "team:bravo" });
+    try { expect((await coverageService.gaps(ava, anchor.id)).length).toBeGreaterThan(0); }
+    finally { await db.delete(adminScopeGrants).where(and(eq(adminScopeGrants.userId, ava.id), eq(adminScopeGrants.scopeType, "TEAM"), eq(adminScopeGrants.scopeReference, "team:bravo"))); }
+  });
+
+  it("stops counting an inactive or reassigned-role employee toward staffing", async () => {
+    const period = await schedulingService.createPeriod(nora, { clientId: phase3Ids.alphaClient, month: "2032-02" });
+    const anchor = await schedulingService.addAssignment(nora, { periodId: period.id, expectedPeriodVersion: period.version, employeeUserId: cora.id, projectId: phase3Ids.alphaProjectOne, locationId: phase3Ids.alphaLocation, assignmentDate: "2032-02-12", startTime: "09:00", endTime: "11:00" });
+    await schedulingService.addAssignment(nora, { periodId: period.id, expectedPeriodVersion: period.version + 1, employeeUserId: eli.id, projectId: phase3Ids.alphaProjectOne, locationId: phase3Ids.alphaLocation, assignmentDate: "2032-02-12", startTime: "09:00", endTime: "11:00" });
+    const rule = await db.select().from(staffingRequirements).where(eq(staffingRequirements.projectId, phase3Ids.alphaProjectOne)).then(([row]) => row!);
+    expect((await coverageService.gaps(nora, anchor.id)).find((gap) => gap.staffingRequirementId === rule.id)).toBeUndefined();
+    try {
+      await db.update(users).set({ active: false }).where(eq(users.id, eli.id));
+      expect((await coverageService.gaps(nora, anchor.id)).find((gap) => gap.staffingRequirementId === rule.id)).toMatchObject({ eligibleEmployeeCount: 1, missingEmployeeCount: 1 });
+      await db.update(users).set({ active: true, role: "ADMIN" }).where(eq(users.id, eli.id));
+      expect((await coverageService.gaps(nora, anchor.id)).find((gap) => gap.staffingRequirementId === rule.id)).toMatchObject({ eligibleEmployeeCount: 1, missingEmployeeCount: 1 });
+    } finally { await db.update(users).set({ active: true, role: "EMPLOYEE" }).where(eq(users.id, eli.id)); }
+  });
 });

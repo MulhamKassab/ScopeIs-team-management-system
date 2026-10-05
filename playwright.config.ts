@@ -18,7 +18,7 @@ export default defineConfig({
   webServer: {
     command: `node scripts/start-phase1-test-server.mjs --port ${port}`,
     url: baseURL,
-    reuseExistingServer: false,
+    reuseExistingServer: false, gracefulShutdown: { signal: "SIGTERM", timeout: 10_000 },
   },
   projects: [
     { name: "desktop", use: { browserName: "chromium", viewport: { width: 1440, height: 900 } } },

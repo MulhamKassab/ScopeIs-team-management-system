@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentActor } from "@/modules/auth/session-service";
 import { can } from "@/modules/authorization/authorization-service";
@@ -27,7 +28,14 @@ export default async function ReportPage({ params, searchParams }: { params: Pro
     const [view, index] = await Promise.all([reportingService.report(actor, reportKey, query), reportingService.index(actor)]);
     loaded = { view, index };
   } catch (error) {
-    if (error instanceof ReportDomainError) notFound();
+    if (error instanceof ReportDomainError) {
+      if (error.status === 404) notFound();
+      return <section className="operations-page" aria-labelledby="report-error-title">
+        <h1 id="report-error-title">Check report filters</h1>
+        <p role="alert">{error.message}</p>
+        <Link className="button" href={`/reports/${reportKey}`}>Reset filters</Link>
+      </section>;
+    }
     throw error;
   }
   return <ReportViewPanel view={loaded.view} filters={loaded.index.options} />;

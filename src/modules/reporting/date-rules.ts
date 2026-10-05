@@ -19,9 +19,17 @@ const TIME = /^\d{2}:\d{2}$/;
 
 export type DateWindow = { from: string; to: string };
 
-export function isBusinessDate(value: unknown): value is string { return typeof value === "string" && DATE.test(value); }
+export function isBusinessDate(value: unknown): value is string {
+  if (typeof value !== "string" || !DATE.test(value)) return false;
+  const timestamp = Date.parse(`${value}T00:00:00Z`);
+  return Number.isFinite(timestamp) && new Date(timestamp).toISOString().slice(0, 10) === value;
+}
 export function isPlanningMonth(value: unknown): value is string { return typeof value === "string" && MONTH.test(value); }
-export function isWallClockTime(value: unknown): value is string { return typeof value === "string" && TIME.test(value); }
+export function isWallClockTime(value: unknown): value is string {
+  if (typeof value !== "string" || !TIME.test(value)) return false;
+  const [hours, minutes] = value.split(":").map(Number);
+  return (hours < 24 && minutes < 60) || (hours === 24 && minutes === 0);
+}
 
 /** The current Dubai business month, used as the default window for allocation, leave and lifecycle reports. */
 export function currentDubaiMonth(now = new Date()) { return dubaiToday(now).slice(0, 7); }

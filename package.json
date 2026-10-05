@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=22.0.0" },
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -18,6 +20,7 @@
     "test:component": "vitest run test/component",
     "test:integration": "node scripts/run-aggregate-integration-tests.mjs",
     "test:e2e": "node scripts/run-aggregate-e2e-tests.mjs",
+    "test:responsive": "node scripts/run-responsive-playwright.mjs",
     "test:route-certification": "node scripts/run-phase1-route-certification.mjs",
     "test:migration": "node scripts/run-phase2-migration-tests.mjs",
     "test:seed-smoke": "node scripts/run-seed-smoke.mjs",
@@ -53,14 +56,14 @@
     "db:schema:drift": "node scripts/run-phase2-migration-tests.mjs -t \"detects migration\"",
     "db:schema:runtime:validate": "node scripts/run-phase2-migration-tests.mjs -t \"uses all eight\"",
     "db:validate": "tsx src/db/validate.ts",
-    "audit:dependencies": "npm audit --omit=dev"
-    ,"validate:phase2-runbook": "node scripts/validate-phase2-runbook.mjs",
+    "audit:dependencies": "npm audit --omit=dev",
+    "validate:phase2-runbook": "node scripts/validate-phase2-runbook.mjs",
     "test:phase10-service": "node scripts/run-phase10-service-tests.mjs",
-    "test:phase10-e2e": "node scripts/run-phase10-playwright.mjs"
-    ,"test:phase11-service": "node scripts/run-phase11-service-tests.mjs"
-    ,"test:account-administration": "node scripts/run-account-administration-service-tests.mjs"
-    ,"test:account-administration-e2e": "node scripts/run-account-e2e.mjs"
-    ,"test:phase11-e2e": "node scripts/run-phase11-playwright.mjs",
+    "test:phase10-e2e": "node scripts/run-phase10-playwright.mjs",
+    "test:phase11-service": "node scripts/run-phase11-service-tests.mjs",
+    "test:account-administration": "node scripts/run-account-administration-service-tests.mjs",
+    "test:account-administration-e2e": "node scripts/run-account-e2e.mjs",
+    "test:phase11-e2e": "node scripts/run-phase11-playwright.mjs",
     "test:system-smoke": "node scripts/run-system-smoke.mjs",
     "test:system-concurrency": "node scripts/run-system-concurrency-tests.mjs",
     "test:system-lock": "node scripts/run-system-lock.mjs"
@@ -69,6 +72,7 @@
     "@vercel/blob": "^2.3.0",
     "dotenv": "latest",
     "drizzle-orm": "latest",
+    "lucide-react": "1.49.0",
     "next": "latest",
     "pg": "latest",
     "react": "latest",
@@ -89,8 +93,8 @@
     "eslint": "latest",
     "eslint-config-next": "latest",
     "jsdom": "^29.0.1",
-    "typescript": "latest",
     "tsx": "latest",
+    "typescript": "latest",
     "vitest": "latest"
   }
 }

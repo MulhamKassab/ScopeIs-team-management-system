@@ -34,7 +34,11 @@ export async function setSessionCookie(token: string, expires: Date) {
 
 export async function clearSessionCookie() { (await cookies()).set(SESSION_COOKIE, "", { ...cookieOptions, maxAge: 0 }); }
 
-export async function getCurrentActor(): Promise<AuthenticatedActor | null> {
+/**
+ * Session identity for the password-change page/action and authentication redirects only.
+ * Business reads and mutations must use getCurrentActor/requireCurrentActor instead.
+ */
+export async function getCurrentPasswordChangeActor(): Promise<AuthenticatedActor | null> {
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
   if (!token) return null;
   const found = await foundationRepository.findActiveSession(tokenHash(token));
@@ -42,6 +46,13 @@ export async function getCurrentActor(): Promise<AuthenticatedActor | null> {
   if (found.session.authenticationMode === "mock" && !mockAuthenticationIsAllowed()) return null;
   const scopes = await foundationRepository.activeScopeGrants(found.user.id);
   return { id: found.user.id, displayName: found.user.displayName, role: found.user.role, sessionId: found.session.id, sessionVersion: found.user.sessionVersion, scopes, authenticationMode: found.session.authenticationMode };
+}
+
+/** Enforce the required-change gate for every business endpoint, including direct API/action calls. */
+export async function getCurrentActor(): Promise<AuthenticatedActor | null> {
+  const actor = await getCurrentPasswordChangeActor();
+  if (!actor || await mustChangePassword(actor.id)) return null;
+  return actor;
 }
 
 export async function requireCurrentActor() {

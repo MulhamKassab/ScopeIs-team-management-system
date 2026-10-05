@@ -1,4 +1,8 @@
 import { redirect } from "next/navigation";
-import { getCurrentActor } from "@/modules/auth/session-service";
+import { getCurrentPasswordChangeActor, mustChangePassword } from "@/modules/auth/session-service";
 import { LoginScreen } from "@/app/(auth)/login/login-screen";
-export default async function LoginPage() { if (await getCurrentActor()) redirect("/dashboard"); return <LoginScreen />; }
+export default async function LoginPage() {
+  const actor = await getCurrentPasswordChangeActor();
+  if (actor) redirect(await mustChangePassword(actor.id) ? "/account/change-password" : "/dashboard");
+  return <LoginScreen />;
+}

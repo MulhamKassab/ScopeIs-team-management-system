@@ -14,6 +14,7 @@
 //   Phase 9  capability evidence journey             (Phase 3 + Phase 4 fixtures, private local storage)
 //   Phase 10 collaboration/governance journey        (Phase 3 + Phase 4 fixtures, participant request)
 //   Phase 11 dashboards, reports and exports         (Phase 11 reporting fixtures, published + planning)
+//   UI      responsive, visual and task discovery     (reporting + map + responsive edge cases)
 //
 // The phase specs carry `test.skip(<guard>)` statements. Invoking them individually is what keeps
 // those guards satisfied, so no journey is silently skipped, and no journey runs against another
@@ -37,6 +38,7 @@ const suites = [
   { name: "Phase 11 dashboards, reports and exports", script: "run-phase11-playwright.mjs" },
   { name: "Credential authentication login", script: "run-credential-e2e.mjs" },
   { name: "Super Admin account administration", script: "run-account-e2e.mjs" },
+  { name: "Responsive UI, task discovery and planning workspace", script: "run-responsive-playwright.mjs" },
 ];
 
 function runSuite(script) {

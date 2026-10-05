@@ -10,6 +10,7 @@ import type { ResolvedScope } from "@/modules/authorization/current-actor";
 
 export type ReportExecutor = typeof db;
 export type Window = { from: string; to: string };
+export type AssignmentFilters = { clientId?: string; projectId?: string; locationId?: string };
 export type ScheduleStatus = "DRAFT" | "PROPOSED" | "PUBLISHED";
 
 /**
@@ -37,6 +38,36 @@ function assignmentScope(scope: ResolvedScope): SQL | undefined {
   return predicates.length ? or(...predicates)! : sql`false`;
 }
 
+function selectedAssignments(filters: AssignmentFilters): SQL | undefined {
+  return and(
+    filters.clientId ? eq(schedulePeriods.clientId, filters.clientId) : undefined,
+    filters.projectId ? eq(scheduleAssignments.projectId, filters.projectId) : undefined,
+    filters.locationId ? eq(scheduleAssignments.locationId, filters.locationId) : undefined,
+  );
+}
+
+function publishedWindow(scope: ResolvedScope, window: Window, filters: AssignmentFilters = {}) {
+  return and(eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true),
+    gte(scheduleAssignments.assignmentDate, window.from), lte(scheduleAssignments.assignmentDate, window.to),
+    assignmentScope(scope), selectedAssignments(filters));
+}
+
+function replacementWindow(window?: Window): SQL | undefined {
+  return window ? and(
+    gte(replacementRequests.createdAt, new Date(`${window.from}T00:00:00+04:00`)),
+    lt(replacementRequests.createdAt, new Date(new Date(`${window.to}T00:00:00+04:00`).getTime() + 86_400_000)),
+  ) : undefined;
+}
+
+function lifecycleScope(scope: ResolvedScope, window?: Window, filters: AssignmentFilters = {}) {
+  return and(
+    scope.isGlobal ? undefined : (scope.role === "ADMIN" && scope.clientIds.length ? inArray(schedulePeriods.clientId, scope.clientIds) : sql`false`),
+    window ? gte(schedulePeriods.planningMonth, `${window.from.slice(0, 7)}-01`) : undefined,
+    window ? lte(schedulePeriods.planningMonth, `${window.to.slice(0, 7)}-01`) : undefined,
+    filters.clientId ? eq(schedulePeriods.clientId, filters.clientId) : undefined,
+  );
+}
+
 const assignmentColumns = {
   id: scheduleAssignments.id,
   assignmentDate: scheduleAssignments.assignmentDate,
@@ -53,7 +84,7 @@ const assignmentColumns = {
 };
 export type AssignmentRow = { id: string; assignmentDate: string; startTime: string; endTime: string; employeeUserId: string; employeeName: string; clientName: string; projectName: string; locationName: string; planningMonth: string; periodStatus: ScheduleStatus; revisionNumber: number };
 
-function assignmentQuery(scope: ResolvedScope, statuses: ScheduleStatus[], window: Window, currentPublishedOnly: boolean) {
+function assignmentQuery(scope: ResolvedScope, statuses: ScheduleStatus[], window: Window, currentPublishedOnly: boolean, filters: AssignmentFilters = {}) {
   return db.select(assignmentColumns)
     .from(scheduleAssignments)
     .innerJoin(schedulePeriods, eq(schedulePeriods.id, scheduleAssignments.schedulePeriodId))
@@ -66,7 +97,7 @@ function assignmentQuery(scope: ResolvedScope, statuses: ScheduleStatus[], windo
       currentPublishedOnly ? eq(schedulePeriods.isCurrent, true) : undefined,
       gte(scheduleAssignments.assignmentDate, window.from),
       lte(scheduleAssignments.assignmentDate, window.to),
-      assignmentScope(scope),
+      assignmentScope(scope), selectedAssignments(filters),
     ))
     .orderBy(
       asc(scheduleAssignments.assignmentDate), asc(scheduleAssignments.startTime),
@@ -76,26 +107,46 @@ function assignmentQuery(scope: ResolvedScope, statuses: ScheduleStatus[], windo
 
 export const reportingRepository = {
   /** Published assignments inside the window, ordered by the published-allocation contract. */
-  publishedAssignments(scope: ResolvedScope, window: Window, limit: number, offset: number) {
-    return assignmentQuery(scope, ["PUBLISHED"], window, true).limit(limit).offset(offset);
+  publishedAssignments(scope: ResolvedScope, window: Window, limit: number, offset: number, filters: AssignmentFilters = {}) {
+    return assignmentQuery(scope, ["PUBLISHED"], window, true, filters).limit(limit).offset(offset);
   },
-  publishedAssignmentCount(scope: ResolvedScope, window: Window) {
+  publishedAssignmentCount(scope: ResolvedScope, window: Window, filters: AssignmentFilters = {}) {
     return db.select({ value: sql<number>`count(*)::int` })
       .from(scheduleAssignments)
       .innerJoin(schedulePeriods, eq(schedulePeriods.id, scheduleAssignments.schedulePeriodId))
-      .where(and(eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true), gte(scheduleAssignments.assignmentDate, window.from), lte(scheduleAssignments.assignmentDate, window.to), assignmentScope(scope)))
+      .where(publishedWindow(scope, window, filters))
       .then(([row]) => Number(row?.value ?? 0));
   },
   /** Draft and Proposed assignments only. Never mixes into a Published metric. */
-  planningAssignments(scope: ResolvedScope, window: Window, limit: number, offset: number) {
-    return assignmentQuery(scope, ["DRAFT", "PROPOSED"], window, false).limit(limit).offset(offset);
+  planningAssignments(scope: ResolvedScope, window: Window, limit: number, offset: number, filters: AssignmentFilters = {}) {
+    return assignmentQuery(scope, ["DRAFT", "PROPOSED"], window, false, filters).limit(limit).offset(offset);
   },
 
-  activeEmployees(scope: ResolvedScope, limit: number, offset: number) {
+  /** Aggregate every matching assignment before paginating employee totals. */
+  scheduledHours(scope: ResolvedScope, window: Window, limit: number, offset: number, filters: AssignmentFilters = {}) {
+    const hours = sql<number>`sum(extract(epoch from (${scheduleAssignments.endTime} - ${scheduleAssignments.startTime})) / 3600)::float8`;
+    return db.select({ employeeUserId: users.id, employeeName: users.displayName, hours,
+      assignments: sql<number>`count(*)::int` })
+      .from(scheduleAssignments)
+      .innerJoin(schedulePeriods, eq(schedulePeriods.id, scheduleAssignments.schedulePeriodId))
+      .innerJoin(users, eq(users.id, scheduleAssignments.employeeUserId))
+      .where(publishedWindow(scope, window, filters))
+      .groupBy(users.id, users.displayName)
+      .orderBy(desc(hours), asc(users.displayName), asc(users.id)).limit(limit).offset(offset);
+  },
+  scheduledEmployeeCount(scope: ResolvedScope, window: Window, filters: AssignmentFilters = {}) {
+    return db.select({ value: sql<number>`count(distinct ${scheduleAssignments.employeeUserId})::int` })
+      .from(scheduleAssignments)
+      .innerJoin(schedulePeriods, eq(schedulePeriods.id, scheduleAssignments.schedulePeriodId))
+      .where(publishedWindow(scope, window, filters)).then(([row]) => Number(row?.value ?? 0));
+  },
+
+  /** Full source set: balance ordering and export limits apply after the service computes each balance. */
+  activeEmployees(scope: ResolvedScope) {
     return db.select({ id: users.id, displayName: users.displayName, team: employeeProfiles.team, employeeCode: employeeProfiles.employeeCode })
       .from(users).innerJoin(employeeProfiles, eq(employeeProfiles.userId, users.id))
       .where(and(eq(users.active, true), employeeScope(scope)))
-      .orderBy(asc(users.displayName), asc(users.id)).limit(limit).offset(offset);
+      .orderBy(asc(users.displayName), asc(users.id));
   },
   activeEmployeeCount(scope: ResolvedScope) {
     return db.select({ value: sql<number>`count(*)::int` }).from(users)
@@ -114,7 +165,7 @@ export const reportingRepository = {
       .from(scheduleAssignments)
       .innerJoin(schedulePeriods, eq(schedulePeriods.id, scheduleAssignments.schedulePeriodId))
       .where(and(eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true), gte(scheduleAssignments.assignmentDate, window.from), lte(scheduleAssignments.assignmentDate, window.to), assignmentScope(scope)));
-    return db.select({ id: users.id, displayName: users.displayName, team: employeeProfiles.team })
+    return db.select({ id: users.id, displayName: users.displayName, team: employeeProfiles.team, employeeCode: employeeProfiles.employeeCode })
       .from(users).innerJoin(employeeProfiles, eq(employeeProfiles.userId, users.id))
       .where(and(eq(users.active, true), employeeScope(scope), sql`${users.id} not in (${allocated})`))
       .orderBy(asc(users.displayName), asc(users.id)).limit(limit).offset(offset);
@@ -191,7 +242,7 @@ export const reportingRepository = {
   },
 
   /** Replacement requests whose anchor assignment is in current scope. Ownership never widens this. */
-  replacementRequests(scope: ResolvedScope, limit: number, offset: number) {
+  replacementRequests(scope: ResolvedScope, limit: number, offset: number, window?: Window, filters: AssignmentFilters = {}) {
     return db.select({
       id: replacementRequests.id, intent: replacementRequests.intent, status: replacementRequests.status,
       effectStatus: replacementRequests.effectStatus, requesterUserId: replacementRequests.requesterUserId,
@@ -202,14 +253,14 @@ export const reportingRepository = {
       .innerJoin(users, eq(users.id, replacementRequests.requesterUserId))
       .innerJoin(scheduleAssignments, eq(scheduleAssignments.id, replacementRequests.anchorAssignmentId))
       .innerJoin(schedulePeriods, eq(schedulePeriods.id, scheduleAssignments.schedulePeriodId))
-      .where(assignmentScope(scope))
+      .where(and(assignmentScope(scope), replacementWindow(window), selectedAssignments(filters)))
       .orderBy(desc(replacementRequests.createdAt), desc(replacementRequests.id)).limit(limit).offset(offset);
   },
-  replacementRequestCount(scope: ResolvedScope) {
+  replacementRequestCount(scope: ResolvedScope, window?: Window, filters: AssignmentFilters = {}) {
     return db.select({ value: sql<number>`count(*)::int` }).from(replacementRequests)
       .innerJoin(scheduleAssignments, eq(scheduleAssignments.id, replacementRequests.anchorAssignmentId))
       .innerJoin(schedulePeriods, eq(schedulePeriods.id, scheduleAssignments.schedulePeriodId))
-      .where(assignmentScope(scope)).then(([row]) => Number(row?.value ?? 0));
+      .where(and(assignmentScope(scope), replacementWindow(window), selectedAssignments(filters))).then(([row]) => Number(row?.value ?? 0));
   },
   pendingReplacementCount(scope: ResolvedScope) {
     return db.select({ value: sql<number>`count(*)::int` }).from(replacementRequests)
@@ -323,7 +374,7 @@ export const reportingRepository = {
   },
 
   /** One row per client-month with its effective lifecycle state. */
-  scheduleLifecycle(scope: ResolvedScope, limit: number, offset: number) {
+  scheduleLifecycle(scope: ResolvedScope, limit: number, offset: number, window?: Window, filters: AssignmentFilters = {}) {
     return db.select({
       clientId: schedulePeriods.clientId, clientName: clients.companyName, planningMonth: schedulePeriods.planningMonth,
       latestRevision: sql<number>`max(${schedulePeriods.revisionNumber})::int`,
@@ -337,7 +388,7 @@ export const reportingRepository = {
       publishedPeriodId: sql<string | null>`max(case when ${schedulePeriods.status} = 'PUBLISHED' and ${schedulePeriods.isCurrent} then ${schedulePeriods.id}::text end)`,
     }).from(schedulePeriods)
       .innerJoin(clients, eq(clients.id, schedulePeriods.clientId))
-      .where(scope.isGlobal ? undefined : (scope.role === "ADMIN" && scope.clientIds.length ? inArray(schedulePeriods.clientId, scope.clientIds) : sql`false`))
+      .where(lifecycleScope(scope, window, filters))
       .groupBy(schedulePeriods.clientId, clients.companyName, schedulePeriods.planningMonth)
       .orderBy(desc(schedulePeriods.planningMonth), asc(clients.companyName))
       .limit(limit).offset(offset);
@@ -350,9 +401,9 @@ export const reportingRepository = {
       .where(and(eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true)))
       .groupBy(scheduleAssignments.schedulePeriodId);
   },
-  scheduleLifecycleCount(scope: ResolvedScope) {
+  scheduleLifecycleCount(scope: ResolvedScope, window?: Window, filters: AssignmentFilters = {}) {
     return db.select({ value: sql<number>`count(distinct (${schedulePeriods.clientId}, ${schedulePeriods.planningMonth}))::int` }).from(schedulePeriods)
-      .where(scope.isGlobal ? undefined : (scope.role === "ADMIN" && scope.clientIds.length ? inArray(schedulePeriods.clientId, scope.clientIds) : sql`false`))
+      .where(lifecycleScope(scope, window, filters))
       .then(([row]) => Number(row?.value ?? 0));
   },
 
@@ -391,13 +442,19 @@ export const reportingRepository = {
         : null;
     const projectQuery = scope.isGlobal
       ? db.select({ id: projects.id, name: projects.name }).from(projects)
-      : scope.role === "ADMIN" && scope.projectIds.length
-        ? db.select({ id: projects.id, name: projects.name }).from(projects).where(inArray(projects.id, scope.projectIds))
+      : scope.role === "ADMIN" && (scope.projectIds.length || scope.clientIds.length)
+        ? db.select({ id: projects.id, name: projects.name }).from(projects).where(or(
+          scope.projectIds.length ? inArray(projects.id, scope.projectIds) : undefined,
+          scope.clientIds.length ? inArray(projects.clientId, scope.clientIds) : undefined,
+        ))
         : null;
     const locationQuery = scope.isGlobal
       ? db.select({ id: locations.id, name: locations.name }).from(locations)
-      : scope.role === "ADMIN" && scope.locationIds.length
-        ? db.select({ id: locations.id, name: locations.name }).from(locations).where(inArray(locations.id, scope.locationIds))
+      : scope.role === "ADMIN" && (scope.locationIds.length || scope.clientIds.length)
+        ? db.select({ id: locations.id, name: locations.name }).from(locations).where(or(
+          scope.locationIds.length ? inArray(locations.id, scope.locationIds) : undefined,
+          scope.clientIds.length ? inArray(locations.clientId, scope.clientIds) : undefined,
+        ))
         : null;
     return Promise.all([
       clientQuery ? clientQuery.orderBy(asc(clients.companyName)) : Promise.resolve([] as { id: string; name: string }[]),
@@ -406,8 +463,8 @@ export const reportingRepository = {
     ]).then(([clientOptions, projectOptions, locationOptions]) => ({ clientOptions, projectOptions, locationOptions }));
   },
 
-  /** Assignment requirements, used alongside staffing requirements for the required-versus-recorded view. */
-  assignmentSkillRequirements(scope: ResolvedScope, limit: number) {
+  /** Full assignment-requirement source; the service combines, sorts and paginates both requirement types. */
+  assignmentSkillRequirements(scope: ResolvedScope) {
     return db.select({
       id: assignmentSkillRequirements.id, skillId: assignmentSkillRequirements.skillId, skillName: skills.name,
       assignmentId: assignmentSkillRequirements.scheduleAssignmentId,
@@ -416,6 +473,6 @@ export const reportingRepository = {
       .innerJoin(scheduleAssignments, eq(scheduleAssignments.id, assignmentSkillRequirements.scheduleAssignmentId))
       .innerJoin(schedulePeriods, eq(schedulePeriods.id, scheduleAssignments.schedulePeriodId))
       .where(and(isNull(assignmentSkillRequirements.archivedAt), assignmentScope(scope)))
-      .orderBy(asc(skills.name), asc(assignmentSkillRequirements.id)).limit(limit);
+      .orderBy(asc(skills.name), asc(assignmentSkillRequirements.id));
   },
 };

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { getCurrentActor, setSessionCookie } from "@/modules/auth/session-service";
+import { getCurrentActor, getCurrentPasswordChangeActor, setSessionCookie } from "@/modules/auth/session-service";
 import { AccountAdminDomainError } from "./domain-error";
 import { accountAdministrationService } from "./service";
 import { accountErrorMessage } from "./messages";
@@ -63,8 +63,9 @@ export const resetPasswordAction: AccountFormAction = async (_state, formData) =
   if (!onlyContains(formData, ["userId", "expectedVersion", "password", "confirmPassword", "mustChangePassword", "confirmRevoke", "currentPassword", "highRiskConfirmed"])) {
     return { formError: "That submission included fields this form does not accept." };
   }
+  let result;
   try {
-    await accountAdministrationService.resetPassword(actor, {
+    result = await accountAdministrationService.resetPassword(actor, {
       userId: text(formData, "userId"), expectedVersion: Number(text(formData, "expectedVersion")),
       password: text(formData, "password"), confirmPassword: text(formData, "confirmPassword"),
       mustChangePassword: bool(formData, "mustChangePassword"), confirmRevoke: bool(formData, "confirmRevoke"),
@@ -73,12 +74,14 @@ export const resetPasswordAction: AccountFormAction = async (_state, formData) =
   } catch (error) {
     return { formError: accountErrorMessage(error) };
   }
+  if (result.session) await setSessionCookie(result.session.token, result.session.expiresAt);
   revalidatePath("/accounts");
+  if (result.session && result.mustChangePassword) redirect("/account/change-password");
   return { success: "Password reset completed. Existing sessions were revoked." };
 };
 
 export const changeOwnPasswordAction: AccountFormAction = async (_state, formData) => {
-  const actor = await getCurrentActor();
+  const actor = await getCurrentPasswordChangeActor();
   if (!actor) redirect("/login");
   if (!onlyContains(formData, ["currentPassword", "newPassword", "confirmPassword"])) {
     return { formError: "That submission included fields this form does not accept." };

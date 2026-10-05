@@ -29,8 +29,8 @@ export function LoginScreen() {
       setPending(false);
     }
   }
-  return <main className="login-page"><section className="login-card"><Brand /><h1>Sign in</h1>
-    <form onSubmit={signIn}>
+  return <main className="login-page"><section className="login-card"><Brand /><h1>Sign in</h1><p className="login-intro">Welcome to your team workspace.</p>
+    <form className="login-form" onSubmit={signIn}>
       <label htmlFor="login-identifier">Username or email</label>
       <input id="login-identifier" type="text" autoComplete="username" required value={identifier} onChange={(event) => setIdentifier(event.target.value)} disabled={pending} />
       <label htmlFor="login-password">Password</label>
@@ -39,7 +39,7 @@ export function LoginScreen() {
         <button type="button" className="icon-button" aria-label={visible ? "Hide password" : "Show password"} aria-pressed={visible} onClick={() => setVisible(!visible)}>{visible ? "Hide" : "Show"}</button>
       </div>
       {error && <p className="form-error" role="alert">{error}</p>}
-      <button className="button primary login-submit" type="submit" disabled={pending}>{pending ? "Signing in…" : "Sign in"}</button>
+      <button className="button primary login-submit" type="submit" disabled={pending} aria-busy={pending}>{pending ? "Signing in…" : "Sign in"}</button>
     </form>
   </section></main>;
 }

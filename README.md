@@ -1,6 +1,8 @@
 # ScopeIs Team Management System
 
-Responsive internal workforce-planning application. Phases 0–11 are `COMPLETED` as bounded vertical journeys: the secure mock-account foundation, employee management, clients/projects/locations, scheduling Draft → Proposed → Published V1, annual leave, controlled skills with non-blocking warnings, coverage/replacement, the management-only static planning map, capability evidence with private files, collaboration and governance (shared operational notes, employee-management notes, participant-only replacement-request discussions, the notification centre, and the Super Admin audit history), and reporting (role-and-scope dashboards, thirteen registered reports, a separate unpublished planning report, and bounded CSV exports).
+Responsive internal workforce-planning application covering the secure foundation, employee management, clients/projects/locations, scheduling Draft → Proposed → Published V1, annual leave, controlled skills with non-blocking warnings, coverage/replacement, the management-only static planning map, capability evidence with private files, collaboration and governance, and role-and-scope dashboards, reports and bounded CSV exports. The live tracker retains Phase 4 as `PARTIAL` for retained-history assignment omission/removal; other completed journeys are bounded verification claims.
+
+The header's **Find a feature** search exposes each role's delivered tools through tasks such as CVs, staffing and exports. Dashboard shortcuts connect daily work to the appropriate workflow. The planning map fits authorized assignments, groups coincident pins, supports search/layers/touch interaction and links selected assignments to schedule and coverage. See the [UI experience review](DOCX/phase-reports/SCOPEIS_UI_EXPERIENCE_AND_PLANNING_MAP_2026_10_05.md) for screenshots and verification.
 
 Phase 12 — Ticket System integration — is the next journey and is `NEXT`; it has not started. Production identity/rollout remains Phase 13. Those modules exist only as clearly labelled shells.
 
@@ -71,8 +73,9 @@ Each concept has exactly one meaning. Every gate below is safe to run locally: i
 | Component tests | `npm run test:component` | All jsdom component suites in one pass, with no PostgreSQL or environment dependency. |
 | Aggregate integration tests | `npm run test:integration` | Every file in `test/integration`, each in its own freshly created disposable database. |
 | Phase-specific integration tests | `npm run test:phase1-integration`, `npm run test:phase2-core`, `npm run test:phase3-service` … `npm run test:phase11-service` | One phase's service/migration slice only. Retained for focused work; `npm run test:integration` is the authoritative aggregate. |
-| Aggregate E2E | `npm run test:e2e` | The Phase 1–11 guarded browser journeys, run sequentially, each on its own disposable database and runner-allocated port. |
+| Aggregate E2E | `npm run test:e2e` | Phase 1–11, credential/account and responsive UI browser journeys, run sequentially, each on its own disposable database and runner-allocated port. |
 | Phase-specific E2E | `npm run test:phase1-e2e` … `npm run test:phase11-e2e` | One phase's guarded desktop/mobile journey only. |
+| Responsive and visual presentation E2E | `npm run test:responsive` | Supplemental UI gate using installed Chrome, an isolated safe build, one owned disposable database and fictional edge-case fixtures. Checks 320–1920px layouts, dialogs, role navigation and feature discovery, planning-map fit/search/layers/offline recovery, RTL, both themes, doubled text, a simulated onscreen keyboard, contrast/focus, native modal behavior, reduced motion, desktop hover and forced colors. |
 | Route certification | `npm run test:route-certification` | Phase 1 HTTP route/role/scope/privacy certification against a built test server. |
 | Migration verification | `npm run test:migration` | Migration ledger, journal, manifest, and TypeScript-schema parity. |
 | Seed smoke | `npm run test:seed-smoke` | The real fictional seed against a fresh disposable database, including an idempotent re-run. |

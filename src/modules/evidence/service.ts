@@ -140,9 +140,16 @@ export class EvidenceService {
       await evidenceRepository.lockOwner(tx, actor.id);
       await evidenceRepository.lockEvidence(tx, parsed.evidenceId);
       const current = await this.requireOwnedActiveEvidence(tx, actor, parsed.evidenceId);
-      const row = await evidenceRepository.updateEvidence(tx, parsed.evidenceId, parsed.expectedVersion, {
+      if (current.version !== parsed.expectedVersion) throw new EvidenceDomainError("STALE_VERSION");
+      const editableValues = {
         title: parsed.title, issuer: parsed.issuer ?? null, issueDate: parsed.issueDate ?? null, expiryDate: parsed.expiryDate ?? null,
-        details: parsed.details ?? null, relatedSkillId: parsed.relatedSkillId ?? null, externalUrl: parsed.externalUrl ?? null, lastSubmittedAt: new Date(),
+        details: parsed.details ?? null, relatedSkillId: parsed.relatedSkillId ?? null, externalUrl: parsed.externalUrl ?? null,
+      };
+      const editableFields = Object.keys(editableValues) as (keyof typeof editableValues)[];
+      // Saving the same normalized content is not a new submission or a change to the review claim.
+      if (editableFields.every((field) => current[field] === editableValues[field])) return { evidence: current };
+      const row = await evidenceRepository.updateEvidence(tx, parsed.evidenceId, parsed.expectedVersion, {
+        ...editableValues, lastSubmittedAt: new Date(),
         // A material owner change invalidates the previous review claim: verified must keep meaning something.
         ...resetReviewProvenance(),
       });

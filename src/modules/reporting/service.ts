@@ -5,7 +5,7 @@ import { deriveExpiryStatus } from "@/modules/evidence/validation";
 import { leaveService } from "@/modules/leave/service";
 import {
   canExportReport, canViewReport, CONFLICT_COLUMN_HEADER, conflictValues, PLANNING_DATA_STATE, PUBLISHED_DATA_STATE,
-  reportDefinition, reports, type ConflictValue, type ReportKey,
+  reportDefinition, reportFilters, reports, type ConflictValue, type ReportKey,
 } from "@/modules/reporting/definitions";
 import { ReportDomainError } from "@/modules/reporting/domain-error";
 import {
@@ -13,7 +13,7 @@ import {
   scheduledHours, workingDays, type DateWindow,
 } from "@/modules/reporting/date-rules";
 import { reportingRepository } from "@/modules/reporting/repositories";
-import { MAX_EXPORT_ROWS, parseMonth, REPORT_PAGE_SIZE, parseReportQuery, skillStatus, type ReportQuery } from "@/modules/reporting/validation";
+import { MAX_EXPORT_ROWS, assertSupportedReportFilters, parseMonth, REPORT_PAGE_SIZE, parseReportQuery, skillStatus, type ReportQuery } from "@/modules/reporting/validation";
 import type { AuthenticatedActor, SystemRole } from "@/shared/types/foundation";
 
 export type ReportColumn = { key: string; label: string };
@@ -37,6 +37,7 @@ export type ReportView = {
   windowFrom: string;
   windowTo: string;
   conflictDate: string;
+  query: ReportQuery;
   emptyState: string;
   notes: string[];
   /** True when a required source for this report is genuinely missing (never an employee classification). */
@@ -101,16 +102,10 @@ export class ReportingService {
     const definition = reports[key];
     const today = dubaiToday();
     const month = parseMonth(query.month, currentDubaiMonth());
-    const fallbackFrom = key === "leave-balance" || key === "skills-coverage" || key === "skill-gaps" || key === "certification-status" || key === "evidence-review-queue" || key === "audit-history"
-      ? `${today.slice(0, 4)}-01-01`
-      : key === "schedule-lifecycle"
-        ? addDays(`${month}-01`, -330)
-        : monthBounds(month).from;
-    const fallbackTo = key === "leave-balance" || key === "skills-coverage" || key === "skill-gaps" || key === "certification-status" || key === "evidence-review-queue" || key === "audit-history"
-      ? `${today.slice(0, 4)}-12-31`
-      : key === "schedule-lifecycle"
-        ? monthBounds(month).to
-        : monthBounds(month).to;
+    assertSupportedReportFilters(key, query);
+    const annual = key === "leave-balance" || key === "audit-history";
+    const fallbackFrom = annual ? `${today.slice(0, 4)}-01-01` : monthBounds(month).from;
+    const fallbackTo = annual ? `${today.slice(0, 4)}-12-31` : monthBounds(month).to;
     const window = assertWindow({ from: query.from ?? fallbackFrom, to: query.to ?? fallbackTo }, definition.maxWindowDays);
     if (key === "approved-leave" && query.date && (query.date < window.from || query.date > window.to)) throw new ReportDomainError("VALIDATION_ERROR");
     const selectedDate = key === "approved-leave" ? (query.date ?? (today >= window.from && today <= window.to ? today : window.from)) : today;
@@ -122,15 +117,21 @@ export class ReportingService {
 
   /** Builds the projection for one report. The page and the CSV export share this exact result. */
   async report(actor: AuthenticatedActor, reportKey: string, input: unknown = {}): Promise<ReportView> {
-    const parsedQuery = parseReportQuery(input);
     const { current, scope, definition } = await this.authorize(actor, reportKey);
+    const parsedQuery = parseReportQuery(input);
     const key = definition!.key;
     const request = { ...this.resolveRequest(key, parsedQuery), scope, actorId: actor.id };
     const builder = this.builders[key];
     const built = await builder.call(this, request);
+    const hasWindow = reportFilters[key].includes("from");
+    const query: ReportQuery = { ...parsedQuery, ...(hasWindow ? request.window : {}), page: undefined, month: undefined,
+      ...(key === "approved-leave" ? request.conflict : {}) };
     return {
       key, label: definition!.label, question: definition!.question, asOf: asOfNow(),
-      windowLabel: formatDateRange(request.window) + (key === "approved-leave" ? ` · conflict date ${request.conflict.date}` : ""),
+      windowLabel: key === "leave-balance" ? `${request.window.from.slice(0, 4)} Dubai calendar year`
+        : hasWindow ? formatDateRange(request.window) + (key === "approved-leave" ? ` · conflict date ${request.conflict.date}` : "")
+          : `Current snapshot on ${dubaiToday()}`,
+      query,
       windowFrom: request.window.from, windowTo: request.window.to, conflictDate: request.conflict.date,
       columns: built.columns, rows: built.rows, page: request.page, pageSize: request.limit, totalRows: built.total ?? null,
       exportable: canExportReport(current.role, definition!.key),
@@ -165,8 +166,8 @@ export class ReportingService {
   private readonly builders: Record<ReportKey, (request: ResolvedRequest) => Promise<{ columns: ReportColumn[]; rows: ReportRow[]; total?: number; notes?: string[]; unavailable?: boolean }>> = {
     "published-allocation": async (request) => {
       const [rows, total] = await Promise.all([
-        reportingRepository.publishedAssignments(request.scope, request.window, request.limit, request.offset),
-        reportingRepository.publishedAssignmentCount(request.scope, request.window),
+        reportingRepository.publishedAssignments(request.scope, request.window, request.limit, request.offset, request.query),
+        reportingRepository.publishedAssignmentCount(request.scope, request.window, request.query),
       ]);
       return { columns: ReportingService.assignmentColumns(true), rows: this.assignmentsToRows(rows, PUBLISHED_DATA_STATE), total, notes: ["Published assignments only. Draft and Proposed scheduling is never included."] };
     },
@@ -178,40 +179,34 @@ export class ReportingService {
       ]);
       return {
         columns: [{ key: "employee_name", label: "Employee" }, { key: "employee_code", label: "Employee code" }, { key: "team", label: "Team" }],
-        rows: rows.map((row) => ({ employee_name: row.displayName, employee_code: "", team: row.team ?? "No team recorded" })),
+        rows: rows.map((row) => ({ employee_name: row.displayName, employee_code: row.employeeCode ?? "—", team: row.team ?? "No team recorded" })),
         total,
         notes: ["A person listed here may still hold Draft or Proposed work; this report reads the current Published schedule only."],
       };
     },
 
     "scheduled-hours": async (request) => {
-      const rows = await reportingRepository.publishedAssignments(request.scope, request.window, MAX_EXPORT_ROWS, 0);
-      const totals = new Map<string, { name: string; hours: number; assignments: number }>();
-      for (const row of rows) {
-        const entry = totals.get(row.employeeUserId) ?? { name: row.employeeName, hours: 0, assignments: 0 };
-        entry.hours += scheduledHours(String(row.startTime), String(row.endTime));
-        entry.assignments += 1;
-        totals.set(row.employeeUserId, entry);
-      }
-      const grouped = [...totals.values()].sort((a, b) => b.hours - a.hours || a.name.localeCompare(b.name));
-      const page = grouped.slice(request.offset, request.offset + request.limit);
+      const [rows, total] = await Promise.all([
+        reportingRepository.scheduledHours(request.scope, request.window, request.limit, request.offset, request.query),
+        reportingRepository.scheduledEmployeeCount(request.scope, request.window, request.query),
+      ]);
       return {
         columns: [{ key: "employee_name", label: "Employee" }, { key: "assignment_count", label: "Published assignments" }, { key: "total_hours", label: "Total scheduled hours" }],
-        rows: page.map((entry) => ({ employee_name: entry.name, assignment_count: String(entry.assignments), total_hours: formatHours(entry.hours) })),
-        total: grouped.length,
+        rows: rows.map((entry) => ({ employee_name: entry.employeeName, assignment_count: String(entry.assignments), total_hours: formatHours(entry.hours) })),
+        total,
         notes: ["Total scheduled hours is the arithmetic sum of each Published assignment's start and end time. It is not worked time, attendance, or a capacity measure."],
       };
     },
 
     "planning-unpublished": async (request) => {
-      const rows = await reportingRepository.planningAssignments(request.scope, request.window, request.limit, request.offset);
+      const rows = await reportingRepository.planningAssignments(request.scope, request.window, request.limit, request.offset, request.query);
       const projected = rows.map((row) => ({
         data_state: PLANNING_DATA_STATE, assignment_date: row.assignmentDate, start_time: String(row.startTime).slice(0, 5),
         end_time: String(row.endTime).slice(0, 5), scheduled_hours: formatHours(scheduledHours(String(row.startTime), String(row.endTime))),
         employee_name: row.employeeName, project_name: row.projectName, location_name: row.locationName, client_name: row.clientName,
         planning_month: row.planningMonth.slice(0, 7), period_status: row.periodStatus, revision_number: String(row.revisionNumber),
       }));
-      const count = await reportingRepository.publishedAssignmentCount(request.scope, request.window);
+      const count = await reportingRepository.publishedAssignmentCount(request.scope, request.window, request.query);
       return {
         columns: [...ReportingService.assignmentColumns(true), { key: "period_status", label: "Period status" }, { key: "revision_number", label: "Revision" }],
         rows: projected, total: undefined, notes: [
@@ -256,7 +251,7 @@ export class ReportingService {
     "leave-balance": async (request) => {
       const [allowance, employees, approved] = await Promise.all([
         reportingRepository.allowance(),
-        reportingRepository.activeEmployees(request.scope, MAX_EXPORT_ROWS, 0),
+        reportingRepository.activeEmployees(request.scope),
         reportingRepository.approvedLeaveForYear(request.scope, request.window.from, request.window.to),
       ]);
       if (!allowance) {
@@ -281,8 +276,8 @@ export class ReportingService {
 
     "coverage-replacement": async (request) => {
       const [rows, total] = await Promise.all([
-        reportingRepository.replacementRequests(request.scope, request.limit, request.offset),
-        reportingRepository.replacementRequestCount(request.scope),
+        reportingRepository.replacementRequests(request.scope, request.limit, request.offset, request.window, request.query),
+        reportingRepository.replacementRequestCount(request.scope, request.window, request.query),
       ]);
       return {
         columns: [
@@ -297,7 +292,7 @@ export class ReportingService {
           observed_required: String(row.observedRequiredEmployeeCount), observed_eligible: String(row.observedEligibleEmployeeCount),
         })),
         total,
-        notes: ["Rows are limited to requests whose anchor assignment is inside your current scope. A fleet-wide open-gap figure is not offered: coverage gaps are computed per anchor assignment."],
+        notes: ["Dates filter when the request was created in Asia/Dubai. Rows are limited to requests whose anchor assignment is inside your current scope. A fleet-wide open-gap figure is not offered: coverage gaps are computed per anchor assignment."],
       };
     },
 
@@ -322,7 +317,7 @@ export class ReportingService {
     "skill-gaps": async (request) => {
       const [requirements, assignmentRequirements, relations] = await Promise.all([
         reportingRepository.skillRequirements(),
-        reportingRepository.assignmentSkillRequirements(request.scope, MAX_EXPORT_ROWS),
+        reportingRepository.assignmentSkillRequirements(request.scope),
         reportingRepository.recordedSkillRelations(),
       ]);
       const inScope = relations.filter((relation) => request.scope.isGlobal || (request.scope.role === "ADMIN" && relation.team !== null && request.scope.teams.includes(relation.team)));
@@ -413,8 +408,8 @@ export class ReportingService {
 
     "schedule-lifecycle": async (request) => {
       const [rows, total, counts] = await Promise.all([
-        reportingRepository.scheduleLifecycle(request.scope, request.limit, request.offset),
-        reportingRepository.scheduleLifecycleCount(request.scope),
+        reportingRepository.scheduleLifecycle(request.scope, request.limit, request.offset, request.window, request.query),
+        reportingRepository.scheduleLifecycleCount(request.scope, request.window, request.query),
         reportingRepository.publishedAssignmentCountByPeriod(),
       ]);
       const countByPeriod = new Map(counts.map((row) => [row.periodId, row.value]));
@@ -432,7 +427,7 @@ export class ReportingService {
           published_at: row.publishedAt ? new Intl.DateTimeFormat("en-GB", { dateStyle: "short", timeStyle: "short", timeZone: "Asia/Dubai" }).format(new Date(row.publishedAt)) : "—",
         })),
         total,
-        notes: ["Each client-month appears once with its effective state: Published when a current published revision exists, otherwise the open Draft or Proposed state."],
+        notes: ["Date filters include the planning months that intersect the selected range. Each client-month appears once with its effective state: Published when a current published revision exists, otherwise the open Draft or Proposed state."],
       };
     },
 
@@ -481,8 +476,8 @@ export class ReportingService {
    * rather than truncate. Uses the same builder as the on-screen report, so the projection is identical.
    */
   async exportPayload(actor: AuthenticatedActor, reportKey: string, input: unknown = {}) {
-    const parsedQuery = parseReportQuery(input);
     const { scope, definition } = await this.authorize(actor, reportKey);
+    const parsedQuery = parseReportQuery(input);
     const key = definition!.key;
     const request: ResolvedRequest = { ...this.resolveRequest(key, parsedQuery), scope, actorId: actor.id, offset: 0, limit: MAX_EXPORT_ROWS + 1 };
     const built = await this.builders[key].call(this, request);
@@ -516,7 +511,7 @@ export class ReportingService {
         role: current.role, asOf,
         cards: [
           { key: "my-leave", label: "My leave and balance", question: "How much annual leave do I have left?", value: String(myLeave.balance.remaining), detail: `${myLeave.balance.used} of ${myLeave.balance.allowance} working days used in ${myLeave.balance.year}`, href: "/leave" },
-          { key: "my-skills", label: "Skills I have recorded", question: "How many skills are on my profile?", value: String(skills), href: "/profile" },
+          { key: "my-skills", label: "My recorded skills", question: "How many skills are on my profile?", value: String(skills), href: "/skills" },
           { key: "my-evidence", label: "My capability evidence", question: "What evidence have I recorded?", value: String(evidence.length), detail: `${evidenceCounts.expired} expired`, href: "/profile" },
           { key: "my-unread", label: "My unread notifications", question: "Do I have anything new?", value: String(unread), href: "/notifications" },
         ],

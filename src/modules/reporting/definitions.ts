@@ -220,6 +220,26 @@ export const reports: Record<ReportKey, ReportDefinition> = {
 
 export const reportKeyList = reportKeys.slice() as unknown as ReportKey[];
 
+/** Only controls backed by a report's source query are offered or accepted. */
+export type ReportFilter = "from" | "to" | "month" | "date" | "start" | "end" | "clientId" | "projectId" | "locationId" | "action" | "targetType" | "actorUserId";
+const WINDOW_FILTERS = ["from", "to", "month"] as const;
+const ASSIGNMENT_FILTERS = [...WINDOW_FILTERS, "clientId", "projectId", "locationId"] as const;
+export const reportFilters: Record<ReportKey, readonly ReportFilter[]> = {
+  "published-allocation": ASSIGNMENT_FILTERS,
+  "unallocated-employees": WINDOW_FILTERS,
+  "scheduled-hours": ASSIGNMENT_FILTERS,
+  "planning-unpublished": ASSIGNMENT_FILTERS,
+  "approved-leave": [...WINDOW_FILTERS, "date", "start", "end"],
+  "leave-balance": [],
+  "coverage-replacement": ASSIGNMENT_FILTERS,
+  "skills-coverage": [],
+  "skill-gaps": [],
+  "certification-status": [],
+  "evidence-review-queue": [],
+  "schedule-lifecycle": [...WINDOW_FILTERS, "clientId"],
+  "audit-history": [...WINDOW_FILTERS, "action", "targetType", "actorUserId"],
+};
+
 export function reportDefinition(key: string): ReportDefinition | null {
   return (reportKeys as readonly string[]).includes(key) ? reports[key as ReportKey] : null;
 }

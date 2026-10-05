@@ -1,0 +1,76 @@
+.people-page-heading,.account-list-toolbar,.people-evidence-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; }
+.people-page-heading h2 { margin:4px 0 8px; font-size:1.7rem; letter-spacing:-.025em; }
+.people-page-heading > .button { flex:none; }
+.employee-directory,.employee-detail,.people-profile-page { max-width:1180px; min-width:0; }
+.employee-directory .directory-filters { margin-block-start:22px; box-shadow:none; }
+.people-list-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 18px; border-block-end:1px solid var(--border); }
+.people-list-heading h3,.account-list-toolbar h3 { margin:0; font-size:1rem; }
+.people-list-heading span,.account-list-toolbar p,.people-evidence-heading span { color:var(--muted); font-size:.82rem; }
+.account-list-toolbar p { margin:5px 0 0; }
+.people-filter-actions,.people-record-actions { display:flex; flex-wrap:wrap; gap:8px; }
+.account-cell-stack { display:grid; gap:5px; min-width:0; }
+.account-cell-stack small { color:var(--muted); font-size:.75rem; font-weight:400; line-height:1.4; overflow-wrap:anywhere; }
+.account-table { min-width:980px; }
+.account-table th,.account-table td { padding:16px 14px; vertical-align:middle; }
+.account-table thead { background:var(--surface-muted); }
+.account-table tbody tr:last-child > * { border-block-end:0; }
+.account-table tbody tr:hover,.employee-directory tbody tr:hover { background:color-mix(in srgb,var(--primary) 3%,var(--surface)); }
+.account-actions-row > .account-empty { border:0; padding:0; background:transparent; font-size:.8rem; }
+.account-password-notice { border-inline-start:3px solid var(--border); font-size:.83rem; padding:9px 12px; }
+.account-pagination { justify-content:flex-end; }
+.account-pagination > span { margin-inline-end:auto; color:var(--muted); font-size:.82rem; }
+.people-profile-page { display:grid; gap:30px; }
+.people-profile-page .employee-self-profile { margin-block-start:0; gap:20px; }
+.people-profile-card { display:flex; gap:18px; align-items:flex-start; padding:24px; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); }
+.people-avatar { display:grid; place-items:center; width:64px; height:64px; flex:none; border-radius:16px; color:var(--primary); background:color-mix(in srgb,var(--primary) 9%,var(--surface)); font-size:1.25rem; font-weight:750; }
+.people-profile-identity { min-width:0; }
+.people-profile-identity h3 { margin:0 0 6px; font-size:1.2rem; }
+.people-profile-identity p { margin:0; color:var(--muted); line-height:1.6; overflow-wrap:anywhere; }
+.people-profile-identity p + p { margin-block-start:12px; color:var(--text); max-width:72ch; }
+.people-profile-facts { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; margin:0; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); }
+.people-profile-facts > div { min-width:0; padding:18px; }
+.people-profile-facts > div + div { border-inline-start:1px solid var(--border); }
+.people-profile-facts dt { font-size:.75rem; color:var(--muted); }
+.people-profile-facts dd { margin:7px 0 0; font-size:.9rem; font-weight:600; overflow-wrap:anywhere; }
+.people-security-link { justify-self:start; font-size:.84rem; color:var(--primary); text-underline-offset:3px; }
+.employee-detail dl { grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; background:var(--surface); }
+.employee-detail dl div { border:0; border-radius:0; border-block-end:1px solid var(--border); padding:18px; }
+.employee-detail dt { text-transform:none; letter-spacing:0; font-weight:500; }
+.employee-detail dd { font-size:.9rem; }
+.employee-management-panel { display:flex; flex-wrap:wrap; align-items:center; padding:18px; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); }
+.employee-management-panel > h3,.employee-management-panel > .directory-intro,.employee-scope-controls { width:100%; }
+.employee-management-panel > h3 { font-size:1rem; }
+.employee-management-panel > .directory-intro { font-size:.85rem; margin-block-end:2px; }
+.employee-management-panel > .button,.employee-scope-controls .button,.people-record-actions > .button { background:var(--surface); border-color:var(--border); color:var(--text); }
+.employee-scope-controls { display:grid; gap:12px; border-block-start:1px solid var(--border); margin-block-start:4px; padding-block-start:18px; }
+.employee-scope-controls > p { margin:0; color:var(--muted); font-size:.84rem; }
+.employee-scope-controls > .button { justify-self:start; }
+.people-evidence-sections { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; align-items:start; }
+.people-evidence-heading h3 { margin:0 0 5px; font-size:1rem; }
+.people-evidence-heading > .button { flex:none; font-size:.8rem; }
+.people-evidence-sections .operation-panel { padding:20px; gap:16px; box-shadow:none; }
+.people-evidence-sections .operation-empty { border:0; padding:12px 0; background:transparent; font-size:.85rem; }
+.evidence-page .evidence-item { box-shadow:none; }
+.people-evidence-sections .evidence-item { padding:16px; background:var(--surface-muted); }
+.people-record-actions { margin-block-start:4px; }
+.people-record-actions > .button { min-height:36px; font-size:.8rem; }
+.evidence-page { margin-block-start:24px; }
+.people-profile-page .evidence-page { margin-block-start:0; }
+.task-dialog .employee-create-form { grid-template-columns:1fr; margin-block-start:16px; gap:7px; }
+.task-dialog .employee-create-form > * { grid-column:auto; }
+.task-dialog .employee-create-form > input,.task-dialog .employee-create-form > textarea { margin-block-end:8px; }
+.task-dialog .employee-management-form,.task-dialog .employee-self-profile-form,.task-dialog .operation-form { border:0; background:transparent; box-shadow:none; padding:0; }
+.task-dialog .employee-management-form > h4 { display:none; }
+.task-dialog .account-form { gap:7px; }
+.task-dialog .account-form > input,.task-dialog .account-form > select,.task-dialog .account-form > textarea { margin-block-end:9px; }
+.task-dialog .account-form > label:not(.account-check) { margin-block-start:3px; }
+.people-optional-fields { margin-block:8px; border-block-start:1px solid var(--border); padding-block-start:14px; }
+.people-optional-fields summary { cursor:pointer; color:var(--muted); font-size:.84rem; font-weight:600; }
+.people-optional-fields > div { display:grid; gap:8px; margin-block-start:14px; }
+.task-dialog .account-check { padding-block:6px; line-height:1.5; }
+.task-dialog .account-check input { flex:none; width:18px; height:18px; margin-block-start:2px; accent-color:var(--primary); }
+.task-dialog .employee-management-form > .button,.task-dialog .employee-self-profile-form > .button,.task-dialog .operation-form > .button { justify-self:end; margin-block-start:8px; }
+.task-dialog .evidence-review-actions { display:grid; grid-template-columns:1fr; }
+.task-dialog .evidence-review-actions .operation-form { border:1px solid var(--border); padding:12px; }
+@media(max-width:1000px) { .people-profile-facts { grid-template-columns:repeat(2,minmax(0,1fr)); }.people-profile-facts > div:nth-child(3) { border-inline-start:0; }.people-profile-facts > div:nth-child(n+3) { border-block-start:1px solid var(--border); }.people-evidence-sections { grid-template-columns:1fr; }.account-list-toolbar { flex-direction:column; } }
+@media(max-width:760px) { .people-page-heading { flex-direction:column; gap:14px; }.people-page-heading h2 { font-size:1.5rem; }.people-page-heading > .button { width:100%; }.people-profile-card { padding:18px; gap:12px; }.people-avatar { width:48px; height:48px; border-radius:12px; font-size:1rem; }.people-profile-facts > div { padding:14px; }.employee-detail dl { grid-template-columns:1fr 1fr; }.employee-detail dl div { padding:14px; }.people-evidence-heading { gap:12px; }.people-evidence-heading > .button { min-height:44px; max-width:55%; white-space:normal; }.account-list-toolbar,.account-actions-row { width:100%; }.people-filter-actions > .button { flex:1; }.people-record-actions > .button { min-height:44px; }.employee-management-panel > .button { width:100%; }.task-dialog .employee-create-form,.task-dialog .employee-management-form,.task-dialog .employee-self-profile-form { min-width:0; } }

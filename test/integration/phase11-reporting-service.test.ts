@@ -1,11 +1,12 @@
 import { and, eq, sql } from "drizzle-orm";
 import { describe, expect, it } from "vitest";
 import { db } from "@/db/client";
-import { adminScopeGrants, auditEvents, employeeEvidence, users } from "@/db/schema";
+import { adminScopeGrants, auditEvents, employeeEvidence, leaveRequests, users } from "@/db/schema";
 import { coverageService } from "@/modules/coverage/service";
 import { leaveService } from "@/modules/leave/service";
 import { ReportDomainError } from "@/modules/reporting/domain-error";
 import { reportExportService } from "@/modules/reporting/export-service";
+import { dubaiToday } from "@/modules/reporting/date-rules";
 import { reportingService } from "@/modules/reporting/service";
 import { phase3Ids } from "../../scripts/phase10-test-fixtures.mjs";
 import { APPROVED_LEAVE_DATE, PRIVATE_MARKER, PROPOSED_MONTH, PUBLISHED_MONTH, phase11Ids } from "../../scripts/phase11-test-fixtures.mjs";
@@ -79,8 +80,8 @@ describe("Phase 11 published allocation (R1) and planning (R4)", () => {
 
   it("refuses Admin-only-excluded and unknown report keys with one non-enumerating error", async () => {
     const refused = await Promise.all([
-      refuseCode(() => reportingService.report(ava(), "leave-balance", YEAR)),
-      refuseCode(() => reportingService.report(ava(), "evidence-review-queue", YEAR)),
+      refuseCode(() => reportingService.report(ava(), "leave-balance")),
+      refuseCode(() => reportingService.report(ava(), "evidence-review-queue")),
       refuseCode(() => reportingService.report(ava(), "audit-history", YEAR)),
       refuseCode(() => reportingService.report(ava(), "does-not-exist", YEAR)),
     ]);
@@ -143,8 +144,8 @@ describe("Phase 11 leave reporting", () => {
   });
 
   it("keeps leave balance Super Admin only", async () => {
-    expect(await refuseCode(() => reportingService.report(ava(), "leave-balance", YEAR))).toMatchObject({ code: "NOT_FOUND" });
-    const balance = await reportingService.report(nora(), "leave-balance", YEAR);
+    expect(await refuseCode(() => reportingService.report(ava(), "leave-balance"))).toMatchObject({ code: "NOT_FOUND" });
+    const balance = await reportingService.report(nora(), "leave-balance");
     expect(balance.rows.some((row) => row.employee_name === "Cora Bell")).toBe(true);
     expect(JSON.stringify(balance)).not.toContain(PRIVATE_MARKER);
   });
@@ -152,18 +153,18 @@ describe("Phase 11 leave reporting", () => {
 
 describe("Phase 11 certification and skill reporting", () => {
   it("gives the Super Admin full certification detail and the Admin the summary projection only", async () => {
-    const full = await reportingService.report(nora(), "certification-status", YEAR);
+    const full = await reportingService.report(nora(), "certification-status");
     expect(full.columns.map((column) => column.key)).toContain("employee_name");
     expect(full.rows.some((row) => row.expiry_state === "expired")).toBe(true);
 
-    const summary = await reportingService.report(ava(), "certification-status", YEAR);
+    const summary = await reportingService.report(ava(), "certification-status");
     expect(summary.columns.map((column) => column.key)).not.toContain("employee_name");
     expect(summary.columns.map((column) => column.key)).not.toContain("details");
     expect(summary.rows.length).toBeGreaterThan(0);
   });
 
   it("uses only the recorded/not recorded vocabulary and never reads certification state into coverage", async () => {
-    const gaps = await reportingService.report(nora(), "skill-gaps", YEAR);
+    const gaps = await reportingService.report(nora(), "skill-gaps");
     const statuses = new Set(gaps.rows.map((row) => row.status));
     for (const status of statuses) expect(["recorded", "not recorded"]).toContain(status);
     expect(JSON.stringify(gaps).toLowerCase()).not.toContain("qualified");
@@ -189,14 +190,14 @@ describe("Phase 11 certification and skill reporting", () => {
     });
     const before = await snapshot();
     for (const key of ["published-allocation", "planning-unpublished", "skills-coverage", "skill-gaps", "certification-status", "schedule-lifecycle"]) {
-      await reportingService.report(nora(), key, YEAR);
+      await reportingService.report(nora(), key, ["skills-coverage", "skill-gaps", "certification-status"].includes(key) ? {} : YEAR);
     }
     // Approved leave and replacement status have a 90-day maximum window.
     const ninetyDays = { from: "2027-09-01", to: "2027-11-29" };
     await reportingService.report(nora(), "approved-leave", ninetyDays);
     await reportingService.report(nora(), "coverage-replacement", ninetyDays);
-    await reportingService.report(nora(), "leave-balance", YEAR);
-    await reportingService.report(nora(), "evidence-review-queue", YEAR);
+    await reportingService.report(nora(), "leave-balance");
+    await reportingService.report(nora(), "evidence-review-queue");
     await reportingService.report(nora(), "audit-history", YEAR);
     expect(await snapshot()).toEqual(before);
   });
@@ -270,9 +271,11 @@ describe("Phase 11 dashboards", () => {
     expect(view.sections.map((section) => section.key)).toEqual(["my-upcoming", "my-leave-requests"]);
 
     const areas = [...view.cards.map((card) => card.label), ...view.sections.map((section) => section.label)];
-    for (const required of ["My published assignments (next 7 days)", "My leave and balance", "My leave", "Skills I have recorded", "My capability evidence", "My unread notifications"]) {
+    for (const required of ["My published assignments (next 7 days)", "My leave and balance", "My leave", "My recorded skills", "My capability evidence", "My unread notifications"]) {
       expect(areas).toContain(required);
     }
+
+    expect(view.cards.find((card) => card.key === "my-skills")?.href).toBe("/skills");
 
     // The balance equals the authoritative leave-service computation for the same actor.
     const authoritative = await leaveService.getMyLeave(cora());
@@ -356,6 +359,12 @@ describe("Phase 11 exports", () => {
     expect(await refuseCode(() => reportExportService.generate(nora(), "audit-history", YEAR))).toMatchObject({ code: "NOT_FOUND" });
   });
 
+  it("gives an authorized export an actionable over-window refusal", async () => {
+    expect(await refuseCode(() => reportExportService.generate(nora(), "approved-leave", YEAR))).toMatchObject({
+      code: "WINDOW_TOO_LARGE", message: "Narrow the date range to 90 days or fewer.",
+    });
+  });
+
   it("prevents the export when the audit write fails", async () => {
     const failing = new (await import("@/modules/reporting/export-service")).ReportExportService(async () => { throw new Error("forced audit failure"); });
     await expect(failing.generate(nora(), "published-allocation", PUBLISHED_WINDOW)).rejects.toThrow("forced audit failure");
@@ -385,7 +394,7 @@ describe("Phase 11 current-authorization enforcement", () => {
     const requestId = "60000000-0000-4000-8000-000000000003";
     await db.execute(sql`insert into schedule_periods (id, client_id, planning_month, lineage_id, status) values (${periodId}, ${phase3Ids.bravoClient}, '2027-09-01', ${periodId}, 'DRAFT') on conflict (id) do nothing`);
     await db.execute(sql`insert into schedule_assignments (id, schedule_period_id, employee_user_id, project_id, location_id, assignment_date, start_time, end_time) values (${assignmentId}, ${periodId}, 'mock-employee-dan', ${phase3Ids.bravoProject}, ${phase3Ids.bravoLocation}, '2027-09-20', '09:00', '10:00') on conflict (id) do nothing`);
-    await db.execute(sql`insert into replacement_requests (id, intent, status, anchor_assignment_id, requester_user_id, observed_required_employee_count, observed_eligible_employee_count) values (${requestId}, 'REPLACE_ASSIGNMENT', 'PENDING', ${assignmentId}, 'mock-admin-ava', 1, 0) on conflict (id) do nothing`);
+    await db.execute(sql`insert into replacement_requests (id, intent, status, anchor_assignment_id, requester_user_id, observed_required_employee_count, observed_eligible_employee_count, created_at) values (${requestId}, 'REPLACE_ASSIGNMENT', 'PENDING', ${assignmentId}, 'mock-admin-ava', 1, 0, '2027-09-20T00:00:00+04:00') on conflict (id) do nothing`);
     try {
       const ninetyDays = { from: "2027-09-01", to: "2027-11-29" };
       const adminView = await reportingService.report(ava(), "coverage-replacement", ninetyDays);
@@ -393,6 +402,12 @@ describe("Phase 11 current-authorization enforcement", () => {
       // The same request is visible to a Super Admin, proving it exists and is hidden by scope alone.
       const superAdminView = await reportingService.report(nora(), "coverage-replacement", ninetyDays);
       expect(superAdminView.rows.length).toBeGreaterThan(adminView.rows.length);
+      // Midnight Dubai is still the previous UTC date: the date control follows Dubai.
+      const before = await reportingService.report(nora(), "coverage-replacement", { from: "2027-09-19", to: "2027-09-19", clientId: phase3Ids.bravoClient });
+      const onDate = await reportingService.report(nora(), "coverage-replacement", { from: "2027-09-20", to: "2027-09-20", clientId: phase3Ids.bravoClient });
+      expect(before.totalRows).toBe(0);
+      expect(onDate.totalRows).toBe(1);
+      expect((await reportingService.report(nora(), "coverage-replacement", { from: "2027-09-20", to: "2027-09-20", clientId: phase3Ids.alphaClient })).totalRows).toBe(0);
     } finally {
       await db.execute(sql`delete from replacement_requests where id = ${requestId}`);
       await db.execute(sql`delete from schedule_assignments where id = ${assignmentId}`);
@@ -405,5 +420,139 @@ describe("Phase 11 current-authorization enforcement", () => {
     expect(employee.role).toBe("EMPLOYEE");
     expect(employee.cards.every((card) => !card.label.toLowerCase().includes("team"))).toBe(true);
     expect(JSON.stringify(employee)).not.toContain("Dan Unscoped");
+  });
+});
+
+
+describe("report filter and total regressions", () => {
+  it("applies every selected assignment dimension to rows, counts, hours and exports without widening scope", async () => {
+    for (const filters of [
+      { clientId: phase3Ids.bravoClient }, { projectId: phase3Ids.bravoProject }, { locationId: phase3Ids.bravoLocation },
+    ]) {
+      for (const key of ["published-allocation", "planning-unpublished", "scheduled-hours"]) {
+        const view = await reportingService.report(nora(), key, { ...PUBLISHED_WINDOW, ...filters });
+        expect(view.rows).toEqual([]);
+        if (view.totalRows !== null) expect(view.totalRows).toBe(0);
+      }
+      expect((await reportExportService.generate(nora(), "published-allocation", { ...PUBLISHED_WINDOW, ...filters })).rowCount).toBe(0);
+    }
+    const selected = { ...PUBLISHED_WINDOW, clientId: phase3Ids.alphaClient, projectId: phase3Ids.alphaProjectOne, locationId: phase3Ids.alphaLocation };
+    expect((await reportingService.report(nora(), "published-allocation", selected)).totalRows).toBe(2);
+    expect((await reportingService.report(ben(), "published-allocation", selected)).totalRows).toBe(0);
+    expect((await reportingService.report(nora(), "published-allocation", { ...PUBLISHED_WINDOW, clientId: "", projectId: "", locationId: "" })).totalRows).toBe(2);
+  });
+
+  it("filters lifecycle by intersecting planning month and client", async () => {
+    const view = await reportingService.report(nora(), "schedule-lifecycle", { from: "2027-09-14", to: "2027-09-15", clientId: phase3Ids.alphaClient });
+    expect(view.totalRows).toBe(1);
+    expect(view.rows.map((row) => row.planning_month)).toEqual(["2027-09"]);
+    expect((await reportingService.report(nora(), "schedule-lifecycle", { from: "2099-01-01", to: "2099-01-31" })).totalRows).toBe(0);
+  });
+
+  it("calculates annual balance using the full current Dubai year and refuses partial-year requests", async () => {
+    const year = dubaiToday().slice(0, 4);
+    const date = new Date(`${year}-02-01T00:00:00Z`);
+    while ([0, 6].includes(date.getUTCDay())) date.setUTCDate(date.getUTCDate() + 1);
+    const workingDate = date.toISOString().slice(0, 10);
+    await db.update(leaveRequests).set({ startDate: workingDate, endDate: workingDate }).where(eq(leaveRequests.id, phase11Ids.approvedLeave));
+    try {
+      const view = await reportingService.report(nora(), "leave-balance");
+      const authoritative = await leaveService.getMyLeave(cora());
+      const row = view.rows.find((entry) => entry.employee_name === "Cora Bell")!;
+      expect(row.used).toBe(String(authoritative.balance.used));
+      expect(row.remaining).toBe(String(authoritative.balance.remaining));
+      expect(view.windowFrom).toBe(`${year}-01-01`);
+      expect(view.windowTo).toBe(`${year}-12-31`);
+      expect(await refuseCode(() => reportingService.report(nora(), "leave-balance", { from: `${year}-09-01`, to: `${year}-09-30` }))).toMatchObject({ code: "VALIDATION_ERROR" });
+    } finally {
+      await db.update(leaveRequests).set({ startDate: APPROVED_LEAVE_DATE, endDate: APPROVED_LEAVE_DATE }).where(eq(leaveRequests.id, phase11Ids.approvedLeave));
+    }
+  });
+
+  it("sums more than 5,000 source assignments before grouping and keeps the export row cap", async () => {
+    await db.execute(sql`insert into schedule_assignments (id, schedule_period_id, employee_user_id, project_id, location_id, assignment_date, start_time, end_time)
+      select md5('report-hours-regression-' || n)::uuid, ${phase11Ids.publishedPeriod}, 'mock-employee-cora', ${phase3Ids.alphaProjectOne}, ${phase3Ids.alphaLocation},
+        date '2027-09-01' + (n / 1000)::int, time '00:00' + ((n % 1000) * interval '1 minute'), time '00:00' + (((n % 1000) + 1) * interval '1 minute')
+      from generate_series(0, 5000) as n`);
+    try {
+      const view = await reportingService.report(nora(), "scheduled-hours", PUBLISHED_WINDOW);
+      expect(view.rows.find((row) => row.employee_name === "Cora Bell")).toMatchObject({ assignment_count: "5002", total_hours: "87.35" });
+      const exported = await reportExportService.generate(nora(), "scheduled-hours", PUBLISHED_WINDOW);
+      expect(exported.rowCount).toBe(2);
+      expect(exported.body).toContain("87.35");
+      expect(await refuseCode(() => reportExportService.generate(nora(), "published-allocation", PUBLISHED_WINDOW))).toMatchObject({ code: "EXPORT_TOO_LARGE", status: 413, message: "Narrow the date range or filters (limit 5,000 rows)" });
+    } finally {
+      await db.execute(sql`delete from schedule_assignments where id in (select md5('report-hours-regression-' || n)::uuid from generate_series(0, 5000) as n)`);
+    }
+  });
+});
+
+
+describe("aggregate export source completeness", () => {
+  it("counts and paginates every balance employee and refuses an over-cap export", async () => {
+    const baseline = await reportingService.report(nora(), "leave-balance");
+    await db.execute(sql`insert into users (id, display_name, role)
+      select 'report-balance-cap-' || n, 'Fictional balance cap ' || lpad(n::text, 5, '0'), 'EMPLOYEE' from generate_series(1, 5001) as n`);
+    try {
+      await db.execute(sql`insert into employee_profiles (user_id, employee_code)
+        select 'report-balance-cap-' || n, 'REPORT-CAP-' || n from generate_series(1, 5001) as n`);
+      const view = await reportingService.report(nora(), "leave-balance", { page: 51 });
+      expect(view.totalRows).toBe(baseline.totalRows! + 5001);
+      expect(view.rows.length).toBeGreaterThan(0);
+      expect((await reportingService.exportPayload(nora(), "leave-balance")).rows).toHaveLength(5001);
+      expect(await refuseCode(() => reportExportService.generate(nora(), "leave-balance"))).toMatchObject({ code: "EXPORT_TOO_LARGE", status: 413, message: "Narrow the date range or filters (limit 5,000 rows)" });
+      const events = await db.select().from(auditEvents).where(and(eq(auditEvents.action, "report.export.refused"), eq(auditEvents.targetId, "leave-balance")));
+      expect(events.some((event) => (event.metadata as { reason?: string }).reason === "too_large")).toBe(true);
+    } finally {
+      await db.execute(sql`delete from employee_profiles where user_id like 'report-balance-cap-%'`);
+      await db.execute(sql`delete from users where id like 'report-balance-cap-%'`);
+    }
+  });
+
+  it("includes every assignment skill requirement before sorting and refuses an over-cap export", async () => {
+    const baseline = await reportingService.report(nora(), "skill-gaps");
+    await db.execute(sql`insert into skills (id, name)
+      select md5('report-skill-cap-' || n)::uuid, 'Fictional report skill ' || lpad(n::text, 5, '0') from generate_series(1, 5001) as n`);
+    try {
+      await db.execute(sql`insert into assignment_skill_requirements (id, schedule_assignment_id, skill_id)
+        select md5('report-requirement-cap-' || n)::uuid, ${phase11Ids.publishedAssignmentOne}, md5('report-skill-cap-' || n)::uuid from generate_series(1, 5001) as n`);
+      const view = await reportingService.report(nora(), "skill-gaps", { page: 51 });
+      expect(view.totalRows).toBe(baseline.totalRows! + 5001);
+      expect(view.rows.length).toBeGreaterThan(0);
+      expect((await reportingService.exportPayload(nora(), "skill-gaps")).rows).toHaveLength(5001);
+      expect(await refuseCode(() => reportExportService.generate(nora(), "skill-gaps"))).toMatchObject({ code: "EXPORT_TOO_LARGE", status: 413, message: "Narrow the date range or filters (limit 5,000 rows)" });
+      const events = await db.select().from(auditEvents).where(and(eq(auditEvents.action, "report.export.refused"), eq(auditEvents.targetId, "skill-gaps")));
+      expect(events.some((event) => (event.metadata as { reason?: string }).reason === "too_large")).toBe(true);
+    } finally {
+      await db.execute(sql`delete from assignment_skill_requirements where id in (select md5('report-requirement-cap-' || n)::uuid from generate_series(1, 5001) as n)`);
+      await db.execute(sql`delete from skills where id in (select md5('report-skill-cap-' || n)::uuid from generate_series(1, 5001) as n)`);
+    }
+  });
+});
+
+describe("report filter option scope inheritance", () => {
+  it("filter options inherit Client descendants without expanding direct Project or Location grants", async () => {
+    const clientScoped = (await reportingService.index(ava())).options;
+    expect(clientScoped.clientOptions.map((option) => option.id)).toEqual([phase3Ids.alphaClient]);
+    expect(clientScoped.projectOptions.map((option) => option.id).sort()).toEqual([phase3Ids.alphaProjectOne, phase3Ids.alphaProjectTwo].sort());
+    expect(clientScoped.locationOptions.map((option) => option.id)).toEqual([phase3Ids.alphaLocation]);
+
+    const directOnly = (await reportingService.index(ben())).options;
+    expect(directOnly.clientOptions).toEqual([]);
+    expect(directOnly.projectOptions.map((option) => option.id)).toEqual([phase3Ids.bravoProject]);
+    expect(directOnly.locationOptions.map((option) => option.id)).toEqual([phase3Ids.gammaLocation]);
+
+    const [grant] = await db.insert(adminScopeGrants).values({ userId: "mock-admin-ben", scopeType: "CLIENT", scopeReference: phase3Ids.alphaClient }).returning({ id: adminScopeGrants.id });
+    try {
+      const combined = (await reportingService.index(ben())).options;
+      expect(combined.clientOptions.map((option) => option.id)).toEqual([phase3Ids.alphaClient]);
+      expect(combined.projectOptions.map((option) => option.id).sort()).toEqual([phase3Ids.alphaProjectOne, phase3Ids.alphaProjectTwo, phase3Ids.bravoProject].sort());
+      expect(combined.locationOptions.map((option) => option.id).sort()).toEqual([phase3Ids.alphaLocation, phase3Ids.gammaLocation].sort());
+      // Revocation removes the descendants on the very next request and preserves only direct grants.
+      await db.update(adminScopeGrants).set({ active: false }).where(eq(adminScopeGrants.id, grant.id));
+      expect((await reportingService.index(ben())).options).toEqual(directOnly);
+    } finally {
+      await db.delete(adminScopeGrants).where(eq(adminScopeGrants.id, grant.id));
+    }
   });
 });

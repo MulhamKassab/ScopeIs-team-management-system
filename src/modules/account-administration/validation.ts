@@ -76,6 +76,7 @@ export const resetPasswordSchema = z.object({
   highRiskConfirmed: z.boolean().default(false),
 }).strict().superRefine((data, ctx) => {
   if (!passwordsMatch(data)) ctx.addIssue({ code: "custom", path: ["confirmPassword"], message: "Passwords do not match." });
+  for (const message of passwordPolicyErrors(data.password, {})) ctx.addIssue({ code: "custom", path: ["password"], message });
   if (!data.confirmRevoke) ctx.addIssue({ code: "custom", path: ["confirmRevoke"], message: "Confirm that existing sessions will be revoked." });
 });
 

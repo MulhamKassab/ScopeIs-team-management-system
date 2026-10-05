@@ -59,8 +59,8 @@ describe("Phase 10 notification centre", () => {
     expect(screen.getByRole("heading", { name: "Notifications" })).toBeInTheDocument();
     expect(screen.getByText(/1 unread notification\./)).toBeInTheDocument();
     // Colour is never the only signal: the read/archive state is textual.
-    expect(screen.getByText(/^Unread · 2026-06-01/)).toBeInTheDocument();
-    expect(screen.getByText(/^Read · Archived · 2026-06-02/)).toBeInTheDocument();
+    expect(screen.getByText("1 Jun 2026, 13:00 · Asia/Dubai").closest(".notification-state")).toHaveTextContent(/^Unread ·/);
+    expect(screen.getByText("2 Jun 2026, 13:00 · Asia/Dubai").closest(".notification-state")).toHaveTextContent(/^Read · Archived ·/);
     expect(screen.getByRole("link", { name: "Open related record" })).toHaveAttribute("href", `/employees/mock-employee-cora#evidence-${evidenceId}`);
     // An unsupported or inaccessible target renders the neutral unavailable state, not a broken link.
     expect(screen.getByText(/no available destination/)).toBeInTheDocument();

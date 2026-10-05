@@ -1,4 +1,24 @@
 - [Super Admin account and credential management report](phase-reports/SCOPEIS_SUPER_ADMIN_ACCOUNT_AND_CREDENTIAL_MANAGEMENT_R1.md)
+
+## Latest task discovery and planning-map experience — 2026-10-05
+
+See the [experience review](phase-reports/SCOPEIS_UI_EXPERIENCE_AND_PLANNING_MAP_2026_10_05.md) for the dashboard-to-task journey, role-aware feature discovery, usable planning map, authorized schedule/coverage handoffs and fresh desktop/mobile screenshots. The approved requirements extend the [UI foundation](project-memory/UI_UX_FOUNDATION.md) and [map decisions](project-memory/PHASE_8_STATIC_PLANNING_MAP_DECISIONS.md). Evidence is separate from earlier responsive, visual and audit receipts; the [live tracker](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) records current verification and Git delivery.
+
+## Latest visual refinement — 2026-10-05
+
+The [visual foundation](project-memory/UI_UX_FOUNDATION.md) records the user-approved texture, surface, control and motion direction. See the [verification receipt](phase-reports/evidence/visual-refinement-2026-10-05/verification.json), [light desktop](phase-reports/evidence/visual-refinement-2026-10-05/1280-light-dashboard.png), [phone dashboard](phase-reports/evidence/visual-refinement-2026-10-05/390-light-dashboard.png), [dark desktop](phase-reports/evidence/visual-refinement-2026-10-05/1280-dark-dashboard.png) and [focused phone dialog](phase-reports/evidence/visual-refinement-2026-10-05/390-dark-focused-dialog.png). Rerun presentation, contrast/focus and motion checks with `npm run test:responsive`.
+
+## Latest responsive implementation — 2026-10-05
+
+The [responsive foundation](project-memory/UI_UX_FOUNDATION.md) records the application-wide mobile, tablet, text, control and dialog requirements. See the [verification receipt](phase-reports/evidence/mobile-responsive-2026-10-05/verification.json), [phone dashboard](phase-reports/evidence/mobile-responsive-2026-10-05/390-dashboard.png), [narrow schedule](phase-reports/evidence/mobile-responsive-2026-10-05/320-schedule.png) and [mobile account card](phase-reports/evidence/mobile-responsive-2026-10-05/390-account-card.png). The dedicated presentation gate is `npm run test:responsive`.
+
+## Latest UI/UX implementation — 2026-09-30
+
+See the [workflow clarity implementation and screenshots](phase-reports/SCOPEIS_UI_UX_WORKFLOW_CLARITY_2026_09_30.html) for the approved design pass: task-based navigation, role-prioritized dashboards, record-first pages, focused dialogs, connected planning and responsive controls. This is local implementation over the existing product and does not close the audit’s retained-history assignment-removal finding or certify Ticket integration.
+
+## Latest audit — 2026-09-30
+
+See the [website audit and repair review](phase-reports/SCOPEIS_WEBSITE_AUDIT_2026_09_30.html) for the 13-step screenshot walkthrough, verified local fixes, test evidence and prioritized improvements. The [live tracker](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) reopens the retained-history assignment-removal path; historical completion reports remain unchanged. This audit does not certify Production or the separate nearly completed Ticket System integration.
 - [Super Admin account management decisions](project-memory/SUPER_ADMIN_ACCOUNT_MANAGEMENT_DECISIONS.md)
 - [Credential authentication remediation report](phase-reports/SCOPEIS_EXISTING_USER_CREDENTIAL_AUTHENTICATION_R1.md)
 - [Credential authentication decisions](project-memory/CREDENTIAL_AUTHENTICATION_DECISIONS.md)
@@ -20,7 +40,7 @@
 
 ## Purpose and status
 
-This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is `COMPLETED_IN_NARROW_FOUNDATION_SCOPE`; Phase 2 — Employee management journey is `COMPLETED` (11/11); Phases 3 clients/projects/locations, 4 scheduling V1, 5 leave, 6 controlled skills/non-blocking warning, 7 coverage/replacement, 8 static planning map, 9 certifications/CVs/portfolios/private files, 10 notes/discussions/notification centre/audit interface, and 11 dashboards/reports/authorized exports are `COMPLETED`. The Post-Phase-8 checkpoint is `COMPLETED` at remediation commit `decb377decb32b3d064b14024c3079879dd932c0` (Sub-phase A remediation, Sub-phase B independent closure). Phase 10 included a post-delivery access-control remediation that corrected the employee-management-note policy to require current authorization for the subject as well as note-level visibility, so authorship no longer overrides a demotion, deactivation, or scope loss. Phase 12 — Ticket System integration — is the next journey, `NEXT` and not started, and production identity and rollout remain Phase 13. Phase 9 sub-phase 9.9 (coverage linkage for verified evidence) is `DEFERRED` pending a product decision.
+This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is complete only in its narrow foundation scope; Phase 2 — Employee management journey is `COMPLETED` (11/11). Phases 3 and 5–11 retain their bounded completed journeys. Phase 4 is `PARTIAL`: the September 30 audit reopened retained-history assignment omission/removal and complete-path QA; the original V1 completion report is historical evidence. The Post-Phase-8 checkpoint is `COMPLETED` at remediation commit `decb377decb32b3d064b14024c3079879dd932c0` (Sub-phase A remediation, Sub-phase B independent closure). Phase 10's employee-management-note remediation requires current subject authorization in addition to note visibility, so authorship does not override demotion, deactivation or scope loss. Phase 12 — Ticket System integration — remains the next journey, `NEXT` and not started in this checkout; production identity and rollout remain Phase 13. Phase 9.9 (coverage linkage for verified evidence) is `DEFERRED` pending a product decision.
 
 ## Reader path
 

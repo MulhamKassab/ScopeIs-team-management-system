@@ -1,0 +1,109 @@
+{
+  "browser": [
+    {
+      "name": "Phase 1 foundation shell, personas, and scope",
+      "runner": "run-phase1-playwright.mjs",
+      "cases": 14,
+      "passed": 10,
+      "failed": 4
+    },
+    {
+      "name": "Phase 2 employee directory",
+      "runner": "run-phase2-playwright.mjs",
+      "cases": 20,
+      "passed": 20,
+      "failed": 0
+    },
+    {
+      "name": "Phase 3 client/project/location",
+      "runner": "run-phase3-playwright.mjs",
+      "cases": 14,
+      "passed": 14,
+      "failed": 0
+    },
+    {
+      "name": "Phase 4 scheduling publication",
+      "runner": "run-phase4-playwright.mjs",
+      "cases": 2,
+      "passed": 2,
+      "failed": 0
+    },
+    {
+      "name": "Phase 5 leave and availability",
+      "runner": "run-phase5-playwright.mjs",
+      "cases": 2,
+      "passed": 2,
+      "failed": 0
+    },
+    {
+      "name": "Phase 6 skills and capabilities",
+      "runner": "run-phase6-playwright.mjs",
+      "cases": 2,
+      "passed": 2,
+      "failed": 0
+    },
+    {
+      "name": "Phase 7 coverage and replacement",
+      "runner": "run-phase7-playwright.mjs",
+      "cases": 4,
+      "passed": 4,
+      "failed": 0
+    },
+    {
+      "name": "Phase 8 static planning map",
+      "runner": "run-phase8-playwright.mjs",
+      "cases": 6,
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "name": "Phase 9 capability evidence",
+      "runner": "run-phase9-playwright.mjs",
+      "cases": 4,
+      "passed": 4,
+      "failed": 0
+    },
+    {
+      "name": "Phase 10 collaboration and governance",
+      "runner": "run-phase10-playwright.mjs",
+      "cases": 2,
+      "passed": 0,
+      "failed": 2
+    },
+    {
+      "name": "Phase 11 dashboards, reports and exports",
+      "runner": "run-phase11-playwright.mjs",
+      "cases": 8,
+      "passed": 8,
+      "failed": 0
+    },
+    {
+      "name": "Credential authentication login",
+      "runner": "run-credential-e2e.mjs",
+      "cases": 2,
+      "passed": 2,
+      "failed": 0
+    },
+    {
+      "name": "Super Admin account administration",
+      "runner": "run-account-e2e.mjs",
+      "cases": 2,
+      "passed": 2,
+      "failed": 0
+    }
+  ],
+  "sourceIntegrity": {
+    "files": 281,
+    "changed": [],
+    "added": []
+  },
+  "fullRunExceptions": [
+    "src/modules/reporting/presentation.ts",
+    "src/modules/reporting/service.ts",
+    "test/component/phase11-reporting-forms.test.tsx",
+    "test/e2e/foundation.spec.ts",
+    "test/e2e/phase10-collaboration.spec.ts",
+    "test/e2e/phase11-reporting.spec.ts",
+    "test/integration/phase11-reporting-service.test.ts"
+  ]
+}

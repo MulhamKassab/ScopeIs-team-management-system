@@ -22,8 +22,7 @@ function renderTable(rows: SafeAccountRowView[] = [row]) {
     <AccountTable
       rows={rows}
       summary={{ total: rows.length, active: rows.length, inactive: 0, configured: rows.length, missing: 0 }}
-      asOf="2 Jan 2026, 07:04"
-      asOfLabel="Asia/Dubai"
+      asOf="2 Jan 2026, 07:04 (Asia/Dubai)"
       page={1}
       pageSize={25}
       total={rows.length}
@@ -49,6 +48,13 @@ describe("account administration table", () => {
   it("shows an explicit empty state when no accounts match", () => {
     renderTable([]);
     expect(screen.getByText("No accounts match the current filters.")).toBeVisible();
+  });
+
+  it("requires the same high-risk reset confirmation for an inactive Super Admin", () => {
+    renderTable([{ ...row, role: "SUPER_ADMIN", active: false }]);
+    fireEvent.click(screen.getByRole("button", { name: "Reset password" }));
+    expect(screen.getByLabelText(/Your current password/)).toBeVisible();
+    expect(screen.getByLabelText(/I confirm resetting another Super Admin account/)).toBeVisible();
   });
 
   it("renders the create form and enables the Super Admin confirmation control", () => {

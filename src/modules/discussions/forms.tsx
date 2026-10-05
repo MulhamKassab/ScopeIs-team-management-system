@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { archiveDiscussionMessageAction, postDiscussionMessageAction, type DiscussionAction, type DiscussionActionState } from "@/modules/discussions/actions";
 import type { DiscussionThreadView } from "@/modules/discussions/service";
+import { formatDubaiDateTime } from "@/shared/format-date";
 
 const initial: DiscussionActionState = {};
 
@@ -25,7 +26,7 @@ export function DiscussionPanel({ thread, heading }: { thread: DiscussionThreadV
     <h4>{heading}</h4>
     <p className="operation-help">Only the requester and the employees named on this request can see this discussion. Messages are plain text and cannot be edited; a sender may archive their own message.</p>
     {active.length ? <ol className="discussion-messages">{active.map((message) => <li key={message.id}>
-      <div><strong>{message.authorName}</strong><span>{message.createdAt.slice(0, 16).replace("T", " ")}</span></div>
+      <div><strong>{message.authorName}</strong><time dateTime={message.createdAt}>{formatDubaiDateTime(message.createdAt)}</time></div>
       <p>{message.content}</p>
       {message.isAuthor ? <Composer action={archiveDiscussionMessageAction} title={`Archive your message ${message.id}`} submit="Archive message" danger>
         <input type="hidden" name="messageId" value={message.id} />

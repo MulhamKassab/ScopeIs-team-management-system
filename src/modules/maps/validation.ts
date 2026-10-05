@@ -1,10 +1,11 @@
 import { z } from "zod";
 
 const id = z.string().uuid();
+const optionalFilter = (schema: z.ZodString) => z.preprocess((value) => value === "" ? undefined : value, schema.optional());
 const flag = z.enum(["true", "false"]).optional().transform((value) => value === "true");
 
 export const mapQuerySchema = z.object({
-  date: z.string().date(), employeeId: id.optional(), skillId: id.optional(), clientId: id.optional(), projectId: id.optional(), locationId: id.optional(),
+  date: z.string().date(), employeeId: optionalFilter(z.string().min(1).max(160)), skillId: optionalFilter(id), clientId: optionalFilter(id), projectId: optionalFilter(id), locationId: optionalFilter(id),
   unavailable: flag, coverageGap: flag,
 }).strict();
 

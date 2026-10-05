@@ -60,7 +60,7 @@ increment, and the audit event are one transaction.
 A reset hashes the new temporary password with a fresh random salt, updates
 `password_hash` and `password_changed_at`, sets `must_change_password` from the
 form, clears `failed_attempt_count`/`failure_window_started_at`/`locked_until`
-(clearing an account lock), increments the acting user's `session_version`,
+(clearing an account lock), increments the target user's `session_version`,
 revokes every active session belonging to the target, and writes one safe audit
 event — atomically. The affected user must use the new password on the next
 login. The password never appears in audit metadata, logs, Server Action state,
@@ -68,9 +68,13 @@ URLs, notifications, browser storage, errors, reports, or exports.
 
 ### AC6 — Required password change before entering the application
 
-`must_change_password` is enforced from PostgreSQL in the protected layout on
-every request. When set, the user authenticates successfully but is redirected
-to `/account/change-password` and may only change their password or log out.
+`must_change_password` is enforced from PostgreSQL at the business-actor boundary
+used by protected pages, APIs and Server Actions, in addition to the protected
+layout redirect. When set, the user authenticates successfully but is redirected
+to `/account/change-password` and may only change their password or log out. A
+narrow password-change actor accessor permits only that self-service journey;
+it does not authorize business operations. This enforcement correction was
+verified during the 2026-09-30 website audit.
 The page is self-only: the subject is always the session actor, so a Super
 Admin cannot use it to view or change another user's password. A successful
 change creates a new salted hash, clears the flag, clears lock state, increments

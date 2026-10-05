@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
-import { getCurrentActor, mustChangePassword } from "@/modules/auth/session-service";
+import { getCurrentPasswordChangeActor, mustChangePassword } from "@/modules/auth/session-service";
+import { logOutAction } from "@/modules/auth/actions";
 import { ChangePasswordForm } from "@/modules/account-administration/forms";
 import { changeOwnPasswordAction } from "@/modules/account-administration/actions";
 import { Brand } from "@/shared/components/brand";
@@ -12,7 +13,7 @@ export const dynamic = "force-dynamic";
  * use it to view or change another user's password because the subject is always the session actor.
  */
 export default async function ChangePasswordPage() {
-  const actor = await getCurrentActor();
+  const actor = await getCurrentPasswordChangeActor();
   if (!actor) redirect("/login");
   const required = await mustChangePassword(actor.id);
   return (
@@ -24,6 +25,7 @@ export default async function ChangePasswordPage() {
           ? <p className="account-help">You must set a new password before you can continue.</p>
           : <p className="account-help">Set a new password for your own account. Passwords cannot be viewed or recovered.</p>}
         <ChangePasswordForm action={changeOwnPasswordAction} required={required} />
+        <form action={logOutAction} className="account-form-actions"><button className="button" type="submit">Log out</button></form>
       </section>
     </main>
   );

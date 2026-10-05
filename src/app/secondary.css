@@ -1,0 +1,34 @@
+/* Supporting workspaces share compact, readable filters and record-first layouts. */
+.secondary-panel-heading { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; }
+.secondary-panel-heading h3 { margin:0; }
+.secondary-panel-heading p { margin:6px 0 0; font-size:.84rem; color:var(--muted); }
+.skill-catalogue .operation-list > li { flex-direction:row; align-items:center; justify-content:space-between; gap:16px; }
+.skill-catalogue-actions { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+.skill-catalogue-actions .operation-form { margin:0; }
+.skill-catalogue-actions > .operation-form .button { background:var(--surface); color:var(--muted); border-color:var(--border); }
+.notification-list > li { padding:20px; gap:20px; }
+.notification-list > li.notification-unread { border-inline-start:3px solid var(--primary); }
+.notification-list > li > div:first-child { display:grid; gap:9px; min-width:0; }
+.notification-list > li > div:first-child > .button { justify-self:start; }
+.notification-list .notification-state { line-height:1.6; }
+.notification-filters { padding-block-end:12px; border-block-end:1px solid var(--border); }
+.notification-filters .button { min-width:90px; }
+.audit-filters { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); align-items:end; }
+.audit-filters > .operation-form-grid { grid-column:span 2; }
+.audit-target { color:var(--muted); font-size:.8rem; overflow-wrap:anywhere; }
+.discussion-messages time { color:var(--muted); font-size:.78rem; }
+.planning-map-filters input,.planning-map-filters select { min-height:44px; min-width:0; width:100%; }
+.planning-map-filters label.operation-check { display:flex; align-items:center; min-height:44px; }
+.planning-map-filters label.operation-check input { width:18px; min-height:18px; flex:0 0 18px; }
+.planning-map-filters > div { flex-wrap:wrap; }
+.planning-map-controls button { width:44px; height:44px; }
+.map-marker { width:44px; height:44px; }
+@media (max-width:760px) {
+  .audit-filters { grid-template-columns:1fr; }
+  .audit-filters > .operation-form-grid { grid-column:auto; }
+  .skill-catalogue .operation-list > li { align-items:flex-start; flex-direction:column; }
+  .notification-controls { display:grid; grid-template-columns:1fr 1fr; }
+  .notification-list > li { padding:16px; }
+  .notification-filters { gap:8px; }
+  .notification-filters .button { flex:1; min-width:0; }
+}

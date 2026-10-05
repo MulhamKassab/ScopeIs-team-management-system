@@ -18,14 +18,17 @@ test("Admin governs shared notes and management notes, participants discuss a re
   // 1. The scoped Admin records a shared Client note and edits it. The previous content is preserved.
   await signIn(page, "Ava Mercer");
   await page.goto("/clients");
-  await page.locator("article").filter({ hasText: "Alpha Facilities" }).getByRole("link", { name: "Manage Client" }).click();
+  await page.locator("article").filter({ hasText: "Alpha Facilities" }).getByRole("link", { name: "Open client" }).click();
+  await page.getByRole("button", { name: "Add note", exact: true }).click();
   const addNote = page.getByRole("form", { name: "Add shared operational note" });
   await addNote.getByLabel("Note").fill(sharedNote);
   await addNote.getByRole("button", { name: "Add note" }).click();
   await expect(addNote.getByText("Shared operational note added.")).toBeVisible();
+  await page.getByRole("dialog").getByRole("button", { name: "Close", exact: true }).click();
 
   const noteItem = page.locator("li").filter({ hasText: sharedNote });
   await expect(noteItem).toBeVisible();
+  await noteItem.getByText("Edit note", { exact: true }).click();
   const editNote = noteItem.getByRole("form", { name: "Edit your note" });
   await editNote.getByLabel("Note").fill(sharedNoteEdited);
   await editNote.getByRole("button", { name: "Save" }).click();
@@ -97,7 +100,9 @@ test("Admin governs shared notes and management notes, participants discuss a re
   const replyNotification = page.locator("li").filter({ hasText: "New discussion message" }).first();
   await expect(replyNotification).toBeVisible();
   await replyNotification.getByRole("button", { name: "Mark read" }).click();
-  await expect(replyNotification.getByText(/Read · 20/)).toBeVisible();
+  await expect(replyNotification.locator(".notification-state")).toContainText(/^Read ·/);
+  await expect(replyNotification.locator("time")).toHaveAttribute("datetime", /^\d{4}-\d{2}-\d{2}T/);
+  await expect(replyNotification.getByRole("button", { name: "Mark unread", exact: true })).toBeVisible();
   await replyNotification.getByRole("button", { name: "Archive" }).click();
   // Archiving moves the row out of the active inbox and keeps it reachable through the explicit filter.
   await expect(activeDiscussionRows).toHaveCount(activeBefore - 1);
@@ -110,7 +115,9 @@ test("Admin governs shared notes and management notes, participants discuss a re
   await page.getByRole("link", { name: "Active" }).click();
   const restoredNotification = page.locator("li").filter({ hasText: "New discussion message" }).first();
   await expect(restoredNotification.getByRole("button", { name: "Archive" })).toBeVisible();
-  await expect(restoredNotification.getByText(/Read · 20/)).toBeVisible();
+  await expect(restoredNotification.locator(".notification-state")).toContainText(/^Read ·/);
+  await expect(restoredNotification.locator("time")).toHaveAttribute("datetime", /^\d{4}-\d{2}-\d{2}T/);
+  await expect(restoredNotification.getByRole("button", { name: "Mark unread", exact: true })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 
   // 9. The Super Admin sees the shared-upward management note but never a private one, and reviews the audit history.

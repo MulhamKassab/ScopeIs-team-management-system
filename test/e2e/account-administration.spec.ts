@@ -28,7 +28,7 @@ test("Super Admin creates and resets an account; other roles cannot reach /accou
 
   // Create an Employee login account and confirm it appears as configured.
   await page.getByRole("button", { name: "Create account" }).first().click();
-  const createPanel = page.getByRole("region", { name: /Create workforce record and login account/ });
+  const createPanel = page.getByRole("dialog", { name: /Create workforce record and login account/ });
   await createPanel.getByLabel(/Display name/).fill(displayName);
   await createPanel.getByLabel(/^Username/).fill(username);
   await createPanel.getByLabel(/Login email/).fill(email);
@@ -36,6 +36,7 @@ test("Super Admin creates and resets an account; other roles cannot reach /accou
   await createPanel.getByLabel(/Confirm temporary password/).fill(TEMP);
   await createPanel.getByRole("button", { name: "Create account" }).click();
   await expect(page.getByText(/Account created with a login/)).toBeVisible();
+  await createPanel.getByRole("button", { name: "Close", exact: true }).click();
   await expect(page.getByRole("row", { name: new RegExp(displayName) })).toContainText("Configured");
   await expect(page.locator("body")).not.toContainText(TEMP);
   expect((await page.locator("body").innerText())).not.toMatch(/scrypt\$|password_hash/i);
@@ -47,6 +48,11 @@ test("Super Admin creates and resets an account; other roles cannot reach /accou
   await page.getByLabel("Username or email").fill(username);
   await page.getByLabel("Password", { exact: true }).fill(TEMP);
   await page.getByRole("button", { name: "Sign in" }).click();
+  await expect(page).toHaveURL(/\/account\/change-password$/);
+  await expect(page.getByRole("button", { name: "Log out" })).toBeVisible();
+  // The required-change gate covers direct business endpoints, not just the page layout.
+  expect((await page.request.get("/api/reports/employee-directory/export")).status()).toBe(401);
+  await page.goto("/dashboard");
   await expect(page).toHaveURL(/\/account\/change-password$/);
   await page.getByLabel(/Current password/).fill(TEMP);
   await page.getByLabel(/New password/).fill("brandnewsafe1");
@@ -61,7 +67,7 @@ test("Super Admin creates and resets an account; other roles cannot reach /accou
   await openAccounts(page);
   const row = page.getByRole("row", { name: new RegExp(displayName) });
   await row.getByRole("button", { name: "Reset password" }).click();
-  const resetPanel = page.getByRole("group", { name: new RegExp(`Reset password for ${displayName}`) });
+  const resetPanel = page.getByRole("dialog", { name: new RegExp(`Reset password for ${displayName}`) });
   await resetPanel.getByLabel(/New temporary password/).fill(RESET);
   await resetPanel.getByLabel(/Confirm temporary password/).fill(RESET);
   await resetPanel.getByLabel(/I understand all existing sessions/).check();
@@ -86,4 +92,7 @@ test("Super Admin creates and resets an account; other roles cannot reach /accou
   await expect(page).toHaveURL(/\/account\/change-password$/);
   expect((await page.locator("body").innerText())).not.toMatch(/scrypt\$|password_hash/i);
   await expectNoHorizontalOverflow(page);
+  await page.getByRole("button", { name: "Log out" }).click();
+  await expect(page).toHaveURL(/\/login$/);
+  expect((await page.request.get("/api/reports/employee-directory/export")).status()).toBe(401);
 });

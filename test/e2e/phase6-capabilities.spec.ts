@@ -7,9 +7,11 @@ test("Super Admin records a skill and the Employee sees only their own recorded 
   const skillName = `Browser capability ${test.info().project.name}`;
   await signIn(page, "Nora Albright");
   await page.goto("/skills");
+  await page.getByRole("button", { name: "Add skill" }).click();
   await page.getByRole("form", { name: "Create skill" }).getByLabel("Skill name").fill(skillName);
   await page.getByRole("form", { name: "Create skill" }).getByRole("button", { name: "Create skill" }).click();
   await expect(page.getByText("Skill created.")).toBeVisible();
+  await page.getByRole("button", { name: "Close", exact: true }).click();
   const record = page.getByRole("form", { name: "Record employee skill" });
   await record.getByLabel("Employee").selectOption({ label: "Cora Bell" });
   await record.getByLabel("Active catalogue skill").selectOption({ label: skillName });

@@ -9,7 +9,7 @@ export default defineConfig({
   testMatch: "account-administration.spec.ts",
   timeout: 240_000,
   use: { baseURL: `http://127.0.0.1:${port}`, trace: "off" },
-  webServer: { command: `npm run build:safe -- --serve-port ${port}`, url: `http://127.0.0.1:${port}`, reuseExistingServer: false, timeout: 120_000, stdout: "pipe" },
+  webServer: { command: `npm run build:safe -- --serve-port ${port}`, url: `http://127.0.0.1:${port}`, reuseExistingServer: false, gracefulShutdown: { signal: "SIGTERM", timeout: 10_000 }, timeout: 120_000, stdout: "pipe" },
   projects: [
     { name: "desktop", use: { browserName: "chromium", viewport: { width: 1440, height: 900 } } },
     { name: "mobile", use: { browserName: "chromium", viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true } },

@@ -4,6 +4,16 @@ import type { AccountListFilter } from "./repositories";
 export type AccountSearchParams = { query?: string; role?: string; status?: string; credentials?: string; page?: string };
 
 export type ParsedAccountFilter = { valid: boolean; filter: AccountListFilter; raw: AccountSearchParams };
+export type AccountPageFilters = Pick<AccountListFilter, "query" | "role" | "status" | "credentials">;
+
+export function buildAccountPageHref(page: number, filters: AccountPageFilters = {}) {
+  const params = new URLSearchParams();
+  for (const key of ["query", "role", "status", "credentials"] as const) {
+    if (filters[key]) params.set(key, filters[key]);
+  }
+  if (page > 1) params.set("page", String(page));
+  return params.size ? `/accounts?${params.toString()}` : "/accounts";
+}
 
 /**
  * Parses URL search parameters into a bounded filter. Invalid input falls back to the safe first page
@@ -11,7 +21,8 @@ export type ParsedAccountFilter = { valid: boolean; filter: AccountListFilter; r
  */
 export function parseAccountSearchParams(params: AccountSearchParams): ParsedAccountFilter {
   const result = accountFilterSchema.safeParse({
-    query: params.query, role: params.role, status: params.status, credentials: params.credentials, page: params.page,
+    query: params.query || undefined, role: params.role || undefined, status: params.status || undefined,
+    credentials: params.credentials || undefined, page: params.page || undefined,
   });
   const raw: AccountSearchParams = {
     query: typeof params.query === "string" ? params.query : undefined,

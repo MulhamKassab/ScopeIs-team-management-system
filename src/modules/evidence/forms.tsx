@@ -2,6 +2,7 @@
 
 import { useActionState, useId, useState } from "react";
 import { useRouter } from "next/navigation";
+import { TaskDialog } from "@/shared/components/task-dialog";
 import {
   archiveEvidenceAction, createEvidenceAction, reviewEvidenceAction, updateEvidenceAction,
   type EvidenceAction, type EvidenceActionState,
@@ -123,20 +124,22 @@ function OwnerItem({ item, skills }: { item: EvidenceItemView; skills: SkillOpti
     {item.externalUrl ? <a className="operation-link" href={item.externalUrl} target="_blank" rel="noreferrer noopener">Open portfolio link</a> : null}
     <FileList item={item} />
     {!item.archivedAt ? <>
-      <FileUploader evidenceId={item.id} version={item.version} label="Attach or replace file" />
-      <details className="evidence-edit">
-        <summary>Edit this item</summary>
+      <div className="people-record-actions">
+      <TaskDialog triggerLabel="Attach file" title={`Files for ${item.title}`} description="Attach or replace a private PDF, image, or Word document."><FileUploader evidenceId={item.id} version={item.version} label="Attach or replace file" /></TaskDialog>
+      <TaskDialog triggerLabel="Edit item" title={`Edit ${item.title}`}>
         <Form action={updateEvidenceAction} title={`Edit ${item.title}`} submit="Save changes">
           <input type="hidden" name="evidenceId" value={item.id} />
           <input type="hidden" name="expectedVersion" value={item.version} />
           <EvidenceFields item={item} kind={item.kind} skills={skills} />
         </Form>
-      </details>
+      </TaskDialog>
+      <TaskDialog triggerLabel="Archive item" title={`Archive ${item.title}`} description="Archiving preserves history and removes the item from active lists.">
       <Form action={archiveEvidenceAction} title={`Archive ${item.title}`} submit="Archive">
         <input type="hidden" name="evidenceId" value={item.id} />
         <input type="hidden" name="expectedVersion" value={item.version} />
-        <p className="operation-help">Archiving preserves history and removes the item from active lists.</p>
       </Form>
+      </TaskDialog>
+      </div>
     </> : null}
   </article>;
 }
@@ -146,36 +149,37 @@ export function CapabilityEvidencePanel({ items, skills }: { items: EvidenceItem
   const [submissionKeys] = useState(() => Object.fromEntries(sections.map((section) => [section.kind, newSubmissionKey()])));
   return <section className="operations-page evidence-page" aria-labelledby="evidence-title">
     <header className="operations-heading"><div>
-      <p className="eyebrow">Phase 9 · My capability evidence</p>
+      <p className="eyebrow">Experience & documents</p>
       <h2 id="evidence-title">My capability evidence</h2>
-      <p>Certifications, portfolio, project examples, CV, and supporting documents save immediately and notify Super Admin. Review and verification are optional and never block you. Private files are visible only to you and Super Admin.</p>
+      <p>Keep your certifications and experience up to date. Private files are visible only to you and Super Admin; certification summaries may be shared with your scoped Admin.</p>
     </div></header>
-    {sections.map((section) => {
+    <div className="people-evidence-sections">{sections.map((section) => {
       const sectionItems = items.filter((item) => item.kind === section.kind);
       const active = sectionItems.filter((item) => !item.archivedAt);
       const archived = sectionItems.filter((item) => item.archivedAt);
       return <section className="operation-panel" key={section.kind} aria-labelledby={`evidence-${section.kind}-title`}>
-        <h3 id={`evidence-${section.kind}-title`}>{section.title}</h3>
-        <p>{section.help}</p>
+        <header className="people-evidence-heading"><div><h3 id={`evidence-${section.kind}-title`}>{section.title}</h3><span>{active.length} active {active.length === 1 ? "item" : "items"}</span></div>
+        <TaskDialog triggerLabel={`Add ${section.title.toLowerCase()}`} title={`Add ${section.title.toLowerCase()}`} description={section.help}>
         <Form action={createEvidenceAction} title={`Add ${section.title.toLowerCase()}`} submit="Save evidence">
           <input type="hidden" name="submissionKey" value={submissionKeys[section.kind]} />
           <EvidenceFields kind={section.kind} skills={skills} />
         </Form>
+        </TaskDialog></header>
         {active.length ? <div className="evidence-list">{active.map((item) => <OwnerItem key={item.id} item={item} skills={skills} />)}</div> : <p className="operation-empty">Nothing recorded in this section yet.</p>}
         {archived.length ? <details className="evidence-archive"><summary>{archived.length} archived item{archived.length === 1 ? "" : "s"}</summary><ul className="operation-list">{archived.map((item) => <li key={item.id}><div><strong>{item.title}</strong><span>Archived · {expiryText(item)}</span></div></li>)}</ul></details> : null}
       </section>;
-    })}
+    })}</div>
   </section>;
 }
 
 /** Super Admin review surface, anchored per item so Phase 9 notifications can deep-link here. */
-export function EvidenceReviewPanel({ items, skills, employeeUserId, employeeName }: { items: EvidenceItemView[]; skills: SkillOption[]; employeeUserId: string; employeeName: string }) {
+export function EvidenceReviewPanel({ items, employeeUserId, employeeName }: { items: EvidenceItemView[]; skills: SkillOption[]; employeeUserId: string; employeeName: string }) {
   const active = items.filter((item) => !item.archivedAt);
   return <section className="operations-page evidence-page" aria-labelledby="evidence-review-title">
     <header className="operations-heading"><div>
-      <p className="eyebrow">Phase 9 · Capability evidence review</p>
+      <p className="eyebrow">Experience & documents</p>
       <h2 id="evidence-review-title">Capability evidence</h2>
-      <p>Evidence recorded by {employeeName}. Review and verification are optional and informational. They never change coverage, replacement eligibility, schedules, or the employee&apos;s ability to see their own evidence.</p>
+      <p>Evidence recorded by {employeeName}. Review status is informational; it does not change staffing eligibility.</p>
     </div></header>
     {active.length ? <div className="evidence-list">{active.map((item) => <article className="evidence-item" key={item.id} id={`evidence-${item.id}`}>
       <div className="evidence-item-head">
@@ -185,7 +189,7 @@ export function EvidenceReviewPanel({ items, skills, employeeUserId, employeeNam
       {item.details ? <p>{item.details}</p> : null}
       {item.externalUrl ? <a className="operation-link" href={item.externalUrl} target="_blank" rel="noreferrer noopener">Open portfolio link</a> : null}
       <FileList item={item} />
-      <div className="evidence-review-actions">
+      <TaskDialog triggerLabel="Review evidence" title={`Review ${item.title}`} description="Mark the item reviewed, verify it, or reset its review state. This does not change staffing eligibility."><div className="evidence-review-actions">
         <Form action={reviewEvidenceAction} title={`Mark ${item.title} reviewed`} submit="Mark reviewed">
           <input type="hidden" name="evidenceId" value={item.id} /><input type="hidden" name="expectedVersion" value={item.version} /><input type="hidden" name="state" value="reviewed" /><input type="hidden" name="ownerUserId" value={employeeUserId} />
         </Form>
@@ -195,10 +199,8 @@ export function EvidenceReviewPanel({ items, skills, employeeUserId, employeeNam
         <Form action={reviewEvidenceAction} title={`Reset review state for ${item.title}`} submit="Reset to not reviewed">
           <input type="hidden" name="evidenceId" value={item.id} /><input type="hidden" name="expectedVersion" value={item.version} /><input type="hidden" name="state" value="unreviewed" /><input type="hidden" name="ownerUserId" value={employeeUserId} />
         </Form>
-      </div>
-      <p className="operation-help">Edits use the recorded version {item.version}; a stale change is rejected instead of overwriting newer work.</p>
+      </div></TaskDialog>
     </article>)}</div> : <p className="operation-empty">No active capability evidence is recorded for this employee.</p>}
-    <p className="operation-help">Files are delivered only through authorized, audited requests; no public or permanent link exists. Skills: {skills.length} active catalogue skill{skills.length === 1 ? "" : "s"} available for related-skill metadata.</p>
   </section>;
 }
 
@@ -206,9 +208,9 @@ export function EvidenceReviewPanel({ items, skills, employeeUserId, employeeNam
 export function CertificationSummaryPanel({ rows, employeeName }: { rows: CertificationSummaryView[]; employeeName: string }) {
   return <section className="operations-page evidence-page" aria-labelledby="evidence-summary-title">
     <header className="operations-heading"><div>
-      <p className="eyebrow">Phase 9 · Certification summary</p>
+      <p className="eyebrow">Qualifications</p>
       <h2 id="evidence-summary-title">Certification summary</h2>
-      <p>Certifications recorded by {employeeName}. Scoped Admin view: title, issuer, dates, related skill, and verification state only. CVs, supporting documents, portfolio files and links, and project-example detail are withheld.</p>
+      <p>Certifications recorded by {employeeName}. Private files and portfolio details are withheld from this view.</p>
     </div></header>
     {rows.length ? <ul className="operation-list">{rows.map((row) => <li key={row.id} id={`evidence-${row.id}`}><div><strong>{row.title}</strong><span>{row.issuer ? `${row.issuer} · ` : ""}{expiryText({ expiryDate: row.expiryDate, expiryStatus: row.expiryStatus } as EvidenceItemView)}{row.relatedSkillName ? ` · ${row.relatedSkillName}` : ""}</span><span>{row.reviewState === "verified" ? "Verified" : row.reviewState === "reviewed" ? "Reviewed" : "Not reviewed"}</span></div></li>)}</ul> : <p className="operation-empty">No certification summary is recorded for this employee.</p>}
   </section>;

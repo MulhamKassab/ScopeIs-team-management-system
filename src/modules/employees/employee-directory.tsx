@@ -27,10 +27,10 @@ export function EmployeeDirectory({ profiles, filters = {}, filterOptions = { te
   const filtered = invalidQuery || activeFilterCount > 0;
   return (
     <section className="employee-directory" aria-labelledby="employee-directory-title">
-      <p className="eyebrow">Phase 2 · Workforce</p>
+      <header className="people-page-heading"><div><p className="eyebrow">People</p>
       <h2 id="employee-directory-title">Employee directory</h2>
-      <p className="directory-intro">Authorized workforce records in your current management scope.</p>
-      {createEmployeeAction ? <EmployeeCreatePanel action={createEmployeeAction} /> : null}
+      <p className="directory-intro">Find people, review their capabilities, and manage team records.</p></div>
+      {createEmployeeAction ? <EmployeeCreatePanel key={profiles.length} action={createEmployeeAction} /> : null}</header>
 
       <form className="directory-filters" action="/employees" method="get" aria-label="Employee directory search and filters">
         <label><span>Search employees</span><input name="query" type="search" defaultValue={filters.query} maxLength={80} placeholder="Name or employee code" /></label>
@@ -49,18 +49,19 @@ export function EmployeeDirectory({ profiles, filters = {}, filterOptions = { te
         </div>
       ) : (
         <div className="directory-table-wrap" role="region" aria-label="Employee directory records" tabIndex={0}>
-          <table>
-            <thead>
-              <tr><th scope="col">Employee</th><th scope="col">Employee code</th><th scope="col">Team</th><th scope="col">Status</th><th scope="col">Action</th></tr>
+          <div className="people-list-heading"><h3>Team members</h3><span>{profiles.length} {filtered ? "matching" : "visible"} {profiles.length === 1 ? "person" : "people"}</span></div>
+          <table role="table">
+            <thead role="rowgroup">
+              <tr role="row"><th scope="col">Employee</th><th scope="col">Employee code</th><th scope="col">Team</th><th scope="col">Status</th><th scope="col">Action</th></tr>
             </thead>
-            <tbody>
+            <tbody role="rowgroup">
               {profiles.map((profile) => (
-                <tr key={profile.userId}>
-                  <th scope="row"><Link href={`/employees/${profile.userId}`}>{profile.user.displayName}</Link></th>
-                  <td data-label="Employee code">{profile.employeeCode}</td>
-                  <td data-label="Team">{displayTeam(profile.team)}</td>
-                  <td data-label="Status"><span className={`directory-status ${profile.user.active ? "active" : "inactive"}`}>{profile.user.active ? "Active" : "Inactive"}</span></td>
-                  <td data-label="Action"><Link className="button directory-record-action" href={`/employees/${profile.userId}`}>{canManage ? "Manage employee" : "View details"}</Link></td>
+                <tr key={profile.userId} role="row">
+                  <th scope="row" role="rowheader"><Link href={`/employees/${profile.userId}`}>{profile.user.displayName}</Link></th>
+                  <td role="cell" data-label="Employee code">{profile.employeeCode}</td>
+                  <td role="cell" data-label="Team">{displayTeam(profile.team)}</td>
+                  <td role="cell" data-label="Status"><span className={`directory-status ${profile.user.active ? "active" : "inactive"}`}>{profile.user.active ? "Active" : "Inactive"}</span></td>
+                  <td role="cell" data-label="Action"><Link className="button directory-record-action" href={`/employees/${profile.userId}`}>{canManage ? "Manage employee" : "View details"}</Link></td>
                 </tr>
               ))}
             </tbody>

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { canExportReport, canViewReport, conflictValues, prohibitedReportingTerms, reportKeys, reports, reportDefinition, PLANNING_DATA_STATE } from "@/modules/reporting/definitions";
 import { addDays, assertWindow, currentDubaiMonth, formatHours, inclusiveDayCount, minutesBetween, monthBounds, scheduledHours, timesOverlap } from "@/modules/reporting/date-rules";
 import { csvBody, csvCell, csvHeader, neutralizeCell, quoteCell, reportFilename, toCsv } from "@/modules/reporting/csv";
-import { MAX_EXPORT_ROWS, parseExportFormat, parseMonth, parseReportQuery, skillStatus } from "@/modules/reporting/validation";
+import { MAX_EXPORT_ROWS, assertSupportedReportFilters, parseExportFormat, parseMonth, parseReportQuery, skillStatus } from "@/modules/reporting/validation";
 import { ReportDomainError } from "@/modules/reporting/domain-error";
 
 describe("Phase 11 reporting CSV safety", () => {
@@ -155,5 +155,25 @@ describe("Phase 11 reporting validation", () => {
     expect(skillStatus(3, 2)).toBe("recorded");
     expect(skillStatus(1, 2)).toBe("not recorded");
     expect(MAX_EXPORT_ROWS).toBe(5_000);
+  });
+});
+
+
+describe("report filter validation regressions", () => {
+  it("accepts a native GET form with blank optional date, time and UUID controls", () => {
+    expect(parseReportQuery({ from: "2027-09-01", to: "2027-09-30", start: "", end: "", clientId: "", projectId: "", locationId: "", date: "", page: "" }))
+      .toMatchObject({ from: "2027-09-01", to: "2027-09-30", start: undefined, clientId: undefined, page: undefined });
+  });
+  it.each([{ from: "2027-02-29" }, { from: "2027-04-31" }, { start: "25:00" }, { end: "24:01" }, { start: "12:60" }])("refuses impossible dates and times: %j", (query) => {
+    expect(() => parseReportQuery(query)).toThrow(ReportDomainError);
+  });
+  it("accepts leap-day dates and an end-of-day conflict bound", () => {
+    expect(parseReportQuery({ date: "2028-02-29", start: "00:00", end: "24:00" })).toMatchObject({ end: "24:00" });
+  });
+  it("refuses filters whose selected report has no matching source predicate", () => {
+    expect(() => assertSupportedReportFilters("leave-balance", { from: "2027-09-01" })).toThrow(ReportDomainError);
+    expect(() => assertSupportedReportFilters("certification-status", { from: "2027-09-01" })).toThrow(ReportDomainError);
+    expect(() => assertSupportedReportFilters("published-allocation", { start: "09:00" })).toThrow(ReportDomainError);
+    expect(() => assertSupportedReportFilters("scheduled-hours", { clientId: "c1", from: "2027-09-01" })).not.toThrow();
   });
 });

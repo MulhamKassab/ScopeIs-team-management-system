@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useSyncExternalStore } from "react";
+import { Moon, Sun } from "lucide-react";
 
 type Theme = "light" | "dark";
-function applyTheme(theme: Theme) { document.documentElement.dataset.theme = theme; document.documentElement.style.colorScheme = theme; }
+function applyTheme(theme: Theme) { document.documentElement.dataset.theme = theme; document.documentElement.style.colorScheme = theme; window.dispatchEvent(new Event("scopeis-theme-change")); }
+function subscribe(listener: () => void) { window.addEventListener("scopeis-theme-change", listener); return () => window.removeEventListener("scopeis-theme-change", listener); }
+function themeSnapshot(): Theme { return document.documentElement.dataset.theme === "dark" ? "dark" : "light"; }
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("light");
-  return <button className="icon-button" type="button" aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`} onClick={() => { const next = theme === "light" ? "dark" : "light"; setTheme(next); localStorage.setItem("scopeis-theme", next); applyTheme(next); }}>{theme === "light" ? "◐" : "☼"}</button>;
+  const theme = useSyncExternalStore(subscribe, themeSnapshot, () => "light" as Theme);
+  return <button className="icon-button theme-toggle" type="button" aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`} onClick={() => { const next = theme === "light" ? "dark" : "light"; try { localStorage.setItem("scopeis-theme", next); } catch { /* The theme remains usable when browser storage is disabled. */ } applyTheme(next); }}><span className="theme-toggle-icon" key={theme} aria-hidden="true">{theme === "light" ? <Moon size={19} /> : <Sun size={19} />}</span></button>;
 }
 
 export function ThemeBootScript() {

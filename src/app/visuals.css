@@ -1,0 +1,312 @@
+/* ScopeIs visual finish. Layout, permissions and native control semantics stay in their own layers. */
+:root {
+  --radius: 14px;
+  --surface-sheen: color-mix(in srgb, var(--primary-soft) 28%, var(--surface));
+  --border-emphasis: color-mix(in srgb, var(--primary) 23%, var(--border));
+  --field-border: #7b8ca6;
+  --shadow-panel: 0 2px 5px rgb(23 42 80 / .025), 0 10px 28px rgb(23 42 80 / .035);
+  --shadow-floating: 0 12px 36px rgb(23 42 80 / .1), 0 2px 6px rgb(23 42 80 / .05);
+  --shadow: var(--shadow-panel);
+  --motion-fast: 150ms;
+  --motion-medium: 240ms;
+  --motion-enter: 340ms;
+  --ease-out: cubic-bezier(.2, .75, .25, 1);
+  --inline-nudge: 3px;
+}
+:root[data-theme="dark"] {
+  --surface-sheen: color-mix(in srgb, var(--primary-soft) 24%, var(--surface));
+  --field-border: #6e839f;
+  --shadow-panel: 0 2px 5px rgb(0 0 0 / .08), 0 12px 30px rgb(0 0 0 / .12);
+  --shadow-floating: 0 12px 40px rgb(0 0 0 / .3), 0 2px 8px rgb(0 0 0 / .15);
+}
+html[dir="rtl"] { --inline-nudge: -3px; }
+body { -webkit-font-smoothing: antialiased; }
+::selection { color: var(--text); background: color-mix(in srgb, var(--primary) 20%, var(--surface)); }
+
+/* A quiet canvas with light concentrated around the workspace, rather than moving decoration. */
+.main-content {
+  background-image: radial-gradient(ellipse at 100% 0, color-mix(in srgb, var(--primary) 5%, transparent), transparent 45%);
+}
+.sidebar {
+  background: linear-gradient(180deg, var(--surface) 65%, var(--surface-sheen));
+  border-inline-end-color: color-mix(in srgb, var(--primary) 10%, var(--border));
+}
+.sidebar-brand .logo-surface { border-radius: 9px; }
+.top-header { box-shadow: 0 2px 12px rgb(23 42 80 / .025); }
+.workspace-location .workspace-page-name { letter-spacing: -.015em; }
+.workspace-status-dot { box-shadow: 0 0 0 3px color-mix(in srgb, var(--success) 10%, transparent); }
+#page-content > :first-child { animation: scopeis-page-enter var(--motion-enter) var(--ease-out); }
+
+/* Raised, tactile controls. Individual translate leaves existing RTL/icon transforms intact. */
+:is(button, .button, .icon-button, .collapse-button, .logout-button, .planning-map-controls button) {
+  transition: background-color var(--motion-fast) ease, border-color var(--motion-fast) ease,
+    color var(--motion-fast) ease, box-shadow var(--motion-medium) var(--ease-out),
+    translate var(--motion-fast) var(--ease-out);
+}
+.button {
+  border-radius: 10px;
+  background-image: linear-gradient(180deg, var(--surface), var(--surface-sheen));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--surface) 65%, transparent), 0 2px 3px rgb(23 42 80 / .035);
+  letter-spacing: -.01em;
+  font-weight: 650;
+}
+.button.primary {
+  --control-fill: var(--primary);
+  background-color: var(--control-fill);
+  background-image: linear-gradient(180deg, color-mix(in srgb, var(--control-fill) 90%, white), var(--control-fill));
+  border-color: color-mix(in srgb, var(--control-fill) 82%, black);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .18), 0 3px 7px color-mix(in srgb, var(--primary) 17%, transparent);
+}
+.button.primary:hover { --control-fill: var(--primary-hover); }
+.button.danger {
+  background-image: linear-gradient(180deg, var(--surface), color-mix(in srgb, var(--danger) 5%, var(--surface)));
+}
+:is(.button, .icon-button, .collapse-button, .logout-button):active:not(:disabled) {
+  translate: 0 1px;
+  box-shadow: inset 0 2px 3px rgb(0 0 0 / .07);
+}
+.button:disabled { background-image: none; box-shadow: none; translate: none; }
+.icon-button, .collapse-button { border-radius: 10px; }
+.icon-button:hover, .collapse-button:hover { color: var(--primary); background-color: var(--primary-soft); }
+:is(button, a, input, select, textarea, summary):focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+.button:focus-visible, .icon-button:focus-visible { box-shadow: 0 0 0 6px color-mix(in srgb, var(--focus) 12%, transparent); }
+.button[aria-busy="true"]::before {
+  content: "";
+  inline-size: 14px;
+  block-size: 14px;
+  flex: 0 0 14px;
+  border: 2px solid currentColor;
+  border-inline-end-color: transparent;
+  border-radius: 50%;
+  animation: scopeis-spin 700ms linear infinite;
+}
+.theme-toggle-icon { display: flex; animation: scopeis-theme-enter var(--motion-medium) var(--ease-out); }
+
+/* Fields keep their native date, select, password and file behavior. */
+:is(.app-shell, .task-dialog, .login-card, .state-page) :is(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), select, textarea) {
+  border-color: var(--field-border);
+  border-radius: 10px;
+  background-color: var(--surface);
+  box-shadow: inset 0 1px 2px rgb(23 42 80 / .035);
+  transition: border-color var(--motion-fast) ease, box-shadow var(--motion-medium) var(--ease-out), background-color var(--motion-fast) ease;
+}
+:is(.app-shell, .task-dialog, .login-card, .state-page) :is(input, select, textarea):focus-visible {
+  border-color: var(--focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--focus) 10%, transparent), inset 0 1px 2px rgb(23 42 80 / .035);
+}
+:is(.app-shell, .task-dialog, .login-card) :is(input, select, textarea)[aria-invalid="true"] { border-color: var(--danger); }
+:is(.app-shell, .task-dialog, .login-card) :is(input, textarea)[readonly] { background-color: var(--surface-muted); }
+:is(.app-shell, .task-dialog, .login-card) :is(input, select, textarea):disabled { opacity: .65; cursor: not-allowed; }
+:is(input[type="checkbox"], input[type="radio"]) { accent-color: var(--primary); }
+input::placeholder, textarea::placeholder { color: var(--muted); opacity: .85; }
+input::file-selector-button {
+  margin-inline-end: 12px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-emphasis);
+  border-radius: 8px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background-color var(--motion-fast) ease;
+}
+input::file-selector-button:hover { background: color-mix(in srgb, var(--primary) 14%, var(--surface)); }
+label { transition: color var(--motion-fast) ease; }
+label:focus-within { color: var(--primary); }
+.account-form label[for]:has(> span[aria-hidden="true"]),
+.employee-create-form label[for]:has(> span[aria-hidden="true"]) { display: block; }
+
+/* Surfaces share a subtle top-light; nested forms in dialogs stay flush with the task. */
+.main-content :is(.operation-panel, .schedule-panel, .account-panel, .employee-management-panel,
+  .people-profile-card, .people-profile-facts, .record-summary, .workflow-start,
+  .directory-filters, .account-filters, .reporting-filter-panel, .operation-cards article,
+  .reporting-cards > li, .reporting-report-list > li, .workflow-balance > div):not(.task-dialog *) {
+  background-image: linear-gradient(160deg, var(--surface), var(--surface-sheen));
+  box-shadow: var(--shadow-panel);
+}
+.reporting-cards > li, .reporting-report-list > li, .operation-cards article {
+  border-radius: 16px;
+  transition: border-color var(--motion-medium) ease, box-shadow var(--motion-medium) var(--ease-out), translate var(--motion-medium) var(--ease-out);
+}
+.reporting-cards > li:has(a:focus-visible), .reporting-report-list > li:has(a:focus-visible) { border-color: var(--primary); }
+.reporting-card-top { align-items: center; }
+.reporting-card-top > svg {
+  box-sizing: content-box;
+  padding: 9px;
+  border: 1px solid color-mix(in srgb, var(--primary) 10%, var(--border));
+  border-radius: 11px;
+  color: var(--primary);
+  background: var(--primary-soft);
+  margin-block-start: 0;
+}
+.reporting-card-label { min-block-size: 0; min-inline-size: 0; overflow-wrap: anywhere; font-weight: 600; }
+.reporting-card-value { font-size: 2.5rem; font-weight: 750; letter-spacing: -.055em; }
+.reporting-card-group-priority .reporting-cards > li {
+  border-block-start-width: 1px;
+  border-color: var(--border-emphasis);
+}
+.reporting-cards .reporting-text-link { font-size: .875rem; }
+:is(.reporting-text-link, .reporting-back-link, .reporting-report-title) > svg {
+  transition: translate var(--motion-fast) var(--ease-out);
+}
+html[dir="rtl"] :is(.reporting-text-link, .reporting-back-link, .reporting-report-title) > svg { transform: scaleX(-1); }
+.reporting-header-icon, .people-avatar {
+  background: linear-gradient(145deg, var(--primary-soft), color-mix(in srgb, var(--primary) 15%, var(--surface)));
+  border: 1px solid var(--border-emphasis);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--surface) 55%, transparent);
+}
+.persona > .avatar:first-child {
+  box-shadow: 0 0 0 3px var(--surface), 0 0 0 4px var(--border);
+  background-image: linear-gradient(145deg, color-mix(in srgb, var(--primary) 90%, white), var(--primary));
+  color: var(--on-primary);
+}
+
+/* The overview has one confident brand moment, with a static fine-grid texture. */
+.dashboard-page > .reporting-page-heading {
+  padding: clamp(20px, 2.6vw, 30px);
+  border: 1px solid #365794;
+  border-radius: 20px;
+  background-color: #132c63;
+  background-image: radial-gradient(ellipse at 95% 0, rgb(79 124 225 / .42), transparent 65%),
+    radial-gradient(rgb(255 255 255 / .075) .7px, transparent .7px),
+    linear-gradient(115deg, #132c63, #1b3b83);
+  background-size: auto, 12px 12px, auto;
+  color: #fff;
+  box-shadow: 0 8px 24px rgb(14 37 85 / .13), inset 0 1px 0 rgb(255 255 255 / .09);
+}
+.dashboard-page > .reporting-page-heading h1 { font-size: clamp(1.65rem, 2.6vw, 2.2rem); letter-spacing: -.045em; }
+.dashboard-page > .reporting-page-heading .eyebrow { color: #cfddff; letter-spacing: .12em; }
+.dashboard-page > .reporting-page-heading p:not(.eyebrow) { color: #dbe5fa; }
+.dashboard-page > .reporting-page-heading .reporting-as-of { color: #bdcff0; font-size: .8125rem; }
+.dashboard-page > .reporting-page-heading > .button.primary {
+  --control-fill: #fff;
+  color: #163b99;
+  border-color: rgb(255 255 255 / .5);
+  box-shadow: 0 3px 10px rgb(0 0 0 / .12), inset 0 1px 0 #fff;
+}
+.dashboard-page > .reporting-page-heading > .button.primary:hover { --control-fill: #eaf0ff; }
+.reporting-group-heading h2 { display: flex; align-items: center; gap: 9px; }
+.reporting-card-group-priority > .reporting-group-heading h2::before {
+  content: "";
+  inline-size: 4px;
+  block-size: 16px;
+  flex: 0 0 4px;
+  border-radius: 3px;
+  background: var(--accent);
+}
+
+/* Navigation feels like a set of deliberately placed controls. */
+.nav-links a { border: 1px solid transparent; border-radius: 11px; transition: background-color var(--motion-fast) ease, border-color var(--motion-fast) ease, color var(--motion-fast) ease; }
+.nav-links a[aria-current="page"] {
+  border-color: color-mix(in srgb, var(--primary) 16%, transparent);
+  background-image: linear-gradient(110deg, var(--primary-soft), color-mix(in srgb, var(--primary-soft) 50%, var(--surface)));
+  box-shadow: inset 3px 0 0 var(--primary);
+}
+html[dir="rtl"] .nav-links a[aria-current="page"] { box-shadow: inset -3px 0 0 var(--primary); }
+.account-menu summary > svg { transition: rotate var(--motion-medium) var(--ease-out); }
+.account-menu[open] summary > svg { rotate: 180deg; }
+.account-popover {
+  padding: 12px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-floating);
+  animation: scopeis-popover-enter var(--motion-medium) var(--ease-out);
+}
+.account-popover :is(a, button) { border-radius: 9px; transition: background-color var(--motion-fast) ease, color var(--motion-fast) ease; }
+.record-navigation { gap: 4px; padding: 4px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-muted); }
+.record-navigation a { border-block-end: 0; border-radius: 8px; transition: color var(--motion-fast) ease, background-color var(--motion-fast) ease, box-shadow var(--motion-fast) ease; }
+.record-navigation a[aria-current="page"] { background: var(--surface); box-shadow: var(--shadow-panel); }
+.workflow-steps li > span { box-shadow: inset 0 0 0 1px var(--border); }
+.workflow-steps li[aria-current="step"] > span { background: var(--primary); color: var(--on-primary); box-shadow: 0 0 0 3px var(--primary-soft); }
+:is(.workflow-count, .record-count, .directory-status, .workflow-status, .schedule-status, .evidence-badge, .reporting-format) { border-radius: 7px; }
+.account-table-scroll, .directory-table-wrap, .report-table-wrap { box-shadow: var(--shadow-panel); }
+:is(.account-table, .employee-directory, .report-table) tbody tr { transition: background-color var(--motion-fast) ease; }
+summary { transition: color var(--motion-fast) ease; }
+summary::marker { color: var(--primary); }
+details[open]:not(.account-menu) > :not(summary) { animation: scopeis-reveal var(--motion-medium) var(--ease-out); }
+:is(.form-error, .form-success, .operation-error, .operation-success, .schedule-error, .schedule-success, .workflow-feedback):not(:empty) { animation: scopeis-reveal var(--motion-medium) var(--ease-out); }
+
+/* Native dialog centering is retained; scale composes with its translateY(-50%). */
+.task-dialog { border-radius: 18px; box-shadow: 0 28px 90px rgb(6 18 44 / .25), 0 4px 16px rgb(6 18 44 / .12); }
+.task-dialog[open] { animation: scopeis-dialog-enter var(--motion-medium) var(--ease-out); }
+.task-dialog::backdrop { background: rgb(10 24 48 / .58); animation: scopeis-reveal var(--motion-medium) ease; }
+.task-dialog-heading { background: linear-gradient(130deg, var(--surface), var(--surface-sheen)); }
+.task-dialog-heading h2 { padding-inline-start: 12px; border-inline-start: 3px solid var(--primary); }
+.task-dialog-heading .icon-button { background: var(--surface-muted); }
+.task-dialog-heading .icon-button:hover { color: var(--primary); background: var(--primary-soft); }
+.task-dialog-content { scrollbar-width: thin; scrollbar-color: var(--field-border) transparent; }
+.mobile-sheet-backdrop { animation: scopeis-reveal var(--motion-medium) ease; }
+.mobile-sheet { animation: scopeis-sheet-enter var(--motion-enter) var(--ease-out); border-block-start: 1px solid var(--border-emphasis); }
+.mobile-sheet .sheet-header { border-block-end: 1px solid var(--border); margin-block-end: 16px; }
+
+.login-page {
+  display: grid;
+  place-items: center;
+  background-image: radial-gradient(ellipse at 15% 0, color-mix(in srgb, var(--primary) 10%, transparent), transparent 55%),
+    radial-gradient(ellipse at 100% 100%, color-mix(in srgb, var(--accent) 5%, transparent), transparent 45%),
+    radial-gradient(color-mix(in srgb, var(--muted) 12%, transparent) .65px, transparent .65px);
+  background-size: auto, auto, 18px 18px;
+}
+.login-card { inline-size: min(100%, 28rem); padding: clamp(18px, 4vw, 32px); border-radius: 20px; box-shadow: var(--shadow-floating); animation: scopeis-page-enter var(--motion-enter) var(--ease-out); }
+.login-card h1 { margin-block-start: 26px; }
+.login-intro { color: var(--muted); margin: 0 0 24px; font-size: .9375rem; line-height: 1.6; }
+.login-card .login-submit { margin-block-start: 16px; }
+.state-page, .empty-module { box-shadow: var(--shadow-panel); }
+
+@media (hover: hover) and (pointer: fine) {
+  .button:hover:not(:disabled) { translate: 0 -1px; border-color: var(--border-emphasis); box-shadow: var(--shadow-panel); }
+  .button.primary:hover:not(:disabled) { border-color: color-mix(in srgb, var(--control-fill) 82%, black); box-shadow: 0 5px 12px color-mix(in srgb, var(--primary) 20%, transparent); }
+  .button:active:not(:disabled) { translate: 0 1px; box-shadow: inset 0 2px 3px rgb(0 0 0 / .07); }
+  .nav-links a:hover:not([aria-current]) { background: var(--surface-muted); border-color: var(--border); color: var(--text); }
+  :is(.reporting-cards > li, .reporting-report-list > li, .operation-cards article):has(a):hover { translate: 0 -2px; border-color: var(--border-emphasis); box-shadow: var(--shadow-floating); }
+  :is(.reporting-text-link, .reporting-report-title):hover > svg { translate: var(--inline-nudge) 0; }
+  :is(.app-shell, .task-dialog, .login-card) :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea):hover:not(:disabled):not(:focus) { border-color: var(--primary); }
+}
+@media (max-width: 1024px) {
+  .bottom-nav { box-shadow: 0 -4px 18px rgb(23 42 80 / .055); }
+  .bottom-nav :is(a, button) { position: relative; transition: color var(--motion-fast) ease, background-color var(--motion-fast) ease; }
+  .bottom-nav a[aria-current="page"] { background: linear-gradient(180deg, var(--primary-soft), var(--surface)); }
+  .bottom-nav a[aria-current="page"]::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 25%;
+    block-size: 3px;
+    border-radius: 0 0 3px 3px;
+    background: var(--primary);
+  }
+  .bottom-nav :is(a, button):active { background-color: var(--primary-soft); }
+  .mobile-sheet { border-start-start-radius: 22px; border-start-end-radius: 22px; }
+  input::file-selector-button { min-block-size: 44px; }
+}
+@container workspace (max-width: 36rem) {
+  .dashboard-page > .reporting-page-heading { border-radius: 16px; }
+  .dashboard-page > .reporting-page-heading > .button.primary { margin-block-start: 2px; }
+}
+
+@keyframes scopeis-page-enter { from { opacity: 0; translate: 0 6px; } to { opacity: 1; translate: 0 0; } }
+@keyframes scopeis-dialog-enter { from { opacity: 0; scale: .975; } to { opacity: 1; scale: 1; } }
+@keyframes scopeis-popover-enter { from { opacity: 0; translate: 0 -5px; } to { opacity: 1; translate: 0 0; } }
+@keyframes scopeis-sheet-enter { from { opacity: 0; translate: 0 18px; } to { opacity: 1; translate: 0 0; } }
+@keyframes scopeis-reveal { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scopeis-theme-enter { from { opacity: 0; rotate: -35deg; scale: .75; } to { opacity: 1; rotate: 0deg; scale: 1; } }
+@keyframes scopeis-spin { to { rotate: 360deg; } }
+
+/* Interaction and decoration are optional: respect the user's display preferences. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after, *::backdrop { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .button:hover:not(:disabled), .button:active:not(:disabled),
+  :is(.reporting-cards > li, .reporting-report-list > li, .operation-cards article):has(a):hover,
+  :is(.reporting-text-link, .reporting-report-title):hover > svg { translate: none; }
+}
+@media (forced-colors: active) {
+  .dashboard-page > .reporting-page-heading { border-color: CanvasText; background: Canvas; color: CanvasText; }
+  .dashboard-page > .reporting-page-heading :is(h1, p, .eyebrow, .reporting-as-of) { color: CanvasText; }
+  .dashboard-page > .reporting-page-heading > .button.primary { border-color: ButtonText; background: ButtonFace; color: ButtonText; }
+  .nav-links a[aria-current="page"], .bottom-nav a[aria-current="page"] { outline: 2px solid Highlight; outline-offset: -3px; }
+  :is(.button, .icon-button, .collapse-button) { border: 1px solid ButtonText; }
+}

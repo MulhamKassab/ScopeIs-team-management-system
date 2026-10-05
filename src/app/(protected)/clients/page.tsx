@@ -2,15 +2,27 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentActor } from "@/modules/auth/session-service";
 import { ClientCreateForm } from "@/modules/operations/forms";
+import { RecordNavigation, RecordStatus } from "@/modules/operations/record-navigation";
 import { operationalService } from "@/modules/operations/service";
+import { TaskDialog } from "@/shared/components/task-dialog";
 
 export default async function ClientsPage({ searchParams }: { searchParams: Promise<{ query?: string; archived?: string }> }) {
-  const actor = await getCurrentActor(); if (!actor) redirect("/login"); if (actor.role === "EMPLOYEE") notFound(); const params = await searchParams;
-  const [records, options] = await Promise.all([operationalService.listClients(actor, { query: params.query ?? "", includeArchived: params.archived === "true" }), operationalService.formOptions(actor)]);
-  return <section className="operations-page"><header className="operations-heading"><div><p className="eyebrow">Phase 3 operational structure</p><h2>Clients</h2><p>Clients are authorization roots. Coordination and employee relationships never grant access or create schedule assignments.</p></div><div className="operation-heading-links"><Link className="button" href="/projects">Projects</Link><Link className="button" href="/locations">Locations</Link></div></header>
-    <form className="operation-search" method="get"><label>Search company name<input name="query" defaultValue={params.query ?? ""} maxLength={100} /></label><label className="operation-check"><input type="checkbox" name="archived" value="true" defaultChecked={params.archived === "true"} /> Include archived</label><button className="button primary">Search</button></form>
-    {actor.role === "SUPER_ADMIN" ? <ClientCreateForm employees={options.employees} /> : <p className="operation-callout">Only Super Admin creates a Client. Your explicit Client scope controls which authorization roots appear here.</p>}
-    <div className="operation-cards">{records.map((client) => <article key={client.id}><span className={`directory-status ${client.status === "ACTIVE" ? "active" : "inactive"}`}>{client.status}</span><h3>{client.companyName}</h3><p>{client.serviceSummary || "No service summary"}</p><Link className="button primary" href={`/clients/${client.id}`}>Manage Client</Link></article>)}</div>
-    {!records.length ? <div className="operation-empty"><h3>No authorized Clients</h3><p>No record matches the current search and explicit operational scope.</p></div> : null}
+  const actor = await getCurrentActor();
+  if (!actor) redirect("/login");
+  if (actor.role === "EMPLOYEE") notFound();
+  const params = await searchParams;
+  const [records, options] = await Promise.all([
+    operationalService.listClients(actor, { query: params.query ?? "", includeArchived: params.archived === "true" }),
+    operationalService.formOptions(actor),
+  ]);
+  const filtered = Boolean(params.query || params.archived === "true");
+  return <section className="operations-page records-workspace">
+    <header className="operations-heading"><div><p className="eyebrow">Client workspace</p><h2>Clients</h2><p>Keep each client’s projects, work locations and contacts together.</p></div>
+      {actor.role === "SUPER_ADMIN" ? <TaskDialog triggerLabel="Create client" title="Create client" description="Start with the company name. You can add projects and work locations next."><ClientCreateForm employees={options.employees} /></TaskDialog> : null}
+    </header>
+    <RecordNavigation current="clients" />
+    <form className="operation-search" method="get"><label>Search clients<input name="query" placeholder="Company name" defaultValue={params.query ?? ""} maxLength={100} /></label><label className="operation-check"><input type="checkbox" name="archived" value="true" defaultChecked={params.archived === "true"} /> Include archived</label><button className="button primary">Search</button></form>
+    <div className="record-result-heading"><p>{records.length} {records.length === 1 ? "client" : "clients"}{filtered ? " found" : " in your workspace"}</p>{filtered ? <Link href="/clients">Clear filters</Link> : null}</div>
+    {records.length ? <div className="operation-cards">{records.map((client) => <article key={client.id}><RecordStatus status={client.status} /><h3>{client.companyName}</h3><p>{client.serviceSummary || "Add a service summary to help your team understand this client."}</p><Link className="button" href={`/clients/${client.id}`}>Open client</Link></article>)}</div> : <div className="operation-empty"><h3>{filtered ? "No clients match your search" : "No clients yet"}</h3><p>{filtered ? "Try another company name or clear the filters." : actor.role === "SUPER_ADMIN" ? "Create a client to start organising projects and work locations." : "Clients appear here when a Super Admin gives you access."}</p></div>}
   </section>;
 }

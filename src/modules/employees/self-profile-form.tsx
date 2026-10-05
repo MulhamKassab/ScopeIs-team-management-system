@@ -3,8 +3,13 @@
 import { useActionState } from "react";
 import type { OwnEmployeeProfileView } from "@/modules/employees/employee-services";
 import { updateOwnProfileAction } from "@/modules/employees/employee-management-actions";
+import { TaskDialog } from "@/shared/components/task-dialog";
 
 export function SelfProfileForm({ profile }: { profile: OwnEmployeeProfileView }) {
+  return <TaskDialog triggerLabel="Edit profile" title="Edit professional profile" description="Keep your work contact details and professional summary up to date."><SelfProfileFields profile={profile} /></TaskDialog>;
+}
+
+function SelfProfileFields({ profile }: { profile: OwnEmployeeProfileView }) {
   const [state, action, pending] = useActionState(updateOwnProfileAction, {});
   return <form className="employee-self-profile-form" action={action} noValidate><input type="hidden" name="expectedVersion" value={profile.version} />
     <label>Work email<input name="workEmail" type="email" defaultValue={profile.workEmail ?? ""} maxLength={254} autoComplete="email" /></label>

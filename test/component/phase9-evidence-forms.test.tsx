@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: () => {} }) }));
@@ -32,10 +32,18 @@ describe("Phase 9 capability evidence forms", () => {
     expect(screen.getByText("Fictional Evidence.pdf")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Preview file" })).toHaveAttribute("href", `/api/evidence/files/${fileId}`);
     // The uploader is an accessible form whose labelled file input posts to the authorized route.
+    expect(screen.queryByRole("form")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Attach file" }));
     const uploader = screen.getByRole("form", { name: "Attach or replace file" });
     expect(uploader.querySelector('input[type="file"]')).not.toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Close", exact: true }));
+    fireEvent.click(screen.getByRole("button", { name: "Add certifications" }));
     expect(screen.getByRole("form", { name: "Add certifications" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Close", exact: true }));
+    fireEvent.click(screen.getByRole("button", { name: "Archive item" }));
     expect(screen.getByRole("form", { name: `Archive ${item.title}` })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Close", exact: true }));
+    fireEvent.click(screen.getByRole("button", { name: "Edit item" }));
     expect(screen.getByRole("form", { name: `Edit ${item.title}` })).toBeInTheDocument();
   });
 
@@ -44,10 +52,12 @@ describe("Phase 9 capability evidence forms", () => {
     expect(screen.getByRole("heading", { name: "Capability evidence" })).toBeInTheDocument();
     expect(screen.getByText(/Evidence recorded by Cora Bell/)).toBeInTheDocument();
     expect(document.getElementById(`evidence-${id}`)).not.toBeNull();
+    expect(screen.queryByRole("form")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Review evidence" }));
     expect(screen.getByRole("form", { name: `Mark ${item.title} reviewed` })).toBeInTheDocument();
     expect(screen.getByRole("form", { name: `Verify ${item.title}` })).toBeInTheDocument();
     expect(screen.getByRole("form", { name: `Reset review state for ${item.title}` })).toBeInTheDocument();
-    expect(screen.getByText(/never change coverage, replacement eligibility/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/does not change staffing eligibility/i).length).toBeGreaterThan(0);
   });
 
   it("keeps the scoped-Admin projection to certification summary facts only", () => {

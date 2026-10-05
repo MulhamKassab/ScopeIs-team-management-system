@@ -92,7 +92,7 @@ test("Scoped Admin reporting is scope-bounded, may open planning, may not reach 
   await expectNoHorizontalOverflow(page);
 
   // 3. The certification report shows the approved summary projection without employee attribution.
-  await page.goto(`/reports/certification-status?${WINDOW}`);
+  await page.goto("/reports/certification-status");
   await expect(page.getByRole("heading", { name: "Certification status" })).toBeVisible();
   await expect(page.locator(".report-table thead")).not.toContainText("Employee");
   await expect(page.locator(".report-table thead")).toContainText("Review state");
@@ -121,7 +121,7 @@ test("Employee dashboard is self-only and reporting stays closed", async ({ page
   await expect(page.getByText("My leave and balance", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "My leave" })).toBeVisible();
   await expect(page.getByRole("region", { name: "My published assignments (next 7 days)" })).toBeVisible();
-  await expect(page.getByText("Skills I have recorded", { exact: true })).toBeVisible();
+  await expect(page.getByText("My recorded skills", { exact: true })).toBeVisible();
   await expect(page.getByText("My capability evidence", { exact: true })).toBeVisible();
   // No organisational total and no other employee's name.
   await expect(page.getByText("Active employees", { exact: true })).toHaveCount(0);
@@ -129,10 +129,46 @@ test("Employee dashboard is self-only and reporting stays closed", async ({ page
   await expectCleanTerminology(page);
   await expectNoHorizontalOverflow(page);
 
+  // The skill action opens the existing read-only skill view, never promises editing rights.
+  await page.getByRole("link", { name: "View my skills: My recorded skills" }).click();
+  await expect(page.getByRole("heading", { name: "My recorded skills" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Record skill", exact: true })).toHaveCount(0);
+
   // Reporting is closed to an Employee, including the planning report and the export endpoint.
   for (const path of ["/reports", "/reports/published-allocation", "/reports/planning-unpublished"]) {
     expect((await page.goto(path))?.status()).toBe(404);
   }
   expect((await page.request.get(`/api/reports/published-allocation/export?${WINDOW}`)).status()).toBe(404);
+  await signOut(page);
+});
+
+
+test("report filters apply without errors, retain their values and export the same conflict window", async ({ page }) => {
+  await signIn(page, "Nora Albright");
+  await page.goto(`/reports/published-allocation?${WINDOW}`);
+  await page.getByRole("button", { name: "Apply filters" }).click();
+  await expect(page.getByRole("heading", { name: "Published allocation", exact: true })).toBeVisible();
+  await expect(page.locator(".report-table tbody tr")).toHaveCount(2);
+  await expect(page.getByLabel("Window start time")).toHaveCount(0);
+  await page.getByRole("combobox", { name: "Client", exact: true }).selectOption({ label: "Bravo Engineering" });
+  await page.getByRole("button", { name: "Apply filters" }).click();
+  await expect(page.getByText("No published assignment falls inside this window for your current scope.")).toBeVisible();
+  await expect(page.getByRole("combobox", { name: "Client", exact: true }).locator("option:checked")).toHaveText("Bravo Engineering");
+
+  await page.goto("/reports/approved-leave?from=2027-09-01&to=2027-09-30");
+  await page.getByLabel("Conflict date").fill("2027-09-14");
+  await page.getByLabel("Window start time").fill("08:00");
+  await page.getByLabel("Window end time").fill("09:00");
+  await page.getByRole("button", { name: "Apply filters" }).click();
+  await expect(page.getByLabel("Window start time")).toHaveValue("08:00");
+  await expect(page.locator(".report-table tbody")).toContainText("Published assignment overlaps the selected time window");
+  const exportHref = await page.getByRole("link", { name: "Download CSV" }).getAttribute("href");
+  const csv = await page.request.get(exportHref!);
+  expect(csv.status()).toBe(200);
+  expect(await csv.text()).toContain("Published assignment overlaps the selected time window");
+
+  await page.goto("/reports/approved-leave?from=2027-01-01&to=2027-12-31");
+  await expect(page.getByRole("region", { name: "Check report filters" }).getByRole("alert")).toContainText("Narrow the date range to 90 days");
+  await expect(page.getByRole("link", { name: "Reset filters" })).toBeVisible();
   await signOut(page);
 });

@@ -21,10 +21,13 @@ export class CoverageService {
     const loaded = await coverageRepository.assignment(executor, assignmentId); if (!loaded) throw new CoverageDomainError("NOT_FOUND");
     if (actor.role === "SUPER_ADMIN") return loaded; if (actor.role !== "ADMIN") throw new CoverageDomainError("FORBIDDEN");
     const grants = await coverageRepository.grants(executor, actor.id); const allowed = grants.some((grant) => (grant.scopeType === "CLIENT" && grant.scopeReference === loaded.period.clientId) || (grant.scopeType === "PROJECT" && grant.scopeReference === loaded.assignment.projectId) || (grant.scopeType === "LOCATION" && grant.scopeReference === loaded.assignment.locationId));
-    if (!allowed) throw new CoverageDomainError("OUT_OF_SCOPE"); return loaded;
+    const employee = await coverageRepository.employee(executor, loaded.assignment.employeeUserId);
+    const teamVisible = employee && grants.some((grant) => grant.scopeType === "TEAM" && grant.scopeReference === employee.team);
+    if (!allowed || !teamVisible) throw new CoverageDomainError("OUT_OF_SCOPE"); return loaded;
   }
   private async teams(executor: CoverageExecutor, actor: AuthenticatedActor) { if (actor.role === "SUPER_ADMIN") return undefined; if (actor.role !== "ADMIN") throw new CoverageDomainError("FORBIDDEN"); return (await coverageRepository.grants(executor, actor.id)).filter((grant) => grant.scopeType === "TEAM").map((grant) => grant.scopeReference); }
   private async eligible(executor: CoverageExecutor, employeeUserId: string, anchor: { id?: string; employeeUserId: string; assignmentDate: string; startTime: string; endTime: string }, skillIds: string[], exceptAssignmentId?: string, checkOverlap = true) {
+    const employee = await coverageRepository.employee(executor, employeeUserId); if (!employee?.active || employee.role !== "EMPLOYEE") return false;
     const skills = new Set((await coverageRepository.employeeSkillIds(executor, employeeUserId)).map((row) => row.skillId)); if (!skillIds.every((id) => skills.has(id))) return false;
     if (await coverageRepository.approvedLeave(executor, employeeUserId, anchor.assignmentDate)) return false;
     return !checkOverlap || !(await coverageRepository.overlaps(executor, employeeUserId, anchor.assignmentDate, anchor.startTime, anchor.endTime, exceptAssignmentId));
@@ -41,6 +44,11 @@ export class CoverageService {
     const effective = await capabilityService.effectiveRequirements(executor as never, anchor.id); const owned = new Set((await coverageRepository.employeeSkillIds(executor, anchor.employeeUserId)).map((row) => row.skillId));
     for (const requirement of effective.requirements.filter((item) => !owned.has(item.id))) gaps.push({ kind: "QUALIFICATION", anchorAssignmentId: anchor.id, periodId: anchor.schedulePeriodId, periodStatus: loaded.period.status, employeeName: loaded.employeeName, assignmentDate: anchor.assignmentDate, startTime: String(anchor.startTime).slice(0, 5), endTime: String(anchor.endTime).slice(0, 5), source: requirement.sources[0]!, skillName: requirement.name, requiredEmployeeCount: 1, eligibleEmployeeCount: 0, missingEmployeeCount: 1 });
     return gaps;
+  }
+  async assignmentContext(actor: AuthenticatedActor, assignmentId: string) {
+    if (!replacementCreateSchema.shape.anchorAssignmentId.safeParse(assignmentId).success) throw new CoverageDomainError("NOT_FOUND");
+    const loaded = await this.allowedAssignment(db, actor, assignmentId);
+    return { id: loaded.assignment.id, periodId: loaded.period.id, month: loaded.period.planningMonth.slice(0, 7), status: loaded.period.status, employeeName: loaded.employeeName, clientName: loaded.clientName, projectName: loaded.projectName, locationName: loaded.locationName, assignmentDate: loaded.assignment.assignmentDate, startTime: loaded.assignment.startTime.slice(0, 5), endTime: loaded.assignment.endTime.slice(0, 5) };
   }
   async gaps(actor: AuthenticatedActor, anchorAssignmentId: string) { if (actor.role === "EMPLOYEE") throw new CoverageDomainError("FORBIDDEN"); return this.gapsForAnchor(db, actor, anchorAssignmentId); }
   async candidates(actor: AuthenticatedActor, anchorAssignmentId: string) { if (actor.role === "EMPLOYEE") throw new CoverageDomainError("FORBIDDEN"); const loaded = await this.allowedAssignment(db, actor, anchorAssignmentId); const effective = await capabilityService.effectiveRequirements(db, anchorAssignmentId); const teamRefs = await this.teams(db, actor); const employees = await coverageRepository.activeEmployees(db, teamRefs); const required = effective.requirements.map((item) => item.id); const candidates = []; for (const employee of employees) if (await this.eligible(db, employee.id, loaded.assignment, required, employee.id === loaded.assignment.employeeUserId ? loaded.assignment.id : undefined)) candidates.push({ id: employee.id, displayName: employee.displayName, skills: effective.requirements.map((item) => item.name) }); return { candidates, requirements: effective.requirements.map((item) => ({ name: item.name, sources: item.sources })) }; }

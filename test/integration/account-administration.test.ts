@@ -141,6 +141,46 @@ describe("account administration service", () => {
   });
 
   describe("password reset", () => {
+    it("rejects weak and identifier-equal passwords without changing credentials, sessions, or audit", async () => {
+      const created = await service.createAccount(nora(), { displayName: "Policy Reset", username: "policyreset1", loginEmail: "policyreset1@example.test", role: "EMPLOYEE", password: TEMP, confirmPassword: TEMP, mustChangePassword: false });
+      const login = await beginPasswordSession({ identifier: "policyreset1", password: TEMP });
+      const before = (await credentialRow(created.userId))[0];
+      for (const password of ["a", "        ", "onlyletters", "12345678", "POLICYRESET1", "POLICYRESET1@EXAMPLE.TEST"]) {
+        await expect(service.resetPassword(nora(), { userId: created.userId, expectedVersion: before.version, password, confirmPassword: password, confirmRevoke: true })).rejects.toMatchObject({ code: "PASSWORD_POLICY" });
+      }
+      expect((await credentialRow(created.userId))[0]).toEqual(before);
+      expect(await foundationRepository.findActiveSession(sessionTokenHash(login.token))).toBeTruthy();
+      expect(await db.select().from(auditEvents).where(and(eq(auditEvents.action, "auth.password.reset"), eq(auditEvents.targetId, created.userId)))).toHaveLength(0);
+    });
+
+    it("rotates a self-reset session under the new version and invalidates every old session", async () => {
+      const created = await service.createAccount(nora(), { displayName: "Self Reset Root", username: "selfresetroot", loginEmail: "selfresetroot@example.test", role: "SUPER_ADMIN", password: TEMP, confirmPassword: TEMP, superAdminConfirmed: true, mustChangePassword: false });
+      const first = await beginPasswordSession({ identifier: "selfresetroot", password: TEMP });
+      const other = await beginPasswordSession({ identifier: "selfresetroot", password: TEMP });
+      const before = (await credentialRow(created.userId))[0];
+      const result = await service.resetPassword(first.actor, { userId: created.userId, expectedVersion: before.version, password: "self-reset-next1", confirmPassword: "self-reset-next1", currentPassword: TEMP, confirmRevoke: true, mustChangePassword: false });
+      expect(result.session?.token).toHaveLength(43);
+      expect(result.session?.actor.sessionVersion).toBe(first.actor.sessionVersion + 1);
+      expect(result.sessionsRevoked).toBe(2);
+      expect(result.mustChangePassword).toBe(false);
+      for (const old of [first, other]) expect(await foundationRepository.findActiveSession(sessionTokenHash(old.token))).toBeNull();
+      const current = await foundationRepository.findActiveSession(sessionTokenHash(result.session!.token));
+      expect(current?.session.sessionVersion).toBe(current?.user.sessionVersion);
+      expect(await verifyPassword("self-reset-next1", await hashOf(created.userId))).toBe(true);
+    });
+
+    it("rolls back a self-reset and keeps its session valid if audit persistence fails", async () => {
+      const created = await service.createAccount(nora(), { displayName: "Rollback Reset Root", username: "rollbackresetroot", loginEmail: "rollbackresetroot@example.test", role: "SUPER_ADMIN", password: TEMP, confirmPassword: TEMP, superAdminConfirmed: true, mustChangePassword: false });
+      const login = await beginPasswordSession({ identifier: "rollbackresetroot", password: TEMP });
+      const before = (await credentialRow(created.userId))[0];
+      const failing = new AccountAdministrationService(async () => { throw new Error("Fictional audit failure"); });
+      await expect(failing.resetPassword(login.actor, { userId: created.userId, expectedVersion: before.version, password: "rollback-reset1", confirmPassword: "rollback-reset1", currentPassword: TEMP, confirmRevoke: true })).rejects.toThrow("Fictional audit failure");
+      expect((await credentialRow(created.userId))[0]).toEqual(before);
+      const retained = await foundationRepository.findActiveSession(sessionTokenHash(login.token));
+      expect(retained?.session.sessionVersion).toBe(retained?.user.sessionVersion);
+      expect(retained).toBeTruthy();
+    });
+
     it("changes hash and salt, clears lock, bumps version, revokes sessions and audits once", async () => {
       const created = await service.createAccount(nora(), { displayName: "Reset Target", username: "resettarget", loginEmail: "resettarget@example.test", role: "EMPLOYEE", password: TEMP, confirmPassword: TEMP, mustChangePassword: false });
       const login = await beginPasswordSession({ identifier: "resettarget", password: TEMP });
@@ -183,6 +223,8 @@ describe("account administration service", () => {
       const version = (await credentialRow(root.userId))[0].version;
       await expect(service.resetPassword(nora(), { userId: root.userId, expectedVersion: version, password: TEMP, confirmPassword: TEMP, confirmRevoke: true })).rejects.toThrow(AccountAdminDomainError);
       await expect(service.resetPassword(nora(), { userId: root.userId, expectedVersion: version, password: TEMP, confirmPassword: TEMP, confirmRevoke: true, currentPassword: "wrong-current" })).rejects.toThrow(AccountAdminDomainError);
+      await db.update(users).set({ active: false }).where(eq(users.id, root.userId));
+      await expect(service.resetPassword(nora(), { userId: root.userId, expectedVersion: version, password: TEMP, confirmPassword: TEMP, confirmRevoke: true })).rejects.toMatchObject({ code: "CURRENT_PASSWORD_INVALID" });
     });
 
     it("leaves an inactive account inactive and does not change its role", async () => {
@@ -197,6 +239,17 @@ describe("account administration service", () => {
   });
 
   describe("self password change", () => {
+    it("rejects the account's stored username or login email as the new password", async () => {
+      const created = await service.createAccount(nora(), { displayName: "Identity Guard", username: "identityguard1", loginEmail: "identityguard1@example.test", role: "EMPLOYEE", password: TEMP, confirmPassword: TEMP, mustChangePassword: true });
+      const login = await beginPasswordSession({ identifier: "identityguard1", password: TEMP });
+      const before = (await credentialRow(created.userId))[0];
+      for (const newPassword of ["IDENTITYGUARD1", "IDENTITYGUARD1@EXAMPLE.TEST"]) {
+        await expect(service.changeOwnPassword(login.actor, { currentPassword: TEMP, newPassword, confirmPassword: newPassword })).rejects.toMatchObject({ code: "PASSWORD_POLICY" });
+      }
+      expect((await credentialRow(created.userId))[0]).toEqual(before);
+      expect(await foundationRepository.findActiveSession(sessionTokenHash(login.token))).toBeTruthy();
+    });
+
     it("clears the requirement, rotates the session, and audits without password content", async () => {
       const created = await service.createAccount(nora(), { displayName: "Self Changer", username: "selfchanger", loginEmail: "selfchanger@example.test", role: "EMPLOYEE", password: TEMP, confirmPassword: TEMP, mustChangePassword: true });
       const actor: AuthenticatedActor = { id: created.userId, displayName: "Self Changer", role: "EMPLOYEE", sessionId: "s", sessionVersion: 1, scopes: [], authenticationMode: "password" };

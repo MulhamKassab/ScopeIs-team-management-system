@@ -25,6 +25,7 @@ const report: ReportViewType = {
   key: "published-allocation", label: "Published allocation", question: "Who is assigned?",
   asOf: "16 Sep 2026, 10:00", windowLabel: "2027-09-01 to 2027-09-30",
   windowFrom: "2027-09-01", windowTo: "2027-09-30", conflictDate: "2027-09-15",
+  query: { from: "2027-09-01", to: "2027-09-30" },
   columns: reportColumns,
   rows: [{ data_state: "PUBLISHED", assignment_date: "2027-09-14", scheduled_hours: "4.00", employee_name: "Cora Bell" }],
   page: 1, pageSize: 100, totalRows: 1, hasNext: false, hasPrevious: false,
@@ -41,7 +42,7 @@ describe("Phase 11 dashboard", () => {
     expect(screen.getByText("Active employees")).toBeInTheDocument();
     expect(screen.getByText("18")).toBeInTheDocument();
     const employeeCard = screen.getByText("Active employees").closest("li")!;
-    expect(within(employeeCard).getByRole("link", { name: "Open" })).toHaveAttribute("href", "/employees");
+    expect(within(employeeCard).getByRole("link", { name: "View employees: Active employees" })).toHaveAttribute("href", "/employees");
     const section = screen.getByRole("region", { name: "Employees by team" });
     expect(within(section).getByText("team:alpha")).toBeInTheDocument();
   });
@@ -81,7 +82,7 @@ const employeeSurfaces: DashboardView = {
   role: "EMPLOYEE", asOf: "16 Sep 2026, 10:00",
   cards: [
     { key: "my-leave", label: "My leave and balance", question: "How much annual leave do I have left?", value: "12", detail: "10 of 22 working days used in 2027", href: "/leave" },
-    { key: "my-skills", label: "Skills I have recorded", question: "How many skills are on my profile?", value: "3", href: "/profile" },
+    { key: "my-skills", label: "My recorded skills", question: "How many skills are on my profile?", value: "3", href: "/skills" },
     { key: "my-evidence", label: "My capability evidence", question: "What evidence have I recorded?", value: "2", detail: "1 expired", href: "/profile" },
     { key: "my-unread", label: "My unread notifications", question: "Do I have anything new?", value: "1", href: "/notifications" },
   ],
@@ -109,15 +110,18 @@ describe("Phase 11 dashboard acceptance reconciliation", () => {
       expect(screen.getByRole("region", { name: caption })).toBeInTheDocument();
     }
     // Each table surface carries its own drill-down, reauthorized by the destination route.
-    expect(screen.getAllByRole("link", { name: "Open" }).length).toBe(3);
+    expect(screen.getByRole("link", { name: "View team" })).toHaveAttribute("href", "/employees");
+    expect(screen.getByRole("link", { name: "View schedule status" })).toHaveAttribute("href", "/reports/schedule-lifecycle");
+    expect(screen.getByRole("link", { name: "View audit history" })).toHaveAttribute("href", "/audit");
     expect(screen.getAllByText(/As of 16 Sep 2026, 10:00 \(Asia\/Dubai\)/).length).toBe(1);
   });
 
   it("renders all five approved Employee information areas and no management surface", () => {
     render(<DashboardCards view={employeeSurfaces} />);
-    for (const label of ["My published assignments (next 7 days)", "My leave and balance", "My leave", "Skills I have recorded", "My capability evidence", "My unread notifications"]) {
+    for (const label of ["My published assignments (next 7 days)", "My leave and balance", "My leave", "My recorded skills", "My capability evidence", "My unread notifications"]) {
       expect(screen.getAllByText(label).length, label).toBeGreaterThan(0);
     }
+    expect(screen.getByRole("link", { name: "View my skills: My recorded skills" })).toHaveAttribute("href", "/skills");
     for (const forbidden of ["Active employees", "Team", "Evidence awaiting review", "Audit", "Reports"]) {
       expect(screen.queryByText(forbidden)).not.toBeInTheDocument();
     }
@@ -151,7 +155,7 @@ describe("Phase 11 report index", () => {
       options={{ clientOptions: [{ id: "c1", name: "Alpha Facilities" }], projectOptions: [], locationOptions: [] }}
     />);
     const publishedEntry = screen.getByText("Published allocation").closest("li")!;
-    expect(within(publishedEntry).getByRole("link", { name: "Open report" })).toHaveAttribute("href", "/reports/published-allocation");
+    expect(within(publishedEntry).getByRole("link", { name: "Published allocation" })).toHaveAttribute("href", "/reports/published-allocation");
     expect(screen.getByText("PLANNING (unpublished)")).toBeInTheDocument();
     expect(screen.getByText("Client · Alpha Facilities")).toBeInTheDocument();
   });
@@ -192,5 +196,99 @@ describe("Phase 11 report view", () => {
     const table = screen.getByRole("table");
     expect(within(table).getAllByRole("columnheader")).toHaveLength(4);
     expect(within(table).getByText("4.00")).toBeInTheDocument();
+  });
+});
+
+
+describe("report filter continuity", () => {
+  const options = { clientOptions: [{ id: "client-1", name: "Chosen client" }], projectOptions: [], locationOptions: [] };
+  it("preserves dimensions and dates in pagination, exports and selected controls", () => {
+    const query = { from: "2027-09-01", to: "2027-09-30", clientId: "client-1" };
+    render(<ReportView view={{ ...report, page: 2, hasPrevious: true, hasNext: true, query }} filters={options} />);
+    expect(screen.getByLabelText("Client")).toHaveValue("client-1");
+    expect(screen.queryByLabelText("Window start time")).not.toBeInTheDocument();
+    for (const name of ["Previous", "Next", "Download CSV"]) {
+      const url = new URL(screen.getByRole("link", { name }).getAttribute("href")!, "http://localhost");
+      for (const [key, value] of Object.entries(query)) expect(url.searchParams.get(key)).toBe(value);
+      expect(url.searchParams.get("page")).toBe(name === "Previous" ? "1" : name === "Next" ? "3" : null);
+    }
+  });
+
+  it("preserves conflict date and times in leave exports and pagination", () => {
+    const query = { from: "2027-09-01", to: "2027-09-30", date: "2027-09-14", start: "09:00", end: "11:00" };
+    render(<ReportView view={{ ...report, key: "approved-leave", query, conflictDate: query.date, hasNext: true }} filters={options} />);
+    expect(screen.getByLabelText("Window start time")).toHaveValue("09:00");
+    expect(screen.getByLabelText("Window end time", { exact: false })).toHaveValue("11:00");
+    expect(screen.queryByLabelText("Client")).not.toBeInTheDocument();
+    for (const name of ["Next", "Download CSV"]) {
+      const url = new URL(screen.getByRole("link", { name }).getAttribute("href")!, "http://localhost");
+      for (const [key, value] of Object.entries(query)) expect(url.searchParams.get(key)).toBe(value);
+    }
+  });
+
+  it.each(["leave-balance", "certification-status", "skills-coverage", "skill-gaps", "evidence-review-queue"] as const)("offers no unsupported filters on %s", (key) => {
+    render(<ReportView view={{ ...report, key, query: {} }} filters={options} />);
+    expect(screen.queryByRole("button", { name: "Apply filters" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Download CSV" })).toHaveAttribute("href", `/api/reports/${key}/export?`);
+  });
+});
+
+
+describe("task-focused reporting presentation", () => {
+  it("puts existing Super Admin decision queues first with meaningful destinations", () => {
+    const cards = [
+      { key: "active-employees", label: "Active employees", question: "How many?", value: "18", href: "/employees" },
+      { key: "awaiting-review", label: "Evidence awaiting review", question: "What needs review?", value: "3", href: "/reports/evidence-review-queue" },
+      { key: "pending-leave", label: "Pending leave requests", question: "What needs review?", value: "2", href: "/leave" },
+      { key: "pending-replacements", label: "Pending replacement requests", question: "What needs review?", value: "1", href: "/replacements" },
+    ];
+    render(<DashboardCards view={{ ...dashboard, cards }} />);
+    const queues = screen.getByRole("region", { name: "Ready for review" });
+    expect(within(queues).getAllByRole("listitem").map((item) => item.getAttribute("data-metric")))
+      .toEqual(["pending-leave", "pending-replacements", "awaiting-review"]);
+    expect(within(queues).getByRole("link", { name: "Review leave: Pending leave requests" })).toHaveAttribute("href", "/leave");
+    expect(within(queues).getByRole("link", { name: "Review evidence: Evidence awaiting review" })).toHaveAttribute("href", "/reports/evidence-review-queue");
+    expect(queues.compareDocumentPosition(screen.getByRole("region", { name: "Published plan and team" })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(screen.queryByRole("link", { name: "Open", exact: true })).not.toBeInTheDocument();
+  });
+
+  it("keeps scoped Admin leave copy observational and never presents a review action", () => {
+    render(<DashboardCards view={{ ...dashboard, role: "ADMIN", cards: [
+      { key: "pending-leave", label: "Pending leave requests", question: "Any requests?", value: "2", href: "/leave" },
+      { key: "my-replacements", label: "Replacement requests I raised", question: "What did I request?", value: "1", href: "/replacements" },
+    ], sections: [] }} />);
+    const requests = screen.getByRole("region", { name: "Requests to follow" });
+    expect(within(requests).getByRole("link", { name: "View leave: Pending leave requests" })).toHaveAttribute("href", "/leave");
+    expect(screen.queryByRole("link", { name: /Review leave/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Ready for review" })).not.toBeInTheDocument();
+  });
+
+  it("puts an Employee's own upcoming schedule before profile counts", () => {
+    render(<DashboardCards view={employeeSurfaces} />);
+    const schedule = screen.getByRole("region", { name: "My published assignments (next 7 days)" });
+    const profile = screen.getByRole("region", { name: "Your profile" });
+    expect(schedule.compareDocumentPosition(profile) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(screen.getByRole("link", { name: "Open my schedule" })).toHaveAttribute("href", "/schedule");
+    expect(screen.queryByText("Phase 11 operational summary")).not.toBeInTheDocument();
+  });
+
+  it("groups only authorized reports by a practical question and keeps row detail in a disclosure", () => {
+    render(<ReportIndex entries={[
+      { key: "published-allocation", label: "Published allocation", question: "Who is assigned?", grain: "one row per Published assignment", privacy: "operational", planning: false, exportable: true },
+      { key: "certification-status", label: "Certification status", question: "Which certifications are recorded?", grain: "one row per certification", privacy: "operational", planning: false, exportable: false },
+    ]} options={{ clientOptions: [], projectOptions: [], locationOptions: [] }} />);
+    expect(within(screen.getByRole("region", { name: "Understand the staffing plan" })).getByRole("link", { name: "Published allocation" })).toHaveAttribute("href", "/reports/published-allocation");
+    expect(within(screen.getByRole("region", { name: "Review skills and evidence" })).getByRole("link", { name: "Certification status" })).toHaveAttribute("href", "/reports/certification-status");
+    expect(screen.queryByRole("region", { name: "Plan around leave and coverage" })).not.toBeInTheDocument();
+    expect(screen.getByText("one row per Published assignment").closest("details")).not.toHaveAttribute("open");
+    expect(screen.queryByText(/Grain:/)).not.toBeInTheDocument();
+  });
+
+  it("separates date and scope filters and keeps explanatory notes out of the primary results", () => {
+    render(<ReportView view={report} filters={{ clientOptions: [], projectOptions: [], locationOptions: [] }} />);
+    expect(within(screen.getByRole("group", { name: "Date range" })).getByLabelText("From date")).toHaveValue(report.windowFrom);
+    expect(within(screen.getByRole("group", { name: "Client, project or location" })).getByRole("combobox", { name: "Client" })).toBeInTheDocument();
+    expect(screen.getByText("Published assignments only.").closest("details")).not.toHaveAttribute("open");
+    expect(screen.getByRole("link", { name: "All reports" })).toHaveAttribute("href", "/reports");
   });
 });

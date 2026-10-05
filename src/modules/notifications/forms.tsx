@@ -7,6 +7,7 @@ import {
   type NotificationAction, type NotificationActionState,
 } from "@/modules/notifications/actions";
 import type { NotificationPage } from "@/modules/notifications/service";
+import { formatDubaiDateTime } from "@/shared/format-date";
 
 const initial: NotificationActionState = {};
 
@@ -31,27 +32,27 @@ const filterLabels: { key: string; label: string }[] = [
 
 export function NotificationCentre({ view, filter }: { view: NotificationPage; filter: string }) {
   return <section className="operations-page">
-    <header className="operations-heading"><div><p className="eyebrow">Phase 10 notification centre</p><h2>Notifications</h2><p>{view.unreadCount} unread notification{view.unreadCount === 1 ? "" : "s"}. Read state and archive state are independent.</p></div>
+    <header className="operations-heading"><div><p className="eyebrow">Your updates</p><h2>Notifications</h2><p>{view.unreadCount} unread notification{view.unreadCount === 1 ? "" : "s"}. Keep track of schedule changes, requests and reviews.</p></div>
       <ActionButton action={markAllNotificationsReadAction} title="Mark all notifications read" label="Mark all read" fields={{}} />
     </header>
-    <nav className="notification-filters" aria-label="Notification filters">{filterLabels.map((entry) => <Link key={entry.key} className={entry.key === filter ? "button primary" : "button"} href={`/notifications?filter=${entry.key}`}>{entry.label}</Link>)}</nav>
+    <nav className="notification-filters" aria-label="Notification filters">{filterLabels.map((entry) => <Link key={entry.key} aria-current={entry.key === filter ? "page" : undefined} className={entry.key === filter ? "button primary" : "button"} href={`/notifications?filter=${entry.key}`}>{entry.label}</Link>)}</nav>
     <ul className="operation-list notification-list">
-      {view.items.map((item) => <li key={item.id}>
+      {view.items.map((item) => <li key={item.id} className={!item.isRead ? "notification-unread" : undefined}>
         <div>
           <strong>{item.title}</strong>
           <span>{item.summary}</span>
-          <span className="notification-state">{item.isRead ? "Read" : "Unread"}{item.isArchived ? " · Archived" : ""} · {item.createdAt.slice(0, 16).replace("T", " ")}</span>
+          <span className="notification-state">{item.isRead ? "Read" : "Unread"}{item.isArchived ? " · Archived" : ""} · <time dateTime={item.createdAt}>{formatDubaiDateTime(item.createdAt)}</time></span>
           {item.href ? <Link className="button" href={item.href}>Open related record</Link> : <span className="notification-unavailable">This notification has no available destination for your current access.</span>}
         </div>
         <div className="notification-controls">
           <ActionButton action={setNotificationReadAction} title={item.isRead ? "Mark this notification unread" : "Mark this notification read"} label={item.isRead ? "Mark unread" : "Mark read"} fields={{ notificationId: item.id, read: String(!item.isRead) }} />
           {item.isArchived
             ? <ActionButton action={archiveNotificationAction} title="Restore this notification" label="Restore" fields={{ notificationId: item.id, archived: "false" }} />
-            : <ActionButton action={archiveNotificationAction} title="Archive this notification" label="Archive" danger fields={{ notificationId: item.id, archived: "true" }} />}
+            : <ActionButton action={archiveNotificationAction} title="Archive this notification" label="Archive" fields={{ notificationId: item.id, archived: "true" }} />}
         </div>
       </li>)}
     </ul>
-    {view.items.length ? null : <p className="operation-empty">No notification matches this filter.</p>}
+    {view.items.length ? null : <div className="operation-empty"><h3>{filter === "unread" ? "You're all caught up" : filter === "archived" ? "No archived notifications" : "No updates yet"}</h3><p>No notification matches this filter. Updates for your work will appear here.</p></div>}
     <nav className="notification-pagination" aria-label="Notification pages">
       {view.hasPrevious ? <Link className="button" href={`/notifications?filter=${filter}&page=${view.page - 1}`}>Previous</Link> : null}
       <span>Page {view.page} of {view.totalPages} · {view.total} notification{view.total === 1 ? "" : "s"}</span>

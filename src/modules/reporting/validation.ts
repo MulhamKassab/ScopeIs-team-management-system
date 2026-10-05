@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { ReportDomainError } from "@/modules/reporting/domain-error";
 import { isBusinessDate, isPlanningMonth, isWallClockTime } from "@/modules/reporting/date-rules";
+import { reportFilters, type ReportFilter, type ReportKey } from "@/modules/reporting/definitions";
 
 const businessDate = z.string().refine(isBusinessDate, "Expected a YYYY-MM-DD business date.");
 const wallClock = z.string().refine(isWallClockTime, "Expected an HH:MM time.");
@@ -41,9 +42,21 @@ export const reportQuerySchema = z.object({
 export type ReportQuery = z.infer<typeof reportQuerySchema>;
 
 export function parseReportQuery(value: unknown): ReportQuery {
-  const result = reportQuerySchema.safeParse(value ?? {});
+  // Native GET forms submit optional empty controls as empty strings.
+  const normalized = value && typeof value === "object" && !Array.isArray(value)
+    ? Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, entry === "" ? undefined : entry]))
+    : value;
+  const result = reportQuerySchema.safeParse(normalized ?? {});
   if (!result.success) throw new ReportDomainError("VALIDATION_ERROR");
   return result.data;
+}
+
+export function assertSupportedReportFilters(key: ReportKey, query: ReportQuery) {
+  for (const [filter, value] of Object.entries(query)) {
+    if (value !== undefined && filter !== "page" && !reportFilters[key].includes(filter as ReportFilter)) {
+      throw new ReportDomainError("VALIDATION_ERROR", "This report does not support the selected filters. Reset the filters and try again.");
+    }
+  }
 }
 
 /** A planning month must be a real `YYYY-MM`; anything else is refused without echoing the input. */

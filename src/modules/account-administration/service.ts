@@ -13,7 +13,7 @@ import type { AuthenticatedActor } from "@/shared/types/foundation";
 import { AccountAdminDomainError } from "./domain-error";
 import { accountRepository, ACCOUNT_PAGE_SIZE, type AccountListFilter, type SafeAccountRow } from "./repositories";
 import { toAccountRowView, accountsAsOf, type SafeAccountRowView } from "./presentation";
-import { changePasswordSchema, createAccountSchema, enableCredentialsSchema, resetPasswordSchema, parseAccountInput } from "./validation";
+import { changePasswordSchema, createAccountSchema, enableCredentialsSchema, resetPasswordSchema, parseAccountInput, passwordPolicyErrors } from "./validation";
 
 type AuditWriter = typeof writeAuditEvent;
 type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
@@ -153,10 +153,11 @@ export class AccountAdministrationService {
       const credential = await accountRepository.lockCredential(tx, parsed.userId);
       if (!credential) throw new AccountAdminDomainError("NOT_FOUND");
       if (credential.version !== parsed.expectedVersion) throw new AccountAdminDomainError("STALE_VERSION");
+      if (passwordPolicyErrors(parsed.password, { username: credential.username, email: credential.normalizedEmail }).length) throw new AccountAdminDomainError("PASSWORD_POLICY");
 
       // Self-reset and resetting another Super Admin both require the acting Super Admin's current
       // password; only resetting another Super Admin additionally requires explicit confirmation.
-      const resettingAnotherSuperAdmin = target.id !== actor.id && target.role === "SUPER_ADMIN" && target.active;
+      const resettingAnotherSuperAdmin = target.id !== actor.id && target.role === "SUPER_ADMIN";
       if (target.id === actor.id || resettingAnotherSuperAdmin) {
         if (!parsed.currentPassword) throw new AccountAdminDomainError("CURRENT_PASSWORD_INVALID");
         const actorCredential = await accountRepository.lockCredential(tx, actor.id);
@@ -169,10 +170,13 @@ export class AccountAdministrationService {
       const passwordHash = await hashPassword(parsed.password, pepper);
       const updated = await accountRepository.updatePassword(tx, parsed.userId, { passwordHash, mustChangePassword: parsed.mustChangePassword, expectedVersion: credential.version, now: new Date() });
       if (!updated) throw new AccountAdminDomainError("STALE_VERSION");
-      await accountRepository.incrementSessionVersion(tx, parsed.userId);
+      const nextSessionVersion = await accountRepository.incrementSessionVersion(tx, parsed.userId);
       const sessionsRevoked = await accountRepository.revokeSessions(tx, parsed.userId);
       await this.auditWriter(tx, { actor, action: "auth.password.reset", targetType: "user", targetId: parsed.userId, metadata: { sessionsRevoked, mustChangePassword: parsed.mustChangePassword, credentialVersion: updated.version, signInEnabled: true } });
-      return { userId: parsed.userId, sessionsRevoked, credentialVersion: updated.version };
+      const session = target.id === actor.id
+        ? await this.rotateSession(tx, actor, target, nextSessionVersion ?? target.sessionVersion + 1)
+        : undefined;
+      return { userId: parsed.userId, sessionsRevoked, credentialVersion: updated.version, session, mustChangePassword: parsed.mustChangePassword };
     });
   }
 
@@ -187,6 +191,7 @@ export class AccountAdministrationService {
       if (!credential) throw new AccountAdminDomainError("NOT_FOUND");
       const [stored] = await tx.select({ passwordHash: userCredentials.passwordHash }).from(userCredentials).where(sql`${userCredentials.userId} = ${actor.id}`);
       if (!await verifyPassword(parsed.currentPassword, stored?.passwordHash ?? null, pepper)) throw new AccountAdminDomainError("CURRENT_PASSWORD_INVALID");
+      if (passwordPolicyErrors(parsed.newPassword, { username: credential.username, email: credential.normalizedEmail }).length) throw new AccountAdminDomainError("PASSWORD_POLICY");
       const passwordHash = await hashPassword(parsed.newPassword, pepper);
       const updated = await accountRepository.updatePassword(tx, actor.id, { passwordHash, mustChangePassword: false, expectedVersion: credential.version, now: new Date() });
       if (!updated) throw new AccountAdminDomainError("STALE_VERSION");
@@ -194,16 +199,18 @@ export class AccountAdministrationService {
       await accountRepository.revokeSessions(tx, actor.id);
       await this.auditWriter(tx, { actor, action: "auth.password.changed", targetType: "user", targetId: actor.id, metadata: { mustChangePassword: false, credentialVersion: updated.version } });
 
-      // Rotate the current session so the browser keeps working, but under the new credential version.
-      const scopes = await tx.select({ type: adminScopeGrants.scopeType, reference: adminScopeGrants.scopeReference })
-        .from(adminScopeGrants).where(and(eq(adminScopeGrants.userId, actor.id), eq(adminScopeGrants.active, true)));
-      const session = await createSessionRecord(tx, {
-        id: actor.id, displayName: actor.displayName, role: actor.role, sessionId: "pending",
-        sessionVersion: nextSessionVersion ?? current.sessionVersion + 1, authenticationMode: actor.authenticationMode,
-        scopes,
-      }, new Date(), env().SESSION_TTL_HOURS);
-      return session;
+      return this.rotateSession(tx, actor, current, nextSessionVersion ?? current.sessionVersion + 1);
     });
+  }
+
+  /** Rotate under the new version using the current database role and scope, never stale actor claims. */
+  private async rotateSession(tx: Tx, actor: AuthenticatedActor, current: { id: string; displayName: string; role: AuthenticatedActor["role"] }, sessionVersion: number) {
+    const scopes = await tx.select({ type: adminScopeGrants.scopeType, reference: adminScopeGrants.scopeReference })
+      .from(adminScopeGrants).where(and(eq(adminScopeGrants.userId, current.id), eq(adminScopeGrants.active, true)));
+    return createSessionRecord(tx, {
+      id: current.id, displayName: current.displayName, role: current.role, sessionId: "pending",
+      sessionVersion, authenticationMode: actor.authenticationMode, scopes,
+    }, new Date(), env().SESSION_TTL_HOURS);
   }
 
 }

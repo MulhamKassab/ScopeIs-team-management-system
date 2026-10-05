@@ -19,39 +19,40 @@ exceptions are rare and carry an explicit justification.
 | Domain | Prefix | Scenarios |
 |---|---|---|
 | System, foundation, smoke, isolation, seed, concurrency, build | SYS | 13 |
-| Authentication, sessions, application shell | AUTH | 3 |
+| Authentication, sessions, credentials and account administration | AUTH | 7 |
 | Employee management | EMP | 7 |
 | Clients, projects, locations | ORG | 4 |
 | Scheduling | SCH | 4 |
 | Leave | LEV | 4 |
 | Skills and operational requirements | SKL | 4 |
 | Coverage and replacement | CVR | 4 |
-| Static planning map | MAP | 4 |
+| Static planning map | MAP | 5 |
+| Responsive presentation and task discovery | UI | 2 |
 | Certifications, evidence, CVs, portfolios, files | EVD | 4 |
 | Notes, discussions | COL | 4 |
 | Notifications | NTF | 2 |
 | Audit | AUD | 2 |
 | Dashboards, reports, exports | RPT | 4 |
-| **Total** | | **63** |
+| **Total** | | **70** |
 
-63 scenarios total: 62 automated and 1 justified manual-only (performance/resource sanity).
+70 scenarios total: 69 automated and 1 justified manual-only (performance/resource sanity). The October 5 presentation extension adds `UI-01`, `UI-02` and `MAP-05`; the inventory also includes the previously registered credential/account scenarios. Historical hardening receipts retain their original counts.
 
 ## Automated evidence inventory
 
-The manifest declares exactly 54 test files and asserts, at lock time, that the on-disk test tree and
+The manifest currently covers 72 test files and asserts, at lock time, that the on-disk test tree and
 the authoritative runner coverage are identical, so a Phase 0-11 test file cannot be silently omitted.
 
 | Layer | Runner | Files |
 |---|---|---|
-| unit | `npm run test:unit` | 16 |
-| component | `npm run test:component` | 13 |
-| integration | `npm run test:integration` | 12 |
+| unit | `npm run test:unit` | 20 |
+| component | `npm run test:component` | 22 |
+| integration | `npm run test:integration` | 14 |
 | migration | `npm run test:migration` | 1 |
 | route-certification | `npm run test:route-certification` | 1 |
-| e2e | `npm run test:e2e` | 11 |
-| **Total** | | **54** |
+| e2e | `npm run test:e2e` | 14 |
+| **Total** | | **72** |
 
-The 28 protected page and API routes declared in the manifest are certified by
+The 30 protected page and API routes declared in the manifest are certified by
 `test/route-certification/phase1-http.test.ts`.
 
 ## Scenario listing
@@ -145,6 +146,7 @@ notification, privacy, transaction, and concurrency expectations) lives in the m
 | MAP-02 | 8 | component | component | test/component/phase8-planning-map.test.tsx |
 | MAP-03 | 8 | service | integration | test/integration/phase8-planning-map-service.test.ts |
 | MAP-04 | 8 | journey | e2e | test/e2e/phase8-planning-map.spec.ts |
+| MAP-05 | 8 | padded geographic camera fit | unit | test/unit/phase8-map-projection.test.ts |
 | EVD-01 | 9 | validation | unit | test/unit/evidence-validation.test.ts |
 | EVD-02 | 9 | forms | component | test/component/phase9-evidence-forms.test.tsx |
 | EVD-03 | 9 | service | integration | test/integration/phase9-evidence-service.test.ts |
@@ -168,6 +170,13 @@ notification, privacy, transaction, and concurrency expectations) lives in the m
 | RPT-04 | 11 | reporting journey | e2e | test/e2e/phase11-reporting.spec.ts |
 
 ## Cross-cutting coverage
+
+| ID | Phase | Module | Layer | Evidence |
+|---|---|---|---|---|
+| UI-01 | 1–11 | role-aware feature discovery | component | test/component/workspace-guide.test.tsx |
+| UI-02 | 1–11 | responsive, visual, discovery and map journeys | e2e | test/e2e/responsive.spec.ts |
+
+The aggregate E2E runner includes the guarded responsive runner as its fourteenth suite. Each suite owns its disposable database and port; the UI runner uses an isolated safe build and fictional edge-case fixtures. Presentation checks do not replace service authorization evidence or certify physical devices.
 
 Role and scope boundaries are exercised across Super Admin, the two scoped Admin personas, the two
 Employee personas, and the anonymous caller, primarily in `AUTH-02`, `AUTH-03`, and each domain

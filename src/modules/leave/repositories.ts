@@ -4,6 +4,7 @@ import { db } from "@/db/client";
 import { adminScopeGrants, clients, employeeProfiles, leaveAllowanceSettings, leaveRequests, locations, projects, scheduleAssignments, schedulePeriods, users } from "@/db/schema";
 export type LeaveTransaction = Parameters<Parameters<typeof db.transaction>[0]>[0]; export type LeaveExecutor = typeof db | LeaveTransaction;
 export const leaveRepository = {
+  employeeName(executor: LeaveExecutor, id: string) { return executor.select({ name: users.displayName }).from(users).where(eq(users.id, id)).limit(1).then(([row]) => row?.name ?? "Employee"); },
   request(executor: LeaveExecutor, id: string) { return executor.select().from(leaveRequests).where(eq(leaveRequests.id, id)).limit(1).then(([row]) => row ?? null); },
   lockRequest(tx: LeaveTransaction, id: string) { return tx.execute(sql`select id from leave_requests where id = ${id} for update`); },
   allowance(executor: LeaveExecutor) { return executor.select().from(leaveAllowanceSettings).where(eq(leaveAllowanceSettings.singleton, true)).limit(1).then(([row]) => row ?? null); },

@@ -8,6 +8,7 @@ import { credentialStatus, lockStatus, toAccountRowView, formatDubaiTimestamp, a
 import type { SafeAccountRow } from "@/modules/account-administration/repositories";
 import { auditMetadataFields, auditActionLabel } from "@/modules/audit/presentation";
 import { accountErrorMessage } from "@/modules/account-administration/messages";
+import { buildAccountPageHref, parseAccountSearchParams } from "@/modules/account-administration/query";
 
 const base = {
   displayName: "Fictional Person", username: "fictional", loginEmail: "fictional@example.test", role: "EMPLOYEE" as const,
@@ -15,6 +16,22 @@ const base = {
 };
 
 describe("account administration validation", () => {
+  it("accepts submitted Any options without discarding the selected filters", () => {
+    expect(parseAccountSearchParams({ query: " Nora ", role: "", status: "active", credentials: "", page: "" })).toMatchObject({
+      valid: true, filter: { query: "Nora", role: undefined, status: "active", credentials: undefined, page: 1 },
+    });
+    expect(parseAccountSearchParams({ role: "OWNER" }).valid).toBe(false);
+  });
+
+  it("preserves all selected account filters when paging forward or back", () => {
+    const filters = { query: "Nora & team", role: "SUPER_ADMIN" as const, status: "active" as const, credentials: "configured" as const };
+    for (const page of [1, 3]) {
+      const href = new URL(buildAccountPageHref(page, filters), "https://scopeis.test");
+      expect(Object.fromEntries(href.searchParams)).toEqual({ ...filters, ...(page > 1 ? { page: String(page) } : {}) });
+    }
+    expect(buildAccountPageHref(1)).toBe("/accounts");
+  });
+
   it("normalizes usernames and login emails by trimming and lowercasing", () => {
     expect(normalizeUsername("  FiCtIoNaL.01 ")).toBe("fictional.01");
     expect(normalizeLoginEmail("  FiCtIoNaL@Example.Test ")).toBe("fictional@example.test");
@@ -49,6 +66,12 @@ describe("account administration validation", () => {
   it("requires revoke confirmation and a version on password reset", () => {
     expect(resetPasswordSchema.safeParse({ userId: "u", expectedVersion: 1, password: "user1234", confirmPassword: "user1234" }).success).toBe(false);
     expect(resetPasswordSchema.safeParse({ userId: "u", expectedVersion: 1, password: "user1234", confirmPassword: "user1234", confirmRevoke: true }).success).toBe(true);
+  });
+
+  it("applies the password policy to administrative resets before any database mutation", () => {
+    for (const password of ["a", "        ", "onlyletters", "12345678", "a1".repeat(65)]) {
+      expect(resetPasswordSchema.safeParse({ userId: "u", expectedVersion: 1, password, confirmPassword: password, confirmRevoke: true }).success).toBe(false);
+    }
   });
 
   it("requires a distinct, policy-compliant new password for self change", () => {

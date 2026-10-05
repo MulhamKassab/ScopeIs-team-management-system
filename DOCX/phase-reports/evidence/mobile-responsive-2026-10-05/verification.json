@@ -1,0 +1,116 @@
+{
+  "date": "2026-10-05",
+  "timezone": "Asia/Dubai",
+  "scope": "Application-wide responsive presentation",
+  "status": "COMPLETED_LOCALLY",
+  "browser": "Installed Google Chrome (Chromium engine)",
+  "viewports": [
+    {
+      "width": 320,
+      "height": 640
+    },
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 600,
+      "height": 900
+    },
+    {
+      "width": 768,
+      "height": 1024
+    },
+    {
+      "width": 820,
+      "height": 1180
+    },
+    {
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "width": 1280,
+      "height": 800
+    },
+    {
+      "width": 1920,
+      "height": 1080
+    }
+  ],
+  "main_page_viewport_combinations": 288,
+  "main_routes": 23,
+  "report_routes": 13,
+  "dialog_viewports": [
+    {
+      "width": 320,
+      "height": 640
+    },
+    {
+      "width": 768,
+      "height": 360
+    },
+    {
+      "width": 1024,
+      "height": 768
+    }
+  ],
+  "roles": [
+    "SUPER_ADMIN",
+    "ADMIN",
+    "EMPLOYEE"
+  ],
+  "additional_checks": [
+    "Expanded dialog sections",
+    "Long unbroken record names",
+    "Notification actions",
+    "Leave review",
+    "Sign in and password change",
+    "Unavailable pages",
+    "RTL",
+    "Dark theme",
+    "200% text",
+    "Tablet-to-desktop focus restoration",
+    "Simulated onscreen keyboard: 360px visual height, 40px offset"
+  ],
+  "gates": {
+    "responsive_browser": {
+      "passed": 6,
+      "failed": 0
+    },
+    "unit": {
+      "passed": 123,
+      "files": 20
+    },
+    "component": {
+      "passed": 93,
+      "files": 21
+    },
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "isolated_build": "PASS: built through run-phase2-safe-build.mjs inside the responsive harness",
+    "whitespace": "PASS"
+  },
+  "isolation": "One owned disposable loopback PostgreSQL database, fictional data, runner-allocated port, isolated no-.env build; runtime and database cleaned up.",
+  "evidence_limits": [
+    "Chrome viewport and touch emulation; no physical-device/Safari/Firefox certification.",
+    "Keyboard shrink/offset is simulated through VisualViewport.",
+    "Wide report comparisons retain contained horizontal scrolling.",
+    "Full system-lock and domain integration suites were not rerun for this presentation-only change."
+  ],
+  "delivery": "Uncommitted local changes; no deployment.",
+  "source_sha256": {
+    "src/app/responsive.css": "02af1ffe16eb346cf1d5808ae0c42dce576367159ad18943dc6e2dab97d97a65",
+    "src/app/layout.tsx": "b21d5d16c7b18bc09bf80b04d1ad2ba3d4408fe21d6916b6044ca2396c9ce6ae",
+    "src/shared/components/shell.tsx": "3f3ab99d7e96733c193943e961f51eb81dbe5acf68f384eda143c534dada51d3",
+    "src/shared/components/task-dialog.tsx": "705f3f107ea852c94ec98cf35a9418a9b91cad3ed1ea7b5f17ec887fb8aabe6c",
+    "src/modules/employees/employee-directory.tsx": "13c861aeda14927efbd231fc713df1a36ad95b3912934d8eee10d2671d2a58bb",
+    "src/modules/account-administration/table.tsx": "e1d21443ff3b52b5e4c1f809723f59653512965725d3fe971a25f49ff46f32a0",
+    "src/modules/scheduling/month-navigation.tsx": "473ebe36f9267c44f5f096d455547dc8e24ebb0da107278780219f319eb7d45c",
+    "test/e2e/responsive.spec.ts": "eee741d22ee50d286a34611eb743e064a94214c31b7e6911c50dc16ac137f728",
+    "playwright.responsive.config.ts": "88444636a7fd97f6adbbae04afed68e674136836164efda8cb743b8832f794b4",
+    "scripts/run-responsive-playwright.mjs": "774f1f30aef04a790c5a72b42a99146afbac1ad999f9ad03108b5151dde97c01",
+    "scripts/responsive-test-fixtures.mjs": "88acaa8ad972cc010d34a2fce16d756b94be120daa08102a0f94fca6453f3577",
+    "package.json": "b0a394823b463254073a3a4ae929cccde4bbadc9be0c47fe558f21c653192195"
+  }
+}
