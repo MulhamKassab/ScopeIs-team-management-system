@@ -2,7 +2,7 @@
 
 ## Latest expressive motion — 2026-10-05
 
-See the [motion implementation and evidence](phase-reports/SCOPEIS_EXPRESSIVE_MOTION_2026_10_05.md) for directional content and route transitions, press feedback, native popup/sheet entrances and exits, and fresh desktop/phone visuals. The [motion foundation](project-memory/UI_UX_FOUNDATION.md) preserves responsive layout, roles, RTL, native controls and reduced-motion behavior. The final system lock passed 14/14 gates with all 12 responsive checks, 523 unique automated cases and 369 matching frozen inputs. Implementation and verification are complete; authorized main delivery is pending. Earlier receipts remain historical evidence.
+See the [motion implementation and evidence](phase-reports/SCOPEIS_EXPRESSIVE_MOTION_2026_10_05.md) for directional content and route transitions, press feedback, native popup/sheet entrances and exits, and fresh desktop/phone visuals. The [motion foundation](project-memory/UI_UX_FOUNDATION.md) preserves responsive layout, roles, RTL, native controls and reduced-motion behavior. The final system lock passed 14/14 gates with all 12 responsive checks, 523 unique automated cases and 369 matching frozen inputs. Implementation commit `ae062dbf` is pushed and verified on `origin/main`; see the [delivery receipt](phase-reports/evidence/motion-refinement-2026-10-05/delivery.json). Earlier receipts remain historical evidence, and production deployment is unverified.
 
 ## Latest task discovery and planning-map experience — 2026-10-05
 

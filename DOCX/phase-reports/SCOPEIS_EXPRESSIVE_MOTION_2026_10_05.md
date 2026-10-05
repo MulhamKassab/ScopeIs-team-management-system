@@ -2,7 +2,7 @@
 
 The user approved a smooth, visibly animated, professional interface across buttons, popups, windows and text on desktop and mobile, while keeping the application simple. This pass extends the delivered responsive interface and planning workspace with one consistent motion language.
 
-**Status:** Implementation and fresh full-system verification complete. The final gate is 14/14 GREEN with zero interruptions; authorized main delivery is pending. The earlier delivery receipts describe their own source and remain unchanged.
+**Status:** Implementation, fresh full-system verification and authorized main delivery complete. The final gate is 14/14 GREEN with zero interruptions. Implementation commit `ae062dbf75cefd2ffaf32b5263bdaadc2e4e7e62` is pushed and verified on `origin/main`. The earlier delivery receipts describe their own source and remain unchanged.
 
 ## Visible behavior
 
@@ -41,3 +41,7 @@ The final full gate passed **14/14 steps with zero interruptions**, including **
 The responsive suite covers 288 main/report page-and-viewport combinations at 320–1920px, all roles, both themes, RTL and enlarged text, every management task dialog at three compact sizes, short landscape, simulated keyboard sizing, reduced motion, forced colors and fitted/map-list interactions. This is bounded browser/emulated-input verification, not a physical-device or complete accessibility certification.
 
 No schema, provider, authentication policy, schedule/leave decision rule, role boundary, map permission or integration contract changed. The retained-history assignment omission/removal path remains `PARTIAL`; Phase 9.9 remains deferred and Ticket integration is not implemented in this checkout. Production deployment is not verified by this presentation work. Unrelated prototype files and the historical remediation script are preserved.
+
+## Git delivery
+
+The user-authorized non-force push to `main` succeeded at implementation commit [`ae062dbf75cefd2ffaf32b5263bdaadc2e4e7e62`](https://github.com/MulhamKassab/ScopeIs-team-management-system/commit/ae062dbf75cefd2ffaf32b5263bdaadc2e4e7e62). A fresh `git ls-remote origin refs/heads/main` returned that exact SHA. The [delivery receipt](evidence/motion-refinement-2026-10-05/delivery.json) links it to the frozen verification receipt. This delivery confirmation is a documentation-only follow-up; the tested application, test and configuration inputs remain unchanged.
