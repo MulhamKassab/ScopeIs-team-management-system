@@ -30,7 +30,13 @@
     "test/e2e/phase7-coverage.spec.ts": "1f02504fe6849bc54ecedee267b2cb098427a7888438d40b6bfe02582e84b709",
     "test/integration/phase7-coverage-service.test.ts": "2c9521923f71642e7112e4f25e90e540104215636ff56e010ed5fb4bf15e0ed2"
   },
-  "delivery": "pending",
+  "delivery": {
+    "implementation_commit": "4f82e7958ca2a477c1936c1b8c08889adb7daae3",
+    "deployment": "verified",
+    "live_accounts": 7,
+    "live_page_checks": 20,
+    "errors": []
+  },
   "production_business_mutations": false,
   "schema_migration": false,
   "limits": "Scoped verification; no full system-lock, physical-device or blanket absence-of-defects claim",

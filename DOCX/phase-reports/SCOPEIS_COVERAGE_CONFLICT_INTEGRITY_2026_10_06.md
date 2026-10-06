@@ -31,4 +31,6 @@ All scoped checks passed on the final application source:
 
 The browser journey explicitly submits a duplicate request and an overlapping manual assignment, verifies both refusals, checks decision feedback, and keeps Employee access closed. Service tests cover concurrent independent-rule approvals, cross-client manual/coverage races, both support/replacement orders, one revision, old-work refusal, adjacent times, rollback and publication races. No full system-lock or physical-device certification is claimed.
 
-[Verification receipt and frozen scoped file hashes](evidence/coverage-integrity-2026-10-06/verification.json) retain the corrected baseline failures and final results. Main push and canonical deployment verification are pending.
+[Verification receipt and frozen scoped file hashes](evidence/coverage-integrity-2026-10-06/verification.json) retain the corrected baseline failures and final results. Implementation `4f82e7958ca2a477c1936c1b8c08889adb7daae3` is pushed to `origin/main` and deployed successfully to [the canonical application](https://scopeis-team-management-system.vercel.app/). All seven accounts and 20 relevant permitted page checks passed without generic page errors. The live dialog shows the new approval safeguards; it was inspected and closed without submitting any decision. [Delivery receipt](evidence/coverage-integrity-2026-10-06/delivery.json).
+
+![Live approval safeguards — no decision submitted](evidence/coverage-integrity-2026-10-06/live-coverage-safeguards.png)
