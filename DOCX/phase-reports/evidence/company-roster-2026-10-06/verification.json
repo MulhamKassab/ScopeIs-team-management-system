@@ -1,0 +1,47 @@
+{
+  "capturedAt": "2026-10-06T09:27:19.620Z",
+  "passed": true,
+  "commands": [
+    {
+      "command": "npm run test:company-demo",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run lint",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "checks": [
+    "fresh seven-person initialization",
+    "real application password KDF for seven independent credentials",
+    "wrong target and nonempty workspace refusal",
+    "seed and roster dry-run rollback",
+    "injected initialization and roster failure rollback",
+    "unexpected employee and extra file history refusal",
+    "preserved password hashes and user-edited notes",
+    "idempotent seed and correction",
+    "seven profile and dashboard journeys",
+    "scoped map and exact/coarse coordinate privacy",
+    "leave and management-note privacy",
+    "participant-only discussions",
+    "actionable pending coverage requests and Published revision preservation",
+    "hosted 324 allowed pages, 35 forbidden pages, 6 safe management explanations and 29 private-file checks"
+  ],
+  "inputSha256": {
+    "scripts/company-demo-data.mjs": "cdb9ab715f80bc283811c952ecdd3e0821ea4d5551d76be318bb9b8942f75690",
+    "scripts/company-demo-pdf.mjs": "09b67991d30fff6cb5ca1e4fd14d41594edecbaa4cfbca1ebbca544071a2243f",
+    "scripts/company-demo-roster-test-fixture.mjs": "37e3b4a38496c1d03a9c03f37bc70657ce28e505188be0b0ae8752dd77b93fd9",
+    "scripts/seed-company-demo.mjs": "9a1b7ce245a56e149687245ffb3d6e8f7caf5065367d5e28df6b2b509a53dbc0",
+    "scripts/seed-company-demo-files.mjs": "800347ad80f00a3f643cc0298e299a843bd00a135640d0b0e4bc5f096fbd68ac",
+    "scripts/test-company-demo.mjs": "d25bd945808fad282135bc6ce60176f1f9a9b61d0c82a2ba5bb2be7f0b53c2eb",
+    "scripts/update-company-demo-roster.mjs": "bacf07f6c6beb1067d49746b817ecf67532248c67bb29a53315e16e67cd27083"
+  }
+}

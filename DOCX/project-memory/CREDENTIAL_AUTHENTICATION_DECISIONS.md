@@ -1,5 +1,7 @@
 # Credential Authentication Decisions
 
+**Current company-example identities, 2026-10-06:** The approved dataset now contains exactly seven login accounts: `raafat` and `hanna` (SUPER_ADMIN), `saber` and `thamer` (ADMIN), `mulham`, `omar` and `ahmad` (EMPLOYEE), at the sole primary application address. Corresponding login emails use `@example.test`. The earlier five fictional account names below describe the historical credential rollout. Renamed records retain their password hashes; new credentials use the normal account-administration service and independent salts. Identifier changes revoke previous sessions. The [company roster decisions](COMPANY_DEMO_WORKSPACE_DECISIONS.md) supersede the old demonstration names without changing authentication or role policy.
+
 ## Scope and status
 
 This document records the confirmed decisions for

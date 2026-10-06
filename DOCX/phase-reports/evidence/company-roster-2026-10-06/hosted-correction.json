@@ -1,0 +1,33 @@
+{
+  "status": "updated",
+  "integrity": {
+    "missing_profiles": "0",
+    "invalid_assignments": "0",
+    "leave_conflicts": "0",
+    "overlaps": "0"
+  },
+  "counts": {
+    "users": 7,
+    "employee_profiles": 7,
+    "user_credentials": 7,
+    "skills": 15,
+    "employee_skills": 21,
+    "clients": 6,
+    "projects": 12,
+    "locations": 6,
+    "schedule_periods": 19,
+    "schedule_assignments": 57,
+    "staffing_requirements": 6,
+    "assignment_skill_requirements": 21,
+    "leave_requests": 4,
+    "replacement_requests": 2,
+    "employee_evidence": 15,
+    "employee_files": 4,
+    "operational_notes": 6,
+    "operational_note_revisions": 6,
+    "employee_management_notes": 4,
+    "discussion_threads": 2,
+    "discussion_messages": 4,
+    "notifications": 24
+  }
+}
