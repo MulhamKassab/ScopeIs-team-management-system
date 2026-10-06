@@ -5,6 +5,10 @@ import { phase1TestProcessEnvironment } from "../../scripts/phase1-test-environm
 
 describe("temporary mock-auth environment policy", () => {
   const database = "postgresql://localhost:5432/scopeis_test";
+  it("labels only explicitly configured demo workspaces", () => {
+    expect(parseEnvironment({ DATABASE_URL: database }).SCOPEIS_DEMO_WORKSPACE).toBe("false");
+    expect(parseEnvironment({ DATABASE_URL: database, SCOPEIS_DEMO_WORKSPACE: "true" }).SCOPEIS_DEMO_WORKSPACE).toBe("true");
+  });
   it("accepts a local test target", () => {
     expect(parseEnvironment({ DATABASE_URL: database, APP_ENV: "test", MOCK_AUTH_ENABLED: "true" }).DATABASE_URL).toContain("localhost");
   });

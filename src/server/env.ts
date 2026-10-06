@@ -13,6 +13,7 @@ export function parseEnvironment(input: NodeJS.ProcessEnv) {
   const config = environmentSchema.parse({
     DATABASE_URL: input.DATABASE_URL,
     APP_ENV: appEnv,
+    SCOPEIS_DEMO_WORKSPACE: input.SCOPEIS_DEMO_WORKSPACE ?? "false",
     MOCK_AUTH_ENABLED: input.MOCK_AUTH_ENABLED ?? "false",
     SESSION_TTL_HOURS: input.SESSION_TTL_HOURS && Number(input.SESSION_TTL_HOURS) > 0 ? input.SESSION_TTL_HOURS : "12",
     // Production must never silently fall back to local disk storage; the explicit choice is required.

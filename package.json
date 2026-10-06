@@ -66,7 +66,11 @@
     "test:phase11-e2e": "node scripts/run-phase11-playwright.mjs",
     "test:system-smoke": "node scripts/run-system-smoke.mjs",
     "test:system-concurrency": "node scripts/run-system-concurrency-tests.mjs",
-    "test:system-lock": "node scripts/run-system-lock.mjs"
+    "test:system-lock": "node scripts/run-system-lock.mjs",
+    "db:demo:dry-run": "node --import tsx --conditions=react-server scripts/seed-company-demo.mjs",
+    "db:demo:initialize": "node --import tsx --conditions=react-server scripts/seed-company-demo.mjs --apply",
+    "test:company-demo": "node --import tsx --conditions=react-server scripts/test-company-demo.mjs",
+    "db:demo:files": "node --import tsx --conditions=react-server scripts/seed-company-demo-files.mjs"
   },
   "dependencies": {
     "@vercel/blob": "^2.3.0",

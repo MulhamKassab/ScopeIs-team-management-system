@@ -1,0 +1,6 @@
+.env*
+DOCX
+prototype
+test
+test-results
+playwright-report

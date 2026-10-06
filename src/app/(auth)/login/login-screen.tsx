@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Brand } from "@/shared/components/brand";
 
 const invalidCredentialMessages = new Set(["INVALID_CREDENTIALS", "VALIDATION"]);
-export function LoginScreen() {
+export function LoginScreen({ demoWorkspace = false }: { demoWorkspace?: boolean }) {
   const router = useRouter();
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -29,7 +29,7 @@ export function LoginScreen() {
       setPending(false);
     }
   }
-  return <main className="login-page"><section className="login-card"><Brand /><h1>Sign in</h1><p className="login-intro">Welcome to your team workspace.</p>
+  return <main className="login-page"><section className="login-card"><Brand /><h1>Sign in</h1><p className="login-intro">{demoWorkspace ? "Explore a fictional company in the demo workspace." : "Welcome to your team workspace."}</p>
     <form className="login-form" onSubmit={signIn}>
       <label htmlFor="login-identifier">Username or email</label>
       <input id="login-identifier" type="text" autoComplete="username" required value={identifier} onChange={(event) => setIdentifier(event.target.value)} disabled={pending} />

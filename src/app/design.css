@@ -122,3 +122,7 @@ button svg, a svg { flex-shrink:0; }
   .task-dialog-content .operation-form-grid,.task-dialog-content .schedule-form-grid { grid-template-columns:1fr; }
 }
 @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; }.app-shell { transition:none; } }
+
+.demo-workspace-banner { display: flex; flex-wrap: wrap; gap: .35rem .8rem; align-items: baseline; padding: .7rem 1rem; margin: 0 0 1rem; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); font-size: .82rem; line-height: 1.5; overflow-wrap: anywhere; }
+.demo-workspace-banner strong { color: var(--primary); }
+.demo-workspace-banner span { color: var(--muted); }

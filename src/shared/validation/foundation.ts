@@ -4,6 +4,7 @@ import { scopeTypes, systemRoles } from "@/shared/types/foundation";
 export const environmentSchema = z.object({
   DATABASE_URL: z.string().url(),
   APP_ENV: z.enum(["development", "test", "production"]).default("development"),
+  SCOPEIS_DEMO_WORKSPACE: z.enum(["true", "false"]).default("false"),
   MOCK_AUTH_ENABLED: z.enum(["true", "false"]).default("false"),
   SESSION_TTL_HOURS: z.coerce.number().int().positive().max(168).default(12),
   // Phase 9 private evidence storage. `unconfigured` fails closed; `local` is development/test only.
