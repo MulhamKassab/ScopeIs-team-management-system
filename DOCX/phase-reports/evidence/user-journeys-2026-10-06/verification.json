@@ -47,7 +47,13 @@
     "final_clear_journeys": "passed twice after test-only corrections; all authorized tabs for three roles, 320/390/1280 tasks, RTL dark enlarged text",
     "limits": "Combined passing evidence, not a single clean full-suite invocation or physical-device/full WCAG certification"
   },
-  "delivery": "Pending main push and canonical deployment verification",
+  "delivery": {
+    "implementation_commit": "3770724acdda157c6fd57e834c026d3753ce6495",
+    "canonical_deployment": "verified",
+    "accounts": 7,
+    "permitted_page_checks": 89,
+    "errors": []
+  },
   "preserved": [
     "System roles and job titles separate",
     "Current role/scopes and participant-only privacy",
