@@ -1,0 +1,713 @@
+{
+  "verifiedAt": "2026-10-06T06:14:34.046Z",
+  "results": [
+    {
+      "identifier": "nora",
+      "pages": [
+        {
+          "path": "/account/change-password",
+          "status": 200,
+          "error": false,
+          "title": "Change your password"
+        },
+        {
+          "path": "/dashboard",
+          "status": 200,
+          "error": false,
+          "title": "Dashboard"
+        },
+        {
+          "path": "/employees",
+          "status": 200,
+          "error": false,
+          "title": "Employee directory"
+        },
+        {
+          "path": "/accounts",
+          "status": 200,
+          "error": false,
+          "title": "Account administration"
+        },
+        {
+          "path": "/skills",
+          "status": 200,
+          "error": false,
+          "title": "Team skills"
+        },
+        {
+          "path": "/clients",
+          "status": 200,
+          "error": false,
+          "title": "Clients"
+        },
+        {
+          "path": "/projects",
+          "status": 200,
+          "error": false,
+          "title": "Projects"
+        },
+        {
+          "path": "/locations",
+          "status": 200,
+          "error": false,
+          "title": "Locations"
+        },
+        {
+          "path": "/schedule",
+          "status": 200,
+          "error": false,
+          "title": "Schedule"
+        },
+        {
+          "path": "/map",
+          "status": 200,
+          "error": false,
+          "title": "Planning map"
+        },
+        {
+          "path": "/leave",
+          "status": 200,
+          "error": false,
+          "title": "Leave review queue"
+        },
+        {
+          "path": "/coverage",
+          "status": 200,
+          "error": false,
+          "title": "Coverage review"
+        },
+        {
+          "path": "/replacements",
+          "status": 200,
+          "error": false,
+          "title": "Pending replacement decisions"
+        },
+        {
+          "path": "/notifications",
+          "status": 200,
+          "error": false,
+          "title": "Notifications"
+        },
+        {
+          "path": "/reports",
+          "status": 200,
+          "error": false,
+          "title": "Reports"
+        },
+        {
+          "path": "/audit",
+          "status": 200,
+          "error": false,
+          "title": "Audit history"
+        },
+        {
+          "path": "/settings",
+          "status": 200,
+          "error": false,
+          "title": "Settings"
+        },
+        {
+          "path": "/profile",
+          "status": 500,
+          "error": false,
+          "title": null
+        },
+        {
+          "path": "/requests",
+          "status": 200,
+          "error": false,
+          "title": "My requests"
+        },
+        {
+          "path": "/employees/employee-d362de17-df60-4928-9509-61a4331ec913",
+          "status": 200,
+          "error": false,
+          "title": "Mulham Kassab"
+        },
+        {
+          "path": "/reports/published-allocation",
+          "status": 200,
+          "error": false,
+          "title": "Published allocation"
+        },
+        {
+          "path": "/reports/unallocated-employees",
+          "status": 200,
+          "error": false,
+          "title": "Employees without a Published assignment"
+        },
+        {
+          "path": "/reports/scheduled-hours",
+          "status": 200,
+          "error": false,
+          "title": "Published scheduled hours"
+        },
+        {
+          "path": "/reports/planning-unpublished",
+          "status": 200,
+          "error": false,
+          "title": "PLANNING (UNPUBLISHED)"
+        },
+        {
+          "path": "/reports/schedule-lifecycle",
+          "status": 200,
+          "error": false,
+          "title": "Schedule lifecycle"
+        },
+        {
+          "path": "/reports/approved-leave",
+          "status": 200,
+          "error": false,
+          "title": "Approved leave"
+        },
+        {
+          "path": "/reports/leave-balance",
+          "status": 200,
+          "error": false,
+          "title": "Leave balance"
+        },
+        {
+          "path": "/reports/coverage-replacement",
+          "status": 200,
+          "error": false,
+          "title": "Replacement request status"
+        },
+        {
+          "path": "/reports/skills-coverage",
+          "status": 200,
+          "error": false,
+          "title": "Recorded skills"
+        },
+        {
+          "path": "/reports/skill-gaps",
+          "status": 200,
+          "error": false,
+          "title": "Required versus recorded skills"
+        },
+        {
+          "path": "/reports/certification-status",
+          "status": 200,
+          "error": false,
+          "title": "Certification status"
+        },
+        {
+          "path": "/reports/evidence-review-queue",
+          "status": 200,
+          "error": false,
+          "title": "Evidence awaiting review"
+        },
+        {
+          "path": "/reports/audit-history",
+          "status": 200,
+          "error": false,
+          "title": "Audit history"
+        }
+      ],
+      "refusals": [],
+      "directoryNames": [
+        "Mulham Kassab",
+        "Manage employee"
+      ]
+    },
+    {
+      "identifier": "ava",
+      "pages": [
+        {
+          "path": "/account/change-password",
+          "status": 200,
+          "error": false,
+          "title": "Change your password"
+        },
+        {
+          "path": "/dashboard",
+          "status": 200,
+          "error": false,
+          "title": "Dashboard"
+        },
+        {
+          "path": "/employees",
+          "status": 200,
+          "error": false,
+          "title": "Employee directory"
+        },
+        {
+          "path": "/skills",
+          "status": 200,
+          "error": false,
+          "title": "Find a skill in your team"
+        },
+        {
+          "path": "/clients",
+          "status": 200,
+          "error": false,
+          "title": "Clients"
+        },
+        {
+          "path": "/projects",
+          "status": 200,
+          "error": false,
+          "title": "Projects"
+        },
+        {
+          "path": "/locations",
+          "status": 200,
+          "error": false,
+          "title": "Locations"
+        },
+        {
+          "path": "/schedule",
+          "status": 200,
+          "error": false,
+          "title": "Schedule"
+        },
+        {
+          "path": "/map",
+          "status": 200,
+          "error": false,
+          "title": "Planning map"
+        },
+        {
+          "path": "/leave",
+          "status": 200,
+          "error": false,
+          "title": "Approved unavailability"
+        },
+        {
+          "path": "/coverage",
+          "status": 200,
+          "error": false,
+          "title": "Coverage review"
+        },
+        {
+          "path": "/replacements",
+          "status": 200,
+          "error": false,
+          "title": "My replacement requests"
+        },
+        {
+          "path": "/notifications",
+          "status": 200,
+          "error": false,
+          "title": "Notifications"
+        },
+        {
+          "path": "/reports",
+          "status": 200,
+          "error": false,
+          "title": "Reports"
+        },
+        {
+          "path": "/profile",
+          "status": 500,
+          "error": false,
+          "title": null
+        },
+        {
+          "path": "/reports/published-allocation",
+          "status": 200,
+          "error": false,
+          "title": "Published allocation"
+        },
+        {
+          "path": "/reports/unallocated-employees",
+          "status": 200,
+          "error": false,
+          "title": "Employees without a Published assignment"
+        },
+        {
+          "path": "/reports/scheduled-hours",
+          "status": 200,
+          "error": false,
+          "title": "Published scheduled hours"
+        },
+        {
+          "path": "/reports/planning-unpublished",
+          "status": 200,
+          "error": false,
+          "title": "PLANNING (UNPUBLISHED)"
+        },
+        {
+          "path": "/reports/schedule-lifecycle",
+          "status": 200,
+          "error": false,
+          "title": "Schedule lifecycle"
+        },
+        {
+          "path": "/reports/approved-leave",
+          "status": 200,
+          "error": false,
+          "title": "Approved leave"
+        },
+        {
+          "path": "/reports/coverage-replacement",
+          "status": 200,
+          "error": false,
+          "title": "Replacement request status"
+        },
+        {
+          "path": "/reports/skills-coverage",
+          "status": 200,
+          "error": false,
+          "title": "Recorded skills"
+        },
+        {
+          "path": "/reports/skill-gaps",
+          "status": 200,
+          "error": false,
+          "title": "Required versus recorded skills"
+        },
+        {
+          "path": "/reports/certification-status",
+          "status": 200,
+          "error": false,
+          "title": "Certification status"
+        }
+      ],
+      "refusals": [
+        {
+          "path": "/accounts",
+          "status": 404
+        },
+        {
+          "path": "/audit",
+          "status": 404
+        },
+        {
+          "path": "/settings",
+          "status": 404
+        },
+        {
+          "path": "/requests",
+          "status": 404
+        }
+      ],
+      "directoryNames": []
+    },
+    {
+      "identifier": "ben",
+      "pages": [
+        {
+          "path": "/account/change-password",
+          "status": 200,
+          "error": false,
+          "title": "Change your password"
+        },
+        {
+          "path": "/dashboard",
+          "status": 200,
+          "error": false,
+          "title": "Dashboard"
+        },
+        {
+          "path": "/employees",
+          "status": 200,
+          "error": false,
+          "title": "Employee directory"
+        },
+        {
+          "path": "/skills",
+          "status": 200,
+          "error": false,
+          "title": "Find a skill in your team"
+        },
+        {
+          "path": "/clients",
+          "status": 200,
+          "error": false,
+          "title": "Clients"
+        },
+        {
+          "path": "/projects",
+          "status": 200,
+          "error": false,
+          "title": "Projects"
+        },
+        {
+          "path": "/locations",
+          "status": 200,
+          "error": false,
+          "title": "Locations"
+        },
+        {
+          "path": "/schedule",
+          "status": 200,
+          "error": false,
+          "title": "Schedule"
+        },
+        {
+          "path": "/map",
+          "status": 200,
+          "error": false,
+          "title": "Planning map"
+        },
+        {
+          "path": "/leave",
+          "status": 200,
+          "error": false,
+          "title": "Approved unavailability"
+        },
+        {
+          "path": "/coverage",
+          "status": 200,
+          "error": false,
+          "title": "Coverage review"
+        },
+        {
+          "path": "/replacements",
+          "status": 200,
+          "error": false,
+          "title": "My replacement requests"
+        },
+        {
+          "path": "/notifications",
+          "status": 200,
+          "error": false,
+          "title": "Notifications"
+        },
+        {
+          "path": "/reports",
+          "status": 200,
+          "error": false,
+          "title": "Reports"
+        },
+        {
+          "path": "/profile",
+          "status": 500,
+          "error": false,
+          "title": null
+        },
+        {
+          "path": "/reports/published-allocation",
+          "status": 200,
+          "error": false,
+          "title": "Published allocation"
+        },
+        {
+          "path": "/reports/unallocated-employees",
+          "status": 200,
+          "error": false,
+          "title": "Employees without a Published assignment"
+        },
+        {
+          "path": "/reports/scheduled-hours",
+          "status": 200,
+          "error": false,
+          "title": "Published scheduled hours"
+        },
+        {
+          "path": "/reports/planning-unpublished",
+          "status": 200,
+          "error": false,
+          "title": "PLANNING (UNPUBLISHED)"
+        },
+        {
+          "path": "/reports/schedule-lifecycle",
+          "status": 200,
+          "error": false,
+          "title": "Schedule lifecycle"
+        },
+        {
+          "path": "/reports/approved-leave",
+          "status": 200,
+          "error": false,
+          "title": "Approved leave"
+        },
+        {
+          "path": "/reports/coverage-replacement",
+          "status": 200,
+          "error": false,
+          "title": "Replacement request status"
+        },
+        {
+          "path": "/reports/skills-coverage",
+          "status": 200,
+          "error": false,
+          "title": "Recorded skills"
+        },
+        {
+          "path": "/reports/skill-gaps",
+          "status": 200,
+          "error": false,
+          "title": "Required versus recorded skills"
+        },
+        {
+          "path": "/reports/certification-status",
+          "status": 200,
+          "error": false,
+          "title": "Certification status"
+        }
+      ],
+      "refusals": [
+        {
+          "path": "/accounts",
+          "status": 404
+        },
+        {
+          "path": "/audit",
+          "status": 404
+        },
+        {
+          "path": "/settings",
+          "status": 404
+        },
+        {
+          "path": "/requests",
+          "status": 404
+        }
+      ],
+      "directoryNames": []
+    },
+    {
+      "identifier": "cora",
+      "pages": [
+        {
+          "path": "/account/change-password",
+          "status": 200,
+          "error": false,
+          "title": "Change your password"
+        },
+        {
+          "path": "/dashboard",
+          "status": 200,
+          "error": false,
+          "title": "Dashboard"
+        },
+        {
+          "path": "/skills",
+          "status": 500,
+          "error": false,
+          "title": null
+        },
+        {
+          "path": "/schedule",
+          "status": 200,
+          "error": false,
+          "title": "My Schedule"
+        },
+        {
+          "path": "/leave",
+          "status": 200,
+          "error": false,
+          "title": "My Leave"
+        },
+        {
+          "path": "/profile",
+          "status": 500,
+          "error": false,
+          "title": null
+        },
+        {
+          "path": "/notifications",
+          "status": 200,
+          "error": false,
+          "title": "Notifications"
+        },
+        {
+          "path": "/requests",
+          "status": 200,
+          "error": false,
+          "title": "My requests"
+        }
+      ],
+      "refusals": [
+        {
+          "path": "/accounts",
+          "status": 404
+        },
+        {
+          "path": "/employees",
+          "status": 404
+        },
+        {
+          "path": "/reports",
+          "status": 404
+        },
+        {
+          "path": "/audit",
+          "status": 404
+        },
+        {
+          "path": "/settings",
+          "status": 404
+        }
+      ],
+      "directoryNames": []
+    },
+    {
+      "identifier": "dan",
+      "pages": [
+        {
+          "path": "/account/change-password",
+          "status": 200,
+          "error": false,
+          "title": "Change your password"
+        },
+        {
+          "path": "/dashboard",
+          "status": 200,
+          "error": false,
+          "title": "Dashboard"
+        },
+        {
+          "path": "/skills",
+          "status": 500,
+          "error": false,
+          "title": null
+        },
+        {
+          "path": "/schedule",
+          "status": 200,
+          "error": false,
+          "title": "My Schedule"
+        },
+        {
+          "path": "/leave",
+          "status": 200,
+          "error": false,
+          "title": "My Leave"
+        },
+        {
+          "path": "/profile",
+          "status": 500,
+          "error": false,
+          "title": null
+        },
+        {
+          "path": "/notifications",
+          "status": 200,
+          "error": false,
+          "title": "Notifications"
+        },
+        {
+          "path": "/requests",
+          "status": 200,
+          "error": false,
+          "title": "My requests"
+        }
+      ],
+      "refusals": [
+        {
+          "path": "/accounts",
+          "status": 404
+        },
+        {
+          "path": "/employees",
+          "status": 404
+        },
+        {
+          "path": "/reports",
+          "status": 404
+        },
+        {
+          "path": "/audit",
+          "status": 404
+        },
+        {
+          "path": "/settings",
+          "status": 404
+        }
+      ],
+      "directoryNames": []
+    }
+  ]
+}

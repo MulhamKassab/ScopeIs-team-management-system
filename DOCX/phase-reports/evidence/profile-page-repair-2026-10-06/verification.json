@@ -1,0 +1,77 @@
+{
+  "verifiedAt": "2026-10-06T06:19:33.963Z",
+  "implementationCommit": "ba8dc69aaa38cc7ff78eeb034df26ced4c36d5b6",
+  "productionDeployment": {
+    "id": "dpl_73zKVXZBz4ybqmoQ5Kec2v5mJmfG",
+    "status": "READY",
+    "environment": "Production",
+    "alias": "https://scopeis-team-management-system.vercel.app",
+    "sourceBranch": "main",
+    "sourceCommit": "ba8dc69aaa38cc7ff78eeb034df26ced4c36d5b6",
+    "verifiedThrough": "Authenticated Vercel deployment detail UI"
+  },
+  "pageChecks": 104,
+  "accountsChecked": 5,
+  "pagesByAccount": {
+    "nora": 38,
+    "ava": 25,
+    "ben": 25,
+    "cora": 8,
+    "dan": 8
+  },
+  "forbiddenChecks": 18,
+  "allAllowedPagesPass": true,
+  "allForbiddenPagesRefused": true,
+  "explicitProfilesCompleted": {
+    "nora": "0001",
+    "ava": "0002",
+    "ben": "0003",
+    "cora": "0004",
+    "dan": "0005"
+  },
+  "directoryPeople": [
+    "Ava Mercer",
+    "Ben Iqbal",
+    "Cora Bell",
+    "Dan Rowan",
+    "Mulham Kassab",
+    "Nora Albright"
+  ],
+  "existingMulhamCode": "123",
+  "profileAuditEvents": 5,
+  "verification": {
+    "unit": 137,
+    "component": 110,
+    "accountIntegration": 30,
+    "employeeCoreIntegration": 13,
+    "desktopMobileAccountBrowser": 4,
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "scenarioRegistration": "PASS",
+    "whitespace": "PASS",
+    "isolatedOptimizedBuild": "PASS"
+  },
+  "nativeBrowserProof": {
+    "directoryScreenshot": "live-directory-desktop.png",
+    "profileEditorOpenedAndCancelled": true,
+    "phoneViewportOverride": "Requested 390x844; Chrome retained width 1705. Override reset. Phone journey verification comes from the disposable Playwright mobile project."
+  },
+  "testedFilesSha256": {
+    "src/app/(protected)/accounts/page.tsx": "44dc57ff7104d4e658c4fe023fb90b392407c7a5ef0787e9995867b19648167e",
+    "src/app/(protected)/profile/page.tsx": "6c3a866bbc837e3a57b1d6fb2e0e537663ab79175bcc90182cbd5fecf5309df9",
+    "src/app/(protected)/skills/page.tsx": "9fc5d761af48a569ab9792bed2332862b3ca0dead0d3d50b03a1e2ae394d80fc",
+    "src/modules/account-administration/actions.ts": "a961cdbd81f5c388cecf3cca2329a1b1cab8ffcce8e0319b439d93baabd2f7c5",
+    "src/modules/account-administration/forms.tsx": "c88c055f254c0f43d93d8a9f4d7beb88be14f45c10ac1fb0d9da6540b2cf000a",
+    "src/modules/account-administration/presentation.ts": "0ccf9fb98a06cb1751652d4b70f83b5048f78d6cdf895ca3f4b9177cfcdf0741",
+    "src/modules/account-administration/service.ts": "13c0ee257296971f3206d031f5f08ef9f8885587962ad5784febd0c8997f9d27",
+    "src/modules/account-administration/table.tsx": "7103ca7e6b1510723fcafbd1d11239360e271089969e23763d23ca882f6815ce",
+    "src/modules/account-administration/validation.ts": "c236f269fdcb07f98ca68bc770acc36553ccdefdc8ee6633b99e2ff463e0b989",
+    "src/modules/employees/missing-workforce-profile.tsx": "ef321434806069ffaa63029321c4e69b15ba7bc9883c5cb949cf413c4e829a4f",
+    "test/component/account-administration.test.tsx": "90301d6ba99770f852ada3dc3f696667c38abfa843937ad26cdc4d2768c13610",
+    "test/component/profile-page.test.tsx": "67dbd7619d9c0014196e3e02dc7072ca59e8874b7a4f39bbeb063ad99fe2e747",
+    "test/e2e/account-administration.spec.ts": "43855c86d897a4bb5c2ed854c29de20a2d68ddd8fa4de9beab113f6e53f0c102",
+    "test/integration/account-administration.test.ts": "d30e7aabf2124402a718cd2819de673a1532b925d339fac01e8f2caaba970e76",
+    "test/unit/account-administration.test.ts": "0d83995acf3d41fc116cd7977e8eb84cae8ee05046ace997e5aea18a58ee18ea"
+  },
+  "uniqueAutomatedCases": 294
+}

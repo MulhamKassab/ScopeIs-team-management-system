@@ -1,0 +1,27 @@
+[
+  {
+    "action": "employee_profile.created",
+    "actorIsNora": true,
+    "target": "mock-employee-dan"
+  },
+  {
+    "action": "employee_profile.created",
+    "actorIsNora": true,
+    "target": "mock-employee-cora"
+  },
+  {
+    "action": "employee_profile.created",
+    "actorIsNora": true,
+    "target": "mock-admin-ben"
+  },
+  {
+    "action": "employee_profile.created",
+    "actorIsNora": true,
+    "target": "mock-admin-ava"
+  },
+  {
+    "action": "employee_profile.created",
+    "actorIsNora": true,
+    "target": "mock-super-admin-nora"
+  }
+]

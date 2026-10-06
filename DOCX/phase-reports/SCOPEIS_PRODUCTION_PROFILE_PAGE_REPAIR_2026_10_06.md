@@ -38,16 +38,49 @@ strict disposable database runners. Production environment files were excluded.
   idempotence, rollback, stale actors and role/input refusals.
 - Employee core service: 13 passing tests.
 - Unit suite: 137 passing tests.
-- Component suite: 108 passing tests before the additional Skills regression;
-  final profile/Skills component rerun: 6/6 passing tests.
+- Final component suite: 110 passing tests, including six profile/Skills
+  missing-setup and unexpected-error regressions.
 - Final desktop/mobile account journey rerun: 4/4 passing, including missing and
   completed Profile/Skills, directory detail, editing and no horizontal overflow.
   The isolated optimized production build passed.
 - Final lint, types, scenario registration and whitespace checks pass. All 15
   changed source/test files match the tested clean clone byte for byte.
 
+These checks total 294 unique automated cases; focused reruns are not counted
+twice. The full historical motion system lock was not rerun for this bounded
+functional repair.
+
 ## Production closure
 
-Deployment, five explicit profile completions and the final route/browser audit
-are pending. This report does not claim production closure yet. Role-forbidden
-resources must continue to return their expected non-enumerating refusal.
+Implementation commit `ba8dc69aaa38cc7ff78eeb034df26ced4c36d5b6` was pushed and
+verified on `origin/main`. Vercel production deployment
+`dpl_73zKVXZBz4ybqmoQ5Kec2v5mJmfG` is Ready with that exact source commit and the
+production alias, verified in the authenticated deployment detail page.
+
+Nora explicitly completed the five profiles through the deployed application:
+Nora `0001`, Ava `0002`, Ben `0003`, Cora `0004`, Dan `0005`. Mulham's existing
+record and employee code `123` remain intact. The audit interface shows exactly
+one profile-creation event for each repaired target. The directory now shows six
+people, including Mulham and all five demo personas. No team scopes were granted;
+Admin directories can therefore remain empty until deliberate scope assignment.
+
+The final authenticated scan passed **104/104 permitted page checks**: Nora 38,
+Ava 25, Ben 25, Cora 8 and Dan 8. This covers every role-permitted top-level module,
+password page, every linked authorized report, and all six directory detail pages
+for Nora. All five My Profile pages and both Employee Skills pages return 200 with
+normal headings. All **18 expected forbidden-page checks** return 404. Fresh login
+and logout succeed for every account using its existing credentials.
+
+Native live browser verification confirms the six-row directory and opening /
+cancelling the profile editor. Desktop and 390px phone completion/editing/Skills
+journeys passed in the disposable browser runner. The native Chrome phone
+viewport override did not apply and was reset; no live phone screenshot is claimed.
+
+See [verification](evidence/profile-page-repair-2026-10-06/verification.json),
+[before](evidence/profile-page-repair-2026-10-06/pages-before.json),
+[after](evidence/profile-page-repair-2026-10-06/pages-after.json),
+[creation audit](evidence/profile-page-repair-2026-10-06/audit.json) and
+[live directory](evidence/profile-page-repair-2026-10-06/live-directory-desktop.png).
+This closes the reported account/profile page-access issue. Empty-state routes
+were checked; this does not certify every future data mutation, file-provider
+configuration, deferred Settings/Ticket work or separate Phase 13 rollout.

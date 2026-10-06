@@ -121,3 +121,26 @@ This verification supersedes earlier combined/presentation-only QA statements fo
 Committed the reviewed 258-file authorized UI/audit/test/documentation allowlist as [`22d2b4d8cf897f738ec7b61653f7b2a8313789b5`](https://github.com/MulhamKassab/ScopeIs-team-management-system/commit/22d2b4d8cf897f738ec7b61653f7b2a8313789b5), pushed to `origin/main` without force and verified that exact remote SHA. The staged source blobs matched all 363 frozen verification inputs, and staged whitespace checks passed. The prototype and historical incident script were excluded and remain preserved. The accumulated September audit/workflow work and October responsive/visual/map/discovery passes are included.
 
 The [delivery receipt](../phase-reports/evidence/ui-experience-2026-10-05/delivery.json) records the implementation commit and links the immutable 14/14 gate receipt. This confirmation supersedes earlier local/uncommitted Git-delivery statements, but does not rewrite their historical verification evidence. The follow-up delivery record changes documentation only; application, test, dependency and harness bytes remain the fully verified snapshot. Production deployment was not performed or verified; retained-history omission policy and Ticket integration status remain unchanged.
+
+
+## 2026-10-06 — Production workforce/profile page-access repair
+
+The user reported Nora's one-person directory and generic My Profile failures.
+Production logins were present but the five demo workforce links were absent.
+My Profile failed for all five; Employee Skills failed for Cora and Dan. Added
+normal missing-setup states and explicit, transactional Super Admin profile
+completion with fresh authorization, normal employee-code allocation, retry
+idempotence and atomic auditing. Existing credentials, roles, scopes and Mulham's
+record are preserved. No production seed or migration was used.
+
+Implementation `ba8dc69aaa38cc7ff78eeb034df26ced4c36d5b6` is verified on
+`origin/main` and Ready production deployment `dpl_73zKVXZBz4ybqmoQ5Kec2v5mJmfG`.
+Completed Nora/Ava/Ben/Cora/Dan through the live authenticated UI. Nora now sees
+six directory records. Final live audit: 104/104 permitted pages and all 18
+expected role refusals pass. All five profiles and both Employee Skills pages
+load; six workforce detail pages and authorized report links load. The repair
+report and sanitized evidence are separate from the historical sign-in receipt.
+Desktop/mobile recovery journeys pass in the disposable browser runner. Local
+verification passes 137 unit, 110 component, 43 account/employee integration and
+4 browser cases (294 unique), plus lint, types, scenario registration, whitespace
+and the isolated production build.
