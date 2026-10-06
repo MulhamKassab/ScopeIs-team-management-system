@@ -479,6 +479,7 @@ test("the planning workspace fits its pins and exposes filters, search and next 
   for (const viewport of viewports) {
     await page.setViewportSize(viewport);
     await page.goto("/map?date=2027-05-12");
+    if (process.env.SCOPEIS_DEMO_WORKSPACE === "true") await expect(page.getByText("Demo workspace", { exact: true })).toBeVisible();
     const filters = page.locator(".map-filter-disclosure");
     await expect(filters).not.toHaveAttribute("open");
     const canvas = page.getByRole("region", { name: "Static planning map", exact: true });

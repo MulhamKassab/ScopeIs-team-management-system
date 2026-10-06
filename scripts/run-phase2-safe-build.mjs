@@ -49,6 +49,7 @@ function safeBuildEnvironment(configuration) {
     ...inherited,
     AUTH_PASSWORD_PEPPER: process.env.AUTH_PASSWORD_PEPPER,
     APP_ENV: "test",
+    SCOPEIS_DEMO_WORKSPACE: process.env.SCOPEIS_DEMO_WORKSPACE === "true" ? "true" : "false",
     DATABASE_URL: servePort !== null ? configuration.databaseUrl : SAFE_BUILD_DATABASE_URL,
     MOCK_AUTH_ENABLED: "true",
     NEXT_TELEMETRY_DISABLED: "1",
