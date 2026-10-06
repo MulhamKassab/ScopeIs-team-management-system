@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import pg from "pg";
 import { signIn, signOut } from "./sign-in";
 
 test.skip(process.env.SCOPEIS_ACCOUNT_E2E !== "true", "Run with the guarded account-administration fixture runner.");
@@ -95,4 +96,64 @@ test("Super Admin creates and resets an account; other roles cannot reach /accou
   await page.getByRole("button", { name: "Log out" }).click();
   await expect(page).toHaveURL(/\/login$/);
   expect((await page.request.get("/api/reports/employee-directory/export")).status()).toBe(401);
+});
+
+test("legacy accounts recover My Profile and appear in the directory after Super Admin completes setup", async ({ page }) => {
+  // Both viewport projects start with the same missing-link case in this runner-owned database.
+  const target = new URL(process.env.DATABASE_URL!);
+  if (!["127.0.0.1", "localhost", "[::1]"].includes(target.hostname)
+    || !/^\/scopeis_account_browser_\d+_[a-f0-9]{10}_test$/.test(target.pathname)) {
+    throw new Error("Profile recovery fixture requires the account runner's disposable loopback database.");
+  }
+  const client = new pg.Client({ connectionString: target.toString() });
+  await client.connect();
+  try {
+    await client.query("delete from employee_profiles where user_id = any($1::text[])", [["mock-super-admin-nora", "mock-employee-cora"]]);
+  } finally { await client.end(); }
+
+  await signIn(page, "Cora Bell");
+  await page.goto("/profile");
+  await expect(page.getByText(/Your sign-in account is ready/)).toBeVisible();
+  await expect(page.getByText(/Ask your Super Admin/)).toBeVisible();
+  await expect(page.getByRole("button", { name: /Complete workforce profile/ })).toHaveCount(0);
+  await expectNoHorizontalOverflow(page);
+  await page.goto("/skills");
+  await expect(page.getByRole("heading", { name: "Profile setup required" })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+  await signOut(page);
+
+  await signIn(page, "Nora Albright");
+  await page.goto("/profile");
+  await page.getByRole("button", { name: "Complete workforce profile for Nora Albright" }).click();
+  await expect(page.getByRole("button", { name: "Edit profile", exact: true })).toBeVisible();
+  await expect(page.getByText(/Your sign-in account is ready/)).toHaveCount(0);
+  await expectNoHorizontalOverflow(page);
+
+  await page.goto("/accounts");
+  const row = page.getByRole("row", { name: /Cora Bell/ });
+  await expect(row).toContainText("Workforce profile missing");
+  await row.getByRole("button", { name: "Complete workforce profile for Cora Bell" }).click();
+  await expect(row).not.toContainText("Workforce profile missing");
+  await expect(row.getByRole("button", { name: /Complete workforce profile/ })).toHaveCount(0);
+  await expectNoHorizontalOverflow(page);
+
+  await page.goto("/employees");
+  await expect(page.getByRole("link", { name: "Cora Bell", exact: true })).toBeVisible();
+  await page.getByRole("link", { name: "Cora Bell", exact: true }).click();
+  await expect(page).toHaveURL(/\/employees\/mock-employee-cora$/);
+  await expect(page.getByRole("heading", { name: "Cora Bell", exact: true })).toBeVisible();
+  await signOut(page);
+
+  await signIn(page, "Cora Bell");
+  await page.goto("/profile");
+  await expect(page.getByRole("button", { name: "Edit profile", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Edit profile", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "Edit professional profile" })).toBeVisible();
+  await expect(page.getByLabel("Work email", { exact: true })).toHaveValue("");
+  await expectNoHorizontalOverflow(page);
+  await page.getByRole("button", { name: "Close", exact: true }).click();
+  await page.goto("/skills");
+  await expect(page.getByRole("heading", { name: "Recorded skills", exact: true })).toBeVisible();
+  await expect(page.getByText("No skills have been recorded on your profile.")).toBeVisible();
+  await signOut(page);
 });

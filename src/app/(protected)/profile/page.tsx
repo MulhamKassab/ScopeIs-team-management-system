@@ -7,13 +7,25 @@ import { evidenceRepository } from "@/modules/evidence/repositories";
 import { evidenceService } from "@/modules/evidence/service";
 import { db } from "@/db/client";
 import { employeeProfileService } from "@/modules/employees/employee-services";
+import { EmployeeDomainError } from "@/modules/employees/domain-error";
+import { MissingWorkforceProfile } from "@/modules/employees/missing-workforce-profile";
+import { completeWorkforceProfileAction } from "@/modules/account-administration/actions";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProfilePage() {
   const actor = await getCurrentActor();
   if (!actor) redirect("/login");
-  const [profile, evidence, skills] = await Promise.all([employeeProfileService.getOwnProfile(actor), evidenceService.listMine(actor), evidenceRepository.activeSkillOptions(db)]);
+  let profile;
+  try {
+    profile = await employeeProfileService.getOwnProfile(actor);
+  } catch (error) {
+    if (error instanceof EmployeeDomainError && error.code === "NOT_FOUND") {
+      return <MissingWorkforceProfile actor={actor} completeAction={completeWorkforceProfileAction} />;
+    }
+    throw error;
+  }
+  const [evidence, skills] = await Promise.all([evidenceService.listMine(actor), evidenceRepository.activeSkillOptions(db)]);
   const activeEvidence = evidence.items.filter((item) => !item.archivedAt);
   return <div className="people-profile-page">
     <section className="employee-self-profile" aria-labelledby="profile-title">

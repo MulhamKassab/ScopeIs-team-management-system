@@ -40,6 +40,7 @@ describe("account administration service", () => {
       for (const actor of [ava(), cora()]) {
         await expect(service.list(actor, { page: 1 })).rejects.toThrow(AccountAdminDomainError);
         await expect(service.summary(actor)).rejects.toThrow(AccountAdminDomainError);
+        await expect(service.completeWorkforceProfile(actor, { userId: coraId })).rejects.toThrow(AccountAdminDomainError);
         await expect(service.createAccount(actor, { displayName: "Fictional", username: "fictional", loginEmail: "fictional@example.test", role: "EMPLOYEE", password: TEMP, confirmPassword: TEMP })).rejects.toThrow(AccountAdminDomainError);
         await expect(service.enableCredentials(actor, { userId: coraId, username: "x1", loginEmail: "x1@example.test", password: TEMP, confirmPassword: TEMP })).rejects.toThrow(AccountAdminDomainError);
       }
@@ -49,6 +50,7 @@ describe("account administration service", () => {
       await db.update(users).set({ role: "ADMIN" }).where(eq(users.id, noraId));
       try {
         await expect(service.createAccount(nora(), { displayName: "Fictional", username: "fictional", loginEmail: "fictional@example.test", role: "EMPLOYEE", password: TEMP, confirmPassword: TEMP })).rejects.toThrow(AccountAdminDomainError);
+        await expect(service.completeWorkforceProfile(nora(), { userId: coraId })).rejects.toThrow(AccountAdminDomainError);
       } finally {
         await db.update(users).set({ role: "SUPER_ADMIN" }).where(eq(users.id, noraId));
       }
@@ -58,9 +60,52 @@ describe("account administration service", () => {
       await db.update(users).set({ active: false }).where(eq(users.id, noraId));
       try {
         await expect(service.summary(nora())).rejects.toThrow(AccountAdminDomainError);
+        await expect(service.completeWorkforceProfile(nora(), { userId: coraId })).rejects.toThrow(AccountAdminDomainError);
       } finally {
         await db.update(users).set({ active: true }).where(eq(users.id, noraId));
       }
+    });
+  });
+
+  describe("legacy workforce profile completion", () => {
+    it("creates one profile across concurrent retries and preserves credentials, role, scopes, and session version", async () => {
+      const beforeHash = await hashOf(coraId);
+      const beforeUser = await foundationRepository.findActiveUser(coraId);
+      const results = await Promise.all([service.completeWorkforceProfile(nora(), { userId: coraId }), service.completeWorkforceProfile(nora(), { userId: coraId })]);
+      expect(results.map((result) => result.outcome).sort()).toEqual(["created", "unchanged"]);
+      expect(results[0].employeeCode).toMatch(/^\d{4}$/);
+      expect(results[1].employeeCode).toBe(results[0].employeeCode);
+      expect(await hashOf(coraId)).toBe(beforeHash);
+      expect(await foundationRepository.findActiveUser(coraId)).toEqual(beforeUser);
+      const profiles = await db.select().from(employeeProfiles).where(eq(employeeProfiles.userId, coraId));
+      expect(profiles).toHaveLength(1);
+      expect(profiles[0]).toMatchObject({ team: null, designationId: null, managerUserId: null, workEmail: null });
+      expect((await db.select().from(auditEvents).where(and(eq(auditEvents.action, "employee_profile.created"), eq(auditEvents.targetId, coraId))))).toHaveLength(1);
+    });
+
+    it("never overwrites an existing profile or writes a second audit", async () => {
+      const before = await db.select().from(employeeProfiles).where(eq(employeeProfiles.userId, coraId));
+      const result = await service.completeWorkforceProfile(nora(), { userId: coraId });
+      expect(result.outcome).toBe("unchanged");
+      expect(await db.select().from(employeeProfiles).where(eq(employeeProfiles.userId, coraId))).toEqual(before);
+      expect((await db.select().from(auditEvents).where(and(eq(auditEvents.action, "employee_profile.created"), eq(auditEvents.targetId, coraId))))).toHaveLength(1);
+    });
+
+    it("refuses inactive, nonexistent, and client-supplied workforce details", async () => {
+      await expect(service.completeWorkforceProfile(nora(), { userId: "nonexistent" })).rejects.toThrow(AccountAdminDomainError);
+      await expect(service.completeWorkforceProfile(nora(), { userId: avaId, employeeCode: "1111", role: "SUPER_ADMIN" })).rejects.toThrow(AccountAdminDomainError);
+      await db.update(users).set({ active: false }).where(eq(users.id, avaId));
+      try { await expect(service.completeWorkforceProfile(nora(), { userId: avaId })).rejects.toThrow(AccountAdminDomainError); }
+      finally { await db.update(users).set({ active: true }).where(eq(users.id, avaId)); }
+      expect(await db.select().from(employeeProfiles).where(eq(employeeProfiles.userId, avaId))).toHaveLength(0);
+    });
+
+    it("rolls back profile and code allocation if the audit fails", async () => {
+      const failing = new AccountAdministrationService(async () => { throw new Error("Fictional audit failure"); });
+      const sequence = (await db.execute(sql`select next_value from employee_code_sequence`)).rows;
+      await expect(failing.completeWorkforceProfile(nora(), { userId: avaId })).rejects.toThrow("Fictional audit failure");
+      expect(await db.select().from(employeeProfiles).where(eq(employeeProfiles.userId, avaId))).toHaveLength(0);
+      expect((await db.execute(sql`select next_value from employee_code_sequence`)).rows).toEqual(sequence);
     });
   });
 

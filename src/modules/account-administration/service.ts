@@ -13,7 +13,7 @@ import type { AuthenticatedActor } from "@/shared/types/foundation";
 import { AccountAdminDomainError } from "./domain-error";
 import { accountRepository, ACCOUNT_PAGE_SIZE, type AccountListFilter, type SafeAccountRow } from "./repositories";
 import { toAccountRowView, accountsAsOf, type SafeAccountRowView } from "./presentation";
-import { changePasswordSchema, createAccountSchema, enableCredentialsSchema, resetPasswordSchema, parseAccountInput, passwordPolicyErrors } from "./validation";
+import { changePasswordSchema, completeWorkforceProfileSchema, createAccountSchema, enableCredentialsSchema, resetPasswordSchema, parseAccountInput, passwordPolicyErrors } from "./validation";
 
 type AuditWriter = typeof writeAuditEvent;
 type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0];
@@ -116,6 +116,24 @@ export class AccountAdministrationService {
       });
       await this.auditWriter(tx, { actor, action: "auth.account.created", targetType: "user", targetId: user.id, metadata: { role: parsed.role, signInEnabled: true, mustChangePassword: parsed.mustChangePassword } });
       return { userId: user.id, employeeCode, role: parsed.role };
+    });
+  }
+
+  /** Complete a legacy account's missing workforce link without changing its identity or access. */
+  async completeWorkforceProfile(actor: AuthenticatedActor, input: unknown) {
+    const parsed = parseAccountInput(completeWorkforceProfileSchema, input);
+    return db.transaction(async (tx) => {
+      await this.reauthorize(tx, actor);
+      const target = await accountRepository.findUserForUpdate(tx, parsed.userId);
+      if (!target) throw new AccountAdminDomainError("NOT_FOUND");
+      if (!target.active) throw new AccountAdminDomainError("CONFLICT");
+      const existing = await employeeProfileRepository.getByUserId(tx, target.id);
+      if (existing) return { userId: target.id, employeeCode: existing.employeeCode, outcome: "unchanged" as const };
+      const employeeCode = await this.allocateEmployeeCode(tx);
+      await employeeProfileRepository.create(tx, { userId: target.id, employeeCode });
+      await this.auditWriter(tx, { actor, action: "employee_profile.created", targetType: "employee_profile",
+        targetId: target.id, metadata: { fields: ["employeeCode"], role: target.role } });
+      return { userId: target.id, employeeCode, outcome: "created" as const };
     });
   }
 

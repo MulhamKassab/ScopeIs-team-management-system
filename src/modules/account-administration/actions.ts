@@ -38,6 +38,20 @@ export const createAccountAction: AccountFormAction = async (_state, formData) =
   return { success: "Account created with a login. The temporary password was stored as a one-way hash." };
 };
 
+export const completeWorkforceProfileAction: AccountFormAction = async (_state, formData) => {
+  const actor = await getCurrentActor();
+  if (!actor) redirect("/login");
+  if (!onlyContains(formData, ["userId"])) return { formError: "That submission included fields this form does not accept." };
+  let result;
+  try {
+    result = await accountAdministrationService.completeWorkforceProfile(actor, { userId: text(formData, "userId") });
+  } catch (error) {
+    return { formError: accountErrorMessage(error) };
+  }
+  revalidatePath("/accounts"); revalidatePath("/employees"); revalidatePath("/profile"); revalidatePath("/dashboard");
+  return { success: result.outcome === "created" ? "Workforce profile created. Work details can now be completed." : "This account already has a workforce profile." };
+};
+
 export const enableCredentialsAction: AccountFormAction = async (_state, formData) => {
   const actor = await getCurrentActor();
   if (!actor) redirect("/login");

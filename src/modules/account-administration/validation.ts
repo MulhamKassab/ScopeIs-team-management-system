@@ -9,6 +9,9 @@ export const usernameSchema = z.string().trim().toLowerCase().min(3, "Username m
 export const loginEmailSchema = z.string().trim().toLowerCase().email("Enter a valid login email address.").max(254, "Login email must be 254 characters or fewer.");
 export const workEmailSchema = z.string().trim().email("Enter a valid work email address.").max(254, "Work email must be 254 characters or fewer.");
 export const roleSchema = z.enum(["EMPLOYEE", "ADMIN", "SUPER_ADMIN"]);
+export const completeWorkforceProfileSchema = z.object({
+  userId: z.string().trim().min(1).max(160).regex(/^[A-Za-z0-9_-]+$/),
+}).strict();
 
 export const DISPLAY_NAME = z.string().trim().min(2, "Enter a name with at least 2 characters.").max(120, "Name must be 120 characters or fewer.").transform((value) => value.replace(/\s+/g, " "));
 export const OPTIONAL_TEXT = (max: number) => z.string().optional().transform((value) => value?.trim() || undefined).pipe(z.string().max(max).optional());

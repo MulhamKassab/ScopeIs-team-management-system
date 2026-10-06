@@ -5,7 +5,7 @@ import { can } from "@/modules/authorization/authorization-service";
 import { AccountTable } from "@/modules/account-administration/table";
 import { accountAdministrationService } from "@/modules/account-administration/service";
 import { parseAccountSearchParams, type AccountSearchParams } from "@/modules/account-administration/query";
-import { createAccountAction, enableCredentialsAction, resetPasswordAction } from "@/modules/account-administration/actions";
+import { completeWorkforceProfileAction, createAccountAction, enableCredentialsAction, resetPasswordAction } from "@/modules/account-administration/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -71,6 +71,7 @@ export default async function AccountsPage({ searchParams }: { searchParams: Pro
         createAction={createAccountAction}
         enableAction={enableCredentialsAction}
         resetAction={resetPasswordAction}
+        completeProfileAction={completeWorkforceProfileAction}
       />
     </section>
   );

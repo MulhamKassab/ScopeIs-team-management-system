@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { SafeAccountRowView } from "./presentation";
-import { CreateAccountPanel, EnableCredentialsPanel, ResetPasswordPanel } from "./forms";
+import { CompleteWorkforceProfileForm, CreateAccountPanel, EnableCredentialsPanel, ResetPasswordPanel } from "./forms";
 import type { AccountFormAction } from "./actions";
 import { buildAccountPageHref, type AccountPageFilters } from "./query";
 
@@ -17,6 +17,7 @@ export type AccountTableProps = {
   createAction: AccountFormAction;
   enableAction: AccountFormAction;
   resetAction: AccountFormAction;
+  completeProfileAction: AccountFormAction;
 };
 
 /**
@@ -63,7 +64,7 @@ export function AccountTable(props: AccountTableProps) {
               </tr>
             </thead>
             <tbody role="rowgroup">
-              {rows.map((row) => <AccountRow key={row.userId} row={row} actingUserId={props.actingUserId} resetAction={props.resetAction} />)}
+              {rows.map((row) => <AccountRow key={row.userId} row={row} actingUserId={props.actingUserId} resetAction={props.resetAction} completeProfileAction={props.completeProfileAction} />)}
             </tbody>
           </table>
         </div>
@@ -78,12 +79,12 @@ export function AccountTable(props: AccountTableProps) {
   );
 }
 
-function AccountRow({ row, actingUserId, resetAction }: { row: SafeAccountRowView; actingUserId: string; resetAction: AccountFormAction }) {
+function AccountRow({ row, actingUserId, resetAction, completeProfileAction }: { row: SafeAccountRowView; actingUserId: string; resetAction: AccountFormAction; completeProfileAction: AccountFormAction }) {
   const self = row.userId === actingUserId;
   const anotherSuperAdmin = !self && row.role === "SUPER_ADMIN";
   return (
     <tr role="row">
-      <th scope="row" role="rowheader"><span className="account-cell-stack"><strong>{row.displayName}</strong><small>{row.employeeCode}</small></span></th>
+      <th scope="row" role="rowheader"><span className="account-cell-stack"><strong>{row.displayName}</strong><small>{row.hasWorkforceProfile ? row.employeeCode : "Workforce profile missing"}</small></span></th>
       <td role="cell" data-label="Sign-in identity"><span className="account-cell-stack"><span>{row.username}</span><small>{row.loginEmail}</small></span></td>
       <td role="cell" data-label="System role">{row.role.replace("_", " ")}</td>
       <td role="cell" data-label="Status"><span className={`directory-status ${row.active ? "active" : "inactive"}`}>{row.active ? "Active" : "Inactive"}</span></td>
@@ -91,6 +92,7 @@ function AccountRow({ row, actingUserId, resetAction }: { row: SafeAccountRowVie
       <td role="cell" data-label="Credential history"><span className="account-cell-stack"><span>{row.credentialStatus === "Configured" ? row.passwordChangedAt : "Not available"}</span><small>Created {row.createdAt}</small></span></td>
       <td role="cell" data-label="Management">
         <div className="account-row-actions">
+          {!row.hasWorkforceProfile && row.active ? <CompleteWorkforceProfileForm action={completeProfileAction} userId={row.userId} displayName={row.displayName} /> : null}
           {row.credentialStatus === "Configured"
             ? <ResetPasswordPanel action={resetAction} row={{ userId: row.userId, displayName: row.displayName, credentialVersion: row.credentialVersion }} needsCurrentPassword={self || anotherSuperAdmin} anotherSuperAdmin={anotherSuperAdmin} />
             : <span className="account-help">Enable sign-in above for records without credentials.</span>}

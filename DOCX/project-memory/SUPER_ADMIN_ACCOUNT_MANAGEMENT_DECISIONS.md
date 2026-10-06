@@ -113,7 +113,7 @@ The account repository uses an explicit safe column list and never selects
 `password_hash`. The table and its projection expose only display name, employee
 code, username, login email, system role, active status, credential status,
 password-changed timestamp, lock status, the password-change requirement,
-creation date, and safe management actions. No hash, salt, pepper, session
+creation date, whether a workforce profile exists, and safe management actions. No hash, salt, pepper, session
 token, session-token hash, raw login attempt, cookie, or raw audit metadata is
 selected, returned, rendered, or serialized.
 
@@ -136,6 +136,28 @@ enabled. Usernames, emails, passwords, password length, hashes, salts, peppers,
 cookies, tokens, request bodies, raw database rows, and failure stacks are never
 recorded. Viewing `/accounts` writes no audit event. Unknown actions keep the
 generic safe fallback.
+
+### AC13 — Complete legacy workforce profiles (2026-10-06)
+
+The user authorized repairing missing directory records and inaccessible pages.
+Existing active accounts can predate the atomic account/profile creation flow.
+Super Admin may explicitly complete a missing workforce profile from Account
+administration or their own My Profile setup state. Opening a page never creates
+records. Admin and Employee users see guidance to contact Super Admin.
+
+Completion rechecks the acting user's current active Super Admin role and locks
+the target user within one transaction. It allocates the normal server-owned
+employee code and creates only the missing profile. It does not invent a team,
+designation, manager, contact details, or qualification. Existing profile data,
+credentials, roles, scopes and sessions are preserved. Repeating completion is
+idempotent; concurrent requests produce one profile and one allowlisted
+`employee_profile.created` audit event. Audit failure rolls back the profile and
+code allocation. Inactive or unknown targets and extra client fields are refused.
+
+My Profile and Employee Skills handle an absent workforce profile as a clear
+setup state. Unexpected failures still reach normal error handling. A directory
+count refers to workforce profiles; sign-in account counts alone do not establish
+that those profiles exist.
 
 ## Non-goals
 

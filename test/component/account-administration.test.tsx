@@ -12,7 +12,7 @@ afterEach(() => cleanup());
 const passthrough = (async () => ({})) as unknown as Parameters<typeof CreateAccountPanel>[0]["action"];
 
 const row: SafeAccountRowView = {
-  userId: "u1", displayName: "Fictional Person", employeeCode: "0007", username: "fictional", loginEmail: "fictional@example.test",
+  userId: "u1", displayName: "Fictional Person", employeeCode: "0007", hasWorkforceProfile: true, username: "fictional", loginEmail: "fictional@example.test",
   role: "ADMIN", active: true, credentialStatus: "Configured", passwordChangedAt: "3 Feb 2026, 08:05", lockStatus: "Not locked",
   mustChangePassword: true, createdAt: "2 Jan 2026, 07:04", credentialVersion: 3,
 };
@@ -27,7 +27,7 @@ function renderTable(rows: SafeAccountRowView[] = [row]) {
       pageSize={25}
       total={rows.length}
       candidates={[{ userId: "u2", displayName: "No Login", employeeCode: "0008" }]}
-      actingUserId="u9" createAction={passthrough} enableAction={passthrough} resetAction={passthrough}
+      actingUserId="u9" createAction={passthrough} enableAction={passthrough} resetAction={passthrough} completeProfileAction={passthrough}
     />,
   );
 }
@@ -48,6 +48,18 @@ describe("account administration table", () => {
   it("shows an explicit empty state when no accounts match", () => {
     renderTable([]);
     expect(screen.getByText("No accounts match the current filters.")).toBeVisible();
+  });
+
+  it("offers profile completion only for active accounts missing a workforce record", () => {
+    renderTable([{ ...row, hasWorkforceProfile: false }]);
+    expect(screen.getByText("Workforce profile missing")).toBeVisible();
+    expect(screen.getByRole("button", { name: "Complete workforce profile for Fictional Person" })).toHaveAttribute("type", "submit");
+    cleanup();
+    renderTable([{ ...row, hasWorkforceProfile: false, active: false }]);
+    expect(screen.queryByRole("button", { name: /Complete workforce profile/ })).not.toBeInTheDocument();
+    cleanup();
+    renderTable();
+    expect(screen.queryByRole("button", { name: /Complete workforce profile/ })).not.toBeInTheDocument();
   });
 
   it("requires the same high-risk reset confirmation for an inactive Super Admin", () => {

@@ -18,6 +18,17 @@ export function PasswordNotice() {
   return <p className="account-password-notice" role="note">Passwords cannot be viewed. Set a temporary password if the user needs new credentials.</p>;
 }
 
+export function CompleteWorkforceProfileForm({ action, userId, displayName }: { action: AccountFormAction; userId: string; displayName: string }) {
+  const [state, formAction, pending] = useActionState(action, initialState);
+  return <form action={formAction} className="account-form-actions">
+    <input type="hidden" name="userId" value={userId} />
+    <button className="button" type="submit" disabled={pending} aria-label={`Complete workforce profile for ${displayName}`}>
+      {pending ? "Completing profile…" : "Complete workforce profile"}
+    </button>
+    <StatusMessage state={state} />
+  </form>;
+}
+
 /** Create-account panel: workforce record plus login account, created atomically on the server. */
 export function CreateAccountPanel({ action }: { action: AccountFormAction }) {
   return <TaskDialog triggerLabel="Create account" title="Create workforce record and login account" description="For someone new to the team. If their employee record already exists, use Enable sign-in instead." triggerClassName="button primary"><CreateAccountForm action={action} /></TaskDialog>;

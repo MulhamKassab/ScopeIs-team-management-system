@@ -30,6 +30,7 @@ export type SafeAccountRowView = {
   userId: string;
   displayName: string;
   employeeCode: string;
+  hasWorkforceProfile: boolean;
   username: string;
   loginEmail: string;
   role: SafeAccountRow["role"];
@@ -51,6 +52,7 @@ export function toAccountRowView(row: SafeAccountRow, now: Date = new Date()): S
     userId: row.userId,
     displayName: row.displayName,
     employeeCode: row.employeeCode ?? "Not assigned",
+    hasWorkforceProfile: row.employeeCode !== null,
     username: row.username ?? "Not configured",
     loginEmail: row.loginEmail ?? "Not configured",
     role: row.role,

@@ -103,8 +103,13 @@ describe("account administration presentation", () => {
 
   it("projects only safe fields and never a hash", () => {
     const view = toAccountRowView(row, new Date("2026-03-01T00:00:00Z"));
-    expect(Object.keys(view).sort()).toEqual(["active", "createdAt", "credentialStatus", "credentialVersion", "displayName", "employeeCode", "lockStatus", "loginEmail", "mustChangePassword", "passwordChangedAt", "role", "userId", "username"].sort());
+    expect(Object.keys(view).sort()).toEqual(["active", "createdAt", "credentialStatus", "credentialVersion", "displayName", "employeeCode", "hasWorkforceProfile", "lockStatus", "loginEmail", "mustChangePassword", "passwordChangedAt", "role", "userId", "username"].sort());
     expect(JSON.stringify(view)).not.toMatch(/scrypt\$|hash|salt|pepper|token|cookie/i);
+  });
+
+  it("distinguishes a login account from a completed workforce profile", () => {
+    expect(toAccountRowView(row).hasWorkforceProfile).toBe(true);
+    expect(toAccountRowView({ ...row, employeeCode: null }).hasWorkforceProfile).toBe(false);
   });
 
   it("formats the as-of timestamp in Asia/Dubai", () => {
