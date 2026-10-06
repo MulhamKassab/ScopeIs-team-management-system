@@ -15,13 +15,14 @@ function displayTeam(team: string | null) {
   return team.replace(/^team:/, "").replace(/[-_]+/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
-export function EmployeeDirectory({ profiles, filters = {}, filterOptions = { teams: [], designations: [] }, invalidQuery = false, createEmployeeAction, canManage = false }: {
+export function EmployeeDirectory({ profiles, filters = {}, filterOptions = { teams: [], designations: [] }, invalidQuery = false, createEmployeeAction, canManage = false, teamNames = {} }: {
   profiles: DirectoryProfile[];
   filters?: EmployeeDirectorySearchFilters;
   filterOptions?: EmployeeDirectoryFilterOptions;
   invalidQuery?: boolean;
   createEmployeeAction?: CreateEmployeeFormAction;
   canManage?: boolean;
+  teamNames?: Record<string, string>;
 }) {
   const activeFilterCount = Object.values(filters).filter((value) => value !== undefined).length;
   const filtered = invalidQuery || activeFilterCount > 0;
@@ -32,10 +33,11 @@ export function EmployeeDirectory({ profiles, filters = {}, filterOptions = { te
       <p className="directory-intro">Find people, review their capabilities, and manage team records.</p></div>
       {createEmployeeAction ? <EmployeeCreatePanel key={profiles.length} action={createEmployeeAction} /> : null}</header>
 
+      {canManage ? <nav className="catalogue-links" aria-label="Manage people groups"><Link href="/teams">Manage teams</Link><Link href="/designations">Manage designations</Link></nav> : null}
       <form className="directory-filters" action="/employees" method="get" aria-label="Employee directory search and filters">
         <label><span>Search employees</span><input name="query" type="search" defaultValue={filters.query} maxLength={80} placeholder="Name or employee code" /></label>
         <label><span>Designation</span><select name="designation" defaultValue={filters.designationId ?? ""}><option value="">All designations</option>{filterOptions.designations.map((designation) => <option key={designation.id} value={designation.id}>{designation.name}</option>)}</select></label>
-        <label><span>Team</span><select name="team" defaultValue={filters.team ?? ""}><option value="">All available teams</option>{filterOptions.teams.map((team) => <option key={team} value={team}>{displayTeam(team)}</option>)}</select></label>
+        <label><span>Team</span><select name="team" defaultValue={filters.team ?? ""}><option value="">All available teams</option>{filterOptions.teams.map((team) => <option key={team} value={team}>{teamNames[team] ?? displayTeam(team)}</option>)}</select></label>
         <label><span>Status</span><select name="status" defaultValue={filters.status ?? ""}><option value="">All statuses</option><option value="active">Active</option><option value="inactive">Inactive</option></select></label>
         <div className="directory-filter-actions"><button className="button primary" type="submit">Apply filters</button>{filtered ? <Link className="button directory-clear" href="/employees">Clear filters</Link> : null}</div>
       </form>
@@ -59,7 +61,7 @@ export function EmployeeDirectory({ profiles, filters = {}, filterOptions = { te
                 <tr key={profile.userId} role="row">
                   <th scope="row" role="rowheader"><Link href={`/employees/${profile.userId}`}>{profile.user.displayName}</Link></th>
                   <td role="cell" data-label="Employee code">{profile.employeeCode}</td>
-                  <td role="cell" data-label="Team">{displayTeam(profile.team)}</td>
+                  <td role="cell" data-label="Team">{profile.team ? teamNames[profile.team] ?? displayTeam(profile.team) : "Unassigned"}</td>
                   <td role="cell" data-label="Status"><span className={`directory-status ${profile.user.active ? "active" : "inactive"}`}>{profile.user.active ? "Active" : "Inactive"}</span></td>
                   <td role="cell" data-label="Action"><Link className="button directory-record-action" href={`/employees/${profile.userId}`}>{canManage ? "Manage employee" : "View details"}</Link></td>
                 </tr>

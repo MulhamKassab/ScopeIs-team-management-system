@@ -113,12 +113,37 @@ describe("Phase 2 database foundation reconciliation", () => {
     expect(first.before.state).toBe("A");
     expect(first.after?.state).toBe("D");
     expect(first.after?.pending).toEqual([]);
-    expect(first.after?.fingerprint.tables).toHaveLength(33);
-    expect(first.after?.ledger.rows).toHaveLength(14);
+    expect(first.after?.fingerprint.tables).toHaveLength(34);
+    expect(first.after?.ledger.rows).toHaveLength(15);
     const second = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
     expect(second.before.state).toBe("D");
     expect(second.after?.state).toBe("D");
     expect(second.after?.fingerprint.hash).toBe(first.after?.fingerprint.hash);
+  }));
+
+  it("upgrades the previous account-management schema and backfills teams without changing membership or grants", async () => withDatabase("team_upgrade", async (url) => {
+    const { journal, migrations } = await validateRepositoryMigrationHistory();
+    await applySql(url, journal.entries.slice(0, 14).map((entry: { tag: string }) => `${entry.tag}.sql`));
+    const client = new pg.Client({ connectionString: url }); await client.connect();
+    try {
+      await client.query('create schema drizzle; create table drizzle.__drizzle_migrations (id serial primary key, hash text not null, created_at bigint)');
+      for (const migration of migrations.slice(0, 14)) await client.query('insert into drizzle.__drizzle_migrations (hash,created_at) values ($1,$2)', [migration.hash,migration.folderMillis]);
+      await client.query("insert into users(id,display_name,role) values ('upgrade-person','Upgrade person','ADMIN')");
+      await client.query("insert into employee_profiles(user_id,employee_code,team) values ('upgrade-person','9999','team:operations')");
+      await client.query("insert into admin_scope_grants(user_id,scope_type,scope_reference) values ('upgrade-person','TEAM','team:operations')");
+    } finally { await client.end(); }
+    const before = await inspect(url);
+    expect(before.state).toBe("D");
+    expect(before.pending).toEqual(["0014_team_catalogue"]);
+    const applied = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
+    expect(applied.after?.state).toBe("D");
+    expect(applied.after?.pending).toEqual([]);
+    const verification = new pg.Client({ connectionString: url }); await verification.connect();
+    try {
+      expect((await verification.query("select id,name from teams")).rows).toEqual([{id:"team:operations",name:"Operations"}]);
+      expect((await verification.query("select team from employee_profiles")).rows[0].team).toBe("team:operations");
+      expect((await verification.query("select scope_reference from admin_scope_grants")).rows[0].scope_reference).toBe("team:operations");
+    } finally { await verification.end(); }
   }));
 
   it("dry-runs and safely adopts an exact ledgerless Phase 1 database", async () => withDatabase("phase1", async (url) => {
@@ -129,7 +154,7 @@ describe("Phase 2 database foundation reconciliation", () => {
     expect((await inspect(url)).state).toBe("B");
     const applied = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
     expect(applied.after?.state).toBe("D");
-    expect(applied.after?.ledger.rows).toHaveLength(14);
+    expect(applied.after?.ledger.rows).toHaveLength(15);
     expect((await reconcileMigrationState(url, { allowDisposableTest: true })).before.state).toBe("D");
   }));
 
@@ -140,7 +165,7 @@ describe("Phase 2 database foundation reconciliation", () => {
     expect((await inspect(url)).state).toBe("C");
     const applied = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
     expect(applied.after?.state).toBe("D");
-    expect(applied.after?.ledger.rows).toHaveLength(14);
+    expect(applied.after?.ledger.rows).toHaveLength(15);
     expect((await reconcileMigrationState(url, { allowDisposableTest: true, apply: true })).after?.state).toBe("D");
   }));
 

@@ -1,3 +1,4 @@
+import { listTeamOptions } from "@/modules/employees/team-options";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentActor } from "@/modules/auth/session-service";
 import { can } from "@/modules/authorization/authorization-service";
@@ -15,5 +16,6 @@ export default async function EmployeesPage({ searchParams }: { searchParams: Pr
   const parsed = parseEmployeeDirectorySearchParams(await searchParams);
   const filterOptions = await employeeProfileService.listDirectoryFilterOptions(actor);
   const directory = parsed.valid ? await employeeProfileService.listDirectoryProfiles(actor, parsed.query) : { items: [] };
-  return <EmployeeDirectory profiles={directory.items} filters={parsed.filters} filterOptions={filterOptions} invalidQuery={!parsed.valid} createEmployeeAction={actor.role === "SUPER_ADMIN" ? createEmployeeAction : undefined} canManage={actor.role === "SUPER_ADMIN"} />;
+  const teamNames = Object.fromEntries((await listTeamOptions()).filter((team) => filterOptions.teams.includes(team.id)).map((team) => [team.id, team.name]));
+  return <EmployeeDirectory teamNames={teamNames} profiles={directory.items} filters={parsed.filters} filterOptions={filterOptions} invalidQuery={!parsed.valid} createEmployeeAction={actor.role === "SUPER_ADMIN" ? createEmployeeAction : undefined} canManage={actor.role === "SUPER_ADMIN"} />;
 }

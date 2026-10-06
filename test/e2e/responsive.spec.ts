@@ -567,3 +567,66 @@ test("feature discovery stays usable and role-specific on phone, desktop and RTL
   await captureVisual(page, testInfo, "320-rtl-large-text-planning-filters.png");
   await attachIssues(testInfo, issues);
 });
+
+test("monthly timetable and people catalogues stay usable across phone, desktop, RTL and reduced motion", async ({ page }, testInfo) => {
+  await signIn(page, "Nora Albright");
+  for (const width of [320, 390, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/schedule?month=2027-09");
+    await expect(page.getByRole("heading", { name: "Monthly timetable" })).toBeVisible();
+    const calendar = page.getByRole("region", { name: "Monthly timetable" });
+    await expect(calendar.getByRole("button", { name: "Month", exact: true })).toHaveAttribute("aria-pressed", "true");
+    await calendar.getByRole("button", { name: /Open .*14 September.*1 assignment/ }).click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(page.getByRole("dialog").getByText(/^Cora Bell/)).toBeVisible();
+    await page.getByRole("button", { name: "Close", exact: true }).click();
+    await expect(page.getByRole("dialog")).not.toBeVisible();
+    await calendar.getByRole("button", { name: "People", exact: true }).click();
+    await expect(calendar.getByRole("table")).toBeVisible();
+    expect(await page.evaluate(() => {
+      if(document.documentElement.scrollWidth <= innerWidth + 1) return [];
+      return [...document.querySelectorAll("main *")].filter(element=>{const r=element.getBoundingClientRect();return r.width>innerWidth && getComputedStyle(element).position!=="absolute";}).slice(0,12).map(element=>({tag:element.tagName,className:element.className,width:element.getBoundingClientRect().width,display:getComputedStyle(element).display}));
+    })).toEqual([]);
+    await calendar.getByRole("button", { name: "Agenda", exact: true }).click();
+    await expect(calendar.locator(".timetable-agenda").getByText(/^Cora Bell/)).toBeVisible();
+    await page.goto("/coverage?month=2027-09");
+    await expect(page.getByRole("heading", { name: "Choose work to review" })).toBeVisible();
+    await page.getByRole("link", { name: /^Review coverage for Cora Bell/ }).click();
+    await expect(page.getByRole("heading", { name: "What needs attention?" })).toBeVisible();
+    for (const route of ["/teams", "/designations", "/replacements"]) {
+      await page.goto(route);
+      await expect(page.locator("main h2").first()).toBeVisible();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+      await expect(page.locator("main")).not.toContainText(/Phase \d/);
+    }
+  }
+  await page.goto("/teams");
+  await page.getByRole("button", { name: "New team", exact: true }).click();
+  await page.getByLabel("Team name").fill("Responsive delivery");
+  await page.getByRole("button", { name: "Create team", exact: true }).click();
+  await expect(page.getByRole("dialog").getByRole("status")).toContainText("Saved");
+  await page.getByRole("button", { name: "Close", exact: true }).click();
+  await page.getByRole("button", { name: "Add member to Responsive delivery", exact: true }).click();
+  await page.getByRole("dialog").getByLabel("Person").selectOption("mock-employee-cora");
+  await page.getByRole("button", { name: "Save membership", exact: true }).click();
+  await expect(page.getByRole("dialog").getByRole("status")).toContainText("Membership saved");
+  await page.getByRole("button", { name: "Close", exact: true }).click();
+  await page.goto("/employees/mock-employee-cora");
+  await page.getByRole("button", { name: "Employee assignments", exact: true }).click();
+  await expect(page.getByRole("dialog").getByLabel("Team")).toHaveValue(await page.getByRole("dialog").getByRole("option", { name: "Responsive delivery", exact: true }).getAttribute("value"));
+  await page.getByRole("button", { name: "Close", exact: true }).click();
+  await page.goto("/teams");
+  await page.getByRole("button", { name: /^Remove Cora Bell .* from Responsive delivery$/ }).click();
+  await page.getByRole("button", { name: "Remove membership", exact: true }).click();
+  await expect(page.getByRole("status")).toContainText("Membership removed");
+  await expect(page.getByRole("dialog")).not.toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.context().addCookies([{ name: "scopeis-direction", value: "rtl", url: new URL(page.url()).origin }]);
+  await page.emulateMedia({ colorScheme: "dark", reducedMotion: "reduce" });
+  await page.goto("/schedule?month=2027-09");
+  await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+  await page.getByRole("button", { name: "Switch to dark mode" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  await page.screenshot({ path: testInfo.outputPath("timetable-mobile-rtl.png"), fullPage: true });
+});

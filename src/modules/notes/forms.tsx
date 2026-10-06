@@ -24,7 +24,7 @@ export function ManagementNotePanel({ subjectUserId, subjectName, notes, canCrea
   const archived = notes.filter((note) => note.archivedAt);
   return <section className="operations-page notes-page" aria-labelledby="management-notes-title">
     <header className="operations-heading"><div>
-      <p className="eyebrow">Phase 10 · Employee-management notes</p>
+      <p className="eyebrow">Management notes</p>
       <h2 id="management-notes-title">Management notes</h2>
       <p>Notes about {subjectName} are private to their author unless shared upward. {subjectName} never sees these notes, and peer Admins cannot read each other&apos;s notes. Content is immutable; archive and write a new note to correct one.</p>
     </div></header>

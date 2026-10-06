@@ -83,6 +83,12 @@
       "idx": 13,
       "when": 1789794000000,
       "hash": "d884258673f2c645fa7a0891431942155394f3396bc12d3d08ce5772bb38f6e9"
+    },
+    {
+      "tag": "0014_team_catalogue",
+      "idx": 14,
+      "when": 1791283248313,
+      "hash": "ca3379424eb3e39683beacdd598b1de68892f87fcb5a55268bd57dff9b4416dd"
     }
   ],
   "states": {
@@ -987,6 +993,69 @@
         "sessions",
         "skills",
         "staffing_requirements",
+        "user_credentials",
+        "users"
+      ],
+      "enumTypes": [
+        "authentication_mode",
+        "evidence_kind",
+        "evidence_review_state",
+        "leave_request_status",
+        "note_visibility",
+        "operational_lifecycle_status",
+        "project_status",
+        "replacement_effect_status",
+        "replacement_request_intent",
+        "replacement_request_status",
+        "schedule_period_status",
+        "scope_type",
+        "system_role"
+      ]
+    },
+    "teamCatalogue": {
+      "hash": "6b5170a137590eac3e51447fada3ffe31da2f05aafd8574526e5073f16d55380",
+      "sectionHashes": {
+        "enums": "152c4698a764bce87367569c13bee1a77683e0fb938edc6df572e7a710009203",
+        "columns": "071798a957e4ae018e8b78478ada9425379c81f2d3fd482ea98d9e74f2383952",
+        "constraints": "921cfe02be4610165c0b8c2339c50bb9aed86e49e4fc307cac8ef433e109bc98",
+        "indexes": "619b63b7661199e7e0ded02153042e80be3692b4afa4fd3f1149f1ec04581872"
+      },
+      "tableHashes": {
+        "teams": "e60d9dfb3e49608a06ea696bab49e260ab0fdd48e0d904222bf6a252fa922dfc"
+      },
+      "tables": [
+        "admin_scope_grants",
+        "arrangement_labels",
+        "assignment_skill_requirements",
+        "audit_events",
+        "clients",
+        "designations",
+        "discussion_messages",
+        "discussion_threads",
+        "employee_code_sequence",
+        "employee_evidence",
+        "employee_files",
+        "employee_management_notes",
+        "employee_planning_locations",
+        "employee_profiles",
+        "employee_skills",
+        "leave_allowance_settings",
+        "leave_requests",
+        "locations",
+        "notifications",
+        "operational_contacts",
+        "operational_employee_relations",
+        "operational_note_revisions",
+        "operational_notes",
+        "project_locations",
+        "projects",
+        "replacement_requests",
+        "schedule_assignments",
+        "schedule_periods",
+        "sessions",
+        "skills",
+        "staffing_requirements",
+        "teams",
         "user_credentials",
         "users"
       ],

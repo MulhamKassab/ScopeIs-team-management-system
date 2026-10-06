@@ -4,7 +4,7 @@ import type { SystemRole } from "@/shared/types/foundation";
 
 export const navigationGroups: { label: string; keys: ModuleKey[] }[] = [
   { label: "Daily work", keys: ["dashboard", "schedule", "leave", "coverage", "replacements", "requests", "map"] },
-  { label: "People", keys: ["employees", "skills", "profile"] },
+  { label: "People", keys: ["employees", "teams", "designations", "skills", "profile"] },
   { label: "Client work", keys: ["clients", "projects", "locations"] },
   { label: "Overview", keys: ["reports", "notifications"] },
   { label: "Administration", keys: ["accounts", "audit", "settings"] },
@@ -15,6 +15,8 @@ const descriptions: Record<ModuleKey, { description: string; keywords: string }>
   schedule: { description: "Plan assignments, review revisions and follow the published schedule.", keywords: "calendar roster shifts draft propose publish revision allocation monthly" },
   map: { description: "Explore published assignments by date, employee and worksite. Open coverage from the map.", keywords: "geography pins locations planning coordinates areas" },
   employees: { description: "Find your team and manage employee records, skills, designations and evidence.", keywords: "people directory search team qualifications certification cv portfolio files notes lifecycle status" },
+  teams: { description: "Create teams and add, move or remove members.", keywords: "groups membership organization" },
+  designations: { description: "Manage job designations and assign people to them.", keywords: "jobs titles designation members" },
   accounts: { description: "Manage accounts, access and temporary passwords. Existing passwords stay private.", keywords: "credentials reset username login role active deactivate scopes" },
   skills: { description: "Maintain recorded skills and understand project requirements.", keywords: "capability qualification training designation requirements staffing" },
   clients: { description: "Manage client relationships, contacts and shared notes.", keywords: "company customer contact notes documents" },

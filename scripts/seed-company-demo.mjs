@@ -49,6 +49,7 @@ export async function seedCompanyDemo(connectionString, {baseDate, pepper, passw
     for(const name of skillCatalog) ids.skills[name]=await insert('skills',{id:id(),name});
     for(const name of new Set(workforce.map(x=>x[4]).filter(Boolean))) ids.designations[name]=await insert('designations',{id:id(),name});
     for(const [sort,name] of ['In-house','Outsourced to Client','Temporary Placement','Scheduled Visit','On-call'].entries()) await insert('arrangement_labels',{id:id(),name,color:['#2563eb','#7c3aed','#0d9488','#d97706','#db2777'][sort],sort_order:sort});
+    for(const team of new Set(workforce.map(row=>row[3]))) await insert('teams',{id:`team:${team}`,name:team.replace(/[-_]/g,' ').replace(/\b\w/g,letter=>letter.toUpperCase())});
     for(const [key,name,role] of workforce) await insert('users',{id:userId(key),display_name:name,role,active:true});
     for(const [index,[key,name,role,team,designation,skillNames]] of workforce.entries()) {
       await insert('employee_profiles',{user_id:userId(key),employee_code:String(index+1).padStart(4,'0'),designation_id:designation?ids.designations[designation]:null,team:`team:${team}`,manager_user_id:role==='SUPER_ADMIN'?null:userId(role==='ADMIN'?'nora':key==='cora'?'ava':'ben'),work_email:`${loginNames[key]}@example.test`,professional_summary:designation?`Fictional ${designation.toLowerCase()} in the company demonstration.`:null,default_work_location:'Fictional planning office',working_pattern:'Weekdays; informational only'});

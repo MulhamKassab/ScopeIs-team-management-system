@@ -24,8 +24,9 @@ function closingAnimation(style: CSSStyleDeclaration) {
 }
 
 /** A focused task with native modal semantics. Form feedback remains visible until closed. */
-export function TaskDialog({ triggerLabel, triggerIcon, title, description, children, triggerClassName = "button primary", triggerDisabled = false, dismissOnNavigate = false }: {
+export function TaskDialog({ triggerLabel, triggerText, triggerIcon, title, description, children, triggerClassName = "button primary", triggerDisabled = false, dismissOnNavigate = false }: {
   triggerLabel: string;
+  triggerText?: string;
   triggerIcon?: ReactNode;
   title: string;
   description?: string;
@@ -139,7 +140,7 @@ export function TaskDialog({ triggerLabel, triggerIcon, title, description, chil
   }, [open]);
 
   return <>
-    <button ref={trigger} type="button" className={triggerClassName} disabled={triggerDisabled} aria-haspopup="dialog" aria-label={triggerLabel} onClick={show}>{triggerIcon}<span>{triggerLabel}</span></button>
+    <button ref={trigger} type="button" className={triggerClassName} disabled={triggerDisabled} aria-haspopup="dialog" aria-label={triggerLabel} onClick={show}>{triggerIcon}<span>{triggerText ?? triggerLabel}</span></button>
     <dialog ref={dialog} className="task-dialog" aria-labelledby={`${id}-title`} aria-describedby={description ? `${id}-description` : undefined}
       onCancel={(event) => { event.preventDefault(); dismiss(); }} onClose={() => setOpen(false)}
       onClick={(event) => {

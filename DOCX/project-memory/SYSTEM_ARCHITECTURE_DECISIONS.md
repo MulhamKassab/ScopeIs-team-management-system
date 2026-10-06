@@ -683,3 +683,11 @@ Before Phase 1 architecture is considered established, implementation evidence m
 - No dependency on Ticket functionality before Phase 12
 
 These checks describe future implementation acceptance. They do not claim that implementation has occurred.
+
+## Confirmed monthly timetable and people catalogues — 2026-10-06
+
+The user requested a monthly timetable showing who is where and what they are doing. Month is the default view, with People (person by day) and Agenda alternatives. Day details include employee, times, client, project, location and shared work instruction. Published work and unpublished planning have separate views; historical Published revisions are excluded from the current timetable. Employees receive only their own current Published assignments. Admin timetable reads require both current TEAM membership scope and a matching Client, Project or Location scope; Super Admin is global. No new recurrence, shift, attendance or automatic publication rules are introduced.
+
+Teams are managed records with stable `team:` references and editable display names. The additive `0014_team_catalogue` migration backfills existing profile and scope references without moving people or changing grants. Super Admin can create and rename teams and add, move or remove members. Each profile retains its existing single team and single designation. Dedicated Designations management reuses the existing job catalogue and permits the same membership operations. Roles, job designations, membership and explicit Admin access grants remain separate. Removing membership clears only the selected assignment field and preserves the person and their history.
+
+Employee assignments use Team and Designation dropdowns linked to their management pages. Coverage starts with visible monthly assignments, explains staffing versus qualification gaps, and separates replacing a person from adding someone alongside them. Super Admin requests say “Choose during review” and link to their own decision surface; approval still prepares a Draft and never publishes automatically. Development phase labels are removed from product copy. Native dialogs, touch targets, internal calendar/table scrolling, RTL, both themes and reduced motion remain required.

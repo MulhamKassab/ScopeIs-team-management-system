@@ -25,6 +25,7 @@ const suites = [
   { name: "Phase 1 PostgreSQL foundation", label: "phase1_foundation", files: ["test/integration/foundation-postgres.test.ts"] },
   { name: "Phase 2 employee core service", label: "phase2_core", files: ["test/integration/phase2-core-service.test.ts"] },
   { name: "Phase 3 operational service", label: "phase3_operations", files: ["test/integration/phase3-operational-service.test.ts"], timeoutMs: 180_000 },
+  { name: "Monthly timetable and organisation service", label: "timetable_organisation", files: ["test/integration/timetable-organisation.test.ts"], seed: seedPhase4Journey, timeoutMs: 240_000 },
   { name: "Phase 4 scheduling service", label: "phase4_scheduling", files: ["test/integration/phase4-scheduling-service.test.ts"], seed: seedPhase4Journey, timeoutMs: 240_000 },
   { name: "Phase 5 leave service", label: "phase5_leave", files: ["test/integration/phase5-leave-service.test.ts"], seed: seedPhase4Journey, timeoutMs: 240_000 },
   { name: "Phase 6 capabilities service", label: "phase6_capabilities", files: ["test/integration/phase6-capabilities-service.test.ts"], seed: seedPhase4Journey, timeoutMs: 240_000 },

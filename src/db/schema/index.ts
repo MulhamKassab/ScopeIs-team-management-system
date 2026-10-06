@@ -72,6 +72,10 @@ export const notifications = pgTable("notifications", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 }, (table) => [foreignKey({ name: "notifications_recipient_user_id_fkey", columns: [table.recipientUserId], foreignColumns: [users.id] }).onDelete("cascade"), index("notifications_recipient_unread_idx").on(table.recipientUserId, table.readAt), index("notifications_recipient_created_idx").on(table.recipientUserId, table.createdAt, table.id)]);
 
+export const teams = pgTable("teams", {
+  id: text("id").primaryKey(), name: text("name").notNull(), version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [check("teams_reference_check", sql`${table.id} ~ '^team:[a-zA-Z0-9][a-zA-Z0-9:_-]{0,118}$'`), check("teams_name_check", sql`char_length(btrim(${table.name})) between 1 and 120`), check("teams_version_check", sql`${table.version} > 0`)]);
+
 export const designations = pgTable("designations", {
   id: uuid("id").defaultRandom().primaryKey(), name: text("name").notNull(), sortOrder: integer("sort_order").notNull().default(0),
   active: boolean("active").notNull().default(true), archivedAt: timestamp("archived_at", { withTimezone: true }), version: integer("version").notNull().default(1), ...timestamps,

@@ -1,5 +1,6 @@
 "use server";
 
+import { listTeamOptions } from "./team-options";
 import { revalidatePath } from "next/cache";
 import { getCurrentActor } from "@/modules/auth/session-service";
 import { EmployeeDomainError } from "@/modules/employees/domain-error";
@@ -24,7 +25,7 @@ function message(error: unknown) {
   return "The employee change could not be saved. Please try again.";
 }
 async function actorOrState() { return getCurrentActor(); }
-function refresh(userId: string) { revalidatePath(`/employees/${userId}`); revalidatePath("/employees"); }
+function refresh(userId: string) { revalidatePath(`/employees/${userId}`); revalidatePath("/employees"); revalidatePath("/teams"); revalidatePath("/designations"); }
 
 export const updateEmployeeBasicAction: EmployeeMutationAction = async (_state, formData) => {
   const actor = await actorOrState(); if (!actor) return { error: "Your session has expired. Sign in again." };
@@ -40,6 +41,8 @@ export const updateEmployeeAssignmentsAction: EmployeeMutationAction = async (_s
   const actor = await actorOrState(); if (!actor) return { error: "Your session has expired. Sign in again." };
   const userId = target(formData);
   try {
+    if (actor.role !== "SUPER_ADMIN" || !onlyContains(formData, ["userId", "expectedVersion", "designationId", "managerUserId", "team", "workingPattern"])) throw new EmployeeDomainError("FORBIDDEN");
+    if (nullable(formData, "team") && !(await listTeamOptions()).some((team) => team.id === nullable(formData, "team"))) throw new EmployeeDomainError("VALIDATION_ERROR");
     await employeeProfileService.updateManagementAssignments(actor, userId, { expectedVersion: version(formData), designationId: nullable(formData, "designationId"), managerUserId: nullable(formData, "managerUserId"), team: nullable(formData, "team"), workingPattern: nullable(formData, "workingPattern") });
     refresh(userId); return { success: "Employee assignments saved." };
   } catch (error) { return { error: message(error) }; }

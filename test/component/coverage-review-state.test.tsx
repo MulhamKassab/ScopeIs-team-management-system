@@ -2,6 +2,9 @@
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({ assignmentContext: vi.fn(), gaps: vi.fn(), candidates: vi.fn() }));
+vi.mock("@/modules/scheduling/timetable-service", () => ({ getTimetable: async () => [] }));
+vi.mock("@/modules/scheduling/repositories", () => ({ schedulingRepository: { visibleEmployees: vi.fn(async () => []) } }));
+vi.mock("@/db/client", () => ({ db: {} }));
 vi.mock("@/modules/auth/session-service", () => ({ getCurrentActor: async () => ({ role: "ADMIN" }) }));
 vi.mock("@/modules/coverage/service", () => ({ coverageService: mocks }));
 vi.mock("@/modules/coverage/forms", () => ({ ReplacementRequestForm: () => null }));
@@ -13,9 +16,9 @@ describe("coverage review failure", () => {
   it("never presents an inaccessible assignment as having no gaps", async () => {
     mocks.assignmentContext.mockRejectedValue(new CoverageDomainError("NOT_FOUND"));
     render(await CoveragePage({ searchParams: Promise.resolve({ assignment: "unknown" }) }));
-    expect(screen.getByRole("heading", { name: "This assignment is unavailable" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Open schedule" })).toHaveAttribute("href", "/schedule");
-    expect(screen.queryByRole("heading", { name: "No recorded gaps" })).not.toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent("That assignment is unavailable");
+    expect(screen.getByRole("link", { name: "Open timetable" })).toHaveAttribute("href", expect.stringMatching(/^\/schedule\?month=/));
+    expect(screen.queryByText("No recorded staffing or skill gaps found for this assignment.")).not.toBeInTheDocument();
     expect(mocks.gaps).not.toHaveBeenCalled();
     expect(mocks.candidates).not.toHaveBeenCalled();
   });
@@ -24,8 +27,8 @@ describe("coverage review failure", () => {
     mocks.gaps.mockResolvedValue([]);
     mocks.candidates.mockResolvedValue({ candidates: [] });
     render(await CoveragePage({ searchParams: Promise.resolve({ assignment: "authorized" }) }));
-    expect(screen.getByRole("heading", { name: "No recorded gaps" })).toBeInTheDocument();
+    expect(screen.getByText("No recorded staffing or skill gaps found for this assignment.")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Fictional Employee" })).toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: "This assignment is unavailable" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
 });

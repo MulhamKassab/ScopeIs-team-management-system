@@ -1,4 +1,5 @@
 import "server-only";
+import { listTeamOptions } from "./team-options";
 import { randomUUID } from "node:crypto";
 import { sql } from "drizzle-orm";
 import { db } from "@/db/client";
@@ -41,7 +42,7 @@ export type ScopedEmployeeProfileView = Pick<ProfileWithUser, "userId" | "employ
 export type OwnEmployeeProfileView = ProfileWithUser;
 export type EmployeeProfileView = SuperAdminProfileView | ScopedEmployeeProfileView | OwnEmployeeProfileView;
 export type ManagementEmployeeDetail = {
-  userId: string; employeeCode: string; team: string | null; designationId: string | null; designationName: string | null; managerUserId: string | null; managerName: string | null; workingPattern: string | null; version: number;
+  userId: string; employeeCode: string; team: string | null; teamName?: string | null; designationId: string | null; designationName: string | null; managerUserId: string | null; managerName: string | null; workingPattern: string | null; version: number;
   user: { displayName: string; role: ProfileWithUser["user"]["role"]; active: boolean };
   workEmail?: string | null; workPhone?: string | null; professionalSummary?: string | null; defaultWorkLocation?: string | null;
 };
@@ -193,7 +194,7 @@ export class EmployeeProfileService {
       profile.managerUserId ? employeeProfileRepository.findUser(db, profile.managerUserId) : null,
     ]);
     const base = {
-      userId: profile.userId, employeeCode: profile.employeeCode, team: profile.team, designationId: profile.designationId,
+      userId: profile.userId, employeeCode: profile.employeeCode, team: profile.team, teamName: (await listTeamOptions()).find((team) => team.id === profile.team)?.name ?? null, designationId: profile.designationId,
       designationName: designation?.name ?? null, managerUserId: profile.managerUserId, managerName: manager?.displayName ?? null, workingPattern: profile.workingPattern, version: profile.version,
       user: { displayName: profile.user.displayName, role: profile.user.role, active: profile.user.active },
     };
@@ -316,10 +317,10 @@ export class EmployeeProfileService {
 
   async listManagementFormOptions(actor: EmployeeActor, userId: string) {
     requireSuperAdmin(actor);
-    const [designations, managers, scopes] = await Promise.all([
-      designationRepository.list(db, { page: 1, pageSize: 100 }), employeeProfileRepository.listManagementCandidates(db, userId), adminScopeGrantRepository.listForUser(db, userId),
+    const [designations, managers, scopes, teams] = await Promise.all([
+      designationRepository.list(db, { page: 1, pageSize: 100 }), employeeProfileRepository.listManagementCandidates(db, userId), adminScopeGrantRepository.listForUser(db, userId), listTeamOptions(),
     ]);
-    return { designations: designations.items.filter((designation) => designation.active), managers: managers.filter((manager) => manager.active), scopes };
+    return { designations: designations.items.filter((designation) => designation.active), managers: managers.filter((manager) => manager.active), scopes, teams };
   }
 
   async grantAdminTeamScope(actor: EmployeeActor, input: AdminScopeGrantInput) {
