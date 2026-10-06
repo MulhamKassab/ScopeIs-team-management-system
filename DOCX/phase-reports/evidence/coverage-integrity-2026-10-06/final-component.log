@@ -1,0 +1,13 @@
+
+> scopeis-team-management-system@0.1.0 test:component
+> vitest run test/component
+
+
+ RUN  v4.1.11 /private/tmp/scopeis-company-demo-build-20261006
+
+Not implemented: navigation to another Document
+
+ Test Files  25 passed (25)
+      Tests  120 passed (120)
+   Start at  19:29:36
+   Duration  14.62s (transform 490ms, setup 813ms, import 2.03s, tests 3.45s, environment 6.70s)

@@ -31,6 +31,7 @@ These decisions record the implemented V1 boundary for `SCOPEIS_PHASE_4_SCHEDULI
 - Same-Employee, same-date overlaps are blocked across active Draft, Proposed, and Published periods. PostgreSQL transaction advisory locks serialize overlap validation for each Employee/date key.
 - Revision copies exempt only their unchanged copied predecessor during overlap validation; other Client-month work remains conflict-visible.
 - Period and assignment mutations use optimistic versions. Lifecycle publication, current-version replacement, notifications, and audit writes are transactional.
+- The 2026-10-06 conflict-integrity refinement makes ordinary assignment edits and coverage effects acquire employee/date overlap locks before leave locks, matching proposal/publication. Coverage reuses an unchanged existing Draft revision; conflicting or obsolete requests are refused. See [the coverage integrity decisions](PHASE_7_COVERAGE_REPLACEMENT_DECISIONS.md).
 
 ## Explicit non-goals
 

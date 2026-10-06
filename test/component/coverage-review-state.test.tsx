@@ -31,4 +31,12 @@ describe("coverage review failure", () => {
     expect(screen.getByRole("heading", { name: "Fictional Employee" })).toBeInTheDocument();
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   });
+  it("explains changed work and points to its planning month without presenting it as gap-free", async () => {
+    mocks.assignmentContext.mockResolvedValue({ id: "authorized", periodId: "period", month: "2027-05" });
+    mocks.gaps.mockRejectedValue(new CoverageDomainError("STALE_WORK"));
+    render(await CoveragePage({ searchParams: Promise.resolve({ assignment: "authorized" }) }));
+    expect(screen.getByRole("alert")).toHaveTextContent("This work has changed");
+    expect(screen.getByRole("link", { name: "Review current Draft" })).toHaveAttribute("href", "/schedule?month=2027-05&mode=planning");
+    expect(screen.queryByText("No recorded staffing or skill gaps found for this assignment.")).not.toBeInTheDocument();
+  });
 });

@@ -1,5 +1,7 @@
 # Project Context
 
+**2026-10-06 coverage integrity update:** The user confirmed that replacements, extra support and timetable work must not overlap or apply conflicting effects. [Coverage integrity decisions](DOCX/project-memory/PHASE_7_COVERAGE_REPLACEMENT_DECISIONS.md) require duplicate-request refusal, current Draft gap rechecks under locks, safe revision reuse, stale-work refusal and shared employee/date overlap enforcement. Compatible support and replacement changes preserve one another; only Super Admin publishes. No schema or production business-data change is needed.
+
 **2026-10-06 user-journey update:** The user confirmed an application-wide simplification. [The 20 user journeys](DOCX/project-memory/USER_JOURNEYS.md) define familiar tab labels, clear next actions, optional role-specific help, and progressive disclosure. Searchable cover work and reports, one-person skill editing, contextual conversations and readable activity history preserve existing business rules and data access. Validation and delivery are recorded in [the fresh walkthrough](DOCX/phase-reports/SCOPEIS_CLEAR_USER_JOURNEYS_2026_10_06.html).
 
 ScopeIs Team Management System is a documentation-first workforce planning product for an internal engineering team of approximately 15-20 people. It will help managers understand skills, assignments, availability, clients, projects, locations, leave, coverage, and replacement options across future weeks and months.

@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { signIn } from "./sign-in";
 test.skip(process.env.SCOPEIS_PHASE7_E2E !== "true", "Run with the guarded Phase 7 fixture runner.");
-test("Super Admin sees non-blocking coverage and replacement workspaces; Employee is kept out", async ({ page }) => { await signIn(page, "Nora Albright"); await page.goto("/coverage"); await expect(page.getByRole("heading", { name: "Coverage review" })).toBeVisible(); await expect(page.getByRole("link", { name: "Open schedule", exact: true })).toBeVisible(); await expect(page.getByLabel("Assignment ID")).toHaveCount(0); await page.goto("/replacements"); await expect(page.getByRole("heading", { name: "Pending replacement decisions" })).toBeVisible(); await page.request.post("/api/auth/logout", { headers: { Origin: new URL(page.url()).origin } }); await signIn(page, "Cora Bell"); await page.goto("/coverage"); await expect(page.getByRole("heading", { name: "Coverage is management-only" })).toBeVisible(); expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true); });
+test("Super Admin sees non-blocking coverage and replacement workspaces; Employee is kept out", async ({ page }) => { await signIn(page, "Nora Albright"); await page.goto("/coverage"); await expect(page.getByRole("heading", { name: "Find cover" })).toBeVisible(); await expect(page.getByRole("link", { name: "Open timetable", exact: true })).toBeVisible(); await expect(page.getByLabel("Assignment ID")).toHaveCount(0); await page.goto("/replacements"); await expect(page.getByRole("heading", { name: "Cover requests" })).toBeVisible(); await page.request.post("/api/auth/logout", { headers: { Origin: new URL(page.url()).origin } }); await signIn(page, "Cora Bell"); await page.goto("/coverage"); await expect(page.getByRole("heading", { name: "Coverage is management-only" })).toBeVisible(); expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true); });
 
 test("replacement decision confirmation stays visible after its pending card and dialog disappear", async ({ page }) => {
   const month = test.info().project.name === "mobile" ? "2036-10" : "2036-09";
@@ -22,14 +22,21 @@ test("replacement decision confirmation stays visible after its pending card and
   await assignment.getByRole("button", { name: "Add assignment", exact: true }).click();
   await expect(assignment.getByText("Assignment added to the Draft.")).toBeVisible();
   await page.getByRole("button", { name: "Close", exact: true }).click();
+  const editorUrl = page.url();
   await page.getByRole("link", { name: "Review coverage", exact: true }).first().click();
   await page.getByRole("button", { name: "Request support", exact: true }).first().click();
   const request = page.getByRole("form", { name: "Request coverage support" });
-  await request.getByLabel("Request intent").selectOption("REPLACE_ASSIGNMENT");
-  await request.getByRole("button", { name: "Request Super Admin decision", exact: true }).click();
-  await expect(request.getByText("Replacement request sent to Super Admin review.")).toBeVisible();
+  await request.getByRole("combobox", { name: "What needs to change?", exact: true }).selectOption("REPLACE_ASSIGNMENT");
+  await request.getByRole("button", { name: "Create coverage request", exact: true }).click();
+  await expect(request.getByText("Coverage request created. Open Cover requests to review or track its decision.")).toBeVisible();
   await page.getByRole("button", { name: "Close", exact: true }).click();
-  await page.getByRole("link", { name: "Replacement requests", exact: true }).click();
+  await page.getByRole("button", { name: "Request support", exact: true }).first().click();
+  await request.getByRole("combobox", { name: "What needs to change?", exact: true }).selectOption("REPLACE_ASSIGNMENT");
+  await request.getByRole("button", { name: "Create coverage request", exact: true }).click();
+  await expect(request.getByRole("alert")).toHaveText("A request for this change is already waiting for review. Open Cover requests before creating another.");
+  await page.getByRole("button", { name: "Close", exact: true }).click();
+  await page.getByRole("link", { name: "View cover requests", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Review request", exact: true })).toHaveCount(1);
   await page.getByRole("button", { name: "Review request", exact: true }).click();
   const decision = page.getByRole("dialog", { name: "Review request · Cora Bell", exact: true });
   await expect(decision.getByRole("combobox", { name: "Decision", exact: true })).toHaveValue("REJECTED");
@@ -40,4 +47,13 @@ test("replacement decision confirmation stays visible after its pending card and
   await expect(page.getByRole("status")).toHaveText("Replacement request decision saved.");
   await page.getByRole("button", { name: "Dismiss confirmation", exact: true }).click();
   await expect(page.getByText("Replacement request decision saved.")).toHaveCount(0);
+  await page.goto(editorUrl);
+  await page.getByRole("button", { name: "Add assignment", exact: true }).click();
+  await assignment.getByRole("combobox", { name: "Employee", exact: true }).selectOption({ label: "Cora Bell" });
+  await assignment.getByRole("combobox", { name: "Project", exact: true }).selectOption({ label: "Alpha Modernization" });
+  await assignment.getByRole("combobox", { name: "Linked Location", exact: true }).selectOption({ label: "Alpha Shared Site" });
+  await assignment.getByLabel("Start time", { exact: true }).fill("10:00");
+  await assignment.getByLabel("End time", { exact: true }).fill("11:00");
+  await assignment.getByRole("button", { name: "Add assignment", exact: true }).click();
+  await expect(assignment.getByRole("alert")).toHaveText("This Employee already has an overlapping assignment at the selected time.");
 });

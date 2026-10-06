@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-06",
+  "base_commit": "5c9607ed3a64628a2e59c67d7658f4a6329b6c3e",
+  "baseline": "Corrected fixture reproduced two defects: both duplicate requests created, both concurrent independent-rule approvals applied",
+  "verification": {
+    "typescript": "passed",
+    "eslint": "passed",
+    "whitespace": "passed",
+    "unit": 140,
+    "component": 120,
+    "coverage_integration": 18,
+    "coverage_disposable_repeats": 3,
+    "scheduling_integration": 9,
+    "leave_integration": 6,
+    "collaboration_integration": 26,
+    "desktop_mobile_browser": 4,
+    "safe_build": "passed via guarded browser runner"
+  },
+  "frozen_source_test_sha256": {
+    "src/app/(protected)/coverage/page.tsx": "10f6a115e7363a97fd5199bf7aa37101be657641977495513e9a5d39cafeb215",
+    "src/app/(protected)/replacements/page.tsx": "56842bd78039c39e3fa5ee73a40eac44db17360a0ad0163402affbcde935ccb7",
+    "src/modules/coverage/actions.ts": "b045423c2a8b0bcc37832ace3040558d694eb71f4d57bd0d48dd7026eb22d63d",
+    "src/modules/coverage/domain-error.ts": "36820665d9350490f406b51b622b057650248a21d28345bc148df4ba20b513fd",
+    "src/modules/coverage/forms.tsx": "34bdcbc4d846e1355c3d787ea2c4956664f1f08f0d5c6ef45f4d2a0510b1fca2",
+    "src/modules/coverage/repositories.ts": "db7cd287afd4b045bf17f5728d3d3995f38b79d2749e663da5c6729372488dc3",
+    "src/modules/coverage/service.ts": "d52a4b3b6e111757ae2158fe8ea46412c03427c3d0614c546be2950a20369964",
+    "src/modules/scheduling/service.ts": "08c2ba9f3feb21fa312780b4d8d41644d2625528110c2a8df0993d534f414822",
+    "test/component/coverage-review-state.test.tsx": "e7264531dc1ec797e5ec9373b628fc1a43f2acdae78c77d96ea825f873be6312",
+    "test/component/phase7-coverage-forms.test.tsx": "7ed02a892d92dba5ba8c1672e2a2a0fac2565bdcfe0fe5492ac44c68730689d0",
+    "test/e2e/phase7-coverage.spec.ts": "1f02504fe6849bc54ecedee267b2cb098427a7888438d40b6bfe02582e84b709",
+    "test/integration/phase7-coverage-service.test.ts": "2c9521923f71642e7112e4f25e90e540104215636ff56e010ed5fb4bf15e0ed2"
+  },
+  "delivery": "pending",
+  "production_business_mutations": false,
+  "schema_migration": false,
+  "limits": "Scoped verification; no full system-lock, physical-device or blanket absence-of-defects claim",
+  "archived_log_format": "Trailing terminal blank lines normalized; original outputs preserved in task temporary logs"
+}

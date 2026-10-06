@@ -1,0 +1,57 @@
+
+> scopeis-team-management-system@0.1.0 test:phase7-service
+> node scripts/run-phase7-service-tests.mjs
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.11 [39m[90m/private/tmp/scopeis-company-demo-build-20261006[39m
+
+(node:36652) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ [31m❯[39m test/integration/phase7-coverage-service.test.ts [2m([22m[2m8 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 596[2mms[22m[39m
+[31m     [31m×[31m serializes duplicate support requests before either can create another review item[39m[32m 214[2mms[22m[39m
+[31m     [31m×[31m rechecks independent gaps under the schedule lock so simultaneous approvals cannot overfill one shortage[39m[32m 74[2mms[22m[39m
+     [32m✓[39m keeps independent coverage rules non-blocking and applies an approved add request only to Draft[32m 100[2mms[22m[39m
+     [32m✓[39m requires Super Admin decision authority and never lets a replacement publish a schedule[32m 36[2mms[22m[39m
+     [32m✓[39m returns Proposed to Draft and creates an immutable Draft revision from Published[32m 118[2mms[22m[39m
+     [32m✓[39m rolls back a request when its required notification write fails[32m 18[2mms[22m[39m
+     [32m✓[39m requires TEAM visibility of the anchor for gaps, candidates, and requests without nominees[32m 15[2mms[22m[39m
+     [32m✓[39m stops counting an inactive or reassigned-role employee toward staffing[32m 20[2mms[22m[39m
+ [32m✓[39m test/unit/phase7-coverage-validation.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 2[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m test/integration/phase7-coverage-service.test.ts[2m > [22mCoverage and support conflict integrity[2m > [22mserializes duplicate support requests before either can create another review item
+[31m[1mAssertionError[22m: expected [ { status: 'fulfilled', …(1) }, …(1) ] to have a length of 1 but got 2[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 2[39m
+
+[36m [2m❯[22m test/integration/phase7-coverage-service.test.ts:[2m34:71[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m test/integration/phase7-coverage-service.test.ts[2m > [22mCoverage and support conflict integrity[2m > [22mrechecks independent gaps under the schedule lock so simultaneous approvals cannot overfill one shortage
+[31m[1mAssertionError[22m: expected [ { status: 'fulfilled', …(1) }, …(1) ] to have a length of 1 but got 2[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 2[39m
+
+[36m [2m❯[22m test/integration/phase7-coverage-service.test.ts:[2m44:71[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (9)[39m
+[2m   Start at [22m 19:22:34
+[2m   Duration [22m 1.73s[2m (transform 174ms, setup 351ms, import 568ms, tests 598ms, environment 0ms)[22m
+
+Phase 7 coverage disposable database cleanup complete.

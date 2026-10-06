@@ -1,3 +1,8 @@
+## Coverage conflict integrity — 2026-10-06
+
+- [Confirmed coverage and support rules](project-memory/PHASE_7_COVERAGE_REPLACEMENT_DECISIONS.md)
+- [Implementation and verification](phase-reports/SCOPEIS_COVERAGE_CONFLICT_INTEGRITY_2026_10_06.md)
+
 ## Clear user journeys — 2026-10-06
 
 - [Canonical stories for all 20 tabs](project-memory/USER_JOURNEYS.md)

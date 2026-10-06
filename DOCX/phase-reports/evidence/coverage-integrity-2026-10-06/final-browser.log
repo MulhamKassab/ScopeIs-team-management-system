@@ -1,0 +1,16 @@
+
+> scopeis-team-management-system@0.1.0 test:phase7-e2e
+> node scripts/run-phase7-playwright.mjs
+
+
+Running 4 tests using 1 worker
+
+  ✓  1 [desktop] › test/e2e/phase7-coverage.spec.ts:4:1 › Super Admin sees non-blocking coverage and replacement workspaces; Employee is kept out (1.9s)
+[WebServer] (node:38691) DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+[WebServer] (Use `node --trace-deprecation ...` to show where the warning was created)
+  ✓  2 [desktop] › test/e2e/phase7-coverage.spec.ts:6:1 › replacement decision confirmation stays visible after its pending card and dialog disappear (8.0s)
+  ✓  3 [mobile] › test/e2e/phase7-coverage.spec.ts:4:1 › Super Admin sees non-blocking coverage and replacement workspaces; Employee is kept out (2.3s)
+  ✓  4 [mobile] › test/e2e/phase7-coverage.spec.ts:6:1 › replacement decision confirmation stays visible after its pending card and dialog disappear (7.7s)
+
+  4 passed (40.0s)
+Phase 7 browser disposable database cleanup complete.

@@ -84,6 +84,8 @@ export class SchedulingService {
     if (!project || !location || !link || project.clientId !== period.clientId || location.clientId !== period.clientId || project.status === "ARCHIVED" || location.status === "ARCHIVED") throw new SchedulingDomainError("INVALID_RELATIONSHIP");
     const employee = await schedulingRepository.employee(tx, input.employeeUserId);
     if (!employee?.user.active || employee.user.role !== "EMPLOYEE") throw new SchedulingDomainError("INVALID_EMPLOYEE");
+    // Match publication's overlap → leave lock order, including coverage and ordinary Draft edits.
+    await this.lockOverlap(tx, input.employeeUserId, input.assignmentDate);
     try { await assertEmployeeAvailableForSchedule(tx, input.employeeUserId, input.assignmentDate); } catch (error) { if (error instanceof LeaveDomainError) throw new SchedulingDomainError("CONFLICT", error.message); throw error; }
   }
 
@@ -174,8 +176,10 @@ export class SchedulingService {
   /** Used by the Phase 7 decision transaction; it deliberately reuses schedule validation and never publishes. */
   async applyReplacementEffect(tx: SchedulingTransaction, actor: AuthenticatedActor, input: { anchorAssignmentId: string; selectedEmployeeUserId: string; intent: "REPLACE_ASSIGNMENT" | "ADD_COVERAGE_ASSIGNMENT" }) {
     if (actor.role !== "SUPER_ADMIN") throw new SchedulingDomainError("FORBIDDEN");
-    const original = await schedulingRepository.assignment(tx, input.anchorAssignmentId); if (!original) throw new SchedulingDomainError("NOT_FOUND");
+    let original = await schedulingRepository.assignment(tx, input.anchorAssignmentId); if (!original) throw new SchedulingDomainError("NOT_FOUND");
     await schedulingRepository.lockPeriod(tx, original.schedulePeriodId);
+    original = await schedulingRepository.assignment(tx, input.anchorAssignmentId); if (!original) throw new SchedulingDomainError("NOT_FOUND");
+    if (original.employeeUserId === input.selectedEmployeeUserId) throw new SchedulingDomainError("CONFLICT", "Choose a different employee for replacement or extra support.");
     let period = await schedulingRepository.period(tx, original.schedulePeriodId); if (!period) throw new SchedulingDomainError("NOT_FOUND");
     let anchor = original; let effectStatus: "APPLIED_TO_DRAFT" | "PUBLISHED_REVISION_CREATED" = "APPLIED_TO_DRAFT";
     if (period.status === "PROPOSED") {

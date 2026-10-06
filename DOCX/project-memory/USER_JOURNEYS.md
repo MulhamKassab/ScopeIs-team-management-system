@@ -37,3 +37,5 @@ Each page has one purpose, an identifiable next action, and a compact, optional 
 - Settings and Ticket integration remain honestly marked as unfinished. No schema, recurrence, live tracking, attendance, ranking or automatic publication is added.
 
 Fresh walkthrough screenshots and bounded validation are in [the user-journey review](../phase-reports/SCOPEIS_CLEAR_USER_JOURNEYS_2026_10_06.html).
+
+The confirmed [coverage conflict-integrity rules](PHASE_7_COVERAGE_REPLACEMENT_DECISIONS.md) apply to Find cover, Cover requests and Timetable: duplicate requests are refused; approval rechecks the effective Draft and candidate availability; compatible changes share one revision; stale work cannot overwrite another decision. Outdated requests can be declined and reconsidered against the current plan.

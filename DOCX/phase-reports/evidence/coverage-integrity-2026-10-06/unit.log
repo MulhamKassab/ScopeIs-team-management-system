@@ -1,0 +1,12 @@
+
+> scopeis-team-management-system@0.1.0 test:unit
+> vitest run test/unit
+
+
+ RUN  v4.1.11 /private/tmp/scopeis-company-demo-build-20261006
+
+
+ Test Files  22 passed (22)
+      Tests  140 passed (140)
+   Start at  19:27:37
+   Duration  4.47s (transform 242ms, setup 788ms, import 1.66s, tests 740ms, environment 1ms)

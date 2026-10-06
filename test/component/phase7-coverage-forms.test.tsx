@@ -13,3 +13,10 @@ it("allows rejection without an employee when no candidate passes the checks", (
   fireEvent.change(screen.getByLabelText("Decision"), { target: { value: "APPROVED" } });
   expect(screen.getByRole("button", { name: "Save Super Admin decision" })).toBeDisabled();
 });
+
+it("shows the stale-work reason and keeps declining the outdated request available", () => {
+  render(<ReplacementDecisionForm request={{ id: "10000000-0000-4000-8000-000000000003", version: 1, nominatedEmployeeUserId: null, intent: "ADD_COVERAGE_ASSIGNMENT" }} candidates={[]} reviewError="This work has changed. Review the current Draft in Timetable." />);
+  expect(screen.getByRole("status")).toHaveTextContent("You can decline this outdated request here.");
+  expect(screen.getByLabelText("Decision")).toHaveValue("REJECTED");
+  expect(screen.getByRole("button", { name: "Save Super Admin decision" })).toBeEnabled();
+});
