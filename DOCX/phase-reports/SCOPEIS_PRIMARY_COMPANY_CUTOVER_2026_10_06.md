@@ -15,6 +15,7 @@ The existing verified company deployment, PostgreSQL database, password configur
 | Database and application role | `scopeis_company_demo` / `scopeis_company_demo_owner` |
 | Private file store | Existing `scopeis-company-demo-evidence`, `store_IjDiwdoA1hsd9ydX` |
 | Former demo domain | HTTP 308 redirect to the primary domain, preserving the requested path |
+| Production team and `git-main` aliases | HTTP 308 redirects to the primary domain, preserving the requested path |
 | Recovery project | `prj_pE9utFkTQd6uulsVrDKoqsgmmKKd`, renamed `scopeis-pre-company-recovery` |
 
 The recovery project has no public project domains and no Git connection. Vercel authentication protects its deployment URLs. Its original `neondb` database and settings remain available for deliberate recovery. No database, file store, deployment history, local simulation, Preview checkout or prototype was deleted. A later purge remains a separate explicitly requested operator operation.
@@ -26,6 +27,8 @@ The root and clean-build checkout's local Vercel project links now identify the 
 ## Verification
 
 The domain move initially served the already verified Ready deployment `dpl_71q2Ub31tfcoke96xXHag1abognv`, whose recorded application source is `3e3210bbb4155ee3fc927900f296aefe1cb3d34d`. `main` also contains the existing `7d111a2b73ea1b6179917d7f5b309c93afc78a23` documentation and verification-harness closure. This cutover changes provider configuration and documentation only; application logic, permissions, schema and business data are unchanged.
+
+The subsequent Git push `b73beb328ea1a99e7a416d7e5353339a9b74c6c1` automatically produced Ready Production deployment `dpl_HycWSLQA74HwoCN2tzjHR97u5KJX`. The primary alias and the active project's Production target both identify that deployment. Afterward, all five accounts signed in again, 18 dashboard/profile/schedule/management-map pages passed, and all four owner PDFs downloaded correctly. Additional public production aliases were explicitly configured as primary-address redirects; the immutable deployment URL remains protected by Vercel authentication. This verifies the Git delivery connection as well as the initial domain cutover.
 
 Fresh checks against the **primary URL** passed:
 
@@ -40,6 +43,8 @@ Fresh checks against the **primary URL** passed:
 The first temporary HTTP crawler followed unbounded schedule-month navigation; its schedule discovery was restricted to the three intended months before the completed verification above. No application repair was required. The CLI pause command required interactive user confirmation, so no pause was performed; deployment authentication and removal of public domains provide the verified recovery arrangement instead.
 
 Receipts: [configuration](evidence/primary-company-cutover-2026-10-06/configuration.json), [live access checks](evidence/primary-company-cutover-2026-10-06/live-access-checks.json), and [primary map screenshot](evidence/primary-company-cutover-2026-10-06/live-primary-map.png). They contain no passwords, provider tokens, session cookies or private storage URLs.
+
+Git delivery receipts: [Ready deployment and primary alias](evidence/primary-company-cutover-2026-10-06/git-delivery.json), [address checks](evidence/primary-company-cutover-2026-10-06/address-checks.json), and [post-deployment smoke](evidence/primary-company-cutover-2026-10-06/post-git-smoke.json).
 
 ## Operator continuity
 

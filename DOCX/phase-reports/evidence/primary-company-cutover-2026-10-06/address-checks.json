@@ -1,0 +1,37 @@
+[
+  {
+    "origin": "https://scopeis-team-management-system.vercel.app",
+    "status": 200,
+    "location": null
+  },
+  {
+    "origin": "https://scopeis-company-demo.vercel.app",
+    "status": 308,
+    "location": "https://scopeis-team-management-system.vercel.app/login"
+  },
+  {
+    "origin": "https://scopeis-team-management-system-mu-ka7.vercel.app",
+    "status": 308,
+    "location": "https://scopeis-team-management-system.vercel.app/login"
+  },
+  {
+    "origin": "https://scopeis-team-management-system-git-main-mu-ka7.vercel.app",
+    "status": 308,
+    "location": "https://scopeis-team-management-system.vercel.app/login"
+  },
+  {
+    "origin": "https://scopeis-company-demo-680wis1m4-mu-ka7.vercel.app",
+    "status": 302,
+    "location": "https://vercel.com/sso-api"
+  },
+  {
+    "origin": "https://scopeis-team-management-system-1csjrjwr1-mu-ka7.vercel.app",
+    "status": 302,
+    "location": "https://vercel.com/sso-api"
+  },
+  {
+    "origin": "https://scopeis-team-management-system-1o9g38y68-mu-ka7.vercel.app",
+    "status": 302,
+    "location": "https://vercel.com/sso-api"
+  }
+]

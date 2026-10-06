@@ -1,0 +1,25 @@
+{
+  "deployment": {
+    "id": "dpl_HycWSLQA74HwoCN2tzjHR97u5KJX",
+    "state": "READY",
+    "source": "git",
+    "target": "production",
+    "sha": "b73beb328ea1a99e7a416d7e5353339a9b74c6c1",
+    "framework": "nextjs"
+  },
+  "alias": {
+    "id": "68398c76de58d9afe91e7869b1836a6c6557ee44edd0489d7dfe917ddabb419cc52a53d6e1928a57bef32b5d06c2d0f086d5b223bf8306425c9194f1f6e6212c",
+    "alias": "scopeis-team-management-system.vercel.app",
+    "projectId": "prj_JvFv2V2vKKmAqfBOySS8FsZ1aZjy",
+    "deploymentId": "dpl_HycWSLQA74HwoCN2tzjHR97u5KJX",
+    "deployment": {
+      "id": "dpl_HycWSLQA74HwoCN2tzjHR97u5KJX",
+      "url": "scopeis-team-management-system-1csjrjwr1-mu-ka7.vercel.app"
+    }
+  },
+  "project": {
+    "name": "scopeis-team-management-system",
+    "productionDeployment": "dpl_HycWSLQA74HwoCN2tzjHR97u5KJX",
+    "productionBranch": "main"
+  }
+}

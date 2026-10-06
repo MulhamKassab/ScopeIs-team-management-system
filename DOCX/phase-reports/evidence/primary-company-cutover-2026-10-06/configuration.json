@@ -16,8 +16,18 @@
     "ssoProtection": {
       "deploymentType": "all_except_custom_domains"
     },
-    "productionDeployment": "dpl_71q2Ub31tfcoke96xXHag1abognv",
+    "productionDeployment": "dpl_HycWSLQA74HwoCN2tzjHR97u5KJX",
     "domains": [
+      {
+        "name": "scopeis-team-management-system-git-main-mu-ka7.vercel.app",
+        "redirect": "scopeis-team-management-system.vercel.app",
+        "redirectStatusCode": 308
+      },
+      {
+        "name": "scopeis-team-management-system-mu-ka7.vercel.app",
+        "redirect": "scopeis-team-management-system.vercel.app",
+        "redirectStatusCode": 308
+      },
       {
         "name": "scopeis-company-demo.vercel.app",
         "redirect": "scopeis-team-management-system.vercel.app",
