@@ -21,11 +21,13 @@ test("Super Admin reporting: dashboard, published allocation drill-down, plannin
   await signIn(page, "Nora Albright");
 
   // 1. The dashboard renders role-specific cards with an as-of timestamp.
-  await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Home" })).toBeVisible();
   await expect(page.getByText(/As of .* \(Asia\/Dubai\)/)).toBeVisible();
+  await expect(page.locator(".journey-disclosure").filter({ hasText: "More team insights" })).not.toHaveAttribute("open");
+  await page.getByText("More team insights", { exact: true }).click();
   await expect(page.locator(".reporting-cards li")).toHaveCount(9);
-  await expect(page.getByText("Active employees", { exact: true })).toBeVisible();
-  await expect(page.getByText("Evidence awaiting review", { exact: true })).toBeVisible();
+  await expect(page.getByText("Active people", { exact: true })).toBeVisible();
+  await expect(page.getByText("Documents to review", { exact: true })).toBeVisible();
   // All twelve approved surfaces are individually reachable: nine cards plus three tables.
   await expect(page.getByRole("heading", { name: "Employees by team" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Schedule lifecycle" })).toBeVisible();
@@ -37,7 +39,7 @@ test("Super Admin reporting: dashboard, published allocation drill-down, plannin
 
   // 2. Published allocation drill-down shows only Published rows.
   await page.goto(`/reports/published-allocation?${WINDOW}`);
-  await expect(page.getByRole("heading", { name: "Published allocation" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Who is working where" })).toBeVisible();
   const rows = page.locator(".report-table tbody tr");
   await expect(rows.first()).toBeVisible();
   await expect(page.locator(".report-table tbody")).toContainText("PUBLISHED");
@@ -47,7 +49,7 @@ test("Super Admin reporting: dashboard, published allocation drill-down, plannin
 
   // 3. The planning report is separate, explicitly labelled, and never mixes in Published rows.
   await page.goto(`/reports/planning-unpublished?${WINDOW}`);
-  await expect(page.getByRole("heading", { name: "PLANNING (UNPUBLISHED)" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Unpublished plans" })).toBeVisible();
   await expect(page.locator(".reporting-planning-banner")).toContainText("PLANNING (unpublished)");
   await expect(page.locator(".report-table tbody")).toContainText("PLANNING (unpublished)");
   await expect(page.locator(".report-table tbody")).not.toContainText("PUBLISHED");
@@ -74,12 +76,13 @@ test("Scoped Admin reporting is scope-bounded, may open planning, may not reach 
   await signIn(page, "Ava Mercer");
 
   // 1. The dashboard is the scoped variant, with no audit or review-queue card.
-  await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
-  await expect(page.getByText("Active employees in my scope", { exact: true })).toBeVisible();
-  await expect(page.getByText("Evidence awaiting review", { exact: true })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "Home" })).toBeVisible();
+  await expect(page.getByText("People you manage", { exact: true })).toBeVisible();
+  await expect(page.getByText("Documents to review", { exact: true })).toHaveCount(0);
   // The scoped Admin keeps the approved shape and never receives the Super-Admin-only tables.
   await expect(page.getByRole("heading", { name: "Schedule lifecycle" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "Recent recorded actions" })).toHaveCount(0);
+  await page.getByText("More team insights", { exact: true }).click();
   await expect(page.getByText("Certifications in my scope", { exact: true })).toBeVisible();
   await expectCleanTerminology(page);
 
@@ -88,7 +91,7 @@ test("Scoped Admin reporting is scope-bounded, may open planning, may not reach 
   await expect(page.getByRole("heading", { name: "Reports" })).toBeVisible();
   await expect(page.getByText("Certification status", { exact: true })).toBeVisible();
   await page.goto(`/reports/planning-unpublished?${WINDOW}`);
-  await expect(page.getByRole("heading", { name: "PLANNING (UNPUBLISHED)" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Unpublished plans" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 
   // 3. The certification report shows the approved summary projection without employee attribution.
@@ -114,17 +117,18 @@ test("Scoped Admin reporting is scope-bounded, may open planning, may not reach 
 test("Employee dashboard is self-only and reporting stays closed", async ({ page }) => {
   await signIn(page, "Cora Bell");
 
-  await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Home" })).toBeVisible();
   await expect(page.getByText("My unread notifications", { exact: true })).toBeVisible();
   await expect(page.locator(".reporting-cards li")).toHaveCount(4);
   // All five approved Employee areas are individually labelled.
   await expect(page.getByText("My leave and balance", { exact: true })).toBeVisible();
+  await page.getByText("More about your work", { exact: true }).click();
   await expect(page.getByRole("heading", { name: "My leave" })).toBeVisible();
   await expect(page.getByRole("region", { name: "My published assignments (next 7 days)" })).toBeVisible();
   await expect(page.getByText("My recorded skills", { exact: true })).toBeVisible();
-  await expect(page.getByText("My capability evidence", { exact: true })).toBeVisible();
+  await expect(page.getByText("My documents", { exact: true })).toBeVisible();
   // No organisational total and no other employee's name.
-  await expect(page.getByText("Active employees", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Active people", { exact: true })).toHaveCount(0);
   await expect(page.locator("body")).not.toContainText("Dan Unscoped");
   await expectCleanTerminology(page);
   await expectNoHorizontalOverflow(page);
@@ -147,7 +151,7 @@ test("report filters apply without errors, retain their values and export the sa
   await signIn(page, "Nora Albright");
   await page.goto(`/reports/published-allocation?${WINDOW}`);
   await page.getByRole("button", { name: "Apply filters" }).click();
-  await expect(page.getByRole("heading", { name: "Published allocation", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Who is working where", exact: true })).toBeVisible();
   await expect(page.locator(".report-table tbody tr")).toHaveCount(2);
   await expect(page.getByLabel("Window start time")).toHaveCount(0);
   await page.getByRole("combobox", { name: "Client", exact: true }).selectOption({ label: "Bravo Engineering" });

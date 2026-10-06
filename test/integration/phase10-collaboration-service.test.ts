@@ -126,6 +126,15 @@ describe("Phase 10 replacement-request discussions", () => {
   it("keeps discussion to live participants and notifies the other participants once", async () => {
     const thread = await discussionService.openThread(ava, phase10Ids.discussionRequest);
     expect(thread.threadId).toBeNull();
+    expect(thread.requestedAt).toBeTruthy();
+    expect(thread.workContext).toMatchObject({ employeeName: "Cora Bell", date: "2027-10-12" });
+    const employeeThread = await discussionService.openThread(cora, phase10Ids.discussionRequest);
+    expect(employeeThread.workContext).toBeNull();
+    expect((await discussionService.openThread({ ...cora, role: "SUPER_ADMIN" }, phase10Ids.discussionRequest)).workContext).toBeNull();
+    await db.update(users).set({ role: "EMPLOYEE" }).where(eq(users.id, ava.id));
+    expect((await discussionService.openThread(ava, phase10Ids.discussionRequest)).workContext).toBeNull();
+    await db.update(users).set({ role: "ADMIN" }).where(eq(users.id, ava.id));
+    expect(JSON.stringify(employeeThread)).not.toContain("Alpha Shared Site");
     const posted = await discussionService.postMessage(ava, { parentType: "replacement_request", parentId: phase10Ids.discussionRequest, content: phase10Notes.discussion });
     expect(posted.threadId).toBeTruthy();
     // The nominated employee is notified exactly once; the author is never self-notified.

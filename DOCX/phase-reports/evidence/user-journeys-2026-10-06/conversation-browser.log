@@ -1,0 +1,12 @@
+
+> scopeis-team-management-system@0.1.0 test:phase10-e2e
+> node scripts/run-phase10-playwright.mjs
+
+
+Running 2 tests using 1 worker
+
+  ✓  1 [desktop] › test/e2e/phase10-collaboration.spec.ts:10:1 › Admin governs shared notes and management notes, participants discuss a request, and notifications and audit stay scoped (6.3s)
+  ✓  2 [mobile] › test/e2e/phase10-collaboration.spec.ts:10:1 › Admin governs shared notes and management notes, participants discuss a request, and notifications and audit stay scoped (5.8s)
+
+  2 passed (28.9s)
+Phase 10 browser disposable database cleanup complete.

@@ -150,7 +150,7 @@ export function CapabilityEvidencePanel({ items, skills }: { items: EvidenceItem
   return <section className="operations-page evidence-page" aria-labelledby="evidence-title">
     <header className="operations-heading"><div>
       <p className="eyebrow">Experience & documents</p>
-      <h2 id="evidence-title">My capability evidence</h2>
+      <h2 id="evidence-title">My documents & experience</h2>
       <p>Keep your certifications and experience up to date. Private files are visible only to you and Super Admin; certification summaries may be shared with your scoped Admin.</p>
     </div></header>
     <div className="people-evidence-sections">{sections.map((section) => {

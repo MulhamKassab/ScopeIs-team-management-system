@@ -14,6 +14,6 @@ export async function organisationAction(_state: OrganisationState, data: FormDa
     if (operation === "member") await organisationService.setMember(actor, { kind: kind as "team" | "designation", reference: text(data, "id"), userId: text(data, "userId"), expectedVersion: Number(text(data, "expectedVersion")), remove: text(data, "remove") === "true" });
     else { const input = { id: text(data, "id") || undefined, name: text(data, "name"), expectedVersion: Number(text(data, "expectedVersion")) }; if (kind === "team") await organisationService.saveTeam(actor, input); else await organisationService.saveDesignation(actor, input); }
     for (const path of ["/teams", "/designations", "/employees", "/schedule", "/map", "/reports"]) revalidatePath(path, "layout");
-    return { success: operation === "member" ? text(data, "remove") === "true" ? "Membership removed." : "Membership saved." : "Saved. This record is available in Employee assignments." };
+    return { success: operation === "member" ? text(data, "remove") === "true" ? "Membership removed." : "Membership saved." : "Saved. This record is available in team and job title options." };
   } catch (error) { return { error: error instanceof EmployeeDomainError ? error.message : "This change could not be saved. Please try again." }; }
 }

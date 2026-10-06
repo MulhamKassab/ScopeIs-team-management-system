@@ -1,0 +1,11 @@
+
+> scopeis-team-management-system@0.1.0 test:responsive
+> node scripts/run-responsive-playwright.mjs -g clear user journeys
+
+
+Running 1 test using 1 worker
+
+  ✓  1 test/e2e/responsive.spec.ts:642:1 › clear user journeys keep every authorized tab understandable and make the main tasks work on phone and desktop (6.7s)
+
+  1 passed (25.5s)
+Responsive browser disposable database cleanup complete.

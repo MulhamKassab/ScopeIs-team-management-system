@@ -55,7 +55,8 @@ test("Admin governs shared notes and management notes, participants discuss a re
 
   // 4. The participant Admin posts to the replacement-request discussion.
   await page.goto("/replacements");
-  const discussion = page.getByRole("region", { name: /Discussion · Add coverage assignment/ });
+  await page.locator(".request-conversation > summary").filter({ hasText: "Extra support" }).click();
+  const discussion = page.getByRole("region", { name: /Discussion · Extra support/ });
   await expect(discussion).toBeVisible();
   const composer = discussion.getByRole("form", { name: /Post a message in/ });
   await composer.getByLabel("Message").fill(discussionMessage);
@@ -72,7 +73,8 @@ test("Admin governs shared notes and management notes, participants discuss a re
   await signOut(page);
   await signIn(page, "Cora Bell");
   await page.goto("/requests");
-  const employeeDiscussion = page.getByRole("region", { name: /Request · Add coverage assignment/ });
+  await page.locator(".request-conversation > summary").filter({ hasText: "Extra support" }).click();
+  const employeeDiscussion = page.getByRole("region", { name: /Request · Extra support/ });
   await expect(employeeDiscussion).toBeVisible();
   await expect(employeeDiscussion.getByText(discussionMessage)).toBeVisible();
   const reply = employeeDiscussion.getByRole("form", { name: /Post a message in/ });
@@ -84,7 +86,7 @@ test("Admin governs shared notes and management notes, participants discuss a re
 
   // The Employee is a participant only on their own request; another request is non-enumerating.
   await expect(page.getByRole("region", { name: /Request ·/ })).toHaveCount(1);
-  await expect(page.getByText(/Replace assignment employee/)).toHaveCount(0);
+  await expect(page.getByText(/Request · Replacement/)).toHaveCount(0);
 
   // 7. The Employee cannot reach management-only surfaces.
   await page.goto("/replacements");
@@ -112,7 +114,7 @@ test("Admin governs shared notes and management notes, participants discuss a re
   // Restoring is explicit and never silently clears the read state.
   await archivedNotification.getByRole("button", { name: "Restore" }).click();
   await expect(page.locator("li").filter({ hasText: "New discussion message" })).toHaveCount(0);
-  await page.getByRole("link", { name: "Active" }).click();
+  await page.getByRole("link", { name: "Inbox" }).click();
   const restoredNotification = page.locator("li").filter({ hasText: "New discussion message" }).first();
   await expect(restoredNotification.getByRole("button", { name: "Archive" })).toBeVisible();
   await expect(restoredNotification.locator(".notification-state")).toContainText(/^Read ·/);
@@ -128,7 +130,7 @@ test("Admin governs shared notes and management notes, participants discuss a re
   await expect(superAdminNotes.getByText(managementNote)).toBeVisible();
 
   await page.goto("/audit");
-  await expect(page.getByRole("heading", { name: "Audit history" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Activity log" })).toBeVisible();
   await expect(page.locator("li").filter({ hasText: "Shared operational note edited" }).first()).toBeVisible();
   const filters = page.getByRole("form", { name: "Audit filters" });
   await filters.getByLabel("Action").selectOption("discussion.message_created");

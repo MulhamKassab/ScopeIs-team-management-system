@@ -21,7 +21,7 @@ export default async function SchedulePage({ searchParams }: { searchParams: Pro
   const entries = await getTimetable(actor, month, planning);
   const today = new Intl.DateTimeFormat("en-CA", { timeZone: PLANNING_TIMEZONE, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
   if (actor.role === "EMPLOYEE") {
-    return <section className="schedule-page workflow-page"><header className="schedule-heading"><div><p className="eyebrow">Your work</p><h2>My Schedule</h2><p>Your published assignments · {PLANNING_TIMEZONE}</p></div><MonthNavigation month={month} /></header><Timetable entries={entries} month={month} manager={false} planning={false} today={today} /></section>;
+    return <section className="schedule-page workflow-page"><header className="schedule-heading"><div><p className="eyebrow">Your work</p><h2>My timetable</h2><p>Your published assignments · {PLANNING_TIMEZONE}</p></div><MonthNavigation month={month} /></header><Timetable entries={entries} month={month} manager={false} planning={false} today={today} /></section>;
   }
 
   const workspace = await schedulingService.getWorkspace(actor, { month, skillId: params.skill || undefined }); if (workspace.kind !== "manager") throw new SchedulingDomainError("FORBIDDEN");

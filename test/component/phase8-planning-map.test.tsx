@@ -14,7 +14,7 @@ describe("Phase 8 planning map fallback", () => {
     expect(within(screen.getByRole("region", { name: "Authorized planning list" })).getByRole("button", { name: /Fictional Employee/ })).toBeVisible();
     expect(screen.getAllByText(/Coarse planning area/)).toHaveLength(2);
     expect(screen.getByRole("link", { name: "Review coverage" })).toHaveAttribute("href", "/coverage?assignment=a");
-    expect(screen.getByRole("link", { name: "Open schedule" })).toHaveAttribute("href", "/schedule?month=2026-09&period=period-a");
+    expect(screen.getByRole("link", { name: "Open timetable" })).toHaveAttribute("href", "/schedule?month=2026-09&period=period-a");
     expect(screen.queryByRole("img", { name: "Static planned associations" })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Retry map" }));
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
@@ -85,7 +85,7 @@ describe("Phase 8 map interactions", () => {
     fireEvent.click(screen.getByRole("button", { name: "Employees", exact: true }));
     expect(screen.queryByRole("button", { name: "Employee: Second Employee" })).not.toBeInTheDocument();
     expect(screen.queryByRole("img", { name: "Static planned associations" })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Approved unavailable 1" }));
+    fireEvent.click(screen.getByRole("button", { name: "On leave 1" }));
     expect(screen.getByRole("heading", { name: "No matching assignments" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Clear search and view filters" }));
     expect(screen.getByRole("status")).toHaveTextContent("2 of 2");

@@ -1,0 +1,12 @@
+
+> scopeis-team-management-system@0.1.0 test:phase6-e2e
+> node scripts/run-phase6-playwright.mjs
+
+
+Running 2 tests using 1 worker
+
+  ✓  1 [desktop] › test/e2e/phase6-capabilities.spec.ts:6:1 › Super Admin records a skill and the Employee sees only their own recorded fact (4.5s)
+  ✓  2 [mobile] › test/e2e/phase6-capabilities.spec.ts:6:1 › Super Admin records a skill and the Employee sees only their own recorded fact (3.4s)
+
+  2 passed (27.0s)
+Phase 6 browser disposable database cleanup complete.

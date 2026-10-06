@@ -20,14 +20,14 @@ async function expectAuthorizedLink(page: import("@playwright/test").Page, label
 test("unauthenticated users do not receive protected shell navigation", async ({ page }) => {
   await page.goto("/map");
   await expect(page).toHaveURL(/\/login$/);
-  await expect(page.getByText("Planning map")).not.toBeVisible();
+  await expect(page.getByText("Work map")).not.toBeVisible();
 });
 
 test("Super Admin receives global shell navigation", async ({ page }) => {
   await signIn(page, "Nora Albright");
-  await expectAuthorizedLink(page, "Planning map");
+  await expectAuthorizedLink(page, "Work map");
   if (test.info().project.name === "mobile") await page.getByRole("button", { name: "Close more navigation" }).click();
-  await expectAuthorizedLink(page, "Audit");
+  await expectAuthorizedLink(page, "Activity log");
   await expectNoHorizontalOverflow(page);
   await signOut(page);
 });
@@ -38,8 +38,8 @@ test("Admin scope is enforced by the direct server seam", async ({ page }) => {
   const forbidden = await page.request.get("/api/foundation/scope/team:bravo");
   expect(permitted.status()).toBe(200);
   expect(forbidden.status()).toBe(403);
-  await expect(page.getByRole("link", { name: "Audit" })).toHaveCount(0);
-  await expectAuthorizedLink(page, "Planning map");
+  await expect(page.getByRole("link", { name: "Activity log" })).toHaveCount(0);
+  await expectAuthorizedLink(page, "Work map");
   expect((await page.request.get("/audit")).status()).toBe(404);
   await expectNoHorizontalOverflow(page);
   await signOut(page);
@@ -50,15 +50,15 @@ test("Admin Bravo receives only Bravo scope", async ({ page }) => {
   expect((await page.request.get("/api/foundation/scope/team:bravo")).status()).toBe(200);
   expect((await page.request.get("/api/foundation/scope/team:alpha")).status()).toBe(403);
   expect((await page.request.get("/audit")).status()).toBe(404);
-  await expectAuthorizedLink(page, "Planning map");
+  await expectAuthorizedLink(page, "Work map");
   await expectNoHorizontalOverflow(page);
   await signOut(page);
 });
 
 test("Employee navigation excludes management-only modules", async ({ page }) => {
   await signIn(page, "Cora Bell");
-  await expect(page.getByRole("link", { name: "Planning map" })).toHaveCount(0);
-  await expect(page.getByRole("link", { name: "Audit" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Work map" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Activity log" })).toHaveCount(0);
   const direct = await page.request.get("/api/foundation/scope/team:alpha");
   expect(direct.status()).toBe(403);
   expect((await page.request.get("/map")).status()).toBe(404);
@@ -68,8 +68,8 @@ test("Employee navigation excludes management-only modules", async ({ page }) =>
 
 test("Employee Bravo remains outside management pages and scopes", async ({ page }) => {
   await signIn(page, "Dan Rowan");
-  await expect(page.getByRole("link", { name: "Planning map" })).toHaveCount(0);
-  await expect(page.getByRole("link", { name: "Audit" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Work map" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Activity log" })).toHaveCount(0);
   expect((await page.request.get("/api/foundation/scope/team:alpha")).status()).toBe(403);
   expect((await page.request.get("/api/foundation/scope/team:bravo")).status()).toBe(403);
   expect((await page.request.get("/map")).status()).toBe(404);
@@ -86,7 +86,7 @@ test("theme preference and RTL shell state persist safely", async ({ page, conte
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
   const navigation = page.getByRole("navigation", { name: test.info().project.name === "mobile" ? "Mobile primary navigation" : "Primary navigation", exact: true });
-  const scheduleLink = navigation.getByRole("link", { name: "Schedule", exact: true });
+  const scheduleLink = navigation.getByRole("link", { name: "Timetable", exact: true });
   await expect(scheduleLink).toBeVisible();
   await scheduleLink.click();
   await expect(page).toHaveURL(/\/schedule$/);

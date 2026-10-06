@@ -1,5 +1,7 @@
 # Project Context
 
+**2026-10-06 user-journey update:** The user confirmed an application-wide simplification. [The 20 user journeys](DOCX/project-memory/USER_JOURNEYS.md) define familiar tab labels, clear next actions, optional role-specific help, and progressive disclosure. Searchable cover work and reports, one-person skill editing, contextual conversations and readable activity history preserve existing business rules and data access. Validation and delivery are recorded in [the fresh walkthrough](DOCX/phase-reports/SCOPEIS_CLEAR_USER_JOURNEYS_2026_10_06.html).
+
 ScopeIs Team Management System is a documentation-first workforce planning product for an internal engineering team of approximately 15-20 people. It will help managers understand skills, assignments, availability, clients, projects, locations, leave, coverage, and replacement options across future weeks and months.
 
 All employees are internal. Labels such as "Outsourced to Client" describe an assignment arrangement, never an employment type and never a source of business logic. Actual dates, times, assignments, skills, locations, approved leave, and coverage rules determine availability and conflicts.

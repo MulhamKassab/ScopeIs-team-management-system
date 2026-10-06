@@ -86,7 +86,7 @@ function AccountRow({ row, actingUserId, resetAction, completeProfileAction }: {
     <tr role="row">
       <th scope="row" role="rowheader"><span className="account-cell-stack"><strong>{row.displayName}</strong><small>{row.hasWorkforceProfile ? row.employeeCode : "Workforce profile missing"}</small></span></th>
       <td role="cell" data-label="Sign-in identity"><span className="account-cell-stack"><span>{row.username}</span><small>{row.loginEmail}</small></span></td>
-      <td role="cell" data-label="System role">{row.role.replace("_", " ")}</td>
+      <td role="cell" data-label="System role">{row.role === "SUPER_ADMIN" ? "Super Admin" : row.role === "ADMIN" ? "Admin" : "Employee"}</td>
       <td role="cell" data-label="Status"><span className={`directory-status ${row.active ? "active" : "inactive"}`}>{row.active ? "Active" : "Inactive"}</span></td>
       <td role="cell" data-label="Sign-in access"><span className="account-cell-stack"><span>{row.credentialStatus}</span><small>{row.mustChangePassword ? "Password change required" : "No password change required"}</small><small>{row.lockStatus}</small></span></td>
       <td role="cell" data-label="Credential history"><span className="account-cell-stack"><span>{row.credentialStatus === "Configured" ? row.passwordChangedAt : "Not available"}</span><small>Created {row.createdAt}</small></span></td>

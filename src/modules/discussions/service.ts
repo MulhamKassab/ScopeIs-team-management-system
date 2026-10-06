@@ -5,6 +5,9 @@ import { DiscussionDomainError } from "@/modules/discussions/domain-error";
 import { discussionRepository, type DiscussionTransaction } from "@/modules/discussions/repositories";
 import { discussionArchiveSchema, discussionPostSchema, looksLikeMarkup, parseDiscussion } from "@/modules/discussions/validation";
 import { createNotification } from "@/modules/notifications/notification-service";
+import { coverageService } from "@/modules/coverage/service";
+import { CoverageDomainError } from "@/modules/coverage/domain-error";
+import { resolveCurrentActor } from "@/modules/authorization/current-actor";
 import type { AuthenticatedActor } from "@/shared/types/foundation";
 
 type AuditWriter = typeof writeAuditEvent;
@@ -15,6 +18,8 @@ export type DiscussionThreadView = {
   requestId: string; threadId: string | null; intent: string; status: string;
   participants: { requesterUserId: string; nominatedEmployeeUserId: string | null; selectedEmployeeUserId: string | null };
   messages: DiscussionMessageView[]; lastMessageAt: string | null;
+  requestedAt?: string;
+  workContext?: { employeeName: string; date: string; start: string; end: string; clientName: string; projectName: string; locationName: string } | null;
 };
 
 type RequestRow = NonNullable<Awaited<ReturnType<typeof discussionRepository.request>>>;
@@ -50,8 +55,18 @@ export class DiscussionService {
     const request = await this.requireParticipantRequest(actor, requestId);
     const thread = await discussionRepository.threadForParent(db, request.id);
     const rows = thread ? await discussionRepository.messages(db, thread.id) : [];
+    // Participation alone does not grant planning access. Employees never receive unpublished work facts.
+    let workContext: DiscussionThreadView["workContext"] = null;
+    const current = await resolveCurrentActor(actor);
+    if (current && current.role !== "EMPLOYEE") {
+      try {
+        const work = await coverageService.assignmentContext({ ...actor, ...current }, request.anchorAssignmentId);
+        workContext = { employeeName: work.employeeName, date: work.assignmentDate, start: work.startTime.slice(0, 5), end: work.endTime.slice(0, 5), clientName: work.clientName, projectName: work.projectName, locationName: work.locationName };
+      } catch (error) { if (!(error instanceof CoverageDomainError)) throw error; }
+    }
     return {
       requestId: request.id, threadId: thread?.id ?? null, intent: request.intent, status: request.status,
+      requestedAt: request.createdAt.toISOString(), workContext,
       participants: { requesterUserId: request.requesterUserId, nominatedEmployeeUserId: request.nominatedEmployeeUserId, selectedEmployeeUserId: request.selectedEmployeeUserId },
       messages: await this.messageViews(rows, actor),
       lastMessageAt: rows.length ? rows[rows.length - 1].message.createdAt.toISOString() : null,
@@ -66,6 +81,7 @@ export class DiscussionService {
       const latest = thread ? await discussionRepository.latestMessage(db, thread.id) : null;
       threads.push({
         requestId: request.id, threadId: thread?.id ?? null, intent: request.intent, status: request.status,
+        requestedAt: request.createdAt.toISOString(),
         participants: { requesterUserId: request.requesterUserId, nominatedEmployeeUserId: request.nominatedEmployeeUserId, selectedEmployeeUserId: request.selectedEmployeeUserId },
         messages: [], lastMessageAt: latest ? latest.message.createdAt.toISOString() : null,
       });

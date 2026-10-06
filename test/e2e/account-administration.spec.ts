@@ -14,7 +14,7 @@ async function expectNoHorizontalOverflow(page: import("@playwright/test").Page)
 async function openAccounts(page: import("@playwright/test").Page) {
   await signIn(page, "Nora Albright");
   await page.goto("/accounts");
-  await expect(page.getByRole("heading", { name: "Account administration" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Accounts" })).toBeVisible();
 }
 
 test("Super Admin creates and resets an account; other roles cannot reach /accounts", async ({ page }, testInfo) => {
@@ -81,7 +81,7 @@ test("Super Admin creates and resets an account; other roles cannot reach /accou
   for (const name of ["Ava Mercer", "Ben Iqbal", "Cora Bell", "Dan Rowan"]) {
     await signIn(page, name);
     expect((await page.request.get("/accounts")).status(), `${name} should not reach /accounts`).toBe(404);
-    await expect(page.getByRole("link", { name: "Account administration" })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: "Accounts" })).toHaveCount(0);
     await signOut(page);
   }
 

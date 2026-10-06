@@ -5,6 +5,7 @@ import { can } from "@/modules/authorization/authorization-service";
 import { AuditDomainError } from "@/modules/audit/domain-error";
 import { auditService, type AuditPageView } from "@/modules/audit/service";
 import { formatDubaiDateTime } from "@/shared/format-date";
+import { auditActionLabel } from "@/modules/audit/presentation";
 
 export const dynamic = "force-dynamic";
 
@@ -14,9 +15,9 @@ const selectStyle = { display: "block", width: "100%" } as const;
 function Filters({ view }: { view: AuditPageView }) {
   const { query, options } = view;
   return <form className="operation-form compact audit-filters" method="get" aria-label="Audit filters">
-    <label>Action<select name="action" defaultValue={query.action ?? ""} style={selectStyle}><option value="">Any action</option>{options.actions.map((action) => <option key={action} value={action}>{action}</option>)}</select></label>
-    <label>Target type<select name="targetType" defaultValue={query.targetType ?? ""} style={selectStyle}><option value="">Any target type</option>{options.targetTypes.map((type) => <option key={type} value={type}>{type}</option>)}</select></label>
-    <label>Actor<select name="actorUserId" defaultValue={query.actorUserId ?? ""} style={selectStyle}><option value="">Any actor</option>{options.actors.map((actor) => <option key={actor.id} value={actor.id}>{actor.displayName}</option>)}</select></label>
+    <label>Action<select name="action" defaultValue={query.action ?? ""} style={selectStyle}><option value="">Any action</option>{options.actions.map((action) => <option key={action} value={action}>{auditActionLabel(action)}</option>)}</select></label>
+    <label>Record type<select name="targetType" defaultValue={query.targetType ?? ""} style={selectStyle}><option value="">Any record type</option>{options.targetTypes.map((type) => <option key={type} value={type}>{type.replaceAll("_", " ")}</option>)}</select></label>
+    <label>Person<select name="actorUserId" defaultValue={query.actorUserId ?? ""} style={selectStyle}><option value="">Any person</option>{options.actors.map((actor) => <option key={actor.id} value={actor.id}>{actor.displayName}</option>)}</select></label>
     <div className="operation-form-grid">
       <label>From date<input type="date" name="from" defaultValue={query.from ?? ""} /></label>
       <label>To date<input type="date" name="to" defaultValue={query.to ?? ""} /></label>
@@ -36,16 +37,18 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
   catch (error) { if (error instanceof AuditDomainError) notFound(); throw error; }
   const pageHref = (page: number) => { const next = new URLSearchParams(); for (const [key, value] of Object.entries(view.query)) if (value) next.set(key, value); next.set("page", String(page)); return `/audit?${next.toString()}`; };
   return <section className="operations-page">
-    <header className="operations-heading"><div><p className="eyebrow">Administration</p><h2>Audit history</h2><p>{view.total} event{view.total === 1 ? "" : "s"} · newest first. Review who changed what and when.</p></div><span className="status-pill">Read-only</span></header>
+    <header className="operations-heading"><div><p className="eyebrow">Administration</p><h2>Activity log</h2><p>{view.total} event{view.total === 1 ? "" : "s"} · newest first. Review who changed what and when.</p></div><span className="status-pill">Read-only</span></header>
     <section className="operation-panel"><h3>Find an event</h3><Filters view={view} /></section>
     <ul className="operation-list audit-list">
       {view.items.map((item) => <li key={item.id}>
         <div>
           <strong>{item.label}</strong>
-          <span><time dateTime={item.occurredAt}>{formatDubaiDateTime(item.occurredAt)}</time> · {item.actorName ?? "Removed or unknown actor"}{item.actorRole ? ` (${item.actorRole})` : ""}</span>
+          <span><time dateTime={item.occurredAt}>{formatDubaiDateTime(item.occurredAt)}</time> · {item.actorName ?? "Removed or unknown actor"}{item.actorRole ? ` (${item.actorRole === "SUPER_ADMIN" ? "Super Admin" : item.actorRole === "ADMIN" ? "Admin" : item.actorRole === "EMPLOYEE" ? "Employee" : "System"})` : ""}</span>
+          <details className="audit-record-details"><summary>Record details</summary>
           <span className="audit-target">{item.targetType}{item.targetId ? ` · ${item.targetId}` : ""}</span>
           {item.isRecognizedAction ? <span className="audit-action">{item.action}</span> : <span className="audit-action">Unrecognized action type — no metadata is shown.</span>}
           {item.fields.length ? <dl className="audit-fields">{item.fields.map((field) => <div key={field.key}><dt>{field.key}</dt><dd>{field.value}</dd></div>)}</dl> : null}
+          </details>
         </div>
       </li>)}
     </ul>

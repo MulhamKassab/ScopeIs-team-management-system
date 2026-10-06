@@ -12,7 +12,7 @@ describe("EmployeeDirectory", () => {
       userId: "employee-1", employeeCode: "EMP-001", team: "team:alpha",
       user: { id: "employee-1", displayName: "Avery Morgan", role: "EMPLOYEE", active: true },
     }]} />);
-    expect(screen.getByRole("heading", { name: "Employee directory" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "People" })).toBeInTheDocument();
     expect(screen.getByText("Avery Morgan")).toBeInTheDocument();
     expect(screen.getByText("EMP-001")).toBeInTheDocument();
     expect(screen.getByText("Alpha")).toBeInTheDocument();
@@ -45,7 +45,7 @@ describe("EmployeeDirectory", () => {
       teams: ["team:alpha"], designations: [{ id: "844f52b6-2baf-4d9f-a8cf-3fbbd4f3e1ef", name: "Field Engineer" }],
     }} />);
     expect(screen.getByRole("searchbox", { name: "Search employees" })).toHaveValue("Avery");
-    expect(screen.getByRole("combobox", { name: "Designation" })).toHaveTextContent("Field Engineer");
+    expect(screen.getByRole("combobox", { name: "Job title" })).toHaveTextContent("Field Engineer");
     expect(screen.getByText("2 active filters")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Clear filters" })).toHaveAttribute("href", "/employees");
     expect(screen.getByRole("heading", { name: "No matching employees" })).toBeInTheDocument();

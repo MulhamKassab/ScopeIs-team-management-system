@@ -4,7 +4,7 @@ import { signIn, signOut } from "./sign-in";
 test("Super Admin searches employee name and employee code", async ({ page }) => {
   await signIn(page, "Nora Albright");
   await page.goto("/employees?query=Cora");
-  await expect(page.getByRole("heading", { name: "Employee directory" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "People" })).toBeVisible();
   await expect(page.getByRole("row", { name: /Cora Bell/ })).toBeVisible();
   await expect(page.getByText("Dan Rowan", { exact: true })).toHaveCount(0);
   await page.goto("/employees?query=EMP-BRAVO-001");
@@ -46,7 +46,7 @@ test("creation form returns field-level validation errors", async ({ page }) => 
 test("Super Admin combines designation, team, and status filters", async ({ page }) => {
   await signIn(page, "Nora Albright");
   await page.goto("/employees");
-  await page.getByRole("combobox", { name: "Designation" }).selectOption({ label: "Field Engineer" });
+  await page.getByRole("combobox", { name: "Job title" }).selectOption({ label: "Field Engineer" });
   await page.getByRole("combobox", { name: "Team" }).selectOption("team:alpha");
   await page.getByRole("combobox", { name: "Status" }).selectOption("active");
   await page.getByRole("button", { name: "Apply filters" }).click();
@@ -82,7 +82,7 @@ test("Employee is forbidden from the workforce directory", async ({ page }) => {
   await signIn(page, "Cora Bell");
   const response = await page.goto("/employees");
   expect(response?.status()).toBe(404);
-  await expect(page.getByRole("heading", { name: "Employee directory" })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "People" })).toHaveCount(0);
   await signOut(page);
 });
 
@@ -126,14 +126,14 @@ test("Super Admin can use visible management controls without granting manager o
   await basic.getByRole("button", { name: "Save changes" }).click();
   await expect(basic.getByText("Basic employee information saved.")).toBeVisible();
   await page.getByRole("dialog").getByRole("button", { name: "Close", exact: true }).click();
-  await page.getByRole("button", { name: "Employee assignments", exact: true }).click();
-  const assignments = page.getByRole("form", { name: "Employee assignments" });
-  await assignments.getByLabel("Designation").selectOption({ label: "Field Engineer" });
+  await page.getByRole("button", { name: "Team and job title", exact: true }).click();
+  const assignments = page.getByRole("form", { name: "Team and job title" });
+  await assignments.getByLabel("Job title").selectOption({ label: "Field Engineer" });
   await assignments.getByLabel("Manager").selectOption("mock-employee-cora");
-  await assignments.getByLabel("Team").fill("team:alpha");
+  await assignments.getByRole("combobox", { name: "Team", exact: true }).selectOption("team:alpha");
   await assignments.getByLabel(/Working pattern/).fill("Hybrid weekdays");
   await assignments.getByRole("button", { name: "Save changes" }).click();
-  await expect(assignments.getByText("Employee assignments saved.")).toBeVisible();
+  await expect(assignments.getByText("Team and job title saved.")).toBeVisible();
   await page.getByRole("dialog").getByRole("button", { name: "Close", exact: true }).click();
   await page.getByRole("button", { name: "Change system role", exact: true }).click();
   const role = page.getByRole("form", { name: "Change system role" });

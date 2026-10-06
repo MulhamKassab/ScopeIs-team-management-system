@@ -25,7 +25,7 @@ describe("Phase 9 capability evidence forms", () => {
   it("renders every evidence section, textual state badges, and authorized delivery controls for the owner", () => {
     render(<CapabilityEvidencePanel items={[item]} skills={[{ id: "30000000-0000-4000-8000-000000000003", name: "Industrial Controls" }]} />);
     for (const heading of ["Certifications", "Portfolio", "Project examples", "CV", "Supporting documents"]) expect(screen.getByRole("heading", { name: heading })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "My capability evidence" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "My documents & experience" })).toBeInTheDocument();
     // Colour must never be the only state signal.
     expect(screen.getByText("Verified")).toBeInTheDocument();
     expect(screen.getByText(/Expires 2027-01-15 \(valid\)/)).toBeInTheDocument();

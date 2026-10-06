@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { ArrowLeft, ArrowRight, Bell, CalendarDays, CalendarOff, CheckSquare, ChevronLeft, ChevronRight, ClipboardList, Download, FileCheck2, FileText, Layers, MapPinned, ScrollText, SlidersHorizontal, UserRound, Users, type LucideIcon } from "lucide-react";
 import { reportFilters } from "@/modules/reporting/definitions";
 import type { DashboardCard, DashboardSection, DashboardView, ReportColumn, ReportRow, ReportView } from "@/modules/reporting/service";
-import { asOfLabel, dashboardAction, dashboardIntro, missingSourceLabel, planningBanner, reportGroups, reportIndexIntro, zeroStateNote } from "@/modules/reporting/presentation";
+import { asOfLabel, dashboardAction, dashboardIntro, metricTitle, missingSourceLabel, planningBanner, reportGroups, reportIndexIntro, reportTitle, zeroStateNote } from "@/modules/reporting/presentation";
 
 export type ReportIndexEntry = { key: string; label: string; question: string; grain: string; privacy: string; planning: boolean; exportable: boolean };
 export type ReportIndexOptions = { clientOptions: { id: string; name: string }[]; projectOptions: { id: string; name: string }[]; locationOptions: { id: string; name: string }[] };
@@ -44,10 +45,10 @@ function DashboardCardGroup({ title, description, cards, role, priority = false 
         const Icon = metricIcons[card.key] ?? Layers;
         const action = dashboardAction(card.key, role);
         return <li key={card.key} data-metric={card.key}>
-          <div className="reporting-card-top"><span className="reporting-card-label">{card.label}</span><Icon size={20} aria-hidden="true" /></div>
+          <div className="reporting-card-top"><span className="reporting-card-label">{metricTitle(card.key, card.label)}</span><Icon size={20} aria-hidden="true" /></div>
           <strong className="reporting-card-value">{card.value}</strong>
           {card.detail ? <span className="reporting-card-detail">{card.detail}</span> : null}
-          {card.href ? <Link className="reporting-text-link" href={card.href} aria-label={`${action}: ${card.label}`}>{action}<ArrowRight size={16} aria-hidden="true" /></Link> : null}
+          {card.href ? <Link className="reporting-text-link" href={card.href} aria-label={`${action}: ${metricTitle(card.key, card.label)}`}>{action}<ArrowRight size={16} aria-hidden="true" /></Link> : null}
         </li>;
       })}
     </ul>
@@ -82,45 +83,56 @@ export function DashboardCards({ view }: { view: DashboardView }) {
     : view.role === "ADMIN" ? ["my-replacements", "pending-leave"] : ["my-leave", "my-unread"];
   const priorityCards = priorityKeys.flatMap((key) => cards.filter((card) => card.key === key));
   const overviewCards = cards.filter((card) => !priorityKeys.includes(card.key));
+  const coreKeys = view.role === "SUPER_ADMIN" ? ["active-employees", "published-periods", "published-assignments"] : ["employees-in-scope", "published-periods", "published-assignments"];
+  const coreCards = view.role === "EMPLOYEE" ? overviewCards : overviewCards.filter((card) => coreKeys.includes(card.key));
+  const extraCards = overviewCards.filter((card) => !coreCards.includes(card));
   const upcoming = view.role === "EMPLOYEE" ? view.sections.find((section) => section.key === "my-upcoming") : undefined;
+  const extraSections = view.sections.filter((section) => section !== upcoming);
   return <section className="reporting-page dashboard-page" aria-labelledby="dashboard-title">
     <header className="operations-heading reporting-page-heading"><div>
       <p className="eyebrow">{view.role === "EMPLOYEE" ? "Your work" : "Team overview"}</p>
-      <h1 id="dashboard-title">Dashboard</h1>
+      <h1 id="dashboard-title">Home</h1>
       <p>{dashboardIntro(view.role)}</p>
       <p className="reporting-as-of" role="status">{asOfLabel(view.asOf)}</p>
-    </div><Link className="button primary" href="/schedule"><CalendarDays size={18} aria-hidden="true" />{view.role === "EMPLOYEE" ? "My schedule" : "Open schedule"}</Link></header>
+    </div><Link className="button primary" href="/schedule"><CalendarDays size={18} aria-hidden="true" />{view.role === "EMPLOYEE" ? "My timetable" : "Open timetable"}</Link></header>
     {view.cards.some((card) => card.unavailable) ? <p className="reporting-missing-source" role="alert">{missingSourceLabel("a required reporting source")}</p> : null}
     {upcoming ? <DashboardTable section={upcoming} role={view.role} featured /> : null}
-    <WorkspaceShortcuts role={view.role} />
     <DashboardCardGroup title={view.role === "SUPER_ADMIN" ? "Ready for review" : view.role === "ADMIN" ? "Requests to follow" : "Your leave and updates"}
       description={view.role === "SUPER_ADMIN" ? "Open a queue to review its requests." : undefined} cards={priorityCards} role={view.role} priority />
-    <DashboardCardGroup title={view.role === "EMPLOYEE" ? "Your profile" : "Published plan and team"} cards={overviewCards} role={view.role} />
-    <div className="reporting-dashboard-sections">{view.sections.filter((section) => section !== upcoming).map((section) => <DashboardTable key={section.key} section={section} role={view.role} />)}</div>
+    <WorkspaceShortcuts role={view.role} />
+    <DashboardCardGroup title={view.role === "EMPLOYEE" ? "Your profile" : "Published plan and team"} cards={coreCards} role={view.role} />
+    {extraCards.length || extraSections.length ? <details className="journey-disclosure"><summary>More {view.role === "EMPLOYEE" ? "about your work" : "team insights"}</summary>
+      <DashboardCardGroup title="More figures" cards={extraCards} role={view.role} />
+      <div className="reporting-dashboard-sections">{extraSections.map((section) => <DashboardTable key={section.key} section={section} role={view.role} />)}</div>
+    </details> : null}
     <details className="reporting-explainer"><summary>About these figures</summary><ul className="reporting-notes">{view.notes.map((note) => <li key={note}>{note}</li>)}</ul><p className="reporting-zero-note">{zeroStateNote}</p></details>
   </section>;
 }
 
 export function ReportIndex({ entries, options }: { entries: ReportIndexEntry[]; options: ReportIndexOptions }) {
+  const [query, setQuery] = useState("");
+  const matching = entries.filter((entry) => [entry.label, reportTitle(entry.key, entry.label), entry.question, entry.key].some((value) => value.toLowerCase().includes(query.trim().toLowerCase())));
   const knownKeys = reportGroups.flatMap((group) => [...group.reports]) as string[];
   const groups = [...reportGroups, { key: "other", label: "More reports", description: "Explore other records in your scope.", reports: entries.filter((entry) => !knownKeys.includes(entry.key)).map((entry) => entry.key) }];
   return <section className="operations-page reporting-page" aria-labelledby="report-index-title">
     <header className="operations-heading reporting-page-heading"><div>
       <p className="eyebrow">Team insights</p><h1 id="report-index-title">Reports</h1><p>{reportIndexIntro}</p>
     </div><span className="reporting-header-icon"><ScrollText size={25} aria-hidden="true" /></span></header>
+    <label className="journey-search">Find a report<input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Try hours, leave, skills or plans" /></label>
+    <p className="journey-search-count" role="status">{matching.length} report{matching.length === 1 ? "" : "s"}{query.trim() ? " match your search" : " available"}</p>
     {groups.map((group) => {
-      const groupEntries = group.reports.flatMap((key) => entries.filter((entry) => entry.key === key));
+      const groupEntries = group.reports.flatMap((key) => matching.filter((entry) => entry.key === key));
       return groupEntries.length ? <section className="reporting-index-group" key={group.key} aria-labelledby={`report-group-${group.key}`}>
         <div className="reporting-group-heading"><h2 id={`report-group-${group.key}`}>{group.label}</h2><p>{group.description}</p></div>
         <ul className="reporting-report-list">{groupEntries.map((entry) => <li key={entry.key} className={entry.planning ? "planning" : undefined}>
-          <Link className="reporting-report-title" href={`/reports/${entry.key}`}><span>{entry.label}</span><ArrowRight size={18} aria-hidden="true" /></Link>
+          <Link className="reporting-report-title" href={`/reports/${entry.key}`}><span>{reportTitle(entry.key, entry.label)}</span><ArrowRight size={18} aria-hidden="true" /></Link>
           <p>{entry.question}</p>
           <div className="reporting-report-meta">{entry.planning ? <span className="reporting-planning-flag">PLANNING (unpublished)</span> : null}<span className="reporting-format">{entry.exportable ? "CSV download" : "View only"}</span></div>
           <details className="reporting-entry-details"><summary>Report details</summary><p>{entry.grain}</p></details>
         </li>)}</ul>
       </section> : null;
     })}
-    {entries.length ? null : <p className="operation-empty">No report is available for your current role.</p>}
+    {matching.length ? null : <p className="operation-empty">{entries.length ? "No report matches your search. Try another topic." : "No report is available for your current role."}</p>}
     {options.clientOptions.length || options.projectOptions.length || options.locationOptions.length ? <details className="reporting-explainer">
       <summary>Clients, projects and locations in your scope</summary>
       <p>Use these options to narrow reports that support them.</p>
@@ -146,7 +158,7 @@ export function ReportView({ view, filters }: { view: ReportView; filters: Repor
   return <section className="operations-page reporting-page" aria-labelledby="report-title">
     <Link className="reporting-back-link" href="/reports"><ArrowLeft size={16} aria-hidden="true" />All reports</Link>
     <header className="operations-heading reporting-page-heading"><div>
-      <h1 id="report-title">{view.planning ? view.label.toUpperCase() : view.label}</h1><p>{view.question}</p>
+      <h1 id="report-title">{reportTitle(view.key, view.label)}</h1><p>{view.question}</p>
       <p className="reporting-as-of" role="status">{asOfLabel(view.asOf)} · {supported.includes("from") ? "Window " : ""}{view.windowLabel}</p>
     </div>{view.exportable ? <a className="button primary" href={`/api/reports/${view.key}/export?${query}`} download><Download size={18} aria-hidden="true" />Download CSV</a> : null}</header>
     {view.planning ? <p className="reporting-planning-banner" role="status">{planningBanner()}</p> : null}

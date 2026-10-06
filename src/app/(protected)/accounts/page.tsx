@@ -25,7 +25,7 @@ export default async function AccountsPage({ searchParams }: { searchParams: Pro
   return (
     <section className="account-page" aria-labelledby="accounts-title">
       <header className="account-page-header">
-        <div><p className="eyebrow">Access management</p><h2 id="accounts-title">Account administration</h2><p>Manage sign-in access and temporary passwords for your team.</p></div>
+        <div><p className="eyebrow">Access management</p><h2 id="accounts-title">Accounts</h2><p>Manage sign-in access and temporary passwords for your team.</p></div>
       </header>
 
       <form className="account-filters" method="get" role="search">
@@ -47,7 +47,7 @@ export default async function AccountsPage({ searchParams }: { searchParams: Pro
           <option value="inactive">Inactive</option>
         </select>
         </label>
-        <label htmlFor="account-filter-credentials">Credentials
+        <label htmlFor="account-filter-credentials">Sign-in setup
         <select id="account-filter-credentials" name="credentials" defaultValue={parsed.raw.credentials ?? ""}>
           <option value="">Any</option>
           <option value="configured">Configured</option>

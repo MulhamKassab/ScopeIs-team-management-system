@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { DashboardCards, ReportIndex, ReportTable, ReportView } from "@/modules/reporting/forms";
 import type { DashboardView, ReportView as ReportViewType } from "@/modules/reporting/service";
@@ -37,12 +37,13 @@ const planningReport: ReportViewType = { ...report, key: "planning-unpublished",
 describe("Phase 11 dashboard", () => {
   it("renders cards, the as-of timestamp, the section table and the notes", () => {
     render(<DashboardCards view={dashboard} />);
-    expect(screen.getByRole("heading", { name: "Dashboard", level: 1 })).toBeInTheDocument();
+    fireEvent.click(screen.getByText("More team insights"));
+    expect(screen.getByRole("heading", { name: "Home", level: 1 })).toBeInTheDocument();
     expect(screen.getByText(/As of 16 Sep 2026, 10:00 \(Asia\/Dubai\)/)).toBeInTheDocument();
-    expect(screen.getByText("Active employees")).toBeInTheDocument();
+    expect(screen.getByText("Active people")).toBeInTheDocument();
     expect(screen.getByText("18")).toBeInTheDocument();
-    const employeeCard = screen.getByText("Active employees").closest("li")!;
-    expect(within(employeeCard).getByRole("link", { name: "View employees: Active employees" })).toHaveAttribute("href", "/employees");
+    const employeeCard = screen.getByText("Active people").closest("li")!;
+    expect(within(employeeCard).getByRole("link", { name: "View people: Active people" })).toHaveAttribute("href", "/employees");
     const section = screen.getByRole("region", { name: "Employees by team" });
     expect(within(section).getByText("team:alpha")).toBeInTheDocument();
   });
@@ -55,6 +56,7 @@ describe("Phase 11 dashboard", () => {
 
   it("never presents a general staffing-availability claim", () => {
     const { container } = render(<DashboardCards view={dashboard} />);
+    fireEvent.click(screen.getByText("More team insights"));
     const text = container.textContent?.toLowerCase() ?? "";
     for (const term of ["capacity", "utilization", "worked hours", "attendance", "performance", "productive", "qualified", "compliant", "eligible"]) {
       expect(text, `prohibited term present: ${term}`).not.toContain(term);
@@ -96,6 +98,7 @@ const employeeSurfaces: DashboardView = {
 describe("Phase 11 dashboard acceptance reconciliation", () => {
   it("renders all twelve approved Super Admin information surfaces as independently named, accessible sections", () => {
     render(<DashboardCards view={superAdminSurfaces} />);
+    fireEvent.click(screen.getByText("More team insights"));
     for (const label of [
       "Active employees", "Current Published client-months", "Published assignments this month",
       "Employees with no Published assignment this month", "Pending leave requests", "Approved leave days this month",
@@ -118,7 +121,8 @@ describe("Phase 11 dashboard acceptance reconciliation", () => {
 
   it("renders all five approved Employee information areas and no management surface", () => {
     render(<DashboardCards view={employeeSurfaces} />);
-    for (const label of ["My published assignments (next 7 days)", "My leave and balance", "My leave", "My recorded skills", "My capability evidence", "My unread notifications"]) {
+    fireEvent.click(screen.getByText("More about your work"));
+    for (const label of ["My published assignments (next 7 days)", "My leave and balance", "My leave", "My recorded skills", "My documents", "My unread notifications"]) {
       expect(screen.getAllByText(label).length, label).toBeGreaterThan(0);
     }
     expect(screen.getByRole("link", { name: "View my skills: My recorded skills" })).toHaveAttribute("href", "/skills");
@@ -138,6 +142,7 @@ describe("Phase 11 dashboard acceptance reconciliation", () => {
 
   it("keeps the terminology rule on the reconciled surfaces", () => {
     const { container } = render(<DashboardCards view={superAdminSurfaces} />);
+    fireEvent.click(screen.getByText("More team insights"));
     const text = container.textContent?.toLowerCase() ?? "";
     for (const term of ["capacity", "utilization", "worked hours", "attendance", "performance", "productive", "qualified", "compliant", "eligible", "availability", "available"]) {
       expect(text, `prohibited term present: ${term}`).not.toContain(term);
@@ -154,8 +159,8 @@ describe("Phase 11 report index", () => {
       ]}
       options={{ clientOptions: [{ id: "c1", name: "Alpha Facilities" }], projectOptions: [], locationOptions: [] }}
     />);
-    const publishedEntry = screen.getByText("Published allocation").closest("li")!;
-    expect(within(publishedEntry).getByRole("link", { name: "Published allocation" })).toHaveAttribute("href", "/reports/published-allocation");
+    const publishedEntry = screen.getByText("Who is working where").closest("li")!;
+    expect(within(publishedEntry).getByRole("link", { name: "Who is working where" })).toHaveAttribute("href", "/reports/published-allocation");
     expect(screen.getByText("PLANNING (unpublished)")).toBeInTheDocument();
     expect(screen.getByText("Client · Alpha Facilities")).toBeInTheDocument();
   });
@@ -169,7 +174,7 @@ describe("Phase 11 report index", () => {
 describe("Phase 11 report view", () => {
   it("renders the projection, the as-of stamp, the window and an export link for an exportable report", () => {
     render(<ReportView view={report} filters={{ clientOptions: [], projectOptions: [], locationOptions: [] }} />);
-    expect(screen.getByRole("heading", { name: "Published allocation", level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Who is working where", level: 1 })).toBeInTheDocument();
     expect(screen.getByText(/Window 2027-09-01 to 2027-09-30/)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Download CSV" })).toHaveAttribute("href", expect.stringContaining("/api/reports/published-allocation/export"));
     const table = screen.getByRole("region", { name: "Published allocation rows" });
@@ -179,7 +184,7 @@ describe("Phase 11 report view", () => {
 
   it("labels the planning report everywhere and hides the export control", () => {
     render(<ReportView view={planningReport} filters={{ clientOptions: [], projectOptions: [], locationOptions: [] }} />);
-    expect(screen.getByRole("heading", { name: "PLANNING (UNPUBLISHED)", level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Unpublished plans", level: 1 })).toBeInTheDocument();
     expect(document.querySelector(".reporting-planning-banner")).toHaveTextContent("PLANNING (unpublished)");
     expect(screen.queryByRole("link", { name: "Download CSV" })).not.toBeInTheDocument();
     expect(screen.getByRole("region", { name: "Planning (unpublished) rows" })).toHaveTextContent("PLANNING (unpublished)");
@@ -247,7 +252,7 @@ describe("task-focused reporting presentation", () => {
     expect(within(queues).getAllByRole("listitem").map((item) => item.getAttribute("data-metric")))
       .toEqual(["pending-leave", "pending-replacements", "awaiting-review"]);
     expect(within(queues).getByRole("link", { name: "Review leave: Pending leave requests" })).toHaveAttribute("href", "/leave");
-    expect(within(queues).getByRole("link", { name: "Review evidence: Evidence awaiting review" })).toHaveAttribute("href", "/reports/evidence-review-queue");
+    expect(within(queues).getByRole("link", { name: "Review documents: Documents to review" })).toHaveAttribute("href", "/reports/evidence-review-queue");
     expect(queues.compareDocumentPosition(screen.getByRole("region", { name: "Published plan and team" })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(screen.queryByRole("link", { name: "Open", exact: true })).not.toBeInTheDocument();
   });
@@ -265,6 +270,7 @@ describe("task-focused reporting presentation", () => {
 
   it("puts an Employee's own upcoming schedule before profile counts", () => {
     render(<DashboardCards view={employeeSurfaces} />);
+    fireEvent.click(screen.getByText("More about your work"));
     const schedule = screen.getByRole("region", { name: "My published assignments (next 7 days)" });
     const profile = screen.getByRole("region", { name: "Your profile" });
     expect(schedule.compareDocumentPosition(profile) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
@@ -277,7 +283,7 @@ describe("task-focused reporting presentation", () => {
       { key: "published-allocation", label: "Published allocation", question: "Who is assigned?", grain: "one row per Published assignment", privacy: "operational", planning: false, exportable: true },
       { key: "certification-status", label: "Certification status", question: "Which certifications are recorded?", grain: "one row per certification", privacy: "operational", planning: false, exportable: false },
     ]} options={{ clientOptions: [], projectOptions: [], locationOptions: [] }} />);
-    expect(within(screen.getByRole("region", { name: "Understand the staffing plan" })).getByRole("link", { name: "Published allocation" })).toHaveAttribute("href", "/reports/published-allocation");
+    expect(within(screen.getByRole("region", { name: "Understand the staffing plan" })).getByRole("link", { name: "Who is working where" })).toHaveAttribute("href", "/reports/published-allocation");
     expect(within(screen.getByRole("region", { name: "Review skills and evidence" })).getByRole("link", { name: "Certification status" })).toHaveAttribute("href", "/reports/certification-status");
     expect(screen.queryByRole("region", { name: "Plan around leave and coverage" })).not.toBeInTheDocument();
     expect(screen.getByText("one row per Published assignment").closest("details")).not.toHaveAttribute("open");

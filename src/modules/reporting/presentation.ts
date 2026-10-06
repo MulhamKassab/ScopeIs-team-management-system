@@ -10,6 +10,24 @@ export function asOfLabel(asOf: string) { return `As of ${asOf} (${REPORTING_TIM
 export function planningBanner() { return "PLANNING (unpublished) — Draft and Proposed schedules only. These figures are separate from Published assignments."; }
 export function exportRefusalCopy(message: string) { return message; }
 export const reportIndexIntro = "Choose what you want to understand about the team. Each report uses the records you can access.";
+export function reportTitle(key: string, fallback: string) {
+  const titles: Record<string, string> = {
+    "published-allocation": "Who is working where", "unallocated-employees": "People without scheduled work",
+    "scheduled-hours": "Scheduled hours", "planning-unpublished": "Unpublished plans", "schedule-lifecycle": "Schedule status",
+    "approved-leave": "Approved time off", "leave-balance": "Leave balances", "coverage-replacement": "Cover requests and decisions",
+    "skills-coverage": "People and required skills", "skill-gaps": "Missing recorded skills", "certification-status": "Certification status",
+    "evidence-review-queue": "Documents awaiting review", "audit-history": "Activity history",
+  };
+  return titles[key] ?? fallback;
+}
+export function metricTitle(key: string, fallback: string) {
+  const titles: Record<string, string> = {
+    "active-employees": "Active people", "employees-in-scope": "People you manage", "pending-replacements": "Cover requests to review",
+    "awaiting-review": "Documents to review", "published-periods": "Published monthly plans", "published-assignments": "Published assignments",
+    "unallocated": "People without scheduled work", "my-replacements": "My cover requests", "my-evidence": "My documents",
+  };
+  return titles[key] ?? fallback;
+}
 export function dashboardIntro(role: SystemRole) {
   return role === "EMPLOYEE" ? "Your published schedule, leave and latest updates."
     : role === "SUPER_ADMIN" ? "Start with decisions waiting for you, then review the team’s published plan."
@@ -18,14 +36,14 @@ export function dashboardIntro(role: SystemRole) {
 
 export function dashboardAction(key: string, role: SystemRole) {
   const actions: Record<string, string> = {
-    "active-employees": "View employees", "employees-in-scope": "View employees", "employees-by-team": "View team",
-    "published-periods": "Open schedule", "published-assignments": "View assignments", "unallocated": "View employees",
+    "active-employees": "View people", "employees-in-scope": "View people", "employees-by-team": "View team",
+    "published-periods": "Open timetable", "published-assignments": "View assignments", "unallocated": "View people",
     "pending-leave": role === "SUPER_ADMIN" ? "Review leave" : "View leave",
     "approved-leave-days": "View approved leave", "pending-replacements": "Review requests", "my-replacements": "View my requests",
-    "awaiting-review": "Review evidence", "expired-certifications": "View certifications", "certifications": "View certifications",
+    "awaiting-review": "Review documents", "expired-certifications": "View certifications", "certifications": "View certifications",
     "schedule-lifecycle": "View schedule status", "recent-actions": "View audit history", "my-upcoming": "Open my schedule",
     "my-leave": "Open my leave", "my-leave-requests": "View my requests", "my-skills": "View my skills",
-    "my-evidence": "Open my evidence", "my-unread": "View notifications",
+    "my-evidence": "Open my documents", "my-unread": "View notifications",
   };
   return actions[key] ?? "View details";
 }

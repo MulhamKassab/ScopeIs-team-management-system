@@ -25,10 +25,21 @@ function ActionButton({ action, title, label, fields, danger = false }: { action
 }
 
 const filterLabels: { key: string; label: string }[] = [
-  { key: "all", label: "Active" },
+  { key: "all", label: "Inbox" },
   { key: "unread", label: "Unread" },
   { key: "archived", label: "Archived" },
 ];
+
+export function notificationActionLabel(href: string) {
+  const path = href.split(/[?#]/)[0];
+  if (path === "/requests") return "Open conversation";
+  if (path === "/replacements") return "View cover request";
+  if (path === "/leave") return "View leave request";
+  if (path === "/schedule") return "Open timetable";
+  if (path.startsWith("/employees/")) return href.includes("#evidence-") ? "Review document" : "View person";
+  if (path === "/profile") return "Open my profile";
+  return "View details";
+}
 
 export function NotificationCentre({ view, filter }: { view: NotificationPage; filter: string }) {
   return <section className="operations-page">
@@ -42,7 +53,7 @@ export function NotificationCentre({ view, filter }: { view: NotificationPage; f
           <strong>{item.title}</strong>
           <span>{item.summary}</span>
           <span className="notification-state">{item.isRead ? "Read" : "Unread"}{item.isArchived ? " · Archived" : ""} · <time dateTime={item.createdAt}>{formatDubaiDateTime(item.createdAt)}</time></span>
-          {item.href ? <Link className="button" href={item.href}>Open related record</Link> : <span className="notification-unavailable">This notification has no available destination for your current access.</span>}
+          {item.href ? <Link className="button" href={item.href}>{notificationActionLabel(item.href)}</Link> : <span className="notification-unavailable">This notification has no available destination for your current access.</span>}
         </div>
         <div className="notification-controls">
           <ActionButton action={setNotificationReadAction} title={item.isRead ? "Mark this notification unread" : "Mark this notification read"} label={item.isRead ? "Mark unread" : "Mark read"} fields={{ notificationId: item.id, read: String(!item.isRead) }} />

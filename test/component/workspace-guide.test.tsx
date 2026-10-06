@@ -12,7 +12,7 @@ describe("workspace task discovery", () => {
     const search = screen.getByRole("searchbox", { name: "Search workspace features" });
     fireEvent.change(search, { target: { value: "CV" } });
     expect(screen.getByRole("link", { name: /My profile/ })).toHaveAttribute("href", "/profile");
-    expect(screen.queryByRole("link", { name: /Planning map|Account administration|Audit/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /Work map|Accounts|Activity log/ })).not.toBeInTheDocument();
     fireEvent.change(search, { target: { value: "account administration" } });
     expect(screen.getByRole("heading", { name: "No matching feature" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Show all features" }));

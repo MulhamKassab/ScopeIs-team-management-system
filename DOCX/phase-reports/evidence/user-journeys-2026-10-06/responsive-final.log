@@ -1,0 +1,87 @@
+
+> scopeis-team-management-system@0.1.0 test:responsive
+> node scripts/run-responsive-playwright.mjs
+
+
+Running 14 tests using 1 worker
+
+  ✓   1 test/e2e/responsive.spec.ts:24:3 › expressive motion › motion stays finite, preserves modal focus and works across desktop and phone (7.9s)
+  ✓   2 test/e2e/responsive.spec.ts:169:1 › all management screens and report tables fit from phone to wide desktop (24.3s)
+  ✓   3 test/e2e/responsive.spec.ts:204:1 › create and review dialogs fit phones, tablets, and short landscape screens (3.9m)
+  ✓   4 test/e2e/responsive.spec.ts:239:1 › role navigation, RTL, dark theme and enlarged text reflow (42.7s)
+  ✓   5 test/e2e/responsive.spec.ts:282:1 › sign in, password change and unavailable pages fit every viewport (2.0s)
+  ✓   6 test/e2e/responsive.spec.ts:302:1 › More navigation stays usable on tablets and closes with focus restored on desktop (3.0s)
+  ✓   7 test/e2e/responsive.spec.ts:324:1 › task dialogs keep fields and actions above a simulated mobile keyboard (1.5s)
+  ✓   8 test/e2e/responsive.spec.ts:353:1 › visual controls keep contrast, focus and native modal behavior in both themes (3.3s)
+  ✓   9 test/e2e/responsive.spec.ts:434:1 › reduced motion removes decorative movement and forced colors retain controls (717ms)
+  ✓  10 test/e2e/responsive.spec.ts:462:1 › desktop hover is tactile and reduced motion removes its movement (2.8s)
+  ✓  11 test/e2e/responsive.spec.ts:483:1 › the planning workspace fits its pins and exposes filters, search and next actions on every screen (7.8s)
+  ✓  12 test/e2e/responsive.spec.ts:537:1 › feature discovery stays usable and role-specific on phone, desktop and RTL with larger text (16.8s)
+  ✘  13 test/e2e/responsive.spec.ts:579:1 › monthly timetable and people catalogues stay usable across phone, desktop, RTL and reduced motion (15.4s)
+  ✘  14 test/e2e/responsive.spec.ts:642:1 › clear user journeys keep every authorized tab understandable and make the main tasks work on phone and desktop (15.0s)
+
+
+  1) test/e2e/responsive.spec.ts:579:1 › monthly timetable and people catalogues stay usable across phone, desktop, RTL and reduced motion 
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByRole('dialog').getByLabel('Team', { exact: true })
+    Expected: "team:a867c0d7-087e-4305-8a8b-a9f544b6800e"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveValue" with timeout 5000ms
+      - waiting for getByRole('dialog').getByLabel('Team', { exact: true })
+
+
+      622 |   await page.goto("/employees/mock-employee-cora");
+      623 |   await page.getByRole("button", { name: "Team and job title", exact: true }).click();
+    > 624 |   await expect(page.getByRole("dialog").getByLabel("Team", { exact: true })).toHaveValue(await page.getByRole("dialog").getByRole("option", { name: "Responsive delivery", exact: true }).getAttribute("value"));
+          |                                                                              ^
+      625 |   await page.getByRole("button", { name: "Close", exact: true }).click();
+      626 |   await page.goto("/teams");
+      627 |   await page.getByRole("button", { name: /^Remove Cora Bell .* from Responsive delivery$/ }).click();
+        at /private/tmp/scopeis-company-demo-build-20261006/test/e2e/responsive.spec.ts:624:78
+
+    Error Context: test-results/responsive/responsive-monthly-timetab-eb4f0-ktop-RTL-and-reduced-motion/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/responsive/responsive-monthly-timetab-eb4f0-ktop-RTL-and-reduced-motion/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/responsive/responsive-monthly-timetab-eb4f0-ktop-RTL-and-reduced-motion/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) test/e2e/responsive.spec.ts:642:1 › clear user journeys keep every authorized tab understandable and make the main tasks work on phone and desktop 
+
+    TimeoutError: locator.selectOption: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Person', { exact: true })
+
+
+      677 |
+      678 |     await page.goto("/coverage?month=2027-09");
+    > 679 |     await page.getByLabel("Person", { exact: true }).selectOption("mock-employee-cora");
+          |                                                      ^
+      680 |     await expect(page.getByRole("link", { name: /^Check cover for Cora Bell/ })).toBeVisible();
+      681 |     await page.getByLabel("Search work").fill("no-such-worksite");
+      682 |     await expect(page.getByRole("heading", { name: "No work matches your search" })).toBeVisible();
+        at /private/tmp/scopeis-company-demo-build-20261006/test/e2e/responsive.spec.ts:679:54
+
+    Error Context: test-results/responsive/responsive-clear-user-jour-6d94e-s-work-on-phone-and-desktop/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/responsive/responsive-clear-user-jour-6d94e-s-work-on-phone-and-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/responsive/responsive-clear-user-jour-6d94e-s-work-on-phone-and-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    test/e2e/responsive.spec.ts:579:1 › monthly timetable and people catalogues stay usable across phone, desktop, RTL and reduced motion 
+    test/e2e/responsive.spec.ts:642:1 › clear user journeys keep every authorized tab understandable and make the main tasks work on phone and desktop 
+  12 passed (6.6m)
+Responsive browser disposable database cleanup complete.

@@ -44,7 +44,7 @@ export const updateEmployeeAssignmentsAction: EmployeeMutationAction = async (_s
     if (actor.role !== "SUPER_ADMIN" || !onlyContains(formData, ["userId", "expectedVersion", "designationId", "managerUserId", "team", "workingPattern"])) throw new EmployeeDomainError("FORBIDDEN");
     if (nullable(formData, "team") && !(await listTeamOptions()).some((team) => team.id === nullable(formData, "team"))) throw new EmployeeDomainError("VALIDATION_ERROR");
     await employeeProfileService.updateManagementAssignments(actor, userId, { expectedVersion: version(formData), designationId: nullable(formData, "designationId"), managerUserId: nullable(formData, "managerUserId"), team: nullable(formData, "team"), workingPattern: nullable(formData, "workingPattern") });
-    refresh(userId); return { success: "Employee assignments saved." };
+    refresh(userId); return { success: "Team and job title saved." };
   } catch (error) { return { error: message(error) }; }
 };
 

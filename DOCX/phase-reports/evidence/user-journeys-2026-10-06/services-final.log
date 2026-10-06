@@ -1,0 +1,16 @@
+
+> scopeis-team-management-system@0.1.0 test:phase10-service
+> node scripts/run-phase10-service-tests.mjs
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.11 [39m[90m/private/tmp/scopeis-company-demo-build-20261006[39m
+
+ [32m✓[39m test/integration/phase10-collaboration-service.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 126[2mms[22m[39m
+ [32m✓[39m test/integration/phase10-management-note-authorization.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 95[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m26 passed[39m[22m[90m (26)[39m
+[2m   Start at [22m 18:15:59
+[2m   Duration [22m 923ms[2m (transform 155ms, setup 66ms, import 530ms, tests 221ms, environment 0ms)[22m
+
+Phase 10 collaboration service disposable database cleanup complete.

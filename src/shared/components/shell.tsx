@@ -13,7 +13,7 @@ import { navigationGroups } from "@/modules/navigation/workspace-guide";
 import { WorkspaceGuide } from "@/shared/components/workspace-guide";
 
 const icons: Record<ModuleKey, LucideIcon> = { dashboard: House, employees: UsersRound, teams: UsersRound, designations: BriefcaseBusiness, accounts: ShieldCheck, skills: Wrench, clients: BriefcaseBusiness, projects: FolderKanban, locations: MapPin, schedule: CalendarDays, map: MapPinned, leave: CalendarOff, coverage: ClipboardList, replacements: ArrowLeftRight, notifications: Bell, reports: ChartNoAxesCombined, audit: FileClock, settings: Settings, profile: UserRound, requests: ClipboardList };
-const mobileLabels: Partial<Record<ModuleKey, string>> = { dashboard: "Home", employees: "Team", profile: "Profile" };
+const mobileLabels: Partial<Record<ModuleKey, string>> = { dashboard: "Home", employees: "People", profile: "Profile" };
 function initials(name: string) { return name.split(" ").map((word) => word[0]).join("").slice(0, 2); }
 function selected(pathname: string, href: string) { return pathname === href || pathname.startsWith(`${href}/`); }
 function NavLinks({ items, close }: { items: ModuleDefinition[]; close?: () => void }) {

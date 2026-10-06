@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: () => {} }) }));
@@ -61,10 +61,10 @@ describe("Phase 10 notification centre", () => {
     // Colour is never the only signal: the read/archive state is textual.
     expect(screen.getByText("1 Jun 2026, 13:00 · Asia/Dubai").closest(".notification-state")).toHaveTextContent(/^Unread ·/);
     expect(screen.getByText("2 Jun 2026, 13:00 · Asia/Dubai").closest(".notification-state")).toHaveTextContent(/^Read · Archived ·/);
-    expect(screen.getByRole("link", { name: "Open related record" })).toHaveAttribute("href", `/employees/mock-employee-cora#evidence-${evidenceId}`);
+    expect(screen.getByRole("link", { name: "Review document" })).toHaveAttribute("href", `/employees/mock-employee-cora#evidence-${evidenceId}`);
     // An unsupported or inaccessible target renders the neutral unavailable state, not a broken link.
     expect(screen.getByText(/no available destination/)).toBeInTheDocument();
-    expect(screen.getAllByRole("link", { name: "Open related record" })).toHaveLength(1);
+    expect(screen.getAllByRole("link", { name: "Review document" })).toHaveLength(1);
   });
 
   it("exposes independent read, unread, archive, and restore controls plus recipient-scoped filter navigation", () => {
@@ -114,7 +114,10 @@ describe("Phase 10 employee-management notes panel", () => {
 describe("Phase 10 replacement-request discussion panel", () => {
   it("renders messages in order with an author-only archive control and a composer", () => {
     render(<DiscussionPanel thread={thread} heading="Discussion · Add coverage assignment (PENDING)" />);
-    expect(screen.getByRole("heading", { name: /Discussion · Add coverage assignment/ })).toBeInTheDocument();
+    const summary = screen.getByText("Discussion · Add coverage assignment (PENDING)").closest("summary")!;
+    expect(summary.closest("details")).not.toHaveAttribute("open");
+    fireEvent.click(summary);
+    expect(summary.closest("details")).toHaveAttribute("open");
     const list = screen.getByRole("list");
     expect(within(list).getAllByText(/Fictional/).map((node) => node.textContent)).toEqual(["Fictional replacement coordination message", "Fictional acknowledgement"]);
     // Only the author may archive, and no participant is offered editing.

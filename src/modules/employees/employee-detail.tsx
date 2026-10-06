@@ -7,7 +7,7 @@ function value(value: string | null | undefined) { return value || "Not recorded
 export function EmployeeDetail({ employee, canManage, managementPanel }: { employee: ManagementEmployeeDetail; canManage: boolean; managementPanel?: React.ReactNode }) {
   const fields = [
     ["Employee code", employee.employeeCode], ["System role", employee.user.role.replaceAll("_", " ")], ["Status", employee.user.active ? "Active" : "Inactive"],
-    ["Designation", value(employee.designationName)], ["Manager", value(employee.managerName)], ["Team", employee.teamName ?? teamLabel(employee.team)], ["Working pattern", value(employee.workingPattern)],
+    ["Job title", value(employee.designationName)], ["Manager", value(employee.managerName)], ["Team", employee.teamName ?? teamLabel(employee.team)], ["Working pattern", value(employee.workingPattern)],
   ];
   if ("workEmail" in employee) fields.push(["Work email", value(employee.workEmail)], ["Work phone", value(employee.workPhone)], ["Professional summary", value(employee.professionalSummary)], ["Default work location", value(employee.defaultWorkLocation)]);
   return <section className="employee-detail" aria-labelledby="employee-detail-title">

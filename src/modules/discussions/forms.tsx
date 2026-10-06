@@ -1,9 +1,10 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { archiveDiscussionMessageAction, postDiscussionMessageAction, type DiscussionAction, type DiscussionActionState } from "@/modules/discussions/actions";
 import type { DiscussionThreadView } from "@/modules/discussions/service";
 import { formatDubaiDateTime } from "@/shared/format-date";
+import { displayDate } from "@/modules/scheduling/calendar-dates";
 
 const initial: DiscussionActionState = {};
 
@@ -22,9 +23,19 @@ function Composer({ action, title, children, submit, danger = false }: { action:
  */
 export function DiscussionPanel({ thread, heading }: { thread: DiscussionThreadView; heading: string }) {
   const active = thread.messages.filter((message) => !message.archivedAt);
-  return <section className="discussion-panel" id={`thread-${thread.threadId ?? thread.requestId}`} aria-label={heading}>
-    <h4>{heading}</h4>
-    <p className="operation-help">Only the requester and the employees named on this request can see this discussion. Messages are plain text and cannot be edited; a sender may archive their own message.</p>
+  const disclosure = useRef<HTMLDetailsElement>(null);
+  const anchor = `thread-${thread.threadId ?? thread.requestId}`;
+  useEffect(() => {
+    const reveal = () => { if (window.location.hash === `#${anchor}` && disclosure.current) disclosure.current.open = true; };
+    reveal(); window.addEventListener("hashchange", reveal);
+    return () => window.removeEventListener("hashchange", reveal);
+  }, [anchor]);
+  const work = thread.workContext;
+  return <details className="journey-disclosure request-conversation" ref={disclosure} id={anchor}>
+    <summary><span>{heading}<small>{thread.requestedAt ? `Requested ${formatDubaiDateTime(thread.requestedAt)} · ` : ""}{active.length} message{active.length === 1 ? "" : "s"}</small>{work ? <small>{work.employeeName} · {displayDate(work.date)} · {work.projectName}</small> : null}</span></summary>
+    <section className="discussion-panel" aria-label={heading}>
+    {work ? <div className="request-context"><strong>{work.employeeName} · {displayDate(work.date)} · {work.start}–{work.end}</strong><p>{work.clientName} · {work.projectName} · {work.locationName}</p></div> : null}
+    <p className="operation-help">Private to the people named on this request. Messages cannot be edited; you can archive your own messages.</p>
     {active.length ? <ol className="discussion-messages">{active.map((message) => <li key={message.id}>
       <div><strong>{message.authorName}</strong><time dateTime={message.createdAt}>{formatDubaiDateTime(message.createdAt)}</time></div>
       <p>{message.content}</p>
@@ -38,5 +49,5 @@ export function DiscussionPanel({ thread, heading }: { thread: DiscussionThreadV
       <input type="hidden" name="parentId" value={thread.requestId} />
       <label>Message<textarea name="content" maxLength={2000} rows={3} required /></label>
     </Composer>
-  </section>;
+  </section></details>;
 }

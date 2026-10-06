@@ -1,0 +1,142 @@
+[
+  {
+    "step": 1,
+    "tab": "Dashboard",
+    "health": "Working, too much secondary information",
+    "screenshot": "01-before-dashboard.png",
+    "finding": "Review queues are useful. Nine large counts compete with the primary work task; lower tables expose technical team references and record IDs."
+  },
+  {
+    "step": 2,
+    "tab": "Schedule",
+    "health": "Clear overview, editing path needs explanation",
+    "screenshot": "02-before-schedule.png",
+    "finding": "Month, People and Agenda are discoverable. Published versus unpublished is visible; Plan work does not explain client schedule selection or the next approval step."
+  },
+  {
+    "step": 3,
+    "tab": "Coverage",
+    "health": "Working, hard to scan a whole month",
+    "screenshot": "03-before-coverage.png",
+    "finding": "Who/where/what is readable, but all 18 work cards form a long unfiltered list. The handoff to Replacements uses a different word from coverage."
+  },
+  {
+    "step": 4,
+    "tab": "Replacements",
+    "health": "Decision is understandable; conversations dominate",
+    "screenshot": "04-before-replacements.png",
+    "finding": "Request cards explain replacement versus extra support. Every conversation is fully open below; the distinction between decisions and participant requests is unclear."
+  },
+  {
+    "step": 5,
+    "tab": "Requests & assignments",
+    "health": "Working, request identity is unclear",
+    "screenshot": "05-before-requests.png",
+    "finding": "The navigation promises assignments but page shows request discussions. Generic type/status headings omit person, date and place; messages and policy copy appear before a compact request overview."
+  },
+  {
+    "step": 6,
+    "tab": "Leave",
+    "health": "Clear review queue",
+    "screenshot": "06-before-leave.png",
+    "finding": "Pending requests and Review are clear. Dates use raw database formatting; page terminology can become Leave requests while allowance settings remain secondary."
+  },
+  {
+    "step": 7,
+    "tab": "Planning map",
+    "health": "Useful map, technical labels remain",
+    "screenshot": "07-before-map.png",
+    "finding": "Selected person, time and place are clear with direct actions. Coverage gaps and Approved unavailable labels need everyday wording; technical planning explanations can be secondary."
+  },
+  {
+    "step": 8,
+    "tab": "Employees",
+    "health": "Readable directory; labels and priority need refinement",
+    "screenshot": "08-before-employees.png",
+    "finding": "Search and row actions work. Long navigation label and internal terms such as Designation/visible people add friction; job titles would help identify each person more than prominent employee codes."
+  },
+  {
+    "step": 9,
+    "tab": "Teams",
+    "health": "Clear membership controls",
+    "screenshot": "09-before-teams.png",
+    "finding": "Create, Rename, Add member and Remove are concrete. Keep these controls and add brief workflow help rather than more introductory copy."
+  },
+  {
+    "step": 10,
+    "tab": "Designations",
+    "health": "Working, unfamiliar terminology",
+    "screenshot": "10-before-designations.png",
+    "finding": "Membership is concrete. Job titles is a more familiar name for this catalogue; avoid repeated long empty-member wording."
+  },
+  {
+    "step": 11,
+    "tab": "Skills",
+    "health": "Working, two competing employee selectors",
+    "screenshot": "11-before-skills.png",
+    "finding": "Selecting someone to review is separate from selecting someone to record a skill. The catalogue, technical warnings and archive controls occupy the main screen; a single selected-person path would be clearer."
+  },
+  {
+    "step": 12,
+    "tab": "My profile",
+    "health": "Working, document terminology and contrast need attention",
+    "screenshot": "12-before-profile.png",
+    "finding": "Work facts and Edit profile are clear. Capability evidence is unfamiliar wording; blue Add buttons have visibly muted text. Team name is a raw reference suffix rather than the managed name."
+  },
+  {
+    "step": 13,
+    "tab": "Clients",
+    "health": "Clear records and actions",
+    "screenshot": "13-before-clients.png",
+    "finding": "Create, search and Open client are clear. Explain the setup order Client → Project → Location → Timetable in optional help, preserving the existing record navigation."
+  },
+  {
+    "step": 14,
+    "tab": "Projects",
+    "health": "Clear cards, handoff needs guidance",
+    "screenshot": "14-before-projects.png",
+    "finding": "Client name, status and dates give good context. Clarify that a project describes the work, a location describes where, and staffing is assigned in Timetable."
+  },
+  {
+    "step": 15,
+    "tab": "Locations",
+    "health": "Clear worksite records",
+    "screenshot": "15-before-locations.png",
+    "finding": "Site and client names are clear. Optional workflow help should explain linking a same-client project before assigning work; no new location or tracking behavior is needed."
+  },
+  {
+    "step": 16,
+    "tab": "Reports",
+    "health": "Working, jargon and long catalogue",
+    "screenshot": "16-before-reports.png",
+    "finding": "Reports are grouped by goal, but Published allocation, client-month and lifecycle require domain knowledge. Add task search and familiar titles while retaining clear Published/planning distinctions."
+  },
+  {
+    "step": 17,
+    "tab": "Notifications",
+    "health": "Working, updates lack a concrete action label",
+    "screenshot": "17-before-notifications.png",
+    "finding": "Unread and archive controls are clear. Repeated Open related record and capability evidence wording obscure the task; use action labels based on the existing authorized destination."
+  },
+  {
+    "step": 18,
+    "tab": "Accounts",
+    "health": "Working, dense administration terms",
+    "screenshot": "18-before-accounts.png",
+    "finding": "Search and Reset password are discoverable. Account administration, Credentials, raw role constants and credential-history density can be simplified without changing identity or permission behavior."
+  },
+  {
+    "step": 19,
+    "tab": "Audit",
+    "health": "Working, technical details dominate",
+    "screenshot": "19-before-audit.png",
+    "finding": "Action, person and time are visible. Raw constants, UUIDs and metadata overwhelm the event list; move them into Record details and use friendly role/record-type labels."
+  },
+  {
+    "step": 20,
+    "tab": "Settings",
+    "health": "Honest placeholder, secondary only",
+    "screenshot": "20-before-settings.png",
+    "finding": "Settings clearly says unavailable. Keep it marked Coming soon and do not invent unconfirmed configuration features."
+  }
+]

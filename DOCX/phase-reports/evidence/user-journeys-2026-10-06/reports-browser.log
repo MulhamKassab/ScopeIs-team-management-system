@@ -1,0 +1,18 @@
+
+> scopeis-team-management-system@0.1.0 test:phase11-e2e
+> node scripts/run-phase11-playwright.mjs
+
+
+Running 8 tests using 1 worker
+
+  ✓  1 [desktop] › test/e2e/phase11-reporting.spec.ts:20:1 › Super Admin reporting: dashboard, published allocation drill-down, planning separation, and a bounded CSV export (1.1s)
+  ✓  2 [desktop] › test/e2e/phase11-reporting.spec.ts:75:1 › Scoped Admin reporting is scope-bounded, may open planning, may not reach audit, and may not export planning (890ms)
+  ✓  3 [desktop] › test/e2e/phase11-reporting.spec.ts:117:1 › Employee dashboard is self-only and reporting stays closed (883ms)
+  ✓  4 [desktop] › test/e2e/phase11-reporting.spec.ts:150:1 › report filters apply without errors, retain their values and export the same conflict window (986ms)
+  ✓  5 [mobile] › test/e2e/phase11-reporting.spec.ts:20:1 › Super Admin reporting: dashboard, published allocation drill-down, planning separation, and a bounded CSV export (796ms)
+  ✓  6 [mobile] › test/e2e/phase11-reporting.spec.ts:75:1 › Scoped Admin reporting is scope-bounded, may open planning, may not reach audit, and may not export planning (830ms)
+  ✓  7 [mobile] › test/e2e/phase11-reporting.spec.ts:117:1 › Employee dashboard is self-only and reporting stays closed (956ms)
+  ✓  8 [mobile] › test/e2e/phase11-reporting.spec.ts:150:1 › report filters apply without errors, retain their values and export the same conflict window (938ms)
+
+  8 passed (24.0s)
+Phase 11 browser disposable database cleanup complete.

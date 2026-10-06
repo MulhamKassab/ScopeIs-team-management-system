@@ -192,9 +192,17 @@ test("all management screens and report tables fit from phone to wide desktop", 
   await attachIssues(testInfo, issues);
 });
 
+// Every distinct task and populated day is checked; empty days share one component.
+// Reopening the same empty calendar dialog 31 times adds no layout coverage.
+function taskTriggers(page: Page) {
+  const base = '#page-content button[aria-haspopup="dialog"]:enabled:visible';
+  return page.locator(`${base}:not(.timetable-day-button)`)
+    .or(page.locator(`${base}.timetable-day-button:not([aria-label$="· 0 assignments"])`))
+    .or(page.locator(`${base}.timetable-day-button[aria-label$="· 0 assignments"]`).first());
+}
+
 test("create and review dialogs fit phones, tablets, and short landscape screens", async ({ page }, testInfo) => {
-  // This exhaustively opens every task at three viewport sizes, including finite
-  // entrances and exits. Give the complete journey a bounded larger budget.
+  // Open every distinct task at three sizes, preserving finite motion and focus checks.
   test.setTimeout(360_000);
   await signIn(page, "Nora Albright");
   const issues: string[] = [];
@@ -202,7 +210,7 @@ test("create and review dialogs fit phones, tablets, and short landscape screens
     await page.setViewportSize(viewport);
     for (const path of managementRoutes) {
       await page.goto(path);
-      const triggers = page.locator('#page-content button[aria-haspopup="dialog"]:enabled:visible');
+      const triggers = taskTriggers(page);
       const count = await triggers.count();
       for (let index = 0; index < count; index++) {
         const trigger = triggers.nth(index);
@@ -239,7 +247,7 @@ test("role navigation, RTL, dark theme and enlarged text reflow", async ({ page,
       const path = route === "/schedule" ? `${route}?month=2027-09` : route;
       expect((await page.goto(path))?.status(), `${persona} ${path}`).toBe(200);
       issues.push(...await layoutIssues(page, `${persona} ${path}`));
-      for (const trigger of await page.locator('#page-content button[aria-haspopup="dialog"]:enabled:visible').all()) {
+      for (const trigger of await taskTriggers(page).all()) {
         await trigger.click();
         issues.push(...await layoutIssues(page, `${persona} ${path} dialog`));
         await page.keyboard.press("Escape");
@@ -428,7 +436,7 @@ test("reduced motion removes decorative movement and forced colors retain contro
   await page.setViewportSize({ width: 390, height: 844 });
   await signIn(page, "Nora Albright");
   await page.goto("/dashboard");
-  expect(await page.locator("#page-content > :first-child").evaluate((element) => getComputedStyle(element).animationName)).toBe("none");
+  expect(await page.locator(".reporting-page").evaluate((element) => getComputedStyle(element).animationName)).toBe("none");
   await page.getByRole("button", { name: "Switch to dark mode" }).click();
   expect(await page.locator(".theme-toggle-icon").evaluate((element) => getComputedStyle(element).animationName)).toBe("none");
   await page.getByRole("button", { name: "More", exact: true }).click();
@@ -444,7 +452,7 @@ test("reduced motion removes decorative movement and forced colors retain contro
   await page.keyboard.press("Escape");
   await page.emulateMedia({ forcedColors: "active" });
   await page.goto("/dashboard");
-  const button = page.getByRole("link", { name: "Open schedule", exact: true }).first();
+  const button = page.getByRole("link", { name: "Open timetable", exact: true }).first();
   expect(await button.evaluate((element) => getComputedStyle(element).borderStyle)).toBe("solid");
   await button.focus();
   await expect(button).toBeFocused();
@@ -458,7 +466,7 @@ test("desktop hover is tactile and reduced motion removes its movement", async (
     await signIn(page, "Nora Albright");
     await page.goto("/dashboard");
     expect(await page.evaluate(() => matchMedia("(hover: hover) and (pointer: fine)").matches)).toBe(true);
-    const button = page.getByRole("link", { name: "Open schedule", exact: true }).first();
+    const button = page.getByRole("link", { name: "Open timetable", exact: true }).first();
     await button.hover();
     await expect.poll(() => button.evaluate((element) => getComputedStyle(element).translate)).toBe("0px -1px");
     const card = page.locator(".reporting-cards > li").first();
@@ -503,7 +511,7 @@ test("the planning workspace fits its pins and exposes filters, search and next 
     await expect(page.getByRole("heading", { name: /Dan Unscoped/ })).toBeVisible();
     await page.locator(".map-assignment-results button").click();
     await expect(page.getByRole("link", { name: "Review coverage", exact: true })).toHaveAttribute("href", /\/coverage\?assignment=/);
-    await expect(page.getByRole("link", { name: "Open schedule", exact: true }).last()).toHaveAttribute("href", /\/schedule\?month=2027-05&period=/);
+    await expect(page.getByRole("link", { name: "Open timetable", exact: true }).last()).toHaveAttribute("href", /\/schedule\?month=2027-05&period=/);
     await search.fill("");
     const employees = page.getByRole("button", { name: "Employees", exact: true });
     await employees.click();
@@ -511,7 +519,7 @@ test("the planning workspace fits its pins and exposes filters, search and next 
     await expect(page.locator(".map-marker.employee")).toHaveCount(0);
     await expect(page.getByRole("img", { name: "Static planned associations" })).toHaveCount(0);
     await employees.click();
-    await page.getByRole("button", { name: /Approved unavailable 1/ }).click();
+    await page.getByRole("button", { name: /On leave 1/ }).click();
     await expect(page.locator(".map-assignment-results button")).toHaveCount(1);
     await expect(page.getByRole("heading", { name: /Cora Bell/ })).toBeVisible();
     await page.getByRole("button", { name: "All assignments 2", exact: true }).click();
@@ -538,8 +546,8 @@ test("feature discovery stays usable and role-specific on phone, desktop and RTL
       const search = dialog.getByRole("searchbox", { name: "Search workspace features" });
       await expect(search).toBeFocused();
       issues.push(...await layoutIssues(page, `${viewport.width}px ${name} feature guide`));
-      if (name === "Cora Bell") await expect(dialog.getByRole("link", { name: /Planning map|Account administration|Audit|Reports/ })).toHaveCount(0);
-      if (name === "Ava Mercer") await expect(dialog.getByRole("link", { name: /Account administration|Audit/ })).toHaveCount(0);
+      if (name === "Cora Bell") await expect(dialog.getByRole("link", { name: /Work map|Accounts|Activity log|Reports/ })).toHaveCount(0);
+      if (name === "Ava Mercer") await expect(dialog.getByRole("link", { name: /Accounts|Activity log/ })).toHaveCount(0);
       await search.fill("CV");
       await expect(dialog.getByRole("link", { name: /My profile/ })).toBeVisible();
       await search.fill("feature-that-does-not-exist");
@@ -591,7 +599,7 @@ test("monthly timetable and people catalogues stay usable across phone, desktop,
     await expect(calendar.locator(".timetable-agenda").getByText(/^Cora Bell/)).toBeVisible();
     await page.goto("/coverage?month=2027-09");
     await expect(page.getByRole("heading", { name: "Choose work to review" })).toBeVisible();
-    await page.getByRole("link", { name: /^Review coverage for Cora Bell/ }).click();
+    await page.getByRole("link", { name: /^Check cover for Cora Bell/ }).click();
     await expect(page.getByRole("heading", { name: "What needs attention?" })).toBeVisible();
     for (const route of ["/teams", "/designations", "/replacements"]) {
       await page.goto(route);
@@ -612,8 +620,8 @@ test("monthly timetable and people catalogues stay usable across phone, desktop,
   await expect(page.getByRole("dialog").getByRole("status")).toContainText("Membership saved");
   await page.getByRole("button", { name: "Close", exact: true }).click();
   await page.goto("/employees/mock-employee-cora");
-  await page.getByRole("button", { name: "Employee assignments", exact: true }).click();
-  await expect(page.getByRole("dialog").getByLabel("Team")).toHaveValue(await page.getByRole("dialog").getByRole("option", { name: "Responsive delivery", exact: true }).getAttribute("value"));
+  await page.getByRole("button", { name: "Team and job title", exact: true }).click();
+  await expect(page.getByRole("dialog").getByRole("combobox", { name: "Team", exact: true })).toHaveValue(await page.getByRole("dialog").getByRole("option", { name: "Responsive delivery", exact: true }).getAttribute("value"));
   await page.getByRole("button", { name: "Close", exact: true }).click();
   await page.goto("/teams");
   await page.getByRole("button", { name: /^Remove Cora Bell .* from Responsive delivery$/ }).click();
@@ -629,4 +637,79 @@ test("monthly timetable and people catalogues stay usable across phone, desktop,
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
   await page.screenshot({ path: testInfo.outputPath("timetable-mobile-rtl.png"), fullPage: true });
+});
+
+test("clear user journeys keep every authorized tab understandable and make the main tasks work on phone and desktop", async ({ page, context }, testInfo) => {
+  test.setTimeout(240_000);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const issues: string[] = [];
+  for (const persona of ["Nora Albright", "Ava Mercer", "Cora Bell"]) {
+    await context.clearCookies();
+    await page.setViewportSize({ width: 390, height: 844 });
+    await signIn(page, persona);
+    const routes = await page.locator(".sidebar .nav-links a").evaluateAll((links) => links.map((link) => ({ href: link.getAttribute("href")!, label: link.textContent!.replace(/Coming soon$/, "").trim() })));
+    for (const route of routes) {
+      expect((await page.goto(route.href))?.status(), `${persona} ${route.label}`).toBe(200);
+      const guide = page.locator(".page-journey-help");
+      await expect(guide).not.toHaveAttribute("open");
+      await expect(guide.locator("summary")).toHaveText(`How to use ${route.label}`);
+      await guide.locator("summary").focus();
+      await page.keyboard.press("Enter");
+      await expect(guide).toHaveAttribute("open");
+      expect(await guide.locator("ol li").count()).toBeGreaterThanOrEqual(2);
+      const related = await guide.locator("a").evaluateAll((links) => links.map((link) => link.getAttribute("href")));
+      expect(related.every((href) => routes.some((item) => item.href === href))).toBe(true);
+      if (persona === "Cora Bell") await expect(guide).not.toContainText("Plan work");
+      issues.push(...await layoutIssues(page, `${persona} expanded ${route.label} guide`));
+    }
+  }
+  await context.clearCookies();
+  await signIn(page, "Nora Albright");
+  for (const width of [320, 390, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/dashboard");
+    const insights = page.locator(".journey-disclosure").filter({ hasText: "More team insights" });
+    await expect(insights).not.toHaveAttribute("open");
+    await insights.locator("summary").click();
+    issues.push(...await layoutIssues(page, `${width}px expanded home insights`));
+    await insights.locator("summary").click();
+    await captureVisual(page, testInfo, `${width}-clear-home.png`);
+
+    await page.goto("/coverage?month=2027-09");
+    await page.getByRole("combobox", { name: "Person", exact: true }).selectOption("mock-employee-cora");
+    await expect(page.getByRole("link", { name: /^Check cover for Cora Bell/ })).toBeVisible();
+    await page.getByLabel("Search work").fill("no-such-worksite");
+    await expect(page.getByRole("heading", { name: "No work matches your search" })).toBeVisible();
+    await page.getByRole("button", { name: "Clear search" }).click();
+    await page.getByLabel("Search work").fill("Cora");
+    issues.push(...await layoutIssues(page, `${width}px cover search`));
+    await captureVisual(page, testInfo, `${width}-clear-coverage.png`);
+
+    await page.goto("/skills");
+    await expect(page.getByRole("combobox", { name: "Person", exact: true })).toHaveCount(1);
+    await page.getByRole("combobox", { name: "Person", exact: true }).selectOption("mock-employee-cora");
+    await page.getByRole("button", { name: "View skills", exact: true }).click();
+    await expect(page.getByRole("heading", { name: /^Cora Bell.*’s recorded skills$/ })).toBeVisible();
+    await page.getByRole("button", { name: /^Record a skill for Cora Bell/ }).click();
+    const record = page.getByRole("dialog").getByRole("form", { name: "Record employee skill" });
+    await expect(record.locator('input[name="employeeUserId"]')).toHaveValue("mock-employee-cora");
+    await expect(record.getByRole("combobox")).toHaveCount(1);
+    issues.push(...await layoutIssues(page, `${width}px selected-person skill dialog`));
+    await page.keyboard.press("Escape");
+    await captureVisual(page, testInfo, `${width}-clear-skills.png`);
+
+    await page.goto("/reports");
+    await page.getByLabel("Find a report").fill("hours");
+    await expect(page.locator(".reporting-report-title")).toHaveCount(1);
+    await expect(page.locator(".reporting-report-title")).toHaveAttribute("href", "/reports/scheduled-hours");
+    issues.push(...await layoutIssues(page, `${width}px report search`));
+  }
+  await context.addCookies([{ name: "scopeis-direction", value: "rtl", url: new URL(page.url()).origin }]);
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto("/reports");
+  await page.evaluate(() => { document.documentElement.dataset.theme = "dark"; document.documentElement.style.fontSize = "200%"; });
+  await page.locator(".page-journey-help > summary").click();
+  issues.push(...await layoutIssues(page, "320px expanded guide with RTL, dark theme and 200% text"));
+  await captureVisual(page, testInfo, "320-clear-rtl-guide.png");
+  await attachIssues(testInfo, issues);
 });
