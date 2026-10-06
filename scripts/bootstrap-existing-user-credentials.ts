@@ -22,7 +22,7 @@ async function main() {
     if (row.name !== database) throw new Error("Connected database identity mismatch.");
     const { inspectMigrationState } = await import("./phase2-migration-core.mjs");
     const migration = await inspectMigrationState(pool);
-    if (migration.state !== "D" || migration.pending.length || migration.ledger.rows.length !== 13) throw new Error("Migration state is not approved.");
+    if (migration.state !== "D" || migration.pending.length || migration.ledger.rows.length !== 14) throw new Error("Migration state is not approved.");
     const { bootstrapExistingUserCredentials } = await import("../src/modules/auth/credential-bootstrap");
     const { db } = await import("../src/db/client");
     try {

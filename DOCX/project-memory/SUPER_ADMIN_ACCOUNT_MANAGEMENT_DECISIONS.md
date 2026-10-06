@@ -147,9 +147,13 @@ monitoring, or changes to the Preview worktree or prototype.
 
 ## Remaining limitations
 
-Production account management will not function until the Production migration
-sequence (`0012` then `0013`) is applied to a verified target and
-`AUTH_PASSWORD_PEPPER` is configured. There is no self-service forgot-password
+The [2026-10-06 production cutover](../phase-reports/SCOPEIS_PRODUCTION_SIGN_IN_CUTOVER_2026_10_06.md)
+completed the verified production migration sequence through `0013` and
+configured `AUTH_PASSWORD_PEPPER`. Live `/accounts` access is verified for Super
+Admin, with the expected non-enumerating 404 for Admin and Employee. This check
+did not create additional accounts or reset existing credentials.
+
+There is no self-service forgot-password
 flow, no email delivery, no MFA, and no approval workflow for high-risk actions.
 Backups, monitoring, external security testing, and controlled real-user
 onboarding remain separate Phase 13 work.

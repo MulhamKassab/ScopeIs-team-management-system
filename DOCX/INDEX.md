@@ -1,3 +1,4 @@
+- [Production sign-in cutover — 2026-10-06](phase-reports/SCOPEIS_PRODUCTION_SIGN_IN_CUTOVER_2026_10_06.md)
 - [Super Admin account and credential management report](phase-reports/SCOPEIS_SUPER_ADMIN_ACCOUNT_AND_CREDENTIAL_MANAGEMENT_R1.md)
 
 ## Latest expressive motion — 2026-10-05

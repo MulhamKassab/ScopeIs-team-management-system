@@ -169,6 +169,14 @@ rollout, Preview changes, prototype changes, or unrelated database cleanup.
 
 ## Remaining limitations
 
+The [2026-10-06 production cutover](../phase-reports/SCOPEIS_PRODUCTION_SIGN_IN_CUTOVER_2026_10_06.md)
+configured the production pepper, validated the target and recovery branch,
+applied the approved migration sequence through `0013`, and initialized exactly
+the five approved existing users. Live username sign-in, email sign-in for each
+role, protected dashboards, and logout are verified. The operator guard now
+requires the current fully migrated 14-row ledger. The PostgreSQL 18 fingerprint
+compatibility fix retains nullability and abnormal-constraint drift detection.
+
 This completes a narrow credential-login foundation; it does not complete all
 of Phase 13 production readiness. Backups, monitoring, external security
 testing, user-managed password changes, password recovery, and controlled

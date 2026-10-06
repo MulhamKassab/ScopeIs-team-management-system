@@ -20,7 +20,8 @@ export async function fingerprintPublicSchema(client) {
        order by table_name, ordinal_position`);
   const constraintResult = await client.query(`
       select c.conrelid::regclass::text as table_name, c.conname as constraint_name, c.contype as constraint_type,
-             pg_get_constraintdef(c.oid, true) as definition
+             pg_get_constraintdef(c.oid, true) as definition, c.convalidated as validated,
+             coalesce((to_jsonb(c)->>'conenforced')::boolean, true) as enforced
         from pg_constraint c
        where c.connamespace = (select oid from pg_namespace where nspname = 'public')
        order by c.conrelid::regclass::text, c.conname`);
@@ -33,7 +34,10 @@ export async function fingerprintPublicSchema(client) {
   const sections = {
     enums: enumResult.rows,
     columns: columnResult.rows,
-    constraints: constraintResult.rows,
+    // PostgreSQL 18 also catalogs NOT NULL constraints. Validated, enforced nullability is
+    // already fingerprinted through columns.is_nullable; retain unusual constraints as drift.
+    constraints: constraintResult.rows.flatMap(({ validated, enforced, ...constraint }) =>
+      constraint.constraint_type === "n" && validated && enforced ? [] : [constraint]),
     indexes: indexResult.rows,
   };
   const tables = [...new Set(columnResult.rows.map((row) => row.table_name))].sort();
