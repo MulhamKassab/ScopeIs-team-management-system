@@ -1,3 +1,8 @@
+## Company Ticket System design review — 2026-10-07
+
+- [Company source assessment, proposed experience and unresolved integration decisions](project-memory/PHASE_12_COMPANY_TICKET_DESIGN_REVIEW.md)
+- Test the reviewed fictional-data design at `/previews/company-tickets.html` on the existing ScopeIs site; full application integration remains Phase 12.
+
 ## Coverage conflict integrity — 2026-10-06
 
 - [Confirmed coverage and support rules](project-memory/PHASE_7_COVERAGE_REPLACEMENT_DECISIONS.md)

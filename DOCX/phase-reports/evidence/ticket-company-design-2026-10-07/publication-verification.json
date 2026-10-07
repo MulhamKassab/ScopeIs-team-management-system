@@ -1,0 +1,20 @@
+{
+  "type": "standalone-design-preview-publication",
+  "date": "2026-10-07",
+  "scope": "Export and publish the reviewed fictional Company ticket design for testing.",
+  "path": "public/previews/company-tickets.html",
+  "intended_url": "https://scopeis-team-management-system.vercel.app/previews/company-tickets.html",
+  "source_fragment_sha256": "675cdf75685443cf5ed12d7f48f5d8f9f8ba32ab5bf0a8607d75d3bdbda79f45",
+  "export_sha256": "93465ed98eecbac7d6523ab3d5f3762e2b705f86d39583cf18acc1ef7e1473d1",
+  "export_bytes": 148939,
+  "verified": [
+    "All 7 inline JavaScript blocks in the outer document and srcdoc passed node --check.",
+    "Standalone exported document inspected through a loopback public-assets server in Codex in-app browser.",
+    "Website updates + On Hold + DNS leaves one matching ticket through Overview/Tickets switching; Board layout retained."
+  ],
+  "server_application_code_changed": false,
+  "database_changed": false,
+  "data_migration_run": false,
+  "authorization_policy_changed": false,
+  "note": "Original inline verification receipts remain historical; live delivery is recorded separately after push."
+}

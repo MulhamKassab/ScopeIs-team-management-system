@@ -1,0 +1,33 @@
+{
+  "type": "design-preview-only",
+  "date": "2026-10-07",
+  "timezone": "Asia/Dubai",
+  "source_repository": "MulhamKassab/ticketSystem",
+  "source_commit": "8888b15a81d85f05c484dac9d17283c9530f61c4",
+  "visual_reference": "DOCX/phase-reports/evidence/user-journeys-2026-10-06/08-before-employees.png",
+  "browser_surface": "Codex in-app browser",
+  "verified": [
+    "1024px light layout screenshot inspected: actual ScopeIs logo, readable primary controls and existing shell direction",
+    "Company overview to Client delivery workspace to Website updates board; five visible tickets",
+    "Search DNS filters the selected board to one ticket",
+    "Ticket details display the recorded on-hold reason",
+    "Adding a 30-minute work entry changes TKT-101 from 2.5h to 3h and attributes the entry to Raafat",
+    "Changing TKT-101 from In Progress to On Hold displays the entered reason",
+    "JavaScript syntax check and documentation whitespace check passed"
+  ],
+  "unexecuted": [
+    "320px and 390px browser viewport checks",
+    "Dark-theme browser screenshot",
+    "Tickets-first variant browser walkthrough",
+    "Browser create/archive/restore checks after the browser connection became unavailable",
+    "Additional jsdom checks: runtime import did not complete and task-owned attempts were stopped"
+  ],
+  "limitations": "Bounded design-preview evidence only; no product role, API, persistence, file storage, PDF, full flowchart-editor or accessibility certification.",
+  "application_code_changed": false,
+  "database_changed": false,
+  "migration_run": false,
+  "deployment_performed": false,
+  "remote_repository_changed": false,
+  "fragment_sha256": "38801872a43b49739e3e3970173fc56eaa86cd1d80c9ea4b45a2cb9748ab689b",
+  "fragment_size_bytes": 62883
+}

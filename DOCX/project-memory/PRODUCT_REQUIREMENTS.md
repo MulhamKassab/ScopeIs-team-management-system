@@ -128,6 +128,9 @@
 - **TKT-003:** A future ticket may link to Client, Project, Location, requester, assignee(s), required skills, due date, schedule assignment, work logs, and attachments.
 - **TKT-004:** Ticket status, assignment status, schedule state, and work-log completion must remain distinct.
 - **TKT-005:** Phase 12 must inspect reusable candidates and preserve the workforce system's roles, scopes, privacy, storage choices, and domain boundaries.
+- **TKT-006 (confirmed 2026-10-07):** Assess and extract the Company experience from `MulhamKassab/ticketSystem`, excluding account creation/onboarding and Personal flows. Review its proposed appearance before application implementation. See `PHASE_12_COMPANY_TICKET_DESIGN_REVIEW.md`; ticket permissions, container mappings and migration remain unapproved.
+- **TKT-007 (confirmed 2026-10-07):** Both the Company overview and operational Tickets view must be present in the same Tickets module, with a switch/filter between them. The design proposal shares board, search and status filters across Overview and Tickets and retains the List/Board selection. This confirms coexistence of the two views; application integration and remaining domain decisions require separate approval.
+- **TKT-008 (confirmed 2026-10-07):** Push the current interactive Company ticket design for testing. Publish the fictional-data preview at `/previews/company-tickets.html` on the existing ScopeIs site. Ticket edits are browser-session examples and reset on refresh; only view/filter preferences are retained locally. This does not approve production ticket permissions, migration, backend persistence or schedule handoffs.
 
 ## Dependencies and acceptance focus
 
