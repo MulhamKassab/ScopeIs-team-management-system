@@ -1,0 +1,41 @@
+/* Phase 10 collaboration and governance surfaces: notification centre, audit history, employee-management notes, and replacement-request discussions. */
+.notification-filters,.notification-pagination { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+.notification-pagination span,.notification-state { color:var(--muted); font-size:.82rem; }
+.notification-list li { flex-direction:row; }
+.notification-controls { display:flex; flex-wrap:wrap; gap:8px; align-items:flex-start; flex:0 0 auto; }
+.notification-action { display:grid; gap:6px; }
+.notification-unavailable { color:var(--muted); font-size:.82rem; font-style:italic; overflow-wrap:anywhere; }
+.audit-list li > div { display:grid; gap:5px; min-width:0; }
+.audit-action { color:var(--muted); font-size:.74rem; font-weight:750; letter-spacing:.03em; }
+.audit-fields { display:flex; flex-wrap:wrap; gap:6px 14px; margin:6px 0 0; }
+.audit-fields > div { display:flex; gap:6px; align-items:baseline; }
+.audit-fields dt { color:var(--muted); font-size:.72rem; font-weight:750; text-transform:uppercase; letter-spacing:.03em; }
+.audit-fields dd { margin:0; font-size:.82rem; overflow-wrap:anywhere; }
+.notes-page { max-width:1040px; }
+.notes-list { display:grid; gap:14px; }
+.note-item { display:grid; gap:10px; min-width:0; padding:16px; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); box-shadow:var(--shadow); }
+.note-item-head { display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:10px; }
+.note-item-head > div { display:grid; gap:3px; min-width:0; }
+.note-item-head span { color:var(--muted); font-size:.8rem; overflow-wrap:anywhere; }
+.note-item p { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.5; }
+.note-badge { padding:4px 9px; border:1px solid color-mix(in srgb,var(--primary) 35%,var(--border)); border-radius:999px; background:color-mix(in srgb,var(--primary) 12%,transparent); color:var(--primary); font-size:.72rem; font-weight:800; }
+.notes-archive { border-block-start:1px solid var(--border); padding-block-start:12px; }
+.notes-archive summary { cursor:pointer; color:var(--muted); font-weight:750; }
+.operation-note-history { margin:4px 0; border-block-start:1px solid var(--border); padding-block-start:8px; }
+.operation-note-history summary { cursor:pointer; color:var(--muted); font-size:.8rem; font-weight:750; }
+.operation-note-history ol { list-style:none; margin:8px 0 0; padding:0; display:grid; gap:8px; }
+.operation-note-history li { padding:10px; border:1px solid var(--border); border-radius:8px; background:var(--surface-muted); }
+.operation-note-history span { color:var(--muted); font-size:.74rem; font-weight:750; }
+.operation-note-history p { margin:4px 0 0; white-space:pre-wrap; overflow-wrap:anywhere; font-size:.86rem; }
+.discussion-panel { display:grid; gap:10px; padding:14px; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface-muted); }
+.discussion-panel h4 { margin:0; }
+.discussion-messages { list-style:none; margin:0; padding:0; display:grid; gap:10px; }
+.discussion-messages li { display:grid; gap:6px; padding:11px; border:1px solid var(--border); border-radius:8px; background:var(--surface); }
+.discussion-messages li > div { display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; }
+.discussion-messages span { color:var(--muted); font-size:.78rem; }
+.discussion-messages p { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.5; }
+@media (max-width:760px) {
+  .notification-list li,.notification-controls,.notification-controls .notification-action,.notification-controls .button { width:100%; }
+  .notification-list li { flex-direction:column; }
+  .note-item-head { flex-direction:column; }
+}

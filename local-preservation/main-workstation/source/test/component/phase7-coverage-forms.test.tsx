@@ -1,0 +1,22 @@
+// @vitest-environment jsdom
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+vi.mock("@/modules/coverage/actions", () => { const action = async () => ({}); return { createReplacementRequestAction: action, decideReplacementRequestAction: action }; });
+import { ReplacementDecisionForm, ReplacementRequestForm } from "@/modules/coverage/forms";
+describe("Phase 7 coverage forms", () => { it("renders both replacement intents and the non-publication explanation", () => { render(<><ReplacementRequestForm gap={{ kind: "STAFFING", staffingRequirementId: "10000000-0000-4000-8000-000000000001", anchorAssignmentId: "10000000-0000-4000-8000-000000000002", skillName: "Network Installation", source: "Location", missingEmployeeCount: 1 }} candidates={[{ id: "employee", displayName: "Eli Alpha" }]} /><ReplacementDecisionForm request={{ id: "10000000-0000-4000-8000-000000000003", version: 1, nominatedEmployeeUserId: "employee", intent: "REPLACE_ASSIGNMENT" }} candidates={[{ id: "employee", displayName: "Eli Alpha" }]} /></>); expect(screen.getByRole("option", { name: "Add another person alongside them" })).toBeInTheDocument(); expect(screen.getAllByText(/does not publish|nothing is auto-published/i).length).toBeGreaterThan(0); expect(screen.getAllByText("Eli Alpha").length).toBeGreaterThan(0); }); });
+
+it("allows rejection without an employee when no candidate passes the checks", () => {
+  render(<ReplacementDecisionForm request={{ id: "10000000-0000-4000-8000-000000000003", version: 1, nominatedEmployeeUserId: null, intent: "REPLACE_ASSIGNMENT" }} candidates={[]} />);
+  expect(screen.getByLabelText("Decision")).toHaveValue("REJECTED");
+  expect(screen.queryByLabelText("Selected eligible Employee")).not.toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Save Super Admin decision" })).toBeEnabled();
+  fireEvent.change(screen.getByLabelText("Decision"), { target: { value: "APPROVED" } });
+  expect(screen.getByRole("button", { name: "Save Super Admin decision" })).toBeDisabled();
+});
+
+it("shows the stale-work reason and keeps declining the outdated request available", () => {
+  render(<ReplacementDecisionForm request={{ id: "10000000-0000-4000-8000-000000000003", version: 1, nominatedEmployeeUserId: null, intent: "ADD_COVERAGE_ASSIGNMENT" }} candidates={[]} reviewError="This work has changed. Review the current Draft in Timetable." />);
+  expect(screen.getByRole("status")).toHaveTextContent("You can decline this outdated request here.");
+  expect(screen.getByLabelText("Decision")).toHaveValue("REJECTED");
+  expect(screen.getByRole("button", { name: "Save Super Admin decision" })).toBeEnabled();
+});

@@ -1,0 +1,6 @@
+{
+  "status": "INTERRUPTED_SUPERSEDED",
+  "reason": "Root corrected duplicate semantic page heading after run began; three stale component mocks/expectations also corrected",
+  "cleanup": "Paused orchestrators, allowed guarded browser child to finish, then terminated only orchestrators",
+  "componentRepairCases": 4
+}

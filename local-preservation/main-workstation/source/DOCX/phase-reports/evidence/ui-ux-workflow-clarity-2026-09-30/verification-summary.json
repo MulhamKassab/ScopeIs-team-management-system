@@ -1,0 +1,469 @@
+{
+  "generatedAt": "2026-09-30T12:53:23.024322+00:00",
+  "scope": "Final UI/UX redesign verification, 2026-09-30",
+  "status": "PASS_WITH_TARGETED_RECHECKS",
+  "interpretation": "All 14 gate categories have passing evidence after focused test repairs and final reporting correction checks. The complete system-lock invocation itself finished 13/14; it was not rerun after repairs. This is combined verification, not a clean single-run system lock.",
+  "evidenceDirectory": "/Users/mulhamkassab/Desktop/For Me/ScopeIs Team Management System/DOCX/phase-reports/evidence/ui-ux-workflow-clarity-2026-09-30",
+  "environment": "Guarded disposable loopback PostgreSQL with fictional fixtures and isolated safe builds; no production data or production environment used.",
+  "attempts": [
+    {
+      "attempt": 1,
+      "command": "npm run test:system-lock",
+      "status": "INTERRUPTED_SUPERSEDED",
+      "exitCode": 143,
+      "log": "system-lock-attempt-1.log",
+      "reason": "Source changed to remove duplicate shell/page h1 while this attempt ran. Stale component mocks and planned-state copy assertions also needed correction. Guarded child cleanup completed before orchestrator termination.",
+      "statusEvidence": "attempt-1-status.json"
+    },
+    {
+      "attempt": 2,
+      "command": "npm run test:system-lock",
+      "status": "FAIL",
+      "exitCode": 1,
+      "gatesPassed": 13,
+      "gatesTotal": 14,
+      "log": "system-lock-attempt-2.log",
+      "failedGate": "Aggregate E2E",
+      "browserSuitesPassed": 11,
+      "browserSuitesTotal": 13,
+      "browserCasesPassed": 76,
+      "browserCasesFailed": 6,
+      "failureCauses": [
+        {
+          "suite": "Foundation",
+          "cases": 4,
+          "cause": "Unscoped partial navigation link names collided with legitimate new dashboard action links. Repaired to exact accessible names inside the relevant navigation region."
+        },
+        {
+          "suite": "Collaboration",
+          "cases": 2,
+          "cause": "Read-state assertion expected former combined year-first date text. Repaired to check the Read state, semantic ISO datetime, and Mark unread action separately."
+        }
+      ]
+    }
+  ],
+  "gates": [
+    {
+      "name": "Scenario manifest validation",
+      "status": "PASS",
+      "scenarios": 67,
+      "automatedScenarios": 66,
+      "manualScenarios": 1,
+      "registeredTestFiles": 70,
+      "runnerCoveredFiles": 70,
+      "protectedRoutes": 30,
+      "mainEvidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Typecheck",
+      "status": "PASS",
+      "finalRecheck": "typecheck-final.log",
+      "mainEvidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Lint",
+      "status": "PASS",
+      "maxWarnings": 0,
+      "finalRecheck": "lint-final.log",
+      "mainEvidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Unit tests",
+      "status": "PASS",
+      "tests": 123,
+      "files": 20,
+      "mainEvidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Component tests",
+      "status": "PASS",
+      "tests": 93,
+      "files": 21,
+      "finalReportingRecheck": {
+        "tests": 25,
+        "log": "report-component-final.log"
+      },
+      "mainEvidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Aggregate integration tests",
+      "status": "PASS",
+      "tests": 169,
+      "files": 14,
+      "suites": 13,
+      "finalReportingRecheck": {
+        "tests": 35,
+        "log": "report-service-final.log"
+      },
+      "mainEvidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Migration tests",
+      "status": "PASS",
+      "tests": 8,
+      "files": 1,
+      "mainEvidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "HTTP route certification",
+      "status": "PASS",
+      "tests": 18,
+      "files": 1,
+      "mainEvidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Isolation tests",
+      "status": "PASS",
+      "checks": 9,
+      "mainEvidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Seed smoke",
+      "status": "PASS",
+      "mainEvidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Fresh-system smoke",
+      "status": "PASS",
+      "includesSafeBuild": true,
+      "mainEvidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Aggregate E2E",
+      "status": "PASS_WITH_TARGETED_RECHECKS",
+      "suites": 13,
+      "tests": 82,
+      "mainRunSuitesPassed": 11,
+      "mainRunTestsPassed": 76,
+      "mainRunTestsFailed": 6,
+      "recheckLogs": [
+        "foundation-final.log",
+        "collaboration-final.log",
+        "report-e2e-final.log"
+      ],
+      "mainEvidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Safe build",
+      "status": "PASS",
+      "mainEvidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Diff whitespace check",
+      "status": "PASS",
+      "finalRecheck": "diff-check-final.log",
+      "mainEvidence": "system-lock-attempt-2.log"
+    }
+  ],
+  "integrationSuites": [
+    {
+      "name": "Phase 1 foundation",
+      "passed": 5,
+      "failed": 0
+    },
+    {
+      "name": "Phase 2 employees",
+      "passed": 13,
+      "failed": 0
+    },
+    {
+      "name": "Phase 3 operations",
+      "passed": 7,
+      "failed": 0
+    },
+    {
+      "name": "Phase 4 scheduling",
+      "passed": 9,
+      "failed": 0
+    },
+    {
+      "name": "Phase 5 leave",
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "name": "Phase 6 capabilities",
+      "passed": 3,
+      "failed": 0
+    },
+    {
+      "name": "Phase 7 coverage",
+      "passed": 6,
+      "failed": 0
+    },
+    {
+      "name": "Phase 8 planning map",
+      "passed": 1,
+      "failed": 0
+    },
+    {
+      "name": "Phase 9 evidence",
+      "passed": 12,
+      "failed": 0
+    },
+    {
+      "name": "Phase 10 collaboration",
+      "passed": 26,
+      "failed": 0
+    },
+    {
+      "name": "Phase 11 reporting",
+      "passed": 35,
+      "failed": 0
+    },
+    {
+      "name": "Credential authentication",
+      "passed": 20,
+      "failed": 0
+    },
+    {
+      "name": "Account administration",
+      "passed": 26,
+      "failed": 0
+    }
+  ],
+  "browserSuites": [
+    {
+      "name": "Phase 1 foundation shell, personas, and scope",
+      "runner": "run-phase1-playwright.mjs",
+      "cases": 14,
+      "finalPassed": 14,
+      "finalFailed": 0,
+      "mainRunPassed": 10,
+      "mainRunFailed": 4,
+      "evidence": "foundation-final.log"
+    },
+    {
+      "name": "Phase 2 employee directory",
+      "runner": "run-phase2-playwright.mjs",
+      "cases": 20,
+      "finalPassed": 20,
+      "finalFailed": 0,
+      "mainRunPassed": 20,
+      "mainRunFailed": 0,
+      "evidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Phase 3 client/project/location",
+      "runner": "run-phase3-playwright.mjs",
+      "cases": 14,
+      "finalPassed": 14,
+      "finalFailed": 0,
+      "mainRunPassed": 14,
+      "mainRunFailed": 0,
+      "evidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Phase 4 scheduling publication",
+      "runner": "run-phase4-playwright.mjs",
+      "cases": 2,
+      "finalPassed": 2,
+      "finalFailed": 0,
+      "mainRunPassed": 2,
+      "mainRunFailed": 0,
+      "evidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Phase 5 leave and availability",
+      "runner": "run-phase5-playwright.mjs",
+      "cases": 2,
+      "finalPassed": 2,
+      "finalFailed": 0,
+      "mainRunPassed": 2,
+      "mainRunFailed": 0,
+      "evidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Phase 6 skills and capabilities",
+      "runner": "run-phase6-playwright.mjs",
+      "cases": 2,
+      "finalPassed": 2,
+      "finalFailed": 0,
+      "mainRunPassed": 2,
+      "mainRunFailed": 0,
+      "evidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Phase 7 coverage and replacement",
+      "runner": "run-phase7-playwright.mjs",
+      "cases": 4,
+      "finalPassed": 4,
+      "finalFailed": 0,
+      "mainRunPassed": 4,
+      "mainRunFailed": 0,
+      "evidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Phase 8 static planning map",
+      "runner": "run-phase8-playwright.mjs",
+      "cases": 6,
+      "finalPassed": 6,
+      "finalFailed": 0,
+      "mainRunPassed": 6,
+      "mainRunFailed": 0,
+      "evidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Phase 9 capability evidence",
+      "runner": "run-phase9-playwright.mjs",
+      "cases": 4,
+      "finalPassed": 4,
+      "finalFailed": 0,
+      "mainRunPassed": 4,
+      "mainRunFailed": 0,
+      "evidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Phase 10 collaboration and governance",
+      "runner": "run-phase10-playwright.mjs",
+      "cases": 2,
+      "finalPassed": 2,
+      "finalFailed": 0,
+      "mainRunPassed": 0,
+      "mainRunFailed": 2,
+      "evidence": "collaboration-final.log"
+    },
+    {
+      "name": "Phase 11 dashboards, reports and exports",
+      "runner": "run-phase11-playwright.mjs",
+      "cases": 8,
+      "finalPassed": 8,
+      "finalFailed": 0,
+      "mainRunPassed": 8,
+      "mainRunFailed": 0,
+      "evidence": "report-e2e-final.log"
+    },
+    {
+      "name": "Credential authentication login",
+      "runner": "run-credential-e2e.mjs",
+      "cases": 2,
+      "finalPassed": 2,
+      "finalFailed": 0,
+      "mainRunPassed": 2,
+      "mainRunFailed": 0,
+      "evidence": "system-lock-attempt-2.log"
+    },
+    {
+      "name": "Super Admin account administration",
+      "runner": "run-account-e2e.mjs",
+      "cases": 2,
+      "finalPassed": 2,
+      "finalFailed": 0,
+      "mainRunPassed": 2,
+      "mainRunFailed": 0,
+      "evidence": "system-lock-attempt-2.log"
+    }
+  ],
+  "totals": {
+    "uniqueTests": 493,
+    "unit": 123,
+    "component": 93,
+    "integration": 169,
+    "migration": 8,
+    "httpRouteCertification": 18,
+    "browser": 82,
+    "browserSuites": 13,
+    "additionalIsolationChecks": 9,
+    "duplicateRechecksExcludedFromUniqueTotal": true
+  },
+  "finalSequentialRechecks": {
+    "exitCode": 0,
+    "entries": [
+      {
+        "command": "npm run test:phase1-e2e",
+        "status": "PASS",
+        "log": "foundation-final.log",
+        "testsPassed": 14
+      },
+      {
+        "command": "npm run test:phase10-e2e",
+        "status": "PASS",
+        "log": "collaboration-final.log",
+        "testsPassed": 2
+      },
+      {
+        "command": "node node_modules/vitest/vitest.mjs run test/component/phase11-reporting-forms.test.tsx",
+        "status": "PASS",
+        "log": "report-component-final.log",
+        "testsPassed": 25
+      },
+      {
+        "command": "npm run test:phase11-service",
+        "status": "PASS",
+        "log": "report-service-final.log",
+        "testsPassed": 35
+      },
+      {
+        "command": "npm run test:phase11-e2e",
+        "status": "PASS",
+        "log": "report-e2e-final.log",
+        "testsPassed": 8
+      },
+      {
+        "command": "npm run typecheck",
+        "status": "PASS",
+        "log": "typecheck-final.log"
+      },
+      {
+        "command": "npm run lint",
+        "status": "PASS",
+        "log": "lint-final.log"
+      },
+      {
+        "command": "git diff --check",
+        "status": "PASS",
+        "log": "diff-check-final.log"
+      }
+    ]
+  },
+  "sourceIntegrity": {
+    "algorithm": "SHA-256",
+    "scope": [
+      "src/**",
+      "test/**",
+      "package.json",
+      "package-lock.json"
+    ],
+    "files": 281,
+    "finalManifest": "final-source-hashes.json",
+    "finalManifestSha256": "1320645b17acf261ae6cd689aefd218857256ca01cd11a3aacd868c0b439f982",
+    "comparisonAtSummaryCreation": "MATCH",
+    "changedSinceFinalRecheckSnapshot": [],
+    "addedSinceFinalRecheckSnapshot": [],
+    "mainRunStartManifest": "frozen-source-hashes.json",
+    "mainRunToFinalExceptions": [
+      "src/modules/reporting/presentation.ts",
+      "src/modules/reporting/service.ts",
+      "test/component/phase11-reporting-forms.test.tsx",
+      "test/e2e/foundation.spec.ts",
+      "test/e2e/phase10-collaboration.spec.ts",
+      "test/e2e/phase11-reporting.spec.ts",
+      "test/integration/phase11-reporting-service.test.ts"
+    ],
+    "productionException": "Two reporting files corrected the Employee skill card label and destination to the read-only /skills page. Three existing reporting tests were strengthened; foundation and collaboration test interaction repairs account for the other two exceptions. All reporting component/service/browser checks were rerun after the correction."
+  },
+  "verificationOwnedTestRepairs": [
+    "test/component/coverage-review-state.test.tsx",
+    "test/component/states.test.tsx",
+    "test/e2e/foundation.spec.ts",
+    "test/e2e/phase10-collaboration.spec.ts"
+  ],
+  "concurrency": {
+    "rerunForThisUIUXPass": false,
+    "reason": "Root explicitly retained prior concurrency certification because this pass changes presentation/read projections, not domain mutation transaction rules.",
+    "priorAuditOnly": {
+      "directory": "/private/tmp/scopeis-audit-2026-09-30/verification",
+      "suiteExecutionsPassed": 21,
+      "repeatedTestExecutionsPassed": 186
+    }
+  },
+  "limitations": [
+    "Browser automation covers Chromium desktop 1440x900 and mobile viewport 390x844. Safari, Firefox, physical devices and assistive-technology certification were not covered.",
+    "Fictional local fixture journeys do not certify production deployment, real external identity providers, future Ticket System integration, backup recovery or production load.",
+    "Scenario-manifest validation checks registration and evidence presence; it does not prove every possible route state has exhaustive behavioral coverage.",
+    "A non-blocking node-postgres concurrent client.query deprecation warning remains in existing test harness paths.",
+    "Passing maintained checks cannot prove the absence of all defects or guarantee 100% correctness.",
+    "The full-run initial snapshot differs from final source by the seven documented files; focused final rechecks and the final SHA-256 manifest preserve that provenance."
+  ],
+  "originalEvidenceDirectory": "/private/tmp/scopeis-uiux-2026-09-30/system-lock"
+}

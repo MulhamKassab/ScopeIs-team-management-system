@@ -1,0 +1,151 @@
+{
+  "verified_at": "2026-10-05T12:53:58.370339+00:00",
+  "scope": "User-approved visual refinement and interaction motion throughout the maintained application",
+  "state": "Local, uncommitted and undeployed",
+  "checks": {
+    "responsive_browser": {
+      "command": "npm run test:responsive",
+      "passed": 9,
+      "failed": 0,
+      "main_page_viewport_combinations": 288,
+      "browser": "Installed Chrome",
+      "safe_isolated_build": "passed",
+      "owned_disposable_database_cleanup": "completed"
+    },
+    "component": {
+      "command": "npm run test:component",
+      "files_passed": 21,
+      "tests_passed": 93
+    },
+    "lint": {
+      "command": "npm run lint",
+      "status": "passed"
+    },
+    "typecheck": {
+      "command": "npm run typecheck",
+      "status": "passed"
+    },
+    "whitespace": {
+      "command": "git diff --check plus changed/untracked presentation file whitespace scan",
+      "status": "passed"
+    }
+  },
+  "viewports": [
+    [
+      320,
+      640
+    ],
+    [
+      390,
+      844
+    ],
+    [
+      600,
+      900
+    ],
+    [
+      768,
+      1024
+    ],
+    [
+      820,
+      1180
+    ],
+    [
+      1024,
+      768
+    ],
+    [
+      1280,
+      800
+    ],
+    [
+      1920,
+      1080
+    ]
+  ],
+  "additional_viewports": [
+    [
+      768,
+      360
+    ],
+    [
+      1280,
+      900
+    ]
+  ],
+  "coverage": [
+    "all three role navigation journeys",
+    "every enabled management task dialog with disclosures expanded",
+    "long fictional record names",
+    "report-table scrolling",
+    "RTL and doubled text",
+    "both themes",
+    "native modal background inertness and focus restoration",
+    "simulated mobile keyboard",
+    "focused-control contrast",
+    "account avatar contrast",
+    "reduced motion including backdrops and hover movement",
+    "forced-color control boundaries",
+    "desktop fine-pointer hover"
+  ],
+  "contrast": {
+    "light": {
+      "fieldText": 16.268480224545662,
+      "fieldFocus": 5.401391073422462,
+      "buttonText": 9.907146343330451,
+      "avatarText": 9.907146343330451,
+      "outlineStyle": "solid",
+      "outlineWidth": "3px",
+      "transitionDuration": "0.15s, 0.24s, 0.15s"
+    },
+    "dark": {
+      "fieldText": 14.214183202500497,
+      "fieldFocus": 8.829760076923677,
+      "buttonText": 7.56326388787922,
+      "avatarText": 7.56326388787922,
+      "outlineStyle": "solid",
+      "outlineWidth": "3px",
+      "transitionDuration": "0.15s, 0.24s, 0.15s"
+    }
+  },
+  "contrast_scope": "Focused input text/outline, primary button computed fill and account avatar computed fill; bounded assertions, not a full accessibility certification.",
+  "limits": [
+    "Chrome emulation; physical devices and Safari/Firefox not certified",
+    "Full system-lock and domain integration suites were not rerun for this presentation-only change",
+    "Historical retained-history assignment-removal issue and product policies are unchanged"
+  ],
+  "intermediate_findings_resolved": [
+    "Reduced-motion rule extended to native dialog backdrops",
+    "Screenshot helper replaced with built-in capture after an animation wait stalled",
+    "Dark-mode avatar initials now use the contrast-aware on-primary token with sufficient selector specificity"
+  ],
+  "source_sha256": {
+    "src/app/visuals.css": "b6e9dce790976cceca90f8dcb222b1d218a08bc4f86cd1452046d2b9f1775768",
+    "src/app/layout.tsx": "afbe971e77b5f34c70b219113a6e69987a91ea4a09960bf4a645847a181dd60d",
+    "src/app/responsive.css": "da41e51a192f7f0089813860b244e9fd7c4b0993bdd47ff5eda2b263bf26e7d9",
+    "src/shared/components/theme-provider.tsx": "a7023c1be79d67a821e45a4097d6c1acd995c1d6ab403d979b6f276e3be58121",
+    "src/app/(auth)/login/login-screen.tsx": "dceaa692f6dd6143e070a3ab09711b975c72ec812da0871fcf14fa67c10e9089",
+    "test/e2e/responsive.spec.ts": "0c47e57c1c9012de3ab00bf723da299148e55a91b9ef927439f3d327d87bb5f8",
+    "playwright.responsive.config.ts": "88444636a7fd97f6adbbae04afed68e674136836164efda8cb743b8832f794b4",
+    "scripts/run-responsive-playwright.mjs": "774f1f30aef04a790c5a72b42a99146afbac1ad999f9ad03108b5151dde97c01",
+    "scripts/responsive-test-fixtures.mjs": "88acaa8ad972cc010d34a2fce16d756b94be120daa08102a0f94fca6453f3577"
+  },
+  "artifacts_sha256": {
+    "1280-light-dashboard.png": "5f9e296f5a407fc7763bd9be9d19f3a4b09384ea122bc30083191030e856e2d1",
+    "1280-dark-dashboard.png": "152f92715061b0655181cf0a2231c4eb2fa0f12ce23f04435be24c1cb0fde075",
+    "390-light-dashboard.png": "75c85e099da68637a8e98a2618937d974c8507b990adb4301f7afda6303477c1",
+    "390-dark-dashboard.png": "91c5f9808f66ef915ccebc4cde0ef4e55d8d76e1b0c8b953aeffd2b32b9cd7a0",
+    "390-light-focused-dialog.png": "22a79ce45e5ed1c63d83f2a6cfdf737a03ad59d3d0b4510b1a3023fb10b4f9b8",
+    "390-dark-focused-dialog.png": "ca3557d2a7e0e82e30c8e816d59e8011d093e80e1fb2916cd1f30e424bc9fcef",
+    "390-light-navigation.png": "49b0957a33980bc6c1bc0709804bc3b026ea6f4c250c4f61f7612ec08ccdc16a",
+    "390-dark-navigation.png": "c8b9fee77f4c0d9c68a8052aed6b54ef73fc58b1704f6795b5887fe0d1d0021a",
+    "390-light-login.png": "94fd8b05456f5a5867bc1570df552994303b4c62f994bcaf2358936ae76ae350",
+    "light-control-contrast.json": "44cb84105fb6ebaf04b1118383a1396f7d89171b302af4e5405ea772d750fa04",
+    "dark-control-contrast.json": "d293fb0fe6ad3428397d823c932212824688310c12f3bf0f873e53fd76aed2fc",
+    "320-schedule.png": "8bf6c5f51f9b512e3e6b373130fc6c6fe0be0555827057b46d7b48a58f83e7a2",
+    "390-account-card.png": "3c28ac9fc58d886c1a20ba7f062115e7ff3c3ae586c3390230af0c57760ca479",
+    "320-rtl-dark-large-text.png": "aa8af1579adffac9e16fcd3b29efd6e3d43040d506f13de0f7a23d60cd7ba611",
+    "768-360-account-dialog.png": "c6254ad89bfeb5c4005a406d7ae9785ae3aa3019c62e982338239b4e60aa61ee"
+  }
+}

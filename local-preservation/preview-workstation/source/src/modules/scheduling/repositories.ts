@@ -1,0 +1,46 @@
+import "server-only";
+import { and, asc, desc, eq, gt, inArray, isNull, lt, or, sql } from "drizzle-orm";
+import { db } from "@/db/client";
+import { adminScopeGrants, clients, employeeProfiles, locations, projectLocations, projects, scheduleAssignments, schedulePeriods, users } from "@/db/schema";
+
+export type SchedulingTransaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
+export type SchedulingExecutor = typeof db | SchedulingTransaction;
+export const activeScheduleStatuses = ["DRAFT", "PROPOSED", "PUBLISHED"] as const;
+
+export const schedulingRepository = {
+  period(executor: SchedulingExecutor, id: string) { return executor.select().from(schedulePeriods).where(eq(schedulePeriods.id, id)).limit(1).then(([row]) => row ?? null); },
+  lockPeriod(executor: SchedulingTransaction, id: string) { return executor.execute(sql`select id from schedule_periods where id = ${id} for update`); },
+  client(executor: SchedulingExecutor, id: string) { return executor.select().from(clients).where(eq(clients.id, id)).limit(1).then(([row]) => row ?? null); },
+  project(executor: SchedulingExecutor, id: string) { return executor.select().from(projects).where(eq(projects.id, id)).limit(1).then(([row]) => row ?? null); },
+  location(executor: SchedulingExecutor, id: string) { return executor.select().from(locations).where(eq(locations.id, id)).limit(1).then(([row]) => row ?? null); },
+  projectLocation(executor: SchedulingExecutor, projectId: string, locationId: string) { return executor.select().from(projectLocations).where(and(eq(projectLocations.projectId, projectId), eq(projectLocations.locationId, locationId), isNull(projectLocations.archivedAt))).limit(1).then(([row]) => row ?? null); },
+  activeGrants(executor: SchedulingExecutor, userId: string) { return executor.select().from(adminScopeGrants).where(and(eq(adminScopeGrants.userId, userId), eq(adminScopeGrants.active, true))); },
+  employee(executor: SchedulingExecutor, id: string) { return executor.select({ user: users, profile: employeeProfiles }).from(users).innerJoin(employeeProfiles, eq(employeeProfiles.userId, users.id)).where(eq(users.id, id)).limit(1).then(([row]) => row ?? null); },
+  visibleEmployees(executor: SchedulingExecutor, teamReferences?: string[]) {
+    const where = [eq(users.active, true), eq(users.role, "EMPLOYEE" as const), teamReferences ? (teamReferences.length ? inArray(employeeProfiles.team, teamReferences) : sql`false`) : undefined].filter(Boolean);
+    return executor.select({ id: users.id, displayName: users.displayName, team: employeeProfiles.team }).from(users).innerJoin(employeeProfiles, eq(employeeProfiles.userId, users.id)).where(and(...where as never[])).orderBy(asc(users.displayName));
+  },
+  activeClients(executor: SchedulingExecutor, ids?: string[]) { return executor.select({ id: clients.id, companyName: clients.companyName }).from(clients).where(and(eq(clients.status, "ACTIVE"), ids ? (ids.length ? inArray(clients.id, ids) : sql`false`) : undefined)).orderBy(asc(clients.companyName)); },
+  projectsForClient(executor: SchedulingExecutor, clientId: string, ids?: string[]) { return executor.select({ project: projects, clientName: clients.companyName }).from(projects).innerJoin(clients, eq(clients.id, projects.clientId)).where(and(eq(projects.clientId, clientId), neArchived(projects.status), ids?.length ? inArray(projects.id, ids) : undefined)).orderBy(asc(projects.name)); },
+  locationsForProject(executor: SchedulingExecutor, clientId: string, projectId: string, ids?: string[]) { return executor.select({ location: locations }).from(projectLocations).innerJoin(locations, eq(locations.id, projectLocations.locationId)).where(and(eq(projectLocations.projectId, projectId), isNull(projectLocations.archivedAt), eq(locations.clientId, clientId), eq(locations.status, "ACTIVE"), ids?.length ? inArray(locations.id, ids) : undefined)).orderBy(asc(locations.name)); },
+  listPeriods(executor: SchedulingExecutor, month: string, clientIds: string[], projectIds: string[], locationIds: string[]) {
+    const visibility = [clientIds.length ? inArray(schedulePeriods.clientId, clientIds) : undefined, projectIds.length ? sql`exists (select 1 from projects p where p.id in (${sql.join(projectIds.map((id) => sql`${id}`), sql`, `)}) and p.client_id = ${schedulePeriods.clientId})` : undefined, locationIds.length ? sql`exists (select 1 from locations l where l.id in (${sql.join(locationIds.map((id) => sql`${id}`), sql`, `)}) and l.client_id = ${schedulePeriods.clientId})` : undefined].filter(Boolean);
+    return executor.select({ period: schedulePeriods, clientName: clients.companyName }).from(schedulePeriods).innerJoin(clients, eq(clients.id, schedulePeriods.clientId)).where(and(eq(schedulePeriods.planningMonth, month), visibility.length ? or(...visibility as never[]) : sql`false`)).orderBy(desc(schedulePeriods.revisionNumber), asc(clients.companyName));
+  },
+  assignmentsForPeriod(executor: SchedulingExecutor, periodId: string, projectIds: string[], locationIds: string[]) {
+    const visibility = [projectIds.length ? inArray(scheduleAssignments.projectId, projectIds) : undefined, locationIds.length ? inArray(scheduleAssignments.locationId, locationIds) : undefined].filter(Boolean);
+    return executor.select({ assignment: scheduleAssignments, employeeName: users.displayName, projectName: projects.name, locationName: locations.name }).from(scheduleAssignments).innerJoin(users, eq(users.id, scheduleAssignments.employeeUserId)).innerJoin(projects, eq(projects.id, scheduleAssignments.projectId)).innerJoin(locations, eq(locations.id, scheduleAssignments.locationId)).where(and(eq(scheduleAssignments.schedulePeriodId, periodId), visibility.length ? or(...visibility as never[]) : undefined)).orderBy(asc(scheduleAssignments.assignmentDate), asc(scheduleAssignments.startTime), asc(users.displayName));
+  },
+  allAssignments(executor: SchedulingExecutor, periodId: string) { return executor.select().from(scheduleAssignments).where(eq(scheduleAssignments.schedulePeriodId, periodId)).orderBy(asc(scheduleAssignments.assignmentDate), asc(scheduleAssignments.startTime)); },
+  assignment(executor: SchedulingExecutor, id: string) { return executor.select().from(scheduleAssignments).where(eq(scheduleAssignments.id, id)).limit(1).then(([row]) => row ?? null); },
+  overlapCandidates(executor: SchedulingTransaction, input: { employeeUserId: string; assignmentDate: string; startTime: string; endTime: string }) { return executor.select({ assignment: scheduleAssignments, period: schedulePeriods }).from(scheduleAssignments).innerJoin(schedulePeriods, eq(schedulePeriods.id, scheduleAssignments.schedulePeriodId)).where(and(eq(scheduleAssignments.employeeUserId, input.employeeUserId), eq(scheduleAssignments.assignmentDate, input.assignmentDate), lt(scheduleAssignments.startTime, input.endTime), gt(scheduleAssignments.endTime, input.startTime), inArray(schedulePeriods.status, activeScheduleStatuses as unknown as ["DRAFT", "PROPOSED", "PUBLISHED"]))); },
+  currentPublished(executor: SchedulingTransaction, clientId: string, month: string) { return executor.select().from(schedulePeriods).where(and(eq(schedulePeriods.clientId, clientId), eq(schedulePeriods.planningMonth, month), eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true))).limit(1).then(([row]) => row ?? null); },
+  nextRevisionNumber(executor: SchedulingTransaction, clientId: string, month: string) { return executor.select({ value: sql<number>`coalesce(max(${schedulePeriods.revisionNumber}), 0) + 1` }).from(schedulePeriods).where(and(eq(schedulePeriods.clientId, clientId), eq(schedulePeriods.planningMonth, month))).then(([row]) => Number(row?.value ?? 1)); },
+  createPeriod(executor: SchedulingTransaction, values: typeof schedulePeriods.$inferInsert) { return executor.insert(schedulePeriods).values(values).returning().then(([row]) => row!); },
+  updatePeriod(executor: SchedulingTransaction, id: string, expectedVersion: number, values: Partial<typeof schedulePeriods.$inferInsert>) { return executor.update(schedulePeriods).set({ ...values, version: sql`${schedulePeriods.version} + 1`, updatedAt: new Date() }).where(and(eq(schedulePeriods.id, id), eq(schedulePeriods.version, expectedVersion))).returning().then(([row]) => row ?? null); },
+  createAssignment(executor: SchedulingTransaction, values: typeof scheduleAssignments.$inferInsert) { return executor.insert(scheduleAssignments).values(values).returning().then(([row]) => row!); },
+  updateAssignment(executor: SchedulingTransaction, id: string, expectedVersion: number, values: Partial<typeof scheduleAssignments.$inferInsert>) { return executor.update(scheduleAssignments).set({ ...values, version: sql`${scheduleAssignments.version} + 1`, updatedAt: new Date() }).where(and(eq(scheduleAssignments.id, id), eq(scheduleAssignments.version, expectedVersion))).returning().then(([row]) => row ?? null); },
+  deleteAssignment(executor: SchedulingTransaction, id: string) { return executor.delete(scheduleAssignments).where(eq(scheduleAssignments.id, id)).returning({ id: scheduleAssignments.id }).then(([row]) => row ?? null); },
+};
+
+function neArchived(status: typeof projects.status) { return sql`${status} <> 'ARCHIVED'`; }

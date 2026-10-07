@@ -1,0 +1,11 @@
+{
+  "deletion_safe": false,
+  "original_files_preserved": 1114,
+  "known_unreadable_files": 16,
+  "initial_walk_file_count": 1132,
+  "current_inventory_file_count": 1130,
+  "initial_two_path_difference_unresolved": true,
+  "note": "Tracked versions of the 16 unreadable files already exist on GitHub; current raw working-tree bytes remain unverified. Both original folders must be retained.",
+  "git_fallback_files": 16,
+  "restorable_files": 1130
+}

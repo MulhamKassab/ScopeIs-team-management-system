@@ -1,0 +1,13 @@
+# ScopeIs Phase 7 coverage and replacement journey R1
+
+Starting custody: `main` at `db7c19310ef4a13d0e1e30435d6178df04e41d28`, `origin/main` aligned 0/0. Phase 7 adds additive migration `0008_phase_7_coverage_replacements.sql`, the persisted request lifecycle/effect record, coverage services/actions/forms/pages, schedule-service effect integration, and targeted tests.
+
+Rules: Client/Project/Location staffing requirements are independent, same-day/same-interval facts in `Asia/Dubai`; active employee, recorded skill, no Approved leave, and no overlap count. Assignment requirements add qualification warnings only. `REPLACE_ASSIGNMENT` and `ADD_COVERAGE_ASSIGNMENT` are both supported. Gaps are non-blocking: no coverage override, publication gate, ranking, automatic assignment, Published mutation, or auto-publication.
+
+Authority: Super Admin sees and decides all; Admin requires existing operational scope plus TEAM employee visibility and can request only; Employees have no coverage/replacement/candidate access. Operational scope never expands skill visibility. Request and decision writes are transactional with sanitized audit and generic persisted notifications. Schedule effects reuse Phase 4 availability/overlap validation: Draft changes in place, Proposed returns to Draft, Published creates a Draft revision.
+
+Verification run: `npx tsc --noEmit` passed; `npm run db:migrate:test` passed against the configured loopback test database; `node scripts/run-phase7-service-tests.mjs` passed (5 tests / 2 files); `npx vitest run test/component/phase7-coverage-forms.test.tsx` passed; `node scripts/run-phase7-playwright.mjs` passed desktop and mobile; `npm run build` passed. The first service-test execution failed because its fixture omitted the inherited Phase 3 skill; corrected rerun passed. Browser startup first failed because the safe-build copier excluded nested source directories named `coverage`; narrowing that exclusion fixed the runner. No production database, deployment, or production QA was accessed.
+
+Changed Phase 7 inventory: schema/migration/manifest, migration core, coverage module/pages, schedule integration, capability/operations/navigation wording, Phase 7 tests/runner, and the Phase 7 documentation listed below. Preserved user-owned work: `README.md`, `package.json`, `playwright.config.ts`, the listed auth/session/seed/foundation modified files, `prototype/`, Phase 1 runner scripts, and `test/route-certification/` remain unstaged and untouched.
+
+Known limitations: focused coverage review currently accepts an authorized assignment ID. Coverage, replacement ranking, certifications-as-gates, maps, tickets, payroll, attendance, production access, and deployment were not started.

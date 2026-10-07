@@ -1,0 +1,34 @@
+{
+  "status": "initialized",
+  "baseDate": "2026-10-06",
+  "integrity": {
+    "missing_profiles": "0",
+    "invalid_assignments": "0",
+    "leave_conflicts": "0",
+    "overlaps": "0"
+  },
+  "counts": {
+    "users": 18,
+    "employee_profiles": 18,
+    "user_credentials": 5,
+    "skills": 15,
+    "employee_skills": 51,
+    "clients": 6,
+    "projects": 12,
+    "locations": 6,
+    "schedule_periods": 19,
+    "schedule_assignments": 57,
+    "staffing_requirements": 6,
+    "assignment_skill_requirements": 21,
+    "leave_requests": 4,
+    "replacement_requests": 2,
+    "employee_evidence": 70,
+    "employee_files": 0,
+    "operational_notes": 6,
+    "operational_note_revisions": 6,
+    "employee_management_notes": 15,
+    "discussion_threads": 2,
+    "discussion_messages": 4,
+    "notifications": 31
+  }
+}

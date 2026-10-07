@@ -1,0 +1,1 @@
+export default function NotFound() { return <main className="login-page"><section className="login-card"><p className="eyebrow">Preview</p><h1>Page not found</h1><p className="lead">This route does not exist or is not available for this fictional persona.</p></section></main>; }

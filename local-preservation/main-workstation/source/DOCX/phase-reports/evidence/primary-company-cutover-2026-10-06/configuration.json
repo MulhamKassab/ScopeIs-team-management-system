@@ -1,0 +1,43 @@
+{
+  "prj_pE9utFkTQd6uulsVrDKoqsgmmKKd": {
+    "name": "scopeis-pre-company-recovery",
+    "framework": "nextjs",
+    "ssoProtection": {
+      "deploymentType": "prod_deployment_urls_and_all_previews"
+    },
+    "productionDeployment": "dpl_BGNgGq4VmkKqe4f4WnhUysRGHJ67",
+    "domains": []
+  },
+  "prj_JvFv2V2vKKmAqfBOySS8FsZ1aZjy": {
+    "name": "scopeis-team-management-system",
+    "framework": "nextjs",
+    "repo": "MulhamKassab/ScopeIs-team-management-system",
+    "branch": "main",
+    "ssoProtection": {
+      "deploymentType": "all_except_custom_domains"
+    },
+    "productionDeployment": "dpl_HycWSLQA74HwoCN2tzjHR97u5KJX",
+    "domains": [
+      {
+        "name": "scopeis-team-management-system-git-main-mu-ka7.vercel.app",
+        "redirect": "scopeis-team-management-system.vercel.app",
+        "redirectStatusCode": 308
+      },
+      {
+        "name": "scopeis-team-management-system-mu-ka7.vercel.app",
+        "redirect": "scopeis-team-management-system.vercel.app",
+        "redirectStatusCode": 308
+      },
+      {
+        "name": "scopeis-company-demo.vercel.app",
+        "redirect": "scopeis-team-management-system.vercel.app",
+        "redirectStatusCode": 308
+      },
+      {
+        "name": "scopeis-team-management-system.vercel.app",
+        "redirect": null,
+        "redirectStatusCode": null
+      }
+    ]
+  }
+}

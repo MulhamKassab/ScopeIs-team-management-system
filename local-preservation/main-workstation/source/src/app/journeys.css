@@ -1,0 +1,50 @@
+/* Task guidance is optional, compact and uses the existing design tokens. */
+.page-journey-bar { margin-block: -.35rem .85rem; display: flex; align-items: start; flex-wrap: wrap; gap: .5rem 1rem; }
+.page-journey-help { flex: 1; min-inline-size: min(100%, 15rem); }
+.page-journey-help > summary { min-block-size: 44px; display: inline-flex; align-items: center; gap: .5rem; color: var(--muted); font-size: .875rem; padding: .5rem .25rem; cursor: pointer; }
+.page-journey-help > summary { list-style: none; }
+.page-journey-help > summary::-webkit-details-marker { display: none; }
+.page-journey-help > summary::after { content: "+"; font-size: 1.1rem; margin-inline-start: .5rem; }
+.page-journey-help[open] > summary::after { content: "−"; }
+.page-journey-help > summary:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; border-radius: .3rem; }
+.page-journey-content { padding: 1rem 1.2rem; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; }
+.journey-goal { margin: 0 0 1rem; font-weight: 650; }
+.page-journey-content ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4rem; margin: 0; padding-inline-start: 1.3rem; }
+.page-journey-content li { padding-inline-start: .25rem; overflow-wrap: anywhere; }
+.page-journey-content li::marker { color: var(--primary); font-weight: 700; }
+.page-journey-content li p { margin: .4rem 0 0; color: var(--muted); font-size: .9rem; line-height: 1.6; }
+.page-journey-content nav { display: flex; flex-wrap: wrap; gap: .5rem; margin-block-start: 1.2rem; }
+.journey-disclosure { border: 1px solid var(--border); background: var(--surface); border-radius: 14px; padding: .2rem 1rem; margin-block: 1rem; }
+.journey-disclosure > summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-block-size: 48px; padding-block: .6rem; cursor: pointer; list-style: none; font-weight: 650; }
+.journey-disclosure > summary::after { content: "+"; color: var(--primary); font-size: 1.2rem; flex: none; }
+.journey-disclosure[open] > summary::after { content: "−"; }
+.journey-disclosure > summary::-webkit-details-marker { display: none; }
+.journey-disclosure > summary:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: .3rem; }
+.journey-disclosure > summary small { font-size: .8rem; color: var(--muted); font-weight: 400; }
+.journey-search { display: grid; gap: .4rem; margin-block: 1rem; font-size: .875rem; font-weight: 600; }
+.journey-search input { inline-size: 100%; min-block-size: 44px; padding: .65rem .8rem; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--text); font: inherit; font-size: 1rem; }
+.journey-search-count { color: var(--muted); font-size: .875rem; }
+.coverage-day-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; padding-block: .5rem 1rem; }
+.coverage-day-list .timetable-entry { min-inline-size: 0; }
+.coverage-work-search { display: grid; grid-template-columns: 2fr 1fr; gap: .8rem; align-items: end; }
+.coverage-work-search label { display: grid; gap: .4rem; font-size: .875rem; font-weight: 600; }
+.coverage-work-search :is(input,select) { min-block-size: 44px; inline-size: 100%; min-inline-size: 0; padding: .65rem .8rem; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--text); font-size: 1rem; }
+.request-context { display: grid; gap: .35rem; margin-block-end: .8rem; }
+.request-context p { margin: 0; color: var(--muted); }
+.request-context strong { color: var(--text); }
+.request-conversation > summary span { display: grid; gap: .3rem; }
+.request-conversation > summary small { display: block; }
+.request-conversation .discussion-panel { border: 0; margin: 0; background: transparent; }
+.request-conversation .discussion-panel > h4 { margin-block-start: .5rem; }
+.people-evidence-heading .button.primary > span { color: #fff; }
+.directory-job-title { display: block; margin-block-start: .3rem; color: var(--muted); font-size: .8rem; font-weight: 400; }
+.audit-record-details { margin-block-start: .5rem; }
+.audit-record-details > summary { min-block-size: 44px; display: inline-flex; align-items: center; cursor: pointer; color: var(--primary); font-size: .875rem; }
+@media (max-width: 760px) {
+  .page-journey-content ol { grid-template-columns: 1fr; gap: 1rem; }
+  .coverage-day-list, .coverage-work-search { grid-template-columns: 1fr; }
+  .page-journey-content { padding: 1rem; }
+}
+@media (forced-colors: active) {
+  .page-journey-content, .journey-disclosure, .journey-search input, .coverage-work-search :is(input,select) { border-color: CanvasText; }
+}

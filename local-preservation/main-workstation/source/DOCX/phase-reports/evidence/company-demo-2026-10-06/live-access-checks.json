@@ -1,0 +1,35 @@
+{
+  "url": "https://scopeis-company-demo.vercel.app",
+  "allowedPages": 212,
+  "forbiddenPages": 26,
+  "fileChecks": 21,
+  "accounts": [
+    {
+      "account": "nora",
+      "allowed": 92,
+      "forbidden": 0
+    },
+    {
+      "account": "ava",
+      "allowed": 59,
+      "forbidden": 4
+    },
+    {
+      "account": "ben",
+      "allowed": 47,
+      "forbidden": 4
+    },
+    {
+      "account": "cora",
+      "allowed": 7,
+      "forbidden": 9
+    },
+    {
+      "account": "dan",
+      "allowed": 7,
+      "forbidden": 9
+    }
+  ],
+  "errors": [],
+  "managementOnlyRefusalViews": 4
+}

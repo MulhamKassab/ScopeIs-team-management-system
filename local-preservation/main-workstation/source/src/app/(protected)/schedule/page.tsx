@@ -1,0 +1,42 @@
+import Link from "next/link";
+import { getTimetable } from "@/modules/scheduling/timetable-service";
+import { Timetable } from "@/modules/scheduling/timetable";
+import { WorkflowFeedback } from "@/shared/components/workflow-feedback";
+import { notFound, redirect } from "next/navigation";
+import { MonthNavigation } from "@/modules/scheduling/month-navigation";
+import { getCurrentActor } from "@/modules/auth/session-service";
+import { PLANNING_TIMEZONE, schedulingService } from "@/modules/scheduling/service";
+import { SchedulingDomainError } from "@/modules/scheduling/domain-error";
+import { CreatePeriodForm, AssignmentList, LifecyclePanel } from "@/modules/scheduling/forms";
+import { coverageService } from "@/modules/coverage/service";
+import { CoverageDomainError } from "@/modules/coverage/domain-error";
+import { TaskDialog } from "@/shared/components/task-dialog";
+
+function currentMonth() { const parts = new Intl.DateTimeFormat("en-US", { timeZone: PLANNING_TIMEZONE, year: "numeric", month: "2-digit" }).formatToParts(new Date()); return `${parts.find((part) => part.type === "year")?.value}-${parts.find((part) => part.type === "month")?.value}`; }
+function safeMonth(value: string | undefined) { return /^\d{4}-(0[1-9]|1[0-2])$/.test(value ?? "") ? value! : currentMonth(); }
+
+export default async function SchedulePage({ searchParams }: { searchParams: Promise<{ month?: string; client?: string; period?: string; skill?: string; mode?: string }> }) {
+  const actor = await getCurrentActor(); if (!actor) redirect("/login"); const params = await searchParams; const month = safeMonth(params.month);
+  const planning = actor.role !== "EMPLOYEE" && params.mode === "planning";
+  const entries = await getTimetable(actor, month, planning);
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: PLANNING_TIMEZONE, year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+  if (actor.role === "EMPLOYEE") {
+    return <section className="schedule-page workflow-page"><header className="schedule-heading"><div><p className="eyebrow">Your work</p><h2>My timetable</h2><p>Your published assignments · {PLANNING_TIMEZONE}</p></div><MonthNavigation month={month} /></header><Timetable entries={entries} month={month} manager={false} planning={false} today={today} /></section>;
+  }
+
+  const workspace = await schedulingService.getWorkspace(actor, { month, skillId: params.skill || undefined }); if (workspace.kind !== "manager") throw new SchedulingDomainError("FORBIDDEN");
+  const selectedClient = workspace.clients.find((client) => client.id === params.client); const visiblePeriods = selectedClient ? workspace.periods.filter((item) => item.period.clientId === selectedClient.id) : workspace.periods;
+  let editor: Awaited<ReturnType<typeof schedulingService.getPeriodEditor>> | null = null;
+  if (params.period) { try { const selected = await schedulingService.getPeriodEditor(actor, params.period, params.skill || undefined); if (selected.period.planningMonth.slice(0, 7) === month) editor = selected; } catch (error) { if (error instanceof SchedulingDomainError) notFound(); throw error; } }
+  const coverageAssignmentIds = editor ? (await Promise.all(editor.assignments.map(async (item) => {
+    try { await coverageService.assignmentContext(actor, item.assignment.id); return item.assignment.id; }
+    catch (error) { if (error instanceof CoverageDomainError) return null; throw error; }
+  }))).filter((id): id is string => id !== null) : [];
+  const coverageGaps = actor.role === "SUPER_ADMIN" && editor ? (await Promise.all(editor.assignments.map((item) => coverageService.gaps(actor, item.assignment.id)))).flat() : [];
+  return <section className="schedule-page workflow-page">
+    <WorkflowFeedback /><header className="schedule-heading"><div><p className="eyebrow">Team planning</p><h2>Monthly timetable</h2><p>Who is where, doing what · {PLANNING_TIMEZONE}.</p></div><Link className="button" href="#schedule-editor">Plan work</Link></header>
+    <div className="workflow-toolbar"><MonthNavigation month={month} planning={planning} /></div>
+    <nav className="timetable-mode" aria-label="Schedule status"><Link className="button" aria-current={!planning ? "page" : undefined} href={`/schedule?month=${month}`}>Published</Link><Link className="button" aria-current={planning ? "page" : undefined} href={`/schedule?month=${month}&mode=planning`}>Planning · unpublished</Link></nav><Timetable entries={entries} month={month} manager planning={planning} today={today} /><section id="schedule-editor" className="timetable-editor"><div className="schedule-panel-heading"><div><p className="eyebrow">Plan and publish</p><h3>Monthly schedule editor</h3><p>Select a client schedule to manage its assignments and revision.</p></div>{workspace.clients.length ? <TaskDialog triggerLabel="New monthly schedule" title="Create a monthly Draft" description="Choose a client and month to start planning." triggerClassName="button primary"><CreatePeriodForm clients={workspace.clients} month={month} /></TaskDialog> : null}</div><div className="workflow-toolbar"><details className="workflow-filters"><summary>Filter schedules and employees</summary><form method="get"><input type="hidden" name="month" value={month} />{editor ? <input type="hidden" name="period" value={editor.period.id} /> : null}{workspace.clients.length ? <label>Client filter<select name="client" defaultValue={selectedClient?.id ?? ""}><option value="">All clients</option>{workspace.clients.map((client) => <option key={client.id} value={client.id}>{client.companyName}</option>)}</select></label> : null}<label>Recorded skill filter<select name="skill" defaultValue={workspace.selectedSkillId ?? ""}><option value="">All visible employees</option>{workspace.skills.map((skill) => <option key={skill.id} value={skill.id}>{skill.name}</option>)}</select></label><button className="button primary" type="submit">Apply filters</button></form></details></div><div className="workflow-schedule-layout"><section className="schedule-panel workflow-periods"><div className="schedule-panel-heading"><h3>Monthly schedules</h3><span className="workflow-count">{visiblePeriods.length}</span></div>{visiblePeriods.length ? <div className="schedule-period-list">{visiblePeriods.map(({ period, clientName }) => <Link className="schedule-period-card" aria-current={editor?.period.id === period.id ? "true" : undefined} key={period.id} href={`/schedule?month=${month}&period=${period.id}${planning ? "&mode=planning" : ""}${params.skill ? `&skill=${encodeURIComponent(params.skill)}` : ""}`}><span className={`schedule-status ${period.status.toLowerCase()}`}>{period.status}{period.status === "PUBLISHED" && !period.isCurrent ? " · historical" : ""}</span><strong>{clientName}</strong><span>Revision {period.revisionNumber} · {period.planningMonth.slice(0, 7)}</span></Link>)}</div> : <div className="workflow-empty"><h4>No schedules this month</h4><p>{workspace.clients.length ? "Create a monthly schedule to begin." : "A client manager must create a schedule before you can add assignments."}</p></div>}</section>
+    {editor ? <div className="workflow-detail"><LifecyclePanel period={editor.period} clientName={editor.client?.companyName ?? "Schedule"} canManage={editor.canManage} canPropose={editor.canPropose} canPublish={editor.canPublish} warnings={editor.warnings} /><AssignmentList period={editor.period} assignments={editor.assignments} employees={editor.employees} projects={editor.projects} locationsByProject={editor.locationsByProject} skills={editor.skills} canManage={editor.canManage || (actor.role === "ADMIN" && editor.period.status === "DRAFT")} coverageAssignmentIds={coverageAssignmentIds} />{coverageGaps.length ? <details className="workflow-advisory"><summary>{coverageGaps.length} coverage and skill gap{coverageGaps.length === 1 ? "" : "s"} to review</summary><p>These warnings do not block publication.</p>{coverageGaps.map((gap, index) => <p key={`${gap.anchorAssignmentId}-${index}`}>{gap.employeeName} · {gap.assignmentDate} · {gap.skillName}: {gap.eligibleEmployeeCount} of {gap.requiredEmployeeCount} recorded. <Link href={`/coverage?assignment=${gap.anchorAssignmentId}`}>Review coverage</Link></p>)}</details> : null}</div> : <div className="workflow-empty workflow-select-empty"><h3>Select a schedule</h3><p>Choose a client’s monthly schedule to see assignments and the next step.</p></div>}</div>
+  </section></section>;
+}

@@ -1,0 +1,20 @@
+{
+  "base_commit": "5c9607ed3a64628a2e59c67d7658f4a6329b6c3e",
+  "implementation_commit": "4f82e7958ca2a477c1936c1b8c08889adb7daae3",
+  "remote_main": "4f82e7958ca2a477c1936c1b8c08889adb7daae3",
+  "matching_tree": "e7a4bec4a8d71e09dfc1606086466ebdebf1c9a6",
+  "push": "confirmed",
+  "deployment": {
+    "state": "success",
+    "id": "7uzZZenV1KfSASN6S3w5EJ1uYTug",
+    "canonical_url": "https://scopeis-team-management-system.vercel.app/"
+  },
+  "live_checks": {
+    "accounts": 7,
+    "permitted_pages": 20,
+    "errors": [],
+    "checked_at": "2026-10-06T15:39:20.428Z"
+  },
+  "live_visual": "New approval explanation visible; approval disabled without an eligible candidate; dialog inspected and closed without submitting",
+  "production_business_mutations": false
+}

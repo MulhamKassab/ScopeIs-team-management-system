@@ -1,0 +1,110 @@
+{
+  "url": "https://scopeis-team-management-system.vercel.app",
+  "integrity": {
+    "missing_profiles": "0",
+    "invalid_assignments": "0",
+    "leave_conflicts": "0",
+    "overlaps": "0"
+  },
+  "counts": {
+    "users": 7,
+    "employee_profiles": 7,
+    "user_credentials": 7,
+    "skills": 15,
+    "employee_skills": 21,
+    "clients": 6,
+    "projects": 12,
+    "locations": 6,
+    "schedule_periods": 19,
+    "schedule_assignments": 57,
+    "staffing_requirements": 6,
+    "assignment_skill_requirements": 21,
+    "leave_requests": 4,
+    "replacement_requests": 2,
+    "employee_evidence": 15,
+    "employee_files": 8,
+    "operational_notes": 6,
+    "operational_note_revisions": 6,
+    "employee_management_notes": 4,
+    "discussion_threads": 2,
+    "discussion_messages": 4,
+    "notifications": 32
+  },
+  "activeFiles": 4,
+  "archivedFiles": 4,
+  "users": [
+    {
+      "name": "Ahmad",
+      "role": "EMPLOYEE",
+      "username": "ahmad"
+    },
+    {
+      "name": "Hanna",
+      "role": "SUPER_ADMIN",
+      "username": "hanna"
+    },
+    {
+      "name": "Mulham",
+      "role": "EMPLOYEE",
+      "username": "mulham"
+    },
+    {
+      "name": "Omar",
+      "role": "EMPLOYEE",
+      "username": "omar"
+    },
+    {
+      "name": "Raafat",
+      "role": "SUPER_ADMIN",
+      "username": "raafat"
+    },
+    {
+      "name": "Saber",
+      "role": "ADMIN",
+      "username": "saber"
+    },
+    {
+      "name": "Thamer",
+      "role": "ADMIN",
+      "username": "thamer"
+    }
+  ],
+  "dayPlan": [
+    {
+      "employee": "Ahmad",
+      "client": "Crestline Schools",
+      "start_time": "09:00:00",
+      "end_time": "11:00:00"
+    },
+    {
+      "employee": "Ahmad",
+      "client": "Cedar Finance House",
+      "start_time": "11:00:00",
+      "end_time": "13:00:00"
+    },
+    {
+      "employee": "Mulham",
+      "client": "Northstar Medical Group",
+      "start_time": "09:00:00",
+      "end_time": "11:00:00"
+    },
+    {
+      "employee": "Mulham",
+      "client": "Marina Heights Residences",
+      "start_time": "11:00:00",
+      "end_time": "13:00:00"
+    },
+    {
+      "employee": "Omar",
+      "client": "Horizon Retail Holdings",
+      "start_time": "09:00:00",
+      "end_time": "11:00:00"
+    },
+    {
+      "employee": "Omar",
+      "client": "Vertex Logistics",
+      "start_time": "13:00:00",
+      "end_time": "15:00:00"
+    }
+  ]
+}

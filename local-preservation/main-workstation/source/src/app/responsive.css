@@ -1,0 +1,256 @@
+/* Shared reflow rules precede the visual finish. Content must fit without page-level overflow clipping. */
+:root {
+  --page-gutter: clamp(1rem, 2.6vw, 2.125rem);
+  --mobile-nav-height: 4.625rem;
+  --safe-inline-start: env(safe-area-inset-left, 0px);
+  --safe-inline-end: env(safe-area-inset-right, 0px);
+}
+html[dir="rtl"] {
+  --safe-inline-start: env(safe-area-inset-right, 0px);
+  --safe-inline-end: env(safe-area-inset-left, 0px);
+}
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+:root { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+body { font-size: .9375rem; }
+:where(h1, h2, h3, h4, p, li, dt, dd, legend, label, a, button, summary) { overflow-wrap: anywhere; }
+:where(img, video) { max-inline-size: 100%; }
+.main-content {
+  padding-inline-start: max(var(--page-gutter), var(--safe-inline-start));
+  padding-inline-end: max(var(--page-gutter), var(--safe-inline-end));
+}
+#page-content { inline-size: 100%; container: workspace / inline-size; }
+#page-content :where(section, article, header, form, fieldset, label, details),
+.task-dialog :where(form, fieldset, label, details),
+.workflow-toolbar > *, .workflow-month-picker, .workflow-month-picker input,
+.people-page-heading > div, .operations-heading > div, .schedule-heading > div,
+.header-actions, .persona-copy, .record-breadcrumbs > * { min-inline-size: 0; }
+fieldset { max-inline-size: 100%; }
+.button {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
+  font-size: .875rem;
+}
+.workspace-location { flex: 1; }
+.header-actions { flex-shrink: 0; }
+.workspace-page-name { overflow-wrap: anywhere; }
+.persona-copy { max-inline-size: 14rem; }
+.task-dialog {
+  inline-size: min(700px, calc(100% - 2rem));
+  inset-inline-start: var(--safe-inline-start);
+  inset-inline-end: var(--safe-inline-end);
+  inset-block-start: calc(var(--dialog-viewport-offset, 0px) + (var(--dialog-viewport-height, 100dvh) + env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) / 2);
+  inset-block-end: auto;
+  margin-block: 0;
+  transform: translateY(-50%);
+  max-block-size: calc(var(--dialog-viewport-height, 100dvh) - 2rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+}
+.task-dialog-heading { gap: 12px; max-block-size: calc(var(--dialog-viewport-height, 100dvh) * .45); overflow-y: auto; }
+.task-dialog-heading > div { min-inline-size: 0; }
+.task-dialog-heading .icon-button { position: sticky; inset-block-start: 0; }
+.task-dialog-content { min-inline-size: 0; overflow: auto; scroll-padding-block: 1rem; }
+.task-dialog :is(.operation-form, .schedule-form, .account-form) > .button { inline-size: auto; }
+.task-dialog input::-webkit-date-and-time-value { min-inline-size: 0; text-align: start; }
+.account-pagination, .notification-pagination, .directory-filter-actions { flex-wrap: wrap; }
+.account-filters > .people-filter-actions { grid-column: 1 / -1; justify-content: flex-end; }
+.account-table-scroll, .directory-table-wrap, .report-table-wrap { min-inline-size: 0; max-inline-size: 100%; overscroll-behavior-inline: contain; }
+.account-table :is(th, td), .employee-directory :is(th, td), .report-table td { overflow-wrap: anywhere; }
+.directory-status, .schedule-status, .workflow-status, .evidence-badge { max-inline-size: 100%; line-height: 1.4; }
+.directory-status { justify-self: start; }
+.workflow-month-nav { min-inline-size: 0; }
+.workflow-month-step-label { display: none; }
+.workflow-month-nav > .button { flex: 0 0 44px; min-inline-size: 44px; }
+.workflow-month-picker { flex: 1; }
+.workflow-month-picker input { flex: 1; inline-size: 100%; }
+.workflow-month-picker .button { flex-shrink: 0; }
+.workflow-steps li { min-inline-size: 0; flex-wrap: wrap; }
+.workflow-assignment-heading, .schedule-panel-heading, .people-list-heading, .record-result-heading { flex-wrap: wrap; }
+.operation-check, .account-check { min-block-size: 44px; }
+.operation-check input, .account-check input { flex-shrink: 0; }
+.planning-map-canvas { min-block-size: clamp(280px, 50dvh, 480px); }
+.planning-map-tiles img { max-inline-size: none; }
+.planning-map-attribution { font-size: .75rem; line-height: 1.4; max-inline-size: calc(100% - 1rem); }
+.planning-map-tile-failure { min-block-size: inherit; padding-block-end: 8rem; }
+.planning-map-legend span { min-inline-size: 0; }
+.planning-map-legend i { flex-shrink: 0; }
+.login-page { min-block-size: 100dvh; }
+.login-card, .state-page { min-inline-size: 0; max-inline-size: 100%; }
+
+/* Touch screens also need comfortable controls at desktop-sized viewport widths. */
+@media (any-pointer: coarse), (max-width: 1024px) {
+  :is(.app-shell, .task-dialog, .login-page, .state-page) :is(.button, .icon-button, .collapse-button, summary, .persona, .nav-links a, .planning-map-controls button, .planning-map-list button) {
+    min-block-size: 44px;
+  }
+  :is(.app-shell, .task-dialog, .login-page, .state-page) :is(.icon-button, .collapse-button) { min-inline-size: 44px; }
+  :is(.app-shell, .task-dialog, .login-page) :is(input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]), select, textarea) {
+    min-block-size: 44px;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    font-size: 1rem;
+  }
+  :is(.app-shell, .task-dialog) textarea { min-block-size: 96px; }
+  summary { align-content: center; }
+  .record-breadcrumbs a, .people-security-link, .workflow-back-link, .record-result-heading a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+  }
+}
+
+/* The workspace width includes sidebar and zoom effects, unlike window-only breakpoints. */
+@container workspace (max-width: 60rem) {
+  .directory-filters, .account-filters, .planning-map-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .directory-filter-actions, .planning-map-filters > div { grid-column: 1 / -1; }
+  .operation-cards, .reporting-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .workflow-schedule-layout, .workflow-review-layout, .reporting-filter-groups { grid-template-columns: minmax(0, 1fr); }
+  .workflow-periods .schedule-period-list { grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+  .people-evidence-sections, .reporting-dashboard-sections { grid-template-columns: minmax(0, 1fr); }
+}
+@container workspace (max-width: 48rem) {
+  .record-related-grid, .reporting-report-list { grid-template-columns: minmax(0, 1fr); }
+  .people-page-heading, .operations-heading, .schedule-heading, .account-list-toolbar { flex-wrap: wrap; }
+  .reporting-section-head { flex-direction: column; gap: 6px; }
+  .workflow-request-list { grid-template-columns: minmax(0, 1fr); }
+  .reporting-filter-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@container workspace (max-width: 36rem) {
+  .directory-filters, .account-filters, .planning-map-filters, .operation-search,
+  .operation-form-grid, .schedule-form-grid, .operation-cards, .operation-cards.compact,
+  .reporting-cards, .reporting-filter-fields, .reporting-filter-date-fields, .schedule-my-list,
+  .employee-detail dl, .people-profile-facts { grid-template-columns: minmax(0, 1fr); }
+  .people-page-heading, .operations-heading, .schedule-heading, .people-evidence-heading { flex-direction: column; align-items: stretch; }
+  :is(.people-page-heading, .operations-heading, .schedule-heading, .people-evidence-heading) > .button { inline-size: 100%; max-inline-size: none; }
+  .operation-heading-links, .people-filter-actions, .directory-filter-actions, .workflow-row-actions { inline-size: 100%; }
+  :is(.operation-heading-links, .people-filter-actions, .directory-filter-actions, .workflow-row-actions) > .button { flex: 1 1 9rem; }
+  .workflow-toolbar, .workflow-month-nav { inline-size: 100%; }
+  .workflow-month-picker { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+  .workflow-month-picker input { padding-inline: 6px; }
+  .workflow-balance { grid-template-columns: minmax(0, 1fr); }
+  .workflow-balance > div { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 12px; padding: 14px; }
+  .workflow-balance dt { font-size: .875rem; flex: 1; }
+  .workflow-balance dd { margin: 0; font-size: 1.5rem; text-align: end; }
+  .people-profile-facts > div + div { border-inline-start: 0; border-block-start: 1px solid var(--border); }
+  .people-profile-card { flex-wrap: wrap; }
+  .people-profile-identity { flex: 1 1 12rem; }
+  .people-evidence-heading > .button { align-self: stretch; }
+  .reporting-filter-heading span { margin-inline-start: 0; }
+  .reporting-results-heading { flex-wrap: wrap; }
+  .reporting-results-heading span { max-inline-size: none; text-align: start; }
+  .audit-filters, .audit-filters > .operation-form-grid { grid-template-columns: minmax(0, 1fr); grid-column: auto; }
+  .account-pagination { justify-content: flex-start; }
+  .account-pagination > span { flex-basis: 100%; }
+}
+@container workspace (max-width: 24rem) {
+  .workflow-month-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .workflow-month-picker { grid-column: 1 / -1; grid-row: 1; }
+  .workflow-month-step-label { display: inline; }
+}
+@container workspace (max-width: 17rem) {
+  .workflow-month-picker { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Compact navigation gives phones and tablets the whole authorized workspace. */
+@media (max-width: 1024px) {
+  html { scroll-padding-block-start: 90px; scroll-padding-block-end: calc(var(--mobile-nav-height) + env(safe-area-inset-bottom, 0px) + 1rem); }
+  .app-shell, .app-shell.sidebar-collapsed { display: block; padding-block-end: calc(var(--mobile-nav-height) + env(safe-area-inset-bottom, 0px)); }
+  .app-shell .sidebar { display: none; }
+  .top-header {
+    min-block-size: 66px;
+    padding-block-start: max(10px, env(safe-area-inset-top, 0px));
+    padding-block-end: 10px;
+    padding-inline-start: max(14px, var(--safe-inline-start));
+    padding-inline-end: max(14px, var(--safe-inline-end));
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .top-header .workspace-location { flex: 1 1 7rem; }
+  .top-header .header-actions { margin-inline-start: auto; }
+  .main-content { padding-block: 22px 30px; }
+  .workspace-location > span:not(.workspace-page-name), .workspace-location > svg { display: none; }
+  .workspace-location .workspace-page-name { font-size: .9375rem; line-height: 1.4; }
+  .account-menu { padding-inline-start: 4px; margin-inline-start: 2px; }
+  .bottom-nav {
+    display: grid;
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: 20;
+    min-block-size: var(--mobile-nav-height);
+    padding-block-end: env(safe-area-inset-bottom, 0px);
+    padding-inline-start: var(--safe-inline-start);
+    padding-inline-end: var(--safe-inline-end);
+    border-block-start: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .bottom-nav :is(a, button) {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    min-inline-size: 0;
+    min-block-size: var(--mobile-nav-height);
+    padding: 6px 2px;
+    gap: 5px;
+    background: transparent;
+    border: 0;
+    color: var(--muted);
+    text-decoration: none;
+    text-align: center;
+  }
+  .bottom-nav a[aria-current="page"] { background: var(--primary-soft); color: var(--primary); font-weight: 750; }
+  .bottom-nav small { font-size: .75rem; line-height: 1.25; white-space: normal; overflow: visible; text-overflow: clip; }
+  .mobile-sheet-backdrop { display: grid; position: fixed; z-index: 30; inset: 0; background: rgb(0 0 0 / .35); align-items: end; }
+  .mobile-sheet {
+    min-inline-size: 0;
+    max-block-size: calc(100dvh - env(safe-area-inset-top, 0px) - 1rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--surface);
+    border-radius: 16px 16px 0 0;
+    padding-block: 8px max(24px, env(safe-area-inset-bottom, 0px));
+    padding-inline-start: max(16px, var(--safe-inline-start));
+    padding-inline-end: max(16px, var(--safe-inline-end));
+  }
+  .mobile-sheet .nav-links { gap: 16px; }
+  .mobile-sheet .nav-links a { min-block-size: 48px; font-size: .9375rem; }
+  .task-dialog { inline-size: min(700px, calc(100% - 1rem - var(--safe-inline-start) - var(--safe-inline-end))); max-block-size: calc(var(--dialog-viewport-height, 100dvh) - 1rem - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)); border-radius: 13px; }
+  .task-dialog-heading { padding: 18px 16px 14px; }
+  .task-dialog-content { padding: 18px 16px 22px; }
+  .task-dialog-content .operation-form-grid, .task-dialog-content .schedule-form-grid { grid-template-columns: minmax(0, 1fr); }
+
+  /* Account rows become labelled cards; all data and credential actions remain available. */
+  .account-table { min-inline-size: 0; inline-size: 100%; }
+  .account-table thead { position: absolute; inline-size: 1px; block-size: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .account-table :is(tbody, tr, th, td) { display: block; inline-size: 100%; }
+  .account-table tbody tr { padding: 18px; border-block-end: 1px solid var(--border); }
+  .account-table tbody tr:last-child { border-block-end: 0; }
+  .account-table tbody :is(th, td) { padding: 8px 0; border: 0; font-size: .9375rem; }
+  .account-table tbody th { padding-block-start: 0; margin-block-end: 8px; font-size: 1rem; }
+  .account-table tbody td { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 12px; align-items: start; }
+  .account-table td::before { content: attr(data-label); font-size: .8125rem; font-weight: 600; color: var(--muted); line-height: 1.5; }
+  .account-table .account-row-actions { min-inline-size: 0; }
+  .account-cell-stack small { font-size: .8125rem; }
+}
+@media (max-width: 600px) {
+  .header-actions { gap: 2px; }
+  .persona-copy, .persona > svg { display: none; }
+  .account-popover { inline-size: min(270px, calc(100vw - 28px)); }
+  .task-dialog :is(form > .button, .account-form-actions > .button, .employee-create-actions > .button) { inline-size: 100%; justify-self: stretch; }
+  .task-dialog-heading h2 { font-size: 1.125rem; }
+  .task-dialog-heading p { font-size: .875rem; }
+  .account-table tbody td { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .account-row-actions > .button { inline-size: 100%; }
+  .employee-directory td { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); }
+  .employee-directory td::before { font-size: .8125rem; text-transform: none; letter-spacing: normal; }
+  .employee-directory td[data-label="Action"] { grid-template-columns: minmax(0, 1fr); margin-block-start: 10px; }
+  .employee-directory td[data-label="Action"]::before { display: none; }
+  .notification-controls { grid-template-columns: minmax(0, 1fr); }
+  .notification-action .button { inline-size: 100%; }
+  .record-navigation a { padding-inline: 6px; font-size: .875rem; min-inline-size: 0; }
+  :is(#page-content, .task-dialog) label { font-size: .875rem; }
+  #page-content :is(.eyebrow, .workflow-meta, .workflow-count, .workflow-status, .schedule-status, .record-count, .evidence-badge, .account-asof, .notification-state, .audit-action) { font-size: .8125rem; }
+  .login-page { padding-block: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-bottom, 0px)); }
+  .login-card { padding: 24px 18px; }
+}

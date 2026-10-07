@@ -1,0 +1,218 @@
+{
+  "date": "2026-10-06",
+  "status": "COMPLETED",
+  "scope": "Approved production password sign-in cutover",
+  "target": {
+    "vercelProject": "prj_pE9utFkTQd6uulsVrDKoqsgmmKKd",
+    "vercelScope": "mu-ka7",
+    "neonProject": "morning-flower-68935124",
+    "neonBranch": "br-empty-fog-avl4wjxn",
+    "database": "neondb",
+    "productionAlias": "https://scopeis-team-management-system.vercel.app"
+  },
+  "recovery": {
+    "results": [
+      {
+        "name": "production",
+        "state": "D",
+        "pending": 12,
+        "ledgerRows": 2,
+        "fingerprint": "bbe7725826e94ce2b81cde18bb788f88989e9adf9e229cd238023e7872f655ce"
+      },
+      {
+        "name": "recovery",
+        "state": "D",
+        "pending": 12,
+        "ledgerRows": 2,
+        "fingerprint": "bbe7725826e94ce2b81cde18bb788f88989e9adf9e229cd238023e7872f655ce"
+      }
+    ],
+    "recovery": "Neon branch br-royal-voice-avjx5yd2 (scopeis-before-auth-20261006), parent br-empty-fog-avl4wjxn, created 2026-10-06, expires 2026-10-13"
+  },
+  "migration": {
+    "safety": {
+      "classification": "NON_TEST_REQUIRES_OPERATOR_REVIEW"
+    },
+    "before": {
+      "state": "D",
+      "description": "Ledger and database agree",
+      "pending": [
+        "0002_phase_2_employee_management_journey",
+        "0003_phase_2_employee_code_sequence",
+        "0004_phase_3_operational_structure",
+        "0005_phase_4_scheduling",
+        "0006_phase_5_leave_availability",
+        "0007_phase_6_skill_requirements",
+        "0008_phase_7_coverage_replacements",
+        "0009_phase_8_static_planning_map",
+        "0010_phase_9_evidence_files",
+        "0011_phase_10_collaboration_governance",
+        "0012_existing_user_credential_authentication",
+        "0013_super_admin_account_management"
+      ],
+      "diagnostics": {
+        "missingTables": [],
+        "unexpectedTables": [],
+        "mismatchedTables": [],
+        "mismatchedSections": [],
+        "actualFingerprint": "bbe7725826e94ce2b81cde18bb788f88989e9adf9e229cd238023e7872f655ce",
+        "expectedFingerprint": "bbe7725826e94ce2b81cde18bb788f88989e9adf9e229cd238023e7872f655ce"
+      }
+    },
+    "after": {
+      "state": "D",
+      "description": "Ledger and database agree",
+      "pending": [],
+      "diagnostics": {
+        "missingTables": [],
+        "unexpectedTables": [],
+        "mismatchedTables": [],
+        "mismatchedSections": [],
+        "actualFingerprint": "094ef163ef273a2e693bf878d5a1228b9e5b38689690b8b2c0cb09680e1f706b",
+        "expectedFingerprint": "094ef163ef273a2e693bf878d5a1228b9e5b38689690b8b2c0cb09680e1f706b"
+      }
+    },
+    "dryRun": false,
+    "applied": true,
+    "refused": false
+  },
+  "bootstrap": {
+    "count": 5,
+    "outcome": "initialized",
+    "userIds": [
+      "mock-super-admin-nora",
+      "mock-admin-ava",
+      "mock-admin-ben",
+      "mock-employee-cora",
+      "mock-employee-dan"
+    ]
+  },
+  "databaseAfter": {
+    "state": "D",
+    "pending": 0,
+    "ledgerRows": 14,
+    "approvedCredentials": 5,
+    "bootstrapAudits": 1
+  },
+  "verification": {
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "fingerprintUnitTests": 5,
+    "migrationTests": 8,
+    "credentialServiceTests": 20,
+    "live": {
+      "verifiedAt": "2026-10-06T05:43:59.650Z",
+      "productionAlias": "https://scopeis-team-management-system.vercel.app",
+      "accounts": [
+        {
+          "identifier": "nora",
+          "login": 200,
+          "redirectTo": "/dashboard",
+          "cookie": {
+            "secure": true,
+            "httpOnly": true,
+            "sameSiteLax": true
+          },
+          "dashboard": 200,
+          "logout": 200,
+          "afterLogout": 307
+        },
+        {
+          "identifier": "ava",
+          "login": 200,
+          "redirectTo": "/dashboard",
+          "cookie": {
+            "secure": true,
+            "httpOnly": true,
+            "sameSiteLax": true
+          },
+          "dashboard": 200,
+          "logout": 200,
+          "afterLogout": 307
+        },
+        {
+          "identifier": "ben",
+          "login": 200,
+          "redirectTo": "/dashboard",
+          "cookie": {
+            "secure": true,
+            "httpOnly": true,
+            "sameSiteLax": true
+          },
+          "dashboard": 200,
+          "logout": 200,
+          "afterLogout": 307
+        },
+        {
+          "identifier": "cora",
+          "login": 200,
+          "redirectTo": "/dashboard",
+          "cookie": {
+            "secure": true,
+            "httpOnly": true,
+            "sameSiteLax": true
+          },
+          "dashboard": 200,
+          "logout": 200,
+          "afterLogout": 307
+        },
+        {
+          "identifier": "dan",
+          "login": 200,
+          "redirectTo": "/dashboard",
+          "cookie": {
+            "secure": true,
+            "httpOnly": true,
+            "sameSiteLax": true
+          },
+          "dashboard": 200,
+          "logout": 200,
+          "afterLogout": 307
+        }
+      ],
+      "unknownAccount": {
+        "status": 401,
+        "error": "INVALID_CREDENTIALS"
+      }
+    },
+    "roles": {
+      "verifiedAt": "2026-10-06T05:44:50.347Z",
+      "checks": [
+        {
+          "role": "SUPER_ADMIN",
+          "emailLogin": 200,
+          "dashboard": 200,
+          "dashboardHeading": true,
+          "accountAdministration": 200,
+          "logout": 200
+        },
+        {
+          "role": "ADMIN",
+          "emailLogin": 200,
+          "dashboard": 200,
+          "dashboardHeading": true,
+          "accountAdministration": 404,
+          "logout": 200
+        },
+        {
+          "role": "EMPLOYEE",
+          "emailLogin": 200,
+          "dashboard": 200,
+          "dashboardHeading": true,
+          "accountAdministration": 404,
+          "logout": 200
+        }
+      ]
+    }
+  },
+  "deployment": {
+    "id": "7CXJR2kXA3PPdcXPcCWZYewpmi4K",
+    "ready": true,
+    "sourceCommit": "b5dbc09d42edf3c30c1e7b772f5b048ba401e6e8",
+    "aliasUpdated": true
+  },
+  "limits": [
+    "Narrow authentication cutover; general Phase 13 readiness is not certified.",
+    "Recovery branch expires 2026-10-13."
+  ]
+}

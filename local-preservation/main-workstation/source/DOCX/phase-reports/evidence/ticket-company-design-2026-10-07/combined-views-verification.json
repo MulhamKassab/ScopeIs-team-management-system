@@ -1,0 +1,33 @@
+{
+  "type": "design-preview-revision-only",
+  "date": "2026-10-07",
+  "request": "Both Company Overview and operational Tickets must coexist, with a switch/filter between them.",
+  "source_repository": "MulhamKassab/ticketSystem",
+  "source_commit": "8888b15a81d85f05c484dac9d17283c9530f61c4",
+  "previous_receipt": "verification.json",
+  "browser_surface": "Codex in-app browser",
+  "verified": [
+    "Single product preview with Overview/Tickets switch; comparison carousel and duplicate state removed.",
+    "Website updates + On Hold + DNS retains one matching ticket through Tickets, Overview and Tickets; Board layout retained.",
+    "Filtered Overview shows one matching ticket, one on-hold ticket and 1h logged work from the same result set.",
+    "1024px light Overview screenshot inspected: shared filters, 12 tickets, 6 active, 2 on hold, 11.5h, two workspaces.",
+    "320px browser viewport: actual embedded product width 273px equals scrollWidth; Overview/Tickets controls are 44px high.",
+    "320px Tickets Board shows 5 vertically stacked status columns and all 12 tickets with no horizontal overflow.",
+    "390px browser viewport: actual embedded product width 343px equals scrollWidth; Website updates + Open + service retains TKT-102 and List layout through both views.",
+    "Compact header breadcrumb wrap repaired; revised accessibility tree shows the concise Tickets label.",
+    "Temporary viewport override reset.",
+    "Final JavaScript syntax check and static fragment checks passed."
+  ],
+  "unexecuted": [
+    "Dark-theme screenshot",
+    "Full accessibility audit",
+    "Original unexecuted create/archive/restore checks"
+  ],
+  "limitations": "Local illustrative design only; fictional tickets, no application integration or production behavior certification.",
+  "application_code_changed": false,
+  "database_changed": false,
+  "deployment_performed": false,
+  "remote_repository_changed": false,
+  "fragment_sha256": "675cdf75685443cf5ed12d7f48f5d8f9f8ba32ab5bf0a8607d75d3bdbda79f45",
+  "fragment_size_bytes": 64883
+}

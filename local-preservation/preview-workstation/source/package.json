@@ -1,0 +1,41 @@
+{
+  "name": "scopeis-team-management-system",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "test:preview": "vitest run test/unit/preview-fixture.test.ts test/unit/preview-motion.test.ts",
+    "test": "npm run test:preview",
+    "test:all": "npm run lint && npm run typecheck && npm run test:preview && npm run build"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "motion": "^13.2.0",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-leaflet": "^5.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "latest",
+    "@testing-library/jest-dom": "latest",
+    "@testing-library/react": "latest",
+    "@types/leaflet": "^1.9.22",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "jsdom": "^29.0.1",
+    "typescript": "latest",
+    "vitest": "latest"
+  }
+}

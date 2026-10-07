@@ -1,0 +1,18 @@
+{
+  "verifiedAt": "2026-10-06T11:05:41.050Z",
+  "migration": "0014_team_catalogue",
+  "state": "D",
+  "pending": [],
+  "schemaFingerprint": "6b5170a137590eac3e51447fada3ffe31da2f05aafd8574526e5073f16d55380",
+  "existingTablesUnchanged": 33,
+  "users": 7,
+  "profiles": 7,
+  "credentials": 7,
+  "teams": [
+    {
+      "id": "team:operations",
+      "name": "Operations",
+      "version": 1
+    }
+  ]
+}

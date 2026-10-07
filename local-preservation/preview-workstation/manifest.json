@@ -1,0 +1,1936 @@
+{
+  "source": "/Users/mulhamkassab/Desktop/For Me/ScopeIs Team Management System-preview",
+  "label": "scopeis-preview",
+  "created_at_utc": "2026-10-07T15:54:15Z",
+  "excluded_directories": [
+    ".cache",
+    ".expo",
+    ".git",
+    ".next",
+    ".node-build",
+    ".npm-cache",
+    ".playwright-browsers",
+    ".runtime-cli-matrix",
+    ".runtime-diagnostics",
+    ".venv",
+    "__pycache__",
+    "dist",
+    "node_modules",
+    "venv"
+  ],
+  "excluded_generated_subtrees": [
+    ".vercel/builders",
+    ".vercel/output"
+  ],
+  "files": [
+    {
+      "path": ".env.example",
+      "bytes": 212,
+      "sha256": "0c6c2d55eee786eec7b9e5c3c63aa71ff111c7965811f935d0bcca109058a5d5",
+      "preserved": "encrypted-backup",
+      "reason": "configuration"
+    },
+    {
+      "path": ".env.test",
+      "bytes": 126,
+      "sha256": "42c88742f07d88f09ccea39f9648d7241bca5cb95b356059803ebed5eddf9a8b",
+      "preserved": "encrypted-backup",
+      "reason": "configuration"
+    },
+    {
+      "path": ".git",
+      "bytes": 128,
+      "sha256": "d4f10b03eba5bf0d54beef6f9b747595723ffa5c0d6ad42826910f80f4e88734",
+      "preserved": "encrypted-backup",
+      "reason": "private-metadata-or-data"
+    },
+    {
+      "path": ".gitattributes",
+      "bytes": 500,
+      "sha256": "fa8f540c9d05b6de21ca89d2f0096c09b80b891bf82a565765c0cfd2f46da826",
+      "preserved": "github-source"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 175,
+      "sha256": "6db9846ddfdf3f840086809e7dfedb1cbc168ba5e49156dd585a89dabbe58035",
+      "preserved": "github-source"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 1703,
+      "sha256": "cae6f486ef70088bfae50d2fb0677b9fdfce8b09106bed92e5ce70019524b31a",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/INDEX.md",
+      "bytes": 11590,
+      "sha256": "aff03e7a699cbcbc905ed04883a1d56fc12c89899e0dad05816d1e242e7c26b2",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/diagrams/01_system_module_hierarchy.png",
+      "bytes": 141284,
+      "sha256": "db2e10caa0a91e4480c95ef32080ca38304798fa75eaaf6ed501cf697158de9f",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/diagrams/02_role_and_permission_hierarchy.png",
+      "bytes": 168135,
+      "sha256": "2dd5c59e275b1a911dd847a76c2e9e6f23675c324771bd1122004150b24d5ebb",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/diagrams/03_client_project_location_employee_relationships.png",
+      "bytes": 119713,
+      "sha256": "3c0cd813b94948a5c63733222e47dc8c1c799edaa39407b1695ba94be8babaf8",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/diagrams/04_schedule_draft_review_publish_workflow.png",
+      "bytes": 127497,
+      "sha256": "d23ca9e4e11bfabbb68cdc6baefc156d0cf78c2e369350d256b8614a5accc520",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/diagrams/05_leave_coverage_and_replacement_workflow.png",
+      "bytes": 167146,
+      "sha256": "a92d22fa1d38b0c4e1c78454296b387956c7884db47a6af6a05c3331776c0fac",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/diagrams/06_notes_and_communication_visibility.png",
+      "bytes": 118076,
+      "sha256": "dd0b128a0cb8bebd11644fd996f0462eaaa340ecce4e5e6e673509366cc9e7a8",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/diagrams/07_certification_and_portfolio_notification_workflow.png",
+      "bytes": 109850,
+      "sha256": "ba1d0c03a1ee7ac8cb0fb7a9b478b6e4258c3e0dd6f029dd50b8eb5b5779f96b",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/diagrams/08_static_planning_map_data_flow.png",
+      "bytes": 136011,
+      "sha256": "a2fd26c72550a822f7e40ce765734ebb8aa69560afbf5af95466924fc87dacce",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/diagrams/09_ticket_system_later_integration.png",
+      "bytes": 102443,
+      "sha256": "bc1adb8526e2842c33eed0a0e2a49dd505560b6e92725f9e5b16d894a71ef6af",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/PHASE_1_FOUNDATION_IMPLEMENTATION_REPORT.md",
+      "bytes": 8105,
+      "sha256": "7cfecf3f3492fca6a8d0f409d8b64a8e8af2e89e8d1f98a2df3ea4af8ae4f601",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/PHASE_2_EMPLOYEES_AND_CAPABILITIES_IMPLEMENTATION_REPORT.md",
+      "bytes": 1927,
+      "sha256": "0bda2f4200031645a113e9a29909038242d87c44671b445a3102b460f21b5e30",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/PHASE_2_PRODUCTION_MIGRATION_RUNBOOK.md",
+      "bytes": 5347,
+      "sha256": "6c54330a46794cfd21b2a3468a1a3bcc000d8886f14e0eaf61255c6ebaf2018d",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_1_ROUTE_AND_PLAYWRIGHT_CERTIFICATION_R1.md",
+      "bytes": 12929,
+      "sha256": "070b4ea3763905185dcd9bf8d490c40184994f397c1d06ea36963b3ab638d118",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_2_1_CUSTODY_RESOLUTION_VERIFIED_MAIN_CLOSURE_R1.md",
+      "bytes": 8058,
+      "sha256": "b59f5ffb032d2c62345c6cf4539cfc3337c9718abe8e8b73406ef34ecff859ff",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_2_1_PRESERVE_AND_RECONCILE_EXISTING_EMPLOYEE_BACKEND_R1.md",
+      "bytes": 10122,
+      "sha256": "9bb10b6595f4ea78b1afb7f5a712444b83a0b5f698c33ee51948709b56cd38cc",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_2_2_REAL_EMPLOYEE_DIRECTORY_R1.md",
+      "bytes": 6002,
+      "sha256": "76c075d8b0b91d5b6d65eeccbc53c4897c7987d68193f522a3c334de1f649102",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_2_3_EMPLOYEE_SEARCH_AND_FILTERS_R1.md",
+      "bytes": 5732,
+      "sha256": "07e8452ad0e8b29a798482a873427001f5143bdf88a00a11f367bfd238d6fa9d",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_2_4_CREATE_EMPLOYEE_R1.md",
+      "bytes": 7544,
+      "sha256": "665e9594cc33987b6ac7dc04263401b67890b55b35b7be60907c0f217bd84629",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_2_CORE_EMPLOYEE_SERVICE_LAYER_R1.md",
+      "bytes": 3288,
+      "sha256": "eaa67721496bbbdb5830c009f998dd3df238622312639abc17c1c38639b5bd9a",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_2_CORE_SERVICE_INCIDENT_REMEDIATION_AND_VERIFICATION_CLOSURE_R3.md",
+      "bytes": 4023,
+      "sha256": "c6b458b228cf298e0ff9751022181a616fe5253b8116c2431291cdca6a1c0ff5",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_2_DATABASE_FOUNDATION_RECONCILIATION_R1.md",
+      "bytes": 9947,
+      "sha256": "eae30f8576a09f6e9a9de3b66a31980383ac94ca45052121882d9ef48ce212fd",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_2_EMPLOYEE_MANAGEMENT_JOURNEY_COMPLETION_R1.md",
+      "bytes": 8371,
+      "sha256": "c12f871726bb7e2a4da0c0aaeb0b415b4ca491114198c43e4136af2db3c2562d",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_2_MANUAL_QA_EMPLOYEE_CONTROLS_AND_CODE_REMEDIATION_R2.md",
+      "bytes": 7726,
+      "sha256": "5a9a40247230ca319023a7f74c6c61dfc2fdb2d8aac12f3ae6070f7a9d59cedc",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_2_MANUAL_QA_RUNTIME_READINESS_AND_DEFECT_REMEDIATION_R1.md",
+      "bytes": 9606,
+      "sha256": "989bafbf8cff95ad4e9cf976749afd757ff2073647441a8c89ac3a22c45b54c6",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_3_CLIENT_PROJECT_LOCATION_JOURNEY_R1.md",
+      "bytes": 11227,
+      "sha256": "d6ad96ed62c99d8d10d354da7a8dd3c21b96befb04eefe0d9925771acbe6f53f",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_4_SCHEDULING_DRAFT_PROPOSED_PUBLISHED_JOURNEY_R1.md",
+      "bytes": 12878,
+      "sha256": "7b7a114dadf515e3f53f7b48fac515c130872e49ab8617f619c8995a4d92789f",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_5_LEAVE_AND_AVAILABILITY_JOURNEY_R1.md",
+      "bytes": 9974,
+      "sha256": "d915b760359acd649143a418e6759d645221644cf71fed1820fc6c6b8603c08d",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_6_SKILLS_AND_OPERATIONAL_CAPABILITIES_JOURNEY_R1.md",
+      "bytes": 11852,
+      "sha256": "3b557461614be2e0ef7698a1b377f523998dcdf14dfd41c92e8d8d3587668822",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_7_COVERAGE_AND_REPLACEMENT_JOURNEY_R1.md",
+      "bytes": 2727,
+      "sha256": "68612ef56a82a8091769a9191dd5b444e6abcb0e68468abf6673f7be4fd6ac72",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PHASE_8_STATIC_PLANNING_MAP_JOURNEY_R1.md",
+      "bytes": 6613,
+      "sha256": "cdefa43e41b16b93515678fcb9e929fb314f578c29ac711dc0d610480268d71a",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PREVIEW_BRANCH_FRONTEND_INTEGRATION_R1.md",
+      "bytes": 13431,
+      "sha256": "038b61f6a74f51278e004aa4b422dca6f5e82ecbdd0f16bec80023ee8e0b54af",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PREVIEW_DATABASE_BOOTSTRAP_R1.md",
+      "bytes": 6124,
+      "sha256": "2f994340d5dd7aee03f9ba5f2788aa58e62dc3170ee5ac9c9e6e4cd569d63095",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PREVIEW_DATABASE_FREE_FULL_FRONTEND_FIXTURE_CONVERSION_R1.md",
+      "bytes": 6607,
+      "sha256": "324d8540f51c015bd16af17a48c24481ec1749dae8bfae0aa27a1c11802a0e08",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PREVIEW_FIXTURE_DATA_COVERAGE_AUDIT_AND_INTERACTIVE_MAP_R1.md",
+      "bytes": 8289,
+      "sha256": "7e665ad53815b3dc8f26f2db63d75d97b7e5b8f0e34260fbf2f2127e9b58f7c0",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PREVIEW_MOTION_SYSTEM_AND_LIVING_INTERFACE_R1.md",
+      "bytes": 8203,
+      "sha256": "6e918eb23e18bd8a19148594cef729f724c699a810638fb0eff5f472a1c3c135",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PREVIEW_RICH_OPERATIONAL_DATA_AND_MULTI_LAYOUT_EXPLORATION_R2.md",
+      "bytes": 6407,
+      "sha256": "6c38afca7d76ad55b32ed03f4504db68e2ad58678dfca93cda2277fcc4e9293b",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/SCOPEIS_PREVIEW_VERCEL_DATABASE_ENV_FIX_R1.md",
+      "bytes": 2649,
+      "sha256": "2f22ed3c7dafe51207f33accd54224dd6384a9f0bf79d3ec8b8a38905e6cdff4",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/assets/scopeis-preview-r1/app-dashboard-super-admin-desktop-1440x900.png",
+      "bytes": 82299,
+      "sha256": "0bdbec5acafa09efed4942fb967b2c5c9de082fa44095b8163c6f6544703891e",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/assets/scopeis-preview-r1/app-employee-create-super-admin-desktop-1440x900.png",
+      "bytes": 81343,
+      "sha256": "e3d081d612d5397ba7303ed3ef49fc52fdf5be5dc96524e3f1e2367f32bdff7b",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/assets/scopeis-preview-r1/app-employee-detail-admin-desktop-1440x900.png",
+      "bytes": 68308,
+      "sha256": "d3ef1ac1b14a49fed4e67dc40de0428baa787f942e0711761049dbe3d6238bf3",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/assets/scopeis-preview-r1/app-employee-management-super-admin-desktop-1440x900.png",
+      "bytes": 90291,
+      "sha256": "622fa299842925c8e23c61a487d080c183aaf3e6c85622d2d454989f42766600",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/assets/scopeis-preview-r1/app-employees-super-admin-desktop-1440x900.png",
+      "bytes": 94834,
+      "sha256": "cc0a741d7c35a9eb3d19fa50efb6b3cdb6718cc0790cfc91a8762012b31551e3",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/assets/scopeis-preview-r1/app-login-desktop-1440x900.png",
+      "bytes": 64959,
+      "sha256": "02373f289bc3808cc5a20681c0bc10514ce60eed27e51913e697978f45469c2d",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/assets/scopeis-preview-r1/app-mobile-more-sheet-390x844.png",
+      "bytes": 25416,
+      "sha256": "1425182809d262013cf27817eb607f582c06435c904fb7caa77e2b87c17d268f",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/assets/scopeis-preview-r1/app-profile-employee-desktop-1440x900.png",
+      "bytes": 76158,
+      "sha256": "584b224b99809f02800d2c3baf4e9161aa1fba2d54e1e7ec23bb8cec0d56bcff",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/assets/scopeis-preview-r1/app-schedule-mobile-dark-390x844.png",
+      "bytes": 29253,
+      "sha256": "66bd0252c7e432806f8c68d81c49116a59de4ed165d19172c5d5c1f14c7b78f9",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/assets/scopeis-preview-r1/app-schedule-mobile-dark-rtl-390x844.png",
+      "bytes": 29636,
+      "sha256": "688dad7ea56fd9e6fa6e7a6a953d643be96c46f2b68f5a970e76a5b8093510e3",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/assets/scopeis-preview-r1/app-schedule-placeholder-desktop-1440x900.png",
+      "bytes": 57185,
+      "sha256": "6f4251960662771501c9fd0679c37e4fc86cce5f27c591b21a24d006aa99e089",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/assets/scopeis-preview-r1/app-schedule-placeholder-mobile-390x844.png",
+      "bytes": 29759,
+      "sha256": "b76498d4501cca087a8c042e6e6c628a7a7ef8d7d834ad1f020e334cfb01f1fe",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/assets/scopeis-preview-r1/prototype-login-desktop-1440x900.png",
+      "bytes": 64054,
+      "sha256": "e41480e79f3565b7a1fc25500d9d409fbcd0f27395627cfba42f7e5d2740208c",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/assets/scopeis-preview-r1/prototype-schedule-desktop-1440x900.png",
+      "bytes": 114820,
+      "sha256": "81175d97768b535d95e34fcc7794956634ceab0e87f6a5fd40f4b8746e78b9fb",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/assets/scopeis-preview-r1/prototype-schedule-mobile-390x844.png",
+      "bytes": 31093,
+      "sha256": "e6a5000d8cf4db60ae787428f798d8c8acde52706f0b9ffe9fba4fa0d3b827ba",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/assets/scopeis-preview-r1/reference-review-command.png",
+      "bytes": 1530402,
+      "sha256": "c1bf966c20ba4d922c64b10afdca95abc8c69ad1a093c26201edac803a2fe9cd",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/phase-reports/evidence/SCOPEIS_R3_PERSISTENT_TEST_DB_INCIDENT_BACKUP.md",
+      "bytes": 3326,
+      "sha256": "8e55f703b2b789938347b8a9907edbda76f169e3674621f4a8aba0d1485bfd14",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/DECISIONS_AND_CONSTRAINTS.md",
+      "bytes": 7376,
+      "sha256": "22dd28584b217eced43939e84d3a701bd13e156a7da092017971c4350bb3e04b",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/DEFINITION_OF_DONE.md",
+      "bytes": 4732,
+      "sha256": "9c0c5ab76df3ba9cc26f50c9defe494caf19683d877265e7af09cb4cf4aac495",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/IMPLEMENTATION_ROADMAP.md",
+      "bytes": 12222,
+      "sha256": "49143e08245ec0208fddc0674a6fa9bec03092c110a38c3fe1b2a997e0df1ead",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/IMPLEMENTATION_STATUS_LOG.md",
+      "bytes": 2963,
+      "sha256": "f536eac711d726ba805db80c2bdd2505cf018077bed6e04263936608dfaa2076",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/IMPLEMENTATION_STATUS_TRACKER.md",
+      "bytes": 75742,
+      "sha256": "b69bb2a5124421cb07ef6dc310e8c75df572434c5232e890a2af56ef0b7176f2",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/PHASE_2_EMPLOYEE_DOMAIN_DECISIONS.md",
+      "bytes": 4208,
+      "sha256": "1d421d32df1d512a41add9f476b6276b98973c1020f719f546dfeaff2a4b4646",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/PHASE_3_OPERATIONAL_DOMAIN_DECISIONS.md",
+      "bytes": 4101,
+      "sha256": "4e6f9fc7a713c8f79b13e4519cf3e8e7f1b539ac70d38b6480cb5f84a9f143c3",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/PHASE_4_SCHEDULING_DOMAIN_DECISIONS.md",
+      "bytes": 3686,
+      "sha256": "59ca559a05e2c20a22ab6f8dd13f5d4b91fe8270af2f6bca22869eeb46740087",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/PHASE_5_LEAVE_DOMAIN_DECISIONS.md",
+      "bytes": 1333,
+      "sha256": "4a86dcf59966634462ca5cbc52db0edf681d4e3af1c248ce700f31ccd6c015ec",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/PHASE_6_SKILLS_CAPABILITIES_DECISIONS.md",
+      "bytes": 2785,
+      "sha256": "ce0d4625023aeead0cdf3c07d544fe29a7b074e2eb22d3b7ffa34e25ab962281",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/PHASE_7_COVERAGE_REPLACEMENT_DECISIONS.md",
+      "bytes": 1296,
+      "sha256": "fea7a37e27cc637b4660fa0b6d05b858fa5c51d1c4882ccf7cb70f0647500a59",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/PHASE_8_STATIC_PLANNING_MAP_DECISIONS.md",
+      "bytes": 1423,
+      "sha256": "e3d38ba9a1a81a25f5cc0c22ca4f46a0ff7edb7c91eef76ed45a2a6564eea9b3",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/PREVIEW_SYNC_RUNBOOK.md",
+      "bytes": 1488,
+      "sha256": "c3bc2c3272d79d1969c92ef098d8f71721658645022e5ac5e4989d57e72cf575",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/PRODUCT_REQUIREMENTS.md",
+      "bytes": 14429,
+      "sha256": "dfbc4ad0b86eab335a61a45a73e1c95e8fdb3cc328567b1c820379a4dd6bf749",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/PROJECT_OVERVIEW.md",
+      "bytes": 3912,
+      "sha256": "9125429f00ebde5465adf78babf458e687ad2c83af5a3169a4b814c0140b17c2",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/ROLE_AND_PERMISSION_MODEL.md",
+      "bytes": 5372,
+      "sha256": "61559985596d597c4fb725ee0f1271a5920fca6a363d9bf027172766274c39e2",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/SYSTEM_ARCHITECTURE_DECISIONS.md",
+      "bytes": 38927,
+      "sha256": "f2c43509b3d575fc76b7530a7752cc43bf5e08abe530c9b3c08652c7961ecd58",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/SYSTEM_HIERARCHY_AND_RELATIONSHIPS.md",
+      "bytes": 5762,
+      "sha256": "315218fd657401224554c71c451601cd08568f87139f96f5be73572d0eb27b14",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/UI_UX_FOUNDATION.md",
+      "bytes": 4032,
+      "sha256": "94cdc57f23d4a7dd7cee29092207df959abf87cc3ff26210a235c8ab2f0fe7b0",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/project-memory/WORKFLOWS.md",
+      "bytes": 6916,
+      "sha256": "840f2078b28bf24d7fff6a215e2d797f6d627b99ea7aaf92926fa791b6ac034f",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/requirements/ScopeIs_Team_Management_System_Product_Requirements.docx",
+      "bytes": 54170,
+      "sha256": "38fce267696ec73014186e33542f00808c8d16ac2560bc9dda7b314c9a4ec090",
+      "preserved": "github-source"
+    },
+    {
+      "path": "DOCX/requirements/ScopeIs_Team_Management_System_Roles_Workflows_and_Hierarchy.docx",
+      "bytes": 1115581,
+      "sha256": "4c078dc24d20a09762006538de83c431410eb1ac98298150a9b3b05a4bcd3572",
+      "preserved": "github-source"
+    },
+    {
+      "path": "PROJECT_CONTEXT.md",
+      "bytes": 5218,
+      "sha256": "276f646ec787f880b766149399350c2103cbe42b6055c6b2a949bd570960bdba",
+      "preserved": "github-source"
+    },
+    {
+      "path": "README.md",
+      "bytes": 1236,
+      "sha256": "ce92a18ce8baae7be78f86599ad4a943a6db3880f2a6e88fb663977e8663015c",
+      "preserved": "github-source"
+    },
+    {
+      "path": "design-qa.md",
+      "bytes": 12838,
+      "sha256": "f8330e26d6b8c8700f55f5e5658632104eb9531faf6477458f5fd793193b6f67",
+      "preserved": "github-source"
+    },
+    {
+      "path": "drizzle.certification.config.ts",
+      "bytes": 205,
+      "sha256": "e130aa0f130e46a22f67a64fa1b8b10a983d7e654d62d6e3d102cbe7be9a716c",
+      "preserved": "github-source"
+    },
+    {
+      "path": "drizzle.config.ts",
+      "bytes": 287,
+      "sha256": "f22afd2b0f7d515f244ca5d2d162b80c09b08008b996575f1292d3d049e88453",
+      "preserved": "github-source"
+    },
+    {
+      "path": "drizzle.test.config.ts",
+      "bytes": 274,
+      "sha256": "b2c6ac59bb4588d13706bf706c9c7f1051b16f04b27485114424c9c50dc9add3",
+      "preserved": "github-source"
+    },
+    {
+      "path": "eslint.config.mjs",
+      "bytes": 267,
+      "sha256": "ea157ebec883bb9eeba3e5254f6f0b8636c906df1311488d056ddce63a68d0ce",
+      "preserved": "github-source"
+    },
+    {
+      "path": "next-env.d.ts",
+      "bytes": 288,
+      "sha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b",
+      "preserved": "github-source"
+    },
+    {
+      "path": "next.config.ts",
+      "bytes": 163,
+      "sha256": "7dfe5f783a0b9472cbbf2f31eb6707fcbf81ff8686ddbad3189dc69ef22ba857",
+      "preserved": "github-source"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 299627,
+      "sha256": "2f12dd6505c0cc9fd98eecee976cdcd86823f4bfdadbd23838cfc2f5e36a850d",
+      "preserved": "github-source"
+    },
+    {
+      "path": "package.json",
+      "bytes": 1135,
+      "sha256": "1a1358829082aceddb2770fb7784eb4b176c6aa2b9b801e01cd5b4ab73057a14",
+      "preserved": "github-source"
+    },
+    {
+      "path": "playwright.config.ts",
+      "bytes": 1109,
+      "sha256": "9d7f4db4743e1766fc9324dc0b4b0c14f1f2996f6230f6bbb226a7f31c7d5672",
+      "preserved": "github-source"
+    },
+    {
+      "path": "playwright.phase2.config.ts",
+      "bytes": 862,
+      "sha256": "fb130399f391075cff6518c38f62643280fcf9e8b28ba20e3153dfddd910bd43",
+      "preserved": "github-source"
+    },
+    {
+      "path": "playwright.phase3.config.ts",
+      "bytes": 872,
+      "sha256": "0a4701ba72affbfacadae4a656e2989fe63b6a551bce60b0000cb349f76b9e0d",
+      "preserved": "github-source"
+    },
+    {
+      "path": "playwright.phase4.config.ts",
+      "bytes": 855,
+      "sha256": "aeadc7530106a7c95d11092b59385473d6a2819329e75dc678ef608be6ecab23",
+      "preserved": "github-source"
+    },
+    {
+      "path": "playwright.phase5.config.ts",
+      "bytes": 861,
+      "sha256": "340494a9d035980f94c1eab23d6511c9420cefa1a9b14d6f213b0bb8bbfad8c5",
+      "preserved": "github-source"
+    },
+    {
+      "path": "playwright.phase6.config.ts",
+      "bytes": 868,
+      "sha256": "68c8a516cf1ca37b6b80f5b359dceca59143b6b71564963b7151e9c697473126",
+      "preserved": "github-source"
+    },
+    {
+      "path": "playwright.phase7.config.ts",
+      "bytes": 864,
+      "sha256": "d3509c7322ab275b976337830a4b74ea93becbfbf8ad34c0e05c28679943ecdc",
+      "preserved": "github-source"
+    },
+    {
+      "path": "playwright.phase8.config.ts",
+      "bytes": 868,
+      "sha256": "c85701ebd7e4f0f43a0f70a906ead1f961e5fe5ef5661f526103dc4e0d67e6c1",
+      "preserved": "github-source"
+    },
+    {
+      "path": "public/brand/scopeis-logo.png",
+      "bytes": 5343,
+      "sha256": "0e190ca0c0686c621e73414e557ac1ce64685b62f8e9fc777e60822d868e8d46",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/disposable-test-database.mjs",
+      "bytes": 6884,
+      "sha256": "d907bc025dc9ff446e48fc7dbe8bded3f47472aebde754004851ba759e407308",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/phase1-test-environment.mjs",
+      "bytes": 5246,
+      "sha256": "4953e172f5f6d7a944d27106fef9c18330bdb23a0582a28324d2f1bac62f95a0",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/phase2-migration-core.mjs",
+      "bytes": 14790,
+      "sha256": "6408e1260bd95f4bbd8789408cc86e038a4295c482e93005bbff146f9f11f614",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/phase2-migration-state.mjs",
+      "bytes": 1358,
+      "sha256": "beb205c523b7c75a6f1e47edd9ebabe0507f57679915c7b27f1c2e47ffd7a331",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/phase3-test-fixtures.mjs",
+      "bytes": 6045,
+      "sha256": "453b91cca562c8d6cf1ac0c4834b4fc994c1eff658a6927df6decf25787b0111",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/phase4-test-fixtures.mjs",
+      "bytes": 1425,
+      "sha256": "b5375e6c732ca61a71790ab4d112080c43a217b0753396c26dc58d9da094ee11",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/phase8-test-fixtures.mjs",
+      "bytes": 1968,
+      "sha256": "91271fb5ecfa569f781d5028ea862205c14ff586386d68a5fad78db8bb0d9cdd",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase2-core-service-tests.mjs",
+      "bytes": 761,
+      "sha256": "4956f80395d154ee92e9fe1e5ae9ca28193e621fe0fe1b5be7974b2a08be3bc7",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase2-manual-qa.mjs",
+      "bytes": 5430,
+      "sha256": "7df50754e7656141ba11766f865de7e511aa7868900d9be139ed495e08b8e4e4",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase2-migration-command.mjs",
+      "bytes": 732,
+      "sha256": "e0aac069ee0f3c6019188ff41f9e9db38e2c6384a7e6b1758a323f383b260821",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase2-migration-tests.mjs",
+      "bytes": 852,
+      "sha256": "a10c6e758a345ead4d6945b2187b6bd4f3c48d6af815006328da36dc2c2e44a9",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase2-playwright.mjs",
+      "bytes": 1895,
+      "sha256": "5c9ab7d3eca7cb1dc08657870b45cd902cb129b586464e450cefc6f52af3a2f3",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase2-safe-build.mjs",
+      "bytes": 5281,
+      "sha256": "eab3db7f86f196758840454591e2ab6315bbdf4c76769570caad0f71d1592bd5",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase3-manual-qa.mjs",
+      "bytes": 3678,
+      "sha256": "96198bcacc750e1f31d21057ca980efcc9238a984aa5425b3b38bd23a1827623",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase3-playwright.mjs",
+      "bytes": 928,
+      "sha256": "230b4cca1d202a4c123a937a90c57523a4b2300d332121e521ede52c02e0406e",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase3-service-tests.mjs",
+      "bytes": 802,
+      "sha256": "6bf9a6546a57d8a73b3a079f39c86ce38563797dcf4d34593f74771583bc7baa",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase4-playwright.mjs",
+      "bytes": 922,
+      "sha256": "c559d313922fea177152974b948bc9af43ef67e0f806694dc3679d0bd2bc4dbf",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase4-service-tests.mjs",
+      "bytes": 918,
+      "sha256": "610b61947c6936430627dc97965c4d95fad07efa9eff0c47d22efb96864a03f2",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase5-playwright.mjs",
+      "bytes": 839,
+      "sha256": "c58fa5ab3636581cd153a51182b2a14bcb4b37c65f8cb018bfdc100581ee69b5",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase5-service-tests.mjs",
+      "bytes": 775,
+      "sha256": "20d0b46ff8c3958087988480a3f49784a8e4a3777e1574e6a2e24826b61d561b",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase6-playwright.mjs",
+      "bytes": 856,
+      "sha256": "9d9d8580a916ab61e131446084505b38c228c7f90c2ad4665ca942929b4ce509",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase6-service-tests.mjs",
+      "bytes": 811,
+      "sha256": "130cb7f2050de281d309dbd58eb7e05a085260f1715718489baebde5bd15e252",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase7-playwright.mjs",
+      "bytes": 839,
+      "sha256": "acf481d6016d0f11d04c98ec75b57c2e60a1649da0c82485741a1a5905317cdd",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase7-service-tests.mjs",
+      "bytes": 824,
+      "sha256": "d5cda7d1a628cbcec102f3fe2ae5db5ae9fff40b6cc90d9f3e7e63b9d509f0fd",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase8-playwright.mjs",
+      "bytes": 947,
+      "sha256": "5d4c62ac0d2dbee8dfdae9458e0afa2ca02fbba46896162ffd451d8a65c52330",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/run-phase8-service-tests.mjs",
+      "bytes": 887,
+      "sha256": "7bd1244e354df0b1bfb40ae2227c771ae7188fa981826adade13c573b6da29f6",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/schema-fingerprint.mjs",
+      "bytes": 2585,
+      "sha256": "08bec485bc79c03981e984977684ed9b721805f4ff35e3c6b82a1e38d7ce7272",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/start-phase2-test-server.mjs",
+      "bytes": 2931,
+      "sha256": "71ff4a3ea210487b0566d9042d23b32f149858b64547e3059849d58a7fd2a1b4",
+      "preserved": "github-source"
+    },
+    {
+      "path": "scripts/validate-phase2-runbook.mjs",
+      "bytes": 1305,
+      "sha256": "f1b2a5e3cde4b2ecffd5c9bc45b2395b47fc25f01b6d6d4c13e0a8cfe29bd416",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(auth)/login/login-screen 2.tsx",
+      "bytes": 2364,
+      "sha256": "0a6337db2f048e81be2a083532ea5858623718d7ea14a9f77283de3a53436ed4",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(auth)/login/page.tsx",
+      "bytes": 115,
+      "sha256": "4a0f1d7e851dacf8921d2503e0cc54a800947f6ef83871c5554afdef3dc72541",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/[module]/page.tsx",
+      "bytes": 123,
+      "sha256": "4352648189ae3b31d5692fd7ce4a6b20b5664d0271660bdf337d6b4b596902f5",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/clients/page.tsx",
+      "bytes": 117,
+      "sha256": "b66a2f60064089b458479fb3fbd04606dc5d346163042a60c310684be6f2434f",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/coverage/page.tsx",
+      "bytes": 119,
+      "sha256": "26377e8754a279b0376efbebbebfce5a76ce04f92b91a30bebd675fff140fb41",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/dashboard/page 2.tsx",
+      "bytes": 256,
+      "sha256": "a7bd7eb4d3e1d62df093da18add5f3c4434d9359df9e2d5941aaba49d95ca2ac",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/dashboard/page.tsx",
+      "bytes": 119,
+      "sha256": "c0c0750c37ff03529272b6a7f0c2b1318d977b13ece3a4a50e7b1ddd16075a2a",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/employees/[userId]/page.tsx",
+      "bytes": 118,
+      "sha256": "8adf7d801e5ebb7ba184b6b06f7e6c4b72bf77a3c698f22ff119c06d5457df55",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/employees/page.tsx",
+      "bytes": 119,
+      "sha256": "88188f72672414e9da2c000800070dfea2e8bb99ab6dd8252929345edeeac7d8",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/layout.tsx",
+      "bytes": 104,
+      "sha256": "7e418004545f393b9b69dda0cc22c9462b0d96d73fad13c3f967d827fe5b59ed",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/leave/page.tsx",
+      "bytes": 115,
+      "sha256": "49ba8d605148954abfb220f09e8c6d01076217a848d10535c6f49d7ee346d9b7",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/locations/[locationId]/page.tsx",
+      "bytes": 118,
+      "sha256": "52945c3a78dec8348d356bb74cd0d9ebe1437ca8bb55bfc2e1b9fbafb83beaf7",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/locations/page.tsx",
+      "bytes": 119,
+      "sha256": "804b2154bb0cf4054a3ebce56a6d005a9ec41da99e83495906f00be9d3c9abc8",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/map/page.tsx",
+      "bytes": 114,
+      "sha256": "1353ba1dfa73514c98c5dd0e828e6bd6b4c673df52c5f7e4edb73931dc5e4f61",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/profile/page.tsx",
+      "bytes": 117,
+      "sha256": "b650ee22254bc1e099c7dff1e90bb5272f93a59c016cbd2050da9bd555c867f4",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/projects/[projectId]/page.tsx",
+      "bytes": 117,
+      "sha256": "6188c9c820af7f232c8893f3ea698eea7a79dc9090af89219b072a1b5134f984",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/projects/page.tsx",
+      "bytes": 118,
+      "sha256": "1923aae19e6e136e55000d8a3907fe0f3a174bd86a041d46e71977af56926b30",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/replacements/page.tsx",
+      "bytes": 123,
+      "sha256": "689d35976ed58087bfe044c06556fe55cb2b82568258de08041b5e6d3fddfe76",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/schedule/page.tsx",
+      "bytes": 118,
+      "sha256": "c08c9c4cd6e4d6df3548db1e9265bc2934883d8d33eb4895e2b52870ba2cd352",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/skills/page.tsx",
+      "bytes": 116,
+      "sha256": "b0874a29a01fff412d719f540ae71a3ba62b70c6a8c33736cb6ed51657ab5fd0",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/error.tsx",
+      "bytes": 298,
+      "sha256": "740667b92f719f63af398caf26aff5197d867899d1d6b58a574b37dbc13f5be6",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/layout.tsx",
+      "bytes": 404,
+      "sha256": "438e47bfbc64dd30abb6977b8de9df687300602be29375dba441974938658bef",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/motion.css",
+      "bytes": 7191,
+      "sha256": "f0bc5ff9a983affda80c1468a4ef9eae16c51c91fda925f067f06907c017de83",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/not-found.tsx",
+      "bytes": 280,
+      "sha256": "f9ef67fa5eeb6d9a29ea2756f0c97bd0a3270f923711c620ec02480b16498bbb",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/page.tsx",
+      "bytes": 110,
+      "sha256": "b67065be19c15cfac790712b12ce8adabe9af32c9c6f6e858f31981d24994fc5",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/styles 2.css",
+      "bytes": 18808,
+      "sha256": "5130b348ab61e804be688c57740337bd2d0dbad1309bb004b11baf2b98ad0989",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/styles.css",
+      "bytes": 64838,
+      "sha256": "b86c557a238484ec7793afdb86dd8924831b9de948ac04ae447bb8e9bfb046b0",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/db/client/index.ts",
+      "bytes": 464,
+      "sha256": "31009e0f98f5145c4251d956179dc5f550ba130306b69222f1f1459c70a9366c",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/db/migrations/0000_phase_1_foundation.sql",
+      "bytes": 3089,
+      "sha256": "cd7965d9b11f756075d76c0a9ef2adb4159827391224233cc143b05dfbe22e34",
+      "preserved": "encrypted-backup",
+      "reason": "database-or-archive"
+    },
+    {
+      "path": "src/db/migrations/0001_phase_2_employee_capabilities.sql",
+      "bytes": 4887,
+      "sha256": "d0dc109b1cca66b727ea2843186559c1b9e0f802ad001d8013322f6a2beddd60",
+      "preserved": "encrypted-backup",
+      "reason": "database-or-archive"
+    },
+    {
+      "path": "src/db/migrations/0002_phase_2_employee_management_journey.sql",
+      "bytes": 351,
+      "sha256": "11913dffe54013a53021896f7c57d7357cbab8cf12e674ae86366bddd039c62c",
+      "preserved": "encrypted-backup",
+      "reason": "database-or-archive"
+    },
+    {
+      "path": "src/db/migrations/0003_phase_2_employee_code_sequence.sql",
+      "bytes": 524,
+      "sha256": "fac18923754fb6f8049a69356749770280722d272a1b83bc42d313ccaf3b2be9",
+      "preserved": "encrypted-backup",
+      "reason": "database-or-archive"
+    },
+    {
+      "path": "src/db/migrations/0004_phase_3_operational_structure.sql",
+      "bytes": 7934,
+      "sha256": "9847376cc77dd89bf3332dd50f8612b0db3b5e388b5c6f398863ffd1fafde4b3",
+      "preserved": "encrypted-backup",
+      "reason": "database-or-archive"
+    },
+    {
+      "path": "src/db/migrations/0005_phase_4_scheduling.sql",
+      "bytes": 3349,
+      "sha256": "70292ede041907b0c6629666c6e7038eedf40d9749dc0c4b82cc977c84ce8251",
+      "preserved": "encrypted-backup",
+      "reason": "database-or-archive"
+    },
+    {
+      "path": "src/db/migrations/0006_phase_5_leave_availability.sql",
+      "bytes": 1957,
+      "sha256": "ca5b71e516e94ec060ebb752eb596fd72e2be21e8cd94d63ea5e24512e0f78b1",
+      "preserved": "encrypted-backup",
+      "reason": "database-or-archive"
+    },
+    {
+      "path": "src/db/migrations/0007_phase_6_skill_requirements.sql",
+      "bytes": 906,
+      "sha256": "0dafbc3f3ca4bb7f6eb42ffc12acf218dc2eff8b86f56c5f561eba0d40a65a2d",
+      "preserved": "encrypted-backup",
+      "reason": "database-or-archive"
+    },
+    {
+      "path": "src/db/migrations/0008_phase_7_coverage_replacements.sql",
+      "bytes": 3111,
+      "sha256": "76fbf89e3c679723f129f43d4863648a84518aef5a610f6684419416f1663ec7",
+      "preserved": "encrypted-backup",
+      "reason": "database-or-archive"
+    },
+    {
+      "path": "src/db/migrations/0009_phase_8_static_planning_map.sql",
+      "bytes": 703,
+      "sha256": "040b97336e5a1fdb1c80523c6ef14d6c07e900f4824b7bda65a2ddcee9046a5d",
+      "preserved": "encrypted-backup",
+      "reason": "database-or-archive"
+    },
+    {
+      "path": "src/db/migrations/meta/_journal.json",
+      "bytes": 1274,
+      "sha256": "f05960c559620868d8b41e8ff46048398ae52d7db1965d55b0d9b83bbab84391",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/db/migrations/meta/adoption-fingerprints.json",
+      "bytes": 28272,
+      "sha256": "28817420a7764136a0b590b88b2d678aee0814f1d6d23941e0fd82f13d6ca4d4",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/db/schema/index.ts",
+      "bytes": 43590,
+      "sha256": "c42d42da864af08f9eec97c983b6f8689f4bea7a0b63e00fdf97e4f16bc42e83",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/db/seed/fixtures.ts",
+      "bytes": 1230,
+      "sha256": "e489f00faaa18e569e54f15861952f578de8b1dd8b6f582f4d426516999e0656",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/db/seed/index.ts",
+      "bytes": 1041,
+      "sha256": "41e88427884d02aad731e554d24eaf2c87a52f5e66f2f011fe11ab308241c8de",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/db/validate.ts",
+      "bytes": 440,
+      "sha256": "58128d20104feeb8c4ae447d5a087588643d795bc78f30cb8f07641cb477dab0",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/audit/audit-service.ts",
+      "bytes": 1113,
+      "sha256": "5cfb716d00c5de15d8d6f023be713ca96584dc1281a88479783a426ef8cc961f",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/auth/authentication-provider.ts",
+      "bytes": 463,
+      "sha256": "2d7d6ec44a42d6108dbee4e64ccc98fa7336c3eef3dabad15b29e596a646867e",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/auth/session-service.ts",
+      "bytes": 4078,
+      "sha256": "ac69b6c04eb50b64bf1232750c34b412cfccef93bab076019eab693c9fce3bca",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/authorization/authorization-service.ts",
+      "bytes": 1121,
+      "sha256": "2316be4bef782da9972480908d9bfe7c98f1708cb49d844fc348a7c655fac204",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/authorization/capabilities.ts",
+      "bytes": 1179,
+      "sha256": "29e1897beee5ff9de2aa884d592bc5d02c01e6696a0bb2ee5a57e51b1fb9e956",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/authorization/operational-scope.ts",
+      "bytes": 1261,
+      "sha256": "879d1ce6068e1d667d7234cb3f86057bc668cf93122f33667997e18a902b808f",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/capabilities/actions.ts",
+      "bytes": 4391,
+      "sha256": "26787de70494520808d48c1209d25a782f331a1cea472e79160ed0a487d9ce2f",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/capabilities/domain-error.ts",
+      "bytes": 1233,
+      "sha256": "44f4f66d66f3d83f0463be208e33b0af9be9d9d1e6f0e4bb82cb55c2eae63012",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/capabilities/forms.tsx",
+      "bytes": 5547,
+      "sha256": "8cc481ef3988fdd2745b71a6f9821e23934090dbc910c3320d9fad75e30c2722",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/capabilities/service.ts",
+      "bytes": 7791,
+      "sha256": "8ce463fa7dc14b868e9e7ef6af31e5ef1568ab21e3155a50ae79b4b14e574769",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/capabilities/validation.ts",
+      "bytes": 696,
+      "sha256": "d6790a9001c00aa8a2ebe9e3a2871aab51f9f9dbce9a22af1070fb3bce6b0469",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/coverage/actions.ts",
+      "bytes": 2487,
+      "sha256": "fc06566561e1f60d920addc39f8935363546b8170bbf91ef1ffdeaf6f0b9543b",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/coverage/domain-error.ts",
+      "bytes": 1491,
+      "sha256": "453f67fe93754b8885e3284e28bd6c378d7a1746e46363a138b91a9cf683d968",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/coverage/forms.tsx",
+      "bytes": 3359,
+      "sha256": "956c845016feb66e3e6e8f95a0f6e011b5c73a8f030e6c3bec1918d0a4efb7e2",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/coverage/repositories.ts",
+      "bytes": 6003,
+      "sha256": "9e41be4d7f32aa46e52586fbb84f9701930e30d4b3cb4270b482992380187304",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/coverage/service.ts",
+      "bytes": 13707,
+      "sha256": "8f05b4adaea48a42b1bbb59cb18c172ddef7c6049954e30ae2bdc8e80d7c47ec",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/coverage/validation.ts",
+      "bytes": 859,
+      "sha256": "df14970433d2b429dbbf8ae79f70c6ee6bee8d3a9ed8e410cb928324f674aa8e",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/employees/contracts.ts",
+      "bytes": 3163,
+      "sha256": "183da91855070aceb78229c1ad7ded3cf829753efd6fcd22e582cdf07021e3e3",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/employees/domain-error.ts",
+      "bytes": 2262,
+      "sha256": "5a0791f80413cf848cabb48e81fb4be4b2d2d04fcd1bc6fed70e7a037d68b084",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/employees/employee-create-action.ts",
+      "bytes": 3004,
+      "sha256": "91c37782d824f4f84fe696f7c0bca8d43d69c3124a13c7c7c616e9cc2742d5bd",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/employees/employee-create-form.tsx",
+      "bytes": 4099,
+      "sha256": "4b8fe9f38cd32d6170620a9ddfea0f07dee13fd2a7b595a972c1a2cd3854357d",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/employees/employee-detail.tsx",
+      "bytes": 2869,
+      "sha256": "e60176e0752bdb1f257320f92551be7f41a74960f5468e72a61491fbd3417fd0",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/employees/employee-directory-query.ts",
+      "bytes": 1524,
+      "sha256": "952f8375a6c2e8e1671d66b5e3406b401c7c5aaebd9a04a84f15e8109f2accd1",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/employees/employee-directory.tsx",
+      "bytes": 5947,
+      "sha256": "28c3553a61d8b001feefd2068d08fc7def67197be315924001892749c7dea05e",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/employees/employee-management-actions.ts",
+      "bytes": 6363,
+      "sha256": "d49eae168d0d43dd8c268b1573706e9afb47c120274d36f4e95701cec0f0300b",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/employees/employee-management-panel 2.tsx",
+      "bytes": 5855,
+      "sha256": "c796a646a9de0e536e7f180394e5870df0d60ea46897e259c8e5678c85c48b9e",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/employees/employee-management-panel.tsx",
+      "bytes": 7223,
+      "sha256": "2aedf5e25f83da6d02680b482e5ec039e5cd09f189a9cf8411ab236663ac1bd6",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/employees/employee-policy.ts",
+      "bytes": 2353,
+      "sha256": "c392102dc4817a8c1aed8c2cfae75d9dd90a27e572a0bd2b240b87c30be5b406",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/employees/employee-repositories.ts",
+      "bytes": 19709,
+      "sha256": "b4ff799c3594ea67450f488fd0c03dba50248fba308f45b4bcc42beb5d08ccde",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/employees/employee-services.ts",
+      "bytes": 32612,
+      "sha256": "623d0aa47cd61d7a9459e75542d5d851d7b88eca753a5e8a748017f5d3cbc7ce",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/employees/employee-validation.ts",
+      "bytes": 6948,
+      "sha256": "18a863cf3d4bc299fba12ffa1c91c3f3fd85f02948655e440a1c7a07570b4867",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/employees/self-profile-form.tsx",
+      "bytes": 1308,
+      "sha256": "fcd4f90cad50c83961358580f97fb8099ca4190fd440eadb32005fb575b8a655",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/leave/actions.ts",
+      "bytes": 2906,
+      "sha256": "c6d6f9fecd12f6aa5d9a18561a49ea648e8859005af7df14d18a1571d1b79464",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/leave/date-rules.ts",
+      "bytes": 553,
+      "sha256": "4aac6df97fd0a390323aa89c662f26cf2e306e9fb5a3f4884cdfbda3b3e68742",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/leave/domain-error.ts",
+      "bytes": 1854,
+      "sha256": "9dab50200301b205b25e9c417bbe3a9916e766d632f7e163473d01a1c05b8247",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/leave/forms.tsx",
+      "bytes": 3418,
+      "sha256": "b316e7e607aaeb60d0acb5b9f468405fbf150b6ac9536d1438f2f7fc6bb7b2b0",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/leave/repositories.ts",
+      "bytes": 5477,
+      "sha256": "f1ed961e6c0bda13eac9004fb33dd77e298e66cfa1bedad9459415f227b7a823",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/leave/service.ts",
+      "bytes": 10445,
+      "sha256": "1bdad36d49fdfe77b1d6eeb733466c7087afec0adaab6ba05841d666eac9df03",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/leave/validation.ts",
+      "bytes": 1203,
+      "sha256": "082f9c5ea1a9f9309b37cb5741ca95e5e70055a61fad16f1490038c92416b597",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/maps/planning-map-client.tsx",
+      "bytes": 6666,
+      "sha256": "6d90a742e7bd6e99477f551177fce87f4cd4dd5b1505fabd41f54e0dca5ec1e6",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/maps/repositories.ts",
+      "bytes": 2329,
+      "sha256": "6ef46bc9c84deb7e2a1613489ae12a06ddb6e60ab524c2312129056a17ba58a4",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/maps/service.ts",
+      "bytes": 6639,
+      "sha256": "2ad145b069e08bebcc68f4b11480a4a617216e023f4142b456ef9a31a5865697",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/maps/validation.ts",
+      "bytes": 1075,
+      "sha256": "503aa3bf0e4ac726e3a7d68e24f571f481700f67d26b1644ddb39e94dd23c4c0",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/navigation/navigation.ts",
+      "bytes": 5026,
+      "sha256": "2e54cd922cb5cadc6f0f6a9e4385881326bfb00e6860e49acc8b278e0dd4afea",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/notifications/notification-service.ts",
+      "bytes": 374,
+      "sha256": "c48bc906413ebeeb24d342051302facdc536cad9311f57115eb294122a303579",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/operations/actions.ts",
+      "bytes": 9104,
+      "sha256": "f7051f7fe244ebde778dcecb7a84ea0d67c733860dff0a39cba12de4f95031d0",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/operations/domain-error.ts",
+      "bytes": 1811,
+      "sha256": "6a2fdb48050193884aaa99fd64c23abc79290ad78efc285f1ce8b4697c0bf151",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/operations/forms.tsx",
+      "bytes": 18572,
+      "sha256": "eba2843291ae0a7f6728580b06fdf5b82ac13d8bcff18d2f2b508f6b6ec07736",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/operations/repositories.ts",
+      "bytes": 16218,
+      "sha256": "2faa9f03dd3fb55b4c8f8b66b99e39a8d781f0d394db23a9afa87f84ed7255b6",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/operations/service.ts",
+      "bytes": 24335,
+      "sha256": "b9c1d6d3f58e844b8ac7333c5598b87fe35d5846d8497a3e1fae3c539ce2f5b9",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/operations/validation.ts",
+      "bytes": 6303,
+      "sha256": "cda21f26192c3c6798fa1a9f363a8521219790780d76cfddbab745e4113dc920",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/scheduling/actions.ts",
+      "bytes": 5763,
+      "sha256": "7f4f3bb3d38d9723d2a792ac26669aa2afde29df84264ed305cb736f9f8de6cf",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/scheduling/domain-error.ts",
+      "bytes": 1995,
+      "sha256": "cf99e224048a787d0e9e148c878e47547199289de14eb5c20b5c5985388873e1",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/scheduling/forms.tsx",
+      "bytes": 10649,
+      "sha256": "99ee9793570bb968df8c22f30218a505687ee99e1769a7f6264e42da54070c44",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/scheduling/service.ts",
+      "bytes": 32505,
+      "sha256": "d968e47aefe300c6700604f53f823d5a5dde44db3f9341aa0afdbe18a180210b",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/modules/scheduling/validation.ts",
+      "bytes": 2052,
+      "sha256": "2964d2e3c1c7c4ffbd88e845e3f1d0a13ace2859bb11289458ae027e08e48b6f",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/preview/interactive-planning-map.tsx",
+      "bytes": 10256,
+      "sha256": "6242c3bf2b2466a25ab214a67da9f419c908f00e354e1b77a1b5a862ab5a887b",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/preview/motion-system.tsx",
+      "bytes": 3335,
+      "sha256": "58f06d880c8aeea981208351325aac31613dd4b7a6d43f40d9740cdeaa009b2f",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/preview/preview-app.tsx",
+      "bytes": 28574,
+      "sha256": "5a4299deaec5341ae799a83a1344d3b7e68dee5a779bc2d11c1911f4d8571d41",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/preview/preview-data.ts",
+      "bytes": 33698,
+      "sha256": "88b05f08b3fa1891a42d288884b669016c519a8ebda20d74bc2abdc1cdc77055",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/preview/preview-map-data.ts",
+      "bytes": 5317,
+      "sha256": "a39af82ed7e964461c9fa9f0916d87f4fd8a2066228ce5ac21ce9ced0ff69b84",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/preview/preview-routes.ts",
+      "bytes": 2924,
+      "sha256": "a482fb6233d9eedf32db41bc34805defcf7b09de77b0ae9dab2e82edd3d72cdc",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/preview/rich-operational-data.ts",
+      "bytes": 19346,
+      "sha256": "8e2ffe2e5c42b075921e656a1e741be3f51c0d1759c733c6507361515f3148da",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/preview/rich-operational-workspaces.tsx",
+      "bytes": 31213,
+      "sha256": "50de1a49adfaa81df64a06933824a3afa886542782902467d5528c671d0391b6",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/preview/schedule-layout-variants.tsx",
+      "bytes": 4069,
+      "sha256": "04548043b25e6a0e10a9c95cfe70cd4f96cd5c361eb504350ea3b2f382c3fe4a",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/preview/schedule-workspace.tsx",
+      "bytes": 11128,
+      "sha256": "9cb1938c0df812669627c9f210120860dce3f7801e5f2d0c640de1667fb34b2f",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/server/env.ts",
+      "bytes": 1911,
+      "sha256": "4e6dfe0119f3123701742529e23762779ebf72d2c398f495fa007639f705ea44",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/server/http.ts",
+      "bytes": 693,
+      "sha256": "3550defbf3d42d670f344825634a232cdb10f9448e5c8991eb08ef46b1a128d1",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/server/providers/unconfigured-providers.ts",
+      "bytes": 597,
+      "sha256": "19a5ef84f75e4ffb4cdf5a871db4f596d4be6bcc7c83e97f2ab954e316190756",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/server/providers/vercel-blob-provider.ts",
+      "bytes": 1239,
+      "sha256": "20b5e5635cd27d7d76bd1585c80eac191052af2d2a09dffcf381af1795af679c",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/server/repositories/foundation-repository.ts",
+      "bytes": 1561,
+      "sha256": "25ca2f82b83c13a1acca7b49c6c0a153b3f6fafa58a8afdcbab2ae4da743cbc3",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/server/transactions/foundation-transaction.ts",
+      "bytes": 1333,
+      "sha256": "45d954cc75444273149074b32c57ee563338e78a2c9c6f0a307aefea59144ce4",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/shared/components/brand.tsx",
+      "bytes": 388,
+      "sha256": "69c0a64d70b7789fde7735f249a1a47e473dc1165e75c9e05b63ccf3906dc9ee",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/shared/components/shell 2.tsx",
+      "bytes": 3924,
+      "sha256": "3bde6c94f9fd5214c6b449e32cb5b096b061833212ac8ed34adb021a6e1f57ef",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/shared/components/shell.tsx",
+      "bytes": 7372,
+      "sha256": "02e60cec0c62ed0df6a3449ad549530c58a290668aa5c4adfa230024f822c2c6",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/shared/components/states.tsx",
+      "bytes": 1118,
+      "sha256": "54d6a4006cc5438bbdba16fd221fa905385d28b3428481018f862abdf84bf7e3",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/shared/components/theme-provider.tsx",
+      "bytes": 1456,
+      "sha256": "74c7c663627f905453f47e2957903e7b929192d000f78a6b7839ec89cb5d31c2",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/shared/errors/app-error.ts",
+      "bytes": 1392,
+      "sha256": "034eb7ea49c551196b388fb77ae2a70495dd6c065113eaed7b5d9bebc0372c8b",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/shared/types/foundation.ts",
+      "bytes": 564,
+      "sha256": "7836012a5804081b06dc3a4721a47f545af15f9641c2989b1ca04d555eb24e37",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/shared/validation/foundation.ts",
+      "bytes": 898,
+      "sha256": "80bb6ba83cb61effb1ff90f8b397f17d1d2495a8fc3b2340e696b071ec3f2245",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test-results/.last-run 2.json",
+      "bytes": 341,
+      "sha256": "f414da6e94076a6cf9f70af5e7429b838b023e2a84d135da985c40848702307b",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test-results/.last-run.json",
+      "bytes": 45,
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/component/employee-detail.test.tsx",
+      "bytes": 771,
+      "sha256": "4df76bf291d3bcb27d59b2d69808a9dff83aadef5254b65032f8865b26eb2da3",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/component/employee-directory.test.tsx",
+      "bytes": 3602,
+      "sha256": "570b6f0ce74ca1417b0f0e4e9ea33aa90651b06f2e26fddb6ad4aca0e82a39f4",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/component/phase3-operational-forms.test.tsx",
+      "bytes": 2992,
+      "sha256": "60866eceddffb1aecabda3b72d5d5e27da77ccd178498e970a5c078585f15338",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/component/phase4-scheduling-forms.test.tsx",
+      "bytes": 2061,
+      "sha256": "4483566ce17b836563635970b56eb99587f4a48a3a776b0565dd52bd6a4a0497",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/component/phase5-leave-forms.test.tsx",
+      "bytes": 983,
+      "sha256": "3785b30c2d66006c24163b40d4b297a6fd3be4fd52e359a9bb265325c53b57f1",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/component/phase6-capability-forms.test.tsx",
+      "bytes": 1750,
+      "sha256": "7dd5aaef1dd9f9f5f12f7066f280e6f71a1c6a75b9cba625910479bc08a022f8",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/component/phase7-coverage-forms.test.tsx",
+      "bytes": 1354,
+      "sha256": "5e50173f235e51cbf05f9c462990eda89db3b70f9c250cf1eeb3138f2a6ba2ed",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/component/phase8-planning-map.test.tsx",
+      "bytes": 1364,
+      "sha256": "9b660f6d8774d5405332885ba6cbe7dbc633bb2e58ff9803d9cece12e7ba30e4",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/component/states.test.tsx",
+      "bytes": 889,
+      "sha256": "a6ba1e45950436a9fac106aa44c8696b5d23ac34284c63910a78f464565262e6",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/e2e/employee-directory.spec.ts",
+      "bytes": 10527,
+      "sha256": "9fb48726e7b46ee875457422aa69ea72227e7d7a0a7fde04d9cedfd274715e93",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/e2e/foundation.spec.ts",
+      "bytes": 2949,
+      "sha256": "fe75373a8d7e5e3e0f4e1d5d8b269db54bbc6103b8a6d2b643bf58dd5096e1e6",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/e2e/phase3-operations.spec.ts",
+      "bytes": 11591,
+      "sha256": "97d6ced5b4b1ae49de0fb49e08a47f665fd3dcaa36fdff2ddfe30e5617add9e0",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/e2e/phase4-scheduling.spec.ts",
+      "bytes": 3393,
+      "sha256": "e1b8e430fd53d5d8695536101e7c1a90b2c290f88e0e84fd8093aaf3e4a721ca",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/e2e/phase5-leave.spec.ts",
+      "bytes": 2071,
+      "sha256": "7ef0a04f358665690e8b56d1d76a69abd3e1d42dcab08b67882dbcfea1540fbe",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/e2e/phase6-capabilities.spec.ts",
+      "bytes": 1972,
+      "sha256": "4317927b9fa12196dfec8761f90446b619c259c84844fcff005b0553bc5cb77f",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/e2e/phase7-coverage.spec.ts",
+      "bytes": 1293,
+      "sha256": "eb6c18b9c7f868c9f5f96cde90b14a4a029b02f1aeb1a161909515653d8bc50a",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/e2e/phase8-planning-map.spec.ts",
+      "bytes": 2254,
+      "sha256": "bff064f511ea44b8df085c800bc2fe9534403e11871cc2bf4a447a852ae16480",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/integration/foundation-postgres.test.ts",
+      "bytes": 3342,
+      "sha256": "e82857cdcf350d3fb8300aa18801f86f337d0ab8dff8469bfb3f0949cc4098f7",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/integration/phase2-core-service.test.ts",
+      "bytes": 26382,
+      "sha256": "4c230131018b51d36a392ca037e993b31a79b47ea2b55db9e5e5bcb660ee8d02",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/integration/phase3-operational-service.test.ts",
+      "bytes": 15890,
+      "sha256": "4d8b0f91a75b59b7702abe6fb1bdaa9f5e15090a7197084c026545c78b7a0e67",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/integration/phase4-scheduling-service.test.ts",
+      "bytes": 8541,
+      "sha256": "cb0b0aa8ea3e7f8cc44e6b173300cbf8493083db6b4bff3886dd2cd613ada324",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/integration/phase5-leave-service.test.ts",
+      "bytes": 5905,
+      "sha256": "804a6ace3af5ccbe21e51555e03754b7c32cf4fb06cdcfd7719f9721b0ca4803",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/integration/phase6-capabilities-service.test.ts",
+      "bytes": 7660,
+      "sha256": "e5dba2bfc44cfc6a8f601124419e94d7c5bb7345256d8a82cb96899d508e441f",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/integration/phase7-coverage-service.test.ts",
+      "bytes": 9324,
+      "sha256": "6ea4d2900c406b178ae567ca74f1a8e2de01b1b9ae156ea136c251070cd2c8fd",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/integration/phase8-planning-map-service.test.ts",
+      "bytes": 2971,
+      "sha256": "720aaf32fd51f1436c4625a837562c48d0ccb2a86ba2dfdbb5b20fc786bde090",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/migration/phase2-database-foundation.test.ts",
+      "bytes": 13762,
+      "sha256": "74fa911c00b5fb5a9f22b05b75250488ac2396defb97adec79ef3e56c930e018",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/server-only.ts",
+      "bytes": 112,
+      "sha256": "c4e17c226a77d8a9a58b64274cb651f39b4971cb119f2f7138c063128517ac72",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/setup.ts",
+      "bytes": 43,
+      "sha256": "9b328c4843431fa76d8de00008fc159e95f99a840211085ff3b8f25e53d14409",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/unit/audit-validation.test.ts",
+      "bytes": 888,
+      "sha256": "f50ccf2d867aed068c7c797a22775fc1c9b4ece9b30c2c3a9891a8da6bbdec51",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/unit/authorization.test.ts",
+      "bytes": 1303,
+      "sha256": "a33673ff927a03becb8664e6c37c1400db8cc9aa57b971478329e1ef78e72ec7",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/unit/employee-create-validation.test.ts",
+      "bytes": 1143,
+      "sha256": "e485fb042aec42f1cb607169118fbb85feeeb63f367b93e97e2b85e64d156d20",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/unit/employee-directory-query.test.ts",
+      "bytes": 1299,
+      "sha256": "36dc19ec5454e117e58554e2a5abb08101ea633d26dae960b68d96c8473996a1",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/unit/employee-policy.test.ts",
+      "bytes": 1954,
+      "sha256": "22799284ccce308006abe4e4f32795cfa682ac7e177c173d81e3b5eef5dd40c0",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/unit/environment-guard.test.ts",
+      "bytes": 3852,
+      "sha256": "644bbc6bd9a47d90976c9c6f1f69768655faa1da6b8c507ac79240d61d15ba07",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/unit/mock-auth-boundaries.test.ts",
+      "bytes": 3157,
+      "sha256": "64e2e03098494c954bb1949670dc9bc3edf848181acfa49ba3cab4310c79823c",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/unit/navigation.test.ts",
+      "bytes": 777,
+      "sha256": "ed8b7463c9b07af8079a7a6a02be610dbd1a74ea2c9817e892ff5cb8f7faec21",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/unit/phase3-operational-validation.test.ts",
+      "bytes": 2906,
+      "sha256": "ab9823e8bcbbda8445e4e49580d4c7361b39d3e9c69aa675270339474832229f",
+      "preserved": "encrypted-backup",
+      "reason": "credential-url"
+    },
+    {
+      "path": "test/unit/phase4-scheduling-validation.test.ts",
+      "bytes": 1783,
+      "sha256": "59d68fe7d96d8f44c890ab8fb50e4f2b55f0928a17a2e32cd9a377612bfe3744",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/unit/phase5-leave-validation.test.ts",
+      "bytes": 777,
+      "sha256": "e982470d0ec1c6c7f0958c5e5a573cfc484ad35c8f4bc19a9a74e69f33e84658",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/unit/phase6-capabilities-validation.test.ts",
+      "bytes": 908,
+      "sha256": "682b62398134ab3dd12d0fef026b71fdf64f4c83e2da26e6e3d1b4fc3f63c10e",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/unit/phase7-coverage-validation.test.ts",
+      "bytes": 933,
+      "sha256": "ebabbab0e39d51839719626ae42cfc23d942e4ec9e926aba02c45136253208f4",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/unit/phase8-map-validation.test.ts",
+      "bytes": 727,
+      "sha256": "9006b7e6a2d0f9ce0b7e47eecb54e2b4f46ddeeb00a3d0b922966f2a0e97f36f",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/unit/preview-fixture.test.ts",
+      "bytes": 12264,
+      "sha256": "b184e186ff79a7174f6dd934c8b2633402e9112462cd0a4cdba60a112786386b",
+      "preserved": "github-source"
+    },
+    {
+      "path": "test/unit/preview-motion.test.ts",
+      "bytes": 1851,
+      "sha256": "1d50d4908bdd0cbcfbadda6940f7c17f6d1d23a9a7dff93f6d8f95aecb29cc0f",
+      "preserved": "github-source"
+    },
+    {
+      "path": "tsconfig.json",
+      "bytes": 971,
+      "sha256": "2d163d290babe2e56433ec2210cab77b5aa025e764aa2b08218f70f22e4a2321",
+      "preserved": "github-source"
+    },
+    {
+      "path": "vitest.config.ts",
+      "bytes": 407,
+      "sha256": "d0f9e94cac613d1d0f93cc4aa0a72d5188925f74e49d626babadf260b603657d",
+      "preserved": "github-source"
+    },
+    {
+      "path": "src/app/(protected)/clients/[clientId]/page.tsx",
+      "bytes": 116,
+      "sha256": "77bd377e42485c4a926b891c474c12880ee919a847797872b74b4e69ccfd5450",
+      "preserved": "github-source",
+      "read_provenance": "original-git-index-matches-live-GitHub",
+      "git_blob": "749dfa061aebb5988396f3d2ed65efd1b8037a89",
+      "raw_original_bytes_unverified": true,
+      "index_mtime_matches_current": false
+    },
+    {
+      "path": "src/modules/capabilities/repositories.ts",
+      "bytes": 5481,
+      "sha256": "48e733775de3fbe6783b0f0db30e93fc4f6aedbe1536af9f2c69113c5da6e8c5",
+      "preserved": "github-source",
+      "read_provenance": "original-git-index-matches-live-GitHub",
+      "git_blob": "a54b6dd077772b7a5f6e2462e9283ec4152c4e35",
+      "raw_original_bytes_unverified": true,
+      "index_mtime_matches_current": false
+    },
+    {
+      "path": "src/modules/maps/map-adapter.ts",
+      "bytes": 469,
+      "sha256": "0188271879564cdc13373555fa3427faac71c7441b3ece9ea70518ec1ffb13ff",
+      "preserved": "github-source",
+      "read_provenance": "original-git-index-matches-live-GitHub",
+      "git_blob": "0df3b0ebb244dab07433abdfb4ac682f99891e5f",
+      "raw_original_bytes_unverified": true,
+      "index_mtime_matches_current": false
+    },
+    {
+      "path": "src/modules/scheduling/repositories.ts",
+      "bytes": 9243,
+      "sha256": "1ed874653084767e72a16afa22ab2393b5a3bd9c1f32a93bf42f78141c08b3a3",
+      "preserved": "github-source",
+      "read_provenance": "original-git-index-matches-live-GitHub",
+      "git_blob": "f68e8285b19e6eb9d1d3a1127786bca5c08be0a5",
+      "raw_original_bytes_unverified": true,
+      "index_mtime_matches_current": true
+    }
+  ],
+  "unreadable_files": [
+    {
+      "path": "src/app/(protected)/clients/[clientId]/page.tsx",
+      "bytes": 116,
+      "error": "icloud-read-timeout"
+    },
+    {
+      "path": "src/modules/capabilities/repositories.ts",
+      "bytes": 5481,
+      "error": "icloud-read-timeout"
+    },
+    {
+      "path": "src/modules/maps/map-adapter.ts",
+      "bytes": 469,
+      "error": "icloud-read-timeout"
+    },
+    {
+      "path": "src/modules/scheduling/repositories.ts",
+      "bytes": 9243,
+      "error": "icloud-read-timeout"
+    }
+  ],
+  "encrypted_backup": {
+    "file": "private-backup.aesgcm",
+    "bytes": 6254,
+    "sha256": "58aec5155a4163c0e37aca8276a7949db6f6d8fefa3d42459e7597cb269c207c",
+    "plaintext_archive_sha256": "a89d25134355469ff5049fb26251a7f1a8fd36c642ff57625d4bffb9334ee054",
+    "file_count": 14
+  },
+  "git_fallback_files": 4,
+  "deletion_safe": false
+}

@@ -1,0 +1,43 @@
+{
+  "url": "https://scopeis-team-management-system.vercel.app",
+  "allowedPages": 245,
+  "forbiddenPages": 26,
+  "managementOnlyViews": 4,
+  "fileChecks": 21,
+  "accounts": [
+    {
+      "account": "nora",
+      "allowed": 113,
+      "forbidden": 0
+    },
+    {
+      "account": "ava",
+      "allowed": 62,
+      "forbidden": 4
+    },
+    {
+      "account": "ben",
+      "allowed": 50,
+      "forbidden": 4
+    },
+    {
+      "account": "cora",
+      "allowed": 10,
+      "forbidden": 9
+    },
+    {
+      "account": "dan",
+      "allowed": 10,
+      "forbidden": 9
+    }
+  ],
+  "errors": [],
+  "companyAssertions": [
+    {
+      "all18People": true
+    },
+    {
+      "all6Clients": true
+    }
+  ]
+}
