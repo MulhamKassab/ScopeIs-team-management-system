@@ -1,11 +1,19 @@
 {
-  "deletion_safe": false,
-  "original_files_preserved": 1114,
-  "known_unreadable_files": 16,
+  "deletion_safe": true,
+  "original_files_preserved_and_byte_verified": 1130,
+  "current_original_files": 1130,
+  "current_original_files_all_verified": true,
+  "git_fallback_files": 2,
+  "restorable_files": 1132,
   "initial_walk_file_count": 1132,
   "current_inventory_file_count": 1130,
-  "initial_two_path_difference_unresolved": true,
-  "note": "Tracked versions of the 16 unreadable files already exist on GitHub; current raw working-tree bytes remain unverified. Both original folders must be retained.",
-  "git_fallback_files": 16,
-  "restorable_files": 1130
+  "initial_two_path_difference_resolved": true,
+  "missing_original_paths": [
+    "main-workstation/test/e2e/account-administration.spec.ts",
+    "main-workstation/test/e2e/phase11-reporting.spec.ts"
+  ],
+  "note": "Every current original file is included and byte verified. The final download/read pass recovered all 16 former unreadable files with hashes matching the archive. Two tracked test paths are already absent from disk and explain the original count difference; their matching original Git index/live GitHub versions are included as historical recovery copies. Preserve their missing-original provenance when restoring the current raw working-tree state.",
+  "complete_current_files": true,
+  "missing_original_files": 2,
+  "historical_warning_only": true
 }

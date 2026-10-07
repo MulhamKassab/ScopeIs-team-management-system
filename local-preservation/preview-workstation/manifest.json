@@ -1866,62 +1866,44 @@
       "bytes": 116,
       "sha256": "77bd377e42485c4a926b891c474c12880ee919a847797872b74b4e69ccfd5450",
       "preserved": "github-source",
-      "read_provenance": "original-git-index-matches-live-GitHub",
+      "read_provenance": "original-file-after-iCloud-download",
       "git_blob": "749dfa061aebb5988396f3d2ed65efd1b8037a89",
-      "raw_original_bytes_unverified": true,
-      "index_mtime_matches_current": false
+      "raw_original_bytes_unverified": false,
+      "index_mtime_matches_current": false,
+      "original_bytes_verified_at_utc": "2026-10-07T16:06:56Z"
     },
     {
       "path": "src/modules/capabilities/repositories.ts",
       "bytes": 5481,
       "sha256": "48e733775de3fbe6783b0f0db30e93fc4f6aedbe1536af9f2c69113c5da6e8c5",
       "preserved": "github-source",
-      "read_provenance": "original-git-index-matches-live-GitHub",
+      "read_provenance": "original-file-after-iCloud-download",
       "git_blob": "a54b6dd077772b7a5f6e2462e9283ec4152c4e35",
-      "raw_original_bytes_unverified": true,
-      "index_mtime_matches_current": false
+      "raw_original_bytes_unverified": false,
+      "index_mtime_matches_current": false,
+      "original_bytes_verified_at_utc": "2026-10-07T16:06:56Z"
     },
     {
       "path": "src/modules/maps/map-adapter.ts",
       "bytes": 469,
       "sha256": "0188271879564cdc13373555fa3427faac71c7441b3ece9ea70518ec1ffb13ff",
       "preserved": "github-source",
-      "read_provenance": "original-git-index-matches-live-GitHub",
+      "read_provenance": "original-file-after-iCloud-download",
       "git_blob": "0df3b0ebb244dab07433abdfb4ac682f99891e5f",
-      "raw_original_bytes_unverified": true,
-      "index_mtime_matches_current": false
+      "raw_original_bytes_unverified": false,
+      "index_mtime_matches_current": false,
+      "original_bytes_verified_at_utc": "2026-10-07T16:06:56Z"
     },
     {
       "path": "src/modules/scheduling/repositories.ts",
       "bytes": 9243,
       "sha256": "1ed874653084767e72a16afa22ab2393b5a3bd9c1f32a93bf42f78141c08b3a3",
       "preserved": "github-source",
-      "read_provenance": "original-git-index-matches-live-GitHub",
+      "read_provenance": "original-file-after-iCloud-download",
       "git_blob": "f68e8285b19e6eb9d1d3a1127786bca5c08be0a5",
-      "raw_original_bytes_unverified": true,
-      "index_mtime_matches_current": true
-    }
-  ],
-  "unreadable_files": [
-    {
-      "path": "src/app/(protected)/clients/[clientId]/page.tsx",
-      "bytes": 116,
-      "error": "icloud-read-timeout"
-    },
-    {
-      "path": "src/modules/capabilities/repositories.ts",
-      "bytes": 5481,
-      "error": "icloud-read-timeout"
-    },
-    {
-      "path": "src/modules/maps/map-adapter.ts",
-      "bytes": 469,
-      "error": "icloud-read-timeout"
-    },
-    {
-      "path": "src/modules/scheduling/repositories.ts",
-      "bytes": 9243,
-      "error": "icloud-read-timeout"
+      "raw_original_bytes_unverified": false,
+      "index_mtime_matches_current": true,
+      "original_bytes_verified_at_utc": "2026-10-07T16:06:56Z"
     }
   ],
   "encrypted_backup": {
@@ -1931,6 +1913,12 @@
     "plaintext_archive_sha256": "a89d25134355469ff5049fb26251a7f1a8fd36c642ff57625d4bffb9334ee054",
     "file_count": 14
   },
-  "git_fallback_files": 4,
-  "deletion_safe": false
+  "git_fallback_files": 0,
+  "deletion_safe": true,
+  "current_original_file_count": 308,
+  "current_original_files_all_verified": true,
+  "missing_original_files": [],
+  "unreadable_files": [],
+  "complete_current_files": true,
+  "deletion_safe_current_state": true
 }

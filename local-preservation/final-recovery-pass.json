@@ -1,0 +1,146 @@
+[
+  {
+    "label": "scopeis-main",
+    "path": "scripts/phase10-test-fixtures.mjs",
+    "initial_bytes": 4589,
+    "attempted_at_utc": "2026-10-07T16:06:56Z",
+    "bytes": 4589,
+    "sha256": "4e3682cd552220da942417954ba17f00a9a472b4f93665191af07bdea2719255",
+    "verified_original_bytes": true
+  },
+  {
+    "label": "scopeis-main",
+    "path": "scripts/phase9-test-fixtures.mjs",
+    "initial_bytes": 2407,
+    "attempted_at_utc": "2026-10-07T16:06:56Z",
+    "bytes": 2407,
+    "sha256": "2ed3778f1ce8942dc10082a8c784baa2962824380ae002c2912574590cc78661",
+    "verified_original_bytes": true
+  },
+  {
+    "label": "scopeis-main",
+    "path": "scripts/run-credential-service-tests.mjs",
+    "initial_bytes": 695,
+    "attempted_at_utc": "2026-10-07T16:06:56Z",
+    "bytes": 695,
+    "sha256": "543fd3ba56ebaa4712f9e48a7eb5a2bea7c815cb7efc81f9ea3436f16962cc61",
+    "verified_original_bytes": true
+  },
+  {
+    "label": "scopeis-main",
+    "path": "scripts/run-phase1-route-certification.mjs",
+    "initial_bytes": 2384,
+    "attempted_at_utc": "2026-10-07T16:06:56Z",
+    "bytes": 2384,
+    "sha256": "759f3b12d089446fb4e15c3c8935e617142be7c002a6a17b1af6cd8a9c07707b",
+    "verified_original_bytes": true
+  },
+  {
+    "label": "scopeis-main",
+    "path": "scripts/run-phase3-manual-qa.mjs",
+    "initial_bytes": 3678,
+    "attempted_at_utc": "2026-10-07T16:06:56Z",
+    "bytes": 3678,
+    "sha256": "96198bcacc750e1f31d21057ca980efcc9238a984aa5425b3b38bd23a1827623",
+    "verified_original_bytes": true
+  },
+  {
+    "label": "scopeis-main",
+    "path": "scripts/run-phase3-playwright.mjs",
+    "initial_bytes": 928,
+    "attempted_at_utc": "2026-10-07T16:06:56Z",
+    "bytes": 928,
+    "sha256": "230b4cca1d202a4c123a937a90c57523a4b2300d332121e521ede52c02e0406e",
+    "verified_original_bytes": true
+  },
+  {
+    "label": "scopeis-main",
+    "path": "scripts/run-phase3-service-tests.mjs",
+    "initial_bytes": 802,
+    "attempted_at_utc": "2026-10-07T16:06:56Z",
+    "bytes": 802,
+    "sha256": "6bf9a6546a57d8a73b3a079f39c86ce38563797dcf4d34593f74771583bc7baa",
+    "verified_original_bytes": true
+  },
+  {
+    "label": "scopeis-main",
+    "path": "scripts/run-seed-smoke.mjs",
+    "initial_bytes": 8391,
+    "attempted_at_utc": "2026-10-07T16:06:56Z",
+    "bytes": 8391,
+    "sha256": "055b3ad4e4f3328427e3304a135f1d17cd51153b24f6f714df5cd3f368c5b3d8",
+    "verified_original_bytes": true
+  },
+  {
+    "label": "scopeis-main",
+    "path": "scripts/run-system-lock.mjs",
+    "initial_bytes": 4720,
+    "attempted_at_utc": "2026-10-07T16:06:56Z",
+    "bytes": 4720,
+    "sha256": "1be26c795ae6fd618763328fa30d499c7054f6f42a1dc40d6f0c7fb3641f74a4",
+    "verified_original_bytes": true
+  },
+  {
+    "label": "scopeis-main",
+    "path": "scripts/schema-fingerprint.mjs",
+    "initial_bytes": 3021,
+    "attempted_at_utc": "2026-10-07T16:06:56Z",
+    "bytes": 3021,
+    "sha256": "e7e7e0c2fb7e39f948a8021375da96d3d72510570c1278d856c086eafd4ecdbb",
+    "verified_original_bytes": true
+  },
+  {
+    "label": "scopeis-main",
+    "path": "scripts/verify-isolation.mjs",
+    "initial_bytes": 6205,
+    "attempted_at_utc": "2026-10-07T16:06:56Z",
+    "bytes": 6205,
+    "sha256": "367526f50d8fc7a8d4c7e958d2ee1615a3d25cbbc9d15ac6577c485ba8371e5d",
+    "verified_original_bytes": true
+  },
+  {
+    "label": "scopeis-main",
+    "path": "scripts/verify-scenario-manifest.mjs",
+    "initial_bytes": 7013,
+    "attempted_at_utc": "2026-10-07T16:06:56Z",
+    "bytes": 7013,
+    "sha256": "4e1cc2b59894a81d3c64b118e979bcacc38077e9b3d49d86ee5267a7c67ce043",
+    "verified_original_bytes": true
+  },
+  {
+    "label": "scopeis-preview",
+    "path": "src/app/(protected)/clients/[clientId]/page.tsx",
+    "initial_bytes": 116,
+    "attempted_at_utc": "2026-10-07T16:06:56Z",
+    "bytes": 116,
+    "sha256": "77bd377e42485c4a926b891c474c12880ee919a847797872b74b4e69ccfd5450",
+    "verified_original_bytes": true
+  },
+  {
+    "label": "scopeis-preview",
+    "path": "src/modules/capabilities/repositories.ts",
+    "initial_bytes": 5481,
+    "attempted_at_utc": "2026-10-07T16:06:56Z",
+    "bytes": 5481,
+    "sha256": "48e733775de3fbe6783b0f0db30e93fc4f6aedbe1536af9f2c69113c5da6e8c5",
+    "verified_original_bytes": true
+  },
+  {
+    "label": "scopeis-preview",
+    "path": "src/modules/maps/map-adapter.ts",
+    "initial_bytes": 469,
+    "attempted_at_utc": "2026-10-07T16:06:56Z",
+    "bytes": 469,
+    "sha256": "0188271879564cdc13373555fa3427faac71c7441b3ece9ea70518ec1ffb13ff",
+    "verified_original_bytes": true
+  },
+  {
+    "label": "scopeis-preview",
+    "path": "src/modules/scheduling/repositories.ts",
+    "initial_bytes": 9243,
+    "attempted_at_utc": "2026-10-07T16:06:56Z",
+    "bytes": 9243,
+    "sha256": "1ed874653084767e72a16afa22ab2393b5a3bd9c1f32a93bf42f78141c08b3a3",
+    "verified_original_bytes": true
+  }
+]

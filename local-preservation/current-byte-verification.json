@@ -1,0 +1,24 @@
+{
+  "verified_at_utc": "2026-10-07T16:12:09Z",
+  "complete_current_files": true,
+  "verified_current_files": 1130,
+  "read_errors": 0,
+  "snapshots": [
+    {
+      "label": "scopeis-main",
+      "current_file_count": 822,
+      "verified_current_bytes": 33073353,
+      "paths_stable_before_and_after_read": true,
+      "manifest_sha256": "9d6cb8d589efc1280f9e95711331ed082c561978adbe6123a104d04a03d513ed",
+      "missing_historical_paths": 2
+    },
+    {
+      "label": "scopeis-preview",
+      "current_file_count": 308,
+      "verified_current_bytes": 6586162,
+      "paths_stable_before_and_after_read": true,
+      "manifest_sha256": "1af8d6ea24daa1f843d953139d4f378b181491b1a522f322c0ecca0ddd3cbdb7",
+      "missing_historical_paths": 0
+    }
+  ]
+}
