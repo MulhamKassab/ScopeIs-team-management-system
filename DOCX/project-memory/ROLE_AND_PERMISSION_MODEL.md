@@ -16,11 +16,11 @@ Has global management authority: employee accounts and roles, designations, skil
 
 ### Admin
 
-May be an account manager, team senior, coordinator, or other trusted employee. Can view necessary employee capabilities and availability; manage assigned clients/projects/locations; create schedule drafts and assignments within scope; propose schedules; review conflicts; find candidates; submit replacement requests; use the scoped planning map; create and edit their own shared Client, Project, and Location notes where their scope authorizes the parent; create permitted employee-management notes about Employees below their role; and participate in private requester-assignee discussions.
+May be an account manager, team senior, coordinator, or other trusted employee. Can view necessary employee capabilities and availability; manage assigned clients/projects/locations; read Draft, Proposed and Published plans within current scope; review conflicts; find candidates; submit replacement requests; use the scoped planning map; create and edit their own shared Client, Project, and Location notes where their scope authorizes the parent; create permitted employee-management notes about Employees below their role; and participate in private requester-assignee discussions.
 
 Company workspace/dashboard supervision requires current active membership, a matching Client/Project grant and TEAM scope; unlinked containers remain Super Admin-managed. Under the 9 October collaboration amendment, an Admin also has ticket-only creator/assignee/observer access independently of workforce scope or workspace membership. That participation never widens workforce management access.
 
-Admin cannot publish schedules, make final schedule approvals, approve or reject leave, recommend leave decisions, access private leave reasons by default, manage global permissions, change global coverage policies without permission, assign replacements without required Super Admin approval, or access data outside scope.
+Admin cannot create, edit, clone or revise schedule periods or assignments, edit Draft notes or assignment-specific requirements, submit or return proposals, publish schedules, make final schedule approvals, approve or reject leave, recommend leave decisions, access private leave reasons by default, manage global permissions, change global coverage policies without permission, assign replacements without required Super Admin approval, or access data outside scope. The 2026-10-09 schedule-access amendment supersedes earlier scoped Admin drafting/proposal authority; a cover request remains a separate request for Super Admin's decision.
 
 ### Employee
 
@@ -45,12 +45,13 @@ An Admin's effective access is the intersection of role permission and assigned 
 | Maintain own certifications/portfolio | Yes | Yes | Yes |
 | Review/verify submitted certifications | Yes | No | No |
 | Manage clients/projects/locations | Yes | Within scope | No; may view shared work information |
-| Create schedule draft | Yes | Within scope | No |
-| Submit schedule proposal | Yes | Within scope | No |
-| View unfinished drafts | All | Own/scoped | No |
+| Create/edit schedule Draft, assignments, notes and assignment requirements | Yes | No | No |
+| Submit/return schedule proposal | Yes | No | No |
+| Clone/revise schedule | Yes | No | No |
+| View unfinished Draft/Proposed plans | All | Within current scope, read only | No |
 | Publish or modify published schedule | Yes | No | No |
 | View published schedule | All | Relevant scope | Own assignments |
-| Submit own leave request | Yes | Yes | Yes |
+| Submit/cancel own Pending annual-leave request | No | No | Yes |
 | View another employee's leave reason | Yes when required | No by default | No |
 | Approve/reject leave | Yes | No | No |
 | Recommend leave outcome | Not a separate workflow | No | No |
@@ -82,9 +83,10 @@ An Admin's effective access is the intersection of role permission and assigned 
 
 ## Explicit safeguards
 
-- Admin cannot publish schedules.
+- Admin cannot directly mutate schedules in any lifecycle state. Only Super Admin drafts, proposes, returns, clones, revises or publishes; Admin retains scoped plan reads and separate cover requests.
 - Admin cannot approve or reject leave.
 - Admin does not recommend leave decisions.
+- Under [Phase 5 leave decisions](PHASE_5_LEAVE_DOMAIN_DECISIONS.md), self-service annual-leave submission and Pending cancellation are Employee-only. Admin reads only identity and Approved unavailable dates for TEAM-visible Employees, with no own-request, balance, private reason or response access; Super Admin reviews/decides requests and manages the allowance. Earlier generic own-leave wording is superseded by that delivered boundary.
 - Employee cannot access the management planning map.
 - Only requester and assigned employee(s) can see an assignment/request discussion.
 - Shared Client, Project, and Location notes are not private notes, but "shared" means shared with everyone already authorized on the parent record, not with every authenticated user. Super Admin holds global access; Admin access follows their Client, Project, or Location scope; Employees hold no Client, Project, Location, or shared-note access in Phase 10. This interpretation was confirmed by the product owner during Phase 10 and replaces the earlier ambiguous "every authenticated user" reading.

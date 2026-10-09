@@ -1,7 +1,7 @@
 import "server-only";
 import { and, eq, sql } from "drizzle-orm";
 import { db } from "@/db/client";
-import { assignmentSkillRequirements, scheduleAssignments } from "@/db/schema";
+import { assignmentSkillRequirements, scheduleAssignments, users } from "@/db/schema";
 import { writeAuditEvent } from "@/modules/audit/audit-service";
 import { CapabilityDomainError } from "@/modules/capabilities/domain-error";
 import { capabilityRepository, type CapabilityExecutor, type CapabilityTransaction } from "@/modules/capabilities/repositories";
@@ -14,23 +14,25 @@ export type MissingSkillWarning = { assignmentId: string; employeeName: string; 
 export class CapabilityService {
   constructor(private readonly auditWriter: AuditWriter = writeAuditEvent) {}
   private audit(tx: CapabilityTransaction, actor: AuthenticatedActor, action: string, targetId: string, metadata: Record<string, unknown>) { return this.auditWriter(tx, { actor, action, targetType: "skill_requirement", targetId, metadata }); }
+  private async requirePlanner(tx: CapabilityTransaction, supplied: AuthenticatedActor): Promise<AuthenticatedActor> {
+    if (supplied.role !== "SUPER_ADMIN") throw new CapabilityDomainError("FORBIDDEN");
+    const [current] = await tx.select({ id: users.id, displayName: users.displayName, role: users.role, active: users.active, sessionVersion: users.sessionVersion }).from(users).where(eq(users.id, supplied.id)).limit(1).for("share");
+    if (!current?.active || current.role !== "SUPER_ADMIN" || current.sessionVersion !== supplied.sessionVersion) throw new CapabilityDomainError("FORBIDDEN");
+    return { ...supplied, id: current.id, displayName: current.displayName, role: current.role, scopes: [] };
+  }
   private async assertAssignmentManage(actor: AuthenticatedActor, executor: CapabilityExecutor, assignmentId: string) {
+    if (actor.role !== "SUPER_ADMIN") throw new CapabilityDomainError("FORBIDDEN");
     const row = await capabilityRepository.assignment(executor, assignmentId); if (!row) throw new CapabilityDomainError("NOT_FOUND");
-    if (actor.role === "EMPLOYEE") throw new CapabilityDomainError("FORBIDDEN");
     if (row.period.status !== "DRAFT") throw new CapabilityDomainError("INVALID_STATE");
-    if (actor.role === "SUPER_ADMIN") return row;
-    const grants = await capabilityRepository.activeGrants(executor, actor.id);
-    const permitted = grants.some((grant) => (grant.scopeType === "CLIENT" && grant.scopeReference === row.period.clientId) || (grant.scopeType === "PROJECT" && grant.scopeReference === row.assignment.projectId) || (grant.scopeType === "LOCATION" && grant.scopeReference === row.assignment.locationId));
-    if (!permitted) throw new CapabilityDomainError("OUT_OF_SCOPE"); return row;
+    return row;
   }
   async addAssignmentRequirement(actor: AuthenticatedActor, input: unknown) {
     const parsed = parseCapabilities(assignmentRequirementCreateSchema, input);
-    await this.assertAssignmentManage(actor, db, parsed.assignmentId);
-    return db.transaction(async (tx) => { await capabilityRepository.lockAssignment(tx, parsed.assignmentId); const assignment = await this.assertAssignmentManage(actor, tx, parsed.assignmentId); const skill = await capabilityRepository.skill(tx, parsed.skillId); if (!skill?.active) throw new CapabilityDomainError("INACTIVE_SKILL"); const existing = await tx.select().from(assignmentSkillRequirements).where(and(eq(assignmentSkillRequirements.scheduleAssignmentId, parsed.assignmentId), eq(assignmentSkillRequirements.skillId, parsed.skillId))).limit(1).then(([row]) => row ?? null); if (existing?.archivedAt) throw new CapabilityDomainError("DUPLICATE_REQUIREMENT", "Archived assignment requirements are retained; create a new Draft assignment if its work requirements change."); if (existing) throw new CapabilityDomainError("DUPLICATE_REQUIREMENT"); const row = await capabilityRepository.createAssignmentRequirement(tx, parsed.assignmentId, parsed.skillId); await this.audit(tx, actor, "assignment_skill_requirement.created", row.id, { assignmentId: parsed.assignmentId, skillId: parsed.skillId, source: "ASSIGNMENT" }); return { row, assignment }; });
+    return db.transaction(async (tx) => { actor = await this.requirePlanner(tx, actor); const source = await this.assertAssignmentManage(actor, tx, parsed.assignmentId); await tx.execute(sql`select id from schedule_periods where id = ${source.period.id} for update`); await capabilityRepository.lockAssignment(tx, parsed.assignmentId); const assignment = await this.assertAssignmentManage(actor, tx, parsed.assignmentId); const skill = await capabilityRepository.skill(tx, parsed.skillId); if (!skill?.active) throw new CapabilityDomainError("INACTIVE_SKILL"); const existing = await tx.select().from(assignmentSkillRequirements).where(and(eq(assignmentSkillRequirements.scheduleAssignmentId, parsed.assignmentId), eq(assignmentSkillRequirements.skillId, parsed.skillId))).limit(1).then(([row]) => row ?? null); if (existing?.archivedAt) throw new CapabilityDomainError("DUPLICATE_REQUIREMENT", "Archived assignment requirements are retained; create a new Draft assignment if its work requirements change."); if (existing) throw new CapabilityDomainError("DUPLICATE_REQUIREMENT"); const row = await capabilityRepository.createAssignmentRequirement(tx, parsed.assignmentId, parsed.skillId); await this.audit(tx, actor, "assignment_skill_requirement.created", row.id, { assignmentId: parsed.assignmentId, skillId: parsed.skillId, source: "ASSIGNMENT" }); return { row, assignment }; });
   }
   async archiveAssignmentRequirement(actor: AuthenticatedActor, input: unknown) {
-    const parsed = parseCapabilities(assignmentRequirementArchiveSchema, input); const existing = await capabilityRepository.assignmentRequirement(db, parsed.requirementId); if (!existing) throw new CapabilityDomainError("NOT_FOUND"); await this.assertAssignmentManage(actor, db, existing.scheduleAssignmentId);
-    return db.transaction(async (tx) => { await capabilityRepository.lockAssignment(tx, existing.scheduleAssignmentId); await this.assertAssignmentManage(actor, tx, existing.scheduleAssignmentId); const row = await capabilityRepository.archiveAssignmentRequirement(tx, existing.id, parsed.expectedVersion); if (!row) throw new CapabilityDomainError("STALE_VERSION"); await this.audit(tx, actor, "assignment_skill_requirement.archived", row.id, { assignmentId: row.scheduleAssignmentId, skillId: row.skillId, source: "ASSIGNMENT" }); return row; });
+    const parsed = parseCapabilities(assignmentRequirementArchiveSchema, input);
+    return db.transaction(async (tx) => { actor = await this.requirePlanner(tx, actor); const existing = await capabilityRepository.assignmentRequirement(tx, parsed.requirementId); if (!existing) throw new CapabilityDomainError("NOT_FOUND"); const source = await this.assertAssignmentManage(actor, tx, existing.scheduleAssignmentId); await tx.execute(sql`select id from schedule_periods where id = ${source.period.id} for update`); await capabilityRepository.lockAssignment(tx, existing.scheduleAssignmentId); await this.assertAssignmentManage(actor, tx, existing.scheduleAssignmentId); const row = await capabilityRepository.archiveAssignmentRequirement(tx, existing.id, parsed.expectedVersion); if (!row) throw new CapabilityDomainError("STALE_VERSION"); await this.audit(tx, actor, "assignment_skill_requirement.archived", row.id, { assignmentId: row.scheduleAssignmentId, skillId: row.skillId, source: "ASSIGNMENT" }); return row; });
   }
   async effectiveRequirements(executor: CapabilityExecutor, assignmentId: string) {
     const loaded = await capabilityRepository.assignment(executor, assignmentId); if (!loaded) throw new CapabilityDomainError("NOT_FOUND"); const [inherited, direct] = await Promise.all([capabilityRepository.activeRequirements(executor, loaded.assignment), capabilityRepository.assignmentRequirements(executor, assignmentId)]); const merged = new Map<string, { id: string; name: string; sources: Set<"Client" | "Project" | "Location" | "Assignment"> }>();

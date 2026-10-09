@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { and, eq } from "drizzle-orm";
 import { db } from "@/db/client";
-import { adminScopeGrants } from "@/db/schema";
+import { adminScopeGrants, assignmentSkillRequirements, auditEvents, users } from "@/db/schema";
 import { capabilityRepository } from "@/modules/capabilities/repositories";
 import { CapabilityService, capabilityService } from "@/modules/capabilities/service";
 import { employeeCatalogueService, employeeSkillService } from "@/modules/employees/employee-services";
@@ -68,5 +68,40 @@ describe("Phase 6 skills and operational capabilities", () => {
     await expect(failing.addAssignmentRequirement(nora, { assignmentId: assignment.id, skillId: skill.id })).rejects.toThrow("forced Phase 6 audit failure");
     expect((await capabilityRepository.assignmentRequirements(db, assignment.id)).filter((item) => item.requirement.skillId === skill.id)).toHaveLength(0);
     await db.delete(adminScopeGrants).where(eq(adminScopeGrants.userId, ava.id));
+  });
+});
+
+describe("schedule requirement mutation authority", () => {
+  it("refuses scoped Admin and Employee requirement writes while retaining Super Admin management", async () => {
+    await db.insert(adminScopeGrants).values({ userId: ava.id, scopeType: "CLIENT", scopeReference: phase3Ids.alphaClient }).onConflictDoNothing();
+    const skill = await employeeCatalogueService.createSkill(nora, { name: "Super Admin assignment requirement" });
+    const period = await schedulingService.createPeriod(nora, { clientId: phase3Ids.alphaClient, month: "2033-05" });
+    const assignment = await schedulingService.addAssignment(nora, { periodId: period.id, expectedPeriodVersion: period.version, employeeUserId: cora.id, projectId: phase3Ids.alphaProjectOne, locationId: phase3Ids.alphaLocation, assignmentDate: "2033-05-12", startTime: "09:00", endTime: "10:00" });
+    for (const manager of [ava, cora]) await expect(capabilityService.addAssignmentRequirement(manager, { assignmentId: assignment.id, skillId: skill.id })).rejects.toMatchObject({ code: "FORBIDDEN", status: 403 });
+    const direct = await capabilityService.addAssignmentRequirement(nora, { assignmentId: assignment.id, skillId: skill.id });
+    const auditBefore = await db.select().from(auditEvents);
+    for (const manager of [ava, cora]) await expect(capabilityService.archiveAssignmentRequirement(manager, { requirementId: direct.row.id, expectedVersion: direct.row.version })).rejects.toMatchObject({ code: "FORBIDDEN", status: 403 });
+    expect(await db.select().from(assignmentSkillRequirements).where(eq(assignmentSkillRequirements.id, direct.row.id))).toEqual([direct.row]);
+    expect(await db.select().from(auditEvents)).toEqual(auditBefore);
+    expect((await capabilityService.archiveAssignmentRequirement(nora, { requirementId: direct.row.id, expectedVersion: direct.row.version })).archivedAt).toBeTruthy();
+  });
+
+  it("rechecks current role, active status and session version for direct requirement calls", async () => {
+    const skill = await employeeCatalogueService.createSkill(nora, { name: "Current planner identity requirement" });
+    const period = await schedulingService.createPeriod(nora, { clientId: phase3Ids.alphaClient, month: "2033-06" });
+    const assignment = await schedulingService.addAssignment(nora, { periodId: period.id, expectedPeriodVersion: period.version, employeeUserId: cora.id, projectId: phase3Ids.alphaProjectOne, locationId: phase3Ids.alphaLocation, assignmentDate: "2033-06-12", startTime: "09:00", endTime: "10:00" });
+    const direct = await capabilityService.addAssignmentRequirement(nora, { assignmentId: assignment.id, skillId: skill.id });
+    const former = actor("phase6-former-planner", "SUPER_ADMIN");
+    await db.insert(users).values({ id: former.id, displayName: "Former planner", role: "ADMIN" });
+    const identities = [{ ...ava, role: "SUPER_ADMIN" as const }, former];
+    for (const supplied of identities) {
+      await expect(capabilityService.addAssignmentRequirement(supplied, { assignmentId: assignment.id, skillId: skill.id })).rejects.toMatchObject({ code: "FORBIDDEN" });
+      await expect(capabilityService.archiveAssignmentRequirement(supplied, { requirementId: direct.row.id, expectedVersion: direct.row.version })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    }
+    await db.update(users).set({ role: "SUPER_ADMIN", active: false }).where(eq(users.id, former.id));
+    await expect(capabilityService.archiveAssignmentRequirement(former, { requirementId: direct.row.id, expectedVersion: direct.row.version })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await db.update(users).set({ active: true, sessionVersion: 2 }).where(eq(users.id, former.id));
+    await expect(capabilityService.archiveAssignmentRequirement(former, { requirementId: direct.row.id, expectedVersion: direct.row.version })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    expect(await db.select().from(assignmentSkillRequirements).where(eq(assignmentSkillRequirements.id, direct.row.id))).toEqual([direct.row]);
   });
 });

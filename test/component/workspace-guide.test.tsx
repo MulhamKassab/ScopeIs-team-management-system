@@ -23,7 +23,7 @@ describe("workspace task discovery", () => {
   it("closes the native task dialog and restores scroll when a feature is chosen", () => {
     render(<WorkspaceGuide navigation={[modules.schedule]} role="ADMIN" />);
     fireEvent.click(screen.getByRole("button", { name: "Find a feature" }));
-    expect(screen.getByRole("link")).toHaveTextContent("Prepare scoped Draft schedules");
+    expect(screen.getByRole("link")).toHaveTextContent("View schedules within your access");
     expect(document.body.style.overflow).toBe("hidden");
     fireEvent.click(screen.getByRole("link"));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();

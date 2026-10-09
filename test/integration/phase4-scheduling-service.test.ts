@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import { beforeAll, describe, expect, it } from "vitest";
 import { db } from "@/db/client";
-import { adminScopeGrants, assignmentSkillRequirements, auditEvents, clients, locations, notifications, projectLocations, projects, schedulePeriods, skills } from "@/db/schema";
+import { adminScopeGrants, assignmentSkillRequirements, auditEvents, clients, locations, notifications, projectLocations, projects, scheduleAssignments, schedulePeriods, skills, users } from "@/db/schema";
 import { phase3Ids, phase4Ids } from "../../scripts/phase4-test-fixtures.mjs";
 import { SchedulingService, schedulingService } from "@/modules/scheduling/service";
 import { coverageRepository } from "@/modules/coverage/repositories";
@@ -15,9 +15,9 @@ beforeAll(async () => { const [project] = await db.select({ id: projects.id, cli
 
 describe("Phase 4 scheduling service", () => {
   it("completes Draft → Proposed → Published and exposes only the employee projection", async () => {
-    const period = await schedulingService.createPeriod(ava, { clientId: phase3Ids.alphaClient, month: "2026-05" });
-    const assignment = await schedulingService.addAssignment(ava, { periodId: period.id, expectedPeriodVersion: period.version, employeeUserId: "mock-employee-cora", projectId: alphaProject.id, locationId: phase3Ids.alphaLocation, assignmentDate: "2026-05-06", startTime: "09:00", endTime: "10:00", sharedInstruction: "Use the reception desk." });
-    const proposed = await schedulingService.propose(ava, { periodId: period.id, expectedVersion: period.version + 1 });
+    const period = await schedulingService.createPeriod(nora, { clientId: phase3Ids.alphaClient, month: "2026-05" });
+    const assignment = await schedulingService.addAssignment(nora, { periodId: period.id, expectedPeriodVersion: period.version, employeeUserId: "mock-employee-cora", projectId: alphaProject.id, locationId: phase3Ids.alphaLocation, assignmentDate: "2026-05-06", startTime: "09:00", endTime: "10:00", sharedInstruction: "Use the reception desk." });
+    const proposed = await schedulingService.propose(nora, { periodId: period.id, expectedVersion: period.version + 1 });
     await expect(schedulingService.publish(ava, { periodId: period.id, expectedVersion: proposed.version })).rejects.toMatchObject({ code: "FORBIDDEN" });
     const published = await schedulingService.publish(nora, { periodId: period.id, expectedVersion: proposed.version });
     expect(published.status).toBe("PUBLISHED"); expect(assignment.employeeUserId).toBe("mock-employee-cora");
@@ -26,14 +26,18 @@ describe("Phase 4 scheduling service", () => {
     expect(await db.select().from(notifications).where(and(eq(notifications.recipientUserId, cora.id), eq(notifications.eventType, "schedule.published")))).toHaveLength(1);
   });
 
-  it("keeps operational scope and TEAM employee visibility separate", async () => {
+  it("keeps Admin schedule reads scoped while refusing Draft creation and edits", async () => {
     const period = await schedulingService.createPeriod(nora, { clientId: phase3Ids.bravoClient, month: "2026-06" });
-    const assignment = await schedulingService.addAssignment(ben, { periodId: period.id, expectedPeriodVersion: period.version, employeeUserId: phase4Ids.bravoEmployee, projectId: phase3Ids.bravoProject, locationId: phase3Ids.bravoLocation, assignmentDate: "2026-06-10", startTime: "11:00", endTime: "12:00" });
+    const assignment = await schedulingService.addAssignment(nora, { periodId: period.id, expectedPeriodVersion: period.version, employeeUserId: phase4Ids.bravoEmployee, projectId: phase3Ids.bravoProject, locationId: phase3Ids.bravoLocation, assignmentDate: "2026-06-10", startTime: "11:00", endTime: "12:00" });
     expect(assignment.projectId).toBe(phase3Ids.bravoProject);
-    await expect(schedulingService.createPeriod(ben, { clientId: phase3Ids.bravoClient, month: "2026-07" })).rejects.toMatchObject({ code: "OUT_OF_SCOPE" });
-    await expect(schedulingService.propose(ben, { periodId: period.id, expectedVersion: period.version + 1 })).rejects.toMatchObject({ code: "OUT_OF_SCOPE" });
-    await expect(schedulingService.addAssignment(ben, { periodId: period.id, expectedPeriodVersion: period.version + 1, employeeUserId: phase4Ids.bravoEmployee, projectId: alphaProject.id, locationId: phase3Ids.alphaLocation, assignmentDate: "2026-06-11", startTime: "11:00", endTime: "12:00" })).rejects.toMatchObject({ code: "OUT_OF_SCOPE" });
-    await expect(schedulingService.createPeriod(unscoped, { clientId: phase3Ids.alphaClient, month: "2026-08" })).rejects.toMatchObject({ code: "OUT_OF_SCOPE" });
+    const editor = await schedulingService.getPeriodEditor(ben, period.id);
+    expect(editor.assignments.map((row) => row.assignment.id)).toEqual([assignment.id]);
+    expect(editor).toMatchObject({ canManage: false, canPropose: false, canPublish: false });
+    await expect(schedulingService.getPeriodEditor(ava, period.id)).rejects.toMatchObject({ code: "OUT_OF_SCOPE" });
+    await expect(schedulingService.createPeriod(ben, { clientId: phase3Ids.bravoClient, month: "2026-07" })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(schedulingService.propose(ben, { periodId: period.id, expectedVersion: period.version + 1 })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(schedulingService.addAssignment(ben, { periodId: period.id, expectedPeriodVersion: period.version + 1, employeeUserId: phase4Ids.bravoEmployee, projectId: alphaProject.id, locationId: phase3Ids.alphaLocation, assignmentDate: "2026-06-11", startTime: "11:00", endTime: "12:00" })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(schedulingService.createPeriod(unscoped, { clientId: phase3Ids.alphaClient, month: "2026-08" })).rejects.toMatchObject({ code: "FORBIDDEN" });
     await expect(schedulingService.getMySchedule(cora, { month: "2026-06" })).resolves.toHaveLength(0);
   });
 
@@ -97,11 +101,11 @@ describe("Schedule revision and scope regressions", () => {
     expect((await schedulingService.getPeriodEditor(nora, first.id)).assignments).toHaveLength(1);
   });
 
-  it("requires authority over both the original assignment and its destination", async () => {
+  it("keeps original assignment and destination unchanged after an Admin edit attempt", async () => {
     const period = await schedulingService.createPeriod(nora, { clientId: phase3Ids.bravoClient, month: "2031-02" });
     await db.insert(projectLocations).values({ projectId: phase3Ids.bravoSibling, locationId: phase3Ids.bravoLocation });
     const original = await schedulingService.addAssignment(nora, { periodId: period.id, expectedPeriodVersion: period.version, employeeUserId: phase4Ids.bravoEmployee, projectId: phase3Ids.bravoSibling, locationId: phase3Ids.bravoLocation, assignmentDate: "2031-02-03", startTime: "09:00", endTime: "10:00" });
-    await expect(schedulingService.updateAssignment(ben, { periodId: period.id, assignmentId: original.id, expectedPeriodVersion: period.version + 1, expectedVersion: original.version, employeeUserId: phase4Ids.bravoEmployee, projectId: phase3Ids.bravoProject, locationId: phase3Ids.bravoLocation, assignmentDate: original.assignmentDate, startTime: "09:00", endTime: "10:00" })).rejects.toMatchObject({ code: "OUT_OF_SCOPE" });
+    await expect(schedulingService.updateAssignment(ben, { periodId: period.id, assignmentId: original.id, expectedPeriodVersion: period.version + 1, expectedVersion: original.version, employeeUserId: phase4Ids.bravoEmployee, projectId: phase3Ids.bravoProject, locationId: phase3Ids.bravoLocation, assignmentDate: original.assignmentDate, startTime: "09:00", endTime: "10:00" })).rejects.toMatchObject({ code: "FORBIDDEN" });
     expect((await schedulingService.getPeriodEditor(nora, period.id)).assignments[0].assignment).toMatchObject({ projectId: phase3Ids.bravoSibling, version: original.version });
   });
 
@@ -131,5 +135,72 @@ describe("Schedule revision and scope regressions", () => {
     const choices = new Map(editor.locationsByProject);
     expect(choices.get(phase3Ids.alphaProjectOne)?.map((row) => row.location.id)).toEqual([phase3Ids.alphaLocation]);
     expect(choices.get(phase3Ids.alphaProjectTwo)?.map((row) => row.location.id)).toEqual([secondLocation.id]);
+  });
+});
+
+describe("Super Admin schedule mutation authority", () => {
+  const writes = (manager: AuthenticatedActor, period: typeof schedulePeriods.$inferSelect, assignment: typeof scheduleAssignments.$inferSelect) => {
+    const version = { periodId: period.id, expectedVersion: period.version + 1 };
+    const work = { periodId: period.id, expectedPeriodVersion: period.version + 1, employeeUserId: assignment.employeeUserId, projectId: assignment.projectId, locationId: assignment.locationId, assignmentDate: assignment.assignmentDate, startTime: "09:00", endTime: "10:00" };
+    return [
+      () => schedulingService.createPeriod(manager, { clientId: period.clientId, month: "2034-12" }),
+      () => schedulingService.addAssignment(manager, { ...work, assignmentDate: assignment.assignmentDate.slice(0, 8) + "15" }),
+      () => schedulingService.updateAssignment(manager, { ...work, assignmentId: assignment.id, expectedVersion: assignment.version, sharedInstruction: "Unauthorized changed work instruction" }),
+      () => schedulingService.removeAssignment(manager, { periodId: period.id, expectedPeriodVersion: period.version + 1, assignmentId: assignment.id, expectedVersion: assignment.version }),
+      () => schedulingService.propose(manager, version),
+      () => schedulingService.returnToDraft(manager, { ...version, reason: "Unauthorized return to Draft" }),
+      () => schedulingService.publish(manager, version),
+      () => schedulingService.createRevision(manager, version),
+      () => db.transaction((tx) => schedulingService.applyReplacementEffect(tx, manager, { anchorAssignmentId: assignment.id, selectedEmployeeUserId: phase4Ids.alphaEmployee, intent: "ADD_COVERAGE_ASSIGNMENT" })),
+    ];
+  };
+
+  it.each([
+    [ava, phase3Ids.alphaClient, phase3Ids.alphaProjectOne, phase3Ids.alphaLocation, cora.id, "2033-01"],
+    [ben, phase3Ids.bravoClient, phase3Ids.bravoProject, phase3Ids.bravoLocation, phase4Ids.bravoEmployee, "2033-02"],
+    [actor(phase4Ids.locationAdmin, "ADMIN"), phase3Ids.gammaClient, phase3Ids.gammaProject, phase3Ids.gammaLocation, cora.id, "2033-03"],
+  ] as const)("refuses all direct schedule mutations for scoped Admin %s", async (manager, clientId, projectId, locationId, employeeUserId, month) => {
+    const period = await schedulingService.createPeriod(nora, { clientId, month });
+    const assignment = await schedulingService.addAssignment(nora, { periodId: period.id, expectedPeriodVersion: period.version, employeeUserId, projectId, locationId, assignmentDate: `${month}-12`, startTime: "09:00", endTime: "10:00", sharedInstruction: "Retain this approved planning instruction." });
+    const auditBefore = await db.select().from(auditEvents);
+    const notificationsBefore = await db.select().from(notifications);
+    const periodsBefore = await db.select().from(schedulePeriods);
+    for (const write of writes(manager, period, assignment)) await expect(write()).rejects.toMatchObject({ code: "FORBIDDEN", status: 403 });
+    expect(await db.select().from(schedulePeriods)).toEqual(periodsBefore);
+    expect(await db.select().from(scheduleAssignments).where(eq(scheduleAssignments.id, assignment.id))).toEqual([assignment]);
+    expect(await db.select().from(auditEvents)).toEqual(auditBefore);
+    expect(await db.select().from(notifications)).toEqual(notificationsBefore);
+    const draft = await schedulingService.getPeriodEditor(manager, period.id);
+    expect(draft.period.status).toBe("DRAFT");
+    expect(draft).toMatchObject({ canManage: false, canPropose: false, canPublish: false });
+    const proposed = await schedulingService.propose(nora, { periodId: period.id, expectedVersion: period.version + 1 });
+    expect((await schedulingService.getPeriodEditor(manager, period.id)).period.status).toBe("PROPOSED");
+    await schedulingService.publish(nora, { periodId: period.id, expectedVersion: proposed.version });
+    expect((await schedulingService.getPeriodEditor(manager, period.id)).period.status).toBe("PUBLISHED");
+  });
+
+  it("refuses a forged Super Admin actor and every mutation after a planner is demoted", async () => {
+    const period = await schedulingService.createPeriod(nora, { clientId: phase3Ids.alphaClient, month: "2033-04" });
+    const assignment = await schedulingService.addAssignment(nora, { periodId: period.id, expectedPeriodVersion: period.version, employeeUserId: cora.id, projectId: phase3Ids.alphaProjectOne, locationId: phase3Ids.alphaLocation, assignmentDate: "2033-04-12", startTime: "09:00", endTime: "10:00" });
+    const former = actor("phase4-demoted-planner", "SUPER_ADMIN");
+    await db.insert(users).values({ id: former.id, role: "SUPER_ADMIN", displayName: "Former schedule planner" });
+    await db.update(users).set({ role: "ADMIN" }).where(eq(users.id, former.id));
+    const periodBefore = await db.select().from(schedulePeriods);
+    const auditBefore = await db.select().from(auditEvents);
+    for (const supplied of [{ ...ava, role: "SUPER_ADMIN" as const }, former]) {
+      for (const write of writes(supplied, period, assignment)) await expect(write()).rejects.toMatchObject({ code: "FORBIDDEN", status: 403 });
+    }
+    expect(await db.select().from(schedulePeriods)).toEqual(periodBefore);
+    expect(await db.select().from(scheduleAssignments).where(eq(scheduleAssignments.id, assignment.id))).toEqual([assignment]);
+    expect(await db.select().from(auditEvents)).toEqual(auditBefore);
+  });
+
+  it("refuses deactivated planners and revoked session versions before writing a Draft", async () => {
+    const planner = actor("phase4-inactive-planner", "SUPER_ADMIN");
+    await db.insert(users).values({ id: planner.id, role: "SUPER_ADMIN", displayName: "Inactive schedule planner", active: false });
+    await expect(schedulingService.createPeriod(planner, { clientId: phase3Ids.alphaClient, month: "2034-11" })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await db.update(users).set({ active: true, sessionVersion: 2 }).where(eq(users.id, planner.id));
+    await expect(schedulingService.createPeriod(planner, { clientId: phase3Ids.alphaClient, month: "2034-11" })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    expect(await db.select().from(schedulePeriods).where(and(eq(schedulePeriods.clientId, phase3Ids.alphaClient), eq(schedulePeriods.planningMonth, "2034-11-01")))).toHaveLength(0);
   });
 });

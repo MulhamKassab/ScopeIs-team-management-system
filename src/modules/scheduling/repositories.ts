@@ -8,6 +8,7 @@ export type SchedulingExecutor = typeof db | SchedulingTransaction;
 export const activeScheduleStatuses = ["DRAFT", "PROPOSED", "PUBLISHED"] as const;
 
 export const schedulingRepository = {
+  planner(executor: SchedulingTransaction, id: string) { return executor.select({ id: users.id, displayName: users.displayName, role: users.role, active: users.active, sessionVersion: users.sessionVersion }).from(users).where(eq(users.id, id)).limit(1).for("share").then(([row]) => row ?? null); },
   period(executor: SchedulingExecutor, id: string) { return executor.select().from(schedulePeriods).where(eq(schedulePeriods.id, id)).limit(1).then(([row]) => row ?? null); },
   lockPeriod(executor: SchedulingTransaction, id: string) { return executor.execute(sql`select id from schedule_periods where id = ${id} for update`); },
   client(executor: SchedulingExecutor, id: string) { return executor.select().from(clients).where(eq(clients.id, id)).limit(1).then(([row]) => row ?? null); },

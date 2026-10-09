@@ -7,8 +7,8 @@ Technical implementation direction is recorded separately in [`SYSTEM_ARCHITECTU
 - All employees are internal; outsourcing is an assignment arrangement.
 - Arrangement labels are manager-configured descriptions and do not determine availability, coverage, leave, work hours, conflicts, or permissions.
 - System roles and job designations are separate.
-- Only Super Admin publishes schedules, approves/rejects leave, and gives final approval for requested replacements.
-- Admin can create scoped drafts/proposals and replacement requests but cannot publish or advise on leave outcomes.
+- Only Super Admin drafts, changes, proposes, returns, clones, revises and publishes schedules, approves/rejects leave, and gives final approval for requested replacements.
+- Under the confirmed 2026-10-09 amendment, Admin reads scoped Draft, Proposed and Published plans and may submit scoped replacement/cover requests, but cannot directly mutate schedules or advise on leave outcomes. Earlier Admin drafting/proposal authority is superseded; operational requirements and other existing tools retain their own permissions.
 - Employees see published schedules only.
 - The planning map is static, selected-date based, and available only to Super Admin and scoped Admin.
 - Employee-management notes are private-to-author or shared-upward; subjects cannot view them. Reading a note requires both its visibility permission and the reader's current authorization for the subject, so authorship never overrides a later demotion, deactivation, or scope loss.

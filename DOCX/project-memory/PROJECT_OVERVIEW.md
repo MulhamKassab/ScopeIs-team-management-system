@@ -10,8 +10,8 @@ Managers currently lack one dependable view of where employees are assigned, wha
 
 ## Target users
 
-- **Super Admin/team manager:** global workforce planning, schedule publication, leave decisions, coverage authority, account administration, audit and reporting.
-- **Admin:** scoped account manager, senior, or coordinator who manages assigned clients/projects/locations/teams, prepares schedule drafts, and requests replacements.
+- **Super Admin/team manager:** global workforce planning, schedule drafting and publication, leave decisions, coverage authority, account administration, audit and reporting.
+- **Admin:** scoped account manager, senior, or coordinator who manages assigned clients/projects/locations/teams, reads scoped plans and requests replacements. The confirmed 2026-10-09 amendment removes all direct schedule mutation authority.
 - **Employee:** internal employee who views published work, maintains permitted profile/capability evidence, submits leave, and participates in relevant work communication.
 
 System access roles are independent of job designations. An Account Manager or Senior Engineer may be an Admin; a Team Manager may be Super Admin.
@@ -26,7 +26,7 @@ The existing Ticket System remains separate until Phase 12. A ticket describes w
 
 1. Every employee is internally employed; "outsourced" is only an assignment arrangement.
 2. Assignment-arrangement labels are configurable descriptions and do not drive logic.
-3. Only Super Admin publishes schedules and decides leave.
+3. Only Super Admin drafts, changes and publishes schedules and decides leave. Admin retains scoped plan reads and separate cover requests.
 4. Admins work only within assigned scope and do not recommend leave decisions.
 5. Employees see published schedules only and cannot access the management planning map.
 6. Shared Client, Project, and Location notes are work-related and visible to authenticated users already authorized on that parent record: Super Admin globally, Admin within their operational scope, and not Employees.

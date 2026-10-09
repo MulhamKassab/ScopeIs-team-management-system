@@ -27,16 +27,18 @@
 
 ## 4. Schedule creation, proposal, and publication
 
-1. Super Admin or scoped Admin creates a Draft on the monthly planning board.
-2. Planner adds full-day, timed, recurring, multi-day, permanent, temporary, one-time, on-call, client/project/location assignments.
+1. Super Admin creates a Draft on the monthly planning board. Admin may read scoped Draft, Proposed and Published plans but cannot create or change them under the confirmed 2026-10-09 amendment.
+2. Super Admin adds assignments within the supported V1 contract in [Phase 4 decisions](PHASE_4_SCHEDULING_DOMAIN_DECISIONS.md); additional assignment types remain deferred until confirmed and implemented.
 3. System evaluates confirmed conflicts and displays blockers, warnings, or information.
-4. Admin resolves issues or submits the draft as Proposed for review; Admin cannot publish.
+4. Super Admin resolves issues or moves the Draft to Proposed for review. Admin may request scoped cover through the separate request workflow; that does not change the schedule directly.
 5. Super Admin reviews, changes, rejects back to draft, or publishes.
 6. Significant overrides record actor, time, warning, and reason.
 7. On publication, affected employees receive notifications and can view only their own relevant published schedule.
 8. Later published changes are audited and notify affected employees.
 
 ![Schedule draft, review, and publication](../diagrams/04_schedule_draft_review_publish_workflow.png)
+
+This discovery diagram retains its historical baseline; any Admin drafting/proposal arrows are superseded by the 2026-10-09 workflow above.
 
 ## 5. Employee schedule viewing
 

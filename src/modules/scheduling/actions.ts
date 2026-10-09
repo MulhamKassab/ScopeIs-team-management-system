@@ -10,7 +10,7 @@ export type SchedulingAction = (state: SchedulingActionState, formData: FormData
 const text = (data: FormData, key: string) => { const value = data.get(key); return typeof value === "string" ? value.trim() : ""; };
 const number = (data: FormData, key: string) => Number(text(data, key));
 const allowed = (data: FormData, keys: string[]) => [...data.keys()].every((key) => keys.includes(key) || key.startsWith("$ACTION_"));
-async function actor() { const current = await getCurrentActor(); if (!current) throw new SchedulingDomainError("FORBIDDEN", "Your session expired. Sign in again."); return current; }
+async function actor() { const current = await getCurrentActor(); if (!current) throw new SchedulingDomainError("FORBIDDEN", "Your session expired. Sign in again."); if (current.role !== "SUPER_ADMIN") throw new SchedulingDomainError("FORBIDDEN", "Only Super Admin can change schedules."); return current; }
 function message(error: unknown) { return error instanceof SchedulingDomainError ? error.message : "The schedule change could not be saved. Reload and try again."; }
 async function run(operation: () => Promise<unknown>, success: string) { try { await operation(); revalidatePath("/schedule"); return { success }; } catch (error) { return { error: message(error) }; } }
 

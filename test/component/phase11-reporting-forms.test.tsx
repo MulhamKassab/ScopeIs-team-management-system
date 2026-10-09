@@ -35,6 +35,11 @@ const report: ReportViewType = {
 const planningReport: ReportViewType = { ...report, key: "planning-unpublished", label: "Planning (unpublished)", planning: true, exportable: false, rows: [{ data_state: "PLANNING (unpublished)", assignment_date: "2027-12-07", scheduled_hours: "2.00", employee_name: "Cora Bell" }] };
 
 describe("Phase 11 dashboard", () => {
+  it("directs Admins to view scoped schedules without offering drafting", () => {
+    render(<DashboardCards view={{ ...dashboard, role: "ADMIN" }} />);
+    expect(screen.getByRole("link", { name: /View team schedules/ })).toHaveAttribute("href", "/schedule");
+    expect(screen.queryByText("Prepare the plan")).not.toBeInTheDocument();
+  });
   it("renders cards, the as-of timestamp, the section table and the notes", () => {
     render(<DashboardCards view={dashboard} />);
     fireEvent.click(screen.getByText("More team insights"));

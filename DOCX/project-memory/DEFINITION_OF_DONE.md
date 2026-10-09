@@ -13,7 +13,7 @@ Phase 7 is complete only when independent operational staffing rules produce ser
 The Phase 6 journey is complete only when controlled skills and independent work requirements can be recorded by their authorized managers, authorized planners can filter only TEAM-visible employees by recorded skill, and Super Admin can see an explainable non-blocking missing-skill warning during schedule review.
 
 - The Phase 2 catalogue and employee-skill stores are reused; the additive assignment-requirement migration, immutable migration ledger/manifest, TypeScript-schema parity, indexes, archive preservation, and version checks are verified.
-- Super Admin-only catalogue and employee-skill mutations, Admin TEAM-only skill projection, scoped operational/Draft-requirement management, Employee own-skill read-only access, and no operational-scope escalation are server enforced.
+- Super Admin-only catalogue, employee-skill and Draft assignment-requirement mutations, Admin TEAM-only skill projection and scoped independent operational-requirement management, Employee own-skill read-only access, and no operational-scope escalation are server enforced. The 2026-10-09 schedule-access amendment supersedes earlier Admin Draft-requirement editing.
 - Client + Project + Location + assignment requirement union is de-duplicated, retains source attribution, and is never treated as a coverage, certification, ranking, or eligibility decision.
 - The server-generated Super Admin warning does not block proposal/publication, create overrides/notifications, or change any schedule; approved-leave and overlap integrity remain enforced.
 - Mutations audit safe metadata transactionally, stale writes fail safely, and audit-write failure rolls back the associated change.

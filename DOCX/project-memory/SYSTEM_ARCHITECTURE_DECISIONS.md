@@ -32,8 +32,8 @@ Architecture must implement, not reinterpret, these canonical product decisions:
 
 - All employees are internal; “outsourced” is an assignment arrangement, never an employment type.
 - Assignment-arrangement labels are descriptive and do not themselves determine availability, coverage, leave, conflicts, or permissions.
-- Super Admin is the only schedule publisher and leave decision-maker.
-- Admin is scope-limited and cannot publish schedules, approve/reject leave, or recommend leave outcomes.
+- Super Admin alone drafts, changes, proposes, returns, clones, revises and publishes schedules and decides leave.
+- Admin is scope-limited, may read authorized Draft/Proposed/Published plans and submit separate scoped cover requests, and cannot directly mutate schedules, approve/reject leave, or recommend leave outcomes. The confirmed 2026-10-09 amendment supersedes earlier Admin Draft-writing authority without changing storage or introducing a migration.
 - Employee sees Published schedule entries only and cannot access the management planning map.
 - Employee-management notes are private to author or shared upward; the subject cannot see them.
 - Shared Client, Project, and Location notes remain limited to authenticated users already authorized on the parent record; the Phase 10 note module enforces this server-side and Employees hold no access.
@@ -203,7 +203,7 @@ Validation does not replace authorization, database constraints, or domain rules
 ## Schedule storage and conflict protection
 
 1. Schedule planning sets or records have Draft, Proposed, or Published state.
-2. Drafts may temporarily contain unresolved warnings while authorized managers prepare them.
+2. Drafts may temporarily contain unresolved warnings while Super Admin prepares them; scoped Admin reads only.
 3. Draft validation clearly reports conflicts and their severity.
 4. Publication reruns authoritative validation against current data.
 5. Only Super Admin can publish or modify a Published schedule.
@@ -305,7 +305,7 @@ Authorization uses more than role alone. Inputs may include system role, Admin s
 
 Confirmed restrictions:
 
-- Admin cannot publish schedules.
+- Admin cannot directly mutate schedules in any lifecycle state; scoped plan reads and separate cover requests remain permitted.
 - Admin cannot approve or reject leave.
 - Admin does not recommend leave decisions.
 - Admin has no out-of-scope access.

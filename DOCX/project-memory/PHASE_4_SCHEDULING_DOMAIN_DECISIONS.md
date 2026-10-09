@@ -4,6 +4,8 @@
 
 These decisions record the implemented V1 boundary for `SCOPEIS_PHASE_4_SCHEDULING_DRAFT_PROPOSED_PUBLISHED_JOURNEY_R1`. They supplement, and do not replace, the Phase 3 operational-domain decisions.
 
+The product owner's 2026-10-09 instruction to remove Admin schedule drafting supersedes historical Admin-writer permissions. The bounded amendment is `LOCAL_COMPLETE` with 98 affected cases and the final-source guarded build plus desktop/phone journey passed; source/production delivery remains `PENDING`. See [the amendment report](../phase-reports/SCOPEIS_ADMIN_SCHEDULE_ACCESS_AMENDMENT_2026_10_09.md). Earlier dated reports retain evidence for their original source; separate retained-history removal remains open.
+
 ## Schedule container
 
 - A schedule period is one active Client, one calendar month, one revision lineage, and one stored lifecycle state: `DRAFT`, `PROPOSED`, or `PUBLISHED`.
@@ -20,9 +22,9 @@ These decisions record the implemented V1 boundary for `SCOPEIS_PHASE_4_SCHEDULI
 ## Authorization and privacy
 
 - Scheduling reuses the Phase 3 operational-scope semantics: Client scope inherits downward; Project/Location scope remains narrow; relationship fields do not grant authority.
-- A Client-level Admin may create/manage Draft work and propose it. A Project/Location Admin may edit only assignments inside an existing authorized Client Draft and cannot create the Client-month container or propose the whole Client schedule.
+- Super Admin alone creates/edits schedule periods, assignments, Draft notes and assignment-specific requirements; submits/returns proposals; creates/clones revisions; and publishes. Admin has no direct schedule mutations, including through an API or direct assignment identifier. Client/Project/Location scope and TEAM visibility continue to limit Admin read access to Draft, Proposed and Published plans.
 - Employee selection and Employee self-service use the existing explicit TEAM-based employee-visibility gate. Operational scope does not silently grant employee browsing.
-- Only Super Admin can return Proposed work to Draft, publish, or create a Published revision.
+- Admin may still submit separate scoped cover/replacement requests. Super Admin's decision may prepare a Draft-safe effect under the existing coverage contract; that workflow does not grant Admin a schedule editor or publication authority.
 - Employee self-service returns only the current Published assignments belonging to the current Employee, projecting date/time, identity fields, timezone, and permitted shared instruction. Draft, Proposed, superseded, other-employee, address, coordinate, contact, access-instruction, scope, staffing, private-note, and audit data are excluded.
 
 ## Time and integrity

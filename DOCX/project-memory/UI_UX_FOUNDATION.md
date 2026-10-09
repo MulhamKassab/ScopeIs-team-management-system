@@ -16,7 +16,9 @@ Desktop uses a collapsible left application sidebar, persistent top header, full
 
 Mobile uses a compact header plus bottom navigation of four role-specific primary destinations and `More`. The drawer exposes every remaining authorized destination; it is not a reduced-function mobile demo. Narrow layouts use full-width content and 44px-or-larger touch targets.
 
-Navigation derives from centralized capability results on the server. Super Admin receives global management tools; Admin receives permitted scoped-management tools plus own leave/profile; Employee receives only personal, published and explicitly shared work. UI visibility is a usability aid only—the same server policy protects routes and APIs.
+Navigation derives from centralized capability results on the server. Super Admin receives global management tools; Admin receives permitted scoped-management tools, Approved team-leave reading and own profile; Employee receives only personal, published and explicitly shared work. Phase 5 leave-request self-service is Employee-only; no Admin own-leave submission or balance surface is implied. UI visibility is a usability aid only—the same server policy protects routes and APIs.
+
+Under the confirmed 2026-10-09 schedule-access amendment, schedule creation/editing, Draft notes and assignment requirements, proposals, clones/revisions and publication controls are Super Admin only. Admin retains authorized scoped Draft, Proposed and Published reading, filters and details, with the separate scoped cover-request workflow. Empty states, page help, Home shortcuts and feature discovery must describe those permissions consistently; hiding controls never replaces a server-side refusal. The requested wider UI simplification review records recommendations only until a specific change is implemented and verified.
 
 ## Type, spacing, components, and accessibility
 

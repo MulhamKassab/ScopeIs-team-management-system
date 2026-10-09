@@ -31,10 +31,12 @@ The product has a workforce core (employees, roles, designations, skills, certif
 
 - A Schedule contains entries and has a state: Draft, Proposed for review, or Published.
 - An Assignment may be full-day, timed, multi-day, recurring, permanent placement, temporary, one-time visit, on-call, client/project/location-linked, or otherwise confirmed.
-- Employees see Published entries only. Admins see and edit drafts within scope; Super Admin sees all drafts and publishes.
+- Employees see Published entries only. Admins read Draft, Proposed and Published plans within current scope; Super Admin alone creates/changes plans, prepares proposals/revisions and publishes. The confirmed 2026-10-09 amendment supersedes earlier Admin Draft editing.
 - Availability is derived from working patterns, schedule entries, approved leave, and confirmed rules. An arrangement label is descriptive only.
 
 ![Schedule workflow](../diagrams/04_schedule_draft_review_publish_workflow.png)
+
+The discovery diagram retains its historical baseline; current Super Admin-only writing and Admin read-only rules above supersede its earlier Admin planning arrows.
 
 ### Leave, coverage, and replacement
 

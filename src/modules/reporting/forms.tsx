@@ -70,7 +70,7 @@ function WorkspaceShortcuts({ role }: { role: DashboardView["role"] }) {
     { href: "/leave", title: "Leave & balances", description: "Request time off and follow its status.", Icon: CalendarOff },
     { href: "/profile", title: "My professional profile", description: "Your experience, certifications and CV.", Icon: UserRound },
   ] : [
-    { href: "/schedule", title: role === "SUPER_ADMIN" ? "Plan, review, publish" : "Prepare the plan", description: role === "SUPER_ADMIN" ? "Move a monthly plan from Draft to Published." : "Prepare scoped Drafts for publication.", Icon: CalendarDays },
+    { href: "/schedule", title: role === "SUPER_ADMIN" ? "Plan, review, publish" : "View team schedules", description: role === "SUPER_ADMIN" ? "Move a monthly plan from Draft to Published." : "Review schedules within your access. Super Admin prepares and publishes them.", Icon: CalendarDays },
     { href: "/map", title: "See the day on a map", description: "Explore assignments and review coverage.", Icon: MapPinned },
     { href: "/employees", title: "Know your team", description: "Find people, skills and supporting evidence.", Icon: Users },
   ];

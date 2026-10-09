@@ -51,9 +51,9 @@ export function featureDescription(key: ModuleKey, role: SystemRole) {
   if (role === "ADMIN" && key === "skills") return "Review your team’s recorded skills and project requirements.";
   if (role === "ADMIN" && key === "employees") return "Find your team and review employee records, skills and supporting evidence.";
   if (role === "SUPER_ADMIN" && key === "leave") return "Review leave requests, record decisions and check annual balances.";
-  if (role === "ADMIN" && key === "leave") return "Request your own leave and check approved unavailability within your team scope.";
+  if (role === "ADMIN" && key === "leave") return "View approved leave within your team. Private reasons and balances are not shown.";
   if (role === "ADMIN" && key === "replacements") return "Follow Super Admin decisions on the cover requests you created.";
-  if (role === "ADMIN" && key === "schedule") return "Prepare scoped Draft schedules and propose them for publication.";
+  if (role === "ADMIN" && key === "schedule") return "View schedules within your access. Super Admin prepares and publishes them.";
   return descriptions[key].description;
 }
 

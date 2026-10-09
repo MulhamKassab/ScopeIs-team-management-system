@@ -7,11 +7,11 @@ Each page has one purpose, an identifiable next action, and a compact, optional 
 | Step | Tab | Audience | User goal | Path and result |
 | --- | --- | --- | --- | --- |
 | 1 | Home | All roles | Know what to do next | Check waiting decisions or your next work → open Timetable. Additional figures are under More team insights. |
-| 2 | Timetable | All roles, with separate manager tools | See who is where, when and doing what | Choose month and view → open a day. Managers select a client plan, prepare Draft work and propose; only Super Admin publishes. |
+| 2 | Timetable | All roles, with separate Super Admin editing tools | See who is where, when and doing what | Choose month and view → open a day. Super Admin prepares Draft work, reviews and publishes; Admin reads scoped plans and may use the separate cover-request workflow; Employee sees own Published work. |
 | 3 | Find cover | Managers | Find the work that needs support | Search work or choose a person → open a day → Check cover → replace someone or add extra support → follow Cover requests. |
 | 4 | Cover requests | Managers | Know what a request changes and what happens next | Super Admin reviews the decision queue; Admin follows their own requests. Approval prepares a Draft; publication remains a separate Timetable action. |
 | 5 | My requests | Named participants with module access | Identify a request and discuss its next step | Read request type, date and status → expand conversation → exchange messages. Managers see work context only after current-role and scope checks. |
-| 6 | Leave | All roles, with separate review tools | Request time off or review a waiting decision | Employee/Admin checks balance, chooses dates and follows status. Super Admin reviews dates, balance and work conflicts; Admin team view shows approved leave only. |
+| 6 | Leave | All roles, with separate self-service/read/review tools | Request time off, read approved team leave or review a waiting decision | Employee checks own balance, chooses dates and follows status. Super Admin reviews dates, balance and work conflicts and decides. Admin reads Approved unavailable dates for TEAM-visible Employees only, with no own-request or balance controls. |
 | 7 | Work map | Managers | Understand the selected day’s published work | Choose date → search a person or choose a pin/site → read time and place → check cover or open Timetable. |
 | 8 | People | Managers | Find the right person and understand their record | Search/filter → open person → review work details, recorded skills and permitted documents. Team/job title and system role/access stay separate. |
 | 9 | Teams | Super Admin | Keep team membership current | New team → Add member → Rename or Remove membership. Each person has one team; access grants remain separately managed. |
@@ -29,7 +29,7 @@ Each page has one purpose, an identifiable next action, and a compact, optional 
 
 ## Acceptance boundaries
 
-- Super Admin publishes and decides leave/cover. Admin prepares scoped Drafts, proposes and follows cover requests; Employee sees only own current Published work.
+- Super Admin alone drafts, changes, proposes, revises and publishes schedules and decides leave/cover. Admin reads scoped Draft, Proposed and Published plans and follows separate scoped cover requests; Employee sees only own current Published work. The confirmed 2026-10-09 amendment supersedes earlier Admin drafting/proposals.
 - Request participation does not grant planning access. Work context is omitted for Employees, inactive actors, and managers outside current scope; caller-supplied/stale roles cannot grant it.
 - Private files, certification summaries, management notes, conversations, notifications and unknown audit metadata retain their existing privacy projections.
 - Search filters only the authorized DTO already on the page. Empty results offer a clear recovery action.

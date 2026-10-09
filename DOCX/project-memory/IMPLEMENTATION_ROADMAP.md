@@ -102,9 +102,9 @@ Client, Project, Location, Employee, Account Manager, responsible Admin, and sta
 
 ## Phase 4 — Scheduling, review, and publication
 
-**Status:** `COMPLETED`
+**Status:** See [the live tracker](IMPLEMENTATION_STATUS_TRACKER.md); historical V1 completion does not close retained-history removal or later permission-amendment verification.
 
-**Main journey:** Admin creates Draft → Admin submits Proposed schedule → Super Admin reviews and publishes → employee views Published schedule.
+**Main journey:** Super Admin creates Draft → Super Admin prepares Proposed work and reviews/publishes → scoped Admin reads plans → employee views own Published schedule. The confirmed 2026-10-09 amendment removes Admin direct drafting, assignment editing, proposals and revisions; separate scoped cover requests remain permitted.
 
 **Sub-phases:**
 

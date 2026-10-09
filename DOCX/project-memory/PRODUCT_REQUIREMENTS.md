@@ -49,8 +49,8 @@
 - **SCH-001:** Authorized planners must be able to plan multiple weeks or months using a monthly employee-by-day board with search and filters.
 - **SCH-002:** Schedules must support permanent, temporary, one-time, recurring, full-day, timed, multi-day, on-call, client, project, and location assignments.
 - **SCH-003:** Every schedule version or planning set must have a clear state: Draft, Proposed for review, or Published.
-- **SCH-004:** Admin must be able to create/edit drafts and assignments only within scope and submit proposals for Super Admin review.
-- **SCH-005:** Admin must not be able to publish a schedule or make the final schedule approval.
+- **SCH-004:** Only Super Admin may create/edit schedule periods, Draft assignments, Draft notes and assignment-specific requirements, submit/return proposals, or create/clone revisions. Admin must have read-only access to Draft, Proposed and Published plans within their current scope. This confirmed 2026-10-09 requirement supersedes the earlier scoped Admin drafting/proposal permission.
+- **SCH-005:** Admin must not directly mutate a schedule or make the final schedule approval. Separate scoped cover requests remain permitted and apply a schedule effect only after Super Admin decides.
 - **SCH-006:** Only Super Admin must be able to publish and modify published schedules.
 - **SCH-007:** Employees must see their relevant Published schedule and must not see Draft or Proposed content.
 - **SCH-008:** Publication must notify affected employees; a post-publication change must be audited and notify affected employees.
@@ -64,7 +64,7 @@
 - **LEV-002:** An Employee may cancel a Pending request only when the eventual cancellation rule permits.
 - **LEV-003:** Leave submission must notify Super Admin.
 - **LEV-004:** Only Super Admin must be able to view complete leave details as required and approve or reject leave with a response.
-- **LEV-005:** Admin must not approve, reject, or recommend leave outcomes and must not see private reasons by default; Admin may see that an employee is unavailable.
+- **LEV-005:** Under the delivered Phase 5 boundary, Admin reads only identity and Approved unavailable dates for TEAM-visible Employees. Admin cannot submit/cancel an own request, read balances, private reasons or responses, approve/reject requests, or recommend leave outcomes. Employee alone uses own-request self-service; Super Admin reviews/decides and manages the allowance.
 - **LEV-006:** Before approval, the system must evaluate approved leave, assignments, required skills, minimum coverage, replacements, and affected clients/projects/locations.
 - **LEV-007:** A decision must notify the requesting Employee and create an audit event.
 - **LEV-008:** Leave balances, leave year, half-day handling, holidays, and weekends must not be calculated until rules are confirmed.

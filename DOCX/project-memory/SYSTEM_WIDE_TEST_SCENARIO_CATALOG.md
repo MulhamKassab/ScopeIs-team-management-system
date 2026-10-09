@@ -14,6 +14,8 @@ scenario is covered when its supported contract, role, scope, state transition, 
 material validation boundary, or credible failure path has automated evidence. Manual-only
 exceptions are rare and carry an explicit justification.
 
+The confirmed 2026-10-09 [Admin schedule-access amendment](../phase-reports/SCOPEIS_ADMIN_SCHEDULE_ACCESS_AMENDMENT_2026_10_09.md) updates scheduling scenario metadata: Super Admin is the sole writer, Admin reads scoped Draft/Proposed/Published plans and all direct Admin schedule mutations are refused, including assignment-specific requirements. Separate scoped cover requests remain allowed. Historical checkpoint receipts retain their original source and counts; new verification is recorded in the amendment report.
+
 ## Summary
 
 | Domain | Prefix | Scenarios |
