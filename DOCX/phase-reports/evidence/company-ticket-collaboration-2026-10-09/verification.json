@@ -1,0 +1,51 @@
+{
+  "verifiedAt": "2026-10-09T06:56:54.702Z",
+  "scope": "Company ticket collaboration amendment; bounded affected verification, not a full historical system lock",
+  "checks": {
+    "unit": 25,
+    "workspaceComponents": 9,
+    "detailComponents": 13,
+    "postgresqlIntegration": 26,
+    "httpRoutes": 21,
+    "browserJourneys": 12,
+    "fullRepositoryEslint": "passed",
+    "typecheck": "passed",
+    "isolatedProductionBuild": "passed",
+    "manifestValidation": "passed",
+    "manualLocalEmployeeWalkthrough": "passed"
+  },
+  "browserViewports": [
+    {
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "browserFixture": "Real credential login with fictional disposable accounts",
+  "cleanup": {
+    "browserDatabasesCreated": 1,
+    "browserDatabasesDropped": 1,
+    "browserDatabasesRetained": 0,
+    "ownedServerStopped": true,
+    "ownedBuildAndPrivateFilesRemoved": true
+  },
+  "productionAuthenticatedVerification": false,
+  "sourceFileSha256": {
+    "src/modules/tickets/forms.tsx": "555f714d52afb892ac266bfcc1e5d82990a534e982b511387a07eedfb854a506",
+    "src/modules/tickets/policy.ts": "3915366b98a4db638f699e7358cc0cbb2b73919e3c9cf758d6725fd9fa146049",
+    "src/modules/tickets/service.ts": "b3271f3ae1283407b3b6a3e7bb081e1109c4a5792bb85d600fc21c3b3f3e7e13",
+    "src/modules/tickets/ticket-detail.tsx": "4eeb9e8aef20619f2e431f9e82ee014d6ed82c2337b4aa286322a2aa6f4f0073",
+    "src/modules/tickets/workspace.tsx": "0f6df18a320339c70943a46b267081f0792aa7f2cec9d35334ffb8c4c12e11ed",
+    "src/app/tickets.css": "c3d3f47f72cdb4504a625899d7b580c2be4dd436b017aa9ee49de11381e24c08",
+    "test/component/ticket-workspace.test.tsx": "abd5c72e1db31f36fd85bad3fdc14673c244313b476c4c4c1e45bb6686383f2b",
+    "test/component/ticket-detail.test.tsx": "975e2e72953e8d6fdd8f67e8a363913b75f07f1f096a7583a2d2eff4f58ba426",
+    "test/unit/tickets.test.ts": "acf40be47d77e622e6bc7df4ce5fffc5091b12bef8495d8f3697f3aecc5dfea0",
+    "test/integration/tickets.test.ts": "96207cc2f8c6576c65b5c7949365655f510b948f1cc4e5b28a78ca313c450819",
+    "test/integration/ticket-files.test.ts": "442341d122b57b9ff45b6a21abbba05f17bfb35d2ba91e64f6d18fe417b66a03",
+    "test/route-certification/phase1-http.test.ts": "acfe13705a5a12d309f9e87992deb5fa8abef0f3d09ad94db9f0800ef10dce17",
+    "test/e2e/tickets.spec.ts": "11dbe93bbf6556fea74187b290c796b2b2193c92a6cc35d37deb5a359ade1022"
+  }
+}

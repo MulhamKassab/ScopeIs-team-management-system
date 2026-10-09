@@ -14,13 +14,14 @@ const fileId = "10000000-0000-4000-8000-000000000004";
 const creator = { userId: "creator", displayName: "Creator One", role: "EMPLOYEE" as const };
 const assignee = { userId: "worker", displayName: "Worker Two", role: "EMPLOYEE" as const };
 const observer = { userId: "observer", displayName: "Observer Three", role: "EMPLOYEE" as const };
+const colleague = { userId: "outside", displayName: "Company colleague", role: "EMPLOYEE" as const };
 const actor = { id: creator.userId, displayName: creator.displayName, role: creator.role };
 const noPermissions: TicketPermissions = { edit: false, managePeople: false, archive: false, restore: false, log: false, files: false };
-const ownerPermissions: TicketPermissions = { edit: true, managePeople: false, archive: true, restore: false, log: true, files: true };
+const ownerPermissions: TicketPermissions = { edit: true, managePeople: true, archive: true, restore: false, log: true, files: true };
 const workspace: TicketWorkspaceData = {
   workspaces: [{ id: workspaceId, name: "Company work", description: null, clientId: null, projectId: null, version: 1, canManage: true, members: [creator, assignee, observer] }],
-  boards: [{ id: boardId, workspaceId, name: "Support board", status: "PUBLISHED", version: 1, canManage: true }],
-  tickets: [], people: [creator, assignee, observer, { userId: "outside", displayName: "Outside workspace", role: "EMPLOYEE" }], clients: [], projects: [],
+  boards: [{ id: boardId, workspaceId, name: "Support dashboard", status: "PUBLISHED", version: 1, canManage: true }],
+  tickets: [], people: [creator, assignee, observer, colleague], clients: [], projects: [],
 };
 
 function detail(overrides: Partial<TicketDetail> = {}): TicketDetail {
@@ -57,15 +58,17 @@ describe("Company ticket detail", () => {
     expect(screen.getByRole("heading", { name: "Repair the access reader" })).toBeInTheDocument();
     expect(screen.getByText("Inspect the reader at reception.")).toBeInTheDocument();
     expect(screen.getByText("You have read-only access to this ticket.")).toBeInTheDocument();
+    expect(screen.getByText("Mentioned · read only")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Download Reader manual.pdf" })).toHaveAttribute("href", `/api/tickets/${ticketId}/files/${fileId}`);
     for (const label of ["Edit ticket", "Archive ticket", "Manage ticket people", "Add work log", "Attach file", "Archive Reader manual.pdf"]) expect(screen.queryByRole("button", { name: label, exact: true })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Edit work log/ })).not.toBeInTheDocument();
   });
 
-  it("lets a creator edit all five states and requires an on-hold reason without granting people access", () => {
+  it("lets an Employee creator manage people and edit all five states with an on-hold reason", () => {
     render(<TicketDetailView initialData={detail()} workspace={workspace} actor={actor} />);
     expect(screen.getByRole("button", { name: "Archive ticket", exact: true })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Manage ticket people" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Manage ticket people" })).toBeInTheDocument();
+    expect(screen.getByText("TKT-0012 · Company work / Support dashboard")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Edit ticket", exact: true }));
     const form = screen.getByRole("form", { name: "Edit ticket" });
     const status = within(form).getByLabelText("Status");
@@ -75,11 +78,12 @@ describe("Company ticket detail", () => {
   });
 
   it("allows assignees to work and edit only logs the server marks editable, while archive remains unavailable", () => {
-    render(<TicketDetailView initialData={detail({ permissions: { ...ownerPermissions, archive: false } })} workspace={workspace} actor={{ id: assignee.userId, displayName: assignee.displayName, role: assignee.role }} />);
+    render(<TicketDetailView initialData={detail({ permissions: { ...ownerPermissions, managePeople: false, archive: false } })} workspace={workspace} actor={{ id: assignee.userId, displayName: assignee.displayName, role: assignee.role }} />);
     expect(screen.getByRole("button", { name: "Add work log" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Attach file" })).toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: /Edit work log/ })).toHaveLength(1);
     expect(screen.queryByRole("button", { name: "Archive ticket", exact: true })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Manage ticket people" })).not.toBeInTheDocument();
   });
 
   it("preserves archived content and private download, suppresses every write and offers authorized restore", () => {
@@ -91,21 +95,69 @@ describe("Company ticket detail", () => {
     for (const label of ["Edit ticket", "Archive ticket", "Manage ticket people", "Add work log", "Attach file", "Archive Reader manual.pdf"]) expect(screen.queryByRole("button", { name: label, exact: true })).not.toBeInTheDocument();
   });
 
-  it("offers participant choices only for authorized workspace members, excludes creator and preserves exclusive participation", async () => {
-    const next = detail({ version: 4, permissions: { ...ownerPermissions, managePeople: true } });
+  it("lets an Employee creator assign multiple active company people beyond workspace membership and mention others", async () => {
+    const next = detail({ version: 4, assignees: [assignee, colleague], participants: [{ ...creator, participation: "CREATOR" }, { ...assignee, participation: "ASSIGNEE" }, { ...colleague, participation: "ASSIGNEE" }, { ...observer, participation: "OBSERVER" }] });
     const fetch = fetchWithRefresh(next);
     vi.stubGlobal("fetch", fetch);
-    render(<TicketDetailView initialData={detail({ permissions: { ...ownerPermissions, managePeople: true } })} workspace={workspace} actor={{ ...actor, role: "SUPER_ADMIN" }} />);
+    render(<TicketDetailView initialData={detail()} workspace={workspace} actor={actor} />);
     fireEvent.click(screen.getByRole("button", { name: "Manage ticket people" }));
     const form = screen.getByRole("form", { name: "Manage ticket people" });
-    expect(within(form).getAllByRole("combobox")).toHaveLength(2);
-    expect(within(form).queryByLabelText("Creator One")).not.toBeInTheDocument();
-    expect(within(form).queryByLabelText("Outside workspace")).not.toBeInTheDocument();
-    fireEvent.change(within(form).getByLabelText("Worker Two"), { target: { value: "OBSERVER" } });
-    fireEvent.change(within(form).getByLabelText("Observer Three"), { target: { value: "NONE" } });
+    const assigned = within(form).getByRole("group", { name: "Assignees" });
+    const mentioned = within(form).getByRole("group", { name: "Mentioned people · read only" });
+    expect(within(assigned).getByRole("checkbox", { name: assignee.displayName })).toBeChecked();
+    expect(within(mentioned).getByRole("checkbox", { name: observer.displayName })).toBeChecked();
+    expect(within(form).getAllByRole("checkbox")).toHaveLength(6);
+    expect(within(form).queryByRole("checkbox", { name: creator.displayName })).not.toBeInTheDocument();
+    expect(within(form).queryByRole("combobox")).not.toBeInTheDocument();
+    fireEvent.click(within(assigned).getByRole("checkbox", { name: colleague.displayName }));
     fireEvent.submit(form);
     await waitFor(() => expect(refresh).toHaveBeenCalled());
-    expect(JSON.parse(String(fetch.mock.calls[0][1]?.body))).toEqual({ action: "setParticipants", ticketId, version: 3, assigneeIds: [], observerIds: [assignee.userId] });
+    const command = JSON.parse(String(fetch.mock.calls[0][1]?.body));
+    expect(command).toMatchObject({ action: "setParticipants", ticketId, version: 3, observerIds: [observer.userId] });
+    expect(command.assigneeIds).toEqual(expect.arrayContaining([assignee.userId, colleague.userId]));
+    expect(command.assigneeIds).toHaveLength(2);
+  });
+
+  it("keeps assigned and mentioned people exclusive and preserves multiple selections while searching", async () => {
+    const fetch = fetchWithRefresh(detail({ version: 4 }));
+    vi.stubGlobal("fetch", fetch);
+    render(<TicketDetailView initialData={detail()} workspace={workspace} actor={actor} />);
+    fireEvent.click(screen.getByRole("button", { name: "Manage ticket people" }));
+    const form = screen.getByRole("form", { name: "Manage ticket people" });
+    const assigned = within(form).getByRole("group", { name: "Assignees" });
+    const mentioned = within(form).getByRole("group", { name: "Mentioned people · read only" });
+    fireEvent.click(within(mentioned).getByRole("checkbox", { name: assignee.displayName }));
+    expect(within(assigned).getByRole("checkbox", { name: assignee.displayName })).not.toBeChecked();
+    fireEvent.click(within(assigned).getByRole("checkbox", { name: observer.displayName }));
+    expect(within(mentioned).getByRole("checkbox", { name: observer.displayName })).not.toBeChecked();
+    fireEvent.change(within(form).getByLabelText("Find people"), { target: { value: "Company colleague" } });
+    expect(within(assigned).queryByRole("checkbox", { name: observer.displayName })).not.toBeInTheDocument();
+    fireEvent.click(within(assigned).getByRole("checkbox", { name: colleague.displayName }));
+    fireEvent.submit(form);
+    await waitFor(() => expect(refresh).toHaveBeenCalled());
+    const command = JSON.parse(String(fetch.mock.calls[0][1]?.body));
+    expect(command.observerIds).toEqual([assignee.userId]);
+    expect(command.assigneeIds).toEqual(expect.arrayContaining([observer.userId, colleague.userId]));
+    expect(command.assigneeIds).toHaveLength(2);
+  });
+
+  it("reloads the latest assigned and mentioned people after an explicit conflict reload", async () => {
+    const next = detail({ version: 4, assignees: [colleague], participants: [{ ...creator, participation: "CREATOR" }, { ...colleague, participation: "ASSIGNEE" }, { ...assignee, participation: "OBSERVER" }] });
+    const fetch = fetchWithRefresh(next, 409);
+    vi.stubGlobal("fetch", fetch);
+    render(<TicketDetailView initialData={detail()} workspace={workspace} actor={actor} />);
+    fireEvent.click(screen.getByRole("button", { name: "Manage ticket people" }));
+    const form = screen.getByRole("form", { name: "Manage ticket people" });
+    fireEvent.submit(form);
+    await waitFor(() => expect(screen.getByRole("button", { name: "Reload latest record" })).toBeInTheDocument());
+    expect(fetch).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByRole("button", { name: "Reload latest record" }));
+    await waitFor(() => expect(within(within(form).getByRole("group", { name: "Assignees" })).getByRole("checkbox", { name: colleague.displayName })).toBeChecked());
+    expect(within(within(form).getByRole("group", { name: "Assignees" })).getByRole("checkbox", { name: assignee.displayName })).not.toBeChecked();
+    expect(within(within(form).getByRole("group", { name: "Mentioned people · read only" })).getByRole("checkbox", { name: assignee.displayName })).toBeChecked();
+    fireEvent.submit(form);
+    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(4));
+    expect(JSON.parse(String(fetch.mock.calls[3][1]?.body))).toEqual({ action: "setParticipants", ticketId, version: 4, assigneeIds: [colleague.userId], observerIds: [assignee.userId] });
   });
 
   it("waits for an explicit reload after a conflict, replaces old fields and submits the latest version", async () => {

@@ -82,13 +82,14 @@ export class TicketService {
     await ticketRepository.lockReadSnapshot(tx);
     const actor = await this.currentActor(tx, supplied, true);
     const snapshot = await ticketRepository.snapshot(tx);
-    const workspaces = snapshot.workspaces.filter((workspace) => this.managesWorkspace(actor, workspace, snapshot) || (actor.role === "EMPLOYEE" && this.isMember(snapshot, workspace.id, actor.id))).map((workspace) => {
+    const workspaces = snapshot.workspaces.filter((workspace) => this.managesWorkspace(actor, workspace, snapshot) || snapshot.boards.some((board) => board.workspaceId === workspace.id && board.status === "PUBLISHED")).map((workspace) => {
       const manager = this.managesWorkspace(actor, workspace, snapshot);
-      return { id: workspace.id, name: workspace.name, description: workspace.description, clientId: actor.role === "EMPLOYEE" ? null : workspace.clientId, projectId: actor.role === "EMPLOYEE" ? null : workspace.projectId, version: workspace.version, canManage: manager, members: manager ? snapshot.memberships.filter((membership) => membership.workspaceId === workspace.id && membership.active).flatMap((membership) => { const person = snapshot.people.find((entry) => entry.user.id === membership.userId && entry.user.active); return person && ticketPersonInScope(actor, { id: person.user.id, role: person.user.role, team: person.team }) ? [{ userId: person.user.id, displayName: person.user.displayName, role: person.user.role }] : []; }) : [] };
+      return { id: workspace.id, name: workspace.name, description: manager ? workspace.description : null, clientId: manager ? workspace.clientId : null, projectId: manager ? workspace.projectId : null, version: workspace.version, canManage: manager, members: manager ? snapshot.memberships.filter((membership) => membership.workspaceId === workspace.id && membership.active).flatMap((membership) => { const person = snapshot.people.find((entry) => entry.user.id === membership.userId && entry.user.active); return person && ticketPersonInScope(actor, { id: person.user.id, role: person.user.role, team: person.team }) ? [{ userId: person.user.id, displayName: person.user.displayName, role: person.user.role }] : []; }) : [] };
     });
     const boards = snapshot.boards.filter((board) => workspaces.some((workspace) => workspace.id === board.workspaceId && (workspace.canManage || board.status === "PUBLISHED"))).map((board) => ({ id: board.id, workspaceId: board.workspaceId, name: board.name, status: board.status, version: board.version, canManage: workspaces.find((workspace) => workspace.id === board.workspaceId)!.canManage }));
     const summaries = snapshot.tickets.flatMap((ticket) => { const context = this.ticketContext(actor, ticket, snapshot); return context ? [this.summary(context)] : []; });
-    const people = actor.role === "EMPLOYEE" ? [] : snapshot.people.filter((entry) => entry.user.active && ticketPersonInScope(actor, { id: entry.user.id, role: entry.user.role, team: entry.team })).map((entry) => ({ userId: entry.user.id, displayName: entry.user.displayName, role: entry.user.role }));
+    // The company ticket picker exposes names and role labels only, never profile or scope facts.
+    const people = snapshot.people.filter((entry) => entry.user.active).map((entry) => ({ userId: entry.user.id, displayName: entry.user.displayName, role: entry.user.role }));
     const clients = actor.role === "EMPLOYEE" ? [] : snapshot.clients.filter((client) => client.status === "ACTIVE" && (actor.role === "SUPER_ADMIN" || actor.scopes.some((grant) => grant.type === "CLIENT" && grant.reference === client.id))).map(({ id, name }) => ({ id, name }));
     const projects = actor.role === "EMPLOYEE" ? [] : snapshot.projects.filter((project) => project.status !== "ARCHIVED" && (actor.role === "SUPER_ADMIN" || actor.scopes.some((grant) => (grant.type === "PROJECT" && grant.reference === project.id) || (grant.type === "CLIENT" && grant.reference === project.clientId)))).map(({ id, name, clientId }) => ({ id, name, clientId }));
     return { workspaces, boards, tickets: summaries, people, clients, projects };
@@ -160,25 +161,17 @@ export class TicketService {
     if (!workspace || !this.managesWorkspace(actor, workspace, snapshot)) throw unavailable();
     return { actor, workspace, snapshot };
   }
-  private async participants(tx: TicketTransaction, actor: AuthenticatedActor, workspace: WorkspaceRow, snapshot: TicketSnapshot, assigneeIds: string[], observerIds: string[], context: { creatorUserId: string; ticketId?: string }) {
+  private async participants(tx: TicketTransaction, assigneeIds: string[], observerIds: string[], creatorUserId: string) {
     validateParticipantIds(assigneeIds, observerIds);
     const selectedIds = [...assigneeIds, ...observerIds];
-    for (const id of [...new Set([...selectedIds, context.creatorUserId])].sort()) {
+    for (const id of [...new Set([...selectedIds, creatorUserId])].sort()) {
       await tx.execute(sql`select id from users where id = ${id} for share`);
       await tx.execute(sql`select user_id from employee_profiles where user_id = ${id} for share`);
-      await tx.execute(sql`select id from admin_scope_grants where user_id = ${id} order by id for share`);
     }
     const people = await ticketRepository.people(tx);
-    const currentSnapshot = { ...snapshot, people };
-    const prospectiveIds = [context.creatorUserId, ...selectedIds, ...snapshot.workLogAuthors.filter((entry) => entry.ticketId === context.ticketId).map((entry) => entry.userId), ...snapshot.fileAuthors.filter((entry) => entry.ticketId === context.ticketId).flatMap((entry) => [entry.ownerUserId, entry.uploaderUserId])];
     for (const id of selectedIds) {
       const person = people.find((entry) => entry.user.id === id && entry.user.active);
-      if (!person || !this.isMember(snapshot, workspace.id, id) || !ticketPersonInScope(actor, { id, role: person.user.role, team: person.team })) throw unavailable();
-      if (person.user.role === "ADMIN") {
-        const grants = await ticketRepository.grants(tx, id);
-        const target = { ...actor, id, role: person.user.role, scopes: grants.map((grant) => ({ type: grant.scopeType, reference: grant.scopeReference })) };
-        if (!this.managesWorkspace(target, workspace, currentSnapshot) || !this.peopleInScope(target, prospectiveIds, currentSnapshot)) throw unavailable();
-      }
+      if (!person) throw unavailable();
     }
   }
   async command(supplied: AuthenticatedActor, input: unknown): Promise<{ id: string; version: number; workLogId?: string }> {
@@ -253,13 +246,12 @@ export class TicketService {
           if (updated.status === "PUBLISHED" && currentBoard.status !== "PUBLISHED") for (const ticket of snapshot.tickets.filter((ticket) => ticket.boardId === board.id && !ticket.archivedAt)) await this.notifyTicket(tx, ticket, actor, "ticket.board_published");
           return { id: updated.id, version: updated.version };
         }
-        if (currentBoard.status === "ARCHIVED" || (!manager && !(actor.role === "EMPLOYEE" && currentBoard.status === "PUBLISHED" && this.isMember(snapshot, workspace.id, actor.id)))) throw unavailable();
+        if (currentBoard.status === "ARCHIVED" || (!manager && currentBoard.status !== "PUBLISHED")) throw unavailable();
         if (currentBoard.version !== parsed.version) throw errors.stale();
         // Creation checks the board's current configuration/publication version; independent tickets do not change that version.
-        if (!manager && (parsed.assigneeIds.length || parsed.observerIds.length)) throw unavailable();
         if ([...parsed.assigneeIds, ...parsed.observerIds].includes(actor.id)) throw errors.validation();
         validateTicketState(parsed);
-        await this.participants(tx, actor, workspace, snapshot, parsed.assigneeIds, parsed.observerIds, { creatorUserId: actor.id });
+        await this.participants(tx, parsed.assigneeIds, parsed.observerIds, actor.id);
         const { action: _action, version: _version, assigneeIds, observerIds, ...values } = parsed;
         const ticket = await ticketRepository.createTicket(tx, { ...values, creatorUserId: actor.id, onHoldReason: parsed.status === "ON_HOLD" ? parsed.onHoldReason : null });
         await ticketRepository.setParticipants(tx, ticket.id, assigneeIds, observerIds, actor.id);
@@ -270,7 +262,7 @@ export class TicketService {
       const access = await this.accessInTransaction(supplied, tx, parsed.ticketId, { version: parsed.version });
       const snapshot = await ticketRepository.snapshot(tx);
       const context = this.ticketContext(access.actor, access.ticket, snapshot)!;
-      const { actor, ticket, permissions, workspace } = context;
+      const { actor, ticket, permissions } = context;
       let updated: TicketRow | null = null;
       let event = "ticket.updated";
       let workLogId: string | undefined;
@@ -281,7 +273,7 @@ export class TicketService {
       } else if (parsed.action === "setParticipants") {
         if (!permissions.managePeople) throw unavailable();
         if ([...parsed.assigneeIds, ...parsed.observerIds].includes(ticket.creatorUserId)) throw errors.validation();
-        await this.participants(tx, actor, workspace, snapshot, parsed.assigneeIds, parsed.observerIds, { creatorUserId: ticket.creatorUserId, ticketId: ticket.id });
+        await this.participants(tx, parsed.assigneeIds, parsed.observerIds, ticket.creatorUserId);
         await ticketRepository.setParticipants(tx, ticket.id, parsed.assigneeIds, parsed.observerIds, actor.id);
         updated = await ticketRepository.updateTicket(tx, ticket.id, ticket.version, {});
         event = "ticket.participants_updated";

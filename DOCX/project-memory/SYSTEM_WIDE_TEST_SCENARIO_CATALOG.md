@@ -194,20 +194,20 @@ The full hardening report is
 
 ## Company ticket verification registration — 2026-10-09
 
-The current machine-readable manifest uses `SCOPEIS_PHASE_12_COMPANY_TICKETS_LOCAL_INTEGRATION_R1` for the expanded local contract. Historical full-system receipts remain bounded to their recorded source. Registration below does not claim a new aggregate lock result or production readiness; current results belong in the integration report.
+The current machine-readable manifest uses `SCOPEIS_PHASE_12_COMPANY_TICKETS_LOCAL_INTEGRATION_R1` for the expanded contract. TKT descriptions now reflect the later [Company collaboration amendment](../phase-reports/SCOPEIS_COMPANY_TICKET_COLLABORATION_AMENDMENT_2026_10_09.md): all active company roles create on Published dashboards without enrollment, creators choose multiple company assignees and notified read-only included people, and explicit ticket participation is independent of membership/workforce scope. Workspace/Dashboard supervision remains scoped. Historical full-system and original ticket receipts remain bounded to their recorded source and policies. Registration does not claim a new aggregate lock or production result; amendment outcomes belong in its separate report.
 
 | ID | Phase | Module | Layer | Evidence |
 |---|---|---|---|---|
 | TKT-01 | 12 | ticket role policy and command validation | unit | test/unit/tickets.test.ts |
-| TKT-02 | 12 | current membership, publication, Admin scope and Employee work | integration | test/integration/tickets.test.ts |
-| TKT-03 | 12 | live revocation, competing edits, bounded read retries and atomic audit rollback | integration | test/integration/tickets.test.ts |
+| TKT-02 | 12 | all-role creation, company-wide ticket participation, notified inclusion and scoped supervision | integration | test/integration/tickets.test.ts |
+| TKT-03 | 12 | participant/session revocation, retained access after membership removal, competing edits and atomic rollback | integration | test/integration/tickets.test.ts |
 | TKT-04 | 12 | private files, retained history, revocation and compensation | integration | test/integration/ticket-files.test.ts |
 | TKT-05 | 12 | fresh install, prior-workforce preservation and schema parity | migration | test/migration/phase2-database-foundation.test.ts |
-| TKT-06 | 12 | Company/Tickets views, list/board and retained shared filters | component | test/component/ticket-workspace.test.tsx |
-| TKT-07 | 12 | ticket details, logs, files and permission-sensitive actions | component | test/component/ticket-detail.test.tsx |
+| TKT-06 | 12 | Workspace/Dashboards/Tickets, unenrolled creation and retained list/Kanban filters | component | test/component/ticket-workspace.test.tsx |
+| TKT-07 | 12 | creator participant management, assignee work, read-only inclusion, logs and files | component | test/component/ticket-detail.test.tsx |
 | TKT-08 | 12 | desktop and phone Company ticket journey | e2e | test/e2e/tickets.spec.ts |
 | TKT-09 | 12 | Employee landing and manager navigation continuity | unit | test/unit/workspace-landing.test.ts |
-| TKT-10 | 12 | protected ticket pages and HTTP APIs | route-certification | test/route-certification/phase1-http.test.ts |
+| TKT-10 | 12 | all-role HTTP creation/sharing, membership-independent participation and current revocation | route-certification | test/route-certification/phase1-http.test.ts |
 | TKT-11 | 12 | file signatures, limits and owned test storage | unit | test/unit/ticket-files.test.ts |
 | TKT-12 | 12 | generic ticket notifications and current authorized destinations | unit | test/unit/ticket-notification-destinations.test.ts |
 

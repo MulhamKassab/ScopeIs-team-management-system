@@ -96,6 +96,16 @@
 .ticket-file-list a { font-size:.83rem; font-weight:650; overflow-wrap:anywhere; }
 .ticket-file-toggle { color:var(--muted); font-size:.76rem; display:flex; gap:7px; align-items:center; margin-block:15px; }
 .ticket-people-editor { display:grid; gap:12px; }
+.ticket-people-fields { display:grid; gap:14px; min-width:0; }
+.ticket-people-groups { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); gap:14px; }
+.ticket-form .ticket-people-picker { border:1px solid var(--border); border-radius:9px; padding:14px; gap:10px; }
+.ticket-people-picker legend { font-size:.85rem; font-weight:700; padding-inline:5px; }
+.ticket-people-picker p { margin:0; overflow-wrap:anywhere; }
+.ticket-people-options { display:grid; gap:4px; max-height:220px; overflow-y:auto; }
+.ticket-form label.ticket-people-option { display:flex; align-items:center; gap:10px; min-height:44px; padding:6px; border-radius:6px; font-size:.85rem; cursor:pointer; }
+.ticket-people-option:hover { background:var(--surface-muted); }
+.ticket-form .ticket-people-option input { width:18px; height:18px; min-height:18px; flex:0 0 auto; accent-color:var(--primary); }
+.ticket-people-option span { overflow-wrap:anywhere; }
 .ticket-notice { padding:12px 15px; background:var(--primary-soft); border-radius:8px; }
 @media(max-width:1100px) { .ticket-filter-bar { grid-template-columns:repeat(4,minmax(0,1fr)); }.ticket-search { grid-column:1/-1; }.ticket-detail-grid { grid-template-columns:minmax(0,1fr) 250px; } }
 @media(max-width:760px) { .ticket-workspace,.ticket-detail { gap:20px; }.ticket-workspace-heading,.ticket-detail-heading { align-items:start; flex-wrap:wrap; }.ticket-heading-actions { width:100%; }.ticket-filter-bar { grid-template-columns:repeat(2,minmax(0,1fr)); }.ticket-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }.ticket-metrics article { padding:16px; gap:12px; }.ticket-card { grid-template-columns:minmax(0,1fr) 20px; padding:16px; }.ticket-card-main { grid-column:1/-1; }.ticket-card .ticket-badges { justify-content:start; grid-column:1; }.ticket-card .ticket-card-meta { grid-column:1; display:grid; gap:5px; }.ticket-card .ticket-open { grid-column:2; grid-row:2/4; }.ticket-list-heading,.ticket-overview-heading { flex-wrap:wrap; }.ticket-managed-workspace { padding:17px; }.ticket-managed-workspace > header { flex-wrap:wrap; }.ticket-detail-grid { grid-template-columns:minmax(0,1fr); }.ticket-detail-aside { grid-row:1; }.ticket-detail :is(.ticket-detail-content,.ticket-detail-aside) > section { padding:17px; }.ticket-section-heading { flex-wrap:wrap; }.ticket-kanban { grid-template-columns:repeat(5,250px); }.ticket-form .operation-form-grid { grid-template-columns:minmax(0,1fr); } }

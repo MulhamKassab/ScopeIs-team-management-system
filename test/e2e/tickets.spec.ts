@@ -19,12 +19,14 @@ async function detail(page: Page, id: string) {
   const response = await page.request.get(`/api/tickets/${id}`); expect(response.status()).toBe(200);
   return (await response.json() as { ticket: TicketDetail }).ticket;
 }
-async function fixture(page: Page, label: string) {
-  const workspace = await command(page, { action: "createWorkspace", name: `${label} ${randomUUID().slice(0, 8)}` });
+async function fixture(page: Page, label: string, memberIds = ["mock-employee-cora", "mock-employee-dan"]) {
+  const workspaceName = `${label} ${randomUUID().slice(0, 8)}`;
+  const workspace = await command(page, { action: "createWorkspace", name: workspaceName });
   let version = workspace.version;
-  for (const userId of ["mock-employee-cora", "mock-employee-dan"]) version = (await command(page, { action: "setWorkspaceMember", workspaceId: workspace.id, userId, active: true, version })).version;
-  const board = await command(page, { action: "createBoard", workspaceId: workspace.id, name: `Published ${label}`, status: "PUBLISHED", version });
-  return { workspaceId: workspace.id, boardId: board.id, boardVersion: board.version };
+  for (const userId of memberIds) version = (await command(page, { action: "setWorkspaceMember", workspaceId: workspace.id, userId, active: true, version })).version;
+  const boardName = `Published ${label}`;
+  const board = await command(page, { action: "createBoard", workspaceId: workspace.id, name: boardName, status: "PUBLISHED", version });
+  return { workspaceId: workspace.id, workspaceName, boardId: board.id, boardName, boardVersion: board.version };
 }
 async function closeDialog(page: Page) {
   const dialog = page.getByRole("dialog");
@@ -34,7 +36,7 @@ async function fitsViewport(page: Page) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
 }
 
-test("manager creates and edits Company workspaces, publishes boards and grants ticket people while retaining management navigation", async ({ page }) => {
+test("manager creates and edits Company workspaces, publishes dashboards and grants ticket people while retaining management navigation", async ({ page }) => {
   await signIn(page, "Nora Albright");
   await page.goto("/tickets");
   await expect(page.getByRole("heading", { name: "Tickets", exact: true })).toBeVisible();
@@ -65,15 +67,15 @@ test("manager creates and edits Company workspaces, publishes boards and grants 
     await expect.poll(async () => (await workspaceData(page)).workspaces.find((entry) => entry.name === name)?.members.some((entry) => entry.displayName === person)).toBe(true);
     await closeDialog(page);
   }
-  await page.getByRole("button", { name: `New board in ${name}` }).click();
+  await page.getByRole("button", { name: `New dashboard in ${name}` }).click();
   dialog = page.getByRole("dialog");
-  await dialog.getByLabel("Name", { exact: true }).fill("UI Published board");
+  await dialog.getByLabel("Name", { exact: true }).fill("UI Published dashboard");
   await dialog.getByRole("combobox", { name: "Lifecycle", exact: true }).selectOption("PUBLISHED");
-  await dialog.getByRole("button", { name: "Create board", exact: true }).click();
+  await dialog.getByRole("button", { name: "Create dashboard", exact: true }).click();
   await expect.poll(async () => {
     const current = await workspaceData(page);
     const workspaceId = current.workspaces.find((entry) => entry.name === name)?.id;
-    return current.boards.some((entry) => entry.workspaceId === workspaceId && entry.name === "UI Published board" && entry.status === "PUBLISHED");
+    return current.boards.some((entry) => entry.workspaceId === workspaceId && entry.name === "UI Published dashboard" && entry.status === "PUBLISHED");
   }).toBe(true);
   await closeDialog(page);
   const data = await workspaceData(page);
@@ -83,8 +85,8 @@ test("manager creates and edits Company workspaces, publishes boards and grants 
   await page.goto(`/tickets/${ticket.id}`);
   await page.getByRole("button", { name: "Manage ticket people", exact: true }).click();
   dialog = page.getByRole("dialog");
-  await dialog.getByRole("combobox", { name: "Cora Bell", exact: true }).selectOption("ASSIGNEE");
-  await dialog.getByRole("combobox", { name: "Dan Rowan", exact: true }).selectOption("OBSERVER");
+  await dialog.getByRole("group", { name: "Assignees", exact: true }).getByRole("checkbox", { name: "Cora Bell", exact: true }).check();
+  await dialog.getByRole("group", { name: "Mentioned people · read only", exact: true }).getByRole("checkbox", { name: "Dan Rowan", exact: true }).check();
   await dialog.getByRole("button", { name: "Save people", exact: true }).click();
   await expect.poll(async () => (await detail(page, ticket.id)).participants.filter((entry) => entry.participation !== "CREATOR").length).toBe(2);
   await closeDialog(page);
@@ -105,7 +107,8 @@ test("Employee lands on tickets and creates, holds, closes, logs, archives and r
   await page.getByRole("button", { name: "New ticket", exact: true }).click();
   let dialog = page.getByRole("dialog");
   const subject = `Employee inspection ${randomUUID().slice(0, 8)}`;
-  await dialog.getByRole("combobox", { name: "Board", exact: true }).selectOption(setup.boardId);
+  await dialog.getByRole("combobox", { name: "Workspace", exact: true }).selectOption(setup.workspaceId);
+  await dialog.getByRole("combobox", { name: "Dashboard", exact: true }).selectOption(setup.boardId);
   await dialog.getByLabel("Subject", { exact: true }).fill(subject);
   await dialog.getByLabel("Ticket date", { exact: true }).fill("2026-10-08");
   await dialog.getByRole("combobox", { name: "Status", exact: true }).selectOption("ON_HOLD");
@@ -148,7 +151,127 @@ test("Employee lands on tickets and creates, holds, closes, logs, archives and r
   for (const path of ["/profile", "/schedule", "/leave"]) expect((await page.goto(path))?.status()).toBe(200);
 });
 
-test("observers and unrelated members receive current read-only and non-enumerating ticket boundaries", async ({ page }) => {
+test("company users create without enrollment, navigate nested dashboards, assign several people and mention with read-only notifications", async ({ page, browser }, testInfo) => {
+  await signIn(page, "Nora Albright");
+  const setup = await fixture(page, "Company collaboration", []);
+  const initialWorkspace = (await workspaceData(page)).workspaces.find((entry) => entry.id === setup.workspaceId)!;
+  expect(initialWorkspace.members.map((person) => person.userId)).toEqual(["mock-super-admin-nora"]);
+  const secondDashboardName = `Additional dashboard ${randomUUID().slice(0, 8)}`;
+  const secondDashboard = await command(page, { action: "createBoard", workspaceId: setup.workspaceId, version: initialWorkspace.version, name: secondDashboardName, status: "PUBLISHED" });
+  const hidden = await command(page, { action: "createTicket", boardId: secondDashboard.id, version: secondDashboard.version, subject: `Unrelated dashboard work ${randomUUID().slice(0, 8)}`, ticketDate: "2026-10-09" });
+  const anonymous = await browser.newContext({ baseURL: new URL(page.url()).origin });
+  try {
+    expect((await anonymous.request.get("/api/tickets")).status()).toBe(401);
+    expect((await anonymous.request.post("/api/tickets/commands", { headers: { Origin: new URL(page.url()).origin }, data: { action: "createTicket", boardId: setup.boardId, version: setup.boardVersion, subject: "Anonymous refusal", ticketDate: "2026-10-09" } })).status()).toBe(401);
+  } finally { await anonymous.close(); }
+  await signOut(page);
+  await signIn(page, "Cora Bell", { destination: "landing" });
+  await page.getByRole("button", { name: "Workspaces", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Workspaces and dashboards", exact: true })).toBeVisible();
+  const company = page.locator(".ticket-managed-workspace").filter({ has: page.getByRole("heading", { name: setup.workspaceName, exact: true }) });
+  const firstDashboard = company.locator("article").filter({ has: page.getByRole("heading", { name: setup.boardName, exact: true }) });
+  const additionalDashboard = company.locator("article").filter({ has: page.getByRole("heading", { name: secondDashboardName, exact: true }) });
+  await expect(firstDashboard).toBeVisible();
+  await expect(additionalDashboard).toBeVisible();
+  await expect(company.getByRole("button", { name: `Manage people in ${setup.workspaceName}`, exact: true })).toHaveCount(0);
+  await expect(company.getByRole("button", { name: `New dashboard in ${setup.workspaceName}`, exact: true })).toHaveCount(0);
+  await firstDashboard.getByRole("button", { name: "Open tickets", exact: true }).click();
+  await expect(page.getByRole("combobox", { name: "Workspace", exact: true })).toHaveValue(setup.workspaceId);
+  await expect(page.getByRole("combobox", { name: "Dashboard", exact: true })).toHaveValue(setup.boardId);
+  await page.getByRole("button", { name: "New ticket", exact: true }).click();
+  let dialog = page.getByRole("dialog");
+  await expect(dialog.getByRole("combobox", { name: "Workspace", exact: true })).toHaveValue(setup.workspaceId);
+  await expect(dialog.getByRole("combobox", { name: "Dashboard", exact: true })).toHaveValue(setup.boardId);
+  const subject = `Collaborative reader repair ${randomUUID().slice(0, 8)}`;
+  await dialog.getByLabel("Subject", { exact: true }).fill(subject);
+  await dialog.getByLabel("Ticket date", { exact: true }).fill("2026-10-09");
+  const assignees = dialog.getByRole("group", { name: "Assignees", exact: true });
+  const mentioned = dialog.getByRole("group", { name: "Mentioned people · read only", exact: true });
+  await expect(dialog.getByRole("checkbox", { name: "Cora Bell", exact: true })).toHaveCount(0);
+  await assignees.getByRole("checkbox", { name: "Ben Iqbal", exact: true }).check();
+  await assignees.getByRole("checkbox", { name: "Dan Rowan", exact: true }).check();
+  await mentioned.getByRole("checkbox", { name: "Ava Mercer", exact: true }).check();
+  await dialog.getByLabel("Find people", { exact: true }).fill("Ava");
+  await expect(assignees.getByText("2 selected · Ben Iqbal, Dan Rowan", { exact: true })).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath("company-ticket-multiple-people.png"), fullPage: true, animations: "disabled" });
+  await dialog.getByRole("button", { name: "Create ticket", exact: true }).click();
+  await expect.poll(async () => (await workspaceData(page)).tickets.some((ticket) => ticket.subject === subject)).toBe(true);
+  const created = (await workspaceData(page)).tickets.find((ticket) => ticket.subject === subject)!;
+  const createdDetail = await detail(page, created.id);
+  expect(createdDetail.permissions.managePeople).toBe(true);
+  expect(createdDetail.assignees.map((person) => person.userId).sort()).toEqual(["mock-admin-ben", "mock-employee-dan"]);
+  expect(createdDetail.participants.find((person) => person.userId === "mock-admin-ava")?.participation).toBe("OBSERVER");
+  await closeDialog(page);
+  await page.getByRole("button", { name: "New ticket", exact: true }).click();
+  dialog = page.getByRole("dialog");
+  const secondSubject = `Second company task ${randomUUID().slice(0, 8)}`;
+  await dialog.getByLabel("Subject", { exact: true }).fill(secondSubject);
+  await dialog.getByLabel("Ticket date", { exact: true }).fill("2026-10-09");
+  await dialog.getByRole("button", { name: "Create ticket", exact: true }).click();
+  await expect.poll(async () => (await workspaceData(page)).tickets.some((ticket) => ticket.subject === secondSubject)).toBe(true);
+  const secondTicket = (await workspaceData(page)).tickets.find((ticket) => ticket.subject === secondSubject)!;
+  await closeDialog(page);
+  await page.getByRole("button", { name: "Workspaces", exact: true }).click();
+  await expect(firstDashboard.getByText("2 tickets you can view", { exact: true })).toBeVisible();
+  await expect(additionalDashboard.getByText("0 tickets you can view", { exact: true })).toBeVisible();
+  await fitsViewport(page);
+  await page.screenshot({ path: testInfo.outputPath("company-workspace-dashboard-hierarchy.png"), fullPage: true, animations: "disabled" });
+  await additionalDashboard.getByRole("button", { name: "Open tickets", exact: true }).click();
+  await expect(page.getByRole("combobox", { name: "Dashboard", exact: true })).toHaveValue(secondDashboard.id);
+  await expect(page.locator(".ticket-card")).toHaveCount(0);
+  expect((await page.request.get(`/api/tickets/${hidden.id}`)).status()).toBe(404);
+  await page.getByRole("button", { name: "Workspaces", exact: true }).click();
+  await firstDashboard.getByRole("button", { name: "Open tickets", exact: true }).click();
+  await expect(page.locator(".ticket-card")).toHaveCount(2);
+  await expect(page.getByRole("link", { name: subject, exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: secondSubject, exact: true })).toBeVisible();
+  expect((await page.goto("/employees"))?.status()).toBe(404);
+  await signOut(page);
+
+  await signIn(page, "Ava Mercer");
+  await page.goto("/notifications?filter=unread");
+  const mentionNotification = page.locator(".notification-list li").filter({ has: page.locator(`a[href="/tickets/${created.id}"]`) }).filter({ hasText: "Ticket created" });
+  await expect(mentionNotification).toBeVisible();
+  await mentionNotification.getByRole("link", { name: "View details", exact: true }).click();
+  await expect(page.getByRole("heading", { name: subject, exact: true })).toBeVisible();
+  await expect(page.getByText("You have read-only access to this ticket.", { exact: true })).toBeVisible();
+  for (const name of ["Edit ticket", "Manage ticket people", "Archive ticket", "Add work log", "Attach file"]) await expect(page.getByRole("button", { name, exact: true })).toHaveCount(0);
+  const mentionedDetail = await detail(page, created.id);
+  const refused = await page.request.post("/api/tickets/commands", { headers: { Origin: new URL(page.url()).origin }, data: { action: "updateTicket", ticketId: created.id, version: mentionedDetail.version, status: "CLOSED" } });
+  expect(refused.status()).toBe(404);
+  expect((await page.goto("/employees/mock-employee-dan"))?.status()).toBe(404);
+  await signOut(page);
+
+  await signIn(page, "Ben Iqbal");
+  await page.goto(`/tickets/${created.id}`);
+  await page.getByRole("button", { name: "Edit ticket", exact: true }).click();
+  dialog = page.getByRole("dialog");
+  await dialog.getByRole("combobox", { name: "Status", exact: true }).selectOption("IN_PROGRESS");
+  await dialog.getByRole("button", { name: "Save changes", exact: true }).click();
+  await expect.poll(async () => (await detail(page, created.id)).status).toBe("IN_PROGRESS");
+  await closeDialog(page);
+  await expect(page.getByRole("button", { name: "Manage ticket people", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Archive ticket", exact: true })).toHaveCount(0);
+  expect((await page.request.get(`/api/tickets/${secondTicket.id}`)).status()).toBe(404);
+  await signOut(page);
+
+  await signIn(page, "Dan Rowan", { destination: "landing" });
+  await page.goto(`/tickets/${created.id}`);
+  await page.getByRole("button", { name: "Add work log", exact: true }).click();
+  dialog = page.getByRole("dialog");
+  await dialog.getByLabel("Work description", { exact: true }).fill("Dan completed the assigned fictional cable inspection.");
+  await dialog.getByRole("button", { name: "Save work log", exact: true }).click();
+  await expect.poll(async () => (await detail(page, created.id)).workLogs.some((log) => log.authorUserId === "mock-employee-dan")).toBe(true);
+  await closeDialog(page);
+  await fitsViewport(page);
+  await page.screenshot({ path: testInfo.outputPath("company-assignee-ticket-details.png"), fullPage: true, animations: "disabled" });
+  expect((await page.request.get(`/api/tickets/${secondTicket.id}`)).status()).toBe(404);
+  await signOut(page);
+  await signIn(page, "Nora Albright");
+  expect((await workspaceData(page)).workspaces.find((entry) => entry.id === setup.workspaceId)?.members.map((person) => person.userId)).toEqual(["mock-super-admin-nora"]);
+});
+
+test("mentioned people and unrelated members receive current read-only and non-enumerating ticket boundaries", async ({ page }) => {
   await signIn(page, "Nora Albright");
   const setup = await fixture(page, "Observer work");
   const observed = await command(page, { action: "createTicket", boardId: setup.boardId, version: setup.boardVersion, subject: `Observed ticket ${randomUUID().slice(0, 8)}`, ticketDate: "2026-10-08", assigneeIds: ["mock-employee-cora"], observerIds: ["mock-employee-dan"] });
@@ -194,7 +317,7 @@ test("private upload and download work through current participant access and st
   } finally { await context.close(); }
 });
 
-test("Overview, Tickets, list and board retain shared filters across refresh and fit the viewport", async ({ page }, testInfo) => {
+test("Overview, Tickets, list and Kanban retain shared filters across refresh and fit the viewport", async ({ page }, testInfo) => {
   await signIn(page, "Nora Albright");
   const setup = await fixture(page, "Shared filters");
   const subject = `Filtered ${randomUUID().slice(0, 8)}`;
@@ -202,23 +325,25 @@ test("Overview, Tickets, list and board retain shared filters across refresh and
   await command(page, { action: "createTicket", boardId: setup.boardId, version: setup.boardVersion, subject: "Excluded search result", ticketDate: "2026-10-08", priority: "LOW" });
   await page.goto("/tickets");
   await page.getByRole("combobox", { name: "Workspace", exact: true }).selectOption(setup.workspaceId);
+  await page.getByRole("combobox", { name: "Dashboard", exact: true }).selectOption(setup.boardId);
   await page.getByLabel("Search tickets", { exact: true }).fill(subject);
   await page.getByRole("combobox", { name: "Priority", exact: true }).selectOption("HIGH");
   await page.getByRole("button", { name: "Tickets", exact: true }).click();
   await expect(page.locator(".ticket-card")).toHaveCount(1);
-  await page.getByRole("button", { name: "Board", exact: true }).click();
-  await expect(page.getByRole("region", { name: "Ticket board" })).toBeVisible();
+  await page.getByRole("button", { name: "Kanban", exact: true }).click();
+  await expect(page.getByRole("region", { name: "Ticket Kanban" })).toBeVisible();
   await expect(page.locator(".ticket-card")).toHaveCount(1);
   await page.getByRole("button", { name: "Overview", exact: true }).click();
   await expect(page.getByLabel("Search tickets", { exact: true })).toHaveValue(subject);
   await page.reload();
   await expect(page.getByRole("combobox", { name: "Workspace", exact: true })).toHaveValue(setup.workspaceId);
+  await expect(page.getByRole("combobox", { name: "Dashboard", exact: true })).toHaveValue(setup.boardId);
   await expect(page.getByLabel("Search tickets", { exact: true })).toHaveValue(subject);
   await expect(page.getByRole("combobox", { name: "Priority", exact: true })).toHaveValue("HIGH");
   await fitsViewport(page);
   await page.screenshot({ path: testInfo.outputPath("company-ticket-overview.png"), fullPage: true, animations: "disabled" });
   await page.getByRole("button", { name: "Tickets", exact: true }).click();
-  await expect(page.getByRole("button", { name: "Board", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: "Kanban", exact: true })).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator(".ticket-card")).toHaveCount(1);
   await fitsViewport(page);
   await page.screenshot({ path: testInfo.outputPath("company-ticket-workspace.png"), fullPage: true, animations: "disabled" });

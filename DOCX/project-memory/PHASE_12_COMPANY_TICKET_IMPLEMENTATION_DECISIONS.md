@@ -1,5 +1,15 @@
 # Company ticket workflow — confirmed implementation decisions
 
+## Current amendment — confirmed 9 October 2026
+
+The product owner subsequently required that **all active authenticated company users can create tickets, mention/include any active company person and assign multiple people**. Ticket creators may manage their ticket's assignee/included-person choices; assignees can update/work, and included/mentioned observers are read-only and receive an in-app notification. This supersedes the original manager-only grants and Employee creation without participants in the delivery contract below. Workforce Admin scope and unrelated workforce tools remain unchanged. Ticket contents remain private to authorized participants/management.
+
+The confirmed hierarchy is **Workspace → Dashboards → Tickets**, with many dashboards per workspace and many tickets per dashboard. Dashboard is the user-facing name for the existing ticket-board container; no migration, database rename or new management Home route is implied. All active authenticated company users see Published dashboard routing metadata and a minimal company people picker, and can create without workspace enrollment. Own/assigned/mentioned participation grants ticket-only access independently of workspace membership or Admin workforce scope; unrelated tickets remain hidden. Workspace/dashboard supervision retains current manager TEAM, Client/Project and membership checks. No automatic workspace grant is created, and current activity/session/participation/lifecycle checks remain binding.
+
+Local implementation/verification is `COMPLETED` under [the amendment report](../phase-reports/SCOPEIS_COMPANY_TICKET_COLLABORATION_AMENDMENT_2026_10_09.md): 106 affected automated cases, guarded builds/types, full ESLint, manual Employee review and scenario registration pass. Source and production delivery remain `IN_PROGRESS` under the existing session authorization; no amendment push/Ready/canonical outcome is claimed yet. Earlier local/production reports retain their historical source and scope.
+
+## Original core delivery — 8–9 October 2026
+
 **Authorized 8 October 2026; core implemented and locally verified 9 October 2026, Asia/Dubai.**
 
 [The delivery report](../phase-reports/SCOPEIS_COMPANY_TICKETS_LOCAL_2026_10_09.md) records scoped verification, preservation and remaining roadmap boundaries.
@@ -10,7 +20,7 @@ The product owner authorized Company ticket-system integration into ScopeIs. Sub
 
 The source reviewed for this implementation is `MulhamKassab/ticketSystem` main at `10e028538f600b8ebf289b5d1d2026d0b4399e4a`, with the earlier reviewed `8888b15a81d85f05c484dac9d17283c9530f61c4` as its ancestor. ScopeIs owns authentication, roles, scopes, storage, audit and notifications. Source onboarding, Company Owner/global-admin roles, Personal workspaces, credentials, deployment configuration and business datasets are not imported.
 
-## Access contract
+## Original access contract
 
 | Actor | Company ticket access |
 | --- | --- |

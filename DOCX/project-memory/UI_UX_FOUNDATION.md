@@ -125,3 +125,7 @@ The product owner authorized the [core Company ticket workflow](PHASE_12_COMPANY
 - Filters, ticket facts, cards, board columns and actions must reflow or provide a labelled internal scroll region at narrow widths. Preserve 44px compact controls, keyboard-operable dialogs, focus restoration, RTL logical properties, both themes and reduced motion.
 
 Daily work lists, flowchart editing, cost/PDF reports, reminders and future schedule/coverage handoffs are outside this first delivery. Ticket work logs represent recorded ticket effort; they do not replace the authoritative schedule or attendance policy.
+
+## 2026-10-09 — Company collaboration amendment
+
+Use **Workspace → Dashboards → Tickets** for container navigation; Dashboard names the existing ticket-board container, without changing the management Home route or database names. All active authenticated company users can choose a Published dashboard and create without enrollment. The creation/detail people picker supports multiple active company assignees and included/mentioned observers; observers receive an in-app notification and the UI explains their read-only access. Creators manage their own participant choices. The minimal picker and routing metadata never expose management profiles or unrelated ticket contents; container supervision retains manager scope/membership. Preserve the existing responsive, keyboard, RTL, theme, stale-write and role-specific shell behavior. [Amendment verification](../phase-reports/SCOPEIS_COMPANY_TICKET_COLLABORATION_AMENDMENT_2026_10_09.md) is in progress.

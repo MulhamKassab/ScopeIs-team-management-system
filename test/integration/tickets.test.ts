@@ -7,6 +7,8 @@ import { createSessionRecord } from "@/modules/auth/session-record";
 import { writeAuditEvent } from "@/modules/audit/audit-service";
 import { TicketService, ticketService } from "@/modules/tickets/service";
 import { ticketRepository } from "@/modules/tickets/repositories";
+import { operationalService } from "@/modules/operations/service";
+import { notificationService } from "@/modules/notifications/service";
 import type { AuthenticatedActor } from "@/shared/types/foundation";
 
 const ids = { nora: "mock-super-admin-nora", ava: "mock-admin-ava", ben: "mock-admin-ben", cora: "mock-employee-cora", dan: "mock-employee-dan" };
@@ -34,10 +36,10 @@ beforeEach(async () => {
   actors = {} as typeof actors;
   for (const key of Object.keys(ids) as (keyof typeof ids)[]) actors[key] = await sessionActor(ids[key]);
 });
-async function workspace(options: { linked?: boolean; status?: "DRAFT" | "PUBLISHED" | "ARCHIVED"; includeDan?: boolean } = {}) {
+async function workspace(options: { linked?: boolean; status?: "DRAFT" | "PUBLISHED" | "ARCHIVED"; includeDan?: boolean; noMembers?: boolean } = {}) {
   const created = await ticketService.command(actors.nora, { action: "createWorkspace", name: `Fictional Company ${randomUUID()}`, ...(options.linked === false ? {} : { clientId, projectId }) });
   let version = created.version;
-  for (const userId of [...(options.linked === false ? [] : [ids.ava]), ids.cora, ...(options.includeDan ? [ids.dan] : [])]) version = (await ticketService.command(actors.nora, { action: "setWorkspaceMember", workspaceId: created.id, userId, active: true, version })).version;
+  for (const userId of options.noMembers ? [] : [...(options.linked === false ? [] : [ids.ava]), ids.cora, ...(options.includeDan ? [ids.dan] : [])]) version = (await ticketService.command(actors.nora, { action: "setWorkspaceMember", workspaceId: created.id, userId, active: true, version })).version;
   const board = await ticketService.command(actors.nora, { action: "createBoard", workspaceId: created.id, name: "Fictional Operations", status: options.status ?? "PUBLISHED", version });
   return { workspaceId: created.id, boardId: board.id, boardVersion: board.version };
 }
@@ -45,6 +47,63 @@ async function create(boardId: string, version: number, actor = actors.nora, ext
 async function countAudit(id: string) { return (await db.select().from(auditEvents).where(and(eq(auditEvents.targetType, "ticket"), eq(auditEvents.targetId, id)))).length; }
 
 describe("Company tickets PostgreSQL access boundaries", () => {
+  it("lets every company role create in published dashboards and shares only explicit tickets without enrollment", async () => {
+    const space = await workspace({ noMembers: true });
+    await ticketService.command(actors.nora, { action: "updateWorkspace", workspaceId: space.workspaceId, version: 2, description: "WORKSPACE PRIVATE DESCRIPTION" });
+    const initial = await ticketService.workspace(actors.dan);
+    expect(initial.workspaces.find((entry) => entry.id === space.workspaceId)).toMatchObject({ name: expect.any(String), description: null, clientId: null, projectId: null, members: [], canManage: false });
+    expect(initial.boards.find((entry) => entry.id === space.boardId)?.status).toBe("PUBLISHED");
+    const ownTickets: { id: string; version: number }[] = [];
+    for (const actor of Object.values(actors)) ownTickets.push(await create(space.boardId, space.boardVersion, actor, { subject: `Fictional own ticket ${actor.id}` }));
+    const ticket = await create(space.boardId, space.boardVersion, actors.cora, { assigneeIds: [ids.dan, ids.ben], observerIds: [ids.ava] });
+    for (const key of ["dan", "ben"] as const) expect((await ticketService.detail(actors[key], ticket.id)).permissions).toMatchObject({ edit: true, log: true, files: true, managePeople: false, archive: false });
+    expect((await ticketService.detail(actors.ava, ticket.id)).permissions).toMatchObject({ edit: false, log: false, files: false, managePeople: false });
+    const listing = await ticketService.workspace(actors.dan);
+    expect(listing.tickets.filter((entry) => entry.boardId === space.boardId).map((entry) => entry.id).sort()).toEqual([ownTickets[4]!.id, ticket.id].sort());
+    await expect(ticketService.detail(actors.dan, ownTickets[3]!.id)).rejects.toMatchObject({ status: 404 });
+    const memberships = await db.select().from(ticketWorkspaceMembers).where(eq(ticketWorkspaceMembers.workspaceId, space.workspaceId));
+    expect(memberships.map((entry) => entry.userId)).toEqual([ids.nora]);
+    expect((await ticketService.workspace(actors.ben)).workspaces.find((entry) => entry.id === space.workspaceId)?.canManage).toBe(false);
+    await expect(operationalService.getClientDetail(actors.ben, clientId)).rejects.toMatchObject({ code: "OUT_OF_SCOPE" });
+    await expect(operationalService.getClientDetail(actors.dan, clientId)).rejects.toMatchObject({ code: "FORBIDDEN" });
+    const notices = await db.select().from(notifications).where(and(eq(notifications.relatedRecordId, ticket.id), eq(notifications.eventType, "ticket.created")));
+    for (const id of [ids.dan, ids.ben, ids.ava]) expect(notices.some((notice) => notice.recipientUserId === id)).toBe(true);
+    const mentionedNotice = notices.find((notice) => notice.recipientUserId === ids.ava)!;
+    expect((await notificationService.inbox(actors.ava)).items.find((item) => item.id === mentionedNotice.id)?.href).toBe(`/tickets/${ticket.id}`);
+    await expect(ticketService.command(actors.dan, { action: "setParticipants", ticketId: ticket.id, version: ticket.version, assigneeIds: [], observerIds: [] })).rejects.toMatchObject({ status: 404 });
+    const updated = await ticketService.command(actors.cora, { action: "setParticipants", ticketId: ticket.id, version: ticket.version, assigneeIds: [ids.dan], observerIds: [ids.ben] });
+    await expect(ticketService.detail(actors.ava, ticket.id)).rejects.toMatchObject({ status: 404 });
+    expect((await notificationService.inbox(actors.ava)).items.find((item) => item.id === mentionedNotice.id)?.href).toBeNull();
+    expect((await ticketService.detail(actors.ben, ticket.id)).permissions.edit).toBe(false);
+    await expect(ticketService.command(actors.cora, { action: "setParticipants", ticketId: ticket.id, version: ticket.version, assigneeIds: [ids.ava], observerIds: [] })).rejects.toMatchObject({ status: 409 });
+    expect((await ticketService.detail(actors.cora, ticket.id)).version).toBe(updated.version);
+  });
+  it("preserves multiple dashboards and tickets and validates every selected active person under the creation transaction", async () => {
+    const space = await workspace({ linked: false, noMembers: true });
+    const workspaceVersion = (await ticketService.workspace(actors.nora)).workspaces.find((entry) => entry.id === space.workspaceId)!.version;
+    const second = await ticketService.command(actors.nora, { action: "createBoard", workspaceId: space.workspaceId, name: "Fictional second dashboard", status: "PUBLISHED", version: workspaceVersion });
+    const firstTicket = await create(space.boardId, space.boardVersion, actors.cora, { assigneeIds: [ids.dan], observerIds: [ids.ben] });
+    const secondTicket = await create(space.boardId, space.boardVersion, actors.cora);
+    const otherDashboardTicket = await create(second.id, second.version, actors.dan, { observerIds: [ids.cora] });
+    const listing = await ticketService.workspace(actors.cora);
+    expect(listing.boards.filter((entry) => entry.workspaceId === space.workspaceId)).toHaveLength(2);
+    expect(listing.tickets.filter((entry) => entry.boardId === space.boardId).map((entry) => entry.id).sort()).toEqual([firstTicket.id, secondTicket.id].sort());
+    expect(listing.tickets.some((entry) => entry.id === otherDashboardTicket.id && entry.boardId === second.id)).toBe(true);
+    const count = (await db.select().from(tickets).where(eq(tickets.boardId, space.boardId))).length;
+    await db.update(users).set({ active: false }).where(eq(users.id, ids.dan));
+    await expect(create(space.boardId, space.boardVersion, actors.cora, { assigneeIds: [ids.dan], observerIds: [ids.ben] })).rejects.toMatchObject({ status: 404 });
+    await expect(create(space.boardId, space.boardVersion, actors.cora, { assigneeIds: ["deleted-company-user"] })).rejects.toMatchObject({ status: 404 });
+    await expect(create(space.boardId, space.boardVersion, actors.cora, { assigneeIds: [ids.cora] })).rejects.toMatchObject({ status: 400 });
+    await expect(create(space.boardId, space.boardVersion, actors.cora, { assigneeIds: [ids.ben], observerIds: [ids.ben] })).rejects.toMatchObject({ status: 400 });
+    expect((await db.select().from(tickets).where(eq(tickets.boardId, space.boardId))).length).toBe(count);
+    expect((await ticketService.workspace(actors.cora)).people.some((person) => person.userId === ids.dan)).toBe(false);
+    const draft = await workspace({ status: "DRAFT", noMembers: true });
+    const archived = await workspace({ status: "ARCHIVED", noMembers: true });
+    for (const board of [draft, archived]) {
+      await expect(create(board.boardId, board.boardVersion, actors.cora)).rejects.toMatchObject({ status: 404 });
+      expect((await ticketService.workspace(actors.cora)).boards.some((entry) => entry.id === board.boardId)).toBe(false);
+    }
+  });
   it.each(["workspace", "detail", "fileAccess"] as const)("restarts the whole %s read after a real PostgreSQL snapshot/SHARE-lock conflict", async (mode) => {
     const space = await workspace();
     const ticket = await create(space.boardId, space.boardVersion, actors.cora);
@@ -128,7 +187,9 @@ describe("Company tickets PostgreSQL access boundaries", () => {
     expect(admin.permissions).toMatchObject({ edit: true, managePeople: true });
     const employee = await ticketService.workspace(actors.cora);
     expect(employee.tickets.some((entry) => entry.id === ticket.id)).toBe(true);
-    expect(employee.people).toEqual([]); expect(employee.clients).toEqual([]); expect(employee.projects).toEqual([]);
+    expect(employee.people.map((person) => person.userId).sort()).toEqual(Object.values(ids).sort());
+    expect(employee.people.every((person) => Object.keys(person).sort().join(",") === "displayName,role,userId")).toBe(true);
+    expect(employee.clients).toEqual([]); expect(employee.projects).toEqual([]);
     expect(employee.workspaces.find((entry) => entry.id === space.workspaceId)).toMatchObject({ clientId: null, projectId: null, members: [], canManage: false });
     expect(JSON.stringify(employee)).not.toContain("MANAGEMENT SECRET"); expect(JSON.stringify(employee)).not.toContain("PRIVATE CLIENT NOTE");
     await expect(ticketService.detail(actors.dan, ticket.id)).rejects.toMatchObject({ status: 404 });
@@ -138,11 +199,12 @@ describe("Company tickets PostgreSQL access boundaries", () => {
     await expect(ticketService.detail(actors.cora, unpublished.id)).rejects.toMatchObject({ status: 404 });
     await expect(create(draft.boardId, draft.boardVersion, actors.cora)).rejects.toMatchObject({ status: 404 });
   });
-  it("keeps unlinked containers global and Admin container/picker work in its current TEAM and operational scope", async () => {
+  it("keeps container supervision scoped while explicit tickets can cross all company roles and teams", async () => {
     await expect(ticketService.command(actors.ava, { action: "createWorkspace", name: "Fictional unlinked" })).rejects.toMatchObject({ status: 404 });
     await expect(ticketService.command(actors.cora, { action: "createWorkspace", name: "Fictional Employee container", clientId })).rejects.toMatchObject({ status: 404 });
     const unlinked = await workspace({ linked: false });
-    await expect(create(unlinked.boardId, unlinked.boardVersion, actors.ava)).rejects.toMatchObject({ status: 404 });
+    const ownUnlinked = await create(unlinked.boardId, unlinked.boardVersion, actors.ava);
+    expect((await ticketService.detail(actors.ava, ownUnlinked.id)).permissions).toMatchObject({ edit: true, managePeople: true });
     const unlinkedVersion = (await ticketService.workspace(actors.nora)).workspaces.find((entry) => entry.id === unlinked.workspaceId)!.version;
     await expect(ticketService.command(actors.nora, { action: "setWorkspaceMember", workspaceId: unlinked.workspaceId, userId: ids.ava, active: true, version: unlinkedVersion })).rejects.toMatchObject({ status: 404 });
     const created = await ticketService.command(actors.ava, { action: "createWorkspace", name: "Fictional scoped", clientId, projectId });
@@ -151,21 +213,22 @@ describe("Company tickets PostgreSQL access boundaries", () => {
     expect(member.version).toBe(2);
     await expect(ticketService.command(actors.ava, { action: "createBoard", workspaceId: created.id, name: "Fictional stale board", version: 1 })).rejects.toMatchObject({ status: 409 });
     const board = await ticketService.command(actors.ava, { action: "createBoard", workspaceId: created.id, name: "Fictional scoped board", status: "PUBLISHED", version: member.version });
-    await expect(create(board.id, board.version, actors.ava, { assigneeIds: [ids.dan] })).rejects.toMatchObject({ status: 404 });
+    const assignedBravo = await create(board.id, board.version, actors.ava, { assigneeIds: [ids.dan] });
+    expect((await ticketService.detail(actors.dan, assignedBravo.id)).permissions).toMatchObject({ edit: true, managePeople: false });
     const mixed = await workspace({ includeDan: true });
-    await expect(create(mixed.boardId, mixed.boardVersion, actors.nora, { assigneeIds: [ids.ava, ids.dan] })).rejects.toMatchObject({ status: 404 });
+    const sharedAdmin = await create(mixed.boardId, mixed.boardVersion, actors.nora, { assigneeIds: [ids.ava, ids.dan] });
+    expect((await ticketService.detail(actors.ava, sharedAdmin.id)).permissions).toMatchObject({ edit: true, managePeople: false });
     const managerAssigned = await create(mixed.boardId, mixed.boardVersion, actors.nora, { assigneeIds: [ids.ava, ids.cora] });
     expect((await ticketService.detail(actors.ava, managerAssigned.id)).permissions.edit).toBe(true);
     const crossTeam = await create(mixed.boardId, mixed.boardVersion, actors.nora, { assigneeIds: [ids.cora, ids.dan] });
     await expect(ticketService.detail(actors.ava, crossTeam.id)).rejects.toMatchObject({ status: 404 });
   });
-  it("allows Employee creation, own/assigned updates and closure while rejecting Employee participation grants and observer edits", async () => {
+  it("allows creator grants across teams while assignees work and mentioned people remain read-only", async () => {
     const space = await workspace({ includeDan: true });
-    await expect(create(space.boardId, space.boardVersion, actors.cora, { assigneeIds: [ids.dan] })).rejects.toMatchObject({ status: 404 });
-    const owned = await create(space.boardId, space.boardVersion, actors.cora);
+    const owned = await create(space.boardId, space.boardVersion, actors.cora, { assigneeIds: [ids.dan], observerIds: [ids.ben] });
     const closed = await ticketService.command(actors.cora, { action: "updateTicket", ticketId: owned.id, version: owned.version, status: "CLOSED", workCompleted: "Fictional work completed" });
     expect((await ticketService.detail(actors.cora, owned.id)).status).toBe("CLOSED");
-    await expect(ticketService.command(actors.cora, { action: "setParticipants", ticketId: owned.id, version: closed.version, assigneeIds: [ids.dan], observerIds: [] })).rejects.toMatchObject({ status: 404 });
+    await ticketService.command(actors.cora, { action: "setParticipants", ticketId: owned.id, version: closed.version, assigneeIds: [ids.dan], observerIds: [ids.ava, ids.ben] });
     const observed = await create(space.boardId, space.boardVersion, actors.nora, { assigneeIds: [ids.cora], observerIds: [ids.dan] });
     expect((await ticketService.detail(actors.dan, observed.id)).permissions).toMatchObject({ edit: false, log: false, files: false, archive: false });
     await expect(ticketService.command(actors.dan, { action: "updateTicket", ticketId: observed.id, version: observed.version, status: "CLOSED" })).rejects.toMatchObject({ status: 404 });
@@ -190,12 +253,11 @@ describe("Company tickets PostgreSQL access boundaries", () => {
     await ticketService.command(actors.nora, { action: "updateBoard", boardId: space.boardId, version: published.version, status: "ARCHIVED" });
     await expect(create(space.boardId, published.version + 1)).rejects.toMatchObject({ status: 404 });
   });
-  it("revokes membership, participation, TEAM grants and operational grants immediately despite stale actor objects", async () => {
+  it("keeps explicit sharing independent of membership while participation and supervisory scopes revoke immediately", async () => {
     const space = await workspace(); const ticket = await create(space.boardId, space.boardVersion, actors.nora, { assigneeIds: [ids.cora] });
     let version = (await ticketService.workspace(actors.nora)).workspaces.find((entry) => entry.id === space.workspaceId)!.version;
     version = (await ticketService.command(actors.nora, { action: "setWorkspaceMember", workspaceId: space.workspaceId, userId: ids.cora, active: false, version })).version;
-    await expect(ticketService.detail(actors.cora, ticket.id)).rejects.toMatchObject({ status: 404 });
-    await expect(ticketService.command(actors.cora, { action: "updateTicket", ticketId: ticket.id, version: ticket.version, notes: "Fictional stale member edit" })).rejects.toMatchObject({ status: 404 });
+    expect((await ticketService.detail(actors.cora, ticket.id)).permissions.edit).toBe(true);
     await ticketService.command(actors.nora, { action: "setWorkspaceMember", workspaceId: space.workspaceId, userId: ids.cora, active: true, version });
     const revoked = await ticketService.command(actors.nora, { action: "setParticipants", ticketId: ticket.id, version: ticket.version, assigneeIds: [], observerIds: [] });
     await expect(ticketService.detail(actors.cora, ticket.id)).rejects.toMatchObject({ status: 404 });

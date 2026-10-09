@@ -471,9 +471,11 @@ describe("Phase 1 public HTTP route certification", () => {
         const page = await request("/tickets", { headers: { Cookie: session.cookie } });
         expect(page.status).toBe(200);
         safeResponse(await page.text(), session.token);
-        const data = await privateJson(await request("/api/tickets", { headers: { Cookie: session.cookie } }), 200, session.token);
+        const data = await privateJson(await request("/api/tickets", { headers: { Cookie: session.cookie } }), 200, session.token) as { people: { userId: string; displayName: string; role: string }[] };
         expect(data).toMatchObject({ workspaces: [], boards: [], tickets: [] });
-        if (persona.role === "EMPLOYEE") expect(data).toMatchObject({ people: [], clients: [], projects: [] });
+        expect(data.people.map((person) => person.userId).sort()).toEqual(personas.map((person) => person.id).sort());
+        expect(data.people.every((person) => Object.keys(person).sort().join(",") === "displayName,role,userId")).toBe(true);
+        if (persona.role === "EMPLOYEE") expect(data).toMatchObject({ clients: [], projects: [] });
         const missingPage = await request(`/tickets/${unknownTicketId}`, { headers: { Cookie: session.cookie } });
         expect(missingPage.status).toBe(404);
         safeResponse(await missingPage.text(), session.token);
@@ -530,22 +532,24 @@ describe("Phase 1 public HTTP route certification", () => {
     const colleague = await login("mock-employee-dan");
     try {
       // All business writes below reach only this runner's disposable fictional database.
-      let workspace = await ticketCommand(manager, { action: "createWorkspace", name: "Fictional HTTP ticket certification" });
-      workspace = await ticketCommand(manager, { action: "setWorkspaceMember", workspaceId: workspace.id, userId: "mock-employee-cora", active: true, version: workspace.version });
-      workspace = await ticketCommand(manager, { action: "setWorkspaceMember", workspaceId: workspace.id, userId: "mock-employee-dan", active: true, version: workspace.version });
+      const workspace = await ticketCommand(manager, { action: "createWorkspace", name: "Fictional HTTP ticket certification" });
       const board = await ticketCommand(manager, { action: "createBoard", workspaceId: workspace.id, name: "Fictional published board", status: "PUBLISHED", version: workspace.version });
       let ticket = await ticketCommand(creator, { action: "createTicket", boardId: board.id, version: board.version, subject: "Fictional employee ticket", ticketDate: "2027-01-03" });
       const detailPath = `/api/tickets/${ticket.id}`;
       const missing = await privateJson(await request(`/api/tickets/${unknownTicketId}`, { headers: { Cookie: colleague.cookie } }), 404, colleague.token);
       expect(await privateJson(await request(detailPath, { headers: { Cookie: colleague.cookie } }), 404, colleague.token)).toEqual(missing);
       expect(await privateJson(await request(detailPath, { headers: { Cookie: scopedAdmin.cookie } }), 404, scopedAdmin.token)).toEqual(missing);
-      const employeeData = await privateJson(await request("/api/tickets", { headers: { Cookie: colleague.cookie } }), 200, colleague.token);
-      expect(employeeData).toMatchObject({ tickets: [], people: [], clients: [], projects: [] });
+      const employeeData = await privateJson(await request("/api/tickets", { headers: { Cookie: colleague.cookie } }), 200, colleague.token) as { workspaces: { id: string }[]; boards: { id: string }[]; people: { userId: string }[] };
+      expect(employeeData).toMatchObject({ tickets: [], clients: [], projects: [] });
+      expect(employeeData.workspaces.some((entry) => entry.id === workspace.id)).toBe(true);
+      expect(employeeData.boards.some((entry) => entry.id === board.id)).toBe(true);
+      expect(employeeData.people.map((person) => person.userId).sort()).toEqual(personas.map((person) => person.id).sort());
 
-      ticket = await ticketCommand(manager, { action: "setParticipants", ticketId: ticket.id, version: ticket.version, assigneeIds: [], observerIds: ["mock-employee-dan"] });
+      ticket = await ticketCommand(creator, { action: "setParticipants", ticketId: ticket.id, version: ticket.version, assigneeIds: [], observerIds: ["mock-employee-dan", "mock-admin-ava"] });
       expect(await privateJson(await request(detailPath, { headers: { Cookie: colleague.cookie } }), 200, colleague.token)).toMatchObject({ ticket: {
         id: ticket.id, permissions: { edit: false, managePeople: false, archive: false, restore: false, log: false, files: false },
       } });
+      expect(await privateJson(await request(detailPath, { headers: { Cookie: scopedAdmin.cookie } }), 200, scopedAdmin.token)).toMatchObject({ ticket: { permissions: { edit: false, managePeople: false, log: false, files: false } } });
       const observerPage = await request(`/tickets/${ticket.id}`, { headers: { Cookie: colleague.cookie } });
       expect(observerPage.status).toBe(200);
       safeResponse(await observerPage.text(), colleague.token);
@@ -564,7 +568,8 @@ describe("Phase 1 public HTTP route certification", () => {
       expect(await privateJson(await request(detailPath, { headers: { Cookie: creator.cookie } }), 200, creator.token)).toMatchObject({ ticket: { version: ticket.version, status: "OPEN", workLogs: [] } });
 
       ticket = await ticketCommand(creator, { action: "updateTicket", ticketId: ticket.id, version: ticket.version, status: "CLOSED" });
-      ticket = await ticketCommand(manager, { action: "setParticipants", ticketId: ticket.id, version: ticket.version, assigneeIds: ["mock-employee-dan"], observerIds: [] });
+      ticket = await ticketCommand(creator, { action: "setParticipants", ticketId: ticket.id, version: ticket.version, assigneeIds: ["mock-employee-dan", "mock-admin-ava"], observerIds: [] });
+      expect(await privateJson(await request(detailPath, { headers: { Cookie: scopedAdmin.cookie } }), 200, scopedAdmin.token)).toMatchObject({ ticket: { permissions: { edit: true, managePeople: false } } });
       const staleVersion = ticket.version;
       ticket = await ticketCommand(colleague, { action: "updateTicket", ticketId: ticket.id, version: ticket.version, status: "IN_PROGRESS" });
       await privateJson(await request("/api/tickets/commands", {
@@ -583,8 +588,16 @@ describe("Phase 1 public HTTP route certification", () => {
       const currentWorkspace = current.workspaces.find((entry) => entry.id === workspace.id);
       expect(currentWorkspace).toBeTruthy();
       await ticketCommand(manager, { action: "setWorkspaceMember", workspaceId: workspace.id, userId: "mock-employee-dan", active: false, version: currentWorkspace!.version });
+      // Workspace enrollment controls supervision; explicit ticket access survives its removal.
+      await privateJson(await request(detailPath, { headers: { Cookie: colleague.cookie } }), 200, colleague.token);
+      await privateJson(await request(`/api/tickets/${ticket.id}/files`, { headers: { Cookie: colleague.cookie } }), 200, colleague.token);
+      ticket = await ticketCommand(creator, { action: "setParticipants", ticketId: ticket.id, version: ticket.version, assigneeIds: [], observerIds: [] });
       expect(await privateJson(await request(detailPath, { headers: { Cookie: colleague.cookie } }), 404, colleague.token)).toEqual(missing);
       expect(await privateJson(await request(`/api/tickets/${ticket.id}/files`, { headers: { Cookie: colleague.cookie } }), 404, colleague.token)).toEqual(missing);
+      expect(await privateJson(await request(detailPath, { headers: { Cookie: scopedAdmin.cookie } }), 404, scopedAdmin.token)).toEqual(missing);
+      const adminCreated = await ticketCommand(scopedAdmin, { action: "createTicket", boardId: board.id, version: board.version, subject: "Fictional unlinked Admin ticket", ticketDate: "2027-01-03", assigneeIds: ["mock-employee-cora", "mock-employee-dan"], observerIds: ["mock-admin-ben"] });
+      expect(await privateJson(await request(`/api/tickets/${adminCreated.id}`, { headers: { Cookie: scopedAdmin.cookie } }), 200, scopedAdmin.token)).toMatchObject({ ticket: { permissions: { edit: true, managePeople: true } } });
+      expect((await pool.query("select user_id from ticket_workspace_members where workspace_id = $1 and active = true", [workspace.id])).rows).toEqual([{ user_id: "mock-super-admin-nora" }]);
     } finally {
       for (const session of [manager, scopedAdmin, creator, colleague]) expect((await logout(session.cookie)).status).toBe(200);
     }

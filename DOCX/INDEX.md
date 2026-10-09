@@ -1,3 +1,8 @@
+## Company ticket collaboration amendment — confirmed 2026-10-09
+
+- [All-company creation, multiple assignees, included people and Workspace/Dashboards/Tickets amendment](phase-reports/SCOPEIS_COMPANY_TICKET_COLLABORATION_AMENDMENT_2026_10_09.md)
+- Local implementation/verification `COMPLETED`; source/production delivery `IN_PROGRESS`. All active authenticated company users create without workspace enrollment and choose any active company people. Creators manage multiple assignees/included observers; assignees work and included observers read only and receive an in-app notification. Published dashboard routing is company-wide, ticket contents remain participation-private, and workspace/dashboard supervision retains manager scope/membership. Dashboard reuses the existing container with no migration. All 106 affected automated cases, builds/types/lint, manual review and manifest checks pass; prior releases remain historical and amendment deployment outcomes await verification.
+
 ## Company ticket production release — authorized 2026-10-09
 
 - [Production release target, preservation and verification status](phase-reports/SCOPEIS_COMPANY_TICKETS_PRODUCTION_2026_10_09.md)

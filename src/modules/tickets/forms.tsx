@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState, type FormEvent, type ReactNode } from "react";
-import type { TicketDetail } from "./types";
+import type { TicketDetail, TicketPerson } from "./types";
 import { ticketPriorities, ticketPriorityLabels, ticketStatuses, ticketStatusLabels, ticketToday } from "./presentation";
 
 export async function sendTicketCommand(input: unknown): Promise<unknown> {
@@ -58,6 +58,45 @@ export function readTicketFields(form: FormData) {
   return { subject: value("subject"), ticketDate: value("ticketDate"), dueDate: value("dueDate") || null,
     status: value("status"), priority: value("priority"), summary: value("summary"), planning: value("planning"),
     workCompleted: value("workCompleted"), notes: value("notes"), onHoldReason: value("onHoldReason") };
+}
+
+/** Hidden values retain selected people when the searchable choices are filtered. */
+export function TicketPeopleFields({ people, creatorUserId, assigneeIds = [], observerIds = [] }: {
+  people: TicketPerson[]; creatorUserId: string; assigneeIds?: string[]; observerIds?: string[];
+}) {
+  const choices = people.filter((person) => person.userId !== creatorUserId);
+  const eligible = new Set(choices.map((person) => person.userId));
+  const [assigned, setAssigned] = useState(() => assigneeIds.filter((id) => eligible.has(id)));
+  const [mentioned, setMentioned] = useState(() => observerIds.filter((id) => eligible.has(id) && !assigneeIds.includes(id)));
+  const [search, setSearch] = useState("");
+  const matching = choices.filter((person) => person.displayName.toLocaleLowerCase().includes(search.trim().toLocaleLowerCase()));
+  function toggle(userId: string, role: "assigned" | "mentioned", selected: boolean) {
+    const update = (current: string[]) => selected ? [...current, userId] : current.filter((id) => id !== userId);
+    if (role === "assigned") {
+      setAssigned(update);
+      if (selected) setMentioned((current) => current.filter((id) => id !== userId));
+    } else {
+      setMentioned(update);
+      if (selected) setAssigned((current) => current.filter((id) => id !== userId));
+    }
+  }
+  return <div className="ticket-people-fields">
+    <p className="operation-help">Choose any company people. Assignees can update this ticket. Mentioned people receive a notification and can view it.</p>
+    <label>Find people<input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search by name" /></label>
+    {assigned.map((id) => <input type="hidden" name="assigneeIds" value={id} key={`assigned:${id}`} />)}
+    {mentioned.map((id) => <input type="hidden" name="observerIds" value={id} key={`mentioned:${id}`} />)}
+    <div className="ticket-people-groups">{([
+      ["assigned", "Assignees", assigned], ["mentioned", "Mentioned people · read only", mentioned],
+    ] as const).map(([role, label, selected]) => <fieldset className="ticket-people-picker" key={role}>
+      <legend>{label}</legend>
+      <p className="ticket-file-meta">{selected.length} selected{selected.length ? ` · ${choices.filter((person) => selected.includes(person.userId)).map((person) => person.displayName).join(", ")}` : " · choose one or more"}</p>
+      <div className="ticket-people-options">{matching.map((person) => <label className="ticket-people-option" key={person.userId}>
+        <input type="checkbox" checked={selected.includes(person.userId)} onChange={(event) => toggle(person.userId, role, event.target.checked)} />
+        <span>{person.displayName}</span>
+      </label>)}{!matching.length ? <p className="record-empty">{choices.length ? "No people match your search." : "No other active company people are available."}</p> : null}</div>
+    </fieldset>)}</div>
+    <p className="operation-help">The creator can always update the ticket. You can select multiple people in each group.</p>
+  </div>;
 }
 
 export function TicketFields({ ticket }: { ticket?: Partial<TicketDetail> }) {

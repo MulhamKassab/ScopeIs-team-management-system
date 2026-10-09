@@ -18,7 +18,7 @@ Has global management authority: employee accounts and roles, designations, skil
 
 May be an account manager, team senior, coordinator, or other trusted employee. Can view necessary employee capabilities and availability; manage assigned clients/projects/locations; create schedule drafts and assignments within scope; propose schedules; review conflicts; find candidates; submit replacement requests; use the scoped planning map; create and edit their own shared Client, Project, and Location notes where their scope authorizes the parent; create permitted employee-management notes about Employees below their role; and participate in private requester-assignee discussions.
 
-Company ticket management additionally requires current active workspace membership, a matching Client or Project link and operational grant, and current TEAM scope for Employee creators and participants. An unlinked company workspace is Super Admin-managed. Ticket membership or participation does not widen an Admin's workforce scope.
+Company workspace/dashboard supervision requires current active membership, a matching Client/Project grant and TEAM scope; unlinked containers remain Super Admin-managed. Under the 9 October collaboration amendment, an Admin also has ticket-only creator/assignee/observer access independently of workforce scope or workspace membership. That participation never widens workforce management access.
 
 Admin cannot publish schedules, make final schedule approvals, approve or reject leave, recommend leave decisions, access private leave reasons by default, manage global permissions, change global coverage policies without permission, assign replacements without required Super Admin approval, or access data outside scope.
 
@@ -26,7 +26,7 @@ Admin cannot publish schedules, make final schedule approvals, approve or reject
 
 Can sign in; view their own published daily/weekly/monthly schedule; view relevant client/project/location/time/instructions; submit and track annual leave; cancel a pending request when allowed; maintain permitted profile, skills evidence, certifications, portfolio, CV, and project experience; use the notification centre for their own notifications; and participate in private replacement-request discussions when they are the requester or a named employee on that request.
 
-Tickets is the Employee's primary workspace. An Employee may create a ticket on a Published board in a workspace where they are an active member, and may update or close tickets they created or are currently assigned to. Current observers may read the ticket only. My profile also displays the Employee's own recorded skills, with the existing skills-editing boundary preserved.
+Tickets is the Employee's primary workspace. An active authenticated Employee may create on a Published dashboard without workspace enrollment, choose multiple active company assignees and include/mention company people. Creators manage their own ticket's participants; creators and assignees may update/close their tickets. Included/mentioned observers read only and receive an in-app notification. My profile displays own recorded skills with its existing editing boundary.
 
 Employee cannot publish or finalize schedules, approve leave, manage roles, access the management planning map, view others' private leave details, view employee-management notes, read or add shared Client/Project/Location notes, or view discussions in which they are not a participant.
 
@@ -72,11 +72,13 @@ An Admin's effective access is the intersection of role permission and assigned 
 | Open authorized reports | Yes, all registered reports | Yes: Published allocation, unallocated employees, scheduled hours, `PLANNING (unpublished)`, approved leave, replacement status, recorded skills, required-versus-recorded gaps, certification summary, schedule lifecycle — scoped | No |
 | Open Super-Admin-only reports | Yes: leave balance, evidence review queue, audit history | No — non-enumerating refusal | No |
 | Export CSV | Yes, every exportable report including `PLANNING (unpublished)`; never audit history | Yes, Published allocation and the certification-summary projection only | No |
-| Company ticket workspaces/boards and participant administration | Global | Active membership + linked Client/Project grant + TEAM scope | No |
-| Create Company ticket | Yes | Within current ticket-management scope | Active workspace member, Published board; creator only |
-| Read Company ticket | Global | Within current ticket-management scope | Active member, Published board, current creator/assignee/observer |
-| Update/close ticket, log own work, upload private files | Yes | Within current ticket-management scope | Creator or assignee; observer read-only |
-| Archive/restore Company ticket | Yes | Within current ticket-management scope | Creator only, while current access and board lifecycle permit |
+| Company workspace/dashboard supervision | Global | Active membership + linked Client/Project grant + TEAM scope | No |
+| Create Company ticket | Yes | Yes on Published dashboards without enrollment; authorized management containers as permitted | Yes on Published dashboards without enrollment |
+| Choose multiple assignees/include people | Global; creators manage own ticket | Creator on own ticket, or current scoped ticket manager | Creator on own ticket |
+| Published dashboard routing/minimal active company picker | Yes | Yes | Yes |
+| Read Company ticket | Global | Current scoped management or own/assigned/mentioned participation | Own/assigned/mentioned participation |
+| Update/close ticket, log own work, upload private files | Yes | Current scoped management or creator/assignee | Creator or assignee; included observer read-only |
+| Archive/restore Company ticket | Yes | Current scoped management or creator | Creator, while current access/dashboard lifecycle permit |
 
 ## Explicit safeguards
 
@@ -98,11 +100,11 @@ An Admin's effective access is the intersection of role permission and assigned 
 
 ## Company ticket safeguards — confirmed 2026-10-08
 
-[The Company implementation decisions](PHASE_12_COMPANY_TICKET_IMPLEMENTATION_DECISIONS.md) govern the authorized core workflow. Workspaces and boards are separate ticket containers, with optional Client/Project links; they do not create workforce assignments or grant Employees access to Client/Project management records. System roles, teams, job titles, workspace memberships and ticket participation remain separate facts.
+[The Company implementation decisions](PHASE_12_COMPANY_TICKET_IMPLEMENTATION_DECISIONS.md), including the current 9 October collaboration amendment, govern the core. Workspace → Dashboards → Tickets uses the existing ticket-board containers and optional Client/Project links; no workforce assignment or Employee management-record access is created. System roles, teams, job titles, workspace memberships and ticket participation remain separate facts. Amendment implementation/verification is locally complete; source/production delivery is in progress, and earlier releases certify their original policy only.
 
 - Current authentication, user activity, session version, workspace membership, board lifecycle, ticket participation and Admin grants are checked server-side. Revocation affects direct detail/file access and notification destinations as well as lists.
-- Employees receive Published boards and only their own, assigned or observed tickets. A workspace membership alone never exposes another person's tickets, private files or work logs.
-- Managers grant and revoke assignees/observers from authorized existing people. Employee creation establishes creator participation atomically and grants no access to other people.
+- All active authenticated company users receive Published dashboard routing and a minimal active-company people picker without enrollment. Own/assigned/mentioned participation grants ticket-only access regardless of workspace membership or Admin workforce scope. Unrelated ticket contents, files and logs remain hidden.
+- Creators can grant/revoke multiple assignees and included observers on their own tickets, choosing active company people; authorized managers retain their supervision. Included/mentioned observers receive an in-app notification and remain read-only. No automatic workspace membership is granted.
 - Ticket creators and authorized managers may archive and restore retained tickets. Assignees cannot archive a ticket by virtue of assignment. Archived boards prevent active work and restoration until the board is restored to an eligible lifecycle state.
 - Work-log changes are author-only while the actor still has ticket work permission. Uploaders may archive/restore their own attachments while they retain write access; authorized managers may manage ticket attachments. Observers never gain upload or file-management permission.
 - Attachments use the private-storage boundary and the established PDF/JPEG/PNG/DOCX allowlist. Local uploads retain a 5 MiB limit; the authorized Vercel production release uses a 4 MiB ticket-upload cap enforced by both server and UI. Every download reauthorizes ticket access; neither public URLs nor storage keys are returned. Archive retains bytes and history.

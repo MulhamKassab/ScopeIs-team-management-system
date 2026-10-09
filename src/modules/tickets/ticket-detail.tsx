@@ -6,7 +6,7 @@ import { useId, useState, type FormEvent } from "react";
 import { ArrowLeft, Archive, FileDown, Paperclip, Pencil, RotateCcw, Users, Plus } from "lucide-react";
 import { TaskDialog } from "@/shared/components/task-dialog";
 import type { SystemRole } from "@/shared/types/foundation";
-import { TicketActionForm, TicketFields, readTicketFields } from "./forms";
+import { TicketActionForm, TicketFields, TicketPeopleFields, readTicketFields } from "./forms";
 import { ticketDate, ticketNumber, ticketPriorityLabels, ticketStatusLabels } from "./presentation";
 import type { TicketDetail, TicketFileSummary, TicketWorkspaceData } from "./types";
 
@@ -129,10 +129,8 @@ export function TicketDetailView({ initialData, workspace, actor, maxUploadBytes
   const [refreshError, setRefreshError] = useState("");
   const ticket = latest?.id === initialData.id && latest.version >= initialData.version ? latest : initialData;
   const files = fileList?.ticketId === ticket.id && fileList.version >= ticket.version ? fileList.files : ticket.files;
-  const board = workspace.boards.find((entry) => entry.id === ticket.boardId);
+  const dashboard = workspace.boards.find((entry) => entry.id === ticket.boardId);
   const currentWorkspace = workspace.workspaces.find((entry) => entry.id === ticket.workspaceId);
-  const members = new Set(currentWorkspace?.members.map((person) => person.userId) ?? []);
-  const candidates = workspace.people.filter((person) => members.has(person.userId) && person.userId !== ticket.creatorUserId);
   const writable = !ticket.archivedAt;
 
   async function refreshTicket(showArchived = includeArchived, throwOnError = false): Promise<void> {
@@ -173,7 +171,7 @@ export function TicketDetailView({ initialData, workspace, actor, maxUploadBytes
     <Link href="/tickets" className="button ticket-back"><ArrowLeft size={17} aria-hidden="true" />Back to tickets</Link>
     <header className="operations-heading ticket-detail-heading">
       <div>
-        <p className="eyebrow">{ticketNumber(ticket.number)} · {currentWorkspace?.name ?? "Company workspace"}{board ? ` / ${board.name}` : ""}</p>
+        <p className="eyebrow">{ticketNumber(ticket.number)} · {currentWorkspace?.name ?? "Company workspace"}{dashboard ? ` / ${dashboard.name}` : ""}</p>
         <h1>{ticket.subject}</h1>
         <div className="ticket-badges"><span className={`ticket-badge ticket-status-${ticket.status.toLowerCase()}`}>{ticketStatusLabels[ticket.status]}</span><span className={`ticket-badge ticket-priority-${ticket.priority.toLowerCase()}`}>{ticketPriorityLabels[ticket.priority]}</span>{ticket.archivedAt ? <span className="ticket-badge">Archived</span> : null}</div>
       </div>
@@ -235,13 +233,15 @@ export function TicketDetailView({ initialData, workspace, actor, maxUploadBytes
       <aside className="ticket-detail-aside">
         <section className="operation-panel"><h2>At a glance</h2><dl className="ticket-facts"><div><dt>Created by</dt><dd>{ticket.creatorName}</dd></div><div><dt>Ticket date</dt><dd>{ticketDate(ticket.ticketDate)}</dd></div><div><dt>Due date</dt><dd>{ticket.dueDate ? ticketDate(ticket.dueDate) : "No due date"}</dd></div><div><dt>Last updated</dt><dd>{dateTime(ticket.updatedAt)}</dd></div></dl></section>
         <section className="operation-panel" aria-labelledby="ticket-people-heading"><div className="ticket-section-heading"><h2 id="ticket-people-heading">People</h2>
-          {ticket.permissions.managePeople && writable ? <TaskDialog triggerLabel="Manage ticket people" triggerText="Manage" title="Manage ticket people" description="Assign work or grant read-only observer access to current workspace members." triggerClassName="button" triggerIcon={<Users size={17} aria-hidden="true" />}>
-            <TicketActionForm label="Manage ticket people" submit="Save people" getCommand={(form) => ({ action: "setParticipants", ticketId: ticket.id, version: ticket.version, assigneeIds: candidates.filter((person) => form.get(`participation-${person.userId}`) === "ASSIGNEE").map((person) => person.userId), observerIds: candidates.filter((person) => form.get(`participation-${person.userId}`) === "OBSERVER").map((person) => person.userId) })} onSuccess={() => saved("Ticket people updated.")} onConflict={() => refreshTicket(includeArchived, true)}>
+          {ticket.permissions.managePeople && writable ? <TaskDialog triggerLabel="Manage ticket people" triggerText="Manage" title="Manage ticket people" description="Assign multiple company people to work, or mention people for read-only access and notifications." triggerClassName="button" triggerIcon={<Users size={17} aria-hidden="true" />}>
+            <TicketActionForm label="Manage ticket people" submit="Save people" getCommand={(form) => ({ action: "setParticipants", ticketId: ticket.id, version: ticket.version, assigneeIds: form.getAll("assigneeIds").map(String), observerIds: form.getAll("observerIds").map(String) })} onSuccess={() => saved("Ticket people updated.")} onConflict={() => refreshTicket(includeArchived, true)}>
               <p>{ticket.creatorName} retains creator access.</p>
-              <div key={ticket.version} className="ticket-people-editor">{candidates.length ? candidates.map((person) => <label key={person.userId}>{person.displayName}<select name={`participation-${person.userId}`} defaultValue={ticket.participants.find((entry) => entry.userId === person.userId)?.participation ?? "NONE"}><option value="NONE">No ticket access</option><option value="ASSIGNEE">Assignee — can work on ticket</option><option value="OBSERVER">Observer — read only</option></select></label>) : <p>No other authorized workspace members are available.</p>}</div>
+              <TicketPeopleFields key={ticket.version} people={workspace.people} creatorUserId={ticket.creatorUserId}
+                assigneeIds={ticket.participants.filter((person) => person.participation === "ASSIGNEE").map((person) => person.userId)}
+                observerIds={ticket.participants.filter((person) => person.participation === "OBSERVER").map((person) => person.userId)} />
             </TicketActionForm>
           </TaskDialog> : null}
-        </div><ul className="operation-list ticket-person-list">{ticket.participants.map((person) => <li key={person.userId}><div><strong>{person.displayName}</strong><span>{person.participation === "CREATOR" ? "Creator" : person.participation === "ASSIGNEE" ? "Assignee" : "Observer · read only"}</span></div></li>)}</ul></section>
+        </div><ul className="operation-list ticket-person-list">{ticket.participants.map((person) => <li key={person.userId}><div><strong>{person.displayName}</strong><span>{person.participation === "CREATOR" ? "Creator" : person.participation === "ASSIGNEE" ? "Assignee" : "Mentioned · read only"}</span></div></li>)}</ul></section>
       </aside>
     </div>
   </div>;

@@ -121,7 +121,7 @@ describe("Company private ticket files", () => {
     expect((await service().list(creator, ticket.id)).files[0].canArchive).toBe(false);
   });
 
-  it("loses direct-file access immediately after participant, membership, scope, or session revocation", async () => {
+  it("revokes participant, supervisory scope and session access while creator access is independent of workspace enrollment", async () => {
     const ticket = await newTicket("Fictional revocable files");
     const attached = await attach(ticket);
     await ticketService.command(superAdmin, { action: "setParticipants", ticketId: ticket.id, version: attached.version, assigneeIds: [], observerIds: [] });
@@ -129,7 +129,7 @@ describe("Company private ticket files", () => {
     await expect(service().read(observer, ticket.id, attached.file.id)).rejects.toMatchObject({ status: 404 });
     const [workspace] = await db.select().from(ticketWorkspaces).where(eq(ticketWorkspaces.id, workspaceId));
     const revoked = await ticketService.command(superAdmin, { action: "setWorkspaceMember", workspaceId, userId: creator.id, active: false, version: workspace.version });
-    await expect(service().read(creator, ticket.id, attached.file.id)).rejects.toMatchObject({ status: 404 });
+    expect((await service().read(creator, ticket.id, attached.file.id)).bytes).toEqual(pdf());
     await ticketService.command(superAdmin, { action: "setWorkspaceMember", workspaceId, userId: creator.id, active: true, version: revoked.version });
     await db.update(adminScopeGrants).set({ active: false }).where(and(eq(adminScopeGrants.userId, manager.id), eq(adminScopeGrants.scopeType, "CLIENT")));
     await expect(service().read(manager, ticket.id, attached.file.id)).rejects.toMatchObject({ status: 404 });
