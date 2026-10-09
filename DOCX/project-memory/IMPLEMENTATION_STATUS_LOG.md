@@ -144,3 +144,12 @@ Desktop/mobile recovery journeys pass in the disposable browser runner. Local
 verification passes 137 unit, 110 component, 43 account/employee integration and
 4 browser cases (294 unique), plus lint, types, scenario registration, whitespace
 and the isolated production build.
+
+
+## 2026-10-09 — Company core tickets completed locally
+
+Implemented the approved Company ticket workflow and Employee Tickets-first workspace. Workspaces/boards with optional Client/Project links, five ticket states, priority, creator/assignee/observer permissions, author-owned work logs, private attachments, in-app notifications and retained archive/restore are connected to persisted authenticated data. Managers retain their existing tools; Employees keep their published schedule, vacations and own profile/skills.
+
+[The scoped delivery report](../phase-reports/SCOPEIS_COMPANY_TICKETS_LOCAL_2026_10_09.md) records actual verification: all 16 aggregate PostgreSQL suites; final ticket/file 24/24; migration 11/11; HTTP 21/21; isolation 9/9; types, lint and isolated production build; ten unique desktop/mobile browser journeys (eight full-run passes plus manager 2/2 after a test-modal dismissal correction). Whole-read retries repair a real PostgreSQL serialization race while rechecking current authorization; retained TEAM history remains protected. The local additive upgrade preserved all 34 prior tables/facts and 15 historical ledger rows. Durable private PDF download after restart and idempotent fictional examples passed.
+
+The approved core is completed, while full Phase 12 remains PARTIAL (4/9 roadmap sub-phases). Future workforce handoffs, direct Location relationships and required-skill semantics remain outside this delivery. Daily work, flowcharts and cost/PDF reporting are user-deferred. No push, production migration or deployment was requested or performed. Initial failed verification attempts and an earlier temporary checkout whose deletion was blocked by automatic review remain documented; final cleanup receipts apply only to owned resources of their respective runs.

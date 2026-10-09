@@ -87,6 +87,22 @@ export const auditActions: Record<string, { label: string; fields: readonly stri
   "evidence.review_reset": { label: "Capability evidence review reset after an owner change", fields: [...shared, "kind", "cause"] },
   "discussion.message_created": { label: "Discussion message posted", fields: [...shared, "parentType", "parentId", "messageId", "contentLength", "participantCount"] },
   "discussion.message_archived": { label: "Discussion message archived by its author", fields: [...shared, "parentType", "parentId", "messageId"] },
+  "ticket.workspace_created": { label: "Ticket workspace created", fields: ["linked"] },
+  "ticket.workspace_updated": { label: "Ticket workspace updated", fields: ["version"] },
+  "ticket.member_granted": { label: "Ticket workspace access granted", fields: ["userId"] },
+  "ticket.member_revoked": { label: "Ticket workspace access revoked", fields: ["userId"] },
+  "ticket.board_created": { label: "Ticket board created", fields: ["workspaceId", "status"] },
+  "ticket.board_updated": { label: "Ticket board updated", fields: ["status"] },
+  "ticket.created": { label: "Ticket created", fields: ["boardId", "status", "participantCount"] },
+  "ticket.updated": { label: "Ticket updated", fields: ["version"] },
+  "ticket.participants_updated": { label: "Ticket people updated", fields: ["version"] },
+  "ticket.work_log_created": { label: "Ticket work log created", fields: ["version", "workLogId"] },
+  "ticket.work_log_updated": { label: "Ticket work log updated", fields: ["version", "workLogId"] },
+  "ticket.archived": { label: "Ticket archived", fields: ["version"] },
+  "ticket.restored": { label: "Ticket restored", fields: ["version"] },
+  "ticket.file_created": { label: "Private ticket file attached", fields: ["fileId", "contentType", "byteSize", "version"] },
+  "ticket.file_archived": { label: "Private ticket file archived", fields: ["fileId", "fileVersion", "version"] },
+  "ticket.file_restored": { label: "Private ticket file restored", fields: ["fileId", "fileVersion", "version"] },
   // Phase 11 reporting: export provenance only. Row contents, employee names and file bytes are never recorded.
   "report.export.generated": { label: "Report export generated", fields: ["reportKey", "format", "from", "to", "rowCount", "outcome"] },
   "report.export.refused": { label: "Report export refused", fields: ["reportKey", "reason"] },
@@ -102,6 +118,25 @@ function displayValue(value: unknown): string | null {
   return null;
 }
 
+/** Ticket metadata uses validated identifiers, enum states and counts, never free-form strings. */
+function ticketDisplayValue(action: string, key: string, value: unknown): string | null {
+  if (["version", "fileVersion", "participantCount", "byteSize"].includes(key)) {
+    return typeof value === "number" && Number.isSafeInteger(value) && value >= 0 ? String(value) : null;
+  }
+  if (key === "linked") return typeof value === "boolean" ? displayValue(value) : null;
+  if (key === "status") {
+    const statuses = action.startsWith("ticket.board_")
+      ? ["DRAFT", "PUBLISHED", "ARCHIVED"]
+      : ["PLANNED", "OPEN", "IN_PROGRESS", "ON_HOLD", "CLOSED"];
+    return typeof value === "string" && statuses.includes(value) ? value : null;
+  }
+  if (key === "contentType") {
+    return typeof value === "string" && ["application/pdf", "image/jpeg", "image/png", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].includes(value) ? value : null;
+  }
+  if (key === "userId") return typeof value === "string" && /^[a-zA-Z0-9:_-]{1,80}$/.test(value) ? value : null;
+  return typeof value === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value) ? value : null;
+}
+
 /**
  * Projects metadata through the action allowlist. Unknown actions render no metadata, and a nested
  * object, array, or null value is always dropped rather than stringified.
@@ -113,7 +148,7 @@ export function auditMetadataFields(action: string, metadata: unknown): { key: s
   return allowed.flatMap((key) => {
     if (action === "auth.password_session.refused" && !["invalid_credentials", "inactive", "locked"].includes(String(record[key]))) return [];
     if (action === "auth.credentials.bootstrapped" && key === "outcome" && record[key] !== "initialized" && record[key] !== "unchanged") return [];
-    const value = displayValue(record[key]);
+    const value = action.startsWith("ticket.") ? ticketDisplayValue(action, key, record[key]) : displayValue(record[key]);
     return value === null ? [] : [{ key, value }];
   });
 }

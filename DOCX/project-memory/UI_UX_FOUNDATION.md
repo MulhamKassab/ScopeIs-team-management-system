@@ -12,11 +12,11 @@ Primary brand color is ScopeIs blue `#163B99`; ScopeIs orange `#F26608` is a spa
 
 ## Shell and navigation
 
-Desktop uses a collapsible left application sidebar, persistent top header, full-width work area, local collapse preference, notification shortcut, theme control, persona/role display, logout, and a persistent Mock authentication marker. The sidebar preserves room for later schedule and map workspaces. A disabled `Ticket System — Phase 12` entry is deliberately non-functional.
+Desktop uses a collapsible left application sidebar, persistent top header, full-width work area, local collapse preference, notification shortcut, theme control, persona/role display and logout. A persistent Mock authentication marker is shown only when mock authentication is actually active. The original disabled Ticket placeholder is superseded for the authorized Company core by the 2026-10-08 requirements below.
 
 Mobile uses a compact header plus bottom navigation of four role-specific primary destinations and `More`. The drawer exposes every remaining authorized destination; it is not a reduced-function mobile demo. Narrow layouts use full-width content and 44px-or-larger touch targets.
 
-Navigation derives from centralized capability results on the server. Super Admin receives global empty shells; Admin receives only permitted scoped-management shells plus own leave/profile; Employee receives only personal/published/shared-work shells. UI visibility is a usability aid only—the same server policy protects routes and APIs.
+Navigation derives from centralized capability results on the server. Super Admin receives global management tools; Admin receives permitted scoped-management tools plus own leave/profile; Employee receives only personal, published and explicitly shared work. UI visibility is a usability aid only—the same server policy protects routes and APIs.
 
 ## Type, spacing, components, and accessibility
 
@@ -111,3 +111,17 @@ Employee assignments use Team and Designation dropdowns linked to their manageme
 ## Confirmed application-wide user journeys — 2026-10-06
 
 The user requested a simpler, clearer story for every tab. [USER_JOURNEYS.md](USER_JOURNEYS.md) defines the purpose, audience, path and result for all 20 pages. Navigation uses everyday labels and task groups; optional native help gives two or three role-specific steps and authorized related tools. Home prioritizes decisions and core published-plan figures; supporting information remains available through disclosure. Skills has one selected-person context, coverage work is searchable and grouped by day, conversations show request identity before messages, reports have task search, and technical audit references are secondary. Job titles is the UI name for Designations; neither label changes role or access semantics. New request work context uses current database role and scope checks and is never projected to Employees. The existing accessibility, mobile, RTL, theme, privacy and finite-motion foundations remain binding.
+
+## 2026-10-08 — Authorized Company ticket workspace
+
+The product owner authorized the [core Company ticket workflow](PHASE_12_COMPANY_TICKET_IMPLEMENTATION_DECISIONS.md). The approved core is implemented and locally verified; see [the delivery report](../phase-reports/SCOPEIS_COMPANY_TICKETS_LOCAL_2026_10_09.md). The earlier disabled-ticket guidance is historical for this delivered slice; unfinished settings remain secondary and clearly labelled.
+
+- Employees land on Tickets after sign-in and root visits, subject to the existing required-password-change gate. Their four primary destinations are Tickets, Schedule, Vacations and My profile. My profile includes their own recorded skills; the standalone Skills destination is no longer a primary Employee tab. Home, Notifications and authorized My requests remain discoverable through secondary navigation.
+- Managers retain their existing primary destinations and full authorized tools, with Tickets added. Ticket access never removes a management tool or widens a workforce capability.
+- Keep Company Overview and operational Tickets in one workspace. Search, workspace, board, status and priority filters are retained when changing views. List and Board show the same authorized records. Employees default to operational Tickets; managers can begin with the overview.
+- Use focused task dialogs for creation, membership, board lifecycle and ticket edits. Detail pages bring ticket content, people, work logs and private files together with permission-specific actions. Status and priority use readable text; On hold explains its required reason.
+- A read-only observer sees the ticket and its permitted history without edit, work-log, upload, participation or archive actions. Creator and assignee actions follow the server's current permissions. Membership and participant removal immediately change subsequent access.
+- Show stale-write feedback in the task context with an explicit reload of the current record. Retain history through Archive and Restore. Do not silently overwrite a newer edit or promise permanent deletion.
+- Filters, ticket facts, cards, board columns and actions must reflow or provide a labelled internal scroll region at narrow widths. Preserve 44px compact controls, keyboard-operable dialogs, focus restoration, RTL logical properties, both themes and reduced motion.
+
+Daily work lists, flowchart editing, cost/PDF reports, reminders and future schedule/coverage handoffs are outside this first delivery. Ticket work logs represent recorded ticket effort; they do not replace the authoritative schedule or attendance policy.

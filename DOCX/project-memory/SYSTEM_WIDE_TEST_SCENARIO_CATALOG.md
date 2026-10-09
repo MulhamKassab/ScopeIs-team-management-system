@@ -191,3 +191,24 @@ coverage, evidence, and collaboration services and is repeated three times by `S
 
 The full hardening report is
 [`SCOPEIS_PRE_PHASE_12_SYSTEM_WIDE_HARDENING_AND_REGRESSION_LOCK_R1.md`](../phase-reports/SCOPEIS_PRE_PHASE_12_SYSTEM_WIDE_HARDENING_AND_REGRESSION_LOCK_R1.md).
+
+## Company ticket verification registration — 2026-10-09
+
+The current machine-readable manifest uses `SCOPEIS_PHASE_12_COMPANY_TICKETS_LOCAL_INTEGRATION_R1` for the expanded local contract. Historical full-system receipts remain bounded to their recorded source. Registration below does not claim a new aggregate lock result or production readiness; current results belong in the integration report.
+
+| ID | Phase | Module | Layer | Evidence |
+|---|---|---|---|---|
+| TKT-01 | 12 | ticket role policy and command validation | unit | test/unit/tickets.test.ts |
+| TKT-02 | 12 | current membership, publication, Admin scope and Employee work | integration | test/integration/tickets.test.ts |
+| TKT-03 | 12 | live revocation, competing edits, bounded read retries and atomic audit rollback | integration | test/integration/tickets.test.ts |
+| TKT-04 | 12 | private files, retained history, revocation and compensation | integration | test/integration/ticket-files.test.ts |
+| TKT-05 | 12 | fresh install, prior-workforce preservation and schema parity | migration | test/migration/phase2-database-foundation.test.ts |
+| TKT-06 | 12 | Company/Tickets views, list/board and retained shared filters | component | test/component/ticket-workspace.test.tsx |
+| TKT-07 | 12 | ticket details, logs, files and permission-sensitive actions | component | test/component/ticket-detail.test.tsx |
+| TKT-08 | 12 | desktop and phone Company ticket journey | e2e | test/e2e/tickets.spec.ts |
+| TKT-09 | 12 | Employee landing and manager navigation continuity | unit | test/unit/workspace-landing.test.ts |
+| TKT-10 | 12 | protected ticket pages and HTTP APIs | route-certification | test/route-certification/phase1-http.test.ts |
+| TKT-11 | 12 | file signatures, limits and owned test storage | unit | test/unit/ticket-files.test.ts |
+| TKT-12 | 12 | generic ticket notifications and current authorized destinations | unit | test/unit/ticket-notification-destinations.test.ts |
+
+`npm run test:tickets` runs the service and private-file integration suites in separate owned disposable databases. `npm run test:tickets-e2e` owns its database, loopback port, safe build and private fictional upload directory. Both are included in the aggregate runner registration. The earlier monthly timetable integration file is also explicitly registered so the fail-closed manifest matches the existing aggregate integration gate.

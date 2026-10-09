@@ -2,7 +2,7 @@
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { ApplicationShell } from "@/shared/components/shell";
-import { modules } from "@/modules/navigation/navigation";
+import { modules, navigationFor } from "@/modules/navigation/navigation";
 import type { AuthenticatedActor } from "@/shared/types/foundation";
 
 vi.mock("next/navigation", () => ({ usePathname: () => "/dashboard", useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }) }));
@@ -18,6 +18,21 @@ function openMore() {
 }
 
 describe("mobile More navigation dialog", () => {
+  it("gives Employee Tickets, Schedule, Vacations and profile while More preserves personal updates", () => {
+    const employee = { ...actor, role: "EMPLOYEE" as const };
+    render(<ApplicationShell actor={employee} navigation={navigationFor(employee)} title="Team Management"><p>Employee work</p></ApplicationShell>);
+    const primary = screen.getByRole("navigation", { name: "Mobile primary navigation" });
+    expect(within(primary).getAllByRole("link").map((link) => link.getAttribute("href"))).toEqual(["/tickets", "/schedule", "/leave", "/profile"]);
+    expect(within(primary).getByRole("link", { name: "Vacations" })).toHaveTextContent("Vacations");
+    expect(screen.queryByText("Ticket System")).not.toBeInTheDocument();
+    fireEvent.click(within(primary).getByRole("button", { name: "More" }));
+    const dialog = screen.getByRole("dialog", { name: "More navigation" });
+    expect(within(dialog).getByRole("link", { name: "Home" })).toHaveAttribute("href", "/dashboard");
+    expect(within(dialog).getByRole("link", { name: "Notifications" })).toHaveAttribute("href", "/notifications");
+    expect(within(dialog).getByRole("link", { name: "My requests" })).toHaveAttribute("href", "/requests");
+    expect(within(dialog).queryByRole("link", { name: "People" })).not.toBeInTheDocument();
+  });
+
   it("moves focus inside, marks the background inert, and restores focus and scrolling on Escape", () => {
     document.body.style.overflow = "auto";
     const { trigger, dialog } = openMore();

@@ -422,3 +422,5 @@ export const scheduleAssignmentRelations = relations(scheduleAssignments, ({ man
 }));
 export const assignmentSkillRequirementRelations = relations(assignmentSkillRequirements, ({ one }) => ({ assignment: one(scheduleAssignments, { fields: [assignmentSkillRequirements.scheduleAssignmentId], references: [scheduleAssignments.id] }), skill: one(skills, { fields: [assignmentSkillRequirements.skillId], references: [skills.id] }) }));
 export const leaveRequestRelations = relations(leaveRequests, ({ one }) => ({ employee: one(users, { fields: [leaveRequests.employeeUserId], references: [users.id], relationName: "leaveRequestEmployee" }), reviewer: one(users, { fields: [leaveRequests.reviewedByUserId], references: [users.id], relationName: "leaveRequestReviewer" }) }));
+
+export * from "./tickets";

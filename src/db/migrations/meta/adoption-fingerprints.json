@@ -89,6 +89,12 @@
       "idx": 14,
       "when": 1791283248313,
       "hash": "ca3379424eb3e39683beacdd598b1de68892f87fcb5a55268bd57dff9b4416dd"
+    },
+    {
+      "tag": "0015_company_tickets",
+      "idx": 15,
+      "when": 1791487936805,
+      "hash": "4c329595f8939836a0cac9d00d0fab5a904e80e0e5c5a78b52de8cac44d50276"
     }
   ],
   "states": {
@@ -1073,6 +1079,86 @@
         "schedule_period_status",
         "scope_type",
         "system_role"
+      ]
+    },
+    "companyTickets": {
+      "hash": "05604ebb77f36d850f12cc758da3c40b4562c8ef42e26634a798c98831ffc04d",
+      "sectionHashes": {
+        "enums": "a73461811b1d8e55a0eed3bfe58ba39d429df9fbae3358ee26674568efe5d2d1",
+        "columns": "95295a9f159dc6d2a28fd1aaca6ea6b89419ab2d8d61cdb42ca95f7c1e2f687b",
+        "constraints": "e7d6a507285f8593666def29eb6e51da9dfee9403c25e2533ed3a2115371ca07",
+        "indexes": "d094bd5a93b7bf06b39e4d2ae2c969696741dd4cdc3f8f067bb8ee9e46727776"
+      },
+      "tableHashes": {
+        "ticket_boards": "22a4b8a246229787fc1cb0f7f2cdc5bc880f6e6a7eebd4aacb04e9d9187ccbc5",
+        "ticket_files": "afe220481af51d989986d87ef32274925d64bf9bf0c8eeddb6b9e0e47a6493a3",
+        "ticket_participants": "18c3e936c6e252d4361d8ab13cd06097011ab69917ac07b8f887ba5f78d0604b",
+        "ticket_work_logs": "a98f1d083cc537f042a521422875fda01c6c0e618e4a6e19fa2877761584b9be",
+        "ticket_workspace_members": "d655d08920ecf62b66bc5179f8840ce847e0d5f769e4fc3130def1aa6f13b080",
+        "ticket_workspaces": "47021a8a37945721a7bf311b043aad57819e0d0d02b8668ae1f20c4b2b8033d2",
+        "tickets": "c4aee968b175296f8710e91aa552fadcd86929858e22959d10c52c2076ad6c6d"
+      },
+      "tables": [
+        "admin_scope_grants",
+        "arrangement_labels",
+        "assignment_skill_requirements",
+        "audit_events",
+        "clients",
+        "designations",
+        "discussion_messages",
+        "discussion_threads",
+        "employee_code_sequence",
+        "employee_evidence",
+        "employee_files",
+        "employee_management_notes",
+        "employee_planning_locations",
+        "employee_profiles",
+        "employee_skills",
+        "leave_allowance_settings",
+        "leave_requests",
+        "locations",
+        "notifications",
+        "operational_contacts",
+        "operational_employee_relations",
+        "operational_note_revisions",
+        "operational_notes",
+        "project_locations",
+        "projects",
+        "replacement_requests",
+        "schedule_assignments",
+        "schedule_periods",
+        "sessions",
+        "skills",
+        "staffing_requirements",
+        "teams",
+        "ticket_boards",
+        "ticket_files",
+        "ticket_participants",
+        "ticket_work_logs",
+        "ticket_workspace_members",
+        "ticket_workspaces",
+        "tickets",
+        "user_credentials",
+        "users"
+      ],
+      "enumTypes": [
+        "authentication_mode",
+        "evidence_kind",
+        "evidence_review_state",
+        "leave_request_status",
+        "note_visibility",
+        "operational_lifecycle_status",
+        "project_status",
+        "replacement_effect_status",
+        "replacement_request_intent",
+        "replacement_request_status",
+        "schedule_period_status",
+        "scope_type",
+        "system_role",
+        "ticket_board_status",
+        "ticket_participant_role",
+        "ticket_priority",
+        "ticket_status"
       ]
     }
   }

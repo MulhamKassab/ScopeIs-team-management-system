@@ -57,14 +57,18 @@ describe("required password change at the session boundary", () => {
     expect(state.createAccount).not.toHaveBeenCalled();
   });
 
-  it("keeps the password-change action available and rotates its cookie before redirecting", async () => {
+  it.each(["SUPER_ADMIN", "ADMIN", "EMPLOYEE"] as const)("keeps the %s password-change action available and rotates its cookie before its role landing", async (role) => {
+    state.findActiveSession.mockResolvedValue({
+      session: { id: "session-1", authenticationMode: "password", sessionVersion: 1 },
+      user: { id: "user-1", displayName: "Fictional User", role, sessionVersion: 1 },
+    });
     const expiresAt = new Date("2027-01-01T00:00:00Z");
     state.changeOwnPassword.mockResolvedValue({ token: "rotated-token", expiresAt });
     const form = new FormData();
     form.set("currentPassword", "temporary1");
     form.set("newPassword", "replacement1");
     form.set("confirmPassword", "replacement1");
-    await expect(changeOwnPasswordAction({}, form)).rejects.toThrow("redirect:/dashboard");
+    await expect(changeOwnPasswordAction({}, form)).rejects.toThrow(`redirect:${role === "EMPLOYEE" ? "/tickets" : "/dashboard"}`);
     expect(state.changeOwnPassword).toHaveBeenCalledWith(expect.objectContaining({ id: "user-1" }), expect.anything());
     expect(state.cookieSet).toHaveBeenCalledWith("scopeis_session", "rotated-token", expect.objectContaining({ expires: expiresAt, httpOnly: true, sameSite: "lax" }));
   });

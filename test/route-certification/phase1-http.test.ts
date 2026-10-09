@@ -12,16 +12,18 @@ const createdSessionIds = new Set<string>();
 // These per-role module sets are the certified contract and must mirror
 // `src/modules/authorization/capabilities.ts`. `moduleKeys` deliberately lists every module so a
 // persona can never silently skip a route check.
-const moduleKeys = ["dashboard", "employees", "accounts", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "audit", "settings", "profile", "requests"] as const;
+const moduleKeys = ["dashboard", "tickets", "employees", "teams", "designations", "accounts", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "audit", "settings", "profile", "requests"] as const;
 const superAdminModules = [...moduleKeys];
-const adminModules = ["dashboard", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "profile"];
-const employeeModules = ["dashboard", "skills", "schedule", "leave", "profile", "notifications", "requests"];
+const adminModules = ["dashboard", "tickets", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "profile"];
+const employeeModules = ["dashboard", "tickets", "skills", "schedule", "leave", "profile", "notifications", "requests"];
 
 type Persona = {
   id: string;
   displayName: string;
   role: "SUPER_ADMIN" | "ADMIN" | "EMPLOYEE";
   allowedModules: string[];
+  /** Recorded skills move into My profile in Employee navigation; the existing direct route remains authorized. */
+  navigationModules?: string[];
   /**
    * Modules the role holds no capability for but where a dedicated page deliberately renders a
    * non-enumerating "management-only" refusal instead of a 404. The page must stay unlinked in
@@ -36,9 +38,12 @@ const personas: Persona[] = [
   { id: "mock-super-admin-nora", displayName: "Nora Albright", role: "SUPER_ADMIN", allowedModules: superAdminModules, alphaStatus: 200, bravoStatus: 200 },
   { id: "mock-admin-ava", displayName: "Ava Mercer", role: "ADMIN", allowedModules: adminModules, alphaStatus: 200, bravoStatus: 403 },
   { id: "mock-admin-ben", displayName: "Ben Iqbal", role: "ADMIN", allowedModules: adminModules, alphaStatus: 403, bravoStatus: 200 },
-  { id: "mock-employee-cora", displayName: "Cora Bell", role: "EMPLOYEE", allowedModules: employeeModules, refusalModules: ["coverage", "replacements"], alphaStatus: 403, bravoStatus: 403 },
-  { id: "mock-employee-dan", displayName: "Dan Rowan", role: "EMPLOYEE", allowedModules: employeeModules, refusalModules: ["coverage", "replacements"], alphaStatus: 403, bravoStatus: 403 },
+  { id: "mock-employee-cora", displayName: "Cora Bell", role: "EMPLOYEE", allowedModules: employeeModules, navigationModules: employeeModules.filter((key) => key !== "skills"), refusalModules: ["coverage", "replacements"], alphaStatus: 403, bravoStatus: 403 },
+  { id: "mock-employee-dan", displayName: "Dan Rowan", role: "EMPLOYEE", allowedModules: employeeModules, navigationModules: employeeModules.filter((key) => key !== "skills"), refusalModules: ["coverage", "replacements"], alphaStatus: 403, bravoStatus: 403 },
 ];
+
+const unknownTicketId = "00000000-0000-4000-8000-000000000998";
+const unknownTicketFileId = "00000000-0000-4000-8000-000000000997";
 
 function tokenHash(token: string) {
   return createHash("sha256").update(token).digest("hex");
@@ -54,6 +59,15 @@ async function request(path: string, options: RequestInit = {}) {
   return fetch(`${baseUrl}${path}`, { redirect: "manual", ...options });
 }
 
+async function privateJson(response: Response, status: number, rawToken?: string): Promise<unknown> {
+  expect(response.status).toBe(status);
+  expect(response.headers.get("cache-control")).toContain("no-store");
+  expect(response.headers.get("content-type")).toContain("application/json");
+  const body = await response.text();
+  safeResponse(body, rawToken);
+  return JSON.parse(body) as unknown;
+}
+
 async function login(personaId: string) {
   const response = await request("/api/auth/mock-login", {
     method: "POST",
@@ -61,7 +75,7 @@ async function login(personaId: string) {
     body: JSON.stringify({ personaId }),
   });
   expect(response.status).toBe(200);
-  expect(await response.json()).toEqual({ ok: true, redirectTo: "/dashboard" });
+  expect(await response.json()).toEqual({ ok: true, redirectTo: personaId.startsWith("mock-employee-") ? "/tickets" : "/dashboard" });
   const setCookie = response.headers.get("set-cookie");
   expect(setCookie).toBeTruthy();
   const match = setCookie?.match(/scopeis_session=([^;]+)/);
@@ -91,6 +105,17 @@ async function login(personaId: string) {
 
 async function logout(cookie: string) {
   return request("/api/auth/logout", { method: "POST", headers: { Cookie: cookie, Origin: baseUrl } });
+}
+
+async function ticketCommand(session: Awaited<ReturnType<typeof login>>, input: Record<string, unknown>) {
+  const response = await request("/api/tickets/commands", {
+    method: "POST", headers: { Cookie: session.cookie, Origin: baseUrl, "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  const receipt = await privateJson(response, 200, session.token) as { id: string; version: number };
+  expect(receipt.id).toMatch(/^[0-9a-f-]{36}$/i);
+  expect(receipt.version).toBeGreaterThan(0);
+  return receipt;
 }
 
 async function assertScope(cookie: string, scope: string, expectedStatus: number) {
@@ -128,7 +153,7 @@ describe("Phase 1 public HTTP route certification", () => {
     expect(loginHtml).not.toContain('href="/map"');
     expect(loginHtml).not.toContain('href="/audit"');
 
-    for (const path of ["/dashboard", "/map", "/audit", "/profile"]) {
+    for (const path of ["/dashboard", "/map", "/audit", "/profile", "/tickets", `/tickets/${unknownTicketId}`]) {
       const response = await request(path);
       expect([303, 307, 308]).toContain(response.status);
       expect(response.headers.get("location")).toBe("/login");
@@ -165,13 +190,16 @@ describe("Phase 1 public HTTP route certification", () => {
       expect(dashboard.status).toBe(200);
       const navigationHtml = await dashboard.text();
       expect(navigationHtml).toContain(persona.displayName);
-      expect(navigationHtml).toContain("Ticket System");
-      expect(navigationHtml).toContain('aria-disabled="true"');
+      expect(navigationHtml).toContain('href="/tickets"');
+      // Dashboard cards can link to an authorized secondary route without adding a primary tab.
+      const primaryNavigationHtml = [...navigationHtml.matchAll(/<nav\b[^>]*aria-label="Primary navigation"[^>]*>[\s\S]*?<\/nav>/g)].map((match) => match[0]).join("");
+      expect(primaryNavigationHtml).toBeTruthy();
 
       for (const moduleKey of moduleKeys) {
         const allowed = persona.allowedModules.includes(moduleKey);
         const refusal = (persona.refusalModules ?? []).includes(moduleKey);
-        expect(navigationHtml.includes(`href="/${moduleKey}"`), `${persona.id} navigation for ${moduleKey}`).toBe(allowed);
+        const linked = (persona.navigationModules ?? persona.allowedModules).includes(moduleKey);
+        expect(primaryNavigationHtml.includes(`href="/${moduleKey}"`), `${persona.id} navigation for ${moduleKey}`).toBe(linked);
         const page = await request(`/${moduleKey}`, { headers: { Cookie: session.cookie } });
         expect(page.status, `${persona.id} direct page /${moduleKey}`).toBe(allowed || refusal ? 200 : 404);
         const html = await page.text();
@@ -216,7 +244,7 @@ describe("Phase 1 public HTTP route certification", () => {
       const allowed = await request("/accounts", { headers: { Cookie: superAdmin.cookie } });
       expect(allowed.status).toBe(200);
       const html = await allowed.text();
-      expect(html).toContain("Account administration");
+      expect(html).toContain('<h2 id="accounts-title">Accounts</h2>');
       expect(html).toContain("Passwords cannot be viewed");
       expect(html).not.toMatch(/scrypt\$|password_hash|passwordHash/i);
       safeResponse(html, superAdmin.token);
@@ -430,5 +458,136 @@ describe("Phase 1 public HTTP route certification", () => {
     safeResponse(await denied.text(), employee.token);
     await logout(employee.cookie);
   });
+
+  it("protects Company ticket routes and keeps missing ticket and file identities private", async () => {
+    const apiPaths = ["/api/tickets", `/api/tickets/${unknownTicketId}`, `/api/tickets/${unknownTicketId}/files`, `/api/tickets/${unknownTicketId}/files/${unknownTicketFileId}`];
+    for (const path of apiPaths) await privateJson(await request(path), 401);
+    for (const path of ["/api/tickets/commands", `/api/tickets/${unknownTicketId}/files`, `/api/tickets/${unknownTicketId}/files/${unknownTicketFileId}`]) {
+      await privateJson(await request(path, { method: "POST", headers: { Origin: baseUrl, "Content-Type": "application/json" }, body: "{}" }), 401);
+    }
+    for (const persona of personas) {
+      const session = await login(persona.id);
+      try {
+        const page = await request("/tickets", { headers: { Cookie: session.cookie } });
+        expect(page.status).toBe(200);
+        safeResponse(await page.text(), session.token);
+        const data = await privateJson(await request("/api/tickets", { headers: { Cookie: session.cookie } }), 200, session.token);
+        expect(data).toMatchObject({ workspaces: [], boards: [], tickets: [] });
+        if (persona.role === "EMPLOYEE") expect(data).toMatchObject({ people: [], clients: [], projects: [] });
+        const missingPage = await request(`/tickets/${unknownTicketId}`, { headers: { Cookie: session.cookie } });
+        expect(missingPage.status).toBe(404);
+        safeResponse(await missingPage.text(), session.token);
+        for (const path of apiPaths.slice(1)) {
+          expect(await privateJson(await request(path, { headers: { Cookie: session.cookie } }), 404, session.token))
+            .toEqual({ error: "FORBIDDEN", message: "This resource is unavailable." });
+        }
+        // A guessed ticket is refused before an upload body is read or a storage object is created.
+        await privateJson(await request(`/api/tickets/${unknownTicketId}/files`, { method: "POST", headers: { Cookie: session.cookie, Origin: baseUrl } }), 404, session.token);
+        await privateJson(await request(`/api/tickets/${unknownTicketId}/files/${unknownTicketFileId}`, {
+          method: "POST", headers: { Cookie: session.cookie, Origin: baseUrl, "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "archive", version: 1, fileVersion: 1 }),
+        }), 404, session.token);
+      } finally { expect((await logout(session.cookie)).status).toBe(200); }
+    }
+  }, 20_000);
+
+  it("refuses unsafe ticket origins, malformed commands and unsupported methods without ticket state", async () => {
+    const session = await login("mock-super-admin-nora");
+    const countState = () => pool.query(`select
+      (select count(*)::int from ticket_workspaces) as workspaces,
+      (select count(*)::int from ticket_boards) as boards,
+      (select count(*)::int from tickets) as tickets,
+      (select count(*)::int from ticket_work_logs) as logs,
+      (select count(*)::int from ticket_files) as files`);
+    const before = await countState();
+    try {
+      for (const path of ["/api/tickets/commands", `/api/tickets/${unknownTicketId}/files`, `/api/tickets/${unknownTicketId}/files/${unknownTicketFileId}`]) {
+        for (const origin of [undefined, "https://untrusted.example"]) {
+          const headers: Record<string, string> = { Cookie: session.cookie, "Content-Type": "application/json" };
+          if (origin) headers.Origin = origin;
+          await privateJson(await request(path, { method: "POST", headers, body: "{}" }), 403, session.token);
+        }
+      }
+      for (const body of ["{", "null", "[]", "{}", JSON.stringify({ action: "deleteEverything" }), JSON.stringify({ action: "createWorkspace", name: "Fictional", role: "SUPER_ADMIN" }), JSON.stringify({ action: "createWorkspace", name: "x".repeat(66_000) })]) {
+        await privateJson(await request("/api/tickets/commands", {
+          method: "POST", headers: { Cookie: session.cookie, Origin: baseUrl, "Content-Type": "application/json" }, body,
+        }), 400, session.token);
+      }
+      await privateJson(await request("/api/tickets/commands", {
+        method: "POST", headers: { Cookie: session.cookie, Origin: baseUrl, "Content-Type": "text/plain" }, body: "{}",
+      }), 400, session.token);
+      for (const [path, method] of [["/api/tickets/commands", "GET"], ["/api/tickets", "POST"], [`/api/tickets/${unknownTicketId}`, "DELETE"], [`/api/tickets/${unknownTicketId}/files`, "PUT"], [`/api/tickets/${unknownTicketId}/files/${unknownTicketFileId}`, "DELETE"]]) {
+        expect((await request(path, { method, headers: { Cookie: session.cookie, Origin: baseUrl } })).status, `${method} ${path}`).toBe(405);
+      }
+      expect((await countState()).rows[0]).toEqual(before.rows[0]);
+    } finally { expect((await logout(session.cookie)).status).toBe(200); }
+  }, 20_000);
+
+  it("enforces creator, assignee and read-only observer ticket access over HTTP", async () => {
+    const manager = await login("mock-super-admin-nora");
+    const scopedAdmin = await login("mock-admin-ava");
+    const creator = await login("mock-employee-cora");
+    const colleague = await login("mock-employee-dan");
+    try {
+      // All business writes below reach only this runner's disposable fictional database.
+      let workspace = await ticketCommand(manager, { action: "createWorkspace", name: "Fictional HTTP ticket certification" });
+      workspace = await ticketCommand(manager, { action: "setWorkspaceMember", workspaceId: workspace.id, userId: "mock-employee-cora", active: true, version: workspace.version });
+      workspace = await ticketCommand(manager, { action: "setWorkspaceMember", workspaceId: workspace.id, userId: "mock-employee-dan", active: true, version: workspace.version });
+      const board = await ticketCommand(manager, { action: "createBoard", workspaceId: workspace.id, name: "Fictional published board", status: "PUBLISHED", version: workspace.version });
+      let ticket = await ticketCommand(creator, { action: "createTicket", boardId: board.id, version: board.version, subject: "Fictional employee ticket", ticketDate: "2027-01-03" });
+      const detailPath = `/api/tickets/${ticket.id}`;
+      const missing = await privateJson(await request(`/api/tickets/${unknownTicketId}`, { headers: { Cookie: colleague.cookie } }), 404, colleague.token);
+      expect(await privateJson(await request(detailPath, { headers: { Cookie: colleague.cookie } }), 404, colleague.token)).toEqual(missing);
+      expect(await privateJson(await request(detailPath, { headers: { Cookie: scopedAdmin.cookie } }), 404, scopedAdmin.token)).toEqual(missing);
+      const employeeData = await privateJson(await request("/api/tickets", { headers: { Cookie: colleague.cookie } }), 200, colleague.token);
+      expect(employeeData).toMatchObject({ tickets: [], people: [], clients: [], projects: [] });
+
+      ticket = await ticketCommand(manager, { action: "setParticipants", ticketId: ticket.id, version: ticket.version, assigneeIds: [], observerIds: ["mock-employee-dan"] });
+      expect(await privateJson(await request(detailPath, { headers: { Cookie: colleague.cookie } }), 200, colleague.token)).toMatchObject({ ticket: {
+        id: ticket.id, permissions: { edit: false, managePeople: false, archive: false, restore: false, log: false, files: false },
+      } });
+      const observerPage = await request(`/tickets/${ticket.id}`, { headers: { Cookie: colleague.cookie } });
+      expect(observerPage.status).toBe(200);
+      safeResponse(await observerPage.text(), colleague.token);
+      for (const input of [
+        { action: "updateTicket", status: "CLOSED" },
+        { action: "addWorkLog", description: "Fictional refused observer work" },
+        { action: "setParticipants", assigneeIds: ["mock-employee-dan"], observerIds: [] },
+        { action: "archiveTicket" },
+      ]) {
+        await privateJson(await request("/api/tickets/commands", {
+          method: "POST", headers: { Cookie: colleague.cookie, Origin: baseUrl, "Content-Type": "application/json" },
+          body: JSON.stringify({ ...input, ticketId: ticket.id, version: ticket.version }),
+        }), 404, colleague.token);
+      }
+      await privateJson(await request(`/api/tickets/${ticket.id}/files`, { method: "POST", headers: { Cookie: colleague.cookie, Origin: baseUrl } }), 404, colleague.token);
+      expect(await privateJson(await request(detailPath, { headers: { Cookie: creator.cookie } }), 200, creator.token)).toMatchObject({ ticket: { version: ticket.version, status: "OPEN", workLogs: [] } });
+
+      ticket = await ticketCommand(creator, { action: "updateTicket", ticketId: ticket.id, version: ticket.version, status: "CLOSED" });
+      ticket = await ticketCommand(manager, { action: "setParticipants", ticketId: ticket.id, version: ticket.version, assigneeIds: ["mock-employee-dan"], observerIds: [] });
+      const staleVersion = ticket.version;
+      ticket = await ticketCommand(colleague, { action: "updateTicket", ticketId: ticket.id, version: ticket.version, status: "IN_PROGRESS" });
+      await privateJson(await request("/api/tickets/commands", {
+        method: "POST", headers: { Cookie: colleague.cookie, Origin: baseUrl, "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "updateTicket", ticketId: ticket.id, version: staleVersion, subject: "Fictional stale edit" }),
+      }), 409, colleague.token);
+      await privateJson(await request("/api/tickets/commands", {
+        method: "POST", headers: { Cookie: colleague.cookie, Origin: baseUrl, "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "archiveTicket", ticketId: ticket.id, version: ticket.version }),
+      }), 404, colleague.token);
+      ticket = await ticketCommand(creator, { action: "archiveTicket", ticketId: ticket.id, version: ticket.version });
+      ticket = await ticketCommand(creator, { action: "restoreTicket", ticketId: ticket.id, version: ticket.version });
+      expect(await privateJson(await request(detailPath, { headers: { Cookie: creator.cookie } }), 200, creator.token)).toMatchObject({ ticket: { version: ticket.version, archivedAt: null, status: "IN_PROGRESS" } });
+
+      const current = await privateJson(await request("/api/tickets", { headers: { Cookie: manager.cookie } }), 200, manager.token) as { workspaces: { id: string; version: number }[] };
+      const currentWorkspace = current.workspaces.find((entry) => entry.id === workspace.id);
+      expect(currentWorkspace).toBeTruthy();
+      await ticketCommand(manager, { action: "setWorkspaceMember", workspaceId: workspace.id, userId: "mock-employee-dan", active: false, version: currentWorkspace!.version });
+      expect(await privateJson(await request(detailPath, { headers: { Cookie: colleague.cookie } }), 404, colleague.token)).toEqual(missing);
+      expect(await privateJson(await request(`/api/tickets/${ticket.id}/files`, { headers: { Cookie: colleague.cookie } }), 404, colleague.token)).toEqual(missing);
+    } finally {
+      for (const session of [manager, scopedAdmin, creator, colleague]) expect((await logout(session.cookie)).status).toBe(200);
+    }
+  }, 20_000);
 
 });

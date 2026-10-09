@@ -1,3 +1,7 @@
 import { redirect } from "next/navigation";
 import { getCurrentActor } from "@/modules/auth/session-service";
-export default async function Home() { redirect((await getCurrentActor()) ? "/dashboard" : "/login"); }
+import { workspaceHomeFor } from "@/modules/navigation/navigation";
+export default async function Home() {
+  const actor = await getCurrentActor();
+  redirect(actor ? workspaceHomeFor(actor.role) : "/login");
+}

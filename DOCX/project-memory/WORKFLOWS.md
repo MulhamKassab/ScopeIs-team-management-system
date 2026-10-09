@@ -127,3 +127,17 @@ Implemented in Phase 10. The central interface completes the persistence foundat
 5. This workflow is implemented only in Phase 12.
 
 ![Future Ticket System integration](../diagrams/09_ticket_system_later_integration.png)
+
+## 13. Company core ticket workflow — authorized 2026-10-08
+
+[The implementation decisions](PHASE_12_COMPANY_TICKET_IMPLEMENTATION_DECISIONS.md) govern this approved first delivery; the approved core is implemented and locally verified ([delivery evidence](../phase-reports/SCOPEIS_COMPANY_TICKETS_LOCAL_2026_10_09.md)). The future handoff in workflow 12 is not part of this slice.
+
+1. Super Admin, or an Admin with current TEAM and linked Client/Project scope, creates an independent workspace and manages its authorized members. Managers create ticket boards and choose Draft, Published or Archived. An unlinked workspace is Super Admin-managed.
+2. An active Employee member opens Tickets and sees Published boards. They can create a ticket on an eligible board; creator participation is established atomically. Managers may assign authorized members or grant read-only observation.
+3. The creator or current assignee reads and updates ticket content, priority or status, including closing the ticket. On hold requires a reason. Observers read only. Current membership, board state, role and participation are checked on every request.
+4. Authorized workers record their own attributed work logs and upload private PDF/JPEG/PNG/DOCX files. Local uploads permit up to 5 MiB; the subsequently authorized Vercel production release caps ticket uploads at 4 MiB, shown by the UI and enforced on the server. Logs remain author-editable while access permits. Files are downloaded through a freshly authorized private endpoint; uploaders and managers have their own retained archive/restore actions.
+5. The creator or authorized manager archives/restores the ticket while current access and board state permit. History is retained. Content, people, logs and file actions share the ticket version; a stale action is refused with reload guidance.
+6. Audit and in-app notification records accompany successful mutations transactionally. Notification destinations recheck current ticket access. Employee lists, detail pages and files never expose unrelated tickets merely because the user belongs to the workspace.
+7. Overview and Tickets retain common workspace/board, search, status and priority filters. List and Board show the same authorized ticket set. Employees work primarily in Tickets and retain their own Schedule, Vacations and My profile/skills; management retains all existing tools.
+
+These steps neither publish schedules nor decide leave or apply replacement effects. Daily work, flowcharts, cost/PDF tools, source business-data migration and future workforce handoffs are outside the approved first delivery.

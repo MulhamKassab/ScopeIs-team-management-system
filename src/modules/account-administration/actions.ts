@@ -6,6 +6,7 @@ import { getCurrentActor, getCurrentPasswordChangeActor, setSessionCookie } from
 import { AccountAdminDomainError } from "./domain-error";
 import { accountAdministrationService } from "./service";
 import { accountErrorMessage } from "./messages";
+import { workspaceHomeFor } from "@/modules/navigation/navigation";
 
 export type AccountFormState = { formError?: string; success?: string; fieldErrors?: Record<string, string> };
 export type AccountFormAction = (state: AccountFormState, formData: FormData) => Promise<AccountFormState>;
@@ -110,5 +111,5 @@ export const changeOwnPasswordAction: AccountFormAction = async (_state, formDat
   }
   await setSessionCookie(session.token, session.expiresAt);
   revalidatePath("/dashboard");
-  redirect("/dashboard");
+  redirect(workspaceHomeFor(actor.role));
 };

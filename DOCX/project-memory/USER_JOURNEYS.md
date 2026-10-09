@@ -39,3 +39,13 @@ Each page has one purpose, an identifiable next action, and a compact, optional 
 Fresh walkthrough screenshots and bounded validation are in [the user-journey review](../phase-reports/SCOPEIS_CLEAR_USER_JOURNEYS_2026_10_06.html).
 
 The confirmed [coverage conflict-integrity rules](PHASE_7_COVERAGE_REPLACEMENT_DECISIONS.md) apply to Find cover, Cover requests and Timetable: duplicate requests are refused; approval rechecks the effective Draft and candidate availability; compatible changes share one revision; stale work cannot overwrite another decision. Outdated requests can be declined and reconsidered against the current plan.
+
+## Company ticket journey — confirmed 2026-10-08
+
+[The Company core decisions](PHASE_12_COMPANY_TICKET_IMPLEMENTATION_DECISIONS.md) extend the original 20-page review. Its earlier unfinished-ticket statement is historical; the approved core is implemented and locally verified ([delivery evidence](../phase-reports/SCOPEIS_COMPANY_TICKETS_LOCAL_2026_10_09.md)).
+
+Employees land on Tickets, find their own/assigned/observed work, open a ticket and act according to their current creator/assignee/observer permission. Creators and assignees can update/close tickets, log their own work and attach private files; observers read only. An active member may create a ticket on a Published board. Their primary tabs are Tickets, Schedule, Vacations and My profile, with their own recorded skills in My profile. Home and permitted notifications/request conversations remain secondary destinations.
+
+Managers retain the original management journeys and gain Tickets. They move between Company Overview and Tickets with shared filters, create eligible workspaces/boards, manage membership and participants, and review ticket work and retained history. Super Admin is global; Admin uses current TEAM scope, linked Client/Project grants and active membership. Ticket publication, work logs and archive never change timetable, leave or replacement rules.
+
+Daily work lists, flowcharts, cost/PDF reporting and future workforce handoffs are outside the first delivery. The integrated route is `/tickets`; the earlier `/previews/company-tickets.html` remains a historical fictional-data concept.

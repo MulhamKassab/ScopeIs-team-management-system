@@ -3,6 +3,7 @@ import { beginPasswordSession } from "@/modules/auth/credential-service";
 import { setSessionCookie } from "@/modules/auth/session-service";
 import { errorResponse, requireSameOrigin } from "@/server/http";
 import { errors } from "@/shared/errors/app-error";
+import { workspaceHomeFor } from "@/modules/navigation/navigation";
 
 async function boundedJson(request: Request) {
   const reader = request.body?.getReader();
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
     requireSameOrigin(request);
     const session = await beginPasswordSession(await boundedJson(request));
     await setSessionCookie(session.token, session.expiresAt);
-    response = NextResponse.json({ redirectTo: "/dashboard" });
+    response = NextResponse.json({ redirectTo: workspaceHomeFor(session.actor.role) });
   } catch (error) { response = errorResponse(error); }
   response.headers.set("Cache-Control", "private, no-store, max-age=0");
   response.headers.set("X-Content-Type-Options", "nosniff");

@@ -469,9 +469,11 @@ Negative permission tests are mandatory. A hidden interface control is not suffi
 
 ## Ticket System boundary
 
-The existing Ticket System is not the architectural foundation and must not be inspected or modified during this amendment. Ticket functionality is introduced only in Phase 12 after Phases 1–11 are stable.
+The existing Ticket System is not the architectural foundation. The original architecture amendment deferred inspection and implementation to Phase 12; the product owner's 2026-10-08 [Company core authorization](PHASE_12_COMPANY_TICKET_IMPLEMENTATION_DECISIONS.md) now governs that bounded integration.
 
 Selected ticket functionality may later use the workforce system's PostgreSQL, authorization, audit, file-storage, and notification foundations after review. Workforce roles and scopes remain authoritative. Ticket, Assignment, Schedule, Project, Client, and Work Log remain distinct. Ticket-specific storage or permission restrictions are not imported automatically.
+
+The approved core uses the existing modular-monolith direction: thin authenticated routes, ticket service/policy/repository boundaries, additive Drizzle migration `0015_company_tickets`, the existing private-storage provider boundary, and transactional audit/in-app notifications. Workspaces, memberships, boards, tickets, participant grants, logs and attachment metadata are relational records. Source Company Owner/authentication/onboarding, Personal flows, provider configuration and business datasets are excluded. No new worker, external notification provider or automatic schedule/coverage effect is introduced. Local development may explicitly configure a private filesystem directory; production local storage remains prohibited. The approved core is implemented and locally verified ([delivery evidence](../phase-reports/SCOPEIS_COMPANY_TICKETS_LOCAL_2026_10_09.md)), and the broader Phase 12 roadmap remains `PARTIAL`.
 
 ## Architecture decision register
 

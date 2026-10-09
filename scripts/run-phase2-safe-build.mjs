@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
 import { cp, lstat, mkdir, mkdtemp, readdir, rm, symlink } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { basename, join } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import { assertPhase1TestDatabaseSafety, loadPhase1TestConfiguration, repositoryRoot } from "./phase1-test-environment.mjs";
 
 const COPY_ALLOWLIST = ["src", "public", "next.config.ts", "tsconfig.json", "next-env.d.ts", "package.json", "package-lock.json"];
@@ -52,6 +52,8 @@ function safeBuildEnvironment(configuration) {
     SCOPEIS_DEMO_WORKSPACE: process.env.SCOPEIS_DEMO_WORKSPACE === "true" ? "true" : "false",
     DATABASE_URL: servePort !== null ? configuration.databaseUrl : SAFE_BUILD_DATABASE_URL,
     MOCK_AUTH_ENABLED: "true",
+    EVIDENCE_STORAGE_MODE: "local",
+    ...(process.env.SCOPEIS_TEST_EVIDENCE_DIRECTORY ? { SCOPEIS_TEST_EVIDENCE_DIRECTORY: process.env.SCOPEIS_TEST_EVIDENCE_DIRECTORY } : {}),
     NEXT_TELEMETRY_DISABLED: "1",
     NODE_ENV: "production",
     SCOPEIS_DISPOSABLE_TEST_DATABASE: "true",
@@ -77,7 +79,9 @@ async function run(command, args, temporaryApplication, environment) {
 
 const configuration = await loadPhase1TestConfiguration();
 if (servePort !== null) await assertPhase1TestDatabaseSafety(configuration);
-const temporaryApplication = await mkdtemp(join(tmpdir(), "scopeis-phase2-safe-build-"));
+const requestedDirectory = process.env.SCOPEIS_SAFE_BUILD_DIRECTORY;
+const temporaryApplication = requestedDirectory ? resolve(requestedDirectory) : await mkdtemp(join(tmpdir(), "scopeis-phase2-safe-build-"));
+if (dirname(temporaryApplication) !== resolve(tmpdir()) || !basename(temporaryApplication).startsWith("scopeis-phase2-safe-build-")) throw new Error("Safe build directory must be an owned direct temporary-directory child.");
 let exitCode = 1;
 let activeChild = null;
 let terminationRequested = false;
@@ -88,7 +92,7 @@ function stopActiveChild() {
 for (const signal of ["SIGINT", "SIGTERM", "SIGHUP"]) process.on(signal, stopActiveChild);
 try {
   for (const path of COPY_ALLOWLIST) await copySafe(join(repositoryRoot, path), join(temporaryApplication, path));
-  await symlink(join(repositoryRoot, "node_modules"), join(temporaryApplication, "node_modules"), "dir");
+  await symlink(join(repositoryRoot, "node_modules"), join(temporaryApplication, "node_modules"), process.platform === "win32" ? "junction" : "dir");
   await assertNoEnvironmentFiles(temporaryApplication);
   process.stdout.write("Phase 2 safe build preflight passed: isolated copy contains no .env* files.\n");
   const environment = safeBuildEnvironment(configuration);

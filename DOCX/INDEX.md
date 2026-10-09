@@ -1,7 +1,17 @@
+## Company ticket production release — authorized 2026-10-09
+
+- [Production release target, preservation and verification status](phase-reports/SCOPEIS_COMPANY_TICKETS_PRODUCTION_2026_10_09.md)
+- The product owner explicitly requested deployment after local delivery. Release work is `IN_PROGRESS` for the existing [canonical ScopeIs application](https://scopeis-team-management-system.vercel.app/); backup/restore proof, additive production migration, deployment and live checks are pending. This supersedes the prior local-only boundary without completing the broader Phase 12 roadmap or certifying Phase 13 readiness.
+
+## Company ticket implementation — authorized 2026-10-08
+
+- [Confirmed Company core workflow, Employee workspace and permission decisions](project-memory/PHASE_12_COMPANY_TICKET_IMPLEMENTATION_DECISIONS.md)
+- The approved core is implemented and locally verified at `/tickets`; see [the local delivery evidence](phase-reports/SCOPEIS_COMPANY_TICKETS_LOCAL_2026_10_09.md). The [live tracker](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) records Phase 12 as `PARTIAL`; future workforce handoffs and the user-deferred daily work/flowchart/cost-PDF tools remain outside the delivery. The later production authorization is recorded above; the local report preserves its original delivery boundary.
+
 ## Company Ticket System design review — 2026-10-07
 
 - [Company source assessment, proposed experience and unresolved integration decisions](project-memory/PHASE_12_COMPANY_TICKET_DESIGN_REVIEW.md)
-- Test the reviewed fictional-data design at `/previews/company-tickets.html` on the existing ScopeIs site; full application integration remains Phase 12.
+- The historical fictional-data design remains at `/previews/company-tickets.html`. Its design-only implementation restriction and unresolved core questions are superseded by the confirmed decisions above.
 
 ## Coverage conflict integrity — 2026-10-06
 
@@ -61,7 +71,7 @@ See the [website audit and repair review](phase-reports/SCOPEIS_WEBSITE_AUDIT_20
 
 ## Purpose and status
 
-This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is complete only in its narrow foundation scope; Phase 2 — Employee management journey is `COMPLETED` (11/11). Phases 3 and 5–11 retain their bounded completed journeys. Phase 4 is `PARTIAL`: the September 30 audit reopened retained-history assignment omission/removal and complete-path QA; the original V1 completion report is historical evidence. The Post-Phase-8 checkpoint is `COMPLETED` at remediation commit `decb377decb32b3d064b14024c3079879dd932c0` (Sub-phase A remediation, Sub-phase B independent closure). Phase 10's employee-management-note remediation requires current subject authorization in addition to note visibility, so authorship does not override demotion, deactivation or scope loss. Phase 12 — Ticket System integration — remains the next journey, `NEXT` and not started in this checkout; production identity and rollout remain Phase 13. Phase 9.9 (coverage linkage for verified evidence) is `DEFERRED` pending a product decision.
+This directory is the canonical documentation foundation for ScopeIs Team Management System. [`project-memory/IMPLEMENTATION_ROADMAP.md`](project-memory/IMPLEMENTATION_ROADMAP.md) is the sole authoritative phase-definition sequence and [`project-memory/IMPLEMENTATION_STATUS_TRACKER.md`](project-memory/IMPLEMENTATION_STATUS_TRACKER.md) is the sole authoritative live-status record. Phase 0 discovery is `COMPLETED`; Phase 1 is complete only in its narrow foundation scope; Phase 2 — Employee management journey is `COMPLETED` (11/11). Phases 3 and 5–11 retain their bounded completed journeys. Phase 4 is `PARTIAL`: the September 30 audit reopened retained-history assignment omission/removal and complete-path QA; the original V1 completion report is historical evidence. The Post-Phase-8 checkpoint is `COMPLETED` at remediation commit `decb377decb32b3d064b14024c3079879dd932c0` (Sub-phase A remediation, Sub-phase B independent closure). Phase 10's employee-management-note remediation requires current subject authorization in addition to note visibility, so authorship does not override demotion, deactivation or scope loss. Phase 12 — Ticket System integration — is `PARTIAL`, with the approved Company core locally implemented and verified and future workforce handoffs outside that delivery; production identity and rollout remain Phase 13. Phase 9.9 (coverage linkage for verified evidence) is `DEFERRED` pending a product decision.
 
 ## Reader path
 

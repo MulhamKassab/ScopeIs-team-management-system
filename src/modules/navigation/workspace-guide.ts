@@ -3,7 +3,7 @@ import type { ModuleKey } from "@/modules/authorization/capabilities";
 import type { SystemRole } from "@/shared/types/foundation";
 
 export const navigationGroups: { label: string; keys: ModuleKey[] }[] = [
-  { label: "Daily work", keys: ["dashboard", "schedule", "map", "leave"] },
+  { label: "Daily work", keys: ["dashboard", "tickets", "schedule", "map", "leave"] },
   { label: "Cover & requests", keys: ["coverage", "replacements", "requests"] },
   { label: "People", keys: ["employees", "teams", "designations", "skills"] },
   { label: "Client work", keys: ["clients", "projects", "locations"] },
@@ -11,8 +11,16 @@ export const navigationGroups: { label: string; keys: ModuleKey[] }[] = [
   { label: "Administration", keys: ["accounts", "audit", "settings"] },
 ];
 
+export function navigationGroupsFor(role: SystemRole) {
+  return role === "EMPLOYEE" ? [
+    { label: "My work", keys: ["tickets", "schedule", "leave", "profile"] as ModuleKey[] },
+    { label: "Updates & requests", keys: ["dashboard", "notifications", "requests"] as ModuleKey[] },
+  ] : navigationGroups;
+}
+
 const descriptions: Record<ModuleKey, { description: string; keywords: string }> = {
   dashboard: { description: "See your work, updates and what needs attention.", keywords: "home dashboard overview summary metrics" },
+  tickets: { description: "Open company workspaces, follow tickets and see the work available to you.", keywords: "ticket tickets company workspace board task tasks work status priority assignee" },
   schedule: { description: "See who is where, then prepare and publish monthly work.", keywords: "schedule timetable calendar roster shifts draft propose publish revision allocation monthly" },
   map: { description: "Explore published assignments by date, employee and worksite. Open coverage from the map.", keywords: "map planning geography pins locations planning coordinates areas" },
   employees: { description: "Find your team and manage employee records, skills, designations and evidence.", keywords: "people directory search team qualifications certification cv portfolio files notes lifecycle status" },
@@ -31,11 +39,13 @@ const descriptions: Record<ModuleKey, { description: string; keywords: string }>
   reports: { description: "Understand allocation, leave, skills and evidence. Download available reports as CSV.", keywords: "insights analytics hours balances gaps certifications export csv evidence audit history" },
   audit: { description: "Trace recorded actions, changes and decisions across the workspace.", keywords: "audit activity history log governance security events filter" },
   settings: { description: "Workspace configuration is coming soon.", keywords: "configuration preferences" },
-  profile: { description: "Update work details and your summary. Add certifications, portfolio evidence and your CV.", keywords: "self professional email phone summary password change certification portfolio cv upload documents files evidence" },
+  profile: { description: "See your recorded skills and update work details, certifications, portfolio evidence and your CV.", keywords: "self professional email phone summary skills capability qualification password change certification portfolio cv upload documents files evidence" },
 };
 
 export function featureDescription(key: ModuleKey, role: SystemRole) {
   if (role === "EMPLOYEE" && key === "schedule") return "See your published assignments, times, worksites and shared instructions.";
+  if (role === "EMPLOYEE" && key === "tickets") return "Start with the tickets you can access and follow your work.";
+  if (role === "EMPLOYEE" && key === "leave") return "Apply for vacation, check your annual balance and follow your vacation history.";
   if (role === "EMPLOYEE" && key === "employees") return "View your own employee record and recorded capabilities.";
   if (role === "EMPLOYEE" && key === "skills") return "See your recorded skills and professional capabilities.";
   if (role === "ADMIN" && key === "skills") return "Review your team’s recorded skills and project requirements.";

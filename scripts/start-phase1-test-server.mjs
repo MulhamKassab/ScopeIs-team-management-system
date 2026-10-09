@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
 import { cp, mkdtemp, rm, symlink } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import {
   assertPhase1FictionalFixtures,
   assertPhase1TestDatabaseSafety,
@@ -18,11 +18,13 @@ const configuration = await loadPhase1TestConfiguration();
 await assertPhase1TestDatabaseSafety(configuration);
 await assertPhase1FictionalFixtures(configuration);
 
-const temporaryApplication = await mkdtemp(join(tmpdir(), "scopeis-phase1-server-"));
+const requestedDirectory = process.env.SCOPEIS_PHASE1_SERVER_DIRECTORY;
+const temporaryApplication = requestedDirectory ? resolve(requestedDirectory) : await mkdtemp(join(tmpdir(), "scopeis-phase1-server-"));
+if (dirname(temporaryApplication) !== resolve(tmpdir()) || !basename(temporaryApplication).startsWith("scopeis-phase1-server-")) throw new Error("Test server directory must be an owned direct temporary-directory child.");
 for (const path of ["src", "public", "next.config.ts", "tsconfig.json", "next-env.d.ts", "package.json", "package-lock.json"]) {
   await cp(join(repositoryRoot, path), join(temporaryApplication, path), { recursive: true });
 }
-await symlink(join(repositoryRoot, "node_modules"), join(temporaryApplication, "node_modules"), "dir");
+await symlink(join(repositoryRoot, "node_modules"), join(temporaryApplication, "node_modules"), process.platform === "win32" ? "junction" : "dir");
 
 const nextBinary = join(repositoryRoot, "node_modules", "next", "dist", "bin", "next");
 const safeEnvironment = phase1TestProcessEnvironment(configuration);

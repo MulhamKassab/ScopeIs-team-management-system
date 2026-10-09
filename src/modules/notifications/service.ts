@@ -5,6 +5,8 @@ import { canReadEmployee } from "@/modules/employees/employee-policy";
 import { NotificationDomainError } from "@/modules/notifications/domain-error";
 import { notificationText, NOTIFICATION_PAGE_SIZE } from "@/modules/notifications/presentation";
 import { notificationRepository, type NotificationFilter } from "@/modules/notifications/repositories";
+import { ticketService } from "@/modules/tickets/service";
+import { AppError } from "@/shared/errors/app-error";
 import type { AuthenticatedActor } from "@/shared/types/foundation";
 
 export type NotificationView = {
@@ -77,6 +79,25 @@ export class NotificationService {
     return period && can(actor, "module:schedule:view") ? "/schedule" : null;
   }
 
+  private async ticketHref(actor: AuthenticatedActor, ticketId: string) {
+    try {
+      // The ticket service checks current identity, scopes, membership, board and participation under
+      // its read locks. A notification never preserves access after one of those grants is revoked.
+      await ticketService.fileAccess(actor, ticketId);
+      return `/tickets/${ticketId}`;
+    } catch (error) {
+      if (error instanceof AppError && (error.status === 403 || error.status === 404)) return null;
+      throw error;
+    }
+  }
+
+  private async ticketWorkspaceHref(actor: AuthenticatedActor, workspaceId: string) {
+    const accessible = await ticketService.workspace(actor);
+    return accessible.workspaces.some((workspace) => workspace.id === workspaceId)
+      ? `/tickets?workspace=${encodeURIComponent(workspaceId)}`
+      : null;
+  }
+
   /** Resolves the authorized destination for one row; unsupported or unknown types stay neutral. */
   private async href(actor: AuthenticatedActor, item: { relatedRecordType: string | null; relatedRecordId: string | null }): Promise<string | null> {
     if (!item.relatedRecordType || !item.relatedRecordId) return null;
@@ -85,6 +106,8 @@ export class NotificationService {
     if (item.relatedRecordType === "replacement_request") return this.replacementHref(actor, item.relatedRecordId);
     if (item.relatedRecordType === "leave_request") return this.leaveHref(actor, item.relatedRecordId);
     if (item.relatedRecordType === "schedule_period") return NotificationService.scheduleHref(actor, await notificationRepository.schedulePeriod(db, item.relatedRecordId));
+    if (item.relatedRecordType === "ticket") return this.ticketHref(actor, item.relatedRecordId);
+    if (item.relatedRecordType === "ticket_workspace") return this.ticketWorkspaceHref(actor, item.relatedRecordId);
     return null;
   }
 

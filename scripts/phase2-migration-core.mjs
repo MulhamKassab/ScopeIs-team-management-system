@@ -23,6 +23,8 @@ export async function loadAdoptionManifest() {
   // Credential account-management (0013) is additive: retain the 0012 table fingerprints and add the changed user_credentials fingerprint.
   manifest.states.superAdminAccountManagement.tableHashes = { ...manifest.states.credentialAuthentication.tableHashes, ...manifest.states.superAdminAccountManagement.tableHashes };
   manifest.states.teamCatalogue.tableHashes = { ...manifest.states.superAdminAccountManagement.tableHashes, ...manifest.states.teamCatalogue.tableHashes };
+  // Company tickets (0015) adds independent containers and ticket records; existing workforce fingerprints remain immutable.
+  manifest.states.companyTickets.tableHashes = { ...manifest.states.teamCatalogue.tableHashes, ...manifest.states.companyTickets.tableHashes };
   return manifest;
 }
 
@@ -70,6 +72,7 @@ function expectedStage(manifest, count) {
   if (count === 13) return manifest.states.credentialAuthentication;
   if (count === 14) return manifest.states.superAdminAccountManagement;
   if (count === 15) return manifest.states.teamCatalogue;
+  if (count === 16) return manifest.states.companyTickets;
   return null;
 }
 

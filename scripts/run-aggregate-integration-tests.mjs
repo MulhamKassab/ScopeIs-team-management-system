@@ -36,6 +36,8 @@ const suites = [
   { name: "Phase 11 reporting service", label: "phase11_reporting", files: ["test/integration/phase11-reporting-service.test.ts"], seed: seedPhase11Journey, timeoutMs: 300_000 },
   { name: "Credential authentication service", label: "credential_authentication", files: ["test/integration/credential-authentication.test.ts"], timeoutMs: 180_000, credentials: false },
   { name: "Account administration service", label: "account_administration", files: ["test/integration/account-administration.test.ts"], timeoutMs: 180_000 },
+  { name: "Company ticket service", label: "ticket_service", files: ["test/integration/tickets.test.ts"], timeoutMs: 300_000 },
+  { name: "Company ticket private files", label: "ticket_files", files: ["test/integration/ticket-files.test.ts"], timeoutMs: 300_000 },
 ];
 
 // Guard against silently ignoring a newly added integration file.

@@ -301,7 +301,7 @@ functionality; see the [Pre-Phase-12 hardening report](../phase-reports/SCOPEIS_
 
 ## Phase 12 — Ticket System integration
 
-**Status:** `NEXT`
+**Status:** `PARTIAL` — the user-authorized Company core is locally implemented and verified under [the confirmed 2026-10-08 decisions](PHASE_12_COMPANY_TICKET_IMPLEMENTATION_DECISIONS.md). [The live tracker](IMPLEMENTATION_STATUS_TRACKER.md) owns current verification status. The sub-phase definitions below remain the broader roadmap; future workforce handoffs and required-skill semantics are outside this first delivery. Daily work lists, flowcharts and cost/PDF reporting are user-deferred.
 
 **Sub-phases:**
 

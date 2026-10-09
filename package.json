@@ -71,7 +71,9 @@
     "db:demo:initialize": "node --import tsx --conditions=react-server scripts/seed-company-demo.mjs --apply",
     "test:company-demo": "node --import tsx --conditions=react-server scripts/test-company-demo.mjs",
     "db:demo:files": "node --import tsx --conditions=react-server scripts/seed-company-demo-files.mjs",
-    "test:timetable-service": "node scripts/run-timetable-service-tests.mjs"
+    "test:timetable-service": "node scripts/run-timetable-service-tests.mjs",
+    "test:tickets": "node scripts/run-ticket-service-tests.mjs",
+    "test:tickets-e2e": "node scripts/run-ticket-playwright.mjs"
   },
   "dependencies": {
     "@vercel/blob": "^2.3.0",

@@ -12,17 +12,21 @@ Account administration (`/accounts`) is Super Admin only. A currently active Sup
 
 ### Super Admin
 
-Has global management authority: employee accounts and roles, designations, skills, clients, projects, locations, arrangement labels, schedules, publication, leave decisions, coverage rules, replacements, warnings and overrides, management map, authorized management notes, notifications, audit, reports, exports, account credentials (through the guarded operator bootstrap only), and later integrated tickets.
+Has global management authority: employee accounts and roles, designations, skills, clients, projects, locations, arrangement labels, schedules, publication, leave decisions, coverage rules, replacements, warnings and overrides, management map, authorized management notes, notifications, audit, reports, exports, account credentials through the existing credential-management boundaries, and Company tickets.
 
 ### Admin
 
 May be an account manager, team senior, coordinator, or other trusted employee. Can view necessary employee capabilities and availability; manage assigned clients/projects/locations; create schedule drafts and assignments within scope; propose schedules; review conflicts; find candidates; submit replacement requests; use the scoped planning map; create and edit their own shared Client, Project, and Location notes where their scope authorizes the parent; create permitted employee-management notes about Employees below their role; and participate in private requester-assignee discussions.
+
+Company ticket management additionally requires current active workspace membership, a matching Client or Project link and operational grant, and current TEAM scope for Employee creators and participants. An unlinked company workspace is Super Admin-managed. Ticket membership or participation does not widen an Admin's workforce scope.
 
 Admin cannot publish schedules, make final schedule approvals, approve or reject leave, recommend leave decisions, access private leave reasons by default, manage global permissions, change global coverage policies without permission, assign replacements without required Super Admin approval, or access data outside scope.
 
 ### Employee
 
 Can sign in; view their own published daily/weekly/monthly schedule; view relevant client/project/location/time/instructions; submit and track annual leave; cancel a pending request when allowed; maintain permitted profile, skills evidence, certifications, portfolio, CV, and project experience; use the notification centre for their own notifications; and participate in private replacement-request discussions when they are the requester or a named employee on that request.
+
+Tickets is the Employee's primary workspace. An Employee may create a ticket on a Published board in a workspace where they are an active member, and may update or close tickets they created or are currently assigned to. Current observers may read the ticket only. My profile also displays the Employee's own recorded skills, with the existing skills-editing boundary preserved.
 
 Employee cannot publish or finalize schedules, approve leave, manage roles, access the management planning map, view others' private leave details, view employee-management notes, read or add shared Client/Project/Location notes, or view discussions in which they are not a participant.
 
@@ -68,7 +72,11 @@ An Admin's effective access is the intersection of role permission and assigned 
 | Open authorized reports | Yes, all registered reports | Yes: Published allocation, unallocated employees, scheduled hours, `PLANNING (unpublished)`, approved leave, replacement status, recorded skills, required-versus-recorded gaps, certification summary, schedule lifecycle — scoped | No |
 | Open Super-Admin-only reports | Yes: leave balance, evidence review queue, audit history | No — non-enumerating refusal | No |
 | Export CSV | Yes, every exportable report including `PLANNING (unpublished)`; never audit history | Yes, Published allocation and the certification-summary projection only | No |
-| Integrated tickets | Later, global | Later, scoped | Later, assigned/owned |
+| Company ticket workspaces/boards and participant administration | Global | Active membership + linked Client/Project grant + TEAM scope | No |
+| Create Company ticket | Yes | Within current ticket-management scope | Active workspace member, Published board; creator only |
+| Read Company ticket | Global | Within current ticket-management scope | Active member, Published board, current creator/assignee/observer |
+| Update/close ticket, log own work, upload private files | Yes | Within current ticket-management scope | Creator or assignee; observer read-only |
+| Archive/restore Company ticket | Yes | Within current ticket-management scope | Creator only, while current access and board lifecycle permit |
 
 ## Explicit safeguards
 
@@ -87,3 +95,17 @@ An Admin's effective access is the intersection of role permission and assigned 
 - Reporting never classifies a person as generally available. The only permitted derived fact is the conflict fact, whose values are `No known schedule or approved-leave conflict`, `Approved leave on the selected date`, `Published assignment overlaps the selected time window`, and `Approved leave and published assignment overlap`.
 - `PLANNING (unpublished)` is Draft and Proposed scheduling. It is a separate report rather than a filter on Published reporting, is view-only for a scoped Admin, is never visible to an Employee, and is never blended into a Published metric.
 - Assignment labels never grant permissions or determine availability.
+
+## Company ticket safeguards — confirmed 2026-10-08
+
+[The Company implementation decisions](PHASE_12_COMPANY_TICKET_IMPLEMENTATION_DECISIONS.md) govern the authorized core workflow. Workspaces and boards are separate ticket containers, with optional Client/Project links; they do not create workforce assignments or grant Employees access to Client/Project management records. System roles, teams, job titles, workspace memberships and ticket participation remain separate facts.
+
+- Current authentication, user activity, session version, workspace membership, board lifecycle, ticket participation and Admin grants are checked server-side. Revocation affects direct detail/file access and notification destinations as well as lists.
+- Employees receive Published boards and only their own, assigned or observed tickets. A workspace membership alone never exposes another person's tickets, private files or work logs.
+- Managers grant and revoke assignees/observers from authorized existing people. Employee creation establishes creator participation atomically and grants no access to other people.
+- Ticket creators and authorized managers may archive and restore retained tickets. Assignees cannot archive a ticket by virtue of assignment. Archived boards prevent active work and restoration until the board is restored to an eligible lifecycle state.
+- Work-log changes are author-only while the actor still has ticket work permission. Uploaders may archive/restore their own attachments while they retain write access; authorized managers may manage ticket attachments. Observers never gain upload or file-management permission.
+- Attachments use the private-storage boundary and the established PDF/JPEG/PNG/DOCX allowlist. Local uploads retain a 5 MiB limit; the authorized Vercel production release uses a 4 MiB ticket-upload cap enforced by both server and UI. Every download reauthorizes ticket access; neither public URLs nor storage keys are returned. Archive retains bytes and history.
+- Content, participation, work logs and files share the ticket's optimistic version. Stale work is refused; audit and in-app notifications accompany successful mutations transactionally. Ticket content is not copied into notification or audit presentation.
+
+These permissions do not change timetable publication, leave decisions, management-map access, evidence eligibility or replacement-request participation. Daily work, flowcharts, cost/PDF reporting and future ticket-to-workforce handoffs are outside the approved first delivery.

@@ -107,14 +107,14 @@ afterAll(async () => {
   for (const name of [...createdDatabases]) await dropDatabase(name);
 });
 
-describe("Phase 2 database foundation reconciliation", () => {
+describe("Phase 2 database foundation reconciliation", { timeout: 60_000, hookTimeout: 60_000 }, () => {
   it("performs a clean normal migration install and is idempotent", async () => withDatabase("clean", async (url) => {
     const first = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
     expect(first.before.state).toBe("A");
     expect(first.after?.state).toBe("D");
     expect(first.after?.pending).toEqual([]);
-    expect(first.after?.fingerprint.tables).toHaveLength(34);
-    expect(first.after?.ledger.rows).toHaveLength(15);
+    expect(first.after?.fingerprint.tables).toHaveLength(41);
+    expect(first.after?.ledger.rows).toHaveLength(16);
     const second = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
     expect(second.before.state).toBe("D");
     expect(second.after?.state).toBe("D");
@@ -134,7 +134,7 @@ describe("Phase 2 database foundation reconciliation", () => {
     } finally { await client.end(); }
     const before = await inspect(url);
     expect(before.state).toBe("D");
-    expect(before.pending).toEqual(["0014_team_catalogue"]);
+    expect(before.pending).toEqual(["0014_team_catalogue", "0015_company_tickets"]);
     const applied = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
     expect(applied.after?.state).toBe("D");
     expect(applied.after?.pending).toEqual([]);
@@ -146,6 +146,55 @@ describe("Phase 2 database foundation reconciliation", () => {
     } finally { await verification.end(); }
   }));
 
+  it("adds Company tickets to the team-catalogue schema without changing employee, schedule, leave, or historical ledger facts", async () => withDatabase("ticket_upgrade", async (url) => {
+    const { journal, migrations, manifest } = await validateRepositoryMigrationHistory();
+    await applySql(url, journal.entries.slice(0, 15).map((entry: { tag: string }) => `${entry.tag}.sql`));
+    const client = new pg.Client({ connectionString: url }); await client.connect();
+    let priorFacts: Record<string, unknown[]>;
+    let priorLedger: unknown[];
+    const readFacts = async (connection: pg.Client) => {
+      const facts: Record<string, unknown[]> = {};
+      for (const table of manifest.states.teamCatalogue.tables) {
+        if (!/^[a-z_]+$/.test(table)) throw new Error("Unsafe authoritative table name.");
+        facts[table] = (await connection.query(`select to_jsonb(record) as fact from "${table}" record order by to_jsonb(record)::text`)).rows;
+      }
+      return facts;
+    };
+    try {
+      await client.query('create schema drizzle; create table drizzle.__drizzle_migrations (id serial primary key, hash text not null, created_at bigint)');
+      for (const migration of migrations.slice(0, 15)) await client.query('insert into drizzle.__drizzle_migrations (hash,created_at) values ($1,$2)', [migration.hash, migration.folderMillis]);
+      await client.query("insert into users(id,display_name,role) values ('upgrade-manager','Upgrade manager','SUPER_ADMIN'),('upgrade-employee','Upgrade employee','EMPLOYEE')");
+      await client.query("insert into teams(id,name) values ('team:upgrade','Upgrade team')");
+      await client.query("insert into employee_profiles(user_id,employee_code,team,manager_user_id,working_pattern,version) values ('upgrade-employee','upgrade-002','team:upgrade','upgrade-manager','Office weekdays',3)");
+      const skill = (await client.query("insert into skills(name) values ('Upgrade skill') returning id")).rows[0].id;
+      await client.query("insert into employee_skills(employee_user_id,skill_id,proficiency_description,verified) values ('upgrade-employee',$1,'Recorded before ticket integration',true)", [skill]);
+      const clientId = (await client.query("insert into clients(company_name) values ('Upgrade client') returning id")).rows[0].id;
+      const projectId = (await client.query("insert into projects(client_id,name,status) values ($1,'Upgrade project','ACTIVE') returning id", [clientId])).rows[0].id;
+      const locationId = (await client.query("insert into locations(client_id,name,address) values ($1,'Upgrade office','Fictional upgrade address') returning id", [clientId])).rows[0].id;
+      await client.query("insert into project_locations(project_id,location_id) values ($1,$2)", [projectId, locationId]);
+      const periodId = (await client.query("insert into schedule_periods(client_id,planning_month,lineage_id,status,is_current,published_at,version) values ($1,'2026-10-01',$2,'PUBLISHED',true,'2026-10-01T05:00:00Z',4) returning id", [clientId, randomUUID()])).rows[0].id;
+      await client.query("insert into schedule_assignments(schedule_period_id,employee_user_id,project_id,location_id,assignment_date,start_time,end_time,shared_instruction,version) values ($1,'upgrade-employee',$2,$3,'2026-10-08','09:00','13:00','Retained published instruction',2)", [periodId, projectId, locationId]);
+      await client.query("insert into leave_requests(employee_user_id,start_date,end_date,status,private_reason,decision_response,reviewed_by_user_id,decided_at,version) values ('upgrade-employee','2026-10-12','2026-10-13','APPROVED','Retained private reason','Approved before integration','upgrade-manager','2026-10-02T05:00:00Z',3)");
+      await client.query("insert into notifications(recipient_user_id,event_type,related_record_type,related_record_id) values ('upgrade-employee','schedule.published','schedule_period',$1)", [periodId]);
+      priorFacts = await readFacts(client);
+      priorLedger = (await client.query("select id,hash,created_at::text as created_at from drizzle.__drizzle_migrations order by id")).rows;
+    } finally { await client.end(); }
+    const before = await inspect(url);
+    expect(before.state).toBe("D");
+    expect(before.pending).toEqual(["0015_company_tickets"]);
+    const applied = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
+    expect(applied.after?.state).toBe("D");
+    expect(applied.after?.pending).toEqual([]);
+    expect(applied.after?.ledger.rows).toHaveLength(16);
+    for (const table of manifest.states.teamCatalogue.tables) expect(applied.after?.fingerprint.tableHashes[table]).toBe(manifest.states.teamCatalogue.tableHashes[table]);
+    const verification = new pg.Client({ connectionString: url }); await verification.connect();
+    try {
+      expect(await readFacts(verification)).toEqual(priorFacts!);
+      expect((await verification.query("select id,hash,created_at::text as created_at from drizzle.__drizzle_migrations order by id limit 15")).rows).toEqual(priorLedger!);
+      expect((await verification.query("select count(*)::int as count from tickets")).rows[0].count).toBe(0);
+    } finally { await verification.end(); }
+  }));
+
   it("dry-runs and safely adopts an exact ledgerless Phase 1 database", async () => withDatabase("phase1", async (url) => {
     await applySql(url, ["0000_phase_1_foundation.sql"]);
     expect((await inspect(url)).state).toBe("B");
@@ -154,7 +203,7 @@ describe("Phase 2 database foundation reconciliation", () => {
     expect((await inspect(url)).state).toBe("B");
     const applied = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
     expect(applied.after?.state).toBe("D");
-    expect(applied.after?.ledger.rows).toHaveLength(15);
+    expect(applied.after?.ledger.rows).toHaveLength(16);
     expect((await reconcileMigrationState(url, { allowDisposableTest: true })).before.state).toBe("D");
   }));
 
@@ -165,7 +214,7 @@ describe("Phase 2 database foundation reconciliation", () => {
     expect((await inspect(url)).state).toBe("C");
     const applied = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
     expect(applied.after?.state).toBe("D");
-    expect(applied.after?.ledger.rows).toHaveLength(15);
+    expect(applied.after?.ledger.rows).toHaveLength(16);
     expect((await reconcileMigrationState(url, { allowDisposableTest: true, apply: true })).after?.state).toBe("D");
   }));
 
@@ -237,11 +286,41 @@ describe("Phase 2 database foundation reconciliation", () => {
     await pool.end();
   }));
 
+  it("uses all seven Company ticket tables with enforced relationships and content constraints", async () => withDatabase("ticket_runtime", async (url) => {
+    await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
+    const pool = new pg.Pool({ connectionString: url, max: 1 });
+    const db = drizzle({ client: pool, schema });
+    const actor = `ticket-runtime-${randomUUID()}`;
+    try {
+      await db.insert(schema.users).values({ id: actor, displayName: "Ticket runtime Employee", role: "EMPLOYEE" });
+      const [workspace] = await db.insert(schema.ticketWorkspaces).values({ name: "Independent Company workspace", createdByUserId: actor }).returning();
+      await db.insert(schema.ticketWorkspaceMembers).values({ workspaceId: workspace.id, userId: actor, grantedByUserId: actor });
+      const [board] = await db.insert(schema.ticketBoards).values({ workspaceId: workspace.id, name: "Published work", status: "PUBLISHED", createdByUserId: actor }).returning();
+      const [ticket] = await db.insert(schema.tickets).values({ boardId: board.id, subject: "Runtime ticket", ticketDate: "2026-10-08", creatorUserId: actor }).returning();
+      await db.insert(schema.ticketParticipants).values({ ticketId: ticket.id, userId: actor, role: "ASSIGNEE", grantedByUserId: actor });
+      await db.insert(schema.ticketWorkLogs).values({ ticketId: ticket.id, authorUserId: actor, description: "Retained progress", durationMinutes: 30 });
+      await db.insert(schema.ticketFiles).values({ ticketId: ticket.id, ownerUserId: actor, uploaderUserId: actor, fileName: "runtime.pdf", contentType: "application/pdf", byteSize: 10, storageKey: `test/tickets/${ticket.id}/runtime.pdf` });
+      expect(ticket.number).toBeGreaterThan(0);
+      for (const table of [schema.ticketWorkspaces, schema.ticketWorkspaceMembers, schema.ticketBoards, schema.tickets, schema.ticketParticipants, schema.ticketWorkLogs, schema.ticketFiles]) expect(await db.select().from(table)).toHaveLength(1);
+      await expect(db.delete(schema.ticketBoards).where(eq(schema.ticketBoards.id, board.id))).rejects.toThrow();
+      await expect(db.insert(schema.ticketWorkspaceMembers).values({ workspaceId: workspace.id, userId: actor, grantedByUserId: actor })).rejects.toThrow();
+      await expect(db.insert(schema.tickets).values({ boardId: board.id, subject: "Bad hold", status: "ON_HOLD", ticketDate: "2026-10-08", creatorUserId: actor })).rejects.toThrow();
+      // The Company workflow permits a due date before the ticket date; chronology was not approved as a new policy.
+      await db.insert(schema.tickets).values({ boardId: board.id, subject: "Recorded overdue work", ticketDate: "2026-10-08", dueDate: "2026-10-07", creatorUserId: actor });
+      await expect(db.insert(schema.ticketWorkLogs).values({ ticketId: ticket.id, authorUserId: actor, description: "Bad duration", durationMinutes: 0 })).rejects.toThrow();
+      await expect(db.insert(schema.ticketFiles).values({ ticketId: ticket.id, ownerUserId: actor, uploaderUserId: actor, fileName: "bad.pdf", contentType: "application/pdf", byteSize: 0, storageKey: "test/bad-ticket.pdf" })).rejects.toThrow();
+      await expect(db.insert(schema.ticketParticipants).values({ ticketId: randomUUID(), userId: actor, role: "OBSERVER", grantedByUserId: actor })).rejects.toThrow();
+      expect(await db.select().from(schema.tickets)).toHaveLength(2);
+      expect(await db.select().from(schema.scheduleAssignments)).toHaveLength(0);
+      expect(await db.select().from(schema.leaveRequests)).toHaveLength(0);
+    } finally { await pool.end(); }
+  }));
+
   it("detects migration, journal, manifest, and TypeScript-schema drift", async () => {
     await validateRepositoryMigrationHistory();
     await withDatabase("migrated", async (migratedUrl) => withDatabase("exported", async (exportedUrl) => {
       await reconcileMigrationState(migratedUrl, { allowDisposableTest: true, apply: true });
-      const exported = await execFileAsync(`${repositoryRoot}/node_modules/.bin/drizzle-kit`, ["export", "--config=drizzle.certification.config.ts"], { cwd: repositoryRoot });
+      const exported = await execFileAsync(process.execPath, [`${repositoryRoot}/node_modules/drizzle-kit/bin.cjs`, "export", "--config=drizzle.certification.config.ts"], { cwd: repositoryRoot });
       const exportedClient = new pg.Client({ connectionString: exportedUrl });
       await exportedClient.connect();
       await exportedClient.query(exported.stdout);

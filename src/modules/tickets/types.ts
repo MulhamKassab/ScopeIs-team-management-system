@@ -1,0 +1,16 @@
+import type { AuthenticatedActor, SystemRole } from "@/shared/types/foundation";
+export const ticketStatuses = ["PLANNED", "OPEN", "IN_PROGRESS", "ON_HOLD", "CLOSED"] as const;
+export const ticketPriorities = ["CRITICAL", "HIGH", "MEDIUM", "LOW"] as const;
+export const boardStatuses = ["DRAFT", "PUBLISHED", "ARCHIVED"] as const;
+export type TicketStatus = typeof ticketStatuses[number];
+export type TicketPriority = typeof ticketPriorities[number];
+export type BoardStatus = typeof boardStatuses[number];
+export type TicketPerson = { userId: string; displayName: string; role: SystemRole };
+export type TicketWorkspace = { id: string; name: string; description: string | null; clientId: string | null; projectId: string | null; version: number; canManage: boolean; members: TicketPerson[] };
+export type TicketBoard = { id: string; workspaceId: string; name: string; status: BoardStatus; version: number; canManage: boolean };
+export type TicketPermissions = { edit: boolean; managePeople: boolean; archive: boolean; restore: boolean; log: boolean; files: boolean };
+export type TicketSummary = { id: string; number: number; subject: string; status: TicketStatus; priority: TicketPriority; ticketDate: string; dueDate: string | null; boardId: string; creatorName: string; assignees: { userId: string; displayName: string }[]; version: number; archivedAt: string | null; permissions: TicketPermissions };
+export type TicketFileSummary = { id: string; ticketId: string; fileName: string; contentType: string; byteSize: number; uploaderUserId: string; uploaderName: string; version: number; createdAt: string; archivedAt: string | null; canArchive: boolean; canRestore: boolean };
+export type TicketDetail = TicketSummary & { creatorUserId: string; workspaceId: string; summary: string | null; planning: string | null; workCompleted: string | null; notes: string | null; onHoldReason: string | null; createdAt: string; updatedAt: string; participants: (TicketPerson & { role: SystemRole; participation: "CREATOR" | "ASSIGNEE" | "OBSERVER" })[]; workLogs: { id: string; authorUserId: string; authorName: string; description: string; loggedAt: string; durationMinutes: number | null; version: number; canEdit: boolean }[]; files: TicketFileSummary[] };
+export type TicketWorkspaceData = { workspaces: TicketWorkspace[]; boards: TicketBoard[]; tickets: TicketSummary[]; people: TicketPerson[]; clients: { id: string; name: string }[]; projects: { id: string; name: string; clientId: string }[] };
+export type TicketFileAccess = { ticketId: string; canWrite: boolean; canManage: boolean; version: number; actor: AuthenticatedActor };

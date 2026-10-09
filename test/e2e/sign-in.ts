@@ -15,14 +15,17 @@ export const credentialIdentifiers: Record<string, string> = {
   "Dan Rowan": "dan",
 };
 
-export async function signIn(page: import("@playwright/test").Page, name: string) {
+export async function signIn(page: import("@playwright/test").Page, name: string, options: { destination?: "home" | "landing" } = {}) {
   const identifier = credentialIdentifiers[name];
   if (!identifier) throw new Error(`No credential fixture mapping for ${name}.`);
   await page.goto("/login");
   await page.getByLabel("Username or email").fill(identifier);
   await page.getByLabel("Password", { exact: true }).fill(fictionalTestPassword);
   await page.getByRole("button", { name: "Sign in" }).click();
-  await expect(page).toHaveURL(/\/dashboard$/);
+  const employee = identifier === "cora" || identifier === "dan";
+  await expect(page).toHaveURL(employee ? /\/tickets$/ : /\/dashboard$/, { timeout: 30_000 });
+  // Existing workforce journeys start at Home; ticket journeys exercise the actual role landing.
+  if (employee && options.destination !== "landing") await page.goto("/dashboard");
 }
 
 export async function signOut(page: import("@playwright/test").Page) {

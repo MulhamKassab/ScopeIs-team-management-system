@@ -2,6 +2,8 @@
 
 **7 October 2026, Asia/Dubai. Status: design proposal; application integration has not begun.**
 
+**Supersession — 8 October 2026:** This document preserves the original design review and its unresolved questions as historical evidence. The product owner subsequently authorized the core Company ticket workflow and answered its permission and container-mapping questions. [The confirmed implementation decisions](PHASE_12_COMPANY_TICKET_IMPLEMENTATION_DECISIONS.md) now govern that slice. The approved core is implemented and locally verified ([delivery evidence](../phase-reports/SCOPEIS_COMPANY_TICKETS_LOCAL_2026_10_09.md)); the original design-only restriction no longer applies to the approved core. Daily work lists, flowcharts and cost/PDF reporting remain outside this delivery. The full Phase 12 roadmap, including future workforce handoffs, remains `PARTIAL`.
+
 ## Confirmed direction
 
 The product owner asked to review and extract the **Company** experience from [MulhamKassab/ticketSystem](https://github.com/MulhamKassab/ticketSystem), excluding the account-creation/onboarding process, and to see its proposed appearance before implementation. This authorizes source assessment, a visual concept and documentation. It does not approve a schema, migration, permission matrix, application implementation or deployment.

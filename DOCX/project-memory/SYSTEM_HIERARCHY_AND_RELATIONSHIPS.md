@@ -69,3 +69,16 @@ The map combines stored employee home location/area, stored client/project locat
 A future Ticket can relate to Client, Project, Location, requester, assignee(s), required skills, due date, schedule assignment, work logs, and attachments. Ticket status, assignment status, schedule state, and work-log completion remain distinct. Selected ticket capabilities may be migrated in Phase 12 only after the workforce domain and permissions are stable.
 
 ![Future Ticket System boundary](../diagrams/09_ticket_system_later_integration.png)
+
+## Approved Company core — 2026-10-08
+
+The product owner authorized the [Company core implementation](PHASE_12_COMPANY_TICKET_IMPLEMENTATION_DECISIONS.md). The future relationships above remain a broader roadmap, rather than effects applied by the core.
+
+- A ticket Workspace is an independent container with optional existing Client/Project links. It has separately granted active members and Boards. Neither membership nor links grant new workforce roles or Employee management-record access.
+- A Board belongs to one workspace and has Draft, Published or Archived state. Its publication is ticket-specific and never publishes a workforce schedule.
+- A Ticket belongs to one board, retains its creator and optional current assignee/observer grants, and has its own status, priority, date, optional due date, content, version and archive history. Creator/assignee/observer are participation facts rather than system roles.
+- Work Logs belong to a ticket and attribute an authenticated author, description, instant and optional minutes. They do not constitute attendance or schedule assignments.
+- Private File metadata belongs to a ticket, retains uploader and archive provenance, and references private bytes behind the existing storage boundary. Returned DTOs contain no storage key or public URL.
+- Successful changes create the existing audit and per-recipient notification records transactionally. Current role/scope, membership, board lifecycle and participation determine the facts returned to the reader.
+
+The approved core is implemented and locally verified; see [the delivery report](../phase-reports/SCOPEIS_COMPANY_TICKETS_LOCAL_2026_10_09.md). Ticket-to-request/assignment handoffs, direct Location relations and required-skill semantics are outside this first delivery.

@@ -1,8 +1,8 @@
-// Fail-closed validator for the machine-readable pre-Phase-12 scenario manifest.
+// Fail-closed validator for the current machine-readable workforce and Company ticket scenario manifest.
 //
 // The scenario catalogue in DOCX is human guidance; this manifest is the enforcement seam. It must
 // fail when a scenario id is duplicated, a required scenario has no test evidence, a referenced test
-// file does not exist, a Phase 0-11 test file is silently omitted from the authoritative runners, a
+// file does not exist, a Phase 0-12 test file is silently omitted from the authoritative runners, a
 // scenario is marked skipped without a reason, or an implemented protected route is absent from route
 // certification. Coverage percentages are intentionally not the authority here.
 
@@ -103,7 +103,7 @@ const onDisk = await onDiskTestFiles();
 const covered = await runnerCoverageFiles(manifest.runnerCoverage);
 
 for (const file of onDisk) {
-  if (!covered.includes(file)) failures.push(`Registered Phase 0-11 test file is silently omitted from the authoritative runners: ${file}`);
+  if (!covered.includes(file)) failures.push(`Registered Phase 0-12 test file is silently omitted from the authoritative runners: ${file}`);
 }
 for (const file of covered) {
   if (!onDisk.includes(file)) failures.push(`Authoritative runner references a missing test file: ${file}`);

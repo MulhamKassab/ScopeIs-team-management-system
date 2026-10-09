@@ -4,7 +4,11 @@ Responsive internal workforce-planning application covering the secure foundatio
 
 The header's **Find a feature** search exposes each role's delivered tools through tasks such as CVs, staffing and exports. Dashboard shortcuts connect daily work to the appropriate workflow. The planning map fits authorized assignments, groups coincident pins, supports search/layers/touch interaction and links selected assignments to schedule and coverage. See the [UI experience review](DOCX/phase-reports/SCOPEIS_UI_EXPERIENCE_AND_PLANNING_MAP_2026_10_05.md) for screenshots and verification.
 
-Phase 12 — Ticket System integration — is the next journey and is `NEXT`; it has not started. Production identity/rollout remains Phase 13. Those modules exist only as clearly labelled shells.
+Company tickets are the locally authorized Phase 12 core workflow: independent workspaces/boards with optional Client/Project links, ticket status and priority, people access, work logs, private files, in-app notifications and retained archive/restore. The approved core is implemented and locally verified; [the delivery report](DOCX/phase-reports/SCOPEIS_COMPANY_TICKETS_LOCAL_2026_10_09.md) records the checks and their limits. Employees land on Tickets and use Tickets, Schedule, Vacations and My profile as primary destinations; their own recorded skills appear in My profile. Managers keep their existing tools and gain Tickets. [The confirmed decisions](DOCX/project-memory/PHASE_12_COMPANY_TICKET_IMPLEMENTATION_DECISIONS.md) define the exact role and participation boundaries. Full Phase 12 remains `PARTIAL`; future workforce handoffs and required-skill semantics are separate, and daily work, flowcharts and cost/PDF reporting are deferred. Production identity/rollout remains Phase 13.
+
+The product owner subsequently authorized production deployment on 9 October 2026. Release work is in progress for the existing [ScopeIs application](https://scopeis-team-management-system.vercel.app/); [the production report](DOCX/phase-reports/SCOPEIS_COMPANY_TICKETS_PRODUCTION_2026_10_09.md) records its exact target and pending preservation/migration/deployment/live checks. This authorization supersedes the original local-only delivery boundary and does not certify the broader Phase 13 rollout.
+
+Ticket files accept PDF, JPEG, PNG and DOCX. The Vercel production release limits each ticket upload to **4 MiB**; local uploads retain **5 MiB**. The page presents the same environment-specific limit enforced by the server. Downloads remain private and reauthorize current ticket access; archive retains bytes and history.
 
 Reporting reads the current Published schedule. The separate `PLANNING (unpublished)` report carries Draft and Proposed rows to management inside their current scope and is never visible to an Employee. Phase 11 reports never claim general staffing availability: the only permitted derived fact is the four-value conflict fact. CSV exports are streamed, bounded at 5,000 rows with refusal rather than truncation, formula-neutralised, and audited with safe metadata only.
 
@@ -47,6 +51,35 @@ invoked by startup, development, build, or deployment, requires an explicit
 Production confirmation guard and exact target verification, and never prints the
 password, hash, salt, pepper, or database URL.
 
+### Configured Windows checkout
+
+This checkout has a development-only PostgreSQL runtime under `%LOCALAPPDATA%\ScopeIsLocal` and an ignored `.env` for its local application database. Once those prerequisites and dependencies are present, start or reuse the local application from PowerShell:
+
+```powershell
+./Start-Local.ps1
+```
+
+The launcher starts the configured local PostgreSQL cluster if needed, runs Next.js directly on `http://127.0.0.1:3000`, checks an existing port owner, and writes logs under `%LOCALAPPDATA%\ScopeIsLocal`. It does not install dependencies, create a database or apply migrations. Calling Node directly also avoids Windows npm command-shim failures caused by the ampersand in this checkout's directory name.
+
+For local private uploads to survive application restarts, configure an absolute private directory in the ignored `.env`:
+
+```dotenv
+EVIDENCE_STORAGE_MODE=local
+EVIDENCE_LOCAL_DIRECTORY=C:/Users/your-user/AppData/Local/ScopeIsLocal/private-files
+```
+
+Keep this directory outside `public` and back it up with its database metadata. Without an explicit directory, local storage is temporary. Production refuses the local storage provider; disposable tests use owned temporary storage.
+
+The additive Company migration has a guarded local upgrade command. Its default is a read-only dry run against the explicit development `.env` database:
+
+```powershell
+node scripts/upgrade-local-company-tickets.mjs
+```
+
+`--apply` is restricted to a canonical loopback development database with only `0015_company_tickets` pending. It records a private pre-upgrade snapshot and receipt under `%LOCALAPPDATA%\ScopeIsLocal\backups`, and refuses the commit if any prior table facts, schema fingerprints or historical migration rows change. This script is a local development procedure. The separately authorized production release follows target verification, backup/restore proof and the preservation checks recorded in the production report; this local command must not be repurposed against production.
+
+The configured fictional company demo can be populated with five ticket examples and one private example PDF using `node scripts/seed-local-ticket-demo.mjs --apply`. Without `--apply` it only describes the operation. It requires the explicit local demo environment, signs in through ordinary credential authentication, preserves existing matching examples, and performs ticket operations through the application API.
+
 ## Account administration
 
 A currently active Super Admin can open `/accounts` to create application
@@ -73,8 +106,10 @@ Each concept has exactly one meaning. Every gate below is safe to run locally: i
 | Component tests | `npm run test:component` | All jsdom component suites in one pass, with no PostgreSQL or environment dependency. |
 | Aggregate integration tests | `npm run test:integration` | Every file in `test/integration`, each in its own freshly created disposable database. |
 | Phase-specific integration tests | `npm run test:phase1-integration`, `npm run test:phase2-core`, `npm run test:phase3-service` … `npm run test:phase11-service` | One phase's service/migration slice only. Retained for focused work; `npm run test:integration` is the authoritative aggregate. |
-| Aggregate E2E | `npm run test:e2e` | Phase 1–11, credential/account and responsive UI browser journeys, run sequentially, each on its own disposable database and runner-allocated port. |
+| Company ticket integration | `npm run test:tickets` | Ticket service and private-file integration suites, each on a fresh disposable loopback database. |
+| Aggregate E2E | `npm run test:e2e` | Phase 1–11, Company tickets, credential/account and responsive UI browser journeys, run sequentially, each on its own disposable database and runner-allocated port. |
 | Phase-specific E2E | `npm run test:phase1-e2e` … `npm run test:phase11-e2e` | One phase's guarded desktop/mobile journey only. |
+| Company ticket E2E | `npm run test:tickets-e2e` | Guarded Company ticket browser journey on an owned disposable database, temporary private-file directory and runner-allocated loopback port. |
 | Responsive and visual presentation E2E | `npm run test:responsive` | Supplemental UI gate using installed Chrome, an isolated safe build, one owned disposable database and fictional edge-case fixtures. Checks 320–1920px layouts, dialogs, role navigation and feature discovery, planning-map fit/search/layers/offline recovery, RTL, both themes, doubled text, a simulated onscreen keyboard, contrast/focus, native modal behavior, reduced motion, desktop hover and forced colors. |
 | Route certification | `npm run test:route-certification` | Phase 1 HTTP route/role/scope/privacy certification against a built test server. |
 | Migration verification | `npm run test:migration` | Migration ledger, journal, manifest, and TypeScript-schema parity. |
@@ -86,7 +121,20 @@ Each concept has exactly one meaning. Every gate below is safe to run locally: i
 | Concurrency/rollback repeat | `npm run test:system-concurrency` | The concurrency- and rollback-sensitive integration suites, three consecutive passes in fresh disposable databases. |
 | System lock | `npm run test:system-lock` | The fail-closed aggregate that validates the scenario manifest and runs the complete verification contract in a deterministic order. |
 
-`npm run test` runs unit, component, and aggregate integration. `npm run test:all` runs the whole contract: lint, typecheck, unit, component, integration, migration, route certification, seed smoke, safe build, and aggregate E2E. `npm run test:system-lock` adds scenario-manifest validation, the fresh-system smoke, isolation, and a diff whitespace check and is the authoritative fail-closed pre-Phase-12 baseline gate.
+`npm run test` runs unit, component, and aggregate integration. `npm run test:all` runs the whole contract: lint, typecheck, unit, component, integration, migration, route certification, seed smoke, safe build, and aggregate E2E. `npm run test:system-lock` adds scenario-manifest validation, the fresh-system smoke, isolation and a diff whitespace check. Its current registration includes Company tickets; earlier pre-Phase-12 passing receipts certify their own frozen source, not the new integration.
+
+In this Windows directory, invoke installed JavaScript entry points directly when an npm command shim fails:
+
+```powershell
+node node_modules/typescript/bin/tsc --noEmit
+node node_modules/eslint/bin/eslint.js . --max-warnings=0
+node node_modules/vitest/vitest.mjs run test/unit
+node node_modules/vitest/vitest.mjs run test/component
+node scripts/run-ticket-service-tests.mjs
+node scripts/run-ticket-playwright.mjs
+```
+
+Company ticket commands are verification entry points, not claims that the current source has passed. Final results must be recorded in the live tracker with their actual evidence.
 
 ### Build safety
 
@@ -94,7 +142,7 @@ A local `.env.production` can be auto-loaded by an ordinary Next.js build, so **
 
 ### Playwright and database isolation
 
-Direct Playwright invocation is intentionally unsupported. Playwright is run only through the guarded runners, because each journey needs its own disposable database and an isolated port. The root `playwright.config.ts` and the Phase 2–11 configs therefore require a runner-allocated loopback port and fail closed rather than guessing a default that could reach a persistent or production database. Phase 3–11 journey specs additionally carry `test.skip(<guard>)` statements so they can never run against another phase's seed data; the aggregate runner sets each guard, so nothing is skipped in `npm run test:e2e`.
+Direct Playwright invocation is intentionally unsupported. Playwright is run only through the guarded runners, because each journey needs its own disposable database and an isolated port. The root `playwright.config.ts`, Phase 2–11 configs and `playwright.tickets.config.ts` therefore require a runner-allocated loopback port and fail closed rather than guessing a default that could reach a persistent or production database. Phase journey specs carry guards so they can never run against another journey's seed data; their guarded runners establish the correct environment.
 
 ### Lint boundary
 
@@ -106,4 +154,4 @@ For a fresh empty database, use the normal Drizzle migrator. For an existing dat
 
 ## Documentation
 
-See `DOCX/INDEX.md` for canonical requirements and design references, `DOCX/project-memory/IMPLEMENTATION_STATUS_TRACKER.md` for live status, and `DOCX/phase-reports/SCOPEIS_PHASE_11_DASHBOARDS_REPORTS_AND_AUTHORIZED_EXPORTS_R1.md` for the current phase evidence. Phase evidence remains in `DOCX/phase-reports/`.
+See [the documentation index](DOCX/INDEX.md) for canonical requirements, [the live tracker](DOCX/project-memory/IMPLEMENTATION_STATUS_TRACKER.md) for current status, [Company ticket decisions](DOCX/project-memory/PHASE_12_COMPANY_TICKET_IMPLEMENTATION_DECISIONS.md) for the approved core, and [the production release report](DOCX/phase-reports/SCOPEIS_COMPANY_TICKETS_PRODUCTION_2026_10_09.md) for the subsequent deployment request. Historical phase evidence certifies only its own source and stated scope; broader Phase 12/13 completion is not implied by core deployment.

@@ -1,11 +1,12 @@
 import { can } from "@/modules/authorization/authorization-service";
 import type { ModuleKey } from "@/modules/authorization/capabilities";
-import type { AuthenticatedActor } from "@/shared/types/foundation";
+import type { AuthenticatedActor, SystemRole } from "@/shared/types/foundation";
 
 export type ModuleDefinition = { key: ModuleKey; href: string; label: string; purpose: string; phase: number; capability: `module:${ModuleKey}:view`; mobilePrimary?: boolean };
 
 export const modules: Record<ModuleKey, ModuleDefinition> = {
   dashboard: { key: "dashboard", href: "/dashboard", label: "Home", purpose: "Role- and scope-aware operational summaries over the current Published schedule.", phase: 11, capability: "module:dashboard:view", mobilePrimary: true },
+  tickets: { key: "tickets", href: "/tickets", label: "Tickets", purpose: "Company workspaces, boards and tickets within your current access.", phase: 12, capability: "module:tickets:view" },
   employees: { key: "employees", href: "/employees", label: "People", purpose: "Employee records, directory, search, lifecycle, and self-service profile.", phase: 2, capability: "module:employees:view", mobilePrimary: true },
   teams: { key: "teams", href: "/teams", label: "Teams", purpose: "Create teams and manage their members.", phase: 2, capability: "module:teams:view" },
   designations: { key: "designations", href: "/designations", label: "Job titles", purpose: "Manage job designations and membership separately from system roles.", phase: 2, capability: "module:designations:view" },
@@ -28,4 +29,17 @@ export const modules: Record<ModuleKey, ModuleDefinition> = {
 };
 
 export function moduleForPathSegment(segment: string) { return Object.values(modules).find((module) => module.key === segment) ?? null; }
-export function navigationFor(actor: AuthenticatedActor) { return Object.values(modules).filter((module) => can(actor, module.capability)); }
+
+/** The first workspace follows the system role; job titles never choose access or a landing page. */
+export function workspaceHomeFor(role: SystemRole) { return role === "EMPLOYEE" ? "/tickets" : "/dashboard"; }
+
+export function navigationFor(actor: AuthenticatedActor) {
+  const authorized = Object.values(modules).filter((module) => can(actor, module.capability));
+  if (actor.role !== "EMPLOYEE") return authorized;
+  const keys: ModuleKey[] = ["tickets", "schedule", "leave", "profile", "dashboard", "notifications", "requests"];
+  return keys.flatMap((key) => authorized.filter((module) => module.key === key)).map((module) => ({
+    ...module,
+    label: module.key === "schedule" ? "Schedule" : module.key === "leave" ? "Vacations" : module.label,
+    mobilePrimary: ["tickets", "schedule", "leave", "profile"].includes(module.key),
+  }));
+}

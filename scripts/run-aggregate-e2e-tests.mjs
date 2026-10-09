@@ -38,6 +38,7 @@ const suites = [
   { name: "Phase 11 dashboards, reports and exports", script: "run-phase11-playwright.mjs" },
   { name: "Credential authentication login", script: "run-credential-e2e.mjs" },
   { name: "Super Admin account administration", script: "run-account-e2e.mjs" },
+  { name: "Company tickets and private files", script: "run-ticket-playwright.mjs" },
   { name: "Responsive UI, task discovery and planning workspace", script: "run-responsive-playwright.mjs" },
 ];
 

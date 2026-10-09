@@ -2,7 +2,7 @@ import "server-only";
 import { randomUUID } from "node:crypto";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { dirname, join, resolve, sep } from "node:path";
+import { basename, dirname, isAbsolute, join, resolve, sep } from "node:path";
 import { env } from "@/server/env";
 import { errors } from "@/shared/errors/app-error";
 import { validatePrivateUpload, vercelBlobPrivateStorage } from "@/server/providers/vercel-blob-provider";
@@ -65,7 +65,22 @@ export const unconfiguredEvidenceStorage: EvidenceStorage = {
   async remove() { throw errors.providerNotConfigured(); },
 };
 
-export function defaultLocalEvidenceRoot() { return join(tmpdir(), `scopeis-evidence-${process.pid}`); }
+/** Explicit development storage survives restarts; disposable tests retain process-owned storage. */
+export function defaultLocalEvidenceRoot() {
+  const testDirectory = process.env.SCOPEIS_TEST_EVIDENCE_DIRECTORY?.trim();
+  if (testDirectory && process.env.APP_ENV === "test" && process.env.SCOPEIS_DISPOSABLE_TEST_DATABASE === "true") {
+    const target = resolve(testDirectory);
+    const temporaryRoot = resolve(tmpdir());
+    if (!isAbsolute(testDirectory) || dirname(target) !== temporaryRoot || !basename(target).startsWith("scopeis-ticket-browser-files-")) throw errors.validation();
+    return target;
+  }
+  const directory = process.env.EVIDENCE_LOCAL_DIRECTORY?.trim();
+  if (directory && process.env.APP_ENV !== "test" && process.env.SCOPEIS_DISPOSABLE_TEST_DATABASE !== "true") {
+    if (!isAbsolute(directory)) throw errors.validation();
+    return resolve(directory);
+  }
+  return join(tmpdir(), `scopeis-evidence-${process.pid}`);
+}
 
 let cached: EvidenceStorage | undefined;
 

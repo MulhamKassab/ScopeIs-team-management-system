@@ -7,7 +7,7 @@ import { CapabilityEvidencePanel } from "@/modules/evidence/forms";
 import { evidenceRepository } from "@/modules/evidence/repositories";
 import { evidenceService } from "@/modules/evidence/service";
 import { db } from "@/db/client";
-import { employeeProfileService } from "@/modules/employees/employee-services";
+import { employeeProfileService, employeeSkillService } from "@/modules/employees/employee-services";
 import { EmployeeDomainError } from "@/modules/employees/domain-error";
 import { MissingWorkforceProfile } from "@/modules/employees/missing-workforce-profile";
 import { completeWorkforceProfileAction } from "@/modules/account-administration/actions";
@@ -26,7 +26,7 @@ export default async function ProfilePage() {
     }
     throw error;
   }
-  const [evidence, skills, teams] = await Promise.all([evidenceService.listMine(actor), evidenceRepository.activeSkillOptions(db), listTeamOptions()]);
+  const [evidence, skills, teams, recordedSkills] = await Promise.all([evidenceService.listMine(actor), evidenceRepository.activeSkillOptions(db), listTeamOptions(), employeeSkillService.listForEmployee(actor, actor.id)]);
   const teamName = teams.find((team) => team.id === profile.team)?.name;
   const activeEvidence = evidence.items.filter((item) => !item.archivedAt);
   return <div className="people-profile-page">
@@ -36,6 +36,7 @@ export default async function ProfilePage() {
       <dl className="people-profile-facts"><div><dt>Work email</dt><dd>{profile.workEmail || "Not recorded"}</dd></div><div><dt>Work phone</dt><dd>{profile.workPhone || "Not recorded"}</dd></div><div><dt>Certifications</dt><dd>{activeEvidence.filter((item) => item.kind === "certification").length} recorded</dd></div><div><dt>CV</dt><dd>{activeEvidence.some((item) => item.kind === "cv" && item.files.some((file) => !file.archivedAt)) ? "Uploaded" : "No file uploaded"}</dd></div></dl>
       <Link className="people-security-link" href="/account/change-password">Change your password</Link>
     </section>
+    <section className="operation-panel" aria-labelledby="profile-skills-title"><h3 id="profile-skills-title">My recorded skills</h3><p>These skills are recorded by your Super Admin. Contact them if a record needs correcting.</p>{recordedSkills.length ? <ul className="operation-list">{recordedSkills.map(({ association, skill }) => <li key={association.id}><div><strong>{skill.name}</strong><span>Recorded skill</span></div></li>)}</ul> : <p className="operation-empty">No skills have been recorded on your profile.</p>}</section>
     <CapabilityEvidencePanel items={evidence.items} skills={skills} />
   </div>;
 }

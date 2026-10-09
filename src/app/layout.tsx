@@ -16,6 +16,7 @@ import "@/app/route-motion.css";
 import "@/app/motion.css";
 import "@/app/timetable.css";
 import "@/app/journeys.css";
+import "@/app/tickets.css";
 import { directionSchema } from "@/shared/validation/foundation";
 import { ThemeBootScript } from "@/shared/components/theme-provider";
 import { AppMotion } from "@/shared/components/app-motion";
