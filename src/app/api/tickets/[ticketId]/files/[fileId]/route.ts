@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { getCurrentActor } from "@/modules/auth/session-service";
 import { readBoundedTicketBody, ticketFilesService } from "@/modules/tickets/files";
-import { errorResponse, requireSameOrigin } from "@/server/http";
+import { ticketError } from "@/modules/tickets/http";
+import { requireSameOrigin } from "@/server/http";
 import { errors } from "@/shared/errors/app-error";
 
 export const runtime = "nodejs";
-const privateHeaders = { "Cache-Control": "private, no-store, max-age=0" };
+const privateHeaders = { "Cache-Control": "private, no-store, max-age=0", "X-Content-Type-Options": "nosniff" };
 
 export async function GET(_request: Request, { params }: { params: Promise<{ ticketId: string; fileId: string }> }) {
   try {
@@ -16,7 +17,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ tic
     const body = new ArrayBuffer(file.bytes.byteLength);
     new Uint8Array(body).set(file.bytes);
     return new NextResponse(body, { headers: file.headers });
-  } catch (error) { const response = errorResponse(error); response.headers.set("Cache-Control", privateHeaders["Cache-Control"]); return response; }
+  } catch (error) { return ticketError(error); }
 }
 
 export async function POST(request: Request, { params }: { params: Promise<{ ticketId: string; fileId: string }> }) {
@@ -31,5 +32,5 @@ export async function POST(request: Request, { params }: { params: Promise<{ tic
     if (!command || typeof command !== "object" || Array.isArray(command) || "ticketId" in command || "fileId" in command) throw errors.validation();
     const result = await ticketFilesService.change(actor, { ...command, ticketId, fileId });
     return NextResponse.json({ ok: true, ...result }, { headers: privateHeaders });
-  } catch (error) { const response = errorResponse(error); response.headers.set("Cache-Control", privateHeaders["Cache-Control"]); return response; }
+  } catch (error) { return ticketError(error); }
 }
