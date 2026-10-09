@@ -4,7 +4,7 @@
 
 These decisions record the implemented V1 boundary for `SCOPEIS_PHASE_4_SCHEDULING_DRAFT_PROPOSED_PUBLISHED_JOURNEY_R1`. They supplement, and do not replace, the Phase 3 operational-domain decisions.
 
-The product owner's 2026-10-09 instruction to remove Admin schedule drafting supersedes historical Admin-writer permissions. The bounded amendment is `LOCAL_COMPLETE` with 98 affected cases and the final-source guarded build plus desktop/phone journey passed; source/production delivery remains `PENDING`. See [the amendment report](../phase-reports/SCOPEIS_ADMIN_SCHEDULE_ACCESS_AMENDMENT_2026_10_09.md). Earlier dated reports retain evidence for their original source; separate retained-history removal remains open.
+The product owner's 2026-10-09 instruction to remove Admin schedule drafting supersedes historical Admin-writer permissions. Bounded delivery is `PRODUCTION_RELEASED`: 98 local affected cases and guarded build/desktop-phone journey pass; application `955fb4a88e26014fd19bc90a57323f97cf27eaf0` is pushed and Ready in `dpl_7hs93EV73qh7JsDNaHSpJXhheJr8`, canonical verified `2026-10-09T10:05:14.038Z` and anonymous live smoke 11/11 at `10:05:56.321Z`. [The report](../phase-reports/SCOPEIS_ADMIN_SCHEDULE_ACCESS_AMENDMENT_2026_10_09.md) and [exact release receipt](../phase-reports/evidence/admin-schedule-access-2026-10-09/production-release.json) keep signed-in local and anonymous production evidence separate; authenticated live role/private-file journeys remain unverified. Earlier dated reports remain historical; separate retained-history removal stays open. No migration or production database/environment/account/credential/seed change occurred.
 
 ## Schedule container
 

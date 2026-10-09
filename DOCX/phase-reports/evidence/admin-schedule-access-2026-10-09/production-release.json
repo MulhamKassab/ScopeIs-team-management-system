@@ -1,0 +1,127 @@
+{
+  "applicationCommit": "955fb4a88e26014fd19bc90a57323f97cf27eaf0",
+  "deployment": {
+    "verifiedAt": "2026-10-09T10:05:14.038Z",
+    "projectId": "prj_JvFv2V2vKKmAqfBOySS8FsZ1aZjy",
+    "deploymentId": "dpl_7hs93EV73qh7JsDNaHSpJXhheJr8",
+    "source": "955fb4a88e26014fd19bc90a57323f97cf27eaf0",
+    "target": "production",
+    "state": "READY",
+    "url": "scopeis-team-management-system-f9w223u2h-mu-ka7.vercel.app",
+    "canonicalDomain": "scopeis-team-management-system.vercel.app",
+    "canonicalAliasAssigned": true,
+    "aliases": [
+      "scopeis-team-management-system.vercel.app",
+      "scopeis-company-demo.vercel.app",
+      "scopeis-team-management-system-mu-ka7.vercel.app",
+      "scopeis-team-management-system-git-main-mu-ka7.vercel.app"
+    ]
+  },
+  "anonymousLiveSmoke": {
+    "verifiedAt": "2026-10-09T10:05:56.321Z",
+    "origin": "https://scopeis-team-management-system.vercel.app",
+    "authenticated": false,
+    "cases": 11,
+    "passed": 11,
+    "results": [
+      {
+        "path": "/login",
+        "method": "GET",
+        "expectedStatus": 200,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "path": "/schedule",
+        "method": "GET",
+        "expectedStatus": 307,
+        "status": 307,
+        "location": "/login",
+        "passed": true
+      },
+      {
+        "path": "/tickets",
+        "method": "GET",
+        "expectedStatus": 307,
+        "status": 307,
+        "location": "/login",
+        "passed": true
+      },
+      {
+        "path": "/dashboard",
+        "method": "GET",
+        "expectedStatus": 307,
+        "status": 307,
+        "location": "/login",
+        "passed": true
+      },
+      {
+        "path": "/profile",
+        "method": "GET",
+        "expectedStatus": 307,
+        "status": 307,
+        "location": "/login",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets",
+        "method": "GET",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets/00000000-0000-4000-8000-000000000001",
+        "method": "GET",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets/00000000-0000-4000-8000-000000000001/files/00000000-0000-4000-8000-000000000002",
+        "method": "GET",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets/commands",
+        "method": "POST",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets/00000000-0000-4000-8000-000000000001/files",
+        "method": "POST",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/auth/mock-login",
+        "method": "POST",
+        "expectedStatus": 404,
+        "status": 404,
+        "passed": true
+      }
+    ],
+    "limitation": "Anonymous checks do not certify signed-in production role workflows; these are covered on disposable local fixtures."
+  },
+  "migrationRequired": false,
+  "productionDatabaseWrites": false,
+  "productionEnvironmentChanges": false,
+  "productionCredentialChanges": false,
+  "productionSeedChanges": false,
+  "limitation": "Anonymous checks do not certify signed-in production role workflows; these are covered on disposable local fixtures."
+}

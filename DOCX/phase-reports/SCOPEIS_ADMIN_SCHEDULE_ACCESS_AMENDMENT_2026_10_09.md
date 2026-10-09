@@ -1,6 +1,6 @@
 # Admin schedule-access amendment — 2026-10-09
 
-Status: `LOCAL_COMPLETE` for the bounded permission amendment and inaccurate-help corrections. All 98 affected automated cases and the final-source guarded build/browser journey pass. Source/production delivery is `PENDING` and must be recorded against exact source and live evidence.
+Status: `PRODUCTION_RELEASED` for the bounded permission amendment and inaccurate-help corrections. All 98 affected local automated cases and the final-source guarded build/browser journey pass. Application `955fb4a88e26014fd19bc90a57323f97cf27eaf0` is pushed to `origin/main`, Ready at the canonical production domain, with 11/11 anonymous live checks passed. [The public release receipt](evidence/admin-schedule-access-2026-10-09/production-release.json) records exact source and deployment evidence. Signed-in production role/private-file journeys remain unverified.
 
 ## Confirmed requirement
 
@@ -47,4 +47,21 @@ The desktop and phone journey verifies Admin read-only Draft/Proposed/Published 
 
 Seven final screenshots are retained locally in ignored `test-results/admin-schedule-access-amendment/`: `desktop-admin-draft.png`, `desktop-admin-draft-details.png`, `desktop-admin-proposed.png`, `desktop-admin-published.png`, `mobile-admin-draft.png`, `mobile-admin-proposed.png`, and `mobile-admin-published.png`. They contain only fictional guarded-test data.
 
-The 4.7 writer-boundary amendment is locally `COMPLETED`; the tracker restores Phase 4 to 8/12 completed sub-phases (67%) while preserving the separate retained-history assignment-removal findings at 4.6/4.10/4.12 and deferred assignment types at 4.5. Source SHA, canonical Ready deployment/alias and the 11-case live anonymous smoke will be recorded only after actual delivery evidence. Earlier Company ticket and schedule releases do not certify this new permission change. Authenticated production role/private-file journeys are not inferred from local or anonymous checks. This amendment does not close full Phase 4 or general production readiness.
+The 4.7 writer-boundary amendment is `COMPLETED`; the tracker restores Phase 4 to 8/12 completed sub-phases (67%) while preserving the separate retained-history assignment-removal findings at 4.6/4.10/4.12 and deferred assignment types at 4.5. This amendment does not close full Phase 4 or general production readiness.
+
+## Source and production delivery
+
+[The release receipt](evidence/admin-schedule-access-2026-10-09/production-release.json) verifies:
+
+| Check | Actual result |
+|---|---|
+| Application source | `955fb4a88e26014fd19bc90a57323f97cf27eaf0`, pushed to `origin/main` |
+| Vercel target | Production project `prj_JvFv2V2vKKmAqfBOySS8FsZ1aZjy` |
+| Ready deployment | `dpl_7hs93EV73qh7JsDNaHSpJXhheJr8`, exact application source |
+| Canonical alias | [ScopeIs application](https://scopeis-team-management-system.vercel.app/), assignment verified `2026-10-09T10:05:14.038Z` (14:05 Dubai) |
+| Live anonymous smoke | 11/11 passed at `2026-10-09T10:05:56.321Z` (14:05 Dubai) |
+| Production state changes | No migration, database write, environment/account/credential change or seed |
+
+The live checks cover normal sign-in availability; login redirects for protected Schedule, Tickets, Home and Profile pages; ticket/detail/private-file API refusals with private no-store/no-sniff headers; and disabled mock login. The initial smoke helper omitted the required Origin header on POST and correctly received 403; the helper supplied the ordinary same-origin header before the final 11/11 run. No application fix was required for that refusal.
+
+The **98 local signed-in/permission/component cases** and **11 production anonymous checks** are separate evidence. Ordinary authenticated production Admin/Super Admin/Employee and private-file journeys are not certified by these anonymous checks; no credentials were reset or bypassed. Earlier releases remain historical. The broader UI clarity recommendations remain proposed, not an implemented redesign. A later documentation-only closure commit requires its own source/deployment verification; it is not inferred from this application release.
