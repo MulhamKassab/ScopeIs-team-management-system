@@ -1,7 +1,7 @@
 ## Company ticket production release — authorized 2026-10-09
 
 - [Production release target, preservation and verification status](phase-reports/SCOPEIS_COMPANY_TICKETS_PRODUCTION_2026_10_09.md)
-- The product owner explicitly requested deployment after local delivery. Release work is `IN_PROGRESS` for the existing [canonical ScopeIs application](https://scopeis-team-management-system.vercel.app/); backup/restore proof, additive production migration, deployment and live checks are pending. This supersedes the prior local-only boundary without completing the broader Phase 12 roadmap or certifying Phase 13 readiness.
+- The requested production migration/deployment is complete: fresh backup/independent restore, prior-fact preservation, Ready application `4307413`, canonical [ScopeIs application](https://scopeis-team-management-system.vercel.app/) assignment and final anonymous smoke 10/10 are verified. Ordinary sign-in was visually checked; authenticated live Employee/manager/private-byte certification remains pending without ordinary credentials. The broader Phase 12 roadmap remains `PARTIAL`, and Phase 13 readiness is not certified.
 
 ## Company ticket implementation — authorized 2026-10-08
 
