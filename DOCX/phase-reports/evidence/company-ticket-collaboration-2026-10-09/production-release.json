@@ -1,0 +1,119 @@
+{
+  "applicationCommit": "48e6c827320a649c01b38428a734f5d5f194b6b2",
+  "deployment": {
+    "verifiedAt": "2026-10-09T07:00:56.931Z",
+    "projectId": "prj_JvFv2V2vKKmAqfBOySS8FsZ1aZjy",
+    "deploymentId": "dpl_GqYFAUpCEuxPKADuDq8b4jPTS9We",
+    "source": "48e6c827320a649c01b38428a734f5d5f194b6b2",
+    "target": "production",
+    "state": "READY",
+    "url": "scopeis-team-management-system-k4of6a4cw-mu-ka7.vercel.app",
+    "canonicalDomain": "scopeis-team-management-system.vercel.app",
+    "canonicalAliasAssigned": true,
+    "aliases": [
+      "scopeis-team-management-system.vercel.app",
+      "scopeis-company-demo.vercel.app",
+      "scopeis-team-management-system-mu-ka7.vercel.app",
+      "scopeis-team-management-system-git-main-mu-ka7.vercel.app"
+    ]
+  },
+  "anonymousLiveSmoke": {
+    "verifiedAt": "2026-10-09T07:01:04.889Z",
+    "origin": "https://scopeis-team-management-system.vercel.app",
+    "authenticated": false,
+    "cases": 10,
+    "passed": 10,
+    "results": [
+      {
+        "path": "/login",
+        "method": "GET",
+        "expectedStatus": 200,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "path": "/tickets",
+        "method": "GET",
+        "expectedStatus": 307,
+        "status": 307,
+        "location": "/login",
+        "passed": true
+      },
+      {
+        "path": "/dashboard",
+        "method": "GET",
+        "expectedStatus": 307,
+        "status": 307,
+        "location": "/login",
+        "passed": true
+      },
+      {
+        "path": "/profile",
+        "method": "GET",
+        "expectedStatus": 307,
+        "status": 307,
+        "location": "/login",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets",
+        "method": "GET",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets/00000000-0000-4000-8000-000000000001",
+        "method": "GET",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets/00000000-0000-4000-8000-000000000001/files/00000000-0000-4000-8000-000000000002",
+        "method": "GET",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets/commands",
+        "method": "POST",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets/00000000-0000-4000-8000-000000000001/files",
+        "method": "POST",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/auth/mock-login",
+        "method": "POST",
+        "expectedStatus": 404,
+        "status": 404,
+        "passed": true
+      }
+    ],
+    "limitation": "Authenticated Employee/manager operations and private-file transfers require normal account login and are not certified by these anonymous checks."
+  },
+  "migrationRequired": false,
+  "productionDatabaseWrites": false,
+  "productionEnvironmentChanges": false,
+  "productionCredentialChanges": false,
+  "productionSeedChanges": false,
+  "limitation": "Authenticated Employee/manager operations and private-file transfers require normal account login and are not certified by these anonymous checks."
+}
