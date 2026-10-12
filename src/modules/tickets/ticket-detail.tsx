@@ -6,9 +6,10 @@ import { useId, useState, type FormEvent } from "react";
 import { ArrowLeft, Archive, FileDown, Paperclip, Pencil, RotateCcw, Users, Plus } from "lucide-react";
 import { TaskDialog } from "@/shared/components/task-dialog";
 import type { SystemRole } from "@/shared/types/foundation";
-import { TicketActionForm, TicketFields, TicketPeopleFields, readTicketFields } from "./forms";
+import { TicketActionForm, TicketFields, TicketPeopleFields, TicketStatusFields, readTicketFields } from "./forms";
 import { ticketDate, ticketNumber, ticketPriorityLabels, ticketStatusLabels } from "./presentation";
 import type { TicketDetail, TicketFileSummary, TicketWorkspaceData } from "./types";
+import { safeTicketReturnTo, ticketContainerHref } from "./navigation";
 
 type WorkLog = TicketDetail["workLogs"][number];
 type Feedback = { kind: "idle" | "busy" | "success" | "error"; message?: string; stale?: boolean };
@@ -113,11 +114,12 @@ function TicketFileForm({ ticket, file, action, onSuccess, onReload, maxUploadBy
   </form>;
 }
 
-export function TicketDetailView({ initialData, workspace, actor, maxUploadBytes = 5 * 1024 * 1024 }: {
+export function TicketDetailView({ initialData, workspace, actor, maxUploadBytes = 5 * 1024 * 1024, initialReturnTo }: {
   initialData: TicketDetail;
   workspace: TicketWorkspaceData;
   actor: { id: string; displayName: string; role: SystemRole };
   maxUploadBytes?: number;
+  initialReturnTo?: string;
 }) {
   const router = useRouter();
   const [latest, setLatest] = useState<TicketDetail | null>(null);
@@ -132,6 +134,7 @@ export function TicketDetailView({ initialData, workspace, actor, maxUploadBytes
   const dashboard = workspace.boards.find((entry) => entry.id === ticket.boardId);
   const currentWorkspace = workspace.workspaces.find((entry) => entry.id === ticket.workspaceId);
   const writable = !ticket.archivedAt;
+  const returnTo = safeTicketReturnTo(initialReturnTo);
 
   async function refreshTicket(showArchived = includeArchived, throwOnError = false): Promise<void> {
     setRefreshing(true);
@@ -165,18 +168,28 @@ export function TicketDetailView({ initialData, workspace, actor, maxUploadBytes
     setNotice(message);
   }
 
-  if (unavailable) return <div className="operations-page tickets-page"><section className="operation-panel"><h2>Ticket unavailable</h2><p>This ticket is no longer available to your account.</p><Link className="button" href="/tickets">Back to tickets</Link></section></div>;
+  if (unavailable) return <div className="operations-page tickets-page"><section className="operation-panel"><h2>Ticket unavailable</h2><p>This ticket is no longer available to your account.</p><Link className="button" href={returnTo}>Back to tickets</Link></section></div>;
 
   return <div className="operations-page tickets-page ticket-detail-page">
-    <Link href="/tickets" className="button ticket-back"><ArrowLeft size={17} aria-hidden="true" />Back to tickets</Link>
+    <Link href={returnTo} className="button ticket-back"><ArrowLeft size={17} aria-hidden="true" />Back to tickets</Link>
+    <nav className="ticket-breadcrumbs" aria-label="Ticket location"><ol>
+      <li>{currentWorkspace ? <Link href={ticketContainerHref(returnTo, { view: "tickets", workspace: currentWorkspace.id, board: "" })}>{currentWorkspace.name}</Link> : <span>Workspace</span>}</li>
+      <li>{dashboard ? <Link href={ticketContainerHref(returnTo, { view: dashboard.status === "ARCHIVED" ? "archive" : "tickets", workspace: ticket.workspaceId, board: dashboard.id })}>{dashboard.name}</Link> : <span>Dashboard</span>}</li>
+      <li><span aria-current="page">{ticketNumber(ticket.number)}</span></li>
+    </ol></nav>
     <header className="operations-heading ticket-detail-heading">
       <div>
-        <p className="eyebrow">{ticketNumber(ticket.number)} · {currentWorkspace?.name ?? "Company workspace"}{dashboard ? ` / ${dashboard.name}` : ""}</p>
+        <p className="eyebrow">{ticketNumber(ticket.number)}</p>
         <h1>{ticket.subject}</h1>
         <div className="ticket-badges"><span className={`ticket-badge ticket-status-${ticket.status.toLowerCase()}`}>{ticketStatusLabels[ticket.status]}</span><span className={`ticket-badge ticket-priority-${ticket.priority.toLowerCase()}`}>{ticketPriorityLabels[ticket.priority]}</span>{ticket.archivedAt ? <span className="ticket-badge">Archived</span> : null}</div>
       </div>
       <div className="ticket-detail-actions">
-        {ticket.permissions.edit && writable ? <TaskDialog triggerLabel="Edit ticket" title="Edit ticket" triggerIcon={<Pencil size={17} aria-hidden="true" />}>
+        {ticket.permissions.edit && writable ? <TaskDialog triggerLabel="Change status" title="Change ticket status" triggerClassName="button primary">
+          <TicketActionForm label="Change ticket status" submit="Save status" getCommand={(form) => ({ action: "changeTicketStatus", ticketId: ticket.id, version: ticket.version, status: String(form.get("status")), onHoldReason: String(form.get("onHoldReason") ?? "").trim() })} onSuccess={() => saved("Status updated.")} onConflict={() => refreshTicket(includeArchived, true)}>
+            <TicketStatusFields key={ticket.version} ticket={ticket} />
+          </TicketActionForm>
+        </TaskDialog> : null}
+        {ticket.permissions.edit && writable ? <TaskDialog triggerLabel="Edit details" title="Edit ticket" triggerClassName="button" triggerIcon={<Pencil size={17} aria-hidden="true" />}>
           <TicketActionForm label="Edit ticket" submit="Save changes" getCommand={(form) => ({ action: "updateTicket", ticketId: ticket.id, version: ticket.version, ...readTicketFields(form) })} onSuccess={() => saved("Ticket saved.")} onConflict={() => refreshTicket(includeArchived, true)}>
             <TicketFields key={ticket.version} ticket={ticket} />
           </TicketActionForm>
@@ -198,10 +211,12 @@ export function TicketDetailView({ initialData, workspace, actor, maxUploadBytes
         <section className="operation-panel" aria-label="Ticket details">
           <h2>Details</h2>
           {ticket.status === "ON_HOLD" ? <div className="operation-callout"><strong>On hold</strong><p className="ticket-text">{ticket.onHoldReason}</p></div> : null}
-          <DetailText heading="Summary" value={ticket.summary} />
-          <DetailText heading="Planning" value={ticket.planning} />
-          <DetailText heading="Work completed" value={ticket.workCompleted} />
-          <DetailText heading="Notes" value={ticket.notes} />
+          <DetailText heading="Description" value={ticket.summary} />
+          {ticket.planning || ticket.workCompleted || ticket.notes ? <details className="ticket-extra-fields ticket-secondary-narratives"><summary>Planning, completed work and notes</summary>
+            {ticket.planning ? <DetailText heading="Planning" value={ticket.planning} /> : null}
+            {ticket.workCompleted ? <DetailText heading="Work completed" value={ticket.workCompleted} /> : null}
+            {ticket.notes ? <DetailText heading="Notes" value={ticket.notes} /> : null}
+          </details> : null}
         </section>
         <section className="operation-panel" aria-labelledby="ticket-work-logs-heading">
           <div className="ticket-section-heading"><div><h2 id="ticket-work-logs-heading">Work logs</h2><p className="ticket-file-meta">Recorded work and its author.</p></div>
@@ -231,7 +246,7 @@ export function TicketDetailView({ initialData, workspace, actor, maxUploadBytes
         </section>
       </div>
       <aside className="ticket-detail-aside">
-        <section className="operation-panel"><h2>At a glance</h2><dl className="ticket-facts"><div><dt>Created by</dt><dd>{ticket.creatorName}</dd></div><div><dt>Ticket date</dt><dd>{ticketDate(ticket.ticketDate)}</dd></div><div><dt>Due date</dt><dd>{ticket.dueDate ? ticketDate(ticket.dueDate) : "No due date"}</dd></div><div><dt>Last updated</dt><dd>{dateTime(ticket.updatedAt)}</dd></div></dl></section>
+        <details className="operation-panel ticket-detail-facts"><summary>Ticket information</summary><dl className="ticket-facts"><div><dt>Created by</dt><dd>{ticket.creatorName}</dd></div><div><dt>Ticket date</dt><dd>{ticketDate(ticket.ticketDate)}</dd></div><div><dt>Due date</dt><dd>{ticket.dueDate ? ticketDate(ticket.dueDate) : "No due date"}</dd></div><div><dt>Last updated</dt><dd>{dateTime(ticket.updatedAt)}</dd></div></dl></details>
         <section className="operation-panel" aria-labelledby="ticket-people-heading"><div className="ticket-section-heading"><h2 id="ticket-people-heading">People</h2>
           {ticket.permissions.managePeople && writable ? <TaskDialog triggerLabel="Manage ticket people" triggerText="Manage" title="Manage ticket people" description="Assign multiple company people to work, or mention people for read-only access and notifications." triggerClassName="button" triggerIcon={<Users size={17} aria-hidden="true" />}>
             <TicketActionForm label="Manage ticket people" submit="Save people" getCommand={(form) => ({ action: "setParticipants", ticketId: ticket.id, version: ticket.version, assigneeIds: form.getAll("assigneeIds").map(String), observerIds: form.getAll("observerIds").map(String) })} onSuccess={() => saved("Ticket people updated.")} onConflict={() => refreshTicket(includeArchived, true)}>

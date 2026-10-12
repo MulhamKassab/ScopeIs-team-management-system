@@ -116,4 +116,12 @@ describe("Company ticket command validation", () => {
     const parsed = parseTicketCommand({ action: "updateTicket", ticketId: id, version: 1, notes: "Fictional note" });
     expect(parsed).toEqual({ action: "updateTicket", ticketId: id, version: 1, notes: "Fictional note" });
   });
+  it("limits focused status changes to version, status and a plain-text hold reason", () => {
+    const valid = { action: "changeTicketStatus", ticketId: id, version: 1, status: "IN_PROGRESS" };
+    expect(parseTicketCommand(valid)).toEqual(valid);
+    for (const extra of [{ subject: "Hidden replacement" }, { summary: "Hidden content" }, { assigneeIds: ["self"] }, { version: 0 }, { status: "PUBLISHED" }, { onHoldReason: "<script>hidden</script>" }]) expect(ticketCommandSchema.safeParse({ ...valid, ...extra }).success).toBe(false);
+    expect(ticketCommandSchema.safeParse({ ...valid, status: "ON_HOLD" }).success).toBe(false);
+    expect(ticketCommandSchema.safeParse({ ...valid, status: "ON_HOLD", onHoldReason: "  " }).success).toBe(false);
+    expect(parseTicketCommand({ ...valid, status: "ON_HOLD", onHoldReason: " Awaiting a part " })).toMatchObject({ status: "ON_HOLD", onHoldReason: "Awaiting a part" });
+  });
 });

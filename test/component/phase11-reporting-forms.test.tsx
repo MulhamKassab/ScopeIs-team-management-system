@@ -35,6 +35,16 @@ const report: ReportViewType = {
 const planningReport: ReportViewType = { ...report, key: "planning-unpublished", label: "Planning (unpublished)", planning: true, exportable: false, rows: [{ data_state: "PLANNING (unpublished)", assignment_date: "2027-12-07", scheduled_hours: "2.00", employee_name: "Cora Bell" }] };
 
 describe("Phase 11 dashboard", () => {
+  it("puts all four Employee destinations in ticket-first Home shortcuts", () => {
+    render(<DashboardCards view={{ ...dashboard, role: "EMPLOYEE", sections: [] }} />);
+    expect(screen.getByRole("link", { name: "Open tickets" })).toHaveAttribute("href", "/tickets");
+    const links = within(screen.getByRole("navigation", { name: "Workspace starting points" })).getAllByRole("link");
+    expect(links.map((link) => link.getAttribute("href"))).toEqual(["/tickets", "/schedule", "/leave", "/profile"]);
+    expect(links[0]).toHaveTextContent("Tickets");
+    expect(links[1]).toHaveTextContent("Schedule");
+    expect(links[2]).toHaveTextContent("Vacations");
+    expect(links[3]).toHaveTextContent("My profile");
+  });
   it("directs Admins to view scoped schedules without offering drafting", () => {
     render(<DashboardCards view={{ ...dashboard, role: "ADMIN" }} />);
     expect(screen.getByRole("link", { name: /View team schedules/ })).toHaveAttribute("href", "/schedule");

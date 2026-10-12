@@ -6,7 +6,7 @@ import { TicketDetailView } from "@/modules/tickets/ticket-detail";
 import { AppError } from "@/shared/errors/app-error";
 
 export const dynamic = "force-dynamic";
-export default async function TicketPage({ params }: { params: Promise<{ ticketId: string }> }) {
+export default async function TicketPage({ params, searchParams }: { params: Promise<{ ticketId: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const actor = await getCurrentActor();
   if (!actor) redirect("/login");
   const ticket = await ticketService.detail(actor, (await params).ticketId).catch((error: unknown) => {
@@ -14,5 +14,6 @@ export default async function TicketPage({ params }: { params: Promise<{ ticketI
     throw error;
   });
   const workspace = await ticketService.workspace(actor);
-  return <TicketDetailView initialData={ticket} workspace={workspace} actor={{ id: actor.id, displayName: actor.displayName, role: actor.role }} maxUploadBytes={ticketUploadLimitBytes()} />;
+  const query = await searchParams;
+  return <TicketDetailView initialData={ticket} workspace={workspace} actor={{ id: actor.id, displayName: actor.displayName, role: actor.role }} maxUploadBytes={ticketUploadLimitBytes()} initialReturnTo={typeof query.from === "string" ? query.from : undefined} />;
 }

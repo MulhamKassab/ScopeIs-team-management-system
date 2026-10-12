@@ -16,6 +16,8 @@ export const createBoardSchema = z.object({ action: z.literal("createBoard"), wo
 export const updateBoardSchema = z.object({ action: z.literal("updateBoard"), boardId: id, name: plainText(120).min(1).optional(), status: z.enum(boardStatuses).optional(), version }).strict().refine((value) => value.name !== undefined || value.status !== undefined);
 export const createTicketSchema = z.object({ action: z.literal("createTicket"), boardId: id, version, ...contents, status: contents.status.default("OPEN"), priority: contents.priority.default("MEDIUM"), assigneeIds: ids.default([]), observerIds: ids.default([]) }).strict();
 export const updateTicketSchema = z.object({ action: z.literal("updateTicket"), ticketId: id, version, ...Object.fromEntries(Object.entries(contents).map(([key, value]) => [key, value.optional()])) as { [K in keyof typeof contents]: z.ZodOptional<(typeof contents)[K]> } }).strict().refine((value) => Object.keys(value).some((key) => !["action", "ticketId", "version"].includes(key)));
+/** A focused status change cannot carry or overwrite unrelated ticket content. */
+export const changeTicketStatusSchema = z.object({ action: z.literal("changeTicketStatus"), ticketId: id, version, status: contents.status, onHoldReason: contents.onHoldReason }).strict().refine((value) => value.status !== "ON_HOLD" || Boolean(value.onHoldReason?.trim()), { path: ["onHoldReason"], message: "Give a reason for putting the ticket on hold." });
 export const setParticipantsSchema = z.object({ action: z.literal("setParticipants"), ticketId: id, version, ...participants }).strict();
 const log = { ticketId: id, version, description: plainText(5000).min(1), loggedAt: z.string().datetime({ offset: true }).optional(), durationMinutes: z.number().int().min(1).max(1440).nullable().optional() };
 export const addWorkLogSchema = z.object({ action: z.literal("addWorkLog"), ...log }).strict();
@@ -23,7 +25,7 @@ export const editWorkLogSchema = z.object({ action: z.literal("editWorkLog"), ..
 const ticketVersion = { ticketId: id, version };
 export const archiveTicketSchema = z.object({ action: z.literal("archiveTicket"), ...ticketVersion }).strict();
 export const restoreTicketSchema = z.object({ action: z.literal("restoreTicket"), ...ticketVersion }).strict();
-export const ticketCommandSchema = z.discriminatedUnion("action", [createWorkspaceSchema, updateWorkspaceSchema, workspaceMemberSchema, createBoardSchema, updateBoardSchema, createTicketSchema, updateTicketSchema, setParticipantsSchema, addWorkLogSchema, editWorkLogSchema, archiveTicketSchema, restoreTicketSchema]);
+export const ticketCommandSchema = z.discriminatedUnion("action", [createWorkspaceSchema, updateWorkspaceSchema, workspaceMemberSchema, createBoardSchema, updateBoardSchema, createTicketSchema, updateTicketSchema, changeTicketStatusSchema, setParticipantsSchema, addWorkLogSchema, editWorkLogSchema, archiveTicketSchema, restoreTicketSchema]);
 export type TicketCommand = z.infer<typeof ticketCommandSchema>;
 export function parseTicketCommand(input: unknown): TicketCommand { const parsed = ticketCommandSchema.safeParse(input); if (!parsed.success) throw errors.validation(); return parsed.data; }
 /** Applied after combining an edit with the current row; patching status alone cannot bypass its reason. */

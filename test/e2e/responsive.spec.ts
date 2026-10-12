@@ -1,4 +1,4 @@
-import { expect, test, type Page, type TestInfo } from "@playwright/test";
+import { expect, test, type Locator, type Page, type TestInfo } from "@playwright/test";
 import { writeFile } from "node:fs/promises";
 import { phase3Ids, phase11Ids } from "../../scripts/phase11-test-fixtures.mjs";
 import { phase10Ids } from "../../scripts/phase10-test-fixtures.mjs";
@@ -19,6 +19,32 @@ const viewports = [
   { width: 768, height: 1024 }, { width: 820, height: 1180 }, { width: 1024, height: 768 },
   { width: 1280, height: 800 }, { width: 1920, height: 1080 },
 ];
+
+/** Capture the short dismissal phase in one browser microtask, without locator races. */
+async function observeDismissal(locator: Locator, key: string) {
+  await locator.evaluate((element, snapshotKey) => {
+    const observed = window as Window & { scopeisDismissals?: Record<string, { modal: boolean; pointerEvents: string; bodyOverflow: string; mainInert: boolean }> };
+    observed.scopeisDismissals ??= {};
+    delete observed.scopeisDismissals[snapshotKey];
+    const capture = () => {
+      if (element.getAttribute("data-motion-state") !== "closing") return;
+      observed.scopeisDismissals![snapshotKey] = {
+        modal: element.matches(":modal"),
+        pointerEvents: getComputedStyle(element).pointerEvents,
+        bodyOverflow: document.body.style.overflow,
+        mainInert: document.querySelector("main")?.hasAttribute("inert") ?? false,
+      };
+      observer.disconnect();
+    };
+    const observer = new MutationObserver(capture);
+    observer.observe(element, { attributes: true, attributeFilter: ["data-motion-state"] });
+    capture();
+  }, key);
+}
+
+async function dismissalSnapshot(page: Page, key: string) {
+  return page.evaluate((snapshotKey) => (window as Window & { scopeisDismissals?: Record<string, { modal: boolean; pointerEvents: string; bodyOverflow: string; mainInert: boolean }> }).scopeisDismissals?.[snapshotKey], key);
+}
 
 test.describe("expressive motion", () => {
   test("motion stays finite, preserves modal focus and works across desktop and phone", async ({ browser, baseURL }, testInfo) => {
@@ -57,11 +83,9 @@ test.describe("expressive motion", () => {
       await page.mouse.down();
       await expect(close).toHaveAttribute("data-motion-press", "true");
       expect(await close.evaluate((element) => getComputedStyle(element).position)).toBe("sticky");
+      await observeDismissal(dialog, "feature");
       await page.mouse.up();
-      await expect(dialog).toHaveAttribute("data-motion-state", "closing");
-      expect(await dialog.evaluate((element) => element.matches(":modal"))).toBe(true);
-      expect(await dialog.evaluate((element) => getComputedStyle(element).pointerEvents)).toBe("auto");
-      expect(await page.evaluate(() => document.body.style.overflow)).toBe("hidden");
+      await expect.poll(() => dismissalSnapshot(page, "feature")).toMatchObject({ modal: true, pointerEvents: "auto", bodyOverflow: "hidden" });
       await page.keyboard.press("Escape");
       await expect(dialog).not.toBeVisible();
       await expect(featureTrigger).toBeFocused();
@@ -82,10 +106,9 @@ test.describe("expressive motion", () => {
       await expect(sheet).toBeVisible();
       await settle();
       await captureVisual(page, testInfo, "390-motion-more-navigation.png");
+      await observeDismissal(sheet, "navigation");
       await sheet.getByRole("button", { name: "Close more navigation" }).click();
-      await expect(sheet).toHaveAttribute("data-motion-state", "closing");
-      expect(await sheet.evaluate((element) => getComputedStyle(element).pointerEvents)).toBe("auto");
-      await expect(page.locator("main")).toHaveAttribute("inert", "");
+      await expect.poll(() => dismissalSnapshot(page, "navigation")).toMatchObject({ pointerEvents: "auto", mainInert: true });
       await expect(sheet).not.toBeVisible();
       await expect(more).toBeFocused();
       await expect(page.locator("main")).not.toHaveAttribute("inert", "");

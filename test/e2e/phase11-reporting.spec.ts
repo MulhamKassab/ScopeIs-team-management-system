@@ -22,6 +22,7 @@ test("Super Admin reporting: dashboard, published allocation drill-down, plannin
 
   // 1. The dashboard renders role-specific cards with an as-of timestamp.
   await expect(page.getByRole("heading", { name: "Home" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Workspace starting points" }).getByRole("link", { name: /Plan, review, publish/ })).toHaveAttribute("href", "/schedule");
   await expect(page.getByText(/As of .* \(Asia\/Dubai\)/)).toBeVisible();
   await expect(page.locator(".journey-disclosure").filter({ hasText: "More team insights" })).not.toHaveAttribute("open");
   await page.getByText("More team insights", { exact: true }).click();
@@ -77,6 +78,9 @@ test("Scoped Admin reporting is scope-bounded, may open planning, may not reach 
 
   // 1. The dashboard is the scoped variant, with no audit or review-queue card.
   await expect(page.getByRole("heading", { name: "Home" })).toBeVisible();
+  const shortcuts = page.getByRole("navigation", { name: "Workspace starting points" });
+  await expect(shortcuts.getByRole("link", { name: /View team schedules/ })).toHaveAttribute("href", "/schedule");
+  await expect(shortcuts.getByRole("link", { name: /Plan, review, publish/ })).toHaveCount(0);
   await expect(page.getByText("People you manage", { exact: true })).toBeVisible();
   await expect(page.getByText("Documents to review", { exact: true })).toHaveCount(0);
   // The scoped Admin keeps the approved shape and never receives the Super-Admin-only tables.
@@ -118,6 +122,17 @@ test("Employee dashboard is self-only and reporting stays closed", async ({ page
   await signIn(page, "Cora Bell");
 
   await expect(page.getByRole("heading", { name: "Home" })).toBeVisible();
+  const shortcuts = page.getByRole("navigation", { name: "Workspace starting points" });
+  const links = shortcuts.getByRole("link");
+  await expect(links).toHaveCount(4);
+  for (const [index, name, href] of [
+    [0, "Tickets", "/tickets"], [1, "Schedule", "/schedule"],
+    [2, "Vacations", "/leave"], [3, "My profile", "/profile"],
+  ] as const) {
+    await expect(links.nth(index)).toContainText(name);
+    await expect(links.nth(index)).toHaveAttribute("href", href);
+  }
+  await expect(page.getByRole("link", { name: "Open tickets", exact: true })).toHaveAttribute("href", "/tickets");
   await expect(page.getByText("My unread notifications", { exact: true })).toBeVisible();
   await expect(page.locator(".reporting-cards li")).toHaveCount(4);
   // All five approved Employee areas are individually labelled.
@@ -132,6 +147,18 @@ test("Employee dashboard is self-only and reporting stays closed", async ({ page
   await expect(page.locator("body")).not.toContainText("Dan Unscoped");
   await expectCleanTerminology(page);
   await expectNoHorizontalOverflow(page);
+
+  // Daily work starts directly from Home, while the profile keeps its read-only skills prominent.
+  await shortcuts.getByRole("link", { name: /^Tickets/ }).click();
+  await expect(page).toHaveURL(/\/tickets(?:\?.*)?$/);
+  await expect(page.getByRole("heading", { name: "Tickets", exact: true })).toBeVisible();
+  await page.goto("/dashboard");
+  await page.getByRole("navigation", { name: "Workspace starting points" }).getByRole("link", { name: /^My profile/ }).click();
+  await expect(page.getByRole("heading", { name: "My profile", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "My recorded skills", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Record skill", exact: true })).toHaveCount(0);
+  await page.goto("/dashboard");
+  await page.getByText("More about your work", { exact: true }).click();
 
   // The skill action opens the existing read-only skill view, never promises editing rights.
   await page.getByRole("link", { name: "View my skills: My recorded skills" }).click();

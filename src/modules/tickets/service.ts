@@ -52,6 +52,14 @@ export class TicketService {
   }
   private isMember(snapshot: TicketSnapshot, workspaceId: string, userId: string) { return snapshot.memberships.some((membership) => membership.workspaceId === workspaceId && membership.userId === userId && membership.active); }
   private managesWorkspace(actor: AuthenticatedActor, workspace: WorkspaceRow, snapshot: TicketSnapshot) { return canManageTicketWorkspace(actor, workspace, this.isMember(snapshot, workspace.id, actor.id)); }
+  /** Membership choices use the same scope and target-manager checks as a new grant. */
+  private async canGrantWorkspaceMember(executor: TicketExecutor, actor: AuthenticatedActor, workspace: WorkspaceRow, person: TicketSnapshot["people"][number]) {
+    if (!person.user.active || !ticketPersonInScope(actor, { id: person.user.id, role: person.user.role, team: person.team })) return false;
+    if (person.user.role !== "ADMIN") return true;
+    const grants = await ticketRepository.grants(executor, person.user.id);
+    const target = { ...actor, id: person.user.id, role: person.user.role, scopes: grants.map((grant) => ({ type: grant.scopeType, reference: grant.scopeReference })) };
+    return canManageTicketWorkspace(target, workspace, true);
+  }
   private peopleInScope(actor: AuthenticatedActor, ids: string[], snapshot: TicketSnapshot) {
     return ids.every((id) => { const person = snapshot.people.find((entry) => entry.user.id === id); return Boolean(person && (person.user.role !== "EMPLOYEE" || ticketPersonInScope(actor, { id: person.user.id, role: person.user.role, team: person.team }))); });
   }
@@ -73,8 +81,9 @@ export class TicketService {
     return { actor, ticket, workspace, manager, snapshot, permissions: ticketPermissions(actor, policy) };
   }
   private summary(context: TicketContext): TicketSummary {
-    const { ticket, snapshot, permissions } = context;
-    return { id: ticket.id, number: ticket.number, subject: ticket.subject, status: ticket.status, priority: ticket.priority, ticketDate: ticket.ticketDate, dueDate: ticket.dueDate, boardId: ticket.boardId, creatorName: snapshot.people.find((person) => person.user.id === ticket.creatorUserId)?.user.displayName ?? "Former colleague", assignees: snapshot.participants.filter((entry) => entry.ticketId === ticket.id && entry.active && entry.role === "ASSIGNEE").map((entry) => ({ userId: entry.userId, displayName: snapshot.people.find((person) => person.user.id === entry.userId)?.user.displayName ?? "Former colleague" })), version: ticket.version, archivedAt: ticket.archivedAt?.toISOString() ?? null, permissions };
+    const { actor, ticket, snapshot, permissions } = context;
+    const participation = snapshot.participants.find((entry) => entry.ticketId === ticket.id && entry.userId === actor.id && entry.active)?.role;
+    return { id: ticket.id, number: ticket.number, subject: ticket.subject, status: ticket.status, priority: ticket.priority, ticketDate: ticket.ticketDate, dueDate: ticket.dueDate, boardId: ticket.boardId, creatorName: snapshot.people.find((person) => person.user.id === ticket.creatorUserId)?.user.displayName ?? "Former colleague", assignees: snapshot.participants.filter((entry) => entry.ticketId === ticket.id && entry.active && entry.role === "ASSIGNEE").map((entry) => ({ userId: entry.userId, displayName: snapshot.people.find((person) => person.user.id === entry.userId)?.user.displayName ?? "Former colleague" })), myParticipation: { created: ticket.creatorUserId === actor.id, assigned: participation === "ASSIGNEE", mentioned: participation === "OBSERVER" }, version: ticket.version, archivedAt: ticket.archivedAt?.toISOString() ?? null, permissions };
   }
   async workspace(supplied: AuthenticatedActor): Promise<TicketWorkspaceData> {
     return this.consistentRead(async (tx) => {
@@ -90,9 +99,15 @@ export class TicketService {
     const summaries = snapshot.tickets.flatMap((ticket) => { const context = this.ticketContext(actor, ticket, snapshot); return context ? [this.summary(context)] : []; });
     // The company ticket picker exposes names and role labels only, never profile or scope facts.
     const people = snapshot.people.filter((entry) => entry.user.active).map((entry) => ({ userId: entry.user.id, displayName: entry.user.displayName, role: entry.user.role }));
+    const membershipPeople: TicketWorkspaceData["membershipPeople"] = {};
+    for (const workspace of snapshot.workspaces.filter((entry) => workspaces.some((visible) => visible.id === entry.id && visible.canManage))) {
+      const eligible = [];
+      for (const person of snapshot.people) if (await this.canGrantWorkspaceMember(tx, actor, workspace, person)) eligible.push({ userId: person.user.id, displayName: person.user.displayName, role: person.user.role });
+      membershipPeople[workspace.id] = eligible;
+    }
     const clients = actor.role === "EMPLOYEE" ? [] : snapshot.clients.filter((client) => client.status === "ACTIVE" && (actor.role === "SUPER_ADMIN" || actor.scopes.some((grant) => grant.type === "CLIENT" && grant.reference === client.id))).map(({ id, name }) => ({ id, name }));
     const projects = actor.role === "EMPLOYEE" ? [] : snapshot.projects.filter((project) => project.status !== "ARCHIVED" && (actor.role === "SUPER_ADMIN" || actor.scopes.some((grant) => (grant.type === "PROJECT" && grant.reference === project.id) || (grant.type === "CLIENT" && grant.reference === project.clientId)))).map(({ id, name, clientId }) => ({ id, name, clientId }));
-    return { workspaces, boards, tickets: summaries, people, clients, projects };
+    return { workspaces, boards, tickets: summaries, people, membershipPeople, clients, projects };
     });
   }
   async detail(supplied: AuthenticatedActor, id: string): Promise<TicketDetail> {
@@ -213,14 +228,10 @@ export class TicketService {
         await tx.execute(sql`select id from users where id = ${parsed.userId} for share`);
         await tx.execute(sql`select user_id from employee_profiles where user_id = ${parsed.userId} for share`);
         const person = (await ticketRepository.people(tx)).find((entry) => entry.user.id === parsed.userId);
-        if (!person || (parsed.active && !person.user.active) || !ticketPersonInScope(actor, { id: person.user.id, role: person.user.role, team: person.team })) throw unavailable();
-        if (parsed.active && person.user.role === "ADMIN") {
+        if (parsed.active && person?.user.role === "ADMIN") {
           await tx.execute(sql`select id from admin_scope_grants where user_id = ${person.user.id} order by id for share`);
-          const grants = await ticketRepository.grants(tx, person.user.id);
-          const target = { ...actor, id: person.user.id, role: person.user.role, scopes: grants.map((grant) => ({ type: grant.scopeType, reference: grant.scopeReference })) };
-          // A new manager grant must be usable under the manager's own current TEAM and operational authority.
-          if (!canManageTicketWorkspace(target, workspace, true)) throw unavailable();
         }
+        if (!person || (parsed.active ? !(await this.canGrantWorkspaceMember(tx, actor, workspace, person)) : !ticketPersonInScope(actor, { id: person.user.id, role: person.user.role, team: person.team }))) throw unavailable();
         await ticketRepository.setMember(tx, workspace.id, parsed.userId, parsed.active, actor.id);
         const updated = await ticketRepository.touchWorkspace(tx, workspace.id, parsed.version);
         if (!updated) throw errors.stale();
@@ -277,6 +288,11 @@ export class TicketService {
         await ticketRepository.setParticipants(tx, ticket.id, parsed.assigneeIds, parsed.observerIds, actor.id);
         updated = await ticketRepository.updateTicket(tx, ticket.id, ticket.version, {});
         event = "ticket.participants_updated";
+      } else if (parsed.action === "changeTicketStatus") {
+        if (!permissions.edit) throw unavailable();
+        const values = { status: parsed.status, onHoldReason: parsed.status === "ON_HOLD" ? parsed.onHoldReason! : null };
+        validateTicketState({ ...ticket, ...values });
+        updated = await ticketRepository.updateTicket(tx, ticket.id, ticket.version, values);
       } else if (parsed.action === "updateTicket") {
         if (!permissions.edit) throw unavailable();
         const { action: _action, ticketId: _ticketId, version: _version, ...values } = parsed;

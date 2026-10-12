@@ -72,5 +72,15 @@
 .task-dialog .employee-management-form > .button,.task-dialog .employee-self-profile-form > .button,.task-dialog .operation-form > .button { justify-self:end; margin-block-start:8px; }
 .task-dialog .evidence-review-actions { display:grid; grid-template-columns:1fr; }
 .task-dialog .evidence-review-actions .operation-form { border:1px solid var(--border); padding:12px; }
+.people-evidence-sections .evidence-category { display:block; min-width:0; }
+.evidence-category > summary { cursor:pointer; min-block-size:44px; color:var(--text); }
+.evidence-category > summary h3 { display:inline; margin:0; font-size:1rem; }
+.evidence-category > summary > span { display:block; margin-block-start:7px; color:var(--muted); font-size:.82rem; }
+.evidence-category-content { display:grid; gap:16px; margin-block-start:16px; }
+.evidence-add-task,.evidence-saved-task { display:grid; gap:16px; min-width:0; }
+.evidence-kind-choice { display:grid; gap:8px; font-size:.875rem; font-weight:600; }
+.evidence-kind-choice select { width:100%; min-height:44px; padding:10px 12px; font:inherit; border:1px solid var(--border); border-radius:8px; color:var(--text); background:var(--surface); }
+.evidence-saved-task h3,.evidence-saved-task p { margin:0; overflow-wrap:anywhere; }
+.evidence-saved-task > .button { justify-self:start; }
 @media(max-width:1000px) { .people-profile-facts { grid-template-columns:repeat(2,minmax(0,1fr)); }.people-profile-facts > div:nth-child(3) { border-inline-start:0; }.people-profile-facts > div:nth-child(n+3) { border-block-start:1px solid var(--border); }.people-evidence-sections { grid-template-columns:1fr; }.account-list-toolbar { flex-direction:column; } }
 @media(max-width:760px) { .people-page-heading { flex-direction:column; gap:14px; }.people-page-heading h2 { font-size:1.5rem; }.people-page-heading > .button { width:100%; }.people-profile-card { padding:18px; gap:12px; }.people-avatar { width:48px; height:48px; border-radius:12px; font-size:1rem; }.people-profile-facts > div { padding:14px; }.employee-detail dl { grid-template-columns:1fr 1fr; }.employee-detail dl div { padding:14px; }.people-evidence-heading { gap:12px; }.people-evidence-heading > .button { min-height:44px; max-width:55%; white-space:normal; }.account-list-toolbar,.account-actions-row { width:100%; }.people-filter-actions > .button { flex:1; }.people-record-actions > .button { min-height:44px; }.employee-management-panel > .button { width:100%; }.task-dialog .employee-create-form,.task-dialog .employee-management-form,.task-dialog .employee-self-profile-form { min-width:0; } }

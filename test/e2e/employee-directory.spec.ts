@@ -162,8 +162,8 @@ test("Super Admin can use visible management controls without granting manager o
 test("Employee views and updates only the self-service profile", async ({ page }) => {
   await signIn(page, "Cora Bell");
   await page.goto("/profile");
-  await expect(page.getByRole("heading", { name: "My professional profile" })).toBeVisible();
-  await expect(page.getByLabel("My professional profile").getByText("Cora Bell", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "My profile" })).toBeVisible();
+  await expect(page.getByLabel("My profile").getByText("Cora Bell", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Edit profile", exact: true }).click();
   await page.getByLabel("Work phone").fill("101");
   await page.getByLabel("Professional summary").fill("Updated fictional profile");

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useId, useState } from "react";
+import { useActionState, useId, useState, type ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import { TaskDialog } from "@/shared/components/task-dialog";
 import {
@@ -53,19 +53,20 @@ function expiryText(item: EvidenceItemView) {
   return `Expires ${item.expiryDate} (${item.expiryStatus === "expired" ? "expired" : "valid"})`;
 }
 
-function EvidenceFields({ item, kind, skills }: { item?: EvidenceItemView; kind?: string; skills: SkillOption[] }) {
+function EvidenceFields({ item, kind, skills, values, onFieldChange }: { item?: EvidenceItemView; kind?: string; skills: SkillOption[]; values?: Record<string, string>; onFieldChange?: (name: string, value: string) => void }) {
   const fieldId = useId();
+  const field = (name: string, fallback = "") => values ? { value: values[name] ?? fallback, onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => onFieldChange?.(name, event.target.value) } : { defaultValue: fallback };
   return <>
     {kind ? <input type="hidden" name="kind" value={kind} /> : null}
-    <label>Title<input id={`${fieldId}-title`} name="title" defaultValue={item?.title ?? ""} maxLength={200} required /></label>
-    {kind !== "project_example" && kind !== "cv" ? <label>Issuer or provider<input name="issuer" defaultValue={item?.issuer ?? ""} maxLength={120} /></label> : null}
+    <label>Title<input id={`${fieldId}-title`} name="title" {...field("title", item?.title ?? "")} maxLength={200} required /></label>
+    {kind !== "project_example" && kind !== "cv" ? <label>Issuer or provider<input name="issuer" {...field("issuer", item?.issuer ?? "")} maxLength={120} /></label> : null}
     <div className="operation-form-grid">
-      <label>Issue date<input name="issueDate" type="date" defaultValue={item?.issueDate ?? ""} /></label>
-      <label>Expiry date (optional)<input name="expiryDate" type="date" defaultValue={item?.expiryDate ?? ""} /></label>
+      <label>Issue date<input name="issueDate" type="date" {...field("issueDate", item?.issueDate ?? "")} /></label>
+      <label>Expiry date (optional)<input name="expiryDate" type="date" {...field("expiryDate", item?.expiryDate ?? "")} /></label>
     </div>
-    {kind === "portfolio" || kind === "project_example" ? <label>Portfolio link (HTTPS only)<input name="externalUrl" type="url" inputMode="url" placeholder="https://" defaultValue={item?.externalUrl ?? ""} maxLength={2048} /></label> : null}
-    <label>Details<textarea name="details" defaultValue={item?.details ?? ""} maxLength={1000} rows={2} /></label>
-    {kind === "certification" || kind === "supporting_document" ? <label>Related recorded skill<select name="relatedSkillId" defaultValue={item?.relatedSkillId ?? ""}><option value="">None</option>{skills.map((skill) => <option key={skill.id} value={skill.id}>{skill.name}</option>)}</select></label> : null}
+    {kind === "portfolio" || kind === "project_example" ? <label>Portfolio link (HTTPS only)<input name="externalUrl" type="url" inputMode="url" placeholder="https://" {...field("externalUrl", item?.externalUrl ?? "")} maxLength={2048} /></label> : null}
+    <label>Details<textarea name="details" {...field("details", item?.details ?? "")} maxLength={1000} rows={2} /></label>
+    {kind === "certification" || kind === "supporting_document" ? <label>Related recorded skill<select name="relatedSkillId" {...field("relatedSkillId", item?.relatedSkillId ?? "")}><option value="">None</option>{skills.map((skill) => <option key={skill.id} value={skill.id}>{skill.name}</option>)}</select></label> : null}
   </>;
 }
 
@@ -98,7 +99,7 @@ function FileUploader({ evidenceId, version, replaceFileId, label }: { evidenceI
   return <form className="evidence-upload" onSubmit={upload} aria-label={label}>
     <label htmlFor={`${fileFieldId}-file`}>{label}</label>
     <input id={`${fileFieldId}-file`} name="file" type="file" accept=".pdf,.jpg,.jpeg,.png,.docx,application/pdf,image/jpeg,image/png,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required />
-    <button className="button" type="submit" disabled={state.kind === "busy"}>{state.kind === "busy" ? "Uploading…" : "Upload private file"}</button>
+    <button className="button" type="submit" disabled={state.kind === "busy" || state.kind === "ok"}>{state.kind === "busy" ? "Uploading…" : state.kind === "ok" ? "File attached" : "Upload private file"}</button>
     {state.kind === "error" ? <p className="operation-error" role="alert">{state.message}</p> : state.kind === "ok" ? <p className="operation-success" role="status">{state.message}</p> : null}
   </form>;
 }
@@ -144,30 +145,64 @@ function OwnerItem({ item, skills }: { item: EvidenceItemView; skills: SkillOpti
   </article>;
 }
 
+function CreateEvidenceForm({ kind, skills, onCreateAnother, onBusyChange }: { kind: typeof sections[number]["kind"]; skills: SkillOption[]; onCreateAnother: () => void; onBusyChange: (busy: boolean) => void }) {
+  const [submissionKey] = useState(newSubmissionKey);
+  const [state, action, pending] = useActionState(async (previous: EvidenceActionState, data: FormData) => {
+    onBusyChange(true);
+    try { return await createEvidenceAction(previous, data); }
+    finally { onBusyChange(false); }
+  }, initial);
+  const [values, setValues] = useState<Record<string, string>>({});
+  if (state.savedItem && state.success) return <div className="evidence-saved-task">
+    <Feedback state={state} />
+    <h3>{state.savedItem.title}</h3>
+    {state.savedItem.archived ? <p>This item is archived. Start a new item to attach a file.</p> : <>
+      <p>You can attach a private file now, or close this window and do it later.</p>
+      <FileUploader evidenceId={state.savedItem.id} version={state.savedItem.version} label="Attach file to saved item" />
+    </>}
+    <button className="button" type="button" onClick={onCreateAnother}>Add another item</button>
+  </div>;
+  return <form className="operation-form compact" action={action} aria-label="Add document or experience">
+    <input type="hidden" name="submissionKey" value={submissionKey} />
+    <EvidenceFields kind={kind} skills={skills} values={values} onFieldChange={(name, value) => setValues((current) => ({ ...current, [name]: value }))} />
+    <Feedback state={state} />
+    <button className="button primary" type="submit" disabled={pending}>{pending ? "Saving…" : "Save item"}</button>
+  </form>;
+}
+
+function AddEvidenceChooser({ skills }: { skills: SkillOption[] }) {
+  const [kind, setKind] = useState<typeof sections[number]["kind"]>("certification");
+  const [intent, setIntent] = useState(0);
+  const [busy, setBusy] = useState(false);
+  const selected = sections.find((section) => section.kind === kind)!;
+  return <div className="evidence-add-task">
+    <label className="evidence-kind-choice">Document or experience type<select value={kind} disabled={busy} onChange={(event) => setKind(event.target.value as typeof kind)}>
+      {sections.map((section) => <option value={section.kind} key={section.kind}>{section.title}</option>)}
+    </select></label>
+    <p className="workflow-meta">{selected.help}</p>
+    <CreateEvidenceForm key={`${kind}-${intent}`} kind={kind} skills={skills} onCreateAnother={() => setIntent((current) => current + 1)} onBusyChange={setBusy} />
+  </div>;
+}
+
 /** Owner experience: immediate saves, no approval gate, one active CV per owner. */
 export function CapabilityEvidencePanel({ items, skills }: { items: EvidenceItemView[]; skills: SkillOption[] }) {
-  const [submissionKeys] = useState(() => Object.fromEntries(sections.map((section) => [section.kind, newSubmissionKey()])));
   return <section className="operations-page evidence-page" aria-labelledby="evidence-title">
     <header className="operations-heading"><div>
       <p className="eyebrow">Experience & documents</p>
       <h2 id="evidence-title">My documents & experience</h2>
       <p>Keep your certifications and experience up to date. Private files are visible only to you and Super Admin; certification summaries may be shared with your scoped Admin.</p>
-    </div></header>
+    </div><TaskDialog triggerLabel="Add document or experience" title="Add document or experience" description="Choose the type, save its details, then attach a private file if needed."><AddEvidenceChooser skills={skills} /></TaskDialog></header>
     <div className="people-evidence-sections">{sections.map((section) => {
       const sectionItems = items.filter((item) => item.kind === section.kind);
       const active = sectionItems.filter((item) => !item.archivedAt);
       const archived = sectionItems.filter((item) => item.archivedAt);
-      return <section className="operation-panel" key={section.kind} aria-labelledby={`evidence-${section.kind}-title`}>
-        <header className="people-evidence-heading"><div><h3 id={`evidence-${section.kind}-title`}>{section.title}</h3><span>{active.length} active {active.length === 1 ? "item" : "items"}</span></div>
-        <TaskDialog triggerLabel={`Add ${section.title.toLowerCase()}`} title={`Add ${section.title.toLowerCase()}`} description={section.help}>
-        <Form action={createEvidenceAction} title={`Add ${section.title.toLowerCase()}`} submit="Save evidence">
-          <input type="hidden" name="submissionKey" value={submissionKeys[section.kind]} />
-          <EvidenceFields kind={section.kind} skills={skills} />
-        </Form>
-        </TaskDialog></header>
+      return <details className="operation-panel evidence-category" key={section.kind}>
+        <summary><h3 id={`evidence-${section.kind}-title`}>{section.title}</h3><span>{active.length} active {active.length === 1 ? "item" : "items"}{archived.length ? ` · ${archived.length} archived` : ""}</span></summary>
+        <div className="evidence-category-content">
         {active.length ? <div className="evidence-list">{active.map((item) => <OwnerItem key={item.id} item={item} skills={skills} />)}</div> : <p className="operation-empty">Nothing recorded in this section yet.</p>}
         {archived.length ? <details className="evidence-archive"><summary>{archived.length} archived item{archived.length === 1 ? "" : "s"}</summary><ul className="operation-list">{archived.map((item) => <li key={item.id}><div><strong>{item.title}</strong><span>Archived · {expiryText(item)}</span></div></li>)}</ul></details> : null}
-      </section>;
+        </div>
+      </details>;
     })}</div>
   </section>;
 }

@@ -8,7 +8,7 @@
 .ticket-view-tabs button,.ticket-layout-switch button { display:inline-flex; align-items:center; gap:7px; min-height:42px; border:1px solid transparent; border-radius:8px; padding:9px 13px; background:transparent; color:var(--muted); font:inherit; font-size:.84rem; font-weight:650; cursor:pointer; }
 .ticket-view-tabs button:hover,.ticket-layout-switch button:hover { background:var(--surface-muted); color:var(--text); }
 .ticket-view-tabs button[aria-pressed="true"],.ticket-layout-switch button[aria-pressed="true"] { background:var(--primary-soft); color:var(--primary); }
-.ticket-filter-bar { display:grid; grid-template-columns:minmax(200px,1.5fr) repeat(4,minmax(125px,1fr)); gap:12px; align-items:end; }
+.ticket-filter-bar { display:grid; grid-template-columns:minmax(200px,1.5fr) repeat(2,minmax(125px,1fr)); gap:12px; align-items:end; }
 .ticket-filter-bar label { display:grid; gap:7px; color:var(--muted); font-size:.75rem; font-weight:650; min-width:0; }
 .ticket-filter-bar :is(input,select) { width:100%; min-height:44px; min-width:0; border:1px solid var(--border); border-radius:8px; padding:10px 11px; background:var(--surface); color:var(--text); font:inherit; font-size:.82rem; }
 .ticket-search-input { display:flex; align-items:center; position:relative; }
@@ -80,7 +80,7 @@
 .ticket-person-list .ticket-form fieldset { display:none; }
 .ticket-detail-grid { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:24px; align-items:start; }
 .ticket-detail-content,.ticket-detail-aside { display:grid; gap:20px; min-width:0; }
-.ticket-detail-page :is(.ticket-detail-content,.ticket-detail-aside) > section { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:22px; min-width:0; }
+.ticket-detail-page :is(.ticket-detail-content,.ticket-detail-aside) > :is(section,details) { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:22px; min-width:0; }
 .ticket-detail-page h2 { margin:0; font-size:1.03rem; }
 .ticket-section-heading { margin-block-end:20px; }
 .ticket-back { display:inline-flex; align-items:center; gap:7px; color:var(--muted); font-size:.8rem; text-decoration:none; justify-self:start; }
@@ -107,5 +107,32 @@
 .ticket-form .ticket-people-option input { width:18px; height:18px; min-height:18px; flex:0 0 auto; accent-color:var(--primary); }
 .ticket-people-option span { overflow-wrap:anywhere; }
 .ticket-notice { padding:12px 15px; background:var(--primary-soft); border-radius:8px; }
-@media(max-width:1100px) { .ticket-filter-bar { grid-template-columns:repeat(4,minmax(0,1fr)); }.ticket-search { grid-column:1/-1; }.ticket-detail-grid { grid-template-columns:minmax(0,1fr) 250px; } }
-@media(max-width:760px) { .ticket-workspace,.ticket-detail { gap:20px; }.ticket-workspace-heading,.ticket-detail-heading { align-items:start; flex-wrap:wrap; }.ticket-heading-actions { width:100%; }.ticket-filter-bar { grid-template-columns:repeat(2,minmax(0,1fr)); }.ticket-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }.ticket-metrics article { padding:16px; gap:12px; }.ticket-card { grid-template-columns:minmax(0,1fr) 20px; padding:16px; }.ticket-card-main { grid-column:1/-1; }.ticket-card .ticket-badges { justify-content:start; grid-column:1; }.ticket-card .ticket-card-meta { grid-column:1; display:grid; gap:5px; }.ticket-card .ticket-open { grid-column:2; grid-row:2/4; }.ticket-list-heading,.ticket-overview-heading { flex-wrap:wrap; }.ticket-managed-workspace { padding:17px; }.ticket-managed-workspace > header { flex-wrap:wrap; }.ticket-detail-grid { grid-template-columns:minmax(0,1fr); }.ticket-detail-aside { grid-row:1; }.ticket-detail :is(.ticket-detail-content,.ticket-detail-aside) > section { padding:17px; }.ticket-section-heading { flex-wrap:wrap; }.ticket-kanban { grid-template-columns:repeat(5,250px); }.ticket-form .operation-form-grid { grid-template-columns:minmax(0,1fr); } }
+.ticket-relation-tabs { display:flex; flex-wrap:wrap; gap:8px; }
+.ticket-relation-tabs button { min-height:44px; padding:9px 13px; border:1px solid var(--border); border-radius:20px; background:var(--surface); color:var(--muted); font:inherit; font-size:.8rem; font-weight:650; cursor:pointer; }
+.ticket-relation-tabs button[aria-pressed="true"] { background:var(--primary-soft); color:var(--primary); border-color:var(--primary); }
+.ticket-filter-options { border-block-end:1px solid var(--border); padding-block-end:12px; }
+.ticket-filter-options > summary,.ticket-detail-facts > summary { font-size:.85rem; font-weight:650; color:var(--muted); cursor:pointer; min-height:44px; align-content:center; }
+.ticket-filter-bar-secondary { grid-template-columns:repeat(2,minmax(0,1fr)); max-width:600px; margin-block-start:10px; }
+.ticket-active-filters,.ticket-relationships { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+.ticket-filter-chip { display:inline-flex; align-items:center; gap:12px; min-height:44px; max-width:100%; padding:8px 12px; border:1px solid var(--border); border-radius:8px; background:var(--primary-soft); color:var(--primary); font:inherit; font-size:.8rem; cursor:pointer; overflow-wrap:anywhere; text-align:start; }
+.ticket-filter-chip span { flex:0 0 auto; font-size:1.2rem; }
+.ticket-relationships { font-size:.72rem; color:var(--primary); }
+.ticket-relationships:empty { display:none; }
+.ticket-relationships > span { padding:3px 7px; border-radius:6px; background:var(--primary-soft); }
+.ticket-created { display:grid; justify-items:start; gap:16px; padding-block:10px; }
+.ticket-created > svg { color:var(--success); }
+.ticket-created :is(h3,p) { margin:0; line-height:1.6; }
+.ticket-created > p { color:var(--muted); }
+.ticket-created h3 { font-size:1.1rem; }
+.ticket-people-fields-compact .ticket-people-groups { grid-template-columns:minmax(0,1fr); }
+.ticket-mention-options > fieldset { margin-block-start:12px; }
+.ticket-extra-fields > summary { min-height:44px; align-content:center; }
+.ticket-extra-fields > :is(.operation-form-grid,details) { margin-block-start:14px; }
+.ticket-breadcrumbs ol { display:flex; flex-wrap:wrap; gap:4px 10px; margin:0; padding:0; list-style:none; color:var(--muted); font-size:.8rem; }
+.ticket-breadcrumbs li { display:flex; align-items:center; gap:10px; min-width:0; overflow-wrap:anywhere; }
+.ticket-breadcrumbs li + li::before { content:"/"; color:var(--muted); }
+.ticket-breadcrumbs a { display:inline-flex; align-items:center; min-height:44px; color:var(--primary); text-decoration:none; }
+.ticket-breadcrumbs a:hover { text-decoration:underline; }
+.ticket-secondary-narratives { margin-block-start:18px; }
+@media(max-width:1100px) { .ticket-filter-bar { grid-template-columns:repeat(2,minmax(0,1fr)); }.ticket-search { grid-column:1/-1; }.ticket-detail-grid { grid-template-columns:minmax(0,1fr) 250px; } }
+@media(max-width:760px) { .ticket-workspace,.ticket-detail-page { gap:20px; }.ticket-workspace-heading,.ticket-detail-heading { align-items:start; flex-wrap:wrap; }.ticket-heading-actions { width:100%; }.ticket-filter-bar { grid-template-columns:repeat(2,minmax(0,1fr)); }.ticket-filter-bar :is(input,select) { font-size:1rem; }.ticket-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }.ticket-metrics article { padding:16px; gap:12px; }.ticket-card { grid-template-columns:minmax(0,1fr) 20px; padding:16px; }.ticket-card-main { grid-column:1/-1; }.ticket-card .ticket-badges { justify-content:start; grid-column:1; }.ticket-card .ticket-card-meta { grid-column:1; display:grid; gap:5px; }.ticket-card .ticket-open { grid-column:2; grid-row:2/4; }.ticket-list-heading,.ticket-overview-heading { flex-wrap:wrap; }.ticket-managed-workspace { padding:17px; }.ticket-managed-workspace > header { flex-wrap:wrap; }.ticket-detail-grid { grid-template-columns:minmax(0,1fr); }.ticket-detail-page :is(.ticket-detail-content,.ticket-detail-aside) > :is(section,details) { padding:17px; }.ticket-section-heading { flex-wrap:wrap; }.ticket-kanban { grid-template-columns:repeat(5,250px); }.ticket-form .operation-form-grid { grid-template-columns:minmax(0,1fr); }.ticket-view-tabs button,.ticket-layout-switch button { min-height:44px; }.ticket-breadcrumbs ol { font-size:.85rem; } }

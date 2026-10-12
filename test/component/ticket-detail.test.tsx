@@ -21,7 +21,7 @@ const ownerPermissions: TicketPermissions = { edit: true, managePeople: true, ar
 const workspace: TicketWorkspaceData = {
   workspaces: [{ id: workspaceId, name: "Company work", description: null, clientId: null, projectId: null, version: 1, canManage: true, members: [creator, assignee, observer] }],
   boards: [{ id: boardId, workspaceId, name: "Support dashboard", status: "PUBLISHED", version: 1, canManage: true }],
-  tickets: [], people: [creator, assignee, observer, colleague], clients: [], projects: [],
+  tickets: [], people: [creator, assignee, observer, colleague], membershipPeople: { [workspaceId]: [creator, assignee, observer, colleague] }, clients: [], projects: [],
 };
 
 function detail(overrides: Partial<TicketDetail> = {}): TicketDetail {
@@ -29,6 +29,7 @@ function detail(overrides: Partial<TicketDetail> = {}): TicketDetail {
     id: ticketId, number: 12, subject: "Repair the access reader", status: "OPEN", priority: "HIGH", ticketDate: "2026-10-08", dueDate: "2026-10-10",
     boardId, workspaceId, creatorUserId: creator.userId, creatorName: creator.displayName, assignees: [assignee], version: 3, archivedAt: null,
     permissions: ownerPermissions, summary: "Inspect the reader at reception.", planning: "Confirm power first.", workCompleted: null, notes: "Reception knows about the visit.", onHoldReason: null,
+    myParticipation: { created: true, assigned: false, mentioned: false },
     createdAt: "2026-10-08T04:00:00.000Z", updatedAt: "2026-10-08T05:00:00.000Z",
     participants: [{ ...creator, participation: "CREATOR" }, { ...assignee, participation: "ASSIGNEE" }, { ...observer, participation: "OBSERVER" }],
     workLogs: [{ id: "10000000-0000-4000-8000-000000000005", authorUserId: creator.userId, authorName: creator.displayName, description: "Inspected power supply.", loggedAt: "2026-10-08T04:30:00.000Z", durationMinutes: 30, version: 1, canEdit: true }, { id: "10000000-0000-4000-8000-000000000006", authorUserId: assignee.userId, authorName: assignee.displayName, description: "Checked cable.", loggedAt: "2026-10-08T05:30:00.000Z", durationMinutes: null, version: 1, canEdit: false }],
@@ -60,7 +61,7 @@ describe("Company ticket detail", () => {
     expect(screen.getByText("You have read-only access to this ticket.")).toBeInTheDocument();
     expect(screen.getByText("Mentioned · read only")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Download Reader manual.pdf" })).toHaveAttribute("href", `/api/tickets/${ticketId}/files/${fileId}`);
-    for (const label of ["Edit ticket", "Archive ticket", "Manage ticket people", "Add work log", "Attach file", "Archive Reader manual.pdf"]) expect(screen.queryByRole("button", { name: label, exact: true })).not.toBeInTheDocument();
+    for (const label of ["Change status", "Edit details", "Archive ticket", "Manage ticket people", "Add work log", "Attach file", "Archive Reader manual.pdf"]) expect(screen.queryByRole("button", { name: label, exact: true })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /Edit work log/ })).not.toBeInTheDocument();
   });
 
@@ -68,8 +69,8 @@ describe("Company ticket detail", () => {
     render(<TicketDetailView initialData={detail()} workspace={workspace} actor={actor} />);
     expect(screen.getByRole("button", { name: "Archive ticket", exact: true })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Manage ticket people" })).toBeInTheDocument();
-    expect(screen.getByText("TKT-0012 · Company work / Support dashboard")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Edit ticket", exact: true }));
+    expect(screen.getByRole("navigation", { name: "Ticket location" })).toHaveTextContent("Company workSupport dashboardTKT-0012");
+    fireEvent.click(screen.getByRole("button", { name: "Edit details", exact: true }));
     const form = screen.getByRole("form", { name: "Edit ticket" });
     const status = within(form).getByLabelText("Status");
     expect(within(status).getAllByRole("option").map((entry) => entry.textContent)).toEqual(["Planned", "Open", "In progress", "On hold", "Closed"]);
@@ -92,7 +93,7 @@ describe("Company ticket detail", () => {
     expect(screen.getByRole("button", { name: "Restore ticket", exact: true })).toBeInTheDocument();
     expect(screen.getByText("Inspected power supply.")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Download Reader manual.pdf" })).toBeInTheDocument();
-    for (const label of ["Edit ticket", "Archive ticket", "Manage ticket people", "Add work log", "Attach file", "Archive Reader manual.pdf"]) expect(screen.queryByRole("button", { name: label, exact: true })).not.toBeInTheDocument();
+    for (const label of ["Change status", "Edit details", "Archive ticket", "Manage ticket people", "Add work log", "Attach file", "Archive Reader manual.pdf"]) expect(screen.queryByRole("button", { name: label, exact: true })).not.toBeInTheDocument();
   });
 
   it("lets an Employee creator assign multiple active company people beyond workspace membership and mention others", async () => {
@@ -165,7 +166,7 @@ describe("Company ticket detail", () => {
     const fetch = fetchWithRefresh(next, 409);
     vi.stubGlobal("fetch", fetch);
     render(<TicketDetailView initialData={detail()} workspace={workspace} actor={actor} />);
-    fireEvent.click(screen.getByRole("button", { name: "Edit ticket", exact: true }));
+    fireEvent.click(screen.getByRole("button", { name: "Edit details", exact: true }));
     const form = screen.getByRole("form", { name: "Edit ticket" });
     fireEvent.change(within(form).getByLabelText("Subject"), { target: { value: "My unfinished edit" } });
     fireEvent.submit(form);
@@ -267,5 +268,72 @@ describe("Company ticket detail", () => {
     await waitFor(() => expect(screen.getByRole("heading", { name: "Ticket unavailable" })).toBeInTheDocument());
     expect(screen.queryByText("Inspect the reader at reception.")).not.toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "Download Reader manual.pdf" })).not.toBeInTheDocument();
+  });
+
+  it("changes status with a focused command and an explicit On-hold reason", async () => {
+    const fetch = fetchWithRefresh(detail({ version: 4, status: "ON_HOLD", onHoldReason: "Waiting for a replacement reader." }));
+    vi.stubGlobal("fetch", fetch);
+    render(<TicketDetailView initialData={detail()} workspace={workspace} actor={actor} />);
+    fireEvent.click(screen.getByRole("button", { name: "Change status", exact: true }));
+    const form = screen.getByRole("form", { name: "Change ticket status" });
+    expect(within(form).queryByLabelText("Subject")).not.toBeInTheDocument();
+    expect(within(form).queryByLabelText("Description")).not.toBeInTheDocument();
+    expect(within(form).queryByLabelText("Due date · optional")).not.toBeInTheDocument();
+    fireEvent.change(within(form).getByLabelText("Status"), { target: { value: "ON_HOLD" } });
+    const reason = within(form).getByLabelText("On-hold reason");
+    expect(reason).toBeRequired();
+    fireEvent.change(reason, { target: { value: "Waiting for a replacement reader." } });
+    fireEvent.submit(form);
+    await waitFor(() => expect(screen.getByText("Status updated.")).toBeInTheDocument());
+    expect(JSON.parse(String(fetch.mock.calls[0][1]?.body))).toEqual({ action: "changeTicketStatus", ticketId, version: 3, status: "ON_HOLD", onHoldReason: "Waiting for a replacement reader." });
+    expect(screen.getByText("Inspect the reader at reception.")).toBeInTheDocument();
+  });
+
+  it("keeps a failed status edit until explicit conflict reload and then uses the latest version", async () => {
+    const fetch = fetchWithRefresh(detail({ version: 5, status: "IN_PROGRESS" }), 409);
+    vi.stubGlobal("fetch", fetch);
+    render(<TicketDetailView initialData={detail()} workspace={workspace} actor={actor} />);
+    fireEvent.click(screen.getByRole("button", { name: "Change status", exact: true }));
+    const form = screen.getByRole("form", { name: "Change ticket status" });
+    fireEvent.change(within(form).getByLabelText("Status"), { target: { value: "ON_HOLD" } });
+    fireEvent.change(within(form).getByLabelText("On-hold reason"), { target: { value: "My unsaved reason" } });
+    fireEvent.submit(form);
+    await waitFor(() => expect(within(form).getByRole("button", { name: "Reload latest record" })).toBeInTheDocument());
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(within(form).getByLabelText("On-hold reason")).toHaveValue("My unsaved reason");
+    fireEvent.click(within(form).getByRole("button", { name: "Reload latest record" }));
+    await waitFor(() => expect(within(form).getByLabelText("Status")).toHaveValue("IN_PROGRESS"));
+    expect(within(form).queryByLabelText("On-hold reason")).not.toBeInTheDocument();
+    fireEvent.change(within(form).getByLabelText("Status"), { target: { value: "CLOSED" } });
+    fireEvent.submit(form);
+    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(4));
+    expect(JSON.parse(String(fetch.mock.calls[3][1]?.body))).toEqual({ action: "changeTicketStatus", ticketId, version: 5, status: "CLOSED", onHoldReason: "" });
+  });
+
+  it("puts task instructions before metadata and People in reading order", () => {
+    render(<TicketDetailView initialData={detail()} workspace={workspace} actor={actor} />);
+    const description = screen.getByRole("heading", { name: "Description", exact: true });
+    const people = screen.getByRole("heading", { name: "People", exact: true });
+    expect(description.compareDocumentPosition(people) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(screen.getByText("Ticket information", { selector: "summary" }).closest("details")).not.toHaveAttribute("open");
+  });
+
+  it("provides container breadcrumbs and retains the validated return context", () => {
+    const context = "/tickets?layout=board&search=reader&status=OPEN&relation=assigned";
+    render(<TicketDetailView initialData={detail()} workspace={workspace} actor={actor} initialReturnTo={context} />);
+    expect(screen.getByRole("link", { name: "Back to tickets" })).toHaveAttribute("href", context);
+    const navigation = screen.getByRole("navigation", { name: "Ticket location" });
+    const parent = new URL(within(navigation).getByRole("link", { name: "Company work" }).getAttribute("href")!, "http://localhost");
+    expect(parent.searchParams.get("workspace")).toBe(workspaceId);
+    expect(parent.searchParams.get("board")).toBeNull();
+    const dashboard = new URL(within(navigation).getByRole("link", { name: "Support dashboard" }).getAttribute("href")!, "http://localhost");
+    expect(dashboard.searchParams.get("board")).toBe(boardId);
+    expect(dashboard.searchParams.get("relation")).toBe("assigned");
+    expect(dashboard.searchParams.get("layout")).toBe("board");
+  });
+
+  it("falls back to the ticket list for an external return destination", () => {
+    render(<TicketDetailView initialData={detail()} workspace={workspace} actor={actor} initialReturnTo="https://example.com/private" />);
+    expect(screen.getByRole("link", { name: "Back to tickets" })).toHaveAttribute("href", "/tickets");
   });
 });

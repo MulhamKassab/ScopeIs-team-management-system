@@ -1,3 +1,8 @@
+## UI clarity and consolidated tickets — confirmed 2026-10-12
+
+- [Approved UI clarity implementation and consolidated ticket delivery](phase-reports/SCOPEIS_UI_CLARITY_IMPLEMENTATION_2026_10_12.md)
+- All 11 review improvements are implemented and affected local verification is `COMPLETED`: 469 unique automated cases, static gates and the isolated final-source production build pass. Every role defaults to All accessible across currently authorized workspaces/dashboards, with relation/destination filters and Overview secondary; unrelated tickets remain private. [Current ticket decisions](project-memory/PHASE_12_COMPANY_TICKET_IMPLEMENTATION_DECISIONS.md), [UI foundation](project-memory/UI_UX_FOUNDATION.md) and [user journeys](project-memory/USER_JOURNEYS.md) preserve schedule/leave/role/privacy boundaries. Release is `IN_PROGRESS`; exact push/deployment/canonical/live evidence remain pending. [The report](phase-reports/SCOPEIS_UI_CLARITY_IMPLEMENTATION_2026_10_12.md) and [desktop/phone screenshots](phase-reports/evidence/ui-clarity-2026-10-12/) retain bounded evidence and the retry/broad-responsive limitations. The earlier review is historical and broader Phase 12/13 completion is not implied.
+
 ## Admin schedule-access amendment — confirmed 2026-10-09
 
 - [Removal of Admin drafting and schedule mutation permissions](phase-reports/SCOPEIS_ADMIN_SCHEDULE_ACCESS_AMENDMENT_2026_10_09.md)
@@ -6,7 +11,7 @@
 ## UI clarity review — 2026-10-09
 
 - [Application-wide simplification review: add, remove, change and fix](phase-reports/SCOPEIS_UI_CLARITY_REVIEW_2026_10_09.md)
-- Review completed using current source, canonical guidance and fictional local desktop/phone evidence. Its proposed broader presentation changes are recommendations only and are not recorded as implemented; the confirmed Admin schedule-access amendment and included inaccurate-help corrections are tracked separately above.
+- Review completed using current source, canonical guidance and fictional local desktop/phone evidence. Its broader changes were recommendations at the time; the 12 October implementation authorization above supersedes that boundary. The original review remains historical. The confirmed Admin schedule-access amendment and included inaccurate-help corrections are tracked separately.
 
 ## Company ticket collaboration amendment — confirmed 2026-10-09
 

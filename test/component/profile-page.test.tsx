@@ -22,7 +22,7 @@ describe("own profile without a workforce record", () => {
     mocks.actor.mockResolvedValue({ id: "legacy-person", displayName: "Legacy Person", role });
     mocks.profile.mockRejectedValue(new EmployeeDomainError("NOT_FOUND"));
     render(await ProfilePage());
-    expect(screen.getByRole("heading", { name: "My professional profile" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "My profile" })).toBeVisible();
     expect(screen.getByText(/Your sign-in account is ready/)).toBeVisible();
     expect(screen.getByRole("link", { name: "Change your password" })).toHaveAttribute("href", "/account/change-password");
     if (role === "SUPER_ADMIN") expect(screen.getByRole("button", { name: "Complete workforce profile for Legacy Person" })).toBeVisible();

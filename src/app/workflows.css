@@ -97,6 +97,12 @@
 .workflow-impact p { font-size:.85rem; line-height:1.6; margin:0; }
 .workflow-settings { max-width:340px; }
 .workflow-settings .operation-form { margin-block-start:8px; }
+.vacation-preview { display:grid; gap:10px; padding:16px; border:1px solid var(--border); border-radius:10px; background:var(--surface-muted); min-width:0; }
+.vacation-preview h3,.vacation-preview p { margin:0; }
+.vacation-preview h3 { font-size:.95rem; }
+.vacation-preview ul { display:grid; gap:10px; list-style:none; padding:0; margin:0; }
+.vacation-preview li { display:grid; gap:4px; }
+.vacation-preview li span { font-size:.84rem; line-height:1.55; overflow-wrap:anywhere; }
 .task-dialog .schedule-form { border:0; padding:0; box-shadow:none; }
 :root[data-theme="dark"] .workflow-page .schedule-status.proposed { color:#f4cc7f; }
 @media (max-width:1100px) {

@@ -1,6 +1,18 @@
 # Company ticket workflow — confirmed implementation decisions
 
-## Current amendment — confirmed 9 October 2026
+## Current experience amendment — confirmed 12 October 2026
+
+The product owner authorized implementation of the [9 October UI clarity review](../phase-reports/SCOPEIS_UI_CLARITY_REVIEW_2026_10_09.md), followed by a push to `main` and deployment. The ticket starting view is now **All accessible tickets for every role**, consolidated across all authorized workspaces and dashboards. A person does not have to enter a workspace or dashboard before finding their related work. This replaces the earlier Employee “My tickets” and management Overview defaults; **Overview remains available as a secondary view**, alongside operational Tickets and workspace administration.
+
+**All accessible** is the union of the actor's current creator, assignee, included/mentioned-observer and independently authorized manager access. It does not mean every company ticket. Super Admin retains global supervision; Admin retains existing scoped/membership supervision plus their independent participation access; Employee sees only tickets currently authorized through participation. Every list, count, relation label, filter option, detail and file read must respect the applicable server policy. Filtering is applied to the authorized set and cannot grant access.
+
+Workspace and Dashboard filters narrow the consolidated list. **Assigned to me**, **Created by me** and **Mentioned in** are secondary relationship filters; an actor may have more than one relationship to the same ticket. The minimal server-derived relationship facts describe why a ticket is visible without requesting every ticket detail or exposing another person's work. Search, destination, relation, status, priority, archive mode and List/Kanban presentation are retained across permitted view changes and safe detail return navigation. Active filters are visible and can be cleared, including in empty states.
+
+The approved clarity changes also include server-derived eligible **Workspace access** choices separate from the company-wide ticket participant picker; explicit creation success with **Open ticket** and secondary **Create another**; task instructions before supporting detail on phones; a focused **Change status** action using existing versioned validation and requiring an On hold reason; and progressive disclosure of optional creation details. Existing required decisions, private bytes, stale-write refusals, failed form data and double-submission protection remain binding. Clickable Workspace → Dashboard → Ticket breadcrumbs use validated local destinations and a safe fallback for direct links.
+
+Bounded implementation and affected local verification are `COMPLETED`: 407 unit/component cases, 31 ticket-service/private-file integration cases, 28 desktop/phone journey cases and three focused Chrome presentation cases pass, totaling 469 unique automated cases. Static gates and the isolated final-source production build pass. Exact push/deployment/canonical/live verification remain `IN_PROGRESS` under [the 12 October report](../phase-reports/SCOPEIS_UI_CLARITY_IMPLEMENTATION_2026_10_12.md), which preserves failed attempts and explains the ticket-case retry, uncertified broad responsive suite and authenticated-production limitation. The authorization does not add daily work, flowcharts, cost/PDF reporting, external synchronization, reminders, workforce handoffs, ticket skill eligibility or broader Phase 13 certification. Super Admin-only schedule writing and the existing leave/profile boundaries remain unchanged.
+
+## Previous collaboration amendment — confirmed 9 October 2026
 
 The product owner subsequently required that **all active authenticated company users can create tickets, mention/include any active company person and assign multiple people**. Ticket creators may manage their ticket's assignee/included-person choices; assignees can update/work, and included/mentioned observers are read-only and receive an in-app notification. This supersedes the original manager-only grants and Employee creation without participants in the delivery contract below. Workforce Admin scope and unrelated workforce tools remain unchanged. Ticket contents remain private to authorized participants/management.
 
@@ -51,7 +63,7 @@ Client/Project links establish management scope and context, not new Employee ac
 
 Employees land on Tickets after sign-in and root visits. Their primary destinations are Tickets, Schedule, Vacations and My profile. My profile contains their recorded skills. The existing published-only personal schedule, vacation request/balance/history, own profile, Notifications and participant-only My requests retain their authorization boundaries. Home remains a secondary personal summary. Super Admin and Admin keep their existing navigation and gain Tickets.
 
-Overview and Tickets share the same workspace/board, search, status and priority filters. List and Board presentations use the same authorized ticket set. The Employee default presents operational Tickets; management can use the Company overview. Ticket details expose only the actions the server permits.
+Overview and Tickets share the same authorized filter state. List and Kanban presentations use the same authorized ticket set. Under the 12 October amendment, every role defaults to operational **All accessible tickets** across destinations, with Overview secondary. Ticket details expose only the actions the server permits.
 
 ## Delivery boundary
 

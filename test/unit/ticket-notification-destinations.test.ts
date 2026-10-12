@@ -26,7 +26,7 @@ const row = (relatedRecordType: string | null = "ticket", relatedRecordId: strin
 });
 const workspace = (): TicketWorkspaceData => ({
   workspaces: [{ id: workspaceId, name: "Fictional workspace", description: null, clientId: null, projectId: null, version: 1, canManage: false, members: [] }],
-  boards: [], tickets: [], people: [], clients: [], projects: [],
+  boards: [], tickets: [], people: [], membershipPeople: {}, clients: [], projects: [],
 });
 
 describe("current ticket authorization on notification destinations", () => {

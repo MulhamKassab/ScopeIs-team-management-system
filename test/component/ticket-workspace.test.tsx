@@ -8,14 +8,14 @@ const employee = { id: "worker", displayName: "Worker", role: "EMPLOYEE" as cons
 const manager = { id: "manager", displayName: "Manager", role: "SUPER_ADMIN" as const };
 const permissions = { edit: true, managePeople: false, archive: true, restore: false, log: true, files: true };
 function ticket(id: string, boardId: string, overrides: Partial<TicketSummary> = {}): TicketSummary {
-  return { id, boardId, number: Number(id), subject: `Ticket ${id}`, status: "OPEN", priority: "MEDIUM", ticketDate: "2026-10-08", dueDate: null, creatorName: "Worker", assignees: [], version: 1, archivedAt: null, permissions, ...overrides };
+  return { id, boardId, number: Number(id), subject: `Ticket ${id}`, status: "OPEN", priority: "MEDIUM", ticketDate: "2026-10-08", dueDate: null, creatorName: "Worker", assignees: [], version: 1, archivedAt: null, permissions, myParticipation: { created: true, assigned: false, mentioned: false }, ...overrides };
 }
 function data(managed = false): TicketWorkspaceData {
   return {
     workspaces: [{ id: "workspace", name: "Support", description: null, clientId: null, projectId: null, version: 3, canManage: managed, members: managed ? [{ userId: "worker", displayName: "Worker", role: "EMPLOYEE" }] : [] }],
     boards: [{ id: "board", workspaceId: "workspace", name: "Service desk", status: "PUBLISHED", version: 2, canManage: managed }, { id: "old", workspaceId: "workspace", name: "Previous work", status: "ARCHIVED", version: 1, canManage: managed }],
-    tickets: [ticket("1", "board", { subject: "Repair access reader", priority: "HIGH", assignees: [{ userId: "worker", displayName: "Worker" }] }), ticket("2", "board", { subject: "Check cable", status: "CLOSED" }), ticket("3", "board", { archivedAt: "2026-10-08T06:00:00Z" }), ticket("4", "old")],
-    people: [], clients: [], projects: [],
+    tickets: [ticket("1", "board", { subject: "Repair access reader", priority: "HIGH", assignees: [{ userId: "worker", displayName: "Worker" }], myParticipation: { created: false, assigned: true, mentioned: false } }), ticket("2", "board", { subject: "Check cable", status: "CLOSED" }), ticket("3", "board", { archivedAt: "2026-10-08T06:00:00Z" }), ticket("4", "old")],
+    people: [], membershipPeople: managed ? { workspace: [{ userId: "worker", displayName: "Worker", role: "EMPLOYEE" }] } : {}, clients: [], projects: [],
   };
 }
 beforeEach(() => window.history.replaceState({}, "", "/tickets"));
@@ -24,7 +24,7 @@ afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 describe("Company ticket workspace", () => {
   it("keeps employee work primary and omits manager container tools", () => {
     render(<TicketWorkspaceView initialData={data()} actor={employee} />);
-    expect(screen.getByRole("heading", { name: "My tickets" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Tickets", exact: true })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Tickets", exact: true })).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByRole("button", { name: "New ticket" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Workspaces" })).toBeInTheDocument();
@@ -42,6 +42,7 @@ describe("Company ticket workspace", () => {
     fireEvent.change(screen.getByLabelText("Search tickets"), { target: { value: "reader" } });
     fireEvent.change(screen.getByLabelText("Workspace", { exact: true }), { target: { value: "workspace" } });
     fireEvent.change(screen.getByLabelText("Dashboard", { exact: true }), { target: { value: "board" } });
+    fireEvent.click(screen.getByText("Status and priority", { selector: "summary" }));
     fireEvent.change(screen.getByLabelText("Priority"), { target: { value: "HIGH" } });
     fireEvent.click(screen.getByRole("button", { name: "Kanban", exact: true }));
     expect(screen.getByRole("region", { name: "Ticket Kanban" })).toBeInTheDocument();
@@ -91,7 +92,9 @@ describe("Company ticket workspace", () => {
     const form = screen.getByRole("form", { name: "Create ticket" });
     fireEvent.change(within(form).getByLabelText("Subject"), { target: { value: "Inspect reader" } });
     fireEvent.submit(form);
-    await waitFor(() => expect(screen.getByText("Saved. Reload the page to see the latest record.")).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole("heading", { name: "Ticket created" })).toBeInTheDocument());
+    expect(screen.getByRole("link", { name: "Open ticket" })).toHaveAttribute("href", "/tickets/created?from=%2Ftickets");
+    expect(screen.getByText(/The ticket list could not be refreshed/)).toBeInTheDocument();
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     expect(JSON.parse(String(fetch.mock.calls[0][1]?.body))).toMatchObject({ action: "createTicket", version: 2, assigneeIds: [], observerIds: [] });
   });
@@ -116,6 +119,7 @@ describe("Company ticket workspace", () => {
     fireEvent.click(within(assignees).getByRole("checkbox", { name: "Outside Admin" }));
     fireEvent.click(within(assignees).getByRole("checkbox", { name: "Outside Worker" }));
     fireEvent.change(within(form).getByLabelText("Find people"), { target: { value: "Director" } });
+    fireEvent.click(within(form).getByText("Mention people · 0 selected", { selector: "summary" }));
     fireEvent.click(within(within(form).getByRole("group", { name: "Mentioned people · read only" })).getByRole("checkbox", { name: "Company Director" }));
     fireEvent.submit(form);
     await waitFor(() => expect(fetch).toHaveBeenCalled());
@@ -158,5 +162,121 @@ describe("Company ticket workspace", () => {
     fireEvent.submit(form);
     await waitFor(() => expect(screen.getByRole("heading", { name: "Customer support" })).toBeInTheDocument());
     expect(JSON.parse(String(fetch.mock.calls[0][1]?.body))).toEqual({ action: "updateWorkspace", workspaceId: "workspace", version: 3, name: "Customer support", description: "" });
+  });
+
+  it.each(["SUPER_ADMIN", "ADMIN", "EMPLOYEE"] as const)("starts %s with every accessible active ticket across workspaces", (role) => {
+    const snapshot = data(true);
+    snapshot.workspaces.push({ ...snapshot.workspaces[0], id: "another", name: "Engineering" });
+    snapshot.boards.push({ ...snapshot.boards[0], id: "engineering", workspaceId: "another", name: "Delivery" });
+    snapshot.tickets.push(ticket("5", "engineering", { subject: "Read project handover", myParticipation: { created: false, assigned: false, mentioned: true }, permissions: { ...permissions, edit: false } }));
+    render(<TicketWorkspaceView initialData={snapshot} actor={{ ...employee, role }} />);
+    expect(screen.getByRole("button", { name: "Tickets", exact: true })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "All accessible", exact: true })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText("Repair access reader")).toBeInTheDocument();
+    expect(screen.getByText("Check cable")).toBeInTheDocument();
+    expect(screen.getByText("Read project handover")).toBeInTheDocument();
+    expect(screen.getByLabelText("Workspace", { exact: true })).toHaveValue("");
+    fireEvent.click(screen.getByRole("button", { name: "Assigned to me" }));
+    expect(screen.getByText("Repair access reader")).toBeInTheDocument();
+    expect(screen.queryByText("Check cable")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Created by me" }));
+    expect(screen.getByText("Check cable")).toBeInTheDocument();
+    expect(screen.queryByText("Repair access reader")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Mentioned in" }));
+    expect(screen.getByText("Read project handover")).toBeInTheDocument();
+    expect(screen.getByText("Read only")).toBeInTheDocument();
+    expect(screen.queryByText("Check cable")).not.toBeInTheDocument();
+    expect(new URLSearchParams(window.location.search).get("relation")).toBe("mentioned");
+  });
+
+  it("shows retained filter chips in Workspaces and clears them without losing the layout", () => {
+    render(<TicketWorkspaceView initialData={data()} actor={employee} initialQuery={{ workspace: "workspace", board: "board", search: "reader", status: "OPEN", priority: "HIGH", relation: "assigned", layout: "board" }} />);
+    fireEvent.click(screen.getByRole("button", { name: "Workspaces" }));
+    expect(screen.getByLabelText("Search tickets")).toHaveValue("reader");
+    const activeFilters = within(screen.getByLabelText("Active ticket filters"));
+    for (const label of ["Search: reader", "Support", "Service desk", "Open", "High priority", "Assigned to me"]) expect(activeFilters.getByRole("button", { name: `Remove ${label} filter` })).toBeInTheDocument();
+    expect(screen.getByText(/Dashboard counts show matching tickets/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Clear filters", exact: true }));
+    expect(screen.queryByLabelText("Active ticket filters")).not.toBeInTheDocument();
+    expect(screen.getByLabelText("Search tickets")).toHaveValue("");
+    fireEvent.click(screen.getByRole("button", { name: "Tickets", exact: true }));
+    expect(screen.getByRole("region", { name: "Ticket Kanban" })).toBeInTheDocument();
+    expect(screen.getByText("Check cable")).toBeInTheDocument();
+    expect(new URLSearchParams(window.location.search).get("layout")).toBe("board");
+  });
+
+  it("explains empty filters and carries the full list context on detail links", () => {
+    render(<TicketWorkspaceView initialData={data()} actor={employee} initialQuery={{ search: "not found", relation: "assigned", layout: "board" }} />);
+    expect(screen.getByText("Clear or change your filters to see more tickets.")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Show all accessible tickets" }));
+    fireEvent.change(screen.getByLabelText("Search tickets"), { target: { value: "reader" } });
+    fireEvent.click(screen.getByRole("button", { name: "Assigned to me" }));
+    const link = screen.getByRole("link", { name: "Repair access reader", exact: true });
+    const url = new URL(link.getAttribute("href")!, "http://localhost");
+    expect(url.pathname).toBe("/tickets/1");
+    const returnUrl = new URL(url.searchParams.get("from")!, "http://localhost");
+    expect(returnUrl.pathname).toBe("/tickets");
+    expect(Object.fromEntries(returnUrl.searchParams)).toEqual({ layout: "board", search: "reader", relation: "assigned" });
+  });
+
+  it("offers the created ticket even when current filters exclude it, then explicitly starts a new form", async () => {
+    const snapshot = data();
+    const fetch = vi.fn(async (_url: string, options?: RequestInit) => ({ ok: true, status: 200, json: async () => options?.method === "POST" ? { id: "new-ticket" } : snapshot }));
+    vi.stubGlobal("fetch", fetch);
+    render(<TicketWorkspaceView initialData={snapshot} actor={employee} initialQuery={{ search: "excluded", relation: "assigned" }} />);
+    fireEvent.click(screen.getByRole("button", { name: "New ticket" }));
+    const form = screen.getByRole("form", { name: "Create ticket" });
+    fireEvent.change(within(form).getByLabelText("Subject"), { target: { value: "Created outside the filter" } });
+    fireEvent.change(within(form).getByLabelText("Description"), { target: { value: "Inspect the new task." } });
+    expect(within(form).getByText("More options", { selector: "summary" }).closest("details")).not.toHaveAttribute("open");
+    fireEvent.submit(form);
+    await waitFor(() => expect(screen.getByRole("heading", { name: "Ticket created" })).toBeInTheDocument());
+    const link = screen.getByRole("link", { name: "Open ticket" });
+    const url = new URL(link.getAttribute("href")!, "http://localhost");
+    expect(url.pathname).toBe("/tickets/new-ticket");
+    expect(url.searchParams.get("from")).toContain("search=excluded");
+    expect(screen.queryByRole("form", { name: "Create ticket" })).not.toBeInTheDocument();
+    expect(JSON.parse(String(fetch.mock.calls[0][1]?.body))).toMatchObject({ summary: "Inspect the new task.", priority: "MEDIUM", status: "OPEN" });
+    fireEvent.click(screen.getByRole("button", { name: "Create another" }));
+    expect(screen.getByRole("form", { name: "Create ticket" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Subject")).toHaveValue("");
+    expect(screen.getByLabelText("Description")).toHaveValue("");
+  });
+
+  it("retains unfinished creation details and people after a failed command", async () => {
+    const snapshot = data();
+    snapshot.people = [{ userId: "colleague", displayName: "Colleague", role: "EMPLOYEE" }];
+    vi.stubGlobal("fetch", vi.fn(async () => ({ ok: false, status: 422, json: async () => ({ message: "Check the selected dashboard." }) })));
+    render(<TicketWorkspaceView initialData={snapshot} actor={employee} />);
+    fireEvent.click(screen.getByRole("button", { name: "New ticket" }));
+    const form = screen.getByRole("form", { name: "Create ticket" });
+    fireEvent.change(within(form).getByLabelText("Subject"), { target: { value: "Unfinished subject" } });
+    fireEvent.change(within(form).getByLabelText("Description"), { target: { value: "Unfinished details" } });
+    fireEvent.click(within(within(form).getByRole("group", { name: "Assignees" })).getByRole("checkbox", { name: "Colleague" }));
+    fireEvent.submit(form);
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Check the selected dashboard."));
+    expect(within(form).getByLabelText("Subject")).toHaveValue("Unfinished subject");
+    expect(within(form).getByLabelText("Description")).toHaveValue("Unfinished details");
+    expect(within(within(form).getByRole("group", { name: "Assignees" })).getByRole("checkbox", { name: "Colleague" })).toBeChecked();
+    expect(screen.queryByRole("link", { name: "Open ticket" })).not.toBeInTheDocument();
+  });
+
+  it("uses grant eligibility only for adding workspace access and keeps current authorized revocation", () => {
+    const snapshot = data(true);
+    const eligible = { userId: "eligible", displayName: "Eligible colleague", role: "EMPLOYEE" as const };
+    const outside = { userId: "outside", displayName: "Outside colleague", role: "EMPLOYEE" as const };
+    const existingAdmin = { userId: "former-admin-scope", displayName: "Existing Admin", role: "ADMIN" as const };
+    snapshot.people = [eligible, outside, existingAdmin];
+    snapshot.workspaces[0].members.push(existingAdmin);
+    snapshot.membershipPeople = { workspace: [eligible] };
+    render(<TicketWorkspaceView initialData={snapshot} actor={manager} initialQuery={{ view: "workspaces" }} />);
+    fireEvent.click(screen.getByRole("button", { name: "Workspace access in Support" }));
+    const form = screen.getByRole("form", { name: "Add workspace access" });
+    expect(within(form).getByRole("option", { name: "Eligible colleague" })).toBeInTheDocument();
+    expect(within(form).queryByRole("option", { name: "Outside colleague" })).not.toBeInTheDocument();
+    expect(screen.getByRole("form", { name: "Remove Existing Admin from workspace" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Close", exact: true }));
+    fireEvent.click(screen.getByRole("button", { name: "New ticket" }));
+    expect(within(within(screen.getByRole("form", { name: "Create ticket" })).getByRole("group", { name: "Assignees" })).getByRole("checkbox", { name: "Outside colleague" })).toBeInTheDocument();
   });
 });

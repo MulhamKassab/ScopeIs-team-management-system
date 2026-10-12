@@ -66,15 +66,16 @@ function DashboardTable({ section, role, featured = false }: { section: Dashboar
 
 function WorkspaceShortcuts({ role }: { role: DashboardView["role"] }) {
   const shortcuts = role === "EMPLOYEE" ? [
-    { href: "/schedule", title: "My working day", description: "Your published times and worksites.", Icon: CalendarDays },
-    { href: "/leave", title: "Leave & balances", description: "Request time off and follow its status.", Icon: CalendarOff },
-    { href: "/profile", title: "My professional profile", description: "Your experience, certifications and CV.", Icon: UserRound },
+    { href: "/tickets", title: "Tickets", description: "All tickets you can access, across workspaces.", Icon: ClipboardList },
+    { href: "/schedule", title: "Schedule", description: "Your published times and worksites.", Icon: CalendarDays },
+    { href: "/leave", title: "Vacations", description: "Apply for time off and follow its status.", Icon: CalendarOff },
+    { href: "/profile", title: "My profile", description: "Your recorded skills, experience and documents.", Icon: UserRound },
   ] : [
     { href: "/schedule", title: role === "SUPER_ADMIN" ? "Plan, review, publish" : "View team schedules", description: role === "SUPER_ADMIN" ? "Move a monthly plan from Draft to Published." : "Review schedules within your access. Super Admin prepares and publishes them.", Icon: CalendarDays },
     { href: "/map", title: "See the day on a map", description: "Explore assignments and review coverage.", Icon: MapPinned },
     { href: "/employees", title: "Know your team", description: "Find people, skills and supporting evidence.", Icon: Users },
   ];
-  return <nav className="workspace-shortcuts" aria-label="Workspace starting points">{shortcuts.map(({ href, title, description, Icon }) => <Link href={href} key={href}><span className="workspace-shortcut-icon"><Icon size={21} aria-hidden="true" /></span><span><strong>{title}</strong><small>{description}</small></span><ArrowRight size={17} aria-hidden="true" /></Link>)}</nav>;
+  return <nav className={`workspace-shortcuts${role === "EMPLOYEE" ? " workspace-shortcuts-employee" : ""}`} aria-label="Workspace starting points">{shortcuts.map(({ href, title, description, Icon }) => <Link href={href} key={href}><span className="workspace-shortcut-icon"><Icon size={21} aria-hidden="true" /></span><span><strong>{title}</strong><small>{description}</small></span><ArrowRight size={17} aria-hidden="true" /></Link>)}</nav>;
 }
 
 export function DashboardCards({ view }: { view: DashboardView }) {
@@ -94,10 +95,10 @@ export function DashboardCards({ view }: { view: DashboardView }) {
       <h1 id="dashboard-title">Home</h1>
       <p>{dashboardIntro(view.role)}</p>
       <p className="reporting-as-of" role="status">{asOfLabel(view.asOf)}</p>
-    </div><Link className="button primary" href="/schedule"><CalendarDays size={18} aria-hidden="true" />{view.role === "EMPLOYEE" ? "My timetable" : "Open timetable"}</Link></header>
+    </div><Link className="button primary" href={view.role === "EMPLOYEE" ? "/tickets" : "/schedule"}>{view.role === "EMPLOYEE" ? <ClipboardList size={18} aria-hidden="true" /> : <CalendarDays size={18} aria-hidden="true" />}{view.role === "EMPLOYEE" ? "Open tickets" : "Open timetable"}</Link></header>
     {view.cards.some((card) => card.unavailable) ? <p className="reporting-missing-source" role="alert">{missingSourceLabel("a required reporting source")}</p> : null}
     {upcoming ? <DashboardTable section={upcoming} role={view.role} featured /> : null}
-    <DashboardCardGroup title={view.role === "SUPER_ADMIN" ? "Ready for review" : view.role === "ADMIN" ? "Requests to follow" : "Your leave and updates"}
+    <DashboardCardGroup title={view.role === "SUPER_ADMIN" ? "Ready for review" : view.role === "ADMIN" ? "Requests to follow" : "Your vacations and updates"}
       description={view.role === "SUPER_ADMIN" ? "Open a queue to review its requests." : undefined} cards={priorityCards} role={view.role} priority />
     <WorkspaceShortcuts role={view.role} />
     <DashboardCardGroup title={view.role === "EMPLOYEE" ? "Your profile" : "Published plan and team"} cards={coreCards} role={view.role} />

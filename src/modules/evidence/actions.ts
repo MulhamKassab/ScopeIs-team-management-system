@@ -4,7 +4,7 @@ import { getCurrentActor } from "@/modules/auth/session-service";
 import { EvidenceDomainError } from "@/modules/evidence/domain-error";
 import { evidenceService } from "@/modules/evidence/service";
 
-export type EvidenceActionState = { error?: string; success?: string };
+export type EvidenceActionState = { error?: string; success?: string; savedItem?: { id: string; version: number; title: string; archived: boolean } };
 export type EvidenceAction = (state: EvidenceActionState, data: FormData) => Promise<EvidenceActionState>;
 
 const text = (data: FormData, key: string) => typeof data.get(key) === "string" ? String(data.get(key)).trim() : "";
@@ -21,12 +21,18 @@ async function run(operation: () => Promise<unknown>, success: string, extraRefr
   catch (error) { return { error: message(error) }; }
 }
 
-export const createEvidenceAction: EvidenceAction = async (_state, data) => !only(data, allowed) ? { error: "The evidence form contained unsupported fields." } : run(
-  async () => evidenceService.create(await actor(), {
-    kind: text(data, "kind"), title: text(data, "title"), issuer: optional(data, "issuer"), issueDate: optional(data, "issueDate"), expiryDate: optional(data, "expiryDate"),
-    relatedSkillId: optional(data, "relatedSkillId"), externalUrl: optional(data, "externalUrl"), details: optional(data, "details"), submissionKey: optional(data, "submissionKey"),
-  }), "Capability evidence saved. Super Admin can review it.",
-);
+export const createEvidenceAction: EvidenceAction = async (_state, data) => {
+  if (!only(data, allowed)) return { error: "The evidence form contained unsupported fields." };
+  try {
+    const { evidence } = await evidenceService.create(await actor(), {
+      kind: text(data, "kind"), title: text(data, "title"), issuer: optional(data, "issuer"), issueDate: optional(data, "issueDate"), expiryDate: optional(data, "expiryDate"),
+      relatedSkillId: optional(data, "relatedSkillId"), externalUrl: optional(data, "externalUrl"), details: optional(data, "details"), submissionKey: optional(data, "submissionKey"),
+    });
+    refresh();
+    // Only the authorized saved record supplies the upload destination and optimistic version.
+    return { success: "Document or experience saved. Super Admin can review it.", savedItem: { id: evidence.id, version: evidence.version, title: evidence.title, archived: Boolean(evidence.archivedAt) } };
+  } catch (error) { return { error: message(error) }; }
+};
 
 export const updateEvidenceAction: EvidenceAction = async (_state, data) => !only(data, allowed) ? { error: "The evidence form contained unsupported fields." } : run(
   async () => evidenceService.update(await actor(), {

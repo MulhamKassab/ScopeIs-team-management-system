@@ -15,6 +15,13 @@ async function expectNoHorizontalOverflow(page: import("@playwright/test").Page)
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
 }
 
+async function openCertifications(page: import("@playwright/test").Page) {
+  const category = page.locator("details.evidence-category").filter({ has: page.getByRole("heading", { name: "Certifications", exact: true }) });
+  await category.locator("summary").first().click();
+  await expect(category).toHaveAttribute("open");
+  return category;
+}
+
 test("Employee saves capability evidence privately, Super Admin reviews and verifies it, and the owner archives it", async ({ page }, testInfo) => {
   const suffix = `${testInfo.project.name}-${Date.now()}`;
   const title = `Fictional Phase 9 Certification ${suffix}`;
@@ -26,15 +33,39 @@ test("Employee saves capability evidence privately, Super Admin reviews and veri
     // 1. The employee saves evidence immediately, with no approval gate.
     await signIn(page, "Cora Bell");
     await page.goto("/profile");
-    await page.getByRole("button", { name: "Add certifications" }).click();
-    const create = page.getByRole("form", { name: "Add certifications" });
+    await expect(page.getByRole("heading", { name: "My profile", exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "My recorded skills", exact: true })).toBeVisible();
+    const categories = page.locator("details.evidence-category");
+    await expect(categories).toHaveCount(5);
+    for (let index = 0; index < 5; index += 1) await expect(categories.nth(index)).not.toHaveAttribute("open");
+    await page.getByRole("button", { name: "Add document or experience", exact: true }).click();
+    const dialog = page.getByRole("dialog", { name: "Add document or experience", exact: true });
+    const type = dialog.getByLabel("Document or experience type");
+    await expect(type).toHaveValue("certification");
+    await expect(type.locator("option")).toHaveText(["Certifications", "Portfolio", "Project examples", "CV", "Supporting documents"]);
+    await type.selectOption("portfolio");
+    await expect(dialog.getByLabel("Portfolio link (HTTPS only)")).toBeVisible();
+    await type.selectOption("certification");
+    const create = dialog.getByRole("form", { name: "Add document or experience", exact: true });
     await create.getByLabel("Title").fill(title);
     await create.getByLabel("Issuer or provider").fill("Fictional Safety Institute");
     await create.getByLabel("Issue date").fill("2026-01-15");
     await create.getByLabel("Expiry date (optional)").fill("2027-01-15");
-    await create.getByRole("button", { name: "Save evidence" }).click();
-    await expect(create.getByText(/Capability evidence saved/)).toBeVisible();
-    await page.getByRole("dialog").getByRole("button", { name: "Close", exact: true }).click();
+    await create.getByRole("button", { name: "Save item", exact: true }).click();
+    await expect(dialog.getByRole("status")).toContainText("Document or experience saved.");
+    await expect(dialog.getByRole("heading", { name: title, exact: true })).toBeVisible();
+    await expect(dialog.getByRole("button", { name: "Save item", exact: true })).toHaveCount(0);
+
+    // 2. The same save result guides directly to a private upload for the actual saved item.
+    const upload = dialog.getByRole("form", { name: "Attach file to saved item", exact: true });
+    await upload.getByLabel("Attach file to saved item", { exact: true }).setInputFiles(filePath);
+    await upload.getByRole("button", { name: "Upload private file", exact: true }).click();
+    await expect(upload.getByRole("status")).toHaveText("Private file saved.");
+    await expect(upload.getByRole("button", { name: "File attached", exact: true })).toBeDisabled();
+    await dialog.getByRole("button", { name: "Close", exact: true }).click();
+
+    const category = await openCertifications(page);
+    await expect(category.locator("summary").first()).toContainText("active item");
 
     const item = page.locator("article.evidence-item").filter({ hasText: title });
     await expect(item).toBeVisible();
@@ -42,12 +73,7 @@ test("Employee saves capability evidence privately, Super Admin reviews and veri
     await expect(item.getByText(/Expires 2027-01-15 \(valid\)/)).toBeVisible();
     await expectNoHorizontalOverflow(page);
 
-    // 2. A private file is uploaded through the authorized route and delivered with safe headers.
-    await item.getByRole("button", { name: "Attach file" }).click();
-    await item.getByRole("form", { name: "Attach or replace file" }).locator('input[type="file"]').setInputFiles(filePath);
-    await item.getByRole("button", { name: "Upload private file" }).click();
-    await expect(item.getByText("Private file saved.")).toBeVisible();
-    await page.getByRole("dialog").getByRole("button", { name: "Close", exact: true }).click();
+    // The authorized private route retains its response protections after the guided upload.
     const previewLink = item.getByRole("link", { name: "Preview file" });
     await expect(previewLink).toBeVisible();
     const href = await previewLink.getAttribute("href");
@@ -60,6 +86,7 @@ test("Employee saves capability evidence privately, Super Admin reviews and veri
     expect(body).toContain("%PDF-1.4");
     expect(body).not.toContain("evidence/");
     await signOut(page);
+    expect((await page.request.get(href!)).status()).toBe(401);
 
     // 3. Super Admin reviews and verifies from the employee detail context.
     await signIn(page, "Nora Albright");
@@ -83,6 +110,7 @@ test("Employee saves capability evidence privately, Super Admin reviews and veri
     // 4. The owner sees the review and verification state on their own evidence.
     await signIn(page, "Cora Bell");
     await page.goto("/profile");
+    await openCertifications(page);
     const ownedAfterReview = page.locator("article.evidence-item").filter({ hasText: title });
     await expect(ownedAfterReview.getByText("Verified", { exact: true })).toBeVisible();
     await expect(ownedAfterReview.getByText("New / updated")).toHaveCount(0);
@@ -105,14 +133,15 @@ test("Scoped Admin receives certification summary only and Employee is denied ma
   const title = `Fictional Scoped Summary ${Date.now()}`;
   await signIn(page, "Cora Bell");
   await page.goto("/profile");
-  await page.getByRole("button", { name: "Add certifications" }).click();
-  const create = page.getByRole("form", { name: "Add certifications" });
+  await page.getByRole("button", { name: "Add document or experience", exact: true }).click();
+  const create = page.getByRole("form", { name: "Add document or experience", exact: true });
   await create.getByLabel("Title").fill(title);
   await create.getByLabel("Issuer or provider").fill("Fictional Safety Institute");
   await create.getByLabel("Issue date").fill("2026-03-01");
-  await create.getByRole("button", { name: "Save evidence" }).click();
-  await expect(create.getByRole("status")).toBeVisible();
+  await create.getByRole("button", { name: "Save item", exact: true }).click();
+  await expect(page.getByRole("dialog").getByRole("status")).toContainText("Document or experience saved.");
   await page.getByRole("dialog").getByRole("button", { name: "Close", exact: true }).click();
+  await openCertifications(page);
   await expect(page.locator("article.evidence-item").filter({ hasText: title })).toBeVisible();
 
   // An Employee never reaches the management evidence surface.

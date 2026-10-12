@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type FormEvent, type ReactNode } from "react";
+import { useId, useRef, useState, type FormEvent, type ReactNode } from "react";
 import type { TicketDetail, TicketPerson } from "./types";
 import { ticketPriorities, ticketPriorityLabels, ticketStatuses, ticketStatusLabels, ticketToday } from "./presentation";
 
@@ -12,32 +12,37 @@ export async function sendTicketCommand(input: unknown): Promise<unknown> {
   return result;
 }
 
-export function TicketActionForm({ label, submit = "Save changes", getCommand, onSuccess, onConflict, children, danger = false, resetOnSuccess = false }: {
+export function TicketActionForm({ label, submit = "Save changes", getCommand, onSuccess, onConflict, children, danger = false, resetOnSuccess = false, successMessage = "Saved." }: {
   label: string; submit?: string; getCommand: (form: FormData) => unknown;
   onSuccess: (result: unknown) => void | Promise<void>; onConflict?: () => void | Promise<void>;
-  children: ReactNode; danger?: boolean; resetOnSuccess?: boolean;
+  children: ReactNode; danger?: boolean; resetOnSuccess?: boolean; successMessage?: string;
 }) {
   const [pending, setPending] = useState(false);
+  const saving = useRef(false);
   const [resetKey, setResetKey] = useState(0);
   const [feedback, setFeedback] = useState<{ error?: string; success?: string; conflict?: boolean }>({});
   const feedbackId = useId();
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (pending) return;
+    if (saving.current) return;
     const form = event.currentTarget;
-    setPending(true); setFeedback({});
+    saving.current = true; setPending(true); setFeedback({});
     try {
       const result = await sendTicketCommand(getCommand(new FormData(form)));
       if (resetOnSuccess) { form.reset(); setResetKey((key) => key + 1); }
-      setFeedback({ success: "Saved." });
+      setFeedback({ success: successMessage });
       try { await onSuccess(result); }
       catch { setFeedback({ success: "Saved. Reload the page to see the latest record." }); }
     } catch (error) {
       setFeedback({ error: error instanceof Error ? error.message : "The change could not be saved.",
         conflict: error instanceof Error && "status" in error && error.status === 409 });
-    } finally { setPending(false); }
+    } finally { saving.current = false; setPending(false); }
   }
-  return <form className="operation-form ticket-form" aria-label={label} onSubmit={save} aria-describedby={feedbackId}>
+  return <form className="operation-form ticket-form" aria-label={label} onSubmit={save} aria-describedby={feedbackId} onInvalidCapture={(event) => {
+    // Required fields remain reachable when an optional section has been collapsed.
+    let parent = event.target instanceof Element ? event.target.parentElement : null;
+    while (parent) { if (parent instanceof HTMLDetailsElement) parent.open = true; parent = parent.parentElement; }
+  }}>
     <fieldset key={resetKey} disabled={pending}>{children}</fieldset>
     <div id={feedbackId}>
       {feedback.error ? <p className="operation-error" role="alert">{feedback.error}</p> : null}
@@ -61,8 +66,8 @@ export function readTicketFields(form: FormData) {
 }
 
 /** Hidden values retain selected people when the searchable choices are filtered. */
-export function TicketPeopleFields({ people, creatorUserId, assigneeIds = [], observerIds = [] }: {
-  people: TicketPerson[]; creatorUserId: string; assigneeIds?: string[]; observerIds?: string[];
+export function TicketPeopleFields({ people, creatorUserId, assigneeIds = [], observerIds = [], compact = false }: {
+  people: TicketPerson[]; creatorUserId: string; assigneeIds?: string[]; observerIds?: string[]; compact?: boolean;
 }) {
   const choices = people.filter((person) => person.userId !== creatorUserId);
   const eligible = new Set(choices.map((person) => person.userId));
@@ -80,29 +85,32 @@ export function TicketPeopleFields({ people, creatorUserId, assigneeIds = [], ob
       if (selected) setAssigned((current) => current.filter((id) => id !== userId));
     }
   }
-  return <div className="ticket-people-fields">
-    <p className="operation-help">Choose any company people. Assignees can update this ticket. Mentioned people receive a notification and can view it.</p>
-    <label>Find people<input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search by name" /></label>
-    {assigned.map((id) => <input type="hidden" name="assigneeIds" value={id} key={`assigned:${id}`} />)}
-    {mentioned.map((id) => <input type="hidden" name="observerIds" value={id} key={`mentioned:${id}`} />)}
-    <div className="ticket-people-groups">{([
-      ["assigned", "Assignees", assigned], ["mentioned", "Mentioned people · read only", mentioned],
-    ] as const).map(([role, label, selected]) => <fieldset className="ticket-people-picker" key={role}>
+  function picker(role: "assigned" | "mentioned", label: string, selected: string[]) {
+    return <fieldset className="ticket-people-picker" key={role}>
       <legend>{label}</legend>
       <p className="ticket-file-meta">{selected.length} selected{selected.length ? ` · ${choices.filter((person) => selected.includes(person.userId)).map((person) => person.displayName).join(", ")}` : " · choose one or more"}</p>
       <div className="ticket-people-options">{matching.map((person) => <label className="ticket-people-option" key={person.userId}>
         <input type="checkbox" checked={selected.includes(person.userId)} onChange={(event) => toggle(person.userId, role, event.target.checked)} />
         <span>{person.displayName}</span>
       </label>)}{!matching.length ? <p className="record-empty">{choices.length ? "No people match your search." : "No other active company people are available."}</p> : null}</div>
-    </fieldset>)}</div>
-    <p className="operation-help">The creator can always update the ticket. You can select multiple people in each group.</p>
+    </fieldset>;
+  }
+  return <div className={`ticket-people-fields${compact ? " ticket-people-fields-compact" : ""}`}>
+    <p className="operation-help">Assignees can update this ticket. Mentioned people can view it and receive a notification.</p>
+    <label>Find people<input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search company people" /></label>
+    {assigned.map((id) => <input type="hidden" name="assigneeIds" value={id} key={`assigned:${id}`} />)}
+    {mentioned.map((id) => <input type="hidden" name="observerIds" value={id} key={`mentioned:${id}`} />)}
+    <div className="ticket-people-groups">
+      {picker("assigned", "Assignees", assigned)}
+      {compact ? <details className="ticket-extra-fields ticket-mention-options"><summary>Mention people · {mentioned.length} selected</summary>{picker("mentioned", "Mentioned people · read only", mentioned)}</details> : picker("mentioned", "Mentioned people · read only", mentioned)}
+    </div>
+    <p className="operation-help">Choose multiple people, or keep creator access only.</p>
   </div>;
 }
 
-export function TicketFields({ ticket }: { ticket?: Partial<TicketDetail> }) {
+export function TicketFields({ ticket, compact = false, children }: { ticket?: Partial<TicketDetail>; compact?: boolean; children?: ReactNode }) {
   const [status, setStatus] = useState(ticket?.status ?? "OPEN");
-  return <>
-    <label>Subject<input name="subject" defaultValue={ticket?.subject ?? ""} maxLength={200} required data-dialog-autofocus /></label>
+  const options = <>
     <div className="operation-form-grid">
       <label>Status<select name="status" value={status} onChange={(event) => setStatus(event.target.value as typeof status)}>{ticketStatuses.map((value) => <option key={value} value={value}>{ticketStatusLabels[value]}</option>)}</select></label>
       <label>Priority<select name="priority" defaultValue={ticket?.priority ?? "MEDIUM"}>{ticketPriorities.map((value) => <option key={value} value={value}>{ticketPriorityLabels[value]}</option>)}</select></label>
@@ -110,11 +118,24 @@ export function TicketFields({ ticket }: { ticket?: Partial<TicketDetail> }) {
       <label>Due date · optional<input type="date" name="dueDate" defaultValue={ticket?.dueDate ?? ""} /></label>
     </div>
     {status === "ON_HOLD" ? <label>On-hold reason<textarea name="onHoldReason" defaultValue={ticket?.onHoldReason ?? ""} maxLength={2000} rows={3} required /></label> : <input type="hidden" name="onHoldReason" value="" />}
-    <label>Summary<textarea name="summary" defaultValue={ticket?.summary ?? ""} maxLength={10000} rows={3} /></label>
-    <details className="ticket-extra-fields"><summary>Planning, work completed and notes</summary>
+    <details className="ticket-extra-fields"><summary>Planning, completed work and notes</summary>
       <label>Planning<textarea name="planning" defaultValue={ticket?.planning ?? ""} maxLength={10000} rows={3} /></label>
       <label>Work completed<textarea name="workCompleted" defaultValue={ticket?.workCompleted ?? ""} maxLength={10000} rows={3} /></label>
       <label>Notes<textarea name="notes" defaultValue={ticket?.notes ?? ""} maxLength={10000} rows={3} /></label>
     </details>
+  </>;
+  return <>
+    <label>Subject<input name="subject" defaultValue={ticket?.subject ?? ""} maxLength={200} required data-dialog-autofocus /></label>
+    <label>Description<textarea name="summary" defaultValue={ticket?.summary ?? ""} maxLength={10000} rows={4} /></label>
+    {children}
+    {compact ? <details className="ticket-extra-fields"><summary>More options</summary><p className="operation-help">Starts Open with Medium priority and today&apos;s Dubai date.</p>{options}</details> : options}
+  </>;
+}
+
+export function TicketStatusFields({ ticket }: { ticket: Pick<TicketDetail, "status" | "onHoldReason"> }) {
+  const [status, setStatus] = useState(ticket.status);
+  return <>
+    <label>Status<select name="status" value={status} data-dialog-autofocus onChange={(event) => setStatus(event.target.value as typeof status)}>{ticketStatuses.map((value) => <option key={value} value={value}>{ticketStatusLabels[value]}</option>)}</select></label>
+    {status === "ON_HOLD" ? <label>On-hold reason<textarea name="onHoldReason" defaultValue={ticket.onHoldReason ?? ""} maxLength={2000} rows={3} required /></label> : <input type="hidden" name="onHoldReason" value="" />}
   </>;
 }

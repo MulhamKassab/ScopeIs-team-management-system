@@ -7,7 +7,7 @@ export function MissingWorkforceProfile({ actor, completeAction }: {
   actor: Pick<AuthenticatedActor, "id" | "displayName" | "role">; completeAction: AccountFormAction;
 }) {
   return <section className="employee-self-profile" aria-labelledby="profile-title">
-    <header className="people-page-heading"><div><p className="eyebrow">My workspace</p><h2 id="profile-title">My professional profile</h2></div></header>
+    <header className="people-page-heading"><div><p className="eyebrow">My workspace</p><h2 id="profile-title">My profile</h2></div></header>
     <div className="people-profile-card"><div className="people-profile-identity"><h3>{actor.displayName}</h3>
       <p>Your sign-in account is ready. Your workforce profile has not been set up yet.</p>
       {actor.role === "SUPER_ADMIN" ? <><p>Complete your profile to add your work details, experience, and supporting documents.</p>
