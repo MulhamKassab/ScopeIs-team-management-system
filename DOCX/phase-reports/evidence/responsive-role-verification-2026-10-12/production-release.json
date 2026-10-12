@@ -1,0 +1,167 @@
+{
+  "kind": "full-responsive-and-role-verification-production-release",
+  "sourceCommit": "da6a5a36457932b9ae833d0bf6acb510f23196df",
+  "sourceDelivery": {
+    "branch": "main",
+    "remoteBranch": "origin/main",
+    "verifiedCommit": "da6a5a36457932b9ae833d0bf6acb510f23196df"
+  },
+  "applicationUnchangedFrom": "90cd5286c52ced0695d8672d9b134a9af44bd14e",
+  "production": {
+    "verifiedAt": "2026-10-12T08:00:34.886Z",
+    "projectId": "prj_JvFv2V2vKKmAqfBOySS8FsZ1aZjy",
+    "deploymentId": "dpl_EMcADXfwzn25fjNT52Ppcd14ztne",
+    "target": "production",
+    "state": "READY",
+    "url": "https://scopeis-team-management-system-nwkfuytm7-mu-ka7.vercel.app",
+    "canonicalUrl": "https://scopeis-team-management-system.vercel.app",
+    "canonicalAliasAssigned": true
+  },
+  "anonymousSmoke": {
+    "verifiedAt": "2026-10-12T08:01:12.835Z",
+    "authenticated": false,
+    "cases": 11,
+    "passed": 11,
+    "results": [
+      {
+        "path": "/login",
+        "method": "GET",
+        "expectedStatus": 200,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "path": "/schedule",
+        "method": "GET",
+        "expectedStatus": 307,
+        "status": 307,
+        "location": "/login",
+        "passed": true
+      },
+      {
+        "path": "/tickets",
+        "method": "GET",
+        "expectedStatus": 307,
+        "status": 307,
+        "location": "/login",
+        "passed": true
+      },
+      {
+        "path": "/dashboard",
+        "method": "GET",
+        "expectedStatus": 307,
+        "status": 307,
+        "location": "/login",
+        "passed": true
+      },
+      {
+        "path": "/profile",
+        "method": "GET",
+        "expectedStatus": 307,
+        "status": 307,
+        "location": "/login",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets",
+        "method": "GET",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets/00000000-0000-4000-8000-000000000001",
+        "method": "GET",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets/00000000-0000-4000-8000-000000000001/files/00000000-0000-4000-8000-000000000002",
+        "method": "GET",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets/commands",
+        "method": "POST",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets/00000000-0000-4000-8000-000000000001/files",
+        "method": "POST",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/auth/mock-login",
+        "method": "POST",
+        "expectedStatus": 404,
+        "status": 404,
+        "passed": true
+      }
+    ]
+  },
+  "postDeploymentRoleSmoke": {
+    "verifiedAt": "2026-10-12T08:04:51.5466375Z",
+    "sourceCommit": "da6a5a36457932b9ae833d0bf6acb510f23196df",
+    "normalSavedSignIns": true,
+    "readOnly": true,
+    "roles": {
+      "SUPER_ADMIN": {
+        "status": "passed",
+        "archivedRelatedQaTickets": 4,
+        "accountsAllowed": true
+      },
+      "ADMIN": {
+        "status": "passed",
+        "archivedRelatedQaTickets": 3,
+        "unrelatedCreatorOnlyQaTicketExcluded": true,
+        "scheduleReadOnly": true,
+        "scheduleWriterControls": 0,
+        "accountsRefused": true
+      },
+      "EMPLOYEE": {
+        "status": "passed",
+        "ticketsLanding": true,
+        "activeRelatedQaTickets": 0,
+        "archivedRelatedQaTickets": 3,
+        "accountsRefused": true
+      }
+    }
+  },
+  "preReleaseEvidence": {
+    "responsiveCases": 24,
+    "responsivePassed": 24,
+    "cancellationCases": 4,
+    "cancellationPassed": 4,
+    "supplementaryTicketObservations": 54,
+    "roleGroupsPassed": 3,
+    "qaTicketsArchived": 4,
+    "harnessHashesMatched": 7,
+    "ordinaryDetailedRoleQaSource": "90cd5286c52ced0695d8672d9b134a9af44bd14e"
+  },
+  "normalProductionQaWrites": true,
+  "limitations": [
+    "SIGINT cancellation proof uses synthetic registered handler dispatch through process.emit, not a real OS-delivered signal.",
+    "Controlled cleanup does not certify forced Windows process termination or power loss.",
+    "Detailed ordinary pre-release role/file QA and post-release read-only role smoke have different scope.",
+    "Production forced POST/stale races were not tested; revoked private-file HTTP refusal was not observed.",
+    "Full historical system lock, general Phase 13 readiness, other browsers/devices and all Phase 12 features remain outside certification.",
+    "A future documentation-only commit/deployment requires its own exact-source verification."
+  ]
+}

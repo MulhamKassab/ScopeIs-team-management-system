@@ -1,6 +1,6 @@
 {
   "kind": "full-responsive-and-bounded-production-role-verification",
-  "state": "VERIFIED_RELEASE_PENDING",
+  "state": "PRODUCTION_RELEASED",
   "applicationBaseline": "90cd5286c52ced0695d8672d9b134a9af44bd14e",
   "applicationSourceUnchanged": true,
   "responsive": {
@@ -37,14 +37,15 @@
       "passed": 4,
       "mechanisms": [
         "controlled IPC",
-        "registered SIGINT"
+        "synthetic registered SIGINT handler dispatch (process.emit)"
       ],
       "phases": [
         "readiness",
         "browser"
       ],
       "realDescendantsAndOwnedResourcesVerified": true,
-      "forcedWindowsKillOrPowerLossCertified": false
+      "forcedWindowsKillOrPowerLossCertified": false,
+      "realOsDeliveredSigintCertified": false
     },
     "supplementaryTicketObservations": {
       "observations": 54,
@@ -91,9 +92,16 @@
     "manifest": "pass"
   },
   "release": {
-    "commitPush": "pending",
-    "exactSourceReadyCanonical": "pending",
-    "postDeploymentSmoke": "pending"
+    "commitPush": "pass",
+    "sourceCommit": "da6a5a36457932b9ae833d0bf6acb510f23196df",
+    "exactSourceReadyCanonical": "pass",
+    "deploymentId": "dpl_EMcADXfwzn25fjNT52Ppcd14ztne",
+    "readyVerifiedAt": "2026-10-12T08:00:34.886Z",
+    "anonymousSmoke": "pass 11/11",
+    "anonymousVerifiedAt": "2026-10-12T08:01:12.835Z",
+    "postDeploymentRoleSmoke": "pass 3/3 bounded read-only",
+    "roleSmokeVerifiedAt": "2026-10-12T08:04:51.5466375Z",
+    "releaseReceipt": "production-release.json"
   },
   "limits": [
     "Complete Chrome responsive and bounded normal UI role journeys do not constitute a full historical system lock, general Phase 13 readiness or every Phase 12 feature.",
