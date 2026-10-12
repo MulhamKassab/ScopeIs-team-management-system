@@ -2,6 +2,8 @@
 
 Status: **`PRODUCTION_RELEASED` for the bounded UI clarity amendment**. All 11 improvements are implemented; 469 unique local cases, static gates and the isolated build pass. Tested application `6e33c6b3ea461c15a53a8af01506d71d4e4ac4f0` is pushed to `origin/main`, Ready and assigned to the [canonical application](https://scopeis-team-management-system.vercel.app/), with 11/11 anonymous live checks. [The sanitized release receipt](evidence/ui-clarity-2026-10-12/production-release.json) records exact source and deployment. Broader Phase 12 and Phase 13 completion are not implied.
 
+**Subsequent 12 October verification request:** [The separate full responsive/live-role report](SCOPEIS_FULL_RESPONSIVE_ROLE_VERIFICATION_2026_10_12.md) records the later complete responsive gate and ordinary production role QA. Those ticket-only live QA writes and results do not change this earlier release's evidence or original limitations.
+
 ## Confirmed experience
 
 **Tickets opens one All accessible list for Super Admin, Admin and Employee.** It combines the actor's current creator, assignee, mentioned/included-observer and independently authorized management access across workspaces and dashboards. Workspace, Dashboard and relationship controls narrow that set. Related tickets are discoverable without entering a container first; unrelated company contents remain protected. Overview and workspace administration remain available as secondary views.

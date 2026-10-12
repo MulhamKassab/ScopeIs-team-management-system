@@ -1,0 +1,111 @@
+{
+  "kind": "full-responsive-and-bounded-production-role-verification",
+  "state": "VERIFIED_RELEASE_PENDING",
+  "applicationBaseline": "90cd5286c52ced0695d8672d9b134a9af44bd14e",
+  "applicationSourceUnchanged": true,
+  "responsive": {
+    "verifiedAt": "2026-10-12T07:33:16.353Z",
+    "browser": "Installed Google Chrome 154.0.8037.98",
+    "cases": 24,
+    "passed": 24,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0,
+    "retries": 0,
+    "exclusions": 0,
+    "durationMs": 708077.353,
+    "allFrozenInputsMatchedAfterRun": true,
+    "testedHarnessInputsLfSha256": {
+      "playwright.responsive.config.ts": "81501206cb5587b4c46488be8ca9a0c8671cc683f742ccf46350b010f854f653",
+      "scripts/run-responsive-playwright.mjs": "cb1980674e7662b686ef1904eca9325848322de3b0c860be540c0f3059b6ec3d",
+      "scripts/responsive-test-fixtures.mjs": "f0d9b358ce7f6f117c32362d6618dae65e372347ad1e9f345ba36c16fd045602",
+      "test/e2e/responsive.spec.ts": "a99a79505c6d54a887b7bf5e3ea920655b4b1c2f59948d2d7eb99493d30d98b6",
+      "scripts/owned-responsive-processes.mjs": "c76d3105a011e1f10c602eb8a16b4c34879bc4f018992174eb66be3e06474413",
+      "scripts/responsive-cancellation-fixture.mjs": "2cabb8c137293e95cfbd2ed987eb09baf312ccdbec30d79a222dd39f6af0fe27",
+      "scripts/test-responsive-cancellation.mjs": "08b14f572937168c1ae4a8cd2ac610cdce3f0d2841880490a23a80b5e8d42cd8"
+    },
+    "cleanup": {
+      "ownedDatabaseCreated": 1,
+      "ownedDatabaseDropped": 1,
+      "retainedOwnedDatabases": 0,
+      "ownedBuildAndFilesRemoved": true,
+      "ownedProcessTreesRemoved": true,
+      "verificationListenerRemoved": true
+    },
+    "cancellation": {
+      "controlledCases": 4,
+      "passed": 4,
+      "mechanisms": [
+        "controlled IPC",
+        "registered SIGINT"
+      ],
+      "phases": [
+        "readiness",
+        "browser"
+      ],
+      "realDescendantsAndOwnedResourcesVerified": true,
+      "forcedWindowsKillOrPowerLossCertified": false
+    },
+    "supplementaryTicketObservations": {
+      "observations": 54,
+      "passed": 54,
+      "additionalUniqueTestCases": false,
+      "roleCount": 3,
+      "widths": [
+        320,
+        820,
+        1280
+      ],
+      "viewsOrForms": 6,
+      "modes": [
+        "RTL",
+        "dark",
+        "200% text"
+      ]
+    }
+  },
+  "liveRoleQa": {
+    "testedDeployedSource": "90cd5286c52ced0695d8672d9b134a9af44bd14e",
+    "ordinarySavedSignIns": true,
+    "roles": {
+      "SUPER_ADMIN": "passed",
+      "ADMIN": "passed",
+      "EMPLOYEE": "passed"
+    },
+    "testTicketsCreated": 4,
+    "testTicketsArchived": 4,
+    "normalProductionWrites": true,
+    "syntheticPrivatePdfAndAuthorWorkLogRetainedAsHistory": true,
+    "authorizedPrivateBytesMatched": true,
+    "actualQaFileAnonymousGet": {
+      "status": 401,
+      "privateNoStoreNoSniff": true
+    },
+    "productionForcedPostOrStaleRaceCertified": false,
+    "revokedPrivateFileHttpDenialObserved": false
+  },
+  "finalStaticGates": {
+    "types": "pass",
+    "wholeEslint": "pass",
+    "whitespace": "pass",
+    "manifest": "pass"
+  },
+  "release": {
+    "commitPush": "pending",
+    "exactSourceReadyCanonical": "pending",
+    "postDeploymentSmoke": "pending"
+  },
+  "limits": [
+    "Complete Chrome responsive and bounded normal UI role journeys do not constitute a full historical system lock, general Phase 13 readiness or every Phase 12 feature.",
+    "Private-file HTTP denial after revocation was not observed because browser navigation was blocked by the client; direct ticket visibility denial was observed.",
+    "Production forced POST and stale-race security tests were not run; isolated local negative cases are separate evidence.",
+    "Forced Windows process termination and power-loss cleanup are not certified.",
+    "No physical-device, Safari/Firefox or exhaustive accessibility certification is claimed."
+  ],
+  "restrictedOperations": {
+    "productionSeedOrReset": false,
+    "accountOrCredentialChange": false,
+    "providerOrEnvironmentChange": false,
+    "scheduleFixtureMutation": false
+  }
+}

@@ -1,3 +1,8 @@
+## Full responsive and deployed role verification — 2026-10-12
+
+- [Complete responsive gate and ordinary live role verification](phase-reports/SCOPEIS_FULL_RESPONSIVE_ROLE_VERIFICATION_2026_10_12.md)
+- Required verification gates pass; **`RELEASE_PENDING`**. The final repaired full responsive gate passes 24/24 in 11.8 minutes without skips/retries/flaky cases/exclusions; supplementary populated Tickets observations pass 54/54, controlled cancellation 4/4 and owned cleanup is verified. Ordinary deployed Super Admin/Admin/Employee UI/data checks all pass on unchanged application `90cd5286c52ced0695d8672d9b134a9af44bd14e`. Four ticket-only production QA facts were archived 4/4, retaining synthetic private-file/work-log history. Final types/whole ESLint/manifest/whitespace and seven harness hashes pass. [The sanitized verification receipt](phase-reports/evidence/responsive-role-verification-2026-10-12/verification.json) distinguishes normal UI/private-byte observations from untested production forced POST/stale races and unobserved revoked-file HTTP denial. Actual push/Ready/canonical/post-release evidence remain pending; earlier releases remain historical, and no full system lock/general Phase 13 certification is implied.
+
 ## UI clarity and consolidated tickets — confirmed 2026-10-12
 
 - [Approved UI clarity implementation and consolidated ticket delivery](phase-reports/SCOPEIS_UI_CLARITY_IMPLEMENTATION_2026_10_12.md)

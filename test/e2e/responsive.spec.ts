@@ -13,6 +13,7 @@ const managementRoutes = [
   `/schedule?month=2027-09&period=${phase11Ids.publishedPeriod}`,
   `/coverage?assignment=${phase10Ids.discussionAnchor}`, "/replacements", "/leave", `/leave?request=${responsiveIds.pendingLeave}`,
   "/map?date=2027-05-12", "/notifications", "/reports", "/audit", "/profile", "/settings",
+  "/tickets", `/tickets/${responsiveIds.ticket}`,
 ];
 const viewports = [
   { width: 320, height: 640 }, { width: 390, height: 844 }, { width: 600, height: 900 },
@@ -189,7 +190,9 @@ test.beforeEach(async ({ page }) => {
   await page.route("https://*.tile.openstreetmap.org/**", (route) => route.abort());
 });
 
-test("all management screens and report tables fit from phone to wide desktop", async ({ page }, testInfo) => {
+// Keep each viewport independently bounded: the complete route/report matrix
+// should not compete for one test timeout as the application gains screens.
+for (const viewport of viewports) test(`all management screens and report tables fit from phone to wide desktop · ${viewport.width}×${viewport.height}`, async ({ page }, testInfo) => {
   await signIn(page, "Nora Albright");
   await page.goto("/reports");
   const reports = await page.locator(".reporting-report-title").evaluateAll((links) => links.map((link) => {
@@ -199,17 +202,15 @@ test("all management screens and report tables fit from phone to wide desktop", 
   }).filter(Boolean));
   expect(reports.length).toBeGreaterThan(0);
   const issues: string[] = [];
-  for (const viewport of viewports) {
-    await page.setViewportSize(viewport);
-    for (const path of [...managementRoutes, ...reports]) {
-      const response = await page.goto(path);
-      expect(response?.status(), path).toBe(200);
-      await expect(page.locator("#page-content")).toBeVisible();
-      issues.push(...await layoutIssues(page, `${viewport.width}px ${path}`));
-      if ([320, 390, 820, 1280].includes(viewport.width) && ["/dashboard", "/accounts", managementRoutes[11]].includes(path)) {
-        await page.screenshot({ path: testInfo.outputPath(`${viewport.width}-${path.split("?")[0].slice(1)}.png`), animations: "disabled" });
-        if (path === "/accounts") await page.locator(".account-table tbody tr").first().screenshot({ path: testInfo.outputPath(`${viewport.width}-account-card.png`), animations: "disabled" });
-      }
+  await page.setViewportSize(viewport);
+  for (const path of [...managementRoutes, ...reports]) {
+    const response = await page.goto(path);
+    expect(response?.status(), path).toBe(200);
+    await expect(page.locator("#page-content")).toBeVisible();
+    issues.push(...await layoutIssues(page, `${viewport.width}px ${path}`));
+    if ([320, 390, 820, 1280].includes(viewport.width) && ["/dashboard", "/accounts", managementRoutes[11]].includes(path)) {
+      await page.screenshot({ path: testInfo.outputPath(`${viewport.width}-${path.split("?")[0].slice(1)}.png`), animations: "disabled" });
+      if (path === "/accounts") await page.locator(".account-table tbody tr").first().screenshot({ path: testInfo.outputPath(`${viewport.width}-account-card.png`), animations: "disabled" });
     }
   }
   await attachIssues(testInfo, issues);
@@ -224,36 +225,33 @@ function taskTriggers(page: Page) {
     .or(page.locator(`${base}.timetable-day-button[aria-label$="· 0 assignments"]`).first());
 }
 
-test("create and review dialogs fit phones, tablets, and short landscape screens", async ({ page }, testInfo) => {
-  // Open every distinct task at three sizes, preserving finite motion and focus checks.
-  test.setTimeout(360_000);
+for (const viewport of [{ width: 320, height: 640 }, { width: 768, height: 360 }, { width: 1024, height: 768 }]) test(`create and review dialogs fit phones, tablets, and short landscape screens · ${viewport.width}×${viewport.height}`, async ({ page }, testInfo) => {
+  // Open every distinct task at every size, preserving finite motion and focus checks.
   await signIn(page, "Nora Albright");
   const issues: string[] = [];
-  for (const viewport of [{ width: 320, height: 640 }, { width: 768, height: 360 }, { width: 1024, height: 768 }]) {
-    await page.setViewportSize(viewport);
-    for (const path of managementRoutes) {
-      await page.goto(path);
-      const triggers = taskTriggers(page);
-      const count = await triggers.count();
-      for (let index = 0; index < count; index++) {
-        const trigger = triggers.nth(index);
-        const label = await trigger.innerText();
-        await trigger.click();
-        const dialog = page.getByRole("dialog");
-        await expect(dialog).toBeVisible();
-        // Optional and destructive sections must also reflow when the user expands them.
-        const disclosures = dialog.locator("details:not([open]) > summary:visible");
-        while (await disclosures.count()) await disclosures.first().click();
-        issues.push(...await layoutIssues(page, `${viewport.width}×${viewport.height} ${path} ${label}`));
-        if (path === "/accounts" && index === 0) await page.screenshot({ path: testInfo.outputPath(`${viewport.width}-${viewport.height}-account-dialog.png`), animations: "disabled" });
-        const last = dialog.locator("button:enabled:visible, input:not([type=hidden]):enabled:visible, select:enabled:visible, textarea:enabled:visible").last();
-        await last.scrollIntoViewIfNeeded();
-        await expect(last).toBeInViewport();
-        await expect(dialog.getByRole("button", { name: "Close", exact: true })).toBeInViewport();
-        await page.keyboard.press("Escape");
-        await expect(dialog).not.toBeVisible();
-        await expect(trigger).toBeFocused();
-      }
+  await page.setViewportSize(viewport);
+  for (const path of managementRoutes) {
+    await page.goto(path);
+    const triggers = taskTriggers(page);
+    const count = await triggers.count();
+    for (let index = 0; index < count; index++) {
+      const trigger = triggers.nth(index);
+      const label = await trigger.innerText();
+      await trigger.click();
+      const dialog = page.getByRole("dialog");
+      await expect(dialog).toBeVisible();
+      // Optional and destructive sections must also reflow when the user expands them.
+      const disclosures = dialog.locator("details:not([open]) > summary:visible");
+      while (await disclosures.count()) await disclosures.first().click();
+      issues.push(...await layoutIssues(page, `${viewport.width}×${viewport.height} ${path} ${label}`));
+      if (path === "/accounts" && index === 0) await page.screenshot({ path: testInfo.outputPath(`${viewport.width}-${viewport.height}-account-dialog.png`), animations: "disabled" });
+      const last = dialog.locator("button:enabled:visible, input:not([type=hidden]):enabled:visible, select:enabled:visible, textarea:enabled:visible").last();
+      await last.scrollIntoViewIfNeeded();
+      await expect(last).toBeInViewport();
+      await expect(dialog.getByRole("button", { name: "Close", exact: true })).toBeInViewport();
+      await page.keyboard.press("Escape");
+      await expect(dialog).not.toBeVisible();
+      await expect(trigger).toBeFocused();
     }
   }
   await attachIssues(testInfo, issues);
@@ -266,7 +264,7 @@ test("role navigation, RTL, dark theme and enlarged text reflow", async ({ page,
     await page.setViewportSize({ width: 320, height: 640 });
     await signIn(page, persona);
     const authorizedRoutes = await page.locator(".sidebar .nav-links a").evaluateAll((links) => links.map((link) => link.getAttribute("href")!));
-    for (const route of authorizedRoutes) {
+    for (const route of [...authorizedRoutes, `/tickets/${responsiveIds.ticket}`]) {
       const path = route === "/schedule" ? `${route}?month=2027-09` : route;
       expect((await page.goto(path))?.status(), `${persona} ${path}`).toBe(200);
       issues.push(...await layoutIssues(page, `${persona} ${path}`));
@@ -734,5 +732,52 @@ test("clear user journeys keep every authorized tab understandable and make the 
   await page.locator(".page-journey-help > summary").click();
   issues.push(...await layoutIssues(page, "320px expanded guide with RTL, dark theme and 200% text"));
   await captureVisual(page, testInfo, "320-clear-rtl-guide.png");
+  await attachIssues(testInfo, issues);
+});
+
+test("populated tickets, destination filters and work dialogs fit every responsive viewport", async ({ page }, testInfo) => {
+  await signIn(page, "Nora Albright");
+  const issues: string[] = [];
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    await page.goto("/tickets");
+    await expect(page.getByRole("heading", { name: /^All accessible tickets/ })).toBeVisible();
+    await expect(page.locator(".ticket-list > li")).toHaveCount(5);
+    issues.push(...await layoutIssues(page, `${viewport.width}px populated ticket list`));
+    await page.getByRole("combobox", { name: "Workspace", exact: true }).selectOption(responsiveIds.ticketWorkspace);
+    await page.getByRole("combobox", { name: "Dashboard", exact: true }).selectOption(responsiveIds.ticketBoard);
+    await expect(page.locator(".ticket-list > li")).toHaveCount(2);
+    await page.locator(".ticket-filter-options > summary").click();
+    issues.push(...await layoutIssues(page, `${viewport.width}px expanded destination and status filters`));
+    await page.getByRole("button", { name: "Clear filters", exact: true }).click();
+    await page.getByRole("button", { name: "Kanban", exact: true }).click();
+    const kanban = page.getByRole("region", { name: "Ticket Kanban", exact: true });
+    await expect(kanban.locator(".ticket-column")).toHaveCount(5);
+    await expect(kanban.locator(".ticket-card")).toHaveCount(5);
+    await kanban.focus();
+    await expect(kanban).toBeFocused();
+    issues.push(...await layoutIssues(page, `${viewport.width}px populated Kanban`));
+    await page.getByRole("button", { name: "New ticket", exact: true }).click();
+    let dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+    const disclosures = dialog.locator("details:not([open]) > summary:visible");
+    while (await disclosures.count()) await disclosures.first().click();
+    issues.push(...await layoutIssues(page, `${viewport.width}px expanded ticket creation`));
+    await page.keyboard.press("Escape");
+    await expect(dialog).not.toBeVisible();
+
+    await page.goto(`/tickets/${responsiveIds.ticket}`);
+    await expect(page.getByRole("heading", { name: "Description", exact: true })).toBeVisible();
+    await page.locator(".ticket-detail-facts > summary").click();
+    issues.push(...await layoutIssues(page, `${viewport.width}px populated ticket detail and metadata`));
+    await page.getByRole("button", { name: "Change status", exact: true }).click();
+    dialog = page.getByRole("dialog");
+    await dialog.getByRole("combobox", { name: "Status", exact: true }).selectOption("ON_HOLD");
+    await expect(dialog.getByLabel("On-hold reason", { exact: true })).toBeVisible();
+    issues.push(...await layoutIssues(page, `${viewport.width}px ticket On hold dialog`));
+    await page.keyboard.press("Escape");
+    await expect(dialog).not.toBeVisible();
+    await captureVisual(page, testInfo, `${viewport.width}-populated-ticket-detail.png`);
+  }
   await attachIssues(testInfo, issues);
 });

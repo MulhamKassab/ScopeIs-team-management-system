@@ -27,12 +27,8 @@ export default defineConfig({
   testDir: "./test/e2e",
   testMatch: "responsive.spec.ts",
   outputDir: "test-results/responsive",
+  reporter: [["list"], ["json", { outputFile: "test-results/responsive-results.json" }]],
   timeout: 240_000,
   use: { baseURL: `http://127.0.0.1:${port}`, browserName: "chromium", ...(chromeExecutable ? { channel: "chrome", launchOptions: { executablePath: chromeExecutable } } : {}), hasTouch: true, actionTimeout: 10_000, trace: "retain-on-failure" },
-  webServer: {
-    command: `node scripts/run-phase2-safe-build.mjs --serve-port ${port}`,
-    url: `http://127.0.0.1:${port}`,
-    reuseExistingServer: false, gracefulShutdown: { signal: "SIGTERM", timeout: 10_000 },
-    timeout: 600_000,
-  },
+  // The guarded runner directly owns the isolated server and its process tree.
 });
