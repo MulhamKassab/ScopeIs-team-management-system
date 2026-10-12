@@ -1,0 +1,147 @@
+{
+  "kind": "bounded-ui-clarity-production-release",
+  "applicationSourceCommit": "6e33c6b3ea461c15a53a8af01506d71d4e4ac4f0",
+  "sourceDelivery": {
+    "branch": "main",
+    "remoteBranch": "origin/main",
+    "verifiedCommit": "6e33c6b3ea461c15a53a8af01506d71d4e4ac4f0"
+  },
+  "localVerification": {
+    "uniqueAutomatedCases": 469,
+    "unitComponent": 407,
+    "ticketIntegration": 31,
+    "ticketDesktopPhoneUnique": 14,
+    "phase5Phase9Phase11DesktopPhone": 14,
+    "focusedChrome": 3,
+    "chromeVersion": "154.0.8037.98",
+    "types": "pass",
+    "eslint": "pass",
+    "manifest": "pass",
+    "whitespace": "pass",
+    "isolatedProductionBuild": "pass"
+  },
+  "production": {
+    "verifiedAt": "2026-10-12T06:04:41.050Z",
+    "projectId": "prj_JvFv2V2vKKmAqfBOySS8FsZ1aZjy",
+    "deploymentId": "dpl_HCQ7qtLb1F4ZL82RF3B3AdkGMKiA",
+    "sourceCommit": "6e33c6b3ea461c15a53a8af01506d71d4e4ac4f0",
+    "target": "production",
+    "state": "READY",
+    "url": "https://scopeis-team-management-system-hffwxc2ss-mu-ka7.vercel.app",
+    "canonicalUrl": "https://scopeis-team-management-system.vercel.app",
+    "canonicalAliasAssigned": true
+  },
+  "anonymousSmoke": {
+    "verifiedAt": "2026-10-12T06:04:57.037Z",
+    "authenticated": false,
+    "cases": 11,
+    "passed": 11,
+    "results": [
+      {
+        "path": "/login",
+        "method": "GET",
+        "expectedStatus": 200,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "path": "/schedule",
+        "method": "GET",
+        "expectedStatus": 307,
+        "status": 307,
+        "location": "/login",
+        "passed": true
+      },
+      {
+        "path": "/tickets",
+        "method": "GET",
+        "expectedStatus": 307,
+        "status": 307,
+        "location": "/login",
+        "passed": true
+      },
+      {
+        "path": "/dashboard",
+        "method": "GET",
+        "expectedStatus": 307,
+        "status": 307,
+        "location": "/login",
+        "passed": true
+      },
+      {
+        "path": "/profile",
+        "method": "GET",
+        "expectedStatus": 307,
+        "status": 307,
+        "location": "/login",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets",
+        "method": "GET",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets/00000000-0000-4000-8000-000000000001",
+        "method": "GET",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets/00000000-0000-4000-8000-000000000001/files/00000000-0000-4000-8000-000000000002",
+        "method": "GET",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets/commands",
+        "method": "POST",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/tickets/00000000-0000-4000-8000-000000000001/files",
+        "method": "POST",
+        "expectedStatus": 401,
+        "status": 401,
+        "cacheControl": "private, no-store, max-age=0",
+        "nosniff": "nosniff",
+        "passed": true
+      },
+      {
+        "path": "/api/auth/mock-login",
+        "method": "POST",
+        "expectedStatus": 404,
+        "status": 404,
+        "passed": true
+      }
+    ]
+  },
+  "limits": [
+    "All 14 unique ticket case IDs passed across a 13/14 full attempt and one isolated retry; no uninterrupted full-run claim.",
+    "The broad 14-check responsive suite and full system lock are not certified.",
+    "Authenticated production role and private-file journeys remain unverified; local and anonymous evidence are distinct.",
+    "Broader Phase 12 remains partial and general Phase 13 readiness is not certified."
+  ],
+  "productionChanges": {
+    "migration": false,
+    "databaseWrite": false,
+    "seed": false,
+    "environmentChange": false,
+    "credentialChange": false,
+    "providerChange": false
+  }
+}

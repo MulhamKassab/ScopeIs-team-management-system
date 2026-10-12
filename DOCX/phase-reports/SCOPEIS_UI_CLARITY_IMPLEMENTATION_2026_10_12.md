@@ -1,6 +1,6 @@
 # UI clarity and consolidated tickets implementation 12 October 2026
 
-Status: `IN_PROGRESS` for release; bounded implementation and affected local verification are complete. The product owner approved implementation of the [9 October UI clarity review](SCOPEIS_UI_CLARITY_REVIEW_2026_10_09.md), with all currently accessible tickets consolidated for every role, then a push to `main` and deployment. Exact pushed source, Ready deployment, canonical alias and live checks remain pending. Broader Phase 12 and Phase 13 completion are not implied.
+Status: **`PRODUCTION_RELEASED` for the bounded UI clarity amendment**. All 11 improvements are implemented; 469 unique local cases, static gates and the isolated build pass. Tested application `6e33c6b3ea461c15a53a8af01506d71d4e4ac4f0` is pushed to `origin/main`, Ready and assigned to the [canonical application](https://scopeis-team-management-system.vercel.app/), with 11/11 anonymous live checks. [The sanitized release receipt](evidence/ui-clarity-2026-10-12/production-release.json) records exact source and deployment. Broader Phase 12 and Phase 13 completion are not implied.
 
 ## Confirmed experience
 
@@ -42,9 +42,9 @@ This UI pass adds no schema, migration, authentication provider, production seed
 | Focused Chrome presentation gate | Pass 3/3, exit 0, on Google Chrome `154.0.8037.98`; the owned disposable database was cleaned up. Finite motion/modal focus passes in 10.2 seconds, role-specific navigation/RTL/dark theme/200% text in 32.1 seconds, and simulated mobile-keyboard/native-dialog/Escape/focus restoration in 2.2 seconds. |
 | Types, lint, scenario manifest and whitespace | Pass: full TypeScript and ESLint, 84 registered scenarios (83 automated and one manual), 92 registered tests, 39 protected routes and whitespace validation. |
 | Isolated final-source production build | Pass: production-safe isolated Next.js build/source checks and types. Local/production environment files are excluded from the isolated build. |
-| Commit and `origin/main` push | Pending. |
-| Exact-source Ready deployment and canonical alias | Pending. |
-| Anonymous live public-access smoke | Pending. |
+| Commit and `origin/main` push | Pass: tested application `6e33c6b3ea461c15a53a8af01506d71d4e4ac4f0` is pushed to `origin/main`; clean `main` sync was verified 0 ahead / 0 behind. |
+| Exact-source Ready deployment and canonical alias | Pass at `2026-10-12T06:04:41.050Z`: `dpl_HCQ7qtLb1F4ZL82RF3B3AdkGMKiA` is `READY` for exact application source in project `prj_JvFv2V2vKKmAqfBOySS8FsZ1aZjy`. Deployment [scopeis-team-management-system-hffwxc2ss-mu-ka7.vercel.app](https://scopeis-team-management-system-hffwxc2ss-mu-ka7.vercel.app) holds the canonical `scopeis-team-management-system.vercel.app` alias. |
+| Anonymous live public-access smoke | Pass 11/11, exit 0, at `2026-10-12T06:04:57.037Z`: sign-in page 200; Schedule/Tickets/Home/Profile redirect 307 to sign-in; ticket list/detail/file reads and command/file writes refuse 401 with private/no-store/no-sniff headers; production mock-login POST refuses 404. |
 | Authenticated production roles/private files | Not certified by local or anonymous evidence; requires normal production credentials. |
 
 The local totals above comprise **469 unique automated cases**: 407 unit/component, 31 integration, 28 desktop/phone journey cases across Tickets, Vacations, Profile/evidence and reporting, and three focused Chrome presentation cases. The 26 ticket unit cases are included in 407 rather than counted twice. Raw runner receipts, including failed attempts, the final `unit-component-results.json` and `responsive-focused-chrome.json`, remain in ignored private evidence. Historical receipts apply only to their own source.
@@ -55,7 +55,13 @@ The focused presentation evidence runs three existing [responsive scenario cases
 
 Earlier ticket-browser attempts used selectors that assumed previously expanded sections. Those test selectors were updated for the implemented disclosures; the red receipts remain retained. The third full ticket run's remaining failure was a 30-second Super Admin sign-in timeout under concurrent load, followed by the same isolated final-source case passing in 15.1 seconds. This verifies every unique case ID but is not a claim that the entire ticket suite passed in a single final invocation.
 
-The separate broad 14-check responsive suite is **not certified** for this source. An initial hardcoded Google Chrome path failure executed no UI checks; a subsequent Chromium run encountered transient locator timing, the broad-sweep timeout and the run's 900-second budget. The subsequent focused Google Chrome 154 gate passes 3/3 after the harness corrections above. Those three checks do not substitute for a complete broad responsive suite or a full system lock. Local authenticated checks and future anonymous production smoke do not certify authenticated production role/private-file journeys without ordinary credentials.
+The separate broad 14-check responsive suite is **not certified** for this source. An initial hardcoded Google Chrome path failure executed no UI checks; a subsequent Chromium run encountered transient locator timing, the broad-sweep timeout and the run's 900-second budget. The subsequent focused Google Chrome 154 gate passes 3/3 after the harness corrections above. Those three checks do not substitute for a complete broad responsive suite or a full system lock. Local authenticated checks and the completed anonymous production smoke do not certify authenticated production role/private-file journeys without ordinary credentials.
+
+## Production delivery scope
+
+The [release receipt](evidence/ui-clarity-2026-10-12/production-release.json) certifies the tested application commit and its actual Ready/canonical deployment, plus anonymous public-access refusals. It contains no credentials, environment values, local absolute paths or company user data. No migration, production database write/seed, environment/credential or provider change occurred. The source-only UI/service changes preserve the established production configuration and stored facts.
+
+This documentation closure may produce a later commit; any deployment for that later source requires its own verification. It must not be inferred from application `6e33c6b3ea461c15a53a8af01506d71d4e4ac4f0`'s Ready receipt. Phase 12 remains `PARTIAL`, general Phase 13 readiness is not certified, and the independent retained-history schedule-removal finding remains open.
 
 ## Local visual evidence
 

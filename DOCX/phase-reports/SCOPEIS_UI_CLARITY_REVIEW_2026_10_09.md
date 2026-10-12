@@ -2,7 +2,7 @@
 
 Status: review completed. The Admin schedule restriction and inaccurate help corrections are implemented in the accompanying amendment. The recommendations below are proposed improvements, not delivered features.
 
-**12 October 2026 update:** The product owner authorized implementation of this review and a consolidated All accessible ticket starting point for every role, then push/deployment. [The separate implementation report](SCOPEIS_UI_CLARITY_IMPLEMENTATION_2026_10_12.md) records delivery and verification; this assessment and its original evidence remain historical.
+**12 October 2026 update:** The product owner authorized implementation of this review and a consolidated All accessible ticket starting point for every role, then push/deployment. [The separate implementation report](SCOPEIS_UI_CLARITY_IMPLEMENTATION_2026_10_12.md) records the completed bounded delivery at application `6e33c6b3ea461c15a53a8af01506d71d4e4ac4f0`, with 469 local cases and Ready/canonical/11-case anonymous verification; this assessment and its original evidence remain historical.
 
 ## Assessment
 
