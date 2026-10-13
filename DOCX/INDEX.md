@@ -1,3 +1,8 @@
+## Full-system verification — 2026-10-13
+
+- [Complete maintained system run, findings and verification boundaries](phase-reports/SCOPEIS_FULL_SYSTEM_VERIFICATION_2026_10_13.md)
+- Status **`LOCAL_VERIFIED_PENDING_RELEASE`**: final unfiltered lock 14/14, 795 unique cases, all 15 browser suites/responsive 24/24, separate concurrency 21/21 and controlled cancellation 4/4 pass. All 455 inputs match; bounded captured cleanup and awake clearing pass. [Counts](phase-reports/evidence/full-system-verification-2026-10-13/parsed-final-counts.json), [hash summary](phase-reports/evidence/full-system-verification-2026-10-13/hash-comparison-final.json), [custody](phase-reports/evidence/full-system-verification-2026-10-13/resource-custody.json) and [receipt](phase-reports/evidence/full-system-verification-2026-10-13/verification.json) preserve actual scopes and earlier failures. Push/deployment/post-release checks remain pending; historical [role navigation](phase-reports/evidence/full-system-verification-2026-10-13/pre-release-role-navigation.json) cannot certify a new SHA. Retained-history, Phase 12/13 and Settings limits remain unchanged.
+
 ## Full responsive and deployed role verification — 2026-10-12
 
 - [Complete responsive gate and ordinary live role verification](phase-reports/SCOPEIS_FULL_RESPONSIVE_ROLE_VERIFICATION_2026_10_12.md)

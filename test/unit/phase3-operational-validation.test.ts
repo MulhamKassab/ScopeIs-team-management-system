@@ -1,5 +1,10 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { contactSchema, createClientSchema, createLocationSchema, createProjectSchema, staffingRequirementSchema } from "@/modules/operations/validation";
+
+const mocks = vi.hoisted(() => ({ getCurrentActor: vi.fn(), createClient: vi.fn(), revalidatePath: vi.fn() }));
+vi.mock("next/cache", () => ({ revalidatePath: mocks.revalidatePath }));
+vi.mock("@/modules/auth/session-service", () => ({ getCurrentActor: mocks.getCurrentActor }));
+vi.mock("@/modules/operations/service", () => ({ operationalService: { createClient: mocks.createClient } }));
 
 const clientId = "10000000-0000-4000-8000-000000000001";
 describe("Phase 3 operational validation", () => {
@@ -21,10 +26,11 @@ describe("Phase 3 operational validation", () => {
     expect(staffingRequirementSchema.safeParse({ type: "PROJECT", id: clientId, requiredSkillId: clientId, requiredEmployeeCount: 0 }).success).toBe(false);
   });
   it("rejects crafted Server Action fields before authentication or persistence", async () => {
-    process.env.DATABASE_URL = "postgresql://scopeis_test:scopeis_test@127.0.0.1:5432/scopeis_action_boundary_test";
-    process.env.SCOPEIS_E2E_TEST = "true";
     const { createClientAction } = await import("@/modules/operations/actions");
     const data = new FormData(); data.set("companyName", "Crafted Client"); data.set("scheduleAssignment", "forged");
     await expect(createClientAction({}, data)).resolves.toEqual({ error: "The Client form contained unsupported fields." });
+    expect(mocks.getCurrentActor).not.toHaveBeenCalled();
+    expect(mocks.createClient).not.toHaveBeenCalled();
+    expect(mocks.revalidatePath).not.toHaveBeenCalled();
   });
 });

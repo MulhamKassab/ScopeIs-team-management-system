@@ -1,0 +1,9 @@
+{
+  "checkedAt": "2026-10-13T17:35:44.409Z",
+  "startedAt": "2026-10-13T17:02:38.644Z",
+  "files": 455,
+  "matching": 455,
+  "changed": [],
+  "stage": "final-pipeline-complete",
+  "scope": "Byte hashes of frozen working-tree source/test/config inputs; Git newline normalization and later documentation edits are separate."
+}

@@ -93,7 +93,10 @@ export class SchedulingService {
   private async validateReferences(tx: SchedulingTransaction, period: typeof schedulePeriods.$inferSelect, input: { employeeUserId: string; projectId: string; locationId: string; assignmentDate: string; startTime: string; endTime: string }) {
     if (!input.assignmentDate.startsWith(periodMonth(period))) throw new SchedulingDomainError("VALIDATION_ERROR");
     if (input.endTime <= input.startTime) throw new SchedulingDomainError("VALIDATION_ERROR");
-    const [project, location, link] = await Promise.all([schedulingRepository.project(tx, input.projectId), schedulingRepository.location(tx, input.locationId), schedulingRepository.projectLocation(tx, input.projectId, input.locationId)]);
+    // A transaction uses one connection, so finish each read before starting the next.
+    const project = await schedulingRepository.project(tx, input.projectId);
+    const location = await schedulingRepository.location(tx, input.locationId);
+    const link = await schedulingRepository.projectLocation(tx, input.projectId, input.locationId);
     if (!project || !location || !link || project.clientId !== period.clientId || location.clientId !== period.clientId || project.status === "ARCHIVED" || location.status === "ARCHIVED") throw new SchedulingDomainError("INVALID_RELATIONSHIP");
     const employee = await schedulingRepository.employee(tx, input.employeeUserId);
     if (!employee?.user.active || employee.user.role !== "EMPLOYEE") throw new SchedulingDomainError("INVALID_EMPLOYEE");

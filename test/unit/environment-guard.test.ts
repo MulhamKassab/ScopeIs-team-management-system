@@ -2,6 +2,10 @@ import { describe, expect, it } from "vitest";
 import { isMockAuthenticationEnabled, parseEnvironment } from "@/server/env";
 import { assertDisposableName } from "../../scripts/disposable-test-database.mjs";
 import { phase1TestProcessEnvironment } from "../../scripts/phase1-test-environment.mjs";
+import { withOwnedBrowserBuild } from "../../scripts/owned-browser-build.mjs";
+import { access, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { basename, dirname, join, resolve } from "node:path";
 
 describe("temporary mock-auth environment policy", () => {
   const database = "postgresql://localhost:5432/scopeis_test";
@@ -50,5 +54,54 @@ describe("temporary mock-auth environment policy", () => {
   it("refuses non-test, production-like, and unsafe disposable database names", () => {
     expect(() => assertDisposableName("scopeis_phase1_test_123")).not.toThrow();
     for (const name of ["scopeis_prod_test", "scopeis_live_test", "scopeis_database", "scopeis-test"]) expect(() => assertDisposableName(name)).toThrow();
+  });
+});
+
+describe("owned browser build cleanup", () => {
+  it("removes a successful build checkout while preserving an unrelated sibling", async () => {
+    const sibling = await mkdtemp(join(tmpdir(), "scopeis-phase2-safe-build-unit-sibling-"));
+    const siblingSentinel = join(sibling, "keep.txt");
+    let owned = "";
+    try {
+      await writeFile(siblingSentinel, "unrelated fictional sentinel");
+      const result = await withOwnedBrowserBuild(async ({ directory, env }: { directory: string; env: Record<string, string> }) => {
+        owned = directory;
+        expect(dirname(directory)).toBe(resolve(tmpdir()));
+        expect(basename(directory)).toMatch(/^scopeis-phase2-safe-build-/);
+        expect(env).toEqual({ SCOPEIS_SAFE_BUILD_DIRECTORY: directory });
+        await writeFile(join(directory, "build-output.txt"), "fictional build output");
+        return "completed";
+      });
+      expect(result).toBe("completed");
+      await expect(access(owned)).rejects.toMatchObject({ code: "ENOENT" });
+      expect(await readFile(siblingSentinel, "utf8")).toBe("unrelated fictional sentinel");
+    } finally {
+      expect(dirname(resolve(sibling))).toBe(resolve(tmpdir()));
+      expect(basename(sibling)).toMatch(/^scopeis-phase2-safe-build-unit-sibling-/);
+      await rm(sibling, { recursive: true, force: true });
+    }
+  });
+  it("cleans a failed Phase 1 checkout and preserves the callback error and unrelated sibling", async () => {
+    const sibling = await mkdtemp(join(tmpdir(), "scopeis-phase1-server-unit-sibling-"));
+    const siblingSentinel = join(sibling, "keep.txt");
+    const failure = new Error("fictional browser failure");
+    let owned = "";
+    try {
+      await writeFile(siblingSentinel, "unrelated fictional sentinel");
+      await expect(withOwnedBrowserBuild(async ({ directory, env }: { directory: string; env: Record<string, string> }) => {
+        owned = directory;
+        expect(dirname(directory)).toBe(resolve(tmpdir()));
+        expect(basename(directory)).toMatch(/^scopeis-phase1-server-/);
+        expect(env).toEqual({ SCOPEIS_PHASE1_SERVER_DIRECTORY: directory });
+        await writeFile(join(directory, "partial-build.txt"), "fictional partial output");
+        throw failure;
+      }, { phase1: true })).rejects.toBe(failure);
+      await expect(access(owned)).rejects.toMatchObject({ code: "ENOENT" });
+      expect(await readFile(siblingSentinel, "utf8")).toBe("unrelated fictional sentinel");
+    } finally {
+      expect(dirname(resolve(sibling))).toBe(resolve(tmpdir()));
+      expect(basename(sibling)).toMatch(/^scopeis-phase1-server-unit-sibling-/);
+      await rm(sibling, { recursive: true, force: true });
+    }
   });
 });

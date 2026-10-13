@@ -93,7 +93,7 @@ test("management details preserve Admin privacy and provide visible Super Admin 
   await expect(page.getByRole("heading", { name: "Cora Bell" })).toBeVisible();
   await expect(page.getByText("cora@example.test", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Super Admin controls" })).toBeVisible();
-  for (const task of ["Edit basic employee information", "Employee assignments", "Change system role", "Employee lifecycle"]) {
+  for (const task of ["Edit basic employee information", "Team and job title", "Change system role", "Employee lifecycle"]) {
     await page.getByRole("button", { name: task, exact: true }).click();
     await expect(page.getByRole("form", { name: task })).toBeVisible();
     await page.getByRole("dialog").getByRole("button", { name: "Close", exact: true }).click();
@@ -144,7 +144,7 @@ test("Super Admin can use visible management controls without granting manager o
   await page.getByRole("button", { name: "Grant Admin TEAM scope", exact: true }).click();
   const grant = page.getByRole("form", { name: "Grant Admin TEAM scope" });
   await expect(grant).toBeVisible();
-  await grant.getByLabel("TEAM scope").fill("team:alpha");
+  await grant.getByLabel("TEAM scope").selectOption("team:alpha");
   await grant.getByRole("button", { name: "Save changes" }).click();
   await expect(grant.getByText("TEAM scope grant added.")).toBeVisible();
   await page.getByRole("dialog").getByRole("button", { name: "Close", exact: true }).click();

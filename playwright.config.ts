@@ -17,8 +17,8 @@ export default defineConfig({
   use: { baseURL, trace: "on-first-retry" },
   webServer: {
     command: `node scripts/start-phase1-test-server.mjs --port ${port}`,
-    url: baseURL,
-    reuseExistingServer: false, gracefulShutdown: { signal: "SIGTERM", timeout: 10_000 },
+    url: `${baseURL}/login`,
+    reuseExistingServer: false, gracefulShutdown: { signal: "SIGTERM", timeout: 10_000 }, timeout: 600_000,
   },
   projects: [
     { name: "desktop", use: { browserName: "chromium", viewport: { width: 1440, height: 900 } } },

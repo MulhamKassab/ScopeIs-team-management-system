@@ -1,9 +1,9 @@
 # System-Wide Test Scenario Catalogue
 
-Checkpoint: `SCOPEIS_PRE_PHASE_12_SYSTEM_WIDE_HARDENING_AND_REGRESSION_LOCK_R1`
+Current manifest checkpoint: `SCOPEIS_PHASE_12_COMPANY_TICKETS_LOCAL_INTEGRATION_R1`
 
-This document is the human-readable catalogue for the pre-Phase-12 system-wide hardening and
-regression lock. The machine-readable authority is
+This document is the human-readable catalogue for the system-wide hardening and
+regression lock, expanded from the historical pre-Phase-12 checkpoint. The machine-readable authority is
 [`test/system-lock/scenario-manifest.json`](../../test/system-lock/scenario-manifest.json), which is
 validated fail-closed by `scripts/verify-scenario-manifest.mjs` at the start of
 `npm run test:system-lock`. The catalogue and the manifest describe the same scenario set; the
@@ -29,32 +29,35 @@ The confirmed 2026-10-09 [Admin schedule-access amendment](../phase-reports/SCOP
 | Skills and operational requirements | SKL | 4 |
 | Coverage and replacement | CVR | 4 |
 | Static planning map | MAP | 5 |
-| Responsive presentation, task discovery and motion | UI | 3 |
+| Responsive presentation, task discovery, motion and consolidated tickets | UI | 4 |
 | Certifications, evidence, CVs, portfolios, files | EVD | 4 |
 | Notes, discussions | COL | 4 |
 | Notifications | NTF | 2 |
 | Audit | AUD | 2 |
 | Dashboards, reports, exports | RPT | 4 |
-| **Total** | | **71** |
+| Company tickets | TKT | 12 |
+| **Total** | | **84** |
 
-71 scenarios total: 70 automated and 1 justified manual-only (performance/resource sanity). The October 5 presentation extensions add `UI-01`, `UI-02`, `UI-03` and `MAP-05`; the inventory also includes the previously registered credential/account scenarios. The final motion verification passed the full 14/14 system lock, including all 12 responsive checks and the `UI-03` finite-motion journey. See the [motion verification receipt](../phase-reports/evidence/motion-refinement-2026-10-05/verification.json). Historical hardening receipts retain their original counts.
+Current inventory as of 2026-10-13: 84 scenarios (83 automated/one justified manual), including `TKT-01`–`TKT-12` and `UI-04`. The final unfiltered maintained lock passes 14/14 gates and 795 unique cases, all 15 browser suites/responsive 24/24, with separate 21/21 concurrency and 4/4 controlled cancellation. All 455 inputs match; bounded captured cleanup and awake clearing pass. [The full-system report](../phase-reports/SCOPEIS_FULL_SYSTEM_VERIFICATION_2026_10_13.md) records `LOCAL_VERIFIED_PENDING_RELEASE`, actual scopes and preserved failed attempts. Source/production delivery and general Phase 13 remain pending; registration alone is not verification.
+
+Historical 2026-10-05 evidence registered 71 scenarios (70 automated, 1 manual), 72 test files and 30 protected routes. That final motion verification passed the full 14/14 system lock, including all 12 responsive checks and the `UI-03` finite-motion journey. See the [motion verification receipt](../phase-reports/evidence/motion-refinement-2026-10-05/verification.json). Historical receipts retain their original source and counts.
 
 ## Automated evidence inventory
 
-The manifest currently covers 72 test files and asserts, at lock time, that the on-disk test tree and
-the authoritative runner coverage are identical, so a Phase 0-11 test file cannot be silently omitted.
+The manifest currently covers 92 registered test files and asserts, at lock time, that the on-disk test tree and
+the authoritative runner coverage are identical, so a registered workforce or Company ticket test file cannot be silently omitted.
 
 | Layer | Runner | Files |
 |---|---|---|
-| unit | `npm run test:unit` | 20 |
-| component | `npm run test:component` | 22 |
-| integration | `npm run test:integration` | 14 |
+| unit | `npm run test:unit` | 31 |
+| component | `npm run test:component` | 27 |
+| integration | `npm run test:integration` | 17 |
 | migration | `npm run test:migration` | 1 |
 | route-certification | `npm run test:route-certification` | 1 |
-| e2e | `npm run test:e2e` | 14 |
-| **Total** | | **72** |
+| e2e | `npm run test:e2e` | 15 |
+| **Total** | | **92** |
 
-The 30 protected page and API routes declared in the manifest are certified by
+The 39 protected page and API routes declared in the manifest are covered by
 `test/route-certification/phase1-http.test.ts`.
 
 ## Scenario listing
@@ -178,8 +181,9 @@ notification, privacy, transaction, and concurrency expectations) lives in the m
 | UI-01 | 1–11 | role-aware feature discovery | component | test/component/workspace-guide.test.tsx |
 | UI-02 | 1–11 | responsive, visual, discovery and map journeys | e2e | test/e2e/responsive.spec.ts |
 | UI-03 | 1–11 | finite motion, modal focus and desktop/phone interactions | e2e | test/e2e/responsive.spec.ts |
+| UI-04 | Cross-phase UI clarity | consolidated authorized ticket views, relationship filters and retained context | e2e | test/e2e/tickets.spec.ts |
 
-The aggregate E2E runner includes the guarded responsive runner as its fourteenth suite. Each suite owns its disposable database and port; the UI runner uses an isolated safe build and fictional edge-case fixtures. Presentation checks do not replace service authorization evidence or certify physical devices.
+The aggregate E2E runner registers 15 suites, including the guarded responsive and Company ticket runners. Each suite owns its disposable database and port; the UI runner uses an isolated safe build and fictional edge-case fixtures. The [12 October bounded verification](../phase-reports/SCOPEIS_FULL_RESPONSIVE_ROLE_VERIFICATION_2026_10_12.md) passed the complete responsive suite 24/24 and all three ordinary live-role journeys; it does not certify a new full system lock or general Phase 13 readiness. Presentation checks do not replace service authorization evidence or certify physical devices.
 
 Role and scope boundaries are exercised across Super Admin, the two scoped Admin personas, the two
 Employee personas, and the anonymous caller, primarily in `AUTH-02`, `AUTH-03`, and each domain

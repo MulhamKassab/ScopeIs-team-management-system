@@ -21,6 +21,7 @@ test("credential login creates an opaque session and reaches the dashboard", asy
   expect(response.status()).toBe(200);
   await expect(page).toHaveURL(/\/dashboard$/);
   await expect(page.getByRole("heading", { name: "Home" })).toBeVisible();
-  await expect(page.getByText("Active employees", { exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "View people: Active people", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "View people: Active people", exact: true })).toHaveAttribute("href", "/employees");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
 });

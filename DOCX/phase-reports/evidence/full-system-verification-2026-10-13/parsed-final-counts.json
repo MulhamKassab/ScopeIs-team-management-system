@@ -1,0 +1,160 @@
+{
+  "parsedAt": "2026-10-13T17:33:51.029Z",
+  "gates": {
+    "Scenario manifest validation": {
+      "passedCases": 0,
+      "vitestGroups": [],
+      "browserGroups": [],
+      "failedSummaries": [],
+      "skippedLines": [],
+      "status": "PASS"
+    },
+    "Typecheck": {
+      "passedCases": 0,
+      "vitestGroups": [],
+      "browserGroups": [],
+      "failedSummaries": [],
+      "skippedLines": [],
+      "status": "PASS"
+    },
+    "Lint": {
+      "passedCases": 0,
+      "vitestGroups": [],
+      "browserGroups": [],
+      "failedSummaries": [],
+      "skippedLines": [],
+      "status": "PASS"
+    },
+    "Unit tests": {
+      "passedCases": 239,
+      "vitestGroups": [
+        239
+      ],
+      "browserGroups": [],
+      "failedSummaries": [],
+      "skippedLines": [],
+      "status": "PASS"
+    },
+    "Component tests": {
+      "passedCases": 174,
+      "vitestGroups": [
+        174
+      ],
+      "browserGroups": [],
+      "failedSummaries": [],
+      "skippedLines": [],
+      "status": "PASS"
+    },
+    "Aggregate integration tests": {
+      "passedCases": 228,
+      "vitestGroups": [
+        5,
+        13,
+        7,
+        5,
+        14,
+        6,
+        5,
+        18,
+        1,
+        12,
+        26,
+        35,
+        20,
+        30,
+        24,
+        7
+      ],
+      "browserGroups": [],
+      "failedSummaries": [],
+      "skippedLines": [],
+      "status": "PASS"
+    },
+    "Migration tests": {
+      "passedCases": 11,
+      "vitestGroups": [
+        11
+      ],
+      "browserGroups": [],
+      "failedSummaries": [],
+      "skippedLines": [],
+      "status": "PASS"
+    },
+    "Route certification": {
+      "passedCases": 21,
+      "vitestGroups": [
+        21
+      ],
+      "browserGroups": [],
+      "failedSummaries": [],
+      "skippedLines": [],
+      "status": "PASS"
+    },
+    "Isolation tests": {
+      "passedCases": 0,
+      "vitestGroups": [],
+      "browserGroups": [],
+      "failedSummaries": [],
+      "skippedLines": [],
+      "status": "PASS"
+    },
+    "Seed smoke": {
+      "passedCases": 0,
+      "vitestGroups": [],
+      "browserGroups": [],
+      "failedSummaries": [],
+      "skippedLines": [],
+      "status": "PASS"
+    },
+    "Fresh-system smoke": {
+      "passedCases": 0,
+      "vitestGroups": [],
+      "browserGroups": [],
+      "failedSummaries": [],
+      "skippedLines": [],
+      "status": "PASS"
+    },
+    "Aggregate E2E": {
+      "passedCases": 122,
+      "vitestGroups": [],
+      "browserGroups": [
+        14,
+        20,
+        14,
+        2,
+        2,
+        2,
+        4,
+        6,
+        4,
+        2,
+        8,
+        2,
+        4,
+        14,
+        24
+      ],
+      "failedSummaries": [],
+      "skippedLines": [],
+      "status": "PASS"
+    },
+    "Safe build": {
+      "passedCases": 0,
+      "vitestGroups": [],
+      "browserGroups": [],
+      "failedSummaries": [],
+      "skippedLines": [],
+      "status": "PASS"
+    },
+    "Diff whitespace check": {
+      "passedCases": 0,
+      "vitestGroups": [],
+      "browserGroups": [],
+      "failedSummaries": [],
+      "skippedLines": [],
+      "status": "PASS"
+    }
+  },
+  "passedCaseTotal": 795,
+  "note": "Only complete all-green source-frozen final log is certification. Repeated supplementary executions excluded."
+}

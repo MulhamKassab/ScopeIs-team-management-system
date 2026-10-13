@@ -315,6 +315,7 @@ test("sign in, password change and unavailable pages fit every viewport", async 
     issues.push(...await layoutIssues(page, `${viewport.width}px password change`));
     await page.goto("/fictional-unavailable-page");
     await expect(page.getByRole("heading", { name: "Page not found" })).toBeVisible();
+    await expect(page.getByRole("main")).toHaveCount(1);
     issues.push(...await layoutIssues(page, `${viewport.width}px unavailable page`));
   }
   await attachIssues(testInfo, issues);

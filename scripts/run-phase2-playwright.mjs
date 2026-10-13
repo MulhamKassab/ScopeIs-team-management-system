@@ -1,7 +1,8 @@
 import { join } from "node:path";
 import pg from "pg";
 import { allocateLoopbackPort, repositoryRoot } from "./phase1-test-environment.mjs";
-import { runChild, withDisposableTestDatabase } from "./disposable-test-database.mjs";
+import { withDisposableTestDatabase } from "./disposable-test-database.mjs";
+import { runBrowserWithOwnedBuild } from "./owned-browser-build.mjs";
 
 async function seedDirectoryFixtures(databaseUrl) {
   const client = new pg.Client({ connectionString: databaseUrl });
@@ -24,8 +25,8 @@ const port = await allocateLoopbackPort();
 let exitCode = 1;
 await withDisposableTestDatabase("phase2_directory_playwright", async ({ databaseUrl, env }) => {
   await seedDirectoryFixtures(databaseUrl);
-  const result = await runChild(process.execPath, [join(repositoryRoot, "node_modules", "@playwright", "test", "cli.js"), "test", "--config=playwright.phase2.config.ts", ...process.argv.slice(2)], {
-    cwd: repositoryRoot, env: { ...env, SCOPEIS_PLAYWRIGHT_PORT: String(port) }, timeoutMs: 180_000,
+  const result = await runBrowserWithOwnedBuild(process.execPath, [join(repositoryRoot, "node_modules", "@playwright", "test", "cli.js"), "test", "--config=playwright.phase2.config.ts", ...process.argv.slice(2)], {
+    cwd: repositoryRoot, env: { ...env, SCOPEIS_PLAYWRIGHT_PORT: String(port) }, timeoutMs: 780_000,
   });
   exitCode = result.exitCode;
   if (result.timedOut) throw new Error("Phase 2 directory Playwright suite timed out.");

@@ -14,7 +14,17 @@ async function expectNoHorizontalOverflow(page: import("@playwright/test").Page)
 async function openAccounts(page: import("@playwright/test").Page) {
   await signIn(page, "Nora Albright");
   await page.goto("/accounts");
-  await expect(page.getByRole("heading", { name: "Accounts" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Accounts", exact: true })).toBeVisible();
+}
+
+async function completeWorkforceProfile(page: import("@playwright/test").Page, displayName: string) {
+  const path = new URL(page.url()).pathname;
+  const [response] = await Promise.all([
+    page.waitForResponse((response) => response.request().method() === "POST" && new URL(response.url()).pathname === path),
+    page.getByRole("button", { name: `Complete workforce profile for ${displayName}`, exact: true }).click(),
+  ]);
+  expect(response.status()).toBe(200);
+  await page.getByRole("button", { name: `Complete workforce profile for ${displayName}`, exact: true }).waitFor({ state: "hidden" });
 }
 
 test("Super Admin creates and resets an account; other roles cannot reach /accounts", async ({ page }, testInfo) => {
@@ -24,7 +34,7 @@ test("Super Admin creates and resets an account; other roles cannot reach /accou
   const displayName = `Journey Person ${suffix}`;
 
   await openAccounts(page);
-  await expect(page.getByText(/Passwords cannot be viewed/i)).toBeVisible();
+  await expect(page.getByRole("note").filter({ hasText: /Passwords cannot be viewed/i })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 
   // Create an Employee login account and confirm it appears as configured.
@@ -59,7 +69,8 @@ test("Super Admin creates and resets an account; other roles cannot reach /accou
   await page.getByLabel(/New password/).fill("brandnewsafe1");
   await page.getByLabel(/Confirm new password/).fill("brandnewsafe1");
   await page.getByRole("button", { name: "Change password" }).click();
-  await expect(page).toHaveURL(/\/dashboard$/);
+  await expect(page).toHaveURL(/\/tickets$/);
+  await expect(page.getByRole("heading", { name: "Tickets", exact: true })).toBeVisible();
   expect((await page.request.get("/accounts")).status()).toBe(404);
   await expectNoHorizontalOverflow(page);
 
@@ -124,7 +135,7 @@ test("legacy accounts recover My Profile and appear in the directory after Super
 
   await signIn(page, "Nora Albright");
   await page.goto("/profile");
-  await page.getByRole("button", { name: "Complete workforce profile for Nora Albright" }).click();
+  await completeWorkforceProfile(page, "Nora Albright");
   await expect(page.getByRole("button", { name: "Edit profile", exact: true })).toBeVisible();
   await expect(page.getByText(/Your sign-in account is ready/)).toHaveCount(0);
   await expectNoHorizontalOverflow(page);
@@ -132,7 +143,7 @@ test("legacy accounts recover My Profile and appear in the directory after Super
   await page.goto("/accounts");
   const row = page.getByRole("row", { name: /Cora Bell/ });
   await expect(row).toContainText("Workforce profile missing");
-  await row.getByRole("button", { name: "Complete workforce profile for Cora Bell" }).click();
+  await completeWorkforceProfile(page, "Cora Bell");
   await expect(row).not.toContainText("Workforce profile missing");
   await expect(row.getByRole("button", { name: /Complete workforce profile/ })).toHaveCount(0);
   await expectNoHorizontalOverflow(page);

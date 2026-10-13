@@ -1,0 +1,51 @@
+{
+  "evidenceScope": "Resource custody observation only; parent owns source and application test certification",
+  "ownerPid": 51996,
+  "ownerLaunchStartedUtc": "2026-10-13T17:02:38.685Z",
+  "nativeRootCreationIdentityVerified": true,
+  "observationStartedUtc": "2026-10-13T17:04:27.07Z",
+  "observationCompletedUtc": "2026-10-13T17:35:02.361Z",
+  "durableCompletionObservedUtc": "2026-10-13T17:34:59.605Z",
+  "terminationReason": "fresh durable runner completion observed",
+  "sampleCount": 115,
+  "observedExactProcessIdentityCount": 347,
+  "observedOwnedDisposableDatabaseNameCount": 23,
+  "retainedObservedOwnedDatabaseCount": 0,
+  "retainedCapturedOwnedProcessCount": 0,
+  "exactAnnouncedCheckoutCount": 15,
+  "checkoutCleanupMarkerCount": 15,
+  "retainedExactAnnouncedCheckoutCount": 0,
+  "directoryOwnershipMarkerRejectionCount": 0,
+  "observerErrorCount": 0,
+  "configuredTestDatabaseBoundedBaselineUnchanged": true,
+  "boundedBaselineScope": [
+    "migration state/ledger/schema fingerprint",
+    "key-table row counts",
+    "fictional persona roles",
+    "active fictional Admin scopes"
+  ],
+  "envTestByteHashUnchanged": true,
+  "hashesPublished": false,
+  "observerDeletedOrTerminatedAnyResource": false,
+  "unrelatedDatabaseModified": false,
+  "receiptArchiveByteCopyVerified": true,
+  "exactPrivateReceipt": "resource-custody-51996-final.json",
+  "privateMonitorIdentityReceipt": "resource-custody-51996-monitor-identity.json",
+  "wakeHelper": {
+    "helperPid": 26464,
+    "ownerPid": 51996,
+    "active": false,
+    "releasedUtc": "2026-10-13T17:35:01.8368687Z",
+    "requestCleared": true,
+    "persistentPowerSettingsChanged": false,
+    "custodyAncestryScope": "outside monitored launcher ancestry; status read from its own receipt"
+  },
+  "limitations": [
+    "Read-only observation covers only the recorded interval for the exact current launcher; earlier attempts and resources outside that interval are excluded.",
+    "A fifteen-second delay between samples, plus collection time, may miss short-lived descendants or databases; this does not provide full runtime resource coverage.",
+    "Ownership is restricted to observed process identities rooted in the captured launcher identity and the disposable helper exact PID/random-suffix naming pattern.",
+    "Existing unrelated database names are never attributed, dropped or otherwise modified; no global-prefix cleanup claim is made.",
+    "Build checkout proof covers only exact explicit allocation messages from the fresh current-run stdout; short-lived unit workers may not appear in process samples, and unannounced or historical directories are excluded.",
+    "Process disappearance and zero observed retained resources are bounded observations, not forced-termination, power-loss or universal cleanup guarantees."
+  ]
+}

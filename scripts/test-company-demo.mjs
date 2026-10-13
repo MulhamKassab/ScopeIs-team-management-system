@@ -76,7 +76,7 @@ try {
       for(const key of Object.keys(loginNames)) {
         const u=(await c.query('select * from users where id like $1',[`%${key}`])).rows[0];
         const scopes=(await c.query('select scope_type as type,scope_reference as reference from admin_scope_grants where user_id=$1 and active',[u.id])).rows;
-        actors[key]={id:u.id,displayName:u.display_name,role:u.role,scopes,sessionId:randomUUID(),sessionVersion:1,authenticationMode:'password'};
+        actors[key]={id:u.id,displayName:u.display_name,role:u.role,scopes,sessionId:randomUUID(),sessionVersion:u.session_version,authenticationMode:'password'};
         assert.ok(await employeeService.getOwnProfile(actors[key]));
         assert.ok((await reportingService.dashboard(actors[key])).cards.length);
       }
@@ -94,8 +94,28 @@ try {
         assert.ok(candidates.candidates.some(x=>x.id===request.nominated_employee_user_id));
         assert.ok((await discussionService.openThread(requester,request.id)).messages.length===2);
         await assert.rejects(discussionService.openThread(actors.nora,request.id));
-        const decided=await coverageService.decide(actors.nora,{replacementRequestId:request.id,expectedVersion:request.version,decision:'APPROVED'});
+        // The roster correction changed the anchor after these sample requests were created.
+        // Refuse that obsolete work, then follow the UI's decline/review-current-gap/request flow.
+        const snapshot=async()=>({
+          assignments:(await c.query('select * from schedule_assignments order by id')).rows,
+          periods:(await c.query('select * from schedule_periods order by id')).rows,
+          requests:(await c.query('select * from replacement_requests order by id')).rows,
+          auditCount:(await c.query('select count(*)::int n from audit_events')).rows[0].n,
+          notificationCount:(await c.query('select count(*)::int n from notifications')).rows[0].n,
+        });
+        const beforeStale=await snapshot();
+        await assert.rejects(coverageService.decide(actors.nora,{replacementRequestId:request.id,expectedVersion:request.version,decision:'APPROVED'}),{code:'STALE_WORK'});
+        assert.deepEqual(await snapshot(),beforeStale);
+        const declined=await coverageService.decide(actors.nora,{replacementRequestId:request.id,expectedVersion:request.version,decision:'REJECTED'});
+        assert.equal(declined.status,'REJECTED');
+        const gap=(await coverageService.gaps(requester,request.anchor_assignment_id)).find(x=>x.kind==='STAFFING'&&x.staffingRequirementId===request.staffing_requirement_id);
+        assert.ok(gap);
+        const fresh=await coverageService.create(requester,{anchorAssignmentId:gap.anchorAssignmentId,staffingRequirementId:gap.staffingRequirementId,intent:request.intent,nominatedEmployeeUserId:request.nominated_employee_user_id});
+        const publishedBefore=(await c.query("select a.* from schedule_assignments a join schedule_periods p on p.id=a.schedule_period_id where p.status='PUBLISHED' order by a.id")).rows;
+        const decided=await coverageService.decide(actors.nora,{replacementRequestId:fresh.id,expectedVersion:fresh.version,decision:'APPROVED'});
+        assert.equal(decided.status,'APPROVED');
         assert.equal(decided.effectStatus,request.intent==='ADD_COVERAGE_ASSIGNMENT'?'APPLIED_TO_DRAFT':'PUBLISHED_REVISION_CREATED');
+        assert.deepEqual((await c.query("select a.* from schedule_assignments a join schedule_periods p on p.id=a.schedule_period_id where p.status='PUBLISHED' order by a.id")).rows,publishedBefore);
       }
     } finally {await db.$client.end();}
     await validateCompanyDemo(c);

@@ -26,6 +26,8 @@ The application uses a local system-first readable sans-serif stack with an Arab
 
 The foundation targets WCAG 2.1 AA: semantic landmarks, visible focus, a skip link, keyboard controls, named icon buttons, selected navigation state, form labels, contrast-aware tokens, reduced-motion handling, and no color-only status. Empty shells explicitly identify their module, phase, purpose, and `Not implemented in Phase 1` status so later work is never misrepresented as complete.
 
+The 13 October full-system check clarifies the existing landmark requirement: each rendered page, including protected error/not-found refusals, must have one main-content landmark. A refusal inside the protected shell uses a section within its existing `main`; standalone fallback owns its own `main`. Preserve neutral copy, authorized return links, skip-link target and role navigation. These repairs grant no access or protected details. [The report](../phase-reports/SCOPEIS_FULL_SYSTEM_VERIFICATION_2026_10_13.md) records final local 14/14 gates, 795 cases, responsive 24/24 and separate 21+4 checks passing with matching 455 inputs. Release remains pending; exhaustive accessibility/physical-device certification is not implied.
+
 ## Theme and RTL readiness
 
 Light is the default. Theme preference is local and non-security-sensitive; boot-time theme application prevents an incorrect-theme flash. The unchanged logo remains on a white neutral logo surface where required for dark-mode legibility.

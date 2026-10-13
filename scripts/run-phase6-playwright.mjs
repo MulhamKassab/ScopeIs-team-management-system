@@ -1,6 +1,7 @@
 import { join } from "node:path";
 import { allocateLoopbackPort, repositoryRoot } from "./phase1-test-environment.mjs";
-import { runChild, withDisposableTestDatabase } from "./disposable-test-database.mjs";
+import { withDisposableTestDatabase } from "./disposable-test-database.mjs";
+import { runBrowserWithOwnedBuild } from "./owned-browser-build.mjs";
 import { seedPhase4Journey } from "./phase4-test-fixtures.mjs";
 
 const port = await allocateLoopbackPort();
@@ -8,7 +9,7 @@ let exitCode = 1;
 try {
   await withDisposableTestDatabase("phase6_browser", async ({ databaseUrl, env }) => {
     await seedPhase4Journey(databaseUrl);
-    const result = await runChild(process.execPath, [join(repositoryRoot, "node_modules", "playwright", "cli.js"), "test", "--config", "playwright.phase6.config.ts"], { cwd: repositoryRoot, env: { ...env, SCOPEIS_PHASE6_E2E: "true", SCOPEIS_PLAYWRIGHT_PORT: String(port) }, timeoutMs: 240_000 });
+    const result = await runBrowserWithOwnedBuild(process.execPath, [join(repositoryRoot, "node_modules", "playwright", "cli.js"), "test", "--config", "playwright.phase6.config.ts"], { cwd: repositoryRoot, env: { ...env, SCOPEIS_PHASE6_E2E: "true", SCOPEIS_PLAYWRIGHT_PORT: String(port) }, timeoutMs: 840_000 });
     exitCode = result.exitCode;
   });
 } finally { process.stdout.write("Phase 6 browser disposable database cleanup complete.\n"); }

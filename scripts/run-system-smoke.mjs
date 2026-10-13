@@ -5,6 +5,8 @@
 // generated file, or temporary credential behind. Fictional data and loopback resources only.
 
 import { spawn } from "node:child_process";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import pg from "pg";
 import { allocateLoopbackPort, repositoryRoot } from "./phase1-test-environment.mjs";
@@ -14,10 +16,10 @@ import { inspectMigrationState } from "./phase2-migration-core.mjs";
 const tsx = join(repositoryRoot, "node_modules", "tsx", "dist", "cli.mjs");
 const seedEntry = join(repositoryRoot, "src", "db", "seed", "index.ts");
 
-const moduleKeys = ["dashboard", "employees", "accounts", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "audit", "settings", "profile", "requests"];
+const moduleKeys = ["dashboard", "employees", "accounts", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "audit", "settings", "profile", "requests", "tickets"];
 const superAdminModules = [...moduleKeys];
-const adminModules = ["dashboard", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "profile"];
-const employeeModules = ["dashboard", "skills", "schedule", "leave", "profile", "notifications", "requests"];
+const adminModules = ["dashboard", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "profile", "tickets"];
+const employeeModules = ["dashboard", "skills", "schedule", "leave", "profile", "notifications", "requests", "tickets"];
 
 const personas = [
   { id: "mock-super-admin-nora", name: "Nora Albright", role: "SUPER_ADMIN", allowed: superAdminModules, refusal: [], alpha: 200, bravo: 200 },
@@ -52,8 +54,9 @@ async function logout(base, cookie) {
 let exitCode = 1;
 const port = await allocateLoopbackPort();
 const base = `http://127.0.0.1:${port}`;
+const temporaryApplication = await mkdtemp(join(tmpdir(), "scopeis-phase1-server-"));
 
-await withDisposableTestDatabase("system_smoke", async ({ databaseUrl, env }) => {
+try { await withDisposableTestDatabase("system_smoke", async ({ databaseUrl, env }) => {
   // Step 3: verify migration fingerprints and ledgers are at State D with no pending transitions.
   const client = new pg.Client({ connectionString: databaseUrl });
   await client.connect();
@@ -72,11 +75,15 @@ await withDisposableTestDatabase("system_smoke", async ({ databaseUrl, env }) =>
   }
 
   // Steps 6-11: start the application and exercise persona navigation and record verification.
-  const server = spawn(process.execPath, [join(repositoryRoot, "scripts", "start-phase1-test-server.mjs"), "--port", String(port)], { cwd: repositoryRoot, env, stdio: "inherit" });
+  const server = spawn(process.execPath, [join(repositoryRoot, "scripts", "start-phase1-test-server.mjs"), "--port", String(port)], { cwd: repositoryRoot, env: { ...env, SCOPEIS_PHASE1_SERVER_DIRECTORY: temporaryApplication }, stdio: "inherit", windowsHide: true });
   let serverStopped = false;
   async function stopServer() {
     if (serverStopped || !server) return;
     serverStopped = true;
+    if (process.platform === "win32" && server.exitCode === null && server.signalCode === null) {
+      const killer = spawn(join(process.env.SystemRoot ?? "C:\\Windows", "System32", "taskkill.exe"), ["/PID", String(server.pid), "/T", "/F"], { windowsHide: true, stdio: "ignore" });
+      await new Promise((resolve, reject) => { killer.once("error", reject); killer.once("exit", resolve); });
+    }
     if (server.exitCode === null && server.signalCode === null) server.kill("SIGTERM");
     await new Promise((resolve) => {
       if (server.exitCode !== null || server.signalCode !== null) return resolve();
@@ -85,17 +92,17 @@ await withDisposableTestDatabase("system_smoke", async ({ databaseUrl, env }) =>
     });
   }
   try {
-    const deadline = Date.now() + 60_000;
+    const deadline = Date.now() + 600_000;
     let ready = false;
     while (Date.now() < deadline) {
       if (server.exitCode !== null) throw new Error(`System smoke server exited before readiness (${server.exitCode}).`);
       try {
-        const response = await request(base, "/login");
+        const response = await request(base, "/login", { signal: AbortSignal.timeout(1000) });
         if (response.status === 200) { ready = true; break; }
       } catch {}
       await new Promise((resolve) => setTimeout(resolve, 200));
     }
-    if (!ready) throw new Error("System smoke server did not become ready within 60 seconds.");
+    if (!ready) throw new Error("System smoke isolated build and server did not become ready within 600 seconds.");
     process.stdout.write("System smoke server ready on loopback port.\n");
 
     // Unauthenticated enforcement.
@@ -144,6 +151,7 @@ await withDisposableTestDatabase("system_smoke", async ({ databaseUrl, env }) =>
     } finally { await audit.end(); }
   } finally { await stopServer(); }
 }, { phase1EmployeeProfiles: true });
+} finally { await rm(temporaryApplication, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }); }
 
 // Step 12: run the sanctioned isolated build.
 const build = await runChild(process.execPath, [join(repositoryRoot, "scripts", "run-phase2-safe-build.mjs")], { cwd: repositoryRoot, timeoutMs: 180_000 });

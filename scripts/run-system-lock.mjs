@@ -1,4 +1,4 @@
-// Authoritative fail-closed pre-Phase-12 system lock.
+// Authoritative fail-closed system lock, including the delivered Company ticket core.
 //
 // Orchestrates the complete verification contract in a deterministic order and aggregates failures
 // so no result is hidden. Every step owns disposable loopback resources and never reads
@@ -16,11 +16,14 @@ const steps = [
   { name: "component", label: "Component tests", command: process.execPath, args: [join(repositoryRoot, "node_modules", "vitest", "vitest.mjs"), "run", "test/component"], timeoutMs: 180_000 },
   { name: "integration", label: "Aggregate integration tests", command: process.execPath, args: [join(repositoryRoot, "scripts", "run-aggregate-integration-tests.mjs")], timeoutMs: 900_000 },
   { name: "migration", label: "Migration tests", command: process.execPath, args: [join(repositoryRoot, "scripts", "run-phase2-migration-tests.mjs")], timeoutMs: 180_000 },
-  { name: "route-certification", label: "Route certification", command: process.execPath, args: [join(repositoryRoot, "scripts", "run-phase1-route-certification.mjs")], timeoutMs: 300_000 },
+  // Include the guarded server's 600-second readiness and 240-second test budgets.
+  { name: "route-certification", label: "Route certification", command: process.execPath, args: [join(repositoryRoot, "scripts", "run-phase1-route-certification.mjs")], timeoutMs: 900_000 },
   { name: "isolation", label: "Isolation tests", command: process.execPath, args: [join(repositoryRoot, "scripts", "verify-isolation.mjs")], timeoutMs: 180_000 },
   { name: "seed-smoke", label: "Seed smoke", command: process.execPath, args: [join(repositoryRoot, "scripts", "run-seed-smoke.mjs")], timeoutMs: 180_000 },
-  { name: "system-smoke", label: "Fresh-system smoke", command: process.execPath, args: [join(repositoryRoot, "scripts", "run-system-smoke.mjs")], timeoutMs: 420_000 },
-  { name: "e2e", label: "Aggregate E2E", command: process.execPath, args: [join(repositoryRoot, "scripts", "run-aggregate-e2e-tests.mjs")], timeoutMs: 1_500_000 },
+  { name: "system-smoke", label: "Fresh-system smoke", command: process.execPath, args: [join(repositoryRoot, "scripts", "run-system-smoke.mjs")], timeoutMs: 1_200_000 },
+  // Fifteen sequential guarded runners include the 45-minute responsive budget.
+  // The aggregate deadline must allow those individual bounded journeys to finish.
+  { name: "e2e", label: "Aggregate E2E", command: process.execPath, args: [join(repositoryRoot, "scripts", "run-aggregate-e2e-tests.mjs")], timeoutMs: 18_000_000 },
   { name: "safe-build", label: "Safe build", command: process.execPath, args: [join(repositoryRoot, "scripts", "run-phase2-safe-build.mjs")], timeoutMs: 300_000 },
   { name: "diff-check", label: "Diff whitespace check", command: "git", args: ["diff", "--check"], timeoutMs: 60_000 },
 ];
@@ -47,7 +50,8 @@ for (const step of steps) {
   let failure;
   try {
     const result = await runStep(step);
-    exitCode = result.exitCode;
+    // A graceful cleanup exit must never turn an expired deadline into a pass.
+    exitCode = result.timedOut || result.signal ? 1 : result.exitCode;
     if (result.signal) { interrupted += 1; failure = `terminated by ${result.signal}`; }
     else if (result.timedOut) { failure = "timed out"; }
   } catch (error) {

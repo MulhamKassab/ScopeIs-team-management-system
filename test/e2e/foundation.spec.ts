@@ -8,7 +8,7 @@ async function expectNoHorizontalOverflow(page: import("@playwright/test").Page)
 async function expectAuthorizedLink(page: import("@playwright/test").Page, label: string) {
   if (test.info().project.name === "mobile") {
     const more = page.getByRole("button", { name: "More", exact: true });
-    await more.click({ force: true });
+    await more.click();
     await expect(more).toHaveAttribute("aria-expanded", "true");
   }
   const navigation = test.info().project.name === "mobile"
@@ -26,7 +26,10 @@ test("unauthenticated users do not receive protected shell navigation", async ({
 test("Super Admin receives global shell navigation", async ({ page }) => {
   await signIn(page, "Nora Albright");
   await expectAuthorizedLink(page, "Work map");
-  if (test.info().project.name === "mobile") await page.getByRole("button", { name: "Close more navigation" }).click();
+  if (test.info().project.name === "mobile") {
+    await page.getByRole("button", { name: "Close more navigation" }).click();
+    await expect(page.getByRole("dialog", { name: "More navigation" })).toBeHidden();
+  }
   await expectAuthorizedLink(page, "Activity log");
   await expectNoHorizontalOverflow(page);
   await signOut(page);
@@ -41,6 +44,10 @@ test("Admin scope is enforced by the direct server seam", async ({ page }) => {
   await expect(page.getByRole("link", { name: "Activity log" })).toHaveCount(0);
   await expectAuthorizedLink(page, "Work map");
   expect((await page.request.get("/audit")).status()).toBe(404);
+  await page.goto("/audit");
+  await expect(page.getByRole("main")).toHaveCount(1);
+  await expect(page.getByRole("heading", { name: "Page not found" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Return to a safe page" })).toHaveAttribute("href", "/");
   await expectNoHorizontalOverflow(page);
   await signOut(page);
 });
@@ -62,6 +69,11 @@ test("Employee navigation excludes management-only modules", async ({ page }) =>
   const direct = await page.request.get("/api/foundation/scope/team:alpha");
   expect(direct.status()).toBe(403);
   expect((await page.request.get("/map")).status()).toBe(404);
+  await page.goto("/accounts");
+  await expect(page.getByRole("main")).toHaveCount(1);
+  await expect(page.getByRole("heading", { name: "Page not found" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Return to a safe page" })).toHaveAttribute("href", "/");
+  await expect(page.getByRole("link", { name: "Accounts", exact: true })).toHaveCount(0);
   await expectNoHorizontalOverflow(page);
   await signOut(page);
 });
