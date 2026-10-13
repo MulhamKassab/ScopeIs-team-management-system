@@ -1,0 +1,68 @@
+{
+  "status": "PRODUCTION_RELEASED",
+  "applicationSourceSha": "60fb1db7e5b24364ff17cc2a572c467967efc30b",
+  "sourceCertificate": "Tested application source; later documentation-only SHA requires separate deployment verification",
+  "git": {
+    "branch": "main",
+    "remote": "origin/main",
+    "pushedUtc": "2026-10-13T17:44:51Z",
+    "matchingFrozenSourceTestConfigInputs": 455,
+    "changedFrozenSourceTestConfigInputs": 0
+  },
+  "deployment": {
+    "id": "dpl_c2czeDUjMvJuwspbSMX4MTTMAwab",
+    "state": "READY",
+    "target": "production",
+    "url": "https://scopeis-team-management-system-gcq90tmwq-mu-ka7.vercel.app",
+    "canonicalUrl": "https://scopeis-team-management-system.vercel.app",
+    "canonicalAssigned": true,
+    "verifiedUtc": "2026-10-13T17:46:17.166Z"
+  },
+  "local": {
+    "gatesPassed": 14,
+    "totalGates": 14,
+    "uniqueAutomatedCases": 795,
+    "browserSuitesPassed": 15,
+    "responsivePassed": 24,
+    "concurrencyExecutionsPassed": 21,
+    "controlledCancellationCasesPassed": 4,
+    "frozenInputsMatching": 455,
+    "verification": "verification.json"
+  },
+  "anonymousSmoke": {
+    "verifiedUtc": "2026-10-13T17:46:31.622Z",
+    "authenticated": false,
+    "passed": 11,
+    "total": 11,
+    "scope": "Public sign-in, protected redirects, private ticket/file/command unauthenticated refusals and mock-login refusal"
+  },
+  "ordinaryRoleChecks": {
+    "evidence": "post-release-role-navigation.json",
+    "completedUtc": "2026-10-13T17:53:36.677Z",
+    "passedObservations": 69,
+    "totalObservations": 69,
+    "defaultViewportObservations": 60,
+    "phoneSpotObservations": 9,
+    "protectedDenials": 17,
+    "allDenialsOneMain": true,
+    "allDenialsSafeReturn": true,
+    "allRoutesMatched": true,
+    "adminScheduleReadOnly": true,
+    "adminScheduleWriterControls": 0,
+    "businessDataWrites": false,
+    "normalAuthenticationAuditActivity": true,
+    "additionalUniqueAutomatedCases": false,
+    "phoneGeometryScope": "Only final page per role measured; not full nine-page geometry or physical-device certification"
+  },
+  "laterDocumentationOnlyRelease": {
+    "sourceSha": null,
+    "deploymentVerified": false,
+    "separateVerificationRequired": true
+  },
+  "preservedLimits": [
+    "Retained-history assignment removal remains unresolved; Phase 4 PARTIAL 8/12",
+    "Broader Phase 12 remains PARTIAL; general Phase 13 not certified; Settings remains unfinished",
+    "Production malicious/stale API races and revoked-file HTTP denial not newly certified",
+    "Other browsers/physical devices/exhaustive accessibility/load and real OS-signal/forced-kill/power-loss guarantees not certified"
+  ]
+}
