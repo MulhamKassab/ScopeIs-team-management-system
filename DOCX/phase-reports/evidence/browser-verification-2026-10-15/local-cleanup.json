@@ -12,5 +12,9 @@
   "completedAt": "2026-10-15T18:26:36.412Z",
   "runtimeStopped": true,
   "loopbackPortClosed": true,
-  "ownedVerificationEnvironmentRemoved": true
+  "ownedVerificationEnvironmentRemoved": true,
+  "verificationWorktreeArchived": true,
+  "archivedWorktreeIdentity": "C:\\Users\\m.kassab\\.codex\\worktrees\\combined-browser-release\\Team management system",
+  "dependencyJunctionRemovedWithoutTouchingSharedDependencies": true,
+  "neededIgnoredArtifactsPreserved": true
 }

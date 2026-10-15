@@ -91,10 +91,12 @@
     "unavailableEffectLabel": "Approved"
   },
   "combinedVerification": {
-    "status": "LOCAL_VERIFIED_PRODUCTION_PENDING",
+    "status": "PRODUCTION_RELEASED",
     "receipt": "../browser-verification-2026-10-15/verification.json",
     "fullRun": "../browser-verification-2026-10-15/verification-full-run.json",
     "cssFollowup": "../browser-verification-2026-10-15/mobile-labels-verification.json",
-    "fullGateRerunAfterCss": false
+    "fullGateRerunAfterCss": false,
+    "applicationSourceSha": "741595b198f84e759445691477d9f4522d99953b",
+    "productionRelease": "../browser-verification-2026-10-15/production-release.json"
   }
 }

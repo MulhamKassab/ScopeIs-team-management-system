@@ -1,5 +1,5 @@
 {
-  "status": "LOCAL_VERIFIED_PRODUCTION_PENDING",
+  "status": "PRODUCTION_RELEASED",
   "completedAt": "2026-10-15T18:25:29.453Z",
   "fullRun": {
     "certificate": "verification-full-run.json",
@@ -20,12 +20,13 @@
   "finalInputManifest": "inputs-mobile-labels-after.json",
   "fullGateRerunAfterCss": false,
   "additionalUniqueCaseCountClaimed": false,
-  "productionReleasePending": true,
+  "productionReleasePending": false,
   "cleanup": "local-cleanup.json",
   "visualReview": {
     "beforeAfter320LabelsReviewed": true,
     "rtlTimetableReviewed": true,
     "phoneMapReviewed": true,
     "evidence": "mobile-labels-verification.json"
-  }
+  },
+  "productionRelease": "production-release.json"
 }

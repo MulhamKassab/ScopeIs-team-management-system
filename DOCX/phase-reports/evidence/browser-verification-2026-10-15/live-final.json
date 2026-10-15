@@ -1,0 +1,383 @@
+{
+  "status": "VERIFIED",
+  "completedAt": "2026-10-15T18:40:33.142Z",
+  "sourceApplicationSha": "741595b198f84e759445691477d9f4522d99953b",
+  "canonicalUrl": "https://scopeis-team-management-system.vercel.app",
+  "passed": 32,
+  "total": 32,
+  "checks": [
+    {
+      "role": "SUPER_ADMIN",
+      "path": "/coverage",
+      "passed": true,
+      "detail": "New Cover page, timetable, current queue, history and direct decision/edit/cancel controls visible; unavailable nominee correctly disables approval."
+    },
+    {
+      "role": "SUPER_ADMIN",
+      "path": "/coverage",
+      "passed": true,
+      "detail": "Create cover request opens with real assignment and request-type selectors; closed without submission."
+    },
+    {
+      "role": "SUPER_ADMIN",
+      "path": "/schedule",
+      "passed": true,
+      "detail": "Create assignment opens real Draft/client/person/project/date/time controls; no submission."
+    },
+    {
+      "role": "SUPER_ADMIN",
+      "path": "/schedule",
+      "passed": true,
+      "detail": "People timetable renders three employees and October columns.",
+      "error": false,
+      "tables": [
+        {
+          "columns": 32,
+          "rows": 4
+        }
+      ]
+    },
+    {
+      "role": "SUPER_ADMIN",
+      "path": "/tickets?view=archive",
+      "passed": true,
+      "detail": "All six existing archived tickets render; ticket list and New ticket/Reload controls are available."
+    },
+    {
+      "role": "SUPER_ADMIN",
+      "path": "/reports",
+      "passed": true,
+      "creationButtons": [],
+      "error": false,
+      "headings": [
+        "Reports",
+        "Understand the staffing plan",
+        "Plan around leave and coverage",
+        "Review skills and evidence",
+        "Check recorded activity"
+      ],
+      "mainCount": 1
+    },
+    {
+      "role": "SUPER_ADMIN",
+      "path": "/leave",
+      "passed": true,
+      "creationButtons": [],
+      "error": false,
+      "headings": [
+        "Leave review queue",
+        "Global annual allowance",
+        "Pending requests",
+        "Select a request"
+      ],
+      "mainCount": 1
+    },
+    {
+      "role": "SUPER_ADMIN",
+      "path": "/clients",
+      "passed": true,
+      "creationButtons": [
+        "Create client"
+      ],
+      "error": false,
+      "headings": [
+        "Clients",
+        "Cedar Finance House",
+        "Crestline Schools",
+        "Horizon Retail Holdings",
+        "Marina Heights Residences",
+        "Northstar Medical Group"
+      ],
+      "mainCount": 1
+    },
+    {
+      "role": "SUPER_ADMIN",
+      "path": "/projects",
+      "passed": true,
+      "creationButtons": [
+        "Create project"
+      ],
+      "error": false,
+      "headings": [
+        "Projects",
+        "Branch Cloud Migration",
+        "Completed handover",
+        "Campus CCTV Rollout",
+        "Infrastructure assessment",
+        "Infrastructure assessment"
+      ],
+      "mainCount": 1
+    },
+    {
+      "role": "ADMIN",
+      "path": "/dashboard",
+      "passed": true,
+      "detail": "Normal Saber Admin session; navigation omits Leave/Reports and dashboard contains scoped Published work and own requests."
+    },
+    {
+      "role": "ADMIN",
+      "path": "/schedule?mode=planning",
+      "passed": true,
+      "error": false,
+      "headings": [
+        "Monthly timetable",
+        "October 2026",
+        "Schedule details",
+        "Monthly schedules",
+        "Select a schedule"
+      ],
+      "periodStatuses": [
+        "PUBLISHED",
+        "PUBLISHED",
+        "PUBLISHED",
+        "PUBLISHED"
+      ],
+      "planningLinks": 0,
+      "writerControls": 0
+    },
+    {
+      "role": "ADMIN",
+      "path": "/schedule",
+      "passed": true,
+      "detail": "Scoped People table renders",
+      "columns": 32,
+      "rows": 4
+    },
+    {
+      "role": "ADMIN",
+      "path": "/coverage",
+      "passed": true,
+      "cover": true,
+      "creationButtons": 2,
+      "decisionButtons": 0,
+      "error": false,
+      "planningLinks": 0
+    },
+    {
+      "role": "ADMIN",
+      "path": "/reports",
+      "passed": true,
+      "error": false,
+      "headings": [
+        "Page not found"
+      ],
+      "mains": 1,
+      "safeReturn": true
+    },
+    {
+      "role": "ADMIN",
+      "path": "/leave",
+      "passed": true,
+      "error": false,
+      "headings": [
+        "Page not found"
+      ],
+      "mains": 1,
+      "safeReturn": true
+    },
+    {
+      "role": "ADMIN",
+      "path": "/schedule?month=2026-10&period=ca599f89-d824-42d4-ba95-e64bb8cd624c",
+      "passed": true,
+      "error": false,
+      "headings": [
+        "Page not found"
+      ],
+      "mains": 1,
+      "safeReturn": true
+    },
+    {
+      "role": "ADMIN",
+      "path": "safe return /",
+      "passed": true,
+      "detail": "Awaited named safe return redirects through / to the authorized Admin dashboard."
+    },
+    {
+      "role": "ADMIN",
+      "path": "/clients",
+      "passed": true,
+      "creationButtons": [],
+      "error": false,
+      "headings": [
+        "Clients"
+      ]
+    },
+    {
+      "role": "ADMIN",
+      "path": "/projects",
+      "passed": true,
+      "creationButtons": [],
+      "error": false,
+      "headings": [
+        "Projects"
+      ]
+    },
+    {
+      "role": "ADMIN",
+      "path": "/requests",
+      "passed": true,
+      "creationButtons": [],
+      "error": false,
+      "headings": [
+        "My requests",
+        "Your conversations"
+      ]
+    },
+    {
+      "role": "ADMIN",
+      "path": "/tickets",
+      "passed": true,
+      "creationButtons": [],
+      "error": false,
+      "headings": [
+        "Tickets",
+        "All accessible tickets0"
+      ]
+    },
+    {
+      "role": "EMPLOYEE",
+      "path": "/tickets",
+      "passed": true,
+      "detail": "Normal Mulham Employee sign-in lands on functional Tickets."
+    },
+    {
+      "role": "EMPLOYEE",
+      "path": "/schedule?mode=planning",
+      "passed": true,
+      "error": false,
+      "headings": [
+        "My timetable",
+        "October 2026"
+      ],
+      "planningLinks": 0,
+      "writerControls": 0
+    },
+    {
+      "role": "EMPLOYEE",
+      "path": "/schedule",
+      "passed": true,
+      "detail": "Only own published work appears in the People table.",
+      "columns": 32,
+      "people": [
+        "Mulham"
+      ],
+      "rows": 2
+    },
+    {
+      "role": "EMPLOYEE",
+      "path": "/leave",
+      "passed": true,
+      "detail": "Own vacation history and balance remain available; approved existing request retained."
+    },
+    {
+      "role": "EMPLOYEE",
+      "path": "/leave",
+      "passed": true,
+      "detail": "Apply for vacation opens date, balance-preview and private-note controls; closed without submission."
+    },
+    {
+      "role": "EMPLOYEE",
+      "path": "/tickets",
+      "passed": true,
+      "detail": "New ticket opens real workspace/dashboard/person selectors and subject/description controls; closed without submission."
+    },
+    {
+      "role": "EMPLOYEE",
+      "path": "/coverage",
+      "passed": true,
+      "detail": "Management-only refusal with own-schedule/conversation return links and no request controls."
+    },
+    {
+      "role": "EMPLOYEE",
+      "path": "/reports",
+      "passed": true,
+      "error": false,
+      "headings": [
+        "Page not found"
+      ],
+      "mains": 1,
+      "safeReturn": true
+    },
+    {
+      "role": "EMPLOYEE",
+      "path": "/accounts",
+      "passed": true,
+      "error": false,
+      "headings": [
+        "Page not found"
+      ],
+      "mains": 1,
+      "safeReturn": true
+    },
+    {
+      "role": "EMPLOYEE",
+      "path": "/projects",
+      "passed": true,
+      "error": false,
+      "headings": [
+        "Page not found"
+      ],
+      "mains": 1,
+      "safeReturn": true
+    },
+    {
+      "role": "SUPER_ADMIN",
+      "path": "/dashboard",
+      "passed": true,
+      "detail": "Original normal Raafat Super Admin session restored."
+    }
+  ],
+  "diagnosticProbeCorrections": [
+    {
+      "role": "ADMIN",
+      "path": "/reports",
+      "passed": false,
+      "error": false,
+      "headings": [
+        "Page not found"
+      ],
+      "mains": 1,
+      "safeReturn": false,
+      "classification": "PROBE_EXPECTATION_CORRECTED",
+      "reason": "Probe assumed a direct dashboard/tickets return. The named safe-return link correctly targets /, which performs the role-aware redirect."
+    },
+    {
+      "role": "ADMIN",
+      "path": "/leave",
+      "passed": false,
+      "error": false,
+      "headings": [
+        "Page not found"
+      ],
+      "mains": 1,
+      "safeReturn": false,
+      "classification": "PROBE_EXPECTATION_CORRECTED",
+      "reason": "Probe assumed a direct dashboard/tickets return. The named safe-return link correctly targets /, which performs the role-aware redirect."
+    },
+    {
+      "role": "ADMIN",
+      "path": "/schedule?month=2026-10&period=ca599f89-d824-42d4-ba95-e64bb8cd624c",
+      "passed": false,
+      "error": false,
+      "headings": [
+        "Page not found"
+      ],
+      "mains": 1,
+      "safeReturn": false,
+      "classification": "PROBE_EXPECTATION_CORRECTED",
+      "reason": "Probe assumed a direct dashboard/tickets return. The named safe-return link correctly targets /, which performs the role-aware redirect."
+    },
+    {
+      "role": "ADMIN",
+      "path": "safe return /",
+      "passed": false,
+      "detail": "Named safe return follows / to the authorized Admin dashboard.",
+      "classification": "INFLIGHT_NAVIGATION_OBSERVATION",
+      "reason": "Initial snapshot preceded the root-route navigation; final check explicitly awaits the destination."
+    }
+  ],
+  "businessDataWrites": false,
+  "normalAuthenticationAuditActivity": true,
+  "originalSuperAdminRestored": true,
+  "scope": "Normal production sessions, DOM/table/control checks, dialogs opened and closed without submitting. Maintained mutation/file journeys run on disposable local databases; earlier production ticket/private-file verification is linked separately. Browser observations do not assert HTTP status codes."
+}

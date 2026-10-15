@@ -1,9 +1,9 @@
 ## Consolidated Cover and access amendment — 2026-10-15
 
-[Combined verification and final-source evidence](phase-reports/SCOPEIS_BROWSER_VERIFICATION_2026_10_15.md): full14/14,813 automated cases,15 browser suites/responsive24/24; separately manifested CSS-only mobile-label follow-up4/4 plus guarded typecheck/build. [Cover implementation](phase-reports/SCOPEIS_COVER_WORKSPACE_IMPLEMENTATION_2026_10_15.md) is reviewed. Push/deployment and final production checks remain pending.
+[Combined browser/Cover production release](phase-reports/SCOPEIS_BROWSER_VERIFICATION_2026_10_15.md): application `741595b198f84e759445691477d9f4522d99953b` is pushed/deployed, normal roles 32/32 and anonymous 17/17 pass, all six preservation fingerprints match. Local scope: full 14/14/813 cases, 15 browser suites/responsive 24/24; separately manifested CSS-only follow-up 4/4 and guarded typecheck/build. [Release receipt](phase-reports/evidence/browser-verification-2026-10-15/production-release.json).
 
 - [Confirmed Cover, main-timetable, map and highest-role requirements](project-memory/COVER_WORKSPACE_AND_ACCESS_AMENDMENT_2026_10_15.md)
-- Implementation, combined review and local verification are complete; source/production delivery remains pending. This supersedes previous Admin unpublished-plan, team-leave, report and project-creation permissions.
+- Implementation, combined review, source push and production verification are complete. This supersedes previous Admin unpublished-plan, team-leave, report and project-creation permissions.
 
 ## Production recovery and migration 0016 — 2026-10-15
 

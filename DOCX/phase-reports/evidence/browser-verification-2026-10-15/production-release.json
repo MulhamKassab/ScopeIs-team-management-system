@@ -1,0 +1,88 @@
+{
+  "status": "PRODUCTION_RELEASED",
+  "verifiedAt": "2026-10-15T18:42:02.934Z",
+  "applicationSourceSha": "741595b198f84e759445691477d9f4522d99953b",
+  "git": {
+    "branch": "main",
+    "remote": "origin/main",
+    "remoteSha": "741595b198f84e759445691477d9f4522d99953b",
+    "matchingFinalTechnicalInputs": 472,
+    "sourceBinding": "staged-source-binding.json"
+  },
+  "deployment": {
+    "githubDeploymentId": 7101033933,
+    "sha": "741595b198f84e759445691477d9f4522d99953b",
+    "environment": "Production",
+    "state": "success",
+    "vercelDeploymentId": "22utzpwAMmL8CzTguJt7DLAH3cUF",
+    "url": "https://scopeis-team-management-system-475fb7ue3-mu-ka7.vercel.app",
+    "canonicalUrl": "https://scopeis-team-management-system.vercel.app",
+    "completedAt": "2026-10-15T18:31:24Z",
+    "canonicalEvidence": "Fresh normal-session reload shows newly deployed Cover/navigation/composer controls after exact-SHA Production success; no independent alias-registry query is claimed."
+  },
+  "local": {
+    "fullRun": "verification-full-run.json",
+    "gatesPassed": 14,
+    "totalGates": 14,
+    "uniqueAutomatedCases": 813,
+    "browserSuites": 15,
+    "responsivePassed": 24,
+    "fullRunFrozenInputs": 472,
+    "cssOnlyFollowup": "mobile-labels-verification.json",
+    "cssFollowupCasesPassed": 4,
+    "fullGateRerunAfterCss": false,
+    "finalFrozenInputs": 472,
+    "focusedRepeatsAddedTo813": false
+  },
+  "anonymous": {
+    "passed": 17,
+    "total": 17,
+    "evidence": "production-anonymous-final.json"
+  },
+  "ordinaryRoles": {
+    "passed": 32,
+    "total": 32,
+    "evidence": "live-final.json",
+    "roles": [
+      "SUPER_ADMIN",
+      "ADMIN",
+      "EMPLOYEE"
+    ],
+    "originalSuperAdminRestored": true,
+    "probeCorrectionsRetained": 4,
+    "businessDataWrites": false
+  },
+  "preservation": {
+    "passed": true,
+    "readOnly": true,
+    "evidence": "production-data-post-release.json",
+    "fingerprintsMatched": 6,
+    "counts": {
+      "database_name": "scopeis_company_demo",
+      "database_role": "scopeis_company_demo_owner",
+      "verified_at": "2026-10-15T18:40:53.342Z",
+      "accounts": "7",
+      "credentials": "7",
+      "admin_scope_grants": "8",
+      "assignments": "61",
+      "omitted_assignments": "0",
+      "tickets": "6",
+      "archived_tickets": "6",
+      "migrations": "17",
+      "role_counts": {
+        "ADMIN": 2,
+        "EMPLOYEE": 3,
+        "SUPER_ADMIN": 2
+      }
+    },
+    "storedRoleAssignmentsAndGrantsRetained": true,
+    "authorizedAccessRuleAmendmentIncluded": true
+  },
+  "cleanup": "local-cleanup.json",
+  "laterDocumentationOnlyHead": "Checked independently after this receipt is committed; exact final HEAD/deployment proof is retained outside Git to avoid a self-referential commit hash.",
+  "limits": [
+    "CSS-only follow-up has four affected browser journeys and a guarded typecheck/build; full813-case run belongs to its prior explicit manifest.",
+    "Normal production dialogs were opened/closed without submitting business data. Maintained mutation/file journeys use disposable local data; earlier live ticket/file checks remain separately linked.",
+    "Settings, deferred4.5/9.9,broaderPhase12 and generalPhase13 remain outside this bounded release; no physical-device/exhaustive accessibility/load certification."
+  ]
+}
