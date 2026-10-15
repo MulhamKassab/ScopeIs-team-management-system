@@ -1,7 +1,7 @@
 ## Frontend and backend gap implementation — 2026-10-14
 
 - [Implemented controls, history-preserving removal, evidence transport and verification](phase-reports/SCOPEIS_FRONTEND_BACKEND_GAP_FIXES_2026_10_14.md)
-- Authorized implementation is local. All six focused desktop/phone journeys pass; the broad system run passed 13/14 gates with Aggregate E2E interrupted, so full browser/responsive certification remains open. Super Admin controls preserve the existing Admin and Employee boundaries. Additive migration `0016` is prepared and tested only against disposable databases; no production migration, push or deployment has occurred. The audit below remains the historical baseline.
+- Implementation `3599844c255135e7e5ce85f2bf2156f26b0b2718` is pushed and verified on `origin/main` at the product owner's explicit request; [the delivery receipt](phase-reports/evidence/frontend-backend-gap-fixes-2026-10-14/delivery.json) records source delivery. All six focused desktop/phone journeys pass; the broad system run passed 13/14 gates with Aggregate E2E interrupted, so full browser/responsive certification remains open. Super Admin controls preserve the existing Admin and Employee boundaries. Additive migration `0016` is prepared and tested only against disposable databases; production migration remains pending and deployment is unverified. The audit below remains the historical baseline.
 
 ## Frontend and backend feature audit — 2026-10-14
 

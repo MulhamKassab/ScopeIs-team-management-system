@@ -2,7 +2,7 @@
 
 The product owner authorized implementing the confirmed gaps from the [feature audit](SCOPEIS_FRONTEND_BACKEND_AUDIT_2026_10_14.md), in its recommended order, while preserving existing roles and permissions. This report records the resulting local implementation. The audit remains the historical baseline.
 
-**Final disposition — 2026-10-15:** confirmed gaps implemented locally; all six focused desktop/phone journeys pass. The broad system run passed 13/14 gates and retains an interrupted browser gate. Source is uncommitted and undeployed. [The verification receipt](evidence/frontend-backend-gap-fixes-2026-10-14/verification.json) records results, 466 matching source/test/configuration hashes and cleanup.
+**Final disposition — 2026-10-15:** confirmed gaps implemented; all six focused desktop/phone journeys pass. The broad system run passed 13/14 gates and retains an interrupted browser gate. The product owner explicitly requested source delivery to `main`; implementation `3599844c255135e7e5ce85f2bf2156f26b0b2718` is pushed and verified on `origin/main`. [The delivery receipt](evidence/frontend-backend-gap-fixes-2026-10-14/delivery.json) records the source commit and retained verification limits. [The verification receipt](evidence/frontend-backend-gap-fixes-2026-10-14/verification.json) remains the pre-commit snapshot of results, 466 matching source/test/configuration hashes and cleanup. Production migration remains pending and deployment is unverified.
 
 ## Implemented behavior
 
@@ -24,7 +24,7 @@ Super Admin alone writes schedules and publishes, decides leave and coverage, an
 
 `src/db/migrations/0016_schedule_assignment_omission.sql` contains one additive nullable column. The Drizzle snapshot, migration journal, exact schema fingerprints and adoption-stage validation are updated to 17 migrations. Earlier SQL is unchanged. Preservation verification compares existing workforce facts while excluding only the new null field and checks existing ledger entries remain unchanged. The repair avoids foreign-key deletion failures by keeping assignment identities and historical references.
 
-No production database, environment, account, credential or provider has been changed. The migration is prepared locally and has been applied only to fresh disposable test databases. Source remains uncommitted and has not been pushed or deployed. Production needs migration `0016` before deploying the updated application.
+No production database, environment, account, credential or provider has been changed by this work. The migration has been applied only to fresh disposable test databases. Source is pushed to `main` at the product owner's request; this does not certify deployment or production compatibility. Production needs migration `0016` before deploying the updated application. Existing hosting automation may react to the push; its deployment outcome has not been verified.
 
 ## Verification
 
