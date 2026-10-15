@@ -33,6 +33,8 @@ export const auditActions: Record<string, { label: string; fields: readonly stri
   "employee_profile.management_updated": { label: "Employee record updated by management", fields: [...shared, "fieldCount"] },
   "employee_profile.role_updated": { label: "Employee system role updated", fields: [...shared, "previousRole", "role"] },
   "employee_profile.assignments_updated": { label: "Employee designation updated", fields: [...shared] },
+  "employee_planning_location.saved": { label: "Employee planning coordinate saved", fields: shared },
+  "employee_planning_location.cleared": { label: "Employee planning coordinate cleared", fields: shared },
   "employee_skill.created": { label: "Employee skill recorded", fields: [...shared, "coverageEligible"] },
   "employee_skill.updated": { label: "Employee skill updated", fields: [...shared, "coverageEligible"] },
   "client.created": { label: "Client created", fields: [...shared] },

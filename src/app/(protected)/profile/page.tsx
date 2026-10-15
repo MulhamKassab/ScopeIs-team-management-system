@@ -5,6 +5,7 @@ import { listTeamOptions } from "@/modules/employees/team-options";
 import { SelfProfileForm } from "@/modules/employees/self-profile-form";
 import { CapabilityEvidencePanel } from "@/modules/evidence/forms";
 import { evidenceRepository } from "@/modules/evidence/repositories";
+import { evidenceUploadLimitBytes } from "@/modules/evidence/file-limits";
 import { evidenceService } from "@/modules/evidence/service";
 import { db } from "@/db/client";
 import { employeeProfileService, employeeSkillService } from "@/modules/employees/employee-services";
@@ -37,6 +38,6 @@ export default async function ProfilePage() {
       <Link className="people-security-link" href="/account/change-password">Change your password</Link>
     </section>
     <section className="operation-panel" aria-labelledby="profile-skills-title"><h3 id="profile-skills-title">My recorded skills</h3><p>These skills are recorded by your Super Admin. Contact them if a record needs correcting.</p>{recordedSkills.length ? <ul className="operation-list">{recordedSkills.map(({ association, skill }) => <li key={association.id}><div><strong>{skill.name}</strong><span>Recorded skill</span></div></li>)}</ul> : <p className="operation-empty">No skills have been recorded on your profile.</p>}</section>
-    <CapabilityEvidencePanel items={evidence.items} skills={skills} />
+    <CapabilityEvidencePanel items={evidence.items} skills={skills} maxUploadBytes={evidenceUploadLimitBytes()} />
   </div>;
 }

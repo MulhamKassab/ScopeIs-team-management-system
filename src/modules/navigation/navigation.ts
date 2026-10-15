@@ -10,6 +10,7 @@ export const modules: Record<ModuleKey, ModuleDefinition> = {
   employees: { key: "employees", href: "/employees", label: "People", purpose: "Employee records, directory, search, lifecycle, and self-service profile.", phase: 2, capability: "module:employees:view", mobilePrimary: true },
   teams: { key: "teams", href: "/teams", label: "Teams", purpose: "Create teams and manage their members.", phase: 2, capability: "module:teams:view" },
   designations: { key: "designations", href: "/designations", label: "Job titles", purpose: "Manage job designations and membership separately from system roles.", phase: 2, capability: "module:designations:view" },
+  arrangements: { key: "arrangements", href: "/arrangements", label: "Assignment labels", purpose: "Super Admin management of descriptive arrangement labels.", phase: 2, capability: "module:arrangements:view" },
   accounts: { key: "accounts", href: "/accounts", label: "Accounts", purpose: "Super Admin-only account, credential, and password-reset administration. Passwords are never viewable.", phase: 2, capability: "module:accounts:view" },
   skills: { key: "skills", href: "/skills", label: "Skills", purpose: "Controlled skills, Team-scoped planning filters, and transparent requirement warnings.", phase: 6, capability: "module:skills:view" },
   clients: { key: "clients", href: "/clients", label: "Clients", purpose: "Authorized Client records and operational relationships.", phase: 3, capability: "module:clients:view" },

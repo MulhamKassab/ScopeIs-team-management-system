@@ -279,6 +279,8 @@ export const scheduleAssignments = pgTable("schedule_assignments", {
   projectId: uuid("project_id").notNull(), locationId: uuid("location_id").notNull(), assignmentDate: date("assignment_date").notNull(),
   startTime: time("start_time", { precision: 0 }).notNull(), endTime: time("end_time", { precision: 0 }).notNull(), sharedInstruction: text("shared_instruction"), copiedFromAssignmentId: uuid("copied_from_assignment_id"),
   version: integer("version").notNull().default(1), ...timestamps,
+  // Removal from a plan preserves foreign-key history and immutable Published predecessors.
+  omittedAt: timestamp("omitted_at", { withTimezone: true }),
 }, (table) => [
   foreignKey({ name: "schedule_assignments_period_id_fkey", columns: [table.schedulePeriodId], foreignColumns: [schedulePeriods.id] }).onDelete("restrict"),
   foreignKey({ name: "schedule_assignments_employee_user_id_fkey", columns: [table.employeeUserId], foreignColumns: [users.id] }).onDelete("restrict"),

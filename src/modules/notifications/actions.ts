@@ -15,7 +15,7 @@ async function actor() { const current = await getCurrentActor(); if (!current) 
 function message(error: unknown) { return error instanceof NotificationDomainError ? error.message : "The notification could not be updated. Reload and try again."; }
 
 async function run(operation: () => Promise<unknown>, success: string) {
-  try { await operation(); revalidatePath("/notifications"); return { success }; }
+  try { await operation(); revalidatePath("/", "layout"); return { success }; }
   catch (error) { return { error: message(error) }; }
 }
 

@@ -4,6 +4,7 @@ import { EvidenceDomainError } from "@/modules/evidence/domain-error";
 import { evidenceErrorResponse } from "@/modules/evidence/http";
 import { evidenceService } from "@/modules/evidence/service";
 import { requireSameOrigin } from "@/server/http";
+import { readEvidenceUploadForm } from "@/modules/evidence/upload";
 
 /**
  * Authorized private upload. Media type, size, filename, and real file signature are validated by the
@@ -15,7 +16,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ evi
     const actor = await getCurrentActor();
     if (!actor) throw new EvidenceDomainError("FORBIDDEN", "Your session expired. Sign in again.");
     const { evidenceId } = await params;
-    const form = await request.formData().catch(() => { throw new EvidenceDomainError("VALIDATION_ERROR"); });
+    const form = await readEvidenceUploadForm(request);
     const file = form.get("file");
     if (!(file instanceof File)) throw new EvidenceDomainError("VALIDATION_ERROR");
     const expectedVersion = Number(form.get("expectedVersion"));

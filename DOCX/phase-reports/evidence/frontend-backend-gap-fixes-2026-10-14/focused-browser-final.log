@@ -1,0 +1,20 @@
+{"event":"browser_build_directory_allocated","ownerPid":39116,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-uB02h2"}
+
+Running 4 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase6-capabilities.spec.ts:6:1 › Super Admin records a skill and the Employee sees only their own recorded fact (12.4s)
+  ok 2 [desktop] › test\e2e\phase6-capabilities.spec.ts:38:1 › Super Admin manages missing controls while Admin and Employee remain excluded (22.7s)
+  ok 3 [mobile] › test\e2e\phase6-capabilities.spec.ts:6:1 › Super Admin records a skill and the Employee sees only their own recorded fact (7.7s)
+  ok 4 [mobile] › test\e2e\phase6-capabilities.spec.ts:38:1 › Super Admin manages missing controls while Admin and Employee remain excluded (17.5s)
+
+  4 passed (3.7m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":39116,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-uB02h2"}
+{"event":"browser_build_directory_allocated","ownerPid":39116,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-02kJ0r"}
+
+Running 2 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase4-scheduling.spec.ts:38:1 › Super Admin publishes, Admin reads every schedule state, and Employee sees only Published work (45.7s)
+  ok 2 [mobile] › test\e2e\phase4-scheduling.spec.ts:38:1 › Super Admin publishes, Admin reads every schedule state, and Employee sees only Published work (35.3s)
+
+  2 passed (3.3m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":39116,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-02kJ0r"}

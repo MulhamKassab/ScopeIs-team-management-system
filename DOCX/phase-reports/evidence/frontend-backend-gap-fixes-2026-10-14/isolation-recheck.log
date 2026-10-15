@@ -1,0 +1,11 @@
+Isolation proof
+  PASS  disposable databases are distinct — scopeis_isolation_probe_one_4124_133569b26d_test vs scopeis_isolation_probe_two_4124_11c0f53546_test
+  PASS  disposable database names are test-scoped — persistent target is scopeis_gap_fixes_base_test
+  PASS  one disposable database cannot see the other's rows — observed 0 and 0
+  PASS  disposable databases are dropped after their suite finishes
+  PASS  persistent configured test database is unchanged by disposable work
+  PASS  allocated loopback ports are unique — 52967, 52968, 52969
+  PASS  allocated loopback ports are non-privileged
+  PASS  unsafe disposable names are refused — 5/5 refused
+  PASS  no harness or configuration file loads or reads .env.production — 81 files scanned
+Isolation proof: 9/9 checks passed

@@ -256,6 +256,14 @@ describe("Phase 2 core employee and catalogue services", () => {
     expect(updated.verified).toBe(true);
     const archived = await employeeSkillService.setArchived(f.superAdmin, association.id, updated.version, true); expect(archived.archivedAt).toBeInstanceOf(Date);
     expect(await employeeSkillService.listForEmployee(f.employeeAlpha, f.ids.employeeAlpha)).toHaveLength(0);
+    await expect(employeeSkillService.setArchived(f.adminAlpha, association.id, archived.version, false)).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(employeeSkillService.setArchived(f.employeeAlpha, association.id, archived.version, false)).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(employeeSkillService.setArchived(f.superAdmin, association.id, updated.version, false)).rejects.toMatchObject({ code: "STALE_VERSION" });
+    const restored = await employeeSkillService.setArchived(f.superAdmin, association.id, archived.version, false);
+    expect(restored.id).toBe(association.id);
+    expect(restored.archivedAt).toBeNull();
+    expect(restored.notes).toBe("Reviewed capability");
+    expect(await employeeSkillService.listForEmployee(f.employeeAlpha, f.ids.employeeAlpha)).toHaveLength(1);
     expect(await db.select().from(auditEvents).where(eq(auditEvents.targetId, association.id))).toEqual(expect.arrayContaining([expect.objectContaining({ action: "employee_skill.archived" })]));
   });
 

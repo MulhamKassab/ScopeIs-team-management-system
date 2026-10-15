@@ -1,3 +1,13 @@
+## Frontend and backend gap implementation — 2026-10-14
+
+- [Implemented controls, history-preserving removal, evidence transport and verification](phase-reports/SCOPEIS_FRONTEND_BACKEND_GAP_FIXES_2026_10_14.md)
+- Authorized implementation is local. All six focused desktop/phone journeys pass; the broad system run passed 13/14 gates with Aggregate E2E interrupted, so full browser/responsive certification remains open. Super Admin controls preserve the existing Admin and Employee boundaries. Additive migration `0016` is prepared and tested only against disposable databases; no production migration, push or deployment has occurred. The audit below remains the historical baseline.
+
+## Frontend and backend feature audit — 2026-10-14
+
+- [Current feature connections, missing UI controls, partial workflows and planned surfaces](phase-reports/SCOPEIS_FRONTEND_BACKEND_AUDIT_2026_10_14.md)
+- Source review covers all 21 navigation modules. Fresh unit/component checks pass 413 tests and TypeScript passes; database integration could not start because local PostgreSQL was unavailable. Findings preserve existing permissions, deferred decisions and the separate retained-history scheduling limitation. This is an audit, with no application behavior, database or deployment change.
+
 ## Full-system verification — 2026-10-13
 
 - [Complete maintained system run, findings and verification boundaries](phase-reports/SCOPEIS_FULL_SYSTEM_VERIFICATION_2026_10_13.md)

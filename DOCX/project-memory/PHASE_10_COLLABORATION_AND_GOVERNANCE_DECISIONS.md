@@ -1,5 +1,11 @@
 # Phase 10 — Collaboration and Governance Decisions
 
+## Authorized connected-control completion — 2026-10-14
+
+The protected shell displays the current user's unread notification count. Marking read/unread or archiving invalidates the shared layout so the count is refreshed through the existing recipient-authorized service. No polling or external delivery is introduced.
+
+Private evidence uploads retain their existing format/signature, owner, version and review-reset rules. New production Vercel uploads are capped at 4 MiB, with a further 64 KiB multipart allowance below the hosting request limit; local/non-hosted uploads retain 5 MiB. Both the UI and server apply the environment-specific limit. The server bounds the actual request stream before multipart parsing, rejects duplicate/unknown fields and does not rely on declared content length. Retained files over 4 MiB are downloaded in 1 MiB ranges, each freshly authorized by the normal file service. The browser verifies ranges and completeness before creating the download. Malformed/multiple ranges are refused and individual responses are bounded. Large retained files are preserved. See [the implementation report](../phase-reports/SCOPEIS_FRONTEND_BACKEND_GAP_FIXES_2026_10_14.md).
+
 Phase ID: `SCOPEIS_PHASE_10_NOTES_DISCUSSIONS_NOTIFICATION_CENTRE_AND_AUDIT_INTERFACE_R1`
 
 This file records the decisions applied while implementing the Phase 10 collaboration-and-governance journey. It supplements, and does not replace, [`PRODUCT_REQUIREMENTS.md`](PRODUCT_REQUIREMENTS.md), [`ROLE_AND_PERMISSION_MODEL.md`](ROLE_AND_PERMISSION_MODEL.md), and [`DECISIONS_AND_CONSTRAINTS.md`](DECISIONS_AND_CONSTRAINTS.md).

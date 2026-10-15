@@ -10,6 +10,13 @@ export function CatalogueNameForm({ kind, record }: { kind: "team" | "designatio
   const [state, action, pending] = useActionState(applyChange, initial);
   return <form className="catalogue-form" action={action}><input type="hidden" name="kind" value={kind} /><input type="hidden" name="operation" value="save" />{record ? <><input type="hidden" name="id" value={record.id} /><input type="hidden" name="expectedVersion" value={record.version} /></> : null}<label>{kind === "team" ? "Team name" : "Job title name"}<input name="name" defaultValue={record?.name ?? ""} maxLength={120} required data-dialog-autofocus /></label><Feedback state={state} /><button className="button primary" disabled={pending}>{pending ? "Saving…" : record ? "Save name" : `Create ${kind === "team" ? "team" : "job title"}`}</button></form>;
 }
+export function DesignationLifecycleForm({ record }: { record: { id: string; name: string; version: number; active: boolean } }) {
+  const [state, action, pending] = useActionState(applyChange, initial);
+  return <form className="catalogue-form" action={action} aria-label={`${record.active ? "Archive" : "Reactivate"} ${record.name}`}>
+    <input type="hidden" name="kind" value="designation" /><input type="hidden" name="operation" value="lifecycle" /><input type="hidden" name="id" value={record.id} /><input type="hidden" name="expectedVersion" value={record.version} /><input type="hidden" name="active" value={String(!record.active)} />
+    <p>{record.active ? "Archive this job title to prevent new membership. Existing memberships and history remain." : "Reactivate this job title so it can be selected again."}</p><Feedback state={state} /><button className="button" disabled={pending}>{pending ? "Saving…" : record.active ? "Archive job title" : "Reactivate job title"}</button>
+  </form>;
+}
 export function MembershipForm({ kind, reference, members, remove }: { kind: "team" | "designation"; reference: string; members: OrganisationMember[]; remove?: OrganisationMember }) {
   const [state, action, pending] = useActionState(applyChange, initial); const [person, setPerson] = useState(remove?.id ?? "");
   const selected = remove ?? members.find((member) => member.id === person);

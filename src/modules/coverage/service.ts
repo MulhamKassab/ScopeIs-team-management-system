@@ -30,12 +30,14 @@ export class CoverageService {
   /** Read the editable plan, never an obsolete Published predecessor. Mutations hold its row lock through commit. */
   private async currentAnchor(executor: CoverageExecutor, actor: AuthenticatedActor, assignmentId: string, lock = false) {
     let original = await this.allowedAssignment(executor, actor, assignmentId);
+    if (original.assignment.omittedAt) throw new CoverageDomainError("STALE_WORK");
     let editable = original.period.status === "PUBLISHED" ? await coverageRepository.editablePeriod(executor, original.period.clientId, original.period.planningMonth) : null;
     if (lock) {
       // Lock the existing child instead of its Published parent: publication locks child then parent.
       // Holding both in the opposite order could deadlock a simultaneous publication.
       await schedulingRepository.lockPeriod(executor as CoverageTransaction, editable?.id ?? original.period.id);
       original = await this.allowedAssignment(executor, actor, assignmentId);
+      if (original.assignment.omittedAt) throw new CoverageDomainError("STALE_WORK");
       if (original.period.status === "PUBLISHED" && !editable) {
         await executor.execute(sql`select pg_advisory_xact_lock(hashtext(${`schedule-period:${original.period.clientId}:${original.period.planningMonth}`}))`);
         if (await coverageRepository.editablePeriod(executor, original.period.clientId, original.period.planningMonth)) throw new CoverageDomainError("STALE_WORK");

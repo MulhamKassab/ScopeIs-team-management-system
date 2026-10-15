@@ -5,6 +5,11 @@ import { adminScopeGrants, assignmentSkillRequirements, auditEvents, clients, lo
 import { phase3Ids, phase4Ids } from "../../scripts/phase4-test-fixtures.mjs";
 import { SchedulingService, schedulingService } from "@/modules/scheduling/service";
 import { coverageRepository } from "@/modules/coverage/repositories";
+import { coverageService } from "@/modules/coverage/service";
+import { getTimetable } from "@/modules/scheduling/timetable-service";
+import { planningMapService } from "@/modules/maps/service";
+import { leaveRepository } from "@/modules/leave/repositories";
+import { reportingService } from "@/modules/reporting/service";
 import type { AuthenticatedActor } from "@/shared/types/foundation";
 
 const actor = (id: string, role: AuthenticatedActor["role"]): AuthenticatedActor => ({ id, role, displayName: id, sessionId: `session-${id}`, sessionVersion: 1, scopes: [], authenticationMode: "mock" });
@@ -119,8 +124,25 @@ describe("Schedule revision and scope regressions", () => {
     const revision = await schedulingService.createRevision(nora, { periodId: published.id, expectedVersion: published.version });
     const editor = await schedulingService.getPeriodEditor(nora, revision.id);
     expect(editor.assignments[0].requirements.map((row) => row.requirement.skillId)).toEqual([active.id]);
-    await expect(schedulingService.removeAssignment(nora, { assignmentId: editor.assignments[0].assignment.id, periodId: revision.id, expectedVersion: editor.assignments[0].assignment.version, expectedPeriodVersion: revision.version })).rejects.toMatchObject({ code: "CONFLICT" });
     expect(editor.warnings[0].missingSkills).toContainEqual({ id: active.id, name: active.name, sources: ["Assignment"] });
+    const copied = editor.assignments[0].assignment;
+    const removal = { assignmentId: copied.id, periodId: revision.id, expectedVersion: copied.version, expectedPeriodVersion: revision.version };
+    await expect(new SchedulingService(async () => { throw new Error("omission audit failure"); }).removeAssignment(nora, removal)).rejects.toThrow("omission audit failure");
+    expect((await db.select().from(scheduleAssignments).where(eq(scheduleAssignments.id, copied.id)))[0].omittedAt).toBeNull();
+    await schedulingService.removeAssignment(nora, removal);
+    expect((await db.select().from(scheduleAssignments).where(eq(scheduleAssignments.id, copied.id)))[0].omittedAt).toBeInstanceOf(Date);
+    expect(await db.select().from(assignmentSkillRequirements).where(eq(assignmentSkillRequirements.scheduleAssignmentId, copied.id))).toHaveLength(1);
+    expect((await db.select().from(scheduleAssignments).where(eq(scheduleAssignments.id, assignment.id)))[0].omittedAt).toBeNull();
+    expect((await getTimetable(nora, "2031-03", true)).filter((row) => row.periodId === revision.id)).toHaveLength(0);
+    await expect(coverageService.candidates(nora, assignment.id)).rejects.toMatchObject({ code: "STALE_WORK" });
+    expect((await reportingService.report(nora, "planning-unpublished", { month: "2031-03" })).rows).toHaveLength(0);
+    expect(await leaveRepository.publishedImpact(db, cora.id, "2031-03-03", "2031-03-03")).toHaveLength(1);
+    const omittedProposal = await schedulingService.propose(nora, { periodId: revision.id, expectedVersion: revision.version + 1 });
+    await schedulingService.publish(nora, { periodId: revision.id, expectedVersion: omittedProposal.version });
+    expect(await getTimetable(cora, "2031-03")).toHaveLength(0);
+    expect((await planningMapService.projection(nora, { date: "2031-03-03" })).assignments).toHaveLength(0);
+    expect(await leaveRepository.publishedImpact(db, cora.id, "2031-03-03", "2031-03-03")).toHaveLength(0);
+    expect((await reportingService.report(nora, "published-allocation", { month: "2031-03" })).rows).toHaveLength(0);
     expect(await db.select().from(assignmentSkillRequirements).where(eq(assignmentSkillRequirements.scheduleAssignmentId, assignment.id))).toHaveLength(2);
   });
 

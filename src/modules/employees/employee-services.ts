@@ -292,7 +292,8 @@ export class EmployeeProfileService {
     return db.transaction(async (tx) => {
       const current = await employeeProfileRepository.getByUserId(tx, userId); if (!current) throw new EmployeeDomainError("NOT_FOUND");
       if (current.version !== parsed.expectedVersion) throw new EmployeeDomainError("STALE_VERSION");
-      await this.assertActiveDesignation(tx, parsed.designationId); await this.assertValidManager(tx, userId, parsed.managerUserId);
+      if (parsed.designationId !== current.designationId) await this.assertActiveDesignation(tx, parsed.designationId);
+      await this.assertValidManager(tx, userId, parsed.managerUserId);
       const { expectedVersion, ...update } = parsed;
       const profile = await employeeProfileRepository.update(tx, userId, expectedVersion, update);
       if (!profile) throw new EmployeeDomainError("STALE_VERSION");
@@ -317,10 +318,15 @@ export class EmployeeProfileService {
 
   async listManagementFormOptions(actor: EmployeeActor, userId: string) {
     requireSuperAdmin(actor);
-    const [designations, managers, scopes, teams] = await Promise.all([
-      designationRepository.list(db, { page: 1, pageSize: 100 }), employeeProfileRepository.listManagementCandidates(db, userId), adminScopeGrantRepository.listForUser(db, userId), listTeamOptions(),
+    const [designations, managers, scopes, teams, profile] = await Promise.all([
+      designationRepository.list(db, { page: 1, pageSize: 100 }), employeeProfileRepository.listManagementCandidates(db, userId), adminScopeGrantRepository.listForUser(db, userId), listTeamOptions(), employeeProfileRepository.getByUserId(db, userId),
     ]);
-    return { designations: designations.items.filter((designation) => designation.active), managers: managers.filter((manager) => manager.active), scopes, teams };
+    const designationOptions = designations.items.filter((designation) => designation.active);
+    if (profile?.designationId && !designationOptions.some((designation) => designation.id === profile.designationId)) {
+      const currentDesignation = await designationRepository.getById(db, profile.designationId);
+      if (currentDesignation) designationOptions.push({ ...currentDesignation, name: `${currentDesignation.name}${currentDesignation.active ? "" : " (archived)"}` });
+    }
+    return { designations: designationOptions, managers: managers.filter((manager) => manager.active), scopes, teams };
   }
 
   async grantAdminTeamScope(actor: EmployeeActor, input: AdminScopeGrantInput) {

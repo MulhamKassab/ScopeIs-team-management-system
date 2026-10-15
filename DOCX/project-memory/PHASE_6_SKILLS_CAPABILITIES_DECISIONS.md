@@ -1,5 +1,9 @@
 # Phase 6 Skills and Operational Capabilities Decisions
 
+## Authorized control completion — 2026-10-14
+
+Super Admin can expand Archived skills for the selected person and restore the original association through its existing versioned lifecycle service. Restoration preserves the row, descriptions and history and requires an active catalogue skill; an archived parent must be reactivated first. The new-skill picker excludes both active and archived existing associations. Success remains visible after the restored record moves between lists. Super Admin can also edit the existing proficiency description, experience description and notes as optional text. These are informational fields, with no new proficiency scale, verification effect, ranking or coverage qualification. Admin and Employee read projections remain unchanged. See [the implementation report](../phase-reports/SCOPEIS_FRONTEND_BACKEND_GAP_FIXES_2026_10_14.md).
+
 Phase 6 records controlled qualification facts and explains missing recorded skills. It does not determine coverage, safety eligibility, performance, certification status, or replacement candidates.
 
 - The Phase 2 `skills` catalogue and `employee_skills` association remain the sole catalogue and employee-skill stores. Super Admin alone creates, renames, activates/reactivates, and archives catalogue skills, and alone records or archives employee-skill associations. Archiving is non-destructive: historical employee and requirement references remain readable, while archived skills cannot be newly assigned or newly required.

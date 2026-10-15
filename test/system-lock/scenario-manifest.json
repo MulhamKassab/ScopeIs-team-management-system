@@ -43,7 +43,8 @@
     "/api/tickets/commands",
     "/api/tickets/[ticketId]",
     "/api/tickets/[ticketId]/files",
-    "/api/tickets/[ticketId]/files/[fileId]"
+    "/api/tickets/[ticketId]/files/[fileId]",
+    "/arrangements"
   ],
   "runnerCoverage": {
     "test:unit": {

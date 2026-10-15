@@ -1,5 +1,11 @@
 # Clear user journeys — 2026-10-06
 
+## Connected controls — authorized 2026-10-14
+
+Super Admin has a new Assignment labels tab: New label → set descriptive name/colour/order → Edit, Archive or Reactivate. This catalogue stays separate from scheduling and access. Job titles now include Archive/Reactivate and retain existing members; unrelated employee edits preserve their archived title. In People → person → Super Admin controls, Default work location edits the management text reference and Employee planning coordinate separately saves/corrects/clears protected manual coordinates. Admin and Employee do not receive these controls.
+
+In Skills, Super Admin selects a person and uses Archived skills → Restore to recover the original record; an archived catalogue entry must first be reactivated. Informational details → Edit details changes the existing optional descriptions and notes without qualification effects. The notification bell shows the person's own unread count. My profile states the applicable file limit and lets retained larger files download through authorized chunks. Removing Draft work preserves history and changes Employee timetables only after separate revision publication. [The implementation report](../phase-reports/SCOPEIS_FRONTEND_BACKEND_GAP_FIXES_2026_10_14.md) records verification. Historical journey counts below are preserved.
+
 The user confirmed that every tab should be simpler and clearer. These presentation requirements extend UI_UX_FOUNDATION.md and preserve the existing domain decisions. The application remains at https://scopeis-team-management-system.vercel.app/.
 
 Each page has one purpose, an identifiable next action, and a compact, optional “How to use” disclosure with two or three steps. Related tools come only from server-authorized navigation. Everyday labels are UI aliases; routes, module keys, job-designation records, system roles, permission grants and stored report/export contracts remain independent.

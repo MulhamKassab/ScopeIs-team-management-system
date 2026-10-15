@@ -1,0 +1,1 @@
+ALTER TABLE "schedule_assignments" ADD COLUMN "omitted_at" timestamp with time zone;

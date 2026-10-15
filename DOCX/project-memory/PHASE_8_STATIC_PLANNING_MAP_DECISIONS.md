@@ -1,5 +1,9 @@
 # Phase 8 Static Planning Map decisions
 
+## Authorized coordinate controls — 2026-10-14
+
+The employee-detail page provides Super Admin-only manual create, correct and clear controls for the existing employee planning coordinate. Latitude/longitude must be finite and within geographic bounds. Writes recheck current active Super Admin authority and session version inside the transaction, serialize the target coordinate and check both profile and coordinate versions. Clearing and recreating cannot reuse stale form authority. Each change records safe audit fields/version without raw coordinates. Default work location text remains separate from this coordinate and assignment worksites. Admin keeps the existing authorized coarse map projection; Employee has no coordinate editor or exact-coordinate disclosure. No GPS, geocoding, tracking, provider change or automatic movement is introduced. See [the local implementation report](../phase-reports/SCOPEIS_FRONTEND_BACKEND_GAP_FIXES_2026_10_14.md).
+
 The management map is a selected `Asia/Dubai` date projection of current Published assignments only. It is not a live map and does not track anyone.
 
 - Super Admin receives stored exact planning coordinates when they exist. Scoped Admin receives only a deterministic 0.025-degree grid centre (about 2–3 km around Dubai), never raw address, exact coordinate, or reverse-geocoded area label. An employee without stored coordinates is omitted from the map marker.

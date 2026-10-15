@@ -5,6 +5,7 @@ import { db } from "@/db/client";
 import { adminScopeGrants, designations, employeeProfiles, scheduleAssignments, schedulePeriods, users } from "@/db/schema";
 import { getTimetable } from "@/modules/scheduling/timetable-service";
 import { organisationService } from "@/modules/employees/organisation-service";
+import { employeeCatalogueService, employeeProfileService } from "@/modules/employees/employee-services";
 import { phase3Ids, phase4Ids } from "../../scripts/phase4-test-fixtures.mjs";
 import type { AuthenticatedActor } from "@/shared/types/foundation";
 const actor = (id: string, role: AuthenticatedActor["role"]): AuthenticatedActor => ({ id, role, displayName: id, sessionId: "test", sessionVersion: 1, scopes: [], authenticationMode: "mock" });
@@ -45,13 +46,21 @@ describe("monthly timetable permissions and organisation management", () => {
   expect((await db.select().from(employeeProfiles).where(eq(employeeProfiles.userId,employee.id)))[0].team).toBeNull();
   expect(await db.select().from(adminScopeGrants).where(eq(adminScopeGrants.userId,employee.id))).toEqual(grantsBefore);
  });
- it("supports designation creation, assignment and removal while preserving the team", async () => {
+ it("preserves existing archived titles on unrelated edits and refuses new archived memberships", async () => {
   await organisationService.saveDesignation(superAdmin,{name:"Service engineer"});
   const [designation]=await db.select().from(designations).where(eq(designations.name,"Service engineer"));
   const [profile]=await db.select().from(employeeProfiles).where(eq(employeeProfiles.userId,employee.id));
   await organisationService.setMember(superAdmin,{kind:"designation",reference:designation.id,userId:employee.id,expectedVersion:profile.version,remove:false});
   const [assigned]=await db.select().from(employeeProfiles).where(eq(employeeProfiles.userId,employee.id)); expect(assigned.designationId).toBe(designation.id); expect(assigned.team).toBe(profile.team);
-  await organisationService.setMember(superAdmin,{kind:"designation",reference:designation.id,userId:employee.id,expectedVersion:assigned.version,remove:true});
+  const archived = await employeeCatalogueService.setDesignationActive(superAdmin,designation.id,designation.version,false);
+  const options = await employeeProfileService.listManagementFormOptions(superAdmin,employee.id);
+  expect(options.designations).toContainEqual(expect.objectContaining({id:designation.id,name:"Service engineer (archived)"}));
+  const preserved = await employeeProfileService.updateManagementAssignments(superAdmin,employee.id,{expectedVersion:assigned.version,designationId:designation.id,team:assigned.team,workingPattern:"Office reference"});
+  expect(preserved.designationId).toBe(designation.id);
+  const [other] = await db.select().from(employeeProfiles).where(eq(employeeProfiles.userId,phase4Ids.bravoEmployee));
+  await expect(organisationService.setMember(superAdmin,{kind:"designation",reference:designation.id,userId:other.userId,expectedVersion:other.version,remove:false})).rejects.toMatchObject({code:"INACTIVE_REFERENCE"});
+  await employeeCatalogueService.setDesignationActive(superAdmin,designation.id,archived.version,true);
+  await organisationService.setMember(superAdmin,{kind:"designation",reference:designation.id,userId:employee.id,expectedVersion:preserved.version,remove:true});
   expect((await db.select().from(employeeProfiles).where(eq(employeeProfiles.userId,employee.id)))[0].designationId).toBeNull();
  });
  it("rejects forbidden or stale membership operations and concurrent duplicate names", async () => {

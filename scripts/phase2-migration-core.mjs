@@ -73,6 +73,7 @@ function expectedStage(manifest, count) {
   if (count === 14) return manifest.states.superAdminAccountManagement;
   if (count === 15) return manifest.states.teamCatalogue;
   if (count === 16) return manifest.states.companyTickets;
+  if (count === 17) return manifest.states.assignmentOmission;
   return null;
 }
 

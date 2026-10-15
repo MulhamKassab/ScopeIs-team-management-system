@@ -1,0 +1,40 @@
+{"event":"browser_build_directory_allocated","ownerPid":43628,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-4Z28Ra"}
+
+Running 4 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase6-capabilities.spec.ts:6:1 › Super Admin records a skill and the Employee sees only their own recorded fact (17.4s)
+  x  2 [desktop] › test\e2e\phase6-capabilities.spec.ts:38:1 › Super Admin manages missing controls while Admin and Employee remain excluded (12.9s)
+  ok 3 [mobile] › test\e2e\phase6-capabilities.spec.ts:6:1 › Super Admin records a skill and the Employee sees only their own recorded fact (8.0s)
+  ok 4 [mobile] › test\e2e\phase6-capabilities.spec.ts:38:1 › Super Admin manages missing controls while Admin and Employee remain excluded (18.2s)
+
+
+  1) [desktop] › test\e2e\phase6-capabilities.spec.ts:38:1 › Super Admin manages missing controls while Admin and Employee remain excluded 
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: getByRole('dialog', { name: 'Create job title', exact: true }).getByRole('status')
+    Expected: "Saved. This record is available in team and job title options."
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveText" getByRole('dialog', { name: 'Create job title', exact: true }).getByRole('status') with timeout 5000ms
+      - waiting for getByRole('dialog', { name: 'Create job title', exact: true }).getByRole('status')
+
+
+      59 |   await page.getByLabel("Job title name").fill(`Field title ${suffix}`);
+      60 |   await page.getByRole("button", { name: "Create job title", exact: true }).click();
+    > 61 |   await expect(page.getByRole("dialog", { name: "Create job title", exact: true }).getByRole("status")).toHaveText("Saved. This record is available in team and job title options.");
+         |                                                                                                         ^
+      62 |   await page.getByRole("button", { name: "Close", exact: true }).click();
+      63 |   const titleCard = page.getByRole("heading", { name: `Field title ${suffix}`, exact: true }).locator("..").locator("..");
+      64 |   await titleCard.getByText("Job title lifecycle", { exact: true }).click();
+        at C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\phase6-capabilities.spec.ts:61:105
+
+    Error Context: test-results\phase6-capabilities-Super--71665-nd-Employee-remain-excluded-desktop\error-context.md
+
+  1 failed
+    [desktop] › test\e2e\phase6-capabilities.spec.ts:38:1 › Super Admin manages missing controls while Admin and Employee remain excluded 
+  3 passed (3.9m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":43628,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-4Z28Ra"}
+Phase 6 browser disposable database cleanup complete.

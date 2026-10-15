@@ -1,5 +1,9 @@
 # UI/UX Foundation
 
+## Authorized missing controls — 2026-10-14
+
+The connected-control completion adds Assignment labels to Super Admin navigation, job-title lifecycle disclosures, separate default-location and planning-coordinate dialogs, skill history restoration and optional informational-description editing. All use the established native dialogs/disclosures, named fields, pending/error/success feedback and logical responsive layout. Skill restore and coordinate-clear confirmations survive their changing forms. The notification bell exposes the own-unread count through accessible descriptive text, logical placement and forced-colour support. Evidence uploads state the applicable limit before submission and retained large-file downloads provide bounded progress/error/retry behavior. Existing role projections, touch targets, RTL, themes and reduced motion remain binding; Settings stays explicitly unfinished. See [the implementation report](../phase-reports/SCOPEIS_FRONTEND_BACKEND_GAP_FIXES_2026_10_14.md).
+
 ## Status
 
 **Implemented in Phase 1**. This record is the canonical routing reference for the approved visual foundation. It does not implement or change later-phase workforce functionality.

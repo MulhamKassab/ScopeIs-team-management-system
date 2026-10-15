@@ -1,0 +1,72 @@
+{"event":"browser_build_directory_allocated","ownerPid":19856,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-3rHbNR"}
+
+Running 2 tests using 2 workers
+
+  x  2 [desktop] › test\e2e\phase4-scheduling.spec.ts:38:1 › Super Admin publishes, Admin reads every schedule state, and Employee sees only Published work (2.8m)
+  x  1 [mobile] › test\e2e\phase4-scheduling.spec.ts:38:1 › Super Admin publishes, Admin reads every schedule state, and Employee sees only Published work (2.8m)
+
+
+  1) [desktop] › test\e2e\phase4-scheduling.spec.ts:38:1 › Super Admin publishes, Admin reads every schedule state, and Employee sees only Published work 
+
+    Test timeout of 120000ms exceeded.
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/dashboard$/
+    Received string:  "http://127.0.0.1:64947/login"
+    Timeout: 30000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 30000ms
+        15 × locator resolved to <html lang="en" dir="ltr" data-theme="light">…</html>
+           - unexpected value "http://127.0.0.1:64947/login"
+
+
+       at sign-in.ts:27
+
+      25 |   // Phase-specific fixtures may change a user's role without changing their credential identity.
+      26 |   const employee = options.expectedRole ? options.expectedRole === "EMPLOYEE" : identifier === "cora" || identifier === "dan";
+    > 27 |   await expect(page).toHaveURL(employee ? /\/tickets$/ : /\/dashboard$/, { timeout: 30_000 });
+         |                      ^
+      28 |   // Existing workforce journeys start at Home; ticket journeys exercise the actual role landing.
+      29 |   if (employee && options.destination !== "landing") await page.goto("/dashboard");
+      30 | }
+        at signIn (C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\sign-in.ts:27:22)
+        at C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\phase4-scheduling.spec.ts:42:3
+
+    Error Context: test-results\phase4-scheduling-Super-Ad-87fbb-ee-sees-only-Published-work-desktop\error-context.md
+
+  2) [mobile] › test\e2e\phase4-scheduling.spec.ts:38:1 › Super Admin publishes, Admin reads every schedule state, and Employee sees only Published work 
+
+    Test timeout of 120000ms exceeded.
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/dashboard$/
+    Received string:  "http://127.0.0.1:64947/login"
+    Timeout: 30000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 30000ms
+        15 × locator resolved to <html lang="en" dir="ltr" data-theme="light">…</html>
+           - unexpected value "http://127.0.0.1:64947/login"
+
+
+       at sign-in.ts:27
+
+      25 |   // Phase-specific fixtures may change a user's role without changing their credential identity.
+      26 |   const employee = options.expectedRole ? options.expectedRole === "EMPLOYEE" : identifier === "cora" || identifier === "dan";
+    > 27 |   await expect(page).toHaveURL(employee ? /\/tickets$/ : /\/dashboard$/, { timeout: 30_000 });
+         |                      ^
+      28 |   // Existing workforce journeys start at Home; ticket journeys exercise the actual role landing.
+      29 |   if (employee && options.destination !== "landing") await page.goto("/dashboard");
+      30 | }
+        at signIn (C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\sign-in.ts:27:22)
+        at C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\phase4-scheduling.spec.ts:42:3
+
+    Error Context: test-results\phase4-scheduling-Super-Ad-87fbb-ee-sees-only-Published-work-mobile\error-context.md
+
+  2 failed
+    [desktop] › test\e2e\phase4-scheduling.spec.ts:38:1 › Super Admin publishes, Admin reads every schedule state, and Employee sees only Published work 
+    [mobile] › test\e2e\phase4-scheduling.spec.ts:38:1 › Super Admin publishes, Admin reads every schedule state, and Employee sees only Published work 
+{"event":"browser_build_directory_cleanup_complete","ownerPid":19856,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-3rHbNR"}

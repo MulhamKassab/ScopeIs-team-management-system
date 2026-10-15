@@ -1,7 +1,8 @@
 import { EvidenceDomainError } from "@/modules/evidence/domain-error";
+import { evidenceUploadLimitBytes, LOCAL_EVIDENCE_FILE_BYTES } from "./file-limits";
 
 /** Confirmed V1 evidence file allowlist. Extensions are derived from the validated type, never the filename. */
-export const MAX_EVIDENCE_FILE_BYTES = 5 * 1024 * 1024;
+export const MAX_EVIDENCE_FILE_BYTES = LOCAL_EVIDENCE_FILE_BYTES;
 const allowed = {
   "application/pdf": { extension: "pdf", preview: true },
   "image/jpeg": { extension: "jpg", preview: true },
@@ -42,7 +43,7 @@ export function validateEvidenceFile(input: { bytes: Uint8Array; contentType: st
   const declared = input.contentType as keyof typeof allowed;
   if (!Object.hasOwn(allowed, declared)) throw new EvidenceDomainError("VALIDATION_ERROR");
   const clean = sanitizeEvidenceFilename(input.filename);
-  if (input.bytes.byteLength < 1 || input.bytes.byteLength > MAX_EVIDENCE_FILE_BYTES) throw new EvidenceDomainError("VALIDATION_ERROR");
+  if (input.bytes.byteLength < 1 || input.bytes.byteLength > evidenceUploadLimitBytes()) throw new EvidenceDomainError("VALIDATION_ERROR", `Choose a file of ${evidenceUploadLimitBytes() / (1024 * 1024)} MiB or less.`);
   const rule = allowed[declared];
   if (!clean.toLowerCase().endsWith(`.${rule.extension}`) && !(rule.extension === "jpg" && clean.toLowerCase().endsWith(".jpeg"))) throw new EvidenceDomainError("VALIDATION_ERROR");
 

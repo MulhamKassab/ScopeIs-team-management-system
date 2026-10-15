@@ -5,7 +5,7 @@ import type { SystemRole } from "@/shared/types/foundation";
 export const navigationGroups: { label: string; keys: ModuleKey[] }[] = [
   { label: "Daily work", keys: ["dashboard", "tickets", "schedule", "map", "leave"] },
   { label: "Cover & requests", keys: ["coverage", "replacements", "requests"] },
-  { label: "People", keys: ["employees", "teams", "designations", "skills"] },
+  { label: "People", keys: ["employees", "teams", "designations", "arrangements", "skills"] },
   { label: "Client work", keys: ["clients", "projects", "locations"] },
   { label: "Your workspace", keys: ["notifications", "reports", "profile"] },
   { label: "Administration", keys: ["accounts", "audit", "settings"] },
@@ -26,6 +26,7 @@ const descriptions: Record<ModuleKey, { description: string; keywords: string }>
   employees: { description: "Find your team and manage employee records, skills, designations and evidence.", keywords: "people directory search team qualifications certification cv portfolio files notes lifecycle status" },
   teams: { description: "Create teams and add, move or remove members.", keywords: "groups membership organization" },
   designations: { description: "Create job titles (designations) and assign people to them.", keywords: "jobs titles designation designations members" },
+  arrangements: { description: "Create, order, colour and archive descriptive assignment labels.", keywords: "arrangements labels placement outsourced colours order" },
   accounts: { description: "Manage accounts, access and temporary passwords. Existing passwords stay private.", keywords: "account administration credentials reset username login role active deactivate scopes" },
   skills: { description: "Maintain recorded skills and understand project requirements.", keywords: "capability qualification training designation requirements staffing" },
   clients: { description: "Manage client relationships, contacts and shared notes.", keywords: "company customer contact notes documents" },

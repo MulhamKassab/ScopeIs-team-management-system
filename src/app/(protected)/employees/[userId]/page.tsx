@@ -10,6 +10,8 @@ import { evidenceRepository } from "@/modules/evidence/repositories";
 import { evidenceService } from "@/modules/evidence/service";
 import { ManagementNotePanel } from "@/modules/notes/forms";
 import { managementNoteService } from "@/modules/notes/service";
+import { planningLocationService } from "@/modules/maps/location-service";
+import { WorkflowFeedback } from "@/shared/components/workflow-feedback";
 import { db } from "@/db/client";
 
 export const dynamic = "force-dynamic";
@@ -26,6 +28,7 @@ export default async function EmployeeDetailPage({ params }: { params: Promise<{
     throw error;
   }
   const options = actor.role === "SUPER_ADMIN" ? await employeeProfileService.listManagementFormOptions(actor, employee.userId) : undefined;
+  const planningLocation = actor.role === "SUPER_ADMIN" ? await planningLocationService.read(actor, employee.userId) : null;
   // Phase 9 evidence: Super Admin gets the full review surface; a scoped Admin gets the locked certification summary only.
   const [evidence, skills] = await Promise.all([evidenceService.listForEmployee(actor, employee.userId), evidenceRepository.activeSkillOptions(db)]);
   const evidencePanel = evidence.full
@@ -38,5 +41,5 @@ export default async function EmployeeDetailPage({ params }: { params: Promise<{
   const notesPanel = notes
     ? <ManagementNotePanel subjectUserId={notes.subject.userId} subjectName={notes.subject.displayName} notes={notes.notes} canCreate={notes.canCreate} />
     : undefined;
-  return <><EmployeeDetail employee={employee} canManage={actor.role === "SUPER_ADMIN"} managementPanel={options ? <EmployeeManagementPanel employee={employee} options={options} /> : undefined} />{evidencePanel}{notesPanel}</>;
+  return <>{actor.role === "SUPER_ADMIN" ? <WorkflowFeedback /> : null}<EmployeeDetail employee={employee} canManage={actor.role === "SUPER_ADMIN"} managementPanel={options ? <EmployeeManagementPanel employee={employee} options={options} planningLocation={planningLocation} /> : undefined} />{evidencePanel}{notesPanel}</>;
 }

@@ -47,7 +47,7 @@ function selectedAssignments(filters: AssignmentFilters): SQL | undefined {
 }
 
 function publishedWindow(scope: ResolvedScope, window: Window, filters: AssignmentFilters = {}) {
-  return and(eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true),
+  return and(isNull(scheduleAssignments.omittedAt), eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true),
     gte(scheduleAssignments.assignmentDate, window.from), lte(scheduleAssignments.assignmentDate, window.to),
     assignmentScope(scope), selectedAssignments(filters));
 }
@@ -93,7 +93,7 @@ function assignmentQuery(scope: ResolvedScope, statuses: ScheduleStatus[], windo
     .innerJoin(projects, eq(projects.id, scheduleAssignments.projectId))
     .innerJoin(locations, eq(locations.id, scheduleAssignments.locationId))
     .where(and(
-      inArray(schedulePeriods.status, statuses),
+      isNull(scheduleAssignments.omittedAt), inArray(schedulePeriods.status, statuses),
       currentPublishedOnly ? eq(schedulePeriods.isCurrent, true) : undefined,
       gte(scheduleAssignments.assignmentDate, window.from),
       lte(scheduleAssignments.assignmentDate, window.to),
@@ -164,7 +164,7 @@ export const reportingRepository = {
     const allocated = db.select({ employeeUserId: scheduleAssignments.employeeUserId })
       .from(scheduleAssignments)
       .innerJoin(schedulePeriods, eq(schedulePeriods.id, scheduleAssignments.schedulePeriodId))
-      .where(and(eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true), gte(scheduleAssignments.assignmentDate, window.from), lte(scheduleAssignments.assignmentDate, window.to), assignmentScope(scope)));
+      .where(and(isNull(scheduleAssignments.omittedAt), eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true), gte(scheduleAssignments.assignmentDate, window.from), lte(scheduleAssignments.assignmentDate, window.to), assignmentScope(scope)));
     return db.select({ id: users.id, displayName: users.displayName, team: employeeProfiles.team, employeeCode: employeeProfiles.employeeCode })
       .from(users).innerJoin(employeeProfiles, eq(employeeProfiles.userId, users.id))
       .where(and(eq(users.active, true), employeeScope(scope), sql`${users.id} not in (${allocated})`))
@@ -174,7 +174,7 @@ export const reportingRepository = {
     const allocated = db.select({ employeeUserId: scheduleAssignments.employeeUserId })
       .from(scheduleAssignments)
       .innerJoin(schedulePeriods, eq(schedulePeriods.id, scheduleAssignments.schedulePeriodId))
-      .where(and(eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true), gte(scheduleAssignments.assignmentDate, window.from), lte(scheduleAssignments.assignmentDate, window.to), assignmentScope(scope)));
+      .where(and(isNull(scheduleAssignments.omittedAt), eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true), gte(scheduleAssignments.assignmentDate, window.from), lte(scheduleAssignments.assignmentDate, window.to), assignmentScope(scope)));
     return db.select({ value: sql<number>`count(*)::int` }).from(users)
       .innerJoin(employeeProfiles, eq(employeeProfiles.userId, users.id))
       .where(and(eq(users.active, true), employeeScope(scope), sql`${users.id} not in (${allocated})`))
@@ -233,7 +233,7 @@ export const reportingRepository = {
       .from(scheduleAssignments)
       .innerJoin(schedulePeriods, eq(schedulePeriods.id, scheduleAssignments.schedulePeriodId))
       .where(and(
-        eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true),
+        isNull(scheduleAssignments.omittedAt), eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true),
         eq(scheduleAssignments.assignmentDate, date),
         lt(scheduleAssignments.startTime, end), gt(scheduleAssignments.endTime, start),
         assignmentScope(scope),
@@ -398,7 +398,7 @@ export const reportingRepository = {
     return db.select({ periodId: scheduleAssignments.schedulePeriodId, value: sql<number>`count(*)::int` })
       .from(scheduleAssignments)
       .innerJoin(schedulePeriods, eq(schedulePeriods.id, scheduleAssignments.schedulePeriodId))
-      .where(and(eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true)))
+      .where(and(isNull(scheduleAssignments.omittedAt), eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true)))
       .groupBy(scheduleAssignments.schedulePeriodId);
   },
   scheduleLifecycleCount(scope: ResolvedScope, window?: Window, filters: AssignmentFilters = {}) {
@@ -415,7 +415,7 @@ export const reportingRepository = {
       .innerJoin(clients, eq(clients.id, schedulePeriods.clientId))
       .innerJoin(projects, eq(projects.id, scheduleAssignments.projectId))
       .innerJoin(locations, eq(locations.id, scheduleAssignments.locationId))
-      .where(and(eq(scheduleAssignments.employeeUserId, employeeUserId), eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true), gte(scheduleAssignments.assignmentDate, window.from), lte(scheduleAssignments.assignmentDate, window.to)))
+      .where(and(isNull(scheduleAssignments.omittedAt), eq(scheduleAssignments.employeeUserId, employeeUserId), eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true), gte(scheduleAssignments.assignmentDate, window.from), lte(scheduleAssignments.assignmentDate, window.to)))
       .orderBy(asc(scheduleAssignments.assignmentDate), asc(scheduleAssignments.startTime), asc(scheduleAssignments.id)).limit(limit);
   },
   myRecordedSkillCount(employeeUserId: string) {
@@ -472,7 +472,7 @@ export const reportingRepository = {
       .innerJoin(skills, eq(skills.id, assignmentSkillRequirements.skillId))
       .innerJoin(scheduleAssignments, eq(scheduleAssignments.id, assignmentSkillRequirements.scheduleAssignmentId))
       .innerJoin(schedulePeriods, eq(schedulePeriods.id, scheduleAssignments.schedulePeriodId))
-      .where(and(isNull(assignmentSkillRequirements.archivedAt), assignmentScope(scope)))
+      .where(and(isNull(scheduleAssignments.omittedAt), isNull(assignmentSkillRequirements.archivedAt), assignmentScope(scope)))
       .orderBy(asc(skills.name), asc(assignmentSkillRequirements.id));
   },
 };

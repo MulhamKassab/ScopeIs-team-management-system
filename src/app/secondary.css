@@ -32,3 +32,7 @@
   .notification-filters { gap:8px; }
   .notification-filters .button { flex:1; min-width:0; }
 }
+/* The count supplements the notification link and remains readable in both themes. */
+.header-actions .icon-button[aria-describedby="notification-unread-count"] { position: relative; }
+.notification-unread-badge { position: absolute; inset-block-start: -4px; inset-inline-end: -6px; display: inline-flex; align-items: center; justify-content: center; min-inline-size: 1.4em; padding: 0.1em 0.3em; border-radius: 999px; background: var(--text); color: var(--surface); font-size: 0.7rem; font-weight: 700; }
+@media (forced-colors: active) { .notification-unread-badge { background: Canvas; color: CanvasText; border: 1px solid CanvasText; } }

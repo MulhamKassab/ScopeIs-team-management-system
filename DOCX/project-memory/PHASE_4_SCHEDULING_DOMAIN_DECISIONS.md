@@ -1,5 +1,11 @@
 # Phase 4 Scheduling Domain Decisions
 
+## Authorized retained-history removal repair — 2026-10-14
+
+The product owner authorized repairing the confirmed Draft/revision removal gap. Removing an assignment now records `omitted_at` rather than deleting its row. Assignment-specific requirements, copied-source provenance and coverage-request references remain intact. Active Draft planning, revisions, overlap checks, requirements, maps and report queries exclude omitted rows. Coverage history remains readable under its existing permissions, while new candidate/request/decision operations refuse omitted or obsolete work. Period and assignment versions, period locks, audit rollback and Super Admin-only writing remain enforced.
+
+An omitted Draft copy does not change the current Published predecessor. The Employee timetable and leave impact continue to use that predecessor until the revision is proposed and published separately. After publication, the removed work disappears from current Published projections. There is no automatic publication or assignment-restore control. Additive migration `0016_schedule_assignment_omission` is the seventeenth journal entry; previous SQL is immutable and existing rows retain a null omission timestamp. Migration/adoption and preservation tests run only on disposable databases. This local repair supersedes earlier statements that retained-reference removal is unresolved; production migration/deployment remain pending. See [the implementation report](../phase-reports/SCOPEIS_FRONTEND_BACKEND_GAP_FIXES_2026_10_14.md).
+
 ## Status
 
 These decisions record the implemented V1 boundary for `SCOPEIS_PHASE_4_SCHEDULING_DRAFT_PROPOSED_PUBLISHED_JOURNEY_R1`. They supplement, and do not replace, the Phase 3 operational-domain decisions.

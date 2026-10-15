@@ -1,0 +1,79 @@
+{
+  "completedAt": "2026-10-15T05:07:05.325Z",
+  "status": "implemented_locally_broad_browser_verification_incomplete",
+  "head": "80080426669b757ec0b13d9e47c9c9ffd64a7120",
+  "source": {
+    "frozenInputCount": 466,
+    "matchingAfterVerification": true,
+    "committed": false,
+    "pushed": false,
+    "deployed": false
+  },
+  "checks": {
+    "systemLock": {
+      "passed": 13,
+      "total": 14,
+      "interruptions": 1,
+      "failedGate": "Aggregate E2E",
+      "log": "system-lock.log"
+    },
+    "unit": {
+      "passed": 242
+    },
+    "component": {
+      "earlierFullPass": 176,
+      "finalRepeat": {
+        "passed": 171,
+        "failed": 1,
+        "missingWorkerCases": 4
+      },
+      "isolatedRecheck": {
+        "passed": 9,
+        "files": 4,
+        "log": "component-isolated-final.log"
+      },
+      "note": "All 176 distinct cases covered after the isolated rerun; no claim of a clean final single full invocation."
+    },
+    "integration": {
+      "suitesPassed": 16,
+      "casesPassed": 229
+    },
+    "migration": {
+      "passed": 11
+    },
+    "routeCertification": {
+      "passed": 21,
+      "protectedRoutes": 40
+    },
+    "isolation": {
+      "passed": 9
+    },
+    "targetedBrowser": {
+      "passed": 6,
+      "total": 6,
+      "workers": 1,
+      "phase6": 4,
+      "phase4": 2,
+      "log": "focused-browser-final.log"
+    },
+    "typecheck": "passed",
+    "lint": "passed",
+    "safeBuild": "passed",
+    "diffCheck": "passed"
+  },
+  "migration": {
+    "tag": "0016_schedule_assignment_omission",
+    "journalEntries": 17,
+    "appliedToProduction": false
+  },
+  "cleanup": {
+    "ownedTestDatabasesDropped": true,
+    "temporaryPostgresStopped": true,
+    "awakeGuardCleared": true,
+    "temporaryBinaries": "Remain in the operating-system temporary directory; no permanent installation or service was added."
+  },
+  "limitations": [
+    "Broad browser run interrupted; full browser/responsive certification remains open.",
+    "No production migration, push or deployment performed."
+  ]
+}

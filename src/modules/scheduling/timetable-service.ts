@@ -18,7 +18,7 @@ export async function getTimetable(actor: { id: string }, month: string, plannin
   const current = await resolveCurrentActor(actor);
   if (!current) throw new SchedulingDomainError("FORBIDDEN");
   const scope = resolveScope(current);
-  const conditions = [eq(p.planningMonth, `${month}-01`), current.role !== "EMPLOYEE" && planning
+  const conditions = [sql`${a.omittedAt} is null`, eq(p.planningMonth, `${month}-01`), current.role !== "EMPLOYEE" && planning
     ? inArray(p.status, ["DRAFT", "PROPOSED"])
     : and(eq(p.status, "PUBLISHED"), eq(p.isCurrent, true))!];
   if (current.role === "EMPLOYEE") conditions.push(eq(a.employeeUserId, current.id));

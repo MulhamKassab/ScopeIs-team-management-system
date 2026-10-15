@@ -1,0 +1,52 @@
+
+ RUN  v5.0.3 C:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system
+
+Not implemented: navigation to another Document
+ ❯ test/component/workspace-guide.test.tsx (2 tests | 1 failed) 6306ms
+   ❯ workspace task discovery (2)
+     × finds supporting documents while limiting results to the provided employee navigation 5727ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/component/workspace-guide.test.tsx > workspace task discovery > finds supporting documents while limiting results to the provided employee navigation
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ test/component/workspace-guide.test.tsx:8:3
+      6|
+      7| describe("workspace task discovery", () => {
+      8|   it("finds supporting documents while limiting results to the provide…
+       |   ^
+      9|     render(<WorkspaceGuide navigation={[modules.dashboard, modules.sch…
+     10|     const trigger = screen.getByRole("button", { name: "Find a feature…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+⎯⎯⎯⎯⎯⎯ Unhandled Errors ⎯⎯⎯⎯⎯⎯
+
+Vitest caught 1 unhandled error during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+Error: [vitest-pool]: Failed to start forks worker for test files C:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system/test/component/mobile-navigation-dialog.test.tsx.
+ ❯ ../../../../../../OneDrive%20-%20Sharjah%20Investment%20&%20Development%20Authority/Desktop/Applications/CodeBase/For%20Me/Team%20management%20system/node_modules/vitest/dist/chunks/index.DpLw24bj.js:11538:94
+ ❯ runNextTicks node:internal/process/task_queues:65:5
+ ❯ process.processTimers node:internal/timers:568:9
+ ❯ Pool.schedule ../../../../../../OneDrive%20-%20Sharjah%20Investment%20&%20Development%20Authority/Desktop/Applications/CodeBase/For%20Me/Team%20management%20system/node_modules/vitest/dist/chunks/index.DpLw24bj.js:11538:5
+
+Caused by: Error: [vitest-pool-runner]: Timeout waiting for worker to respond
+ ❯ Timeout.<anonymous> ../../../../../../OneDrive%20-%20Sharjah%20Investment%20&%20Development%20Authority/Desktop/Applications/CodeBase/For%20Me/Team%20management%20system/node_modules/vitest/dist/chunks/index.DpLw24bj.js:11035:58
+ ❯ listOnTimeout node:internal/timers:635:17
+ ❯ process.processTimers node:internal/timers:571:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+
+ Test Files  1 failed | 26 passed (27)
+      Tests  1 failed | 171 passed (172)
+     Errors  1 error
+   Start at  01:01:06
+   Duration  28961.43s (environment 51%, tests 27%, setup 8%, transform 7%, import 7%)
+
+    Isolate  27 workers spawned · ~1.93s startup each (spawn + environment, per file)
+             at least ~50.26s faster with isolate: false — reuses workers across files instead of one per file
+

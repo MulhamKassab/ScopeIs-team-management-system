@@ -29,7 +29,14 @@ const steps = [
 ];
 
 function runStep(step) {
-  const child = spawn(step.command, step.args, { cwd: repositoryRoot, stdio: "inherit" });
+  const env = { ...process.env };
+  // Mocked unit/component boundaries must not inherit a disposable PostgreSQL override.
+  // Database-owning gates retain it and validate their loopback-only target themselves.
+  if (step.name === "unit" || step.name === "component") {
+    delete env.DATABASE_URL;
+    delete env.SCOPEIS_DISPOSABLE_TEST_DATABASE;
+  }
+  const child = spawn(step.command, step.args, { cwd: repositoryRoot, env, stdio: "inherit" });
   let timedOut = false;
   const timer = setTimeout(() => { timedOut = true; if (child.exitCode === null && child.signalCode === null) child.kill("SIGTERM"); }, step.timeoutMs);
   return new Promise((resolve, reject) => {

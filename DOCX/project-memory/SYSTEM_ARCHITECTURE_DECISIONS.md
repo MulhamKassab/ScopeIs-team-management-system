@@ -1,5 +1,9 @@
 # System Architecture Decisions
 
+## Authorized gap implementation — 2026-10-14
+
+The [frontend/backend repair](../phase-reports/SCOPEIS_FRONTEND_BACKEND_GAP_FIXES_2026_10_14.md) uses the existing server-action/service/repository boundaries and providers. Additive `0016_schedule_assignment_omission` introduces one nullable `schedule_assignments.omitted_at` column, preserving rows/references while active projections exclude removed Draft work. The journal now contains 17 entries and adoption recognizes the exact new schema; prior migration SQL and ledger entries remain immutable. The Super Admin coordinate writer uses the existing coordinate table with transactional authority, profile/coordinate versions and sanitized audit. Private evidence transport bounds actual multipart bodies and authorized response ranges. No background service, authentication provider or production configuration is added. The migration is prepared and verified only against disposable local databases; applying it to production is outside this implementation authorization.
+
 ## Status
 
 **APPROVED PHASE 1 ARCHITECTURE — IMPLEMENTED AND CERTIFIED FOR THE MOCK-ACCOUNT PROTOTYPE**

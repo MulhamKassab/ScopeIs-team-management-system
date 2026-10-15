@@ -12,7 +12,7 @@ const createdSessionIds = new Set<string>();
 // These per-role module sets are the certified contract and must mirror
 // `src/modules/authorization/capabilities.ts`. `moduleKeys` deliberately lists every module so a
 // persona can never silently skip a route check.
-const moduleKeys = ["dashboard", "tickets", "employees", "teams", "designations", "accounts", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "audit", "settings", "profile", "requests"] as const;
+const moduleKeys = ["dashboard", "tickets", "employees", "teams", "designations", "arrangements", "accounts", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "audit", "settings", "profile", "requests"] as const;
 const superAdminModules = [...moduleKeys];
 const adminModules = ["dashboard", "tickets", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "profile"];
 const employeeModules = ["dashboard", "tickets", "skills", "schedule", "leave", "profile", "notifications", "requests"];

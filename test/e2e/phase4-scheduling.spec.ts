@@ -36,7 +36,7 @@ async function assertAdminReadOnly(page: Page, periodUrl: string, status: "DRAFT
 }
 
 test("Super Admin publishes, Admin reads every schedule state, and Employee sees only Published work", async ({ page }, testInfo) => {
-  test.setTimeout(90_000);
+  test.setTimeout(120_000);
   const month = page.viewportSize()?.width === 390 ? "2026-06" : "2026-05";
   const assignmentDate = `${month}-06`;
   await signIn(page, "Nora Albright"); await page.goto(`/schedule?month=${month}`);
@@ -80,6 +80,13 @@ test("Super Admin publishes, Admin reads every schedule state, and Employee sees
   await page.getByRole("link", { name: "Open this schedule", exact: true }).click();
   await page.getByRole("button", { name: "Create Draft revision", exact: true }).click();
   await page.getByRole("link", { name: /DRAFT Alpha Facilities Revision 2/ }).click();
+  await expect(page.getByRole("button", { name: "Edit assignment", exact: true })).toBeVisible();
+  const requirement = page.getByRole("form", { name: "Add assignment skill requirement", exact: true });
+  if (!(await requirement.isVisible())) await page.getByText("Skills and requirements (0)", { exact: true }).click();
+  await requirement.getByRole("combobox", { name: "Required skill", exact: true }).selectOption({ index: 1 });
+  await requirement.getByRole("button", { name: "Add skill", exact: true }).click();
+  await expect(page.getByText("Skills and requirements (1)", { exact: true })).toBeVisible();
+  const revisionUrl = page.url();
   await page.getByRole("button", { name: "Edit assignment", exact: true }).click();
   const edit = page.getByRole("dialog", { name: "Edit Cora Bell’s assignment", exact: true });
   await edit.getByText("Remove assignment", { exact: true }).click();
@@ -100,5 +107,16 @@ test("Super Admin publishes, Admin reads every schedule state, and Employee sees
   await expect(publishedEntry.getByText("Use the reception desk.", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: /Monthly schedule editor|Schedule details/ })).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+  await signOut(page);
+  await signIn(page, "Nora Albright");
+  await page.goto(revisionUrl);
+  await page.getByRole("form", { name: "Propose this Draft" }).getByRole("button", { name: "Propose for review" }).click();
+  await page.getByRole("form", { name: "Publish Proposed schedule" }).getByRole("button", { name: "Publish schedule" }).click();
+  await expect(page.getByRole("link", { name: /^PUBLISHED Alpha Facilities Revision 2/ })).toBeVisible();
+  await signOut(page);
+  await signIn(page, "Cora Bell");
+  await page.goto(`/schedule?month=${month}`);
+  await page.getByRole("button", { name: "Agenda", exact: true }).click();
+  await expect(page.locator(".timetable-entry")).toHaveCount(0);
   await signOut(page);
 });

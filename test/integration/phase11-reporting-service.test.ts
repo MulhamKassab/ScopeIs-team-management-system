@@ -489,6 +489,7 @@ describe("report filter and total regressions", () => {
 
 
 describe("aggregate export source completeness", () => {
+  // This verifies 5,001 persisted employees, full aggregation and cleanup, rather than a latency budget.
   it("counts and paginates every balance employee and refuses an over-cap export", async () => {
     const baseline = await reportingService.report(nora(), "leave-balance");
     await db.execute(sql`insert into users (id, display_name, role)
@@ -507,7 +508,7 @@ describe("aggregate export source completeness", () => {
       await db.execute(sql`delete from employee_profiles where user_id like 'report-balance-cap-%'`);
       await db.execute(sql`delete from users where id like 'report-balance-cap-%'`);
     }
-  });
+  }, 15_000);
 
   it("includes every assignment skill requirement before sorting and refuses an over-cap export", async () => {
     const baseline = await reportingService.report(nora(), "skill-gaps");

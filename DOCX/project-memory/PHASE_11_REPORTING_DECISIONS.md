@@ -1,5 +1,9 @@
 # Phase 11 — Reporting Decisions
 
+## Assignment omission projection — 2026-10-14
+
+The authorized history-preserving Draft removal repair excludes `omitted_at` assignments from current/planning totals and assignment requirement datasets. Published predecessor rows remain counted until separate revision publication replaces them. Reporting grains, filters, exports and role/privacy projections remain unchanged. Retained assignment/coverage history is not erased. See [the repair report](../phase-reports/SCOPEIS_FRONTEND_BACKEND_GAP_FIXES_2026_10_14.md).
+
 Phase ID: `SCOPEIS_PHASE_11_DASHBOARDS_REPORTS_AND_AUTHORIZED_EXPORTS_R1`
 
 This file records the decisions applied while implementing the Phase 11 dashboards, reports and authorized-exports journey. It supplements, and does not replace, [`PRODUCT_REQUIREMENTS.md`](PRODUCT_REQUIREMENTS.md), [`ROLE_AND_PERMISSION_MODEL.md`](ROLE_AND_PERMISSION_MODEL.md) and [`DECISIONS_AND_CONSTRAINTS.md`](DECISIONS_AND_CONSTRAINTS.md).

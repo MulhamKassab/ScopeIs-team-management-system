@@ -27,6 +27,17 @@ function message(error: unknown) {
 async function actorOrState() { return getCurrentActor(); }
 function refresh(userId: string) { revalidatePath(`/employees/${userId}`); revalidatePath("/employees"); revalidatePath("/teams"); revalidatePath("/designations"); }
 
+export const updateDefaultWorkLocationAction: EmployeeMutationAction = async (_state, data) => {
+  const actor = await actorOrState(); if (!actor) return { error: "Your session has expired. Sign in again." };
+  try {
+    if (actor.role !== "SUPER_ADMIN" || !onlyContains(data, ["userId", "expectedVersion", "defaultWorkLocation"])) throw new EmployeeDomainError("FORBIDDEN");
+    if (text(data, "defaultWorkLocation").length > 500) throw new EmployeeDomainError("VALIDATION_ERROR");
+    const userId = target(data);
+    await employeeProfileService.updateManagementProfile(actor, userId, { expectedVersion: version(data), defaultWorkLocation: nullable(data, "defaultWorkLocation") });
+    refresh(userId); return { success: "Default work location saved." };
+  } catch (error) { return { error: message(error) }; }
+};
+
 export const updateEmployeeBasicAction: EmployeeMutationAction = async (_state, formData) => {
   const actor = await actorOrState(); if (!actor) return { error: "Your session has expired. Sign in again." };
   const userId = target(formData);

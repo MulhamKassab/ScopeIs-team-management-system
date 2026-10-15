@@ -9,6 +9,9 @@ import {
 } from "@/modules/evidence/actions";
 import type { CertificationSummaryView, EvidenceItemView } from "@/modules/evidence/service";
 
+import { EvidenceFileLink } from "./file-link";
+import { HOSTED_EVIDENCE_FILE_BYTES } from "./file-limits";
+
 const initial: EvidenceActionState = {};
 type SkillOption = { id: string; name: string };
 
@@ -71,7 +74,7 @@ function EvidenceFields({ item, kind, skills, values, onFieldChange }: { item?: 
 }
 
 /** Uploads private bytes through the authorized route; storage keys never reach the browser. */
-function FileUploader({ evidenceId, version, replaceFileId, label }: { evidenceId: string; version: number; replaceFileId?: string; label: string }) {
+function FileUploader({ evidenceId, version, replaceFileId, label, maxUploadBytes }: { evidenceId: string; version: number; replaceFileId?: string; label: string; maxUploadBytes: number }) {
   const router = useRouter();
   const [state, setState] = useState<{ kind: "idle" | "busy" | "ok" | "error"; message?: string }>({ kind: "idle" });
   const fileFieldId = useId();
@@ -81,6 +84,7 @@ function FileUploader({ evidenceId, version, replaceFileId, label }: { evidenceI
     const form = new FormData(event.currentTarget);
     const file = form.get("file");
     if (!(file instanceof File) || !file.size) { setState({ kind: "error", message: "Choose a file first." }); return; }
+    if (file.size > maxUploadBytes) { setState({ kind: "error", message: `Choose a file of ${maxUploadBytes / (1024 * 1024)} MiB or less.` }); return; }
     form.set("expectedVersion", String(version));
     if (replaceFileId) form.set("replaceFileId", replaceFileId);
     setState({ kind: "busy" });
@@ -99,6 +103,7 @@ function FileUploader({ evidenceId, version, replaceFileId, label }: { evidenceI
   return <form className="evidence-upload" onSubmit={upload} aria-label={label}>
     <label htmlFor={`${fileFieldId}-file`}>{label}</label>
     <input id={`${fileFieldId}-file`} name="file" type="file" accept=".pdf,.jpg,.jpeg,.png,.docx,application/pdf,image/jpeg,image/png,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required />
+    <p className="operation-help">PDF, JPEG, PNG or Word document, up to {maxUploadBytes / (1024 * 1024)} MiB.</p>
     <button className="button" type="submit" disabled={state.kind === "busy" || state.kind === "ok"}>{state.kind === "busy" ? "Uploading…" : state.kind === "ok" ? "File attached" : "Upload private file"}</button>
     {state.kind === "error" ? <p className="operation-error" role="alert">{state.message}</p> : state.kind === "ok" ? <p className="operation-success" role="status">{state.message}</p> : null}
   </form>;
@@ -111,11 +116,11 @@ function FileList({ item }: { item: EvidenceItemView }) {
       <strong>{file.originalFilename}</strong>
       <span>Version {file.version} · {Math.max(1, Math.round(file.sizeBytes / 1024))} KB · {file.archivedAt ? "replaced" : "current"}</span>
     </div>
-    {!file.archivedAt ? <a className="button" href={`/api/evidence/files/${file.id}`} target="_blank" rel="noreferrer">{file.canPreview ? "Preview file" : "Download file"}</a> : null}
+    {!file.archivedAt ? <EvidenceFileLink file={file} /> : null}
   </li>)}</ul>;
 }
 
-function OwnerItem({ item, skills }: { item: EvidenceItemView; skills: SkillOption[] }) {
+function OwnerItem({ item, skills, maxUploadBytes }: { item: EvidenceItemView; skills: SkillOption[]; maxUploadBytes: number }) {
   return <article className="evidence-item" id={`evidence-${item.id}`}>
     <div className="evidence-item-head">
       <div><strong>{item.title}</strong><span>{item.issuer ? `${item.issuer} · ` : ""}{expiryText(item)}{item.relatedSkillName ? ` · ${item.relatedSkillName}` : ""}</span></div>
@@ -126,7 +131,7 @@ function OwnerItem({ item, skills }: { item: EvidenceItemView; skills: SkillOpti
     <FileList item={item} />
     {!item.archivedAt ? <>
       <div className="people-record-actions">
-      <TaskDialog triggerLabel="Attach file" title={`Files for ${item.title}`} description="Attach or replace a private PDF, image, or Word document."><FileUploader evidenceId={item.id} version={item.version} label="Attach or replace file" /></TaskDialog>
+      <TaskDialog triggerLabel="Attach file" title={`Files for ${item.title}`} description="Attach or replace a private PDF, image, or Word document."><FileUploader evidenceId={item.id} version={item.version} label="Attach or replace file" maxUploadBytes={maxUploadBytes} /></TaskDialog>
       <TaskDialog triggerLabel="Edit item" title={`Edit ${item.title}`}>
         <Form action={updateEvidenceAction} title={`Edit ${item.title}`} submit="Save changes">
           <input type="hidden" name="evidenceId" value={item.id} />
@@ -145,7 +150,7 @@ function OwnerItem({ item, skills }: { item: EvidenceItemView; skills: SkillOpti
   </article>;
 }
 
-function CreateEvidenceForm({ kind, skills, onCreateAnother, onBusyChange }: { kind: typeof sections[number]["kind"]; skills: SkillOption[]; onCreateAnother: () => void; onBusyChange: (busy: boolean) => void }) {
+function CreateEvidenceForm({ kind, skills, onCreateAnother, onBusyChange, maxUploadBytes }: { kind: typeof sections[number]["kind"]; skills: SkillOption[]; onCreateAnother: () => void; onBusyChange: (busy: boolean) => void; maxUploadBytes: number }) {
   const [submissionKey] = useState(newSubmissionKey);
   const [state, action, pending] = useActionState(async (previous: EvidenceActionState, data: FormData) => {
     onBusyChange(true);
@@ -158,7 +163,7 @@ function CreateEvidenceForm({ kind, skills, onCreateAnother, onBusyChange }: { k
     <h3>{state.savedItem.title}</h3>
     {state.savedItem.archived ? <p>This item is archived. Start a new item to attach a file.</p> : <>
       <p>You can attach a private file now, or close this window and do it later.</p>
-      <FileUploader evidenceId={state.savedItem.id} version={state.savedItem.version} label="Attach file to saved item" />
+      <FileUploader evidenceId={state.savedItem.id} version={state.savedItem.version} label="Attach file to saved item" maxUploadBytes={maxUploadBytes} />
     </>}
     <button className="button" type="button" onClick={onCreateAnother}>Add another item</button>
   </div>;
@@ -170,7 +175,7 @@ function CreateEvidenceForm({ kind, skills, onCreateAnother, onBusyChange }: { k
   </form>;
 }
 
-function AddEvidenceChooser({ skills }: { skills: SkillOption[] }) {
+function AddEvidenceChooser({ skills, maxUploadBytes }: { skills: SkillOption[]; maxUploadBytes: number }) {
   const [kind, setKind] = useState<typeof sections[number]["kind"]>("certification");
   const [intent, setIntent] = useState(0);
   const [busy, setBusy] = useState(false);
@@ -180,18 +185,18 @@ function AddEvidenceChooser({ skills }: { skills: SkillOption[] }) {
       {sections.map((section) => <option value={section.kind} key={section.kind}>{section.title}</option>)}
     </select></label>
     <p className="workflow-meta">{selected.help}</p>
-    <CreateEvidenceForm key={`${kind}-${intent}`} kind={kind} skills={skills} onCreateAnother={() => setIntent((current) => current + 1)} onBusyChange={setBusy} />
+    <CreateEvidenceForm key={`${kind}-${intent}`} kind={kind} skills={skills} maxUploadBytes={maxUploadBytes} onCreateAnother={() => setIntent((current) => current + 1)} onBusyChange={setBusy} />
   </div>;
 }
 
 /** Owner experience: immediate saves, no approval gate, one active CV per owner. */
-export function CapabilityEvidencePanel({ items, skills }: { items: EvidenceItemView[]; skills: SkillOption[] }) {
+export function CapabilityEvidencePanel({ items, skills, maxUploadBytes = HOSTED_EVIDENCE_FILE_BYTES }: { items: EvidenceItemView[]; skills: SkillOption[]; maxUploadBytes?: number }) {
   return <section className="operations-page evidence-page" aria-labelledby="evidence-title">
     <header className="operations-heading"><div>
       <p className="eyebrow">Experience & documents</p>
       <h2 id="evidence-title">My documents & experience</h2>
       <p>Keep your certifications and experience up to date. Private files are visible only to you and Super Admin; certification summaries may be shared with your scoped Admin.</p>
-    </div><TaskDialog triggerLabel="Add document or experience" title="Add document or experience" description="Choose the type, save its details, then attach a private file if needed."><AddEvidenceChooser skills={skills} /></TaskDialog></header>
+    </div><TaskDialog triggerLabel="Add document or experience" title="Add document or experience" description="Choose the type, save its details, then attach a private file if needed."><AddEvidenceChooser skills={skills} maxUploadBytes={maxUploadBytes} /></TaskDialog></header>
     <div className="people-evidence-sections">{sections.map((section) => {
       const sectionItems = items.filter((item) => item.kind === section.kind);
       const active = sectionItems.filter((item) => !item.archivedAt);
@@ -199,7 +204,7 @@ export function CapabilityEvidencePanel({ items, skills }: { items: EvidenceItem
       return <details className="operation-panel evidence-category" key={section.kind}>
         <summary><h3 id={`evidence-${section.kind}-title`}>{section.title}</h3><span>{active.length} active {active.length === 1 ? "item" : "items"}{archived.length ? ` · ${archived.length} archived` : ""}</span></summary>
         <div className="evidence-category-content">
-        {active.length ? <div className="evidence-list">{active.map((item) => <OwnerItem key={item.id} item={item} skills={skills} />)}</div> : <p className="operation-empty">Nothing recorded in this section yet.</p>}
+        {active.length ? <div className="evidence-list">{active.map((item) => <OwnerItem key={item.id} item={item} skills={skills} maxUploadBytes={maxUploadBytes} />)}</div> : <p className="operation-empty">Nothing recorded in this section yet.</p>}
         {archived.length ? <details className="evidence-archive"><summary>{archived.length} archived item{archived.length === 1 ? "" : "s"}</summary><ul className="operation-list">{archived.map((item) => <li key={item.id}><div><strong>{item.title}</strong><span>Archived · {expiryText(item)}</span></div></li>)}</ul></details> : null}
         </div>
       </details>;

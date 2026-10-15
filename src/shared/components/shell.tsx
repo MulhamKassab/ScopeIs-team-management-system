@@ -12,7 +12,7 @@ import type { AuthenticatedActor } from "@/shared/types/foundation";
 import { navigationGroupsFor } from "@/modules/navigation/workspace-guide";
 import { WorkspaceGuide } from "@/shared/components/workspace-guide";
 
-const icons: Record<ModuleKey, LucideIcon> = { dashboard: House, tickets: Ticket, employees: UsersRound, teams: UsersRound, designations: BriefcaseBusiness, accounts: ShieldCheck, skills: Wrench, clients: BriefcaseBusiness, projects: FolderKanban, locations: MapPin, schedule: CalendarDays, map: MapPinned, leave: CalendarOff, coverage: ClipboardList, replacements: ArrowLeftRight, notifications: Bell, reports: ChartNoAxesCombined, audit: FileClock, settings: Settings, profile: UserRound, requests: ClipboardList };
+const icons: Record<ModuleKey, LucideIcon> = { dashboard: House, tickets: Ticket, employees: UsersRound, teams: UsersRound, designations: BriefcaseBusiness, arrangements: BriefcaseBusiness, accounts: ShieldCheck, skills: Wrench, clients: BriefcaseBusiness, projects: FolderKanban, locations: MapPin, schedule: CalendarDays, map: MapPinned, leave: CalendarOff, coverage: ClipboardList, replacements: ArrowLeftRight, notifications: Bell, reports: ChartNoAxesCombined, audit: FileClock, settings: Settings, profile: UserRound, requests: ClipboardList };
 const mobileLabels: Partial<Record<ModuleKey, string>> = { dashboard: "Home", employees: "People", profile: "Profile" };
 function initials(name: string) { return name.split(" ").map((word) => word[0]).join("").slice(0, 2); }
 function selected(pathname: string, href: string) { return pathname === href || pathname.startsWith(`${href}/`); }
@@ -27,7 +27,7 @@ function NavLinks({ items, role, close }: { items: ModuleDefinition[]; role: Aut
   })}</nav>;
 }
 
-export function ApplicationShell({ actor, navigation, title, children }: { actor: AuthenticatedActor; navigation: ModuleDefinition[]; title: string; children: React.ReactNode }) {
+export function ApplicationShell({ actor, navigation, title, children, unreadCount = 0 }: { unreadCount?: number; actor: AuthenticatedActor; navigation: ModuleDefinition[]; title: string; children: React.ReactNode }) {
   const router = useRouter(); const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false); const [moreOpen, setMoreOpen] = useState(false);
   const [logoutError, setLogoutError] = useState(""); const [loggingOut, setLoggingOut] = useState(false);
@@ -90,7 +90,7 @@ export function ApplicationShell({ actor, navigation, title, children }: { actor
     </aside>
     <header className="top-header" inert={moreOpen}>
       <div className="workspace-location"><span>Workspace</span><ChevronRight size={14} aria-hidden="true" /><span className="workspace-page-name">{active?.label ?? title}</span></div>
-      <div className="header-actions"><WorkspaceGuide navigation={navigation} role={actor.role} /><Link href="/notifications" className="icon-button" aria-label="Open notifications"><Bell size={19} aria-hidden="true" /></Link><ThemeToggle />
+      <div className="header-actions"><WorkspaceGuide navigation={navigation} role={actor.role} /><Link href="/notifications" className="icon-button" aria-label="Open notifications" aria-describedby={unreadCount ? "notification-unread-count" : undefined}><Bell size={19} aria-hidden="true" />{unreadCount ? <span id="notification-unread-count" className="notification-unread-badge"><span aria-hidden="true">{unreadCount > 99 ? "99+" : unreadCount}</span><span className="sr-only">{unreadCount} unread notifications</span></span> : null}</Link><ThemeToggle />
         <details ref={accountMenu} className="account-menu" onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) event.currentTarget.open = false; }} onKeyDown={(event) => { if (event.key === "Escape") { event.currentTarget.open = false; event.currentTarget.querySelector("summary")?.focus(); } }}>
           <summary className="persona" aria-label={`Account menu for ${actor.displayName}`}><span className="avatar">{initials(actor.displayName)}</span><span className="persona-copy"><strong>{actor.displayName}</strong><small>{actor.role === "SUPER_ADMIN" ? "Super Admin" : actor.role === "ADMIN" ? "Admin" : "Employee"}</small></span><ChevronDown size={15} aria-hidden="true" /></summary>
           <div className="account-popover"><p>Signed in as <strong>{actor.displayName}</strong></p><Link href="/profile" onClick={() => { if (accountMenu.current) accountMenu.current.open = false; }}><UserRound size={17} aria-hidden="true" />My profile</Link><button type="button" onClick={logout} disabled={loggingOut}><LogOut size={17} aria-hidden="true" />{loggingOut ? "Signing out…" : "Log out"}</button>{logoutError ? <p role="alert" className="form-error">{logoutError}</p> : null}</div>

@@ -114,7 +114,7 @@ describe("Phase 2 database foundation reconciliation", { timeout: 60_000, hookTi
     expect(first.after?.state).toBe("D");
     expect(first.after?.pending).toEqual([]);
     expect(first.after?.fingerprint.tables).toHaveLength(41);
-    expect(first.after?.ledger.rows).toHaveLength(16);
+    expect(first.after?.ledger.rows).toHaveLength(17);
     const second = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
     expect(second.before.state).toBe("D");
     expect(second.after?.state).toBe("D");
@@ -134,7 +134,7 @@ describe("Phase 2 database foundation reconciliation", { timeout: 60_000, hookTi
     } finally { await client.end(); }
     const before = await inspect(url);
     expect(before.state).toBe("D");
-    expect(before.pending).toEqual(["0014_team_catalogue", "0015_company_tickets"]);
+    expect(before.pending).toEqual(["0014_team_catalogue", "0015_company_tickets", "0016_schedule_assignment_omission"]);
     const applied = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
     expect(applied.after?.state).toBe("D");
     expect(applied.after?.pending).toEqual([]);
@@ -146,7 +146,7 @@ describe("Phase 2 database foundation reconciliation", { timeout: 60_000, hookTi
     } finally { await verification.end(); }
   }));
 
-  it("adds Company tickets to the team-catalogue schema without changing employee, schedule, leave, or historical ledger facts", async () => withDatabase("ticket_upgrade", async (url) => {
+  it("adds Company tickets and assignment omission while preserving prior workforce data and ledger facts", async () => withDatabase("ticket_upgrade", async (url) => {
     const { journal, migrations, manifest } = await validateRepositoryMigrationHistory();
     await applySql(url, journal.entries.slice(0, 15).map((entry: { tag: string }) => `${entry.tag}.sql`));
     const client = new pg.Client({ connectionString: url }); await client.connect();
@@ -156,7 +156,7 @@ describe("Phase 2 database foundation reconciliation", { timeout: 60_000, hookTi
       const facts: Record<string, unknown[]> = {};
       for (const table of manifest.states.teamCatalogue.tables) {
         if (!/^[a-z_]+$/.test(table)) throw new Error("Unsafe authoritative table name.");
-        facts[table] = (await connection.query(`select to_jsonb(record) as fact from "${table}" record order by to_jsonb(record)::text`)).rows;
+        facts[table] = (await connection.query(`select (to_jsonb(record) - 'omitted_at') as fact from "${table}" record order by to_jsonb(record)::text`)).rows;
       }
       return facts;
     };
@@ -181,12 +181,12 @@ describe("Phase 2 database foundation reconciliation", { timeout: 60_000, hookTi
     } finally { await client.end(); }
     const before = await inspect(url);
     expect(before.state).toBe("D");
-    expect(before.pending).toEqual(["0015_company_tickets"]);
+    expect(before.pending).toEqual(["0015_company_tickets", "0016_schedule_assignment_omission"]);
     const applied = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
     expect(applied.after?.state).toBe("D");
     expect(applied.after?.pending).toEqual([]);
-    expect(applied.after?.ledger.rows).toHaveLength(16);
-    for (const table of manifest.states.teamCatalogue.tables) expect(applied.after?.fingerprint.tableHashes[table]).toBe(manifest.states.teamCatalogue.tableHashes[table]);
+    expect(applied.after?.ledger.rows).toHaveLength(17);
+    for (const table of manifest.states.teamCatalogue.tables) expect(applied.after?.fingerprint.tableHashes[table]).toBe(table === "schedule_assignments" ? manifest.states.assignmentOmission.tableHashes[table] : manifest.states.teamCatalogue.tableHashes[table]);
     const verification = new pg.Client({ connectionString: url }); await verification.connect();
     try {
       expect(await readFacts(verification)).toEqual(priorFacts!);
@@ -203,7 +203,7 @@ describe("Phase 2 database foundation reconciliation", { timeout: 60_000, hookTi
     expect((await inspect(url)).state).toBe("B");
     const applied = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
     expect(applied.after?.state).toBe("D");
-    expect(applied.after?.ledger.rows).toHaveLength(16);
+    expect(applied.after?.ledger.rows).toHaveLength(17);
     expect((await reconcileMigrationState(url, { allowDisposableTest: true })).before.state).toBe("D");
   }));
 
@@ -214,7 +214,7 @@ describe("Phase 2 database foundation reconciliation", { timeout: 60_000, hookTi
     expect((await inspect(url)).state).toBe("C");
     const applied = await reconcileMigrationState(url, { allowDisposableTest: true, apply: true });
     expect(applied.after?.state).toBe("D");
-    expect(applied.after?.ledger.rows).toHaveLength(16);
+    expect(applied.after?.ledger.rows).toHaveLength(17);
     expect((await reconcileMigrationState(url, { allowDisposableTest: true, apply: true })).after?.state).toBe("D");
   }));
 

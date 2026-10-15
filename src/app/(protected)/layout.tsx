@@ -1,3 +1,4 @@
+import { notificationService } from "@/modules/notifications/service";
 import { env } from "@/server/env";
 import { redirect } from "next/navigation";
 import { getCurrentPasswordChangeActor, mustChangePassword } from "@/modules/auth/session-service";
@@ -12,5 +13,6 @@ export default async function ProtectedLayout({ children }: { children: React.Re
   // A user holding only a temporary password must change it before entering the application.
   if (await mustChangePassword(actor.id)) redirect("/account/change-password");
   const navigation = navigationFor(actor);
-  return <ApplicationShell actor={actor} navigation={navigation} title="Team Management">{env().SCOPEIS_DEMO_WORKSPACE === "true" && <p className="demo-workspace-banner"><strong>Demo workspace</strong><span>Fictional company data · Changes are saved</span></p>}<PageJourneyHelp navigation={navigation} role={actor.role} />{children}</ApplicationShell>;
+  const unreadCount = await notificationService.unreadCount(actor);
+  return <ApplicationShell unreadCount={unreadCount} actor={actor} navigation={navigation} title="Team Management">{env().SCOPEIS_DEMO_WORKSPACE === "true" && <p className="demo-workspace-banner"><strong>Demo workspace</strong><span>Fictional company data · Changes are saved</span></p>}<PageJourneyHelp navigation={navigation} role={actor.role} />{children}</ApplicationShell>;
 }

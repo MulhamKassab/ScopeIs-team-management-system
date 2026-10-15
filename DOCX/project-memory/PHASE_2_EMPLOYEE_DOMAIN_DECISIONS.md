@@ -1,5 +1,9 @@
 # Phase 2 Employee Domain Decisions
 
+## Authorized control completion — 2026-10-14
+
+Super Admin has an Assignment labels catalogue at `/arrangements` for creating, renaming, ordering, colouring, archiving and reactivating the existing descriptive records. Job titles expose archive/reactivate controls without clearing existing membership. The employee editor includes the person's current archived title, visibly marked, and permits keeping it on unrelated edits; new assignments to an archived title remain refused. Default work location is a separate Super Admin text control using the existing versioned profile service. These fields do not grant access, assign scheduled work or change availability. Admin/Employee capabilities remain unchanged. See [the local implementation report](../phase-reports/SCOPEIS_FRONTEND_BACKEND_GAP_FIXES_2026_10_14.md).
+
 This record preserves confirmed employee-domain decisions and the existing backend boundary. Under the superseding journey-first roadmap, Phase 2 is the employee-management journey; system role, designation, skill, team, and descriptive arrangement label remain independent concepts. No employment-type, scheduling, coverage, map, leave, client, project, or Ticket behavior is introduced.
 
 Super Admin manages employee lifecycle, roles, designations, skills, labels, and evidence review globally. Admin reads workforce capability metadata only within server-enforced assigned scope and cannot administer global catalogues or another employee profile. Employees may change only their own permitted work contact and professional content; they cannot change role, scope, manager, designation, team, active status, or protected home data.
