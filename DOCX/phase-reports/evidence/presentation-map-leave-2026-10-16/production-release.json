@@ -1,0 +1,48 @@
+{
+  "status": "PRODUCTION_RELEASED",
+  "verifiedAt": "2026-10-15T21:26:57.781Z",
+  "applicationSourceSha": "3e44d6c97e2460c6c10dd91a8dbe3e224c1a6617",
+  "initialImplementationSha": "9ac7b80e82a8c8ec51af60ce79217ad29f1421b9",
+  "branch": "main",
+  "deployment": {
+    "githubDeploymentId": 7104716820,
+    "state": "success",
+    "environment": "Production",
+    "createdAt": "2026-10-15T21:24:04Z",
+    "completedAt": "2026-10-15T21:24:04Z",
+    "url": "https://scopeis-team-management-system-pbqbaulrb-mu-ka7.vercel.app",
+    "vercelStatusUrl": "https://vercel.com/mu-ka7/scopeis-team-management-system/z18UQ4oyf3jd77xfEDXgy5bUF94z",
+    "canonicalUrl": "https://scopeis-team-management-system.vercel.app",
+    "canonicalEvidence": "Fresh normal-session canonical reload shows the new record typography, readable project control and vacation activity panel after exact-SHA Production success."
+  },
+  "local": {
+    "unitComponents": 428,
+    "affectedIntegration": 74,
+    "finalBrowser": 14,
+    "finalTechnicalInputs": 479,
+    "sourceBinding": "staged-record-text-binding.json",
+    "fullSystemLockRerun": false
+  },
+  "liveReadOnly": {
+    "sessionRole": "SUPER_ADMIN",
+    "source": "Existing normal browser session; no authentication reset or impersonation.",
+    "initialMapAndSharedChoiceChecksPassed": true,
+    "finalRecordAddressNormalized": true,
+    "noVisibleEmDashOnClientDetail": true,
+    "enabledCreateProject": {
+      "foreground": "rgb(255, 255, 255)",
+      "background": "rgb(22, 59, 153)",
+      "dialogOpened": true,
+      "closedWithoutSubmission": true
+    },
+    "finalVacationActivityPanelLoaded": true,
+    "productionBusinessWrites": 0
+  },
+  "preservation": {
+    "storedSourceTextUnchangedInDisposableBrowserFixture": true,
+    "formatterDoesNotChangeFormValuesIdsOrActions": true,
+    "noMigrationOrProductionBusinessWrite": true,
+    "independentProductionDatabaseFingerprintComparison": false
+  },
+  "laterDocumentationHead": "Verified independently after the release-receipt commit to avoid a self-referential source hash."
+}

@@ -1,5 +1,5 @@
 {
-  "status": "FINAL_LOCAL_VERIFIED_SOURCE_DELIVERY_PENDING",
+  "status": "PRODUCTION_RELEASED",
   "completedAt": "2026-10-15T21:23:05.158Z",
   "applicationBase": "9ac7b80e82a8c8ec51af60ce79217ad29f1421b9",
   "initialImplementation": "initial-verification.json",
@@ -79,6 +79,8 @@
   ],
   "limits": [
     "Bounded visible text/control contrast on tested routes/states; no exhaustive accessibility/physical-device certificate.",
-    "Final follow-up deployment and read-only live checks are pending."
-  ]
+    "Production read-only checks use the existing normal Super Admin session; lower-role refusals and maintained mutations are verified locally, not re-certified live."
+  ],
+  "applicationSourceSha": "3e44d6c97e2460c6c10dd91a8dbe3e224c1a6617",
+  "productionReceipt": "production-release.json"
 }
