@@ -1,0 +1,180 @@
+{
+  "completedAt": "2026-10-15T06:38:41.149Z",
+  "sourceSha": "2d7ff5a9d2315827ce3447daff22bfa6fb9d31b7",
+  "canonicalUrl": "https://scopeis-team-management-system.vercel.app",
+  "passed": 17,
+  "total": 17,
+  "scope": "Anonymous HTTP checks only. No migration or authenticated workflow certification; production application source reported by GitHub/Vercel integration.",
+  "results": [
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200,
+      "expectedStatus": 200,
+      "location": null,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null,
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/tickets",
+      "status": 307,
+      "expectedStatus": 307,
+      "location": "/login",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null,
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 307,
+      "expectedStatus": 307,
+      "location": "/login",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null,
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/profile",
+      "status": 307,
+      "expectedStatus": 307,
+      "location": "/login",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null,
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/schedule",
+      "status": 307,
+      "expectedStatus": 307,
+      "location": "/login",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null,
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/arrangements",
+      "status": 307,
+      "expectedStatus": 307,
+      "location": "/login",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null,
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/employees",
+      "status": 307,
+      "expectedStatus": 307,
+      "location": "/login",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null,
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/map",
+      "status": 307,
+      "expectedStatus": 307,
+      "location": "/login",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null,
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/notifications",
+      "status": 307,
+      "expectedStatus": 307,
+      "location": "/login",
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null,
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets",
+      "status": 401,
+      "expectedStatus": 401,
+      "location": null,
+      "cacheControl": "private, no-store, max-age=0",
+      "nosniff": "nosniff",
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/release-read-only-probe",
+      "status": 401,
+      "expectedStatus": 401,
+      "location": null,
+      "cacheControl": "private, no-store, max-age=0",
+      "nosniff": "nosniff",
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/release-read-only-probe/files/release-read-only-probe",
+      "status": 401,
+      "expectedStatus": 401,
+      "location": null,
+      "cacheControl": "private, no-store, max-age=0",
+      "nosniff": "nosniff",
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/evidence/files/release-read-only-probe",
+      "status": 401,
+      "expectedStatus": 401,
+      "location": null,
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "nosniff": null,
+      "pass": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/mock-login",
+      "status": 404,
+      "expectedStatus": 404,
+      "location": null,
+      "cacheControl": "private, no-store, max-age=0",
+      "nosniff": "nosniff",
+      "pass": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/tickets/commands",
+      "sameOrigin": true,
+      "status": 401,
+      "expectedStatus": 401,
+      "pass": true,
+      "cacheControl": "private, no-store, max-age=0",
+      "nosniff": "nosniff"
+    },
+    {
+      "method": "POST",
+      "path": "/api/tickets/release-read-only-probe/files",
+      "sameOrigin": true,
+      "status": 401,
+      "expectedStatus": 401,
+      "pass": true,
+      "cacheControl": "private, no-store, max-age=0",
+      "nosniff": "nosniff"
+    },
+    {
+      "method": "POST",
+      "path": "/api/evidence/release-read-only-probe/files",
+      "sameOrigin": true,
+      "status": 403,
+      "expectedStatus": 403,
+      "pass": true,
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "nosniff": null
+    }
+  ]
+}

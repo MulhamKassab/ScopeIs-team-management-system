@@ -1,0 +1,330 @@
+{
+  "completedAt": "2026-10-15T08:42:43.555Z",
+  "state": "D",
+  "pending": [],
+  "ledgerRows": 17,
+  "fingerprint": "6d2a4fd5d09f62eb112306ed44b88d94f1df733af057a3f5f33a83e3029e3fa6",
+  "originalRowsPreserved": true,
+  "normalAuthenticationMetadataExclusions": {
+    "sessions": [
+      "revoked_at"
+    ],
+    "user_credentials": [
+      "failed_attempt_count",
+      "failure_window_started_at",
+      "locked_until",
+      "updated_at"
+    ]
+  },
+  "rolesUnchanged": true,
+  "roleMembershipsUnchanged": true,
+  "databaseGrantsUnchanged": true,
+  "accounts": 7,
+  "credentials": 7,
+  "scopeGrants": 8,
+  "assignmentCount": 61,
+  "existingAssignmentsNotOmitted": true,
+  "qaTickets": [
+    {
+      "id": "1908a63a-c999-40f0-863b-1403001f0ebc",
+      "number": 5,
+      "archived": true
+    },
+    {
+      "id": "50f7e236-1724-43c4-a6ec-b37202e9e152",
+      "number": 6,
+      "archived": true
+    }
+  ],
+  "qaWorkLogs": 1,
+  "qaFiles": 1,
+  "tables": [
+    {
+      "table": "admin_scope_grants",
+      "priorRows": 8,
+      "currentRows": 8,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "arrangement_labels",
+      "priorRows": 5,
+      "currentRows": 5,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "assignment_skill_requirements",
+      "priorRows": 24,
+      "currentRows": 24,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "audit_events",
+      "priorRows": 238,
+      "currentRows": 257,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "clients",
+      "priorRows": 6,
+      "currentRows": 6,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "designations",
+      "priorRows": 12,
+      "currentRows": 12,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "discussion_messages",
+      "priorRows": 4,
+      "currentRows": 4,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "discussion_threads",
+      "priorRows": 2,
+      "currentRows": 2,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "employee_code_sequence",
+      "priorRows": 1,
+      "currentRows": 1,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "employee_evidence",
+      "priorRows": 15,
+      "currentRows": 15,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "employee_files",
+      "priorRows": 8,
+      "currentRows": 8,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "employee_management_notes",
+      "priorRows": 4,
+      "currentRows": 4,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "employee_planning_locations",
+      "priorRows": 6,
+      "currentRows": 6,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "employee_profiles",
+      "priorRows": 7,
+      "currentRows": 7,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "employee_skills",
+      "priorRows": 21,
+      "currentRows": 21,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "leave_allowance_settings",
+      "priorRows": 1,
+      "currentRows": 1,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "leave_requests",
+      "priorRows": 4,
+      "currentRows": 4,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "locations",
+      "priorRows": 6,
+      "currentRows": 6,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "notifications",
+      "priorRows": 87,
+      "currentRows": 97,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "operational_contacts",
+      "priorRows": 6,
+      "currentRows": 6,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "operational_employee_relations",
+      "priorRows": 6,
+      "currentRows": 6,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "operational_note_revisions",
+      "priorRows": 6,
+      "currentRows": 6,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "operational_notes",
+      "priorRows": 6,
+      "currentRows": 6,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "project_locations",
+      "priorRows": 6,
+      "currentRows": 6,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "projects",
+      "priorRows": 12,
+      "currentRows": 12,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "replacement_requests",
+      "priorRows": 3,
+      "currentRows": 3,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "schedule_assignments",
+      "priorRows": 61,
+      "currentRows": 61,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "schedule_periods",
+      "priorRows": 20,
+      "currentRows": 20,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "sessions",
+      "priorRows": 106,
+      "currentRows": 112,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "skills",
+      "priorRows": 15,
+      "currentRows": 15,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "staffing_requirements",
+      "priorRows": 6,
+      "currentRows": 6,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "teams",
+      "priorRows": 1,
+      "currentRows": 1,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "ticket_boards",
+      "priorRows": 1,
+      "currentRows": 1,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "ticket_files",
+      "priorRows": 1,
+      "currentRows": 2,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "ticket_participants",
+      "priorRows": 6,
+      "currentRows": 6,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "ticket_work_logs",
+      "priorRows": 1,
+      "currentRows": 2,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "ticket_workspace_members",
+      "priorRows": 1,
+      "currentRows": 1,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "ticket_workspaces",
+      "priorRows": 1,
+      "currentRows": 1,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "tickets",
+      "priorRows": 4,
+      "currentRows": 6,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "user_credentials",
+      "priorRows": 7,
+      "currentRows": 7,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    },
+    {
+      "table": "users",
+      "priorRows": 7,
+      "currentRows": 7,
+      "priorRowsPreserved": true,
+      "missingOrUnexpectedlyChangedPriorRows": 0
+    }
+  ]
+}

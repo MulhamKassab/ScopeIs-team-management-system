@@ -1,0 +1,289 @@
+{
+  "completedAt": "2026-10-15T08:34:57.365Z",
+  "permitted": [
+    {
+      "expectedPath": "/dashboard",
+      "error": false,
+      "headings": [
+        "Home",
+        "Requests to follow",
+        "Published plan and team",
+        "More figures",
+        "Employees by team"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/dashboard",
+      "role": "Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/tickets",
+      "error": false,
+      "headings": [
+        "Tickets",
+        "All accessible tickets0"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/tickets",
+      "role": "Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/schedule",
+      "error": false,
+      "headings": [
+        "Monthly timetable"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/schedule",
+      "role": "Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/map",
+      "error": false,
+      "headings": [
+        "Work map",
+        "No published assignments for this view"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/map",
+      "role": "Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/leave",
+      "error": false,
+      "headings": [
+        "Team leave"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/leave",
+      "role": "Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/coverage",
+      "error": false,
+      "headings": [
+        "Find cover"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/coverage",
+      "role": "Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/replacements",
+      "error": false,
+      "headings": [
+        "My cover requests"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/replacements",
+      "role": "Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/employees",
+      "error": false,
+      "headings": [
+        "People"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/employees",
+      "role": "Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/skills",
+      "error": false,
+      "headings": [
+        "Find a skill in your team"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/skills",
+      "role": "Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/clients",
+      "error": false,
+      "headings": [
+        "Clients"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/clients",
+      "role": "Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/projects",
+      "error": false,
+      "headings": [
+        "Projects"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/projects",
+      "role": "Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/locations",
+      "error": false,
+      "headings": [
+        "Locations"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/locations",
+      "role": "Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/notifications",
+      "error": false,
+      "headings": [
+        "Notifications"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/notifications",
+      "role": "Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/reports",
+      "error": false,
+      "headings": [
+        "Reports",
+        "Understand the staffing plan",
+        "Plan around leave and coverage",
+        "Review skills and evidence"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/reports",
+      "role": "Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/profile",
+      "error": false,
+      "headings": [
+        "My profile",
+        "My documents & experience"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/profile",
+      "role": "Admin",
+      "pass": true
+    }
+  ],
+  "refusals": [
+    {
+      "expectedPath": "/requests",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/requests",
+      "refusal": true,
+      "role": "Admin",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/teams",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/teams",
+      "refusal": true,
+      "role": "Admin",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/designations",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/designations",
+      "refusal": true,
+      "role": "Admin",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/arrangements",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/arrangements",
+      "refusal": true,
+      "role": "Admin",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/accounts",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/accounts",
+      "refusal": true,
+      "role": "Admin",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/audit",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/audit",
+      "refusal": true,
+      "role": "Admin",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/settings",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/settings",
+      "refusal": true,
+      "role": "Admin",
+      "safeReturn": true,
+      "pass": true
+    }
+  ],
+  "planning": {
+    "error": false,
+    "mainCount": 1,
+    "readOnlyNotice": true,
+    "role": "Admin",
+    "writerControls": []
+  },
+  "normalSavedSignIn": true
+}

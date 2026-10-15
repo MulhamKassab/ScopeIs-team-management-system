@@ -1,0 +1,232 @@
+{
+  "capturedAt": "2026-10-15T08:04:47.540Z",
+  "originalBranch": "br-empty-fog-avl4wjxn",
+  "productionBranch": "br-dark-union-av16a3zh",
+  "originalState": "D",
+  "productionState": "D",
+  "originalPending": [
+    "0016_schedule_assignment_omission"
+  ],
+  "productionPending": [
+    "0016_schedule_assignment_omission"
+  ],
+  "priorLedgerRows": 16,
+  "productionLedgerRows": 16,
+  "originalFingerprint": "05604ebb77f36d850f12cc758da3c40b4562c8ef42e26634a798c98831ffc04d",
+  "productionFingerprint": "05604ebb77f36d850f12cc758da3c40b4562c8ef42e26634a798c98831ffc04d",
+  "tableCount": 41,
+  "totalFacts": 742,
+  "changedTables": [],
+  "rolesMatch": true,
+  "roleMembershipsMatch": true,
+  "permissionsMatch": true,
+  "sequencesMatch": true,
+  "ledgerMatch": true,
+  "facts": [
+    {
+      "table": "admin_scope_grants",
+      "count": 8,
+      "hash": "c7afef7f3e7ae8008f37ce96ba660a352ac24f8770b6a32741e44f114361f5a9"
+    },
+    {
+      "table": "arrangement_labels",
+      "count": 5,
+      "hash": "7ca39d3d87ff0a69e5a23a8ac1f42646eec39e6ac952812870a93d64298bb319"
+    },
+    {
+      "table": "assignment_skill_requirements",
+      "count": 24,
+      "hash": "a43524721d4b20b2fdb998465e6f48b114f478bfc151320431510f52b4933ede"
+    },
+    {
+      "table": "audit_events",
+      "count": 238,
+      "hash": "d431a6eb0f6f2d2b854bc2742968dd033726c817d5abe3ba6b150176f4468075"
+    },
+    {
+      "table": "clients",
+      "count": 6,
+      "hash": "e9a21c81978364e2661a5caaa230b39ce85a6d97d33effd4b2446d642f103dd9"
+    },
+    {
+      "table": "designations",
+      "count": 12,
+      "hash": "6709cc1106f85846821ef8bf7915d17cddaa035e28f17c344febbb16906ab950"
+    },
+    {
+      "table": "discussion_messages",
+      "count": 4,
+      "hash": "a067e6c702452af58f94fa532a34698808f3c6dd35d0d69932110ab4af04acf7"
+    },
+    {
+      "table": "discussion_threads",
+      "count": 2,
+      "hash": "e85a00c4ec751af7309289201e1010e926eb9df9cd8481ba76bae7fcb976578a"
+    },
+    {
+      "table": "employee_code_sequence",
+      "count": 1,
+      "hash": "5abe1a7da16bee1077c26b2ac6db4dfc21caa7337b24fb67b2ca781500a078da"
+    },
+    {
+      "table": "employee_evidence",
+      "count": 15,
+      "hash": "8c6e8bddb8558d9aee19bb34b77ef286ea4d1264b73406c2766c686b9c77d8c0"
+    },
+    {
+      "table": "employee_files",
+      "count": 8,
+      "hash": "a1a2becc02fe5f5c0d3941071556ee4435b371a80ebb8ff5f65ccf94733e6ba4"
+    },
+    {
+      "table": "employee_management_notes",
+      "count": 4,
+      "hash": "6132814238f2836ac0342a293d071b1b525331c14263d1f956748420c71bfbeb"
+    },
+    {
+      "table": "employee_planning_locations",
+      "count": 6,
+      "hash": "1bad86454dfb488070d3fc273f92818f3619d7c57ad5c62776a263d90fe4ed48"
+    },
+    {
+      "table": "employee_profiles",
+      "count": 7,
+      "hash": "7dfeee758cb60b1c1fe3597f9345fcf4ff553feab95c6af4aaa115c38d117c0f"
+    },
+    {
+      "table": "employee_skills",
+      "count": 21,
+      "hash": "5cd1f7b3211fe45b7a55f0ba2a34643b99c86bb72d2483528c3ed4600511b6d7"
+    },
+    {
+      "table": "leave_allowance_settings",
+      "count": 1,
+      "hash": "91187fc6f544fa6c7cf53bf630aa599300bd9f3e1f1909b283bc35b89e6d2845"
+    },
+    {
+      "table": "leave_requests",
+      "count": 4,
+      "hash": "f53634d4663914d1579c48d47b1fae9fab288c5e769ba719d5e9c69303183429"
+    },
+    {
+      "table": "locations",
+      "count": 6,
+      "hash": "89b570420b65ca9a3298e06413a015329aecadb52044c457da65978d9f724d51"
+    },
+    {
+      "table": "notifications",
+      "count": 87,
+      "hash": "4037dcd08aadc499059b9d0d9112c3fb60f3f95126acb711d47237db19328568"
+    },
+    {
+      "table": "operational_contacts",
+      "count": 6,
+      "hash": "4d0d4485f0ed29ad2bbbf3caf8ea5538dd300aedefdaae2871b05a0e8217e119"
+    },
+    {
+      "table": "operational_employee_relations",
+      "count": 6,
+      "hash": "b9566821732b702645a625f4058434c1acd57d8bd0a36d2e7f413d159832dc6a"
+    },
+    {
+      "table": "operational_note_revisions",
+      "count": 6,
+      "hash": "02747144f3b3360289da1f289ad6e754e48e82e608bf5ed52b8eb914b021d29e"
+    },
+    {
+      "table": "operational_notes",
+      "count": 6,
+      "hash": "6183d1668f994c0fe3210f1307778a4e7e99ab4facc2b5710337ae545902f5a0"
+    },
+    {
+      "table": "project_locations",
+      "count": 6,
+      "hash": "f333c9a80d5c39e588a8bd233f47e504cf0a11ef479766d0a26d48982c56e4c0"
+    },
+    {
+      "table": "projects",
+      "count": 12,
+      "hash": "57442c0d19b7b2b8432f4dea8e114ef03a2fd97d37faa83ce420f087bc7b4a9c"
+    },
+    {
+      "table": "replacement_requests",
+      "count": 3,
+      "hash": "9c3fe0c2f1656670a4a9d6d8f0499a7f5f21fd60c0869e452a444a6553def9d2"
+    },
+    {
+      "table": "schedule_assignments",
+      "count": 61,
+      "hash": "4fbc5431f7dfbc840d26deb00fcb91bd45e1ccc209d05bd18993ecd98ca4ad91"
+    },
+    {
+      "table": "schedule_periods",
+      "count": 20,
+      "hash": "b89528f8a7cdab7490cadda87d7c99d566cb017ac721f885bc51f2596e1b3933"
+    },
+    {
+      "table": "sessions",
+      "count": 106,
+      "hash": "ac5a7d209cc91a94f87f5b3d6ea7022ea1e86688dd5e281eccf4e3a4b3375f6c"
+    },
+    {
+      "table": "skills",
+      "count": 15,
+      "hash": "6f0b479b79eb98fd67133d05d0c36f4197c1229c445fe0beb6224cccd442279e"
+    },
+    {
+      "table": "staffing_requirements",
+      "count": 6,
+      "hash": "44338528f8af86f5d6478a820c288f83c7f55bb5a03c55af5b32ff67c6bd9444"
+    },
+    {
+      "table": "teams",
+      "count": 1,
+      "hash": "a6e3606252d705bdf84c07ce92c621ef917f865763bb62a7d5910bd2dccccb45"
+    },
+    {
+      "table": "ticket_boards",
+      "count": 1,
+      "hash": "470cc95df363d033815aadeef4bf06cf3d16b9d470c369b7e411e5e365555f92"
+    },
+    {
+      "table": "ticket_files",
+      "count": 1,
+      "hash": "f64ff8768c3fdbdd0c47297969263a04f85c0d3068e50b87395061af09990c87"
+    },
+    {
+      "table": "ticket_participants",
+      "count": 6,
+      "hash": "bc15a97ad2fca48446991d2554d650075f0cd400a880c50420cb0a43b5c01421"
+    },
+    {
+      "table": "ticket_work_logs",
+      "count": 1,
+      "hash": "b922c87a85c81258636210825ca68a2795cd5c2252998b464365767b6413e6e2"
+    },
+    {
+      "table": "ticket_workspace_members",
+      "count": 1,
+      "hash": "12216c6ec7a1afe6eb7b5f0932dfc2dabf164a32898df5aadfb0c54523e2b1e7"
+    },
+    {
+      "table": "ticket_workspaces",
+      "count": 1,
+      "hash": "65b9cf61a4bc31299c8b31d0446f46bf3077223a4edb7e90266d6a5f5db37a58"
+    },
+    {
+      "table": "tickets",
+      "count": 4,
+      "hash": "6a58e7b5f7e7913d3cdf49ec949c8f076d357585e48cf9ad89df56d41c6caa28"
+    },
+    {
+      "table": "user_credentials",
+      "count": 7,
+      "hash": "596f1c2caa4892441c768ab35ec9609aa73c2e305fcfcd5c0b409e525e820232"
+    },
+    {
+      "table": "users",
+      "count": 7,
+      "hash": "841a3107212ee5a23d543b1ddf4c893a62ea700a750d23bd3bb4bc7a8e90060b"
+    }
+  ]
+}

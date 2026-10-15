@@ -1,0 +1,163 @@
+{
+  "completedAt": "2026-10-15T08:48:43.123Z",
+  "canonicalUrl": "https://scopeis-team-management-system.vercel.app",
+  "sourceApplicationSha": "2d7ff5a9d2315827ce3447daff22bfa6fb9d31b7",
+  "passed": 17,
+  "total": 17,
+  "scope": "Fresh anonymous checks after production migration; no signed-in cookies.",
+  "results": [
+    {
+      "method": "GET",
+      "path": "/login",
+      "status": 200,
+      "expectedStatus": 200,
+      "pass": true,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null
+    },
+    {
+      "method": "GET",
+      "path": "/tickets",
+      "status": 307,
+      "expectedStatus": 307,
+      "pass": true,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 307,
+      "expectedStatus": 307,
+      "pass": true,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null
+    },
+    {
+      "method": "GET",
+      "path": "/profile",
+      "status": 307,
+      "expectedStatus": 307,
+      "pass": true,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null
+    },
+    {
+      "method": "GET",
+      "path": "/schedule",
+      "status": 307,
+      "expectedStatus": 307,
+      "pass": true,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null
+    },
+    {
+      "method": "GET",
+      "path": "/arrangements",
+      "status": 307,
+      "expectedStatus": 307,
+      "pass": true,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null
+    },
+    {
+      "method": "GET",
+      "path": "/employees",
+      "status": 307,
+      "expectedStatus": 307,
+      "pass": true,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null
+    },
+    {
+      "method": "GET",
+      "path": "/map",
+      "status": 307,
+      "expectedStatus": 307,
+      "pass": true,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null
+    },
+    {
+      "method": "GET",
+      "path": "/notifications",
+      "status": 307,
+      "expectedStatus": 307,
+      "pass": true,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "nosniff": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets",
+      "status": 401,
+      "expectedStatus": 401,
+      "pass": true,
+      "cacheControl": "private, no-store, max-age=0",
+      "nosniff": "nosniff"
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/release-read-only-probe",
+      "status": 401,
+      "expectedStatus": 401,
+      "pass": true,
+      "cacheControl": "private, no-store, max-age=0",
+      "nosniff": "nosniff"
+    },
+    {
+      "method": "GET",
+      "path": "/api/tickets/release-read-only-probe/files/release-read-only-probe",
+      "status": 401,
+      "expectedStatus": 401,
+      "pass": true,
+      "cacheControl": "private, no-store, max-age=0",
+      "nosniff": "nosniff"
+    },
+    {
+      "method": "GET",
+      "path": "/api/evidence/files/release-read-only-probe",
+      "status": 401,
+      "expectedStatus": 401,
+      "pass": true,
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "nosniff": null
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/mock-login",
+      "status": 404,
+      "expectedStatus": 404,
+      "pass": true,
+      "cacheControl": "private, no-store, max-age=0",
+      "nosniff": "nosniff"
+    },
+    {
+      "method": "POST",
+      "path": "/api/tickets/commands",
+      "status": 401,
+      "expectedStatus": 401,
+      "pass": true,
+      "cacheControl": "private, no-store, max-age=0",
+      "nosniff": "nosniff"
+    },
+    {
+      "method": "POST",
+      "path": "/api/tickets/release-read-only-probe/files",
+      "status": 401,
+      "expectedStatus": 401,
+      "pass": true,
+      "cacheControl": "private, no-store, max-age=0",
+      "nosniff": "nosniff"
+    },
+    {
+      "method": "POST",
+      "path": "/api/evidence/release-read-only-probe/files",
+      "status": 403,
+      "expectedStatus": 403,
+      "pass": true,
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "nosniff": null
+    }
+  ]
+}

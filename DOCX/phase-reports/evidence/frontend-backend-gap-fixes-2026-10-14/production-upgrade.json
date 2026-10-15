@@ -1,0 +1,25 @@
+{
+  "completedAt": "2026-10-15T08:11:51.474Z",
+  "mode": "production",
+  "applied": true,
+  "migration": "0016_schedule_assignment_omission",
+  "migrationHash": "5774d471fc1ac8007dfce84726be07f39fa0fe7925e20c4c167484477a58b4df",
+  "state": "D",
+  "ledgerRows": 17,
+  "tableCount": 41,
+  "fingerprint": "6d2a4fd5d09f62eb112306ed44b88d94f1df733af057a3f5f33a83e3029e3fa6",
+  "priorFingerprint": "05604ebb77f36d850f12cc758da3c40b4562c8ef42e26634a798c98831ffc04d",
+  "preservedRows": 744,
+  "assignmentCount": 61,
+  "allExistingOmissionValuesNull": true,
+  "preservation": {
+    "allFacts": true,
+    "permissions": true,
+    "roles": true,
+    "roleMemberships": true,
+    "sequences": true,
+    "historicalLedger": true,
+    "priorColumns": true,
+    "unchangedTableSchemas": true
+  }
+}

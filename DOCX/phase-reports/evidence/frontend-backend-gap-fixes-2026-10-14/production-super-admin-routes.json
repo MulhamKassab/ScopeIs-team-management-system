@@ -1,0 +1,296 @@
+{
+  "completedAt": "2026-10-15T08:30:34.229Z",
+  "scope": "Signed-in rendering, single main landmark and page-width checks; not exhaustive mutations. Settings remains Coming soon.",
+  "passed": 22,
+  "total": 22,
+  "checks": [
+    {
+      "expectedPath": "/dashboard",
+      "error": false,
+      "headings": [
+        "Home",
+        "Ready for review",
+        "Published plan and team",
+        "More figures",
+        "Employees by team",
+        "Schedule lifecycle",
+        "Recent recorded actions"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/dashboard",
+      "role": "Super Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/tickets",
+      "error": false,
+      "headings": [
+        "Tickets",
+        "All accessible tickets0"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/tickets",
+      "role": "Super Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/schedule",
+      "error": false,
+      "headings": [
+        "Monthly timetable"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/schedule",
+      "role": "Super Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/map",
+      "error": false,
+      "headings": [
+        "Work map",
+        "No published assignments for this view"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/map",
+      "role": "Super Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/leave",
+      "error": false,
+      "headings": [
+        "Leave review queue"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/leave",
+      "role": "Super Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/coverage",
+      "error": false,
+      "headings": [
+        "Find cover"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/coverage",
+      "role": "Super Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/replacements",
+      "error": false,
+      "headings": [
+        "Cover requests"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/replacements",
+      "role": "Super Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/requests",
+      "error": false,
+      "headings": [
+        "My requests",
+        "Your conversations"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/requests",
+      "role": "Super Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/employees",
+      "error": false,
+      "headings": [
+        "People"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/employees",
+      "role": "Super Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/teams",
+      "error": false,
+      "headings": [
+        "Teams"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/teams",
+      "role": "Super Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/designations",
+      "error": false,
+      "headings": [
+        "Job titles"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/designations",
+      "role": "Super Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/arrangements",
+      "error": false,
+      "headings": [
+        "Assignment labels",
+        "In-house",
+        "Outsourced to Client",
+        "Temporary Placement",
+        "Scheduled Visit",
+        "On-call"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/arrangements",
+      "role": "Super Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/skills",
+      "error": false,
+      "headings": [
+        "Team skills"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/skills",
+      "role": "Super Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/clients",
+      "error": false,
+      "headings": [
+        "Clients"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/clients",
+      "role": "Super Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/projects",
+      "error": false,
+      "headings": [
+        "Projects"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/projects",
+      "role": "Super Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/locations",
+      "error": false,
+      "headings": [
+        "Locations"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/locations",
+      "role": "Super Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/notifications",
+      "error": false,
+      "headings": [
+        "Notifications"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/notifications",
+      "role": "Super Admin",
+      "pass": true,
+      "placeholder": false
+    },
+    {
+      "expectedPath": "/reports",
+      "error": false,
+      "headings": [
+        "Reports",
+        "Understand the staffing plan",
+        "Plan around leave and coverage",
+        "Review skills and evidence",
+        "Check recorded activity"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/reports",
+      "role": "Super Admin",
+      "pass": true,
+      "placeholder": false
+    },
+    {
+      "expectedPath": "/profile",
+      "error": false,
+      "headings": [
+        "My profile",
+        "My documents & experience"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/profile",
+      "role": "Super Admin",
+      "pass": true,
+      "placeholder": false
+    },
+    {
+      "expectedPath": "/accounts",
+      "error": false,
+      "headings": [
+        "Accounts"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/accounts",
+      "role": "Super Admin",
+      "pass": true,
+      "placeholder": false
+    },
+    {
+      "expectedPath": "/audit",
+      "error": false,
+      "headings": [
+        "Activity log"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/audit",
+      "role": "Super Admin",
+      "pass": true
+    },
+    {
+      "expectedPath": "/settings",
+      "error": false,
+      "headings": [
+        "Settings"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/settings",
+      "role": "Super Admin",
+      "pass": true,
+      "placeholder": true
+    }
+  ]
+}

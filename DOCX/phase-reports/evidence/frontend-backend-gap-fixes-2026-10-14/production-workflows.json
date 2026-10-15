@@ -1,0 +1,13 @@
+{
+  "completedOn": "2026-10-15",
+  "sourceApplicationSha": "2d7ff5a9d2315827ce3447daff22bfa6fb9d31b7",
+  "canonicalUrl": "https://scopeis-team-management-system.vercel.app",
+  "normalSignIns": ["SUPER_ADMIN", "ADMIN", "EMPLOYEE"],
+  "routeObservations": { "passed": 66, "total": 66, "superAdmin": 22, "adminAllowed": 15, "adminRefused": 7, "employeeAllowed": 8, "employeeRefused": 14 },
+  "timetable": { "monthAssignments": 18, "peopleRows": 3, "peopleColumns": 32, "agendaEntries": 18, "openedDayAssignments": 6, "adminReadOnly": true, "adminWriterControls": 0, "employeeOwnPublishedAssignments": 6, "employeePlanningEditor": false },
+  "superAdminTicket": { "id": "1908a63a-c999-40f0-863b-1403001f0ebc", "number": 5, "created": true, "opened": true, "statusSaved": true, "detailsSaved": true, "persistedAfterReload": true, "workLogSaved": true, "privateFileUploaded": true, "downloadedBytes": 5343, "downloadSha256MatchedUpload": true, "unrelatedEmployeeTicketRefused": true, "unrelatedEmployeeFileRefused": true, "archived": true },
+  "employeeTicket": { "id": "50f7e236-1724-43c4-a6ec-b37202e9e152", "number": 6, "created": true, "opened": true, "ownManagementControlsPresent": true, "archived": true },
+  "testData": { "newQaTickets": 2, "bothArchived": true, "newQaWorkLogs": 1, "newQaFiles": 1, "additionalParticipants": 0, "retainedAuditAndNotificationHistory": true },
+  "applicationInputs": { "frozen": 466, "changed": 0 },
+  "limitations": ["Bounded live observations, not exhaustive mutations or full-system browser certification.", "Prior broad local run remains 13/14 with Aggregate E2E interrupted.", "Private download check used a small public-logo fixture; large retained-file production ranges were not exercised."]
+}

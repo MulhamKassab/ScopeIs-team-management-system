@@ -1,0 +1,330 @@
+{
+  "completedAt": "2026-10-15T08:38:39.100Z",
+  "permitted": [
+    {
+      "expectedPath": "/tickets",
+      "error": false,
+      "headings": [
+        "Tickets",
+        "All accessible tickets0"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/tickets",
+      "role": "Employee",
+      "pass": true
+    },
+    {
+      "expectedPath": "/schedule",
+      "error": false,
+      "headings": [
+        "My timetable"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/schedule",
+      "role": "Employee",
+      "pass": true
+    },
+    {
+      "expectedPath": "/leave",
+      "error": false,
+      "headings": [
+        "My vacations"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/leave",
+      "role": "Employee",
+      "pass": true
+    },
+    {
+      "expectedPath": "/profile",
+      "error": false,
+      "headings": [
+        "My profile",
+        "My documents & experience"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/profile",
+      "role": "Employee",
+      "pass": true
+    },
+    {
+      "expectedPath": "/dashboard",
+      "error": false,
+      "headings": [
+        "Home",
+        "My published assignments (next 7 days)",
+        "Your vacations and updates",
+        "Your profile",
+        "My leave"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/dashboard",
+      "role": "Employee",
+      "pass": true
+    },
+    {
+      "expectedPath": "/notifications",
+      "error": false,
+      "headings": [
+        "Notifications"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/notifications",
+      "role": "Employee",
+      "pass": true
+    },
+    {
+      "expectedPath": "/requests",
+      "error": false,
+      "headings": [
+        "My requests",
+        "Your conversations"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/requests",
+      "role": "Employee",
+      "pass": true
+    },
+    {
+      "expectedPath": "/skills",
+      "error": false,
+      "headings": [
+        "My recorded skills"
+      ],
+      "mainCount": 1,
+      "pageOverflow": false,
+      "path": "/skills",
+      "role": "Employee",
+      "pass": true
+    }
+  ],
+  "refusals": [
+    {
+      "expectedPath": "/map",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/map",
+      "refusal": true,
+      "role": "Employee",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/coverage",
+      "headings": [
+        "Coverage is management-only"
+      ],
+      "mainCount": 1,
+      "path": "/coverage",
+      "refusal": true,
+      "role": "Employee",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/replacements",
+      "headings": [
+        "Replacement requests are management-only"
+      ],
+      "mainCount": 1,
+      "path": "/replacements",
+      "refusal": true,
+      "role": "Employee",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/employees",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/employees",
+      "refusal": true,
+      "role": "Employee",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/teams",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/teams",
+      "refusal": true,
+      "role": "Employee",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/designations",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/designations",
+      "refusal": true,
+      "role": "Employee",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/arrangements",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/arrangements",
+      "refusal": true,
+      "role": "Employee",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/clients",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/clients",
+      "refusal": true,
+      "role": "Employee",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/projects",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/projects",
+      "refusal": true,
+      "role": "Employee",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/locations",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/locations",
+      "refusal": true,
+      "role": "Employee",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/reports",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/reports",
+      "refusal": true,
+      "role": "Employee",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/accounts",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/accounts",
+      "refusal": true,
+      "role": "Employee",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/audit",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/audit",
+      "refusal": true,
+      "role": "Employee",
+      "safeReturn": true,
+      "pass": true
+    },
+    {
+      "expectedPath": "/settings",
+      "headings": [
+        "Page not found"
+      ],
+      "mainCount": 1,
+      "path": "/settings",
+      "refusal": true,
+      "role": "Employee",
+      "safeReturn": true,
+      "pass": true
+    }
+  ],
+  "schedule": {
+    "editorVisible": false,
+    "error": false,
+    "mainCount": 1,
+    "planningLink": false,
+    "planningWorkLabel": "Published work",
+    "role": "Employee",
+    "summary": "6 assignments · 1 person · 2 sites"
+  },
+  "unrelatedTicket": {
+    "headings": [
+      "Page not found"
+    ],
+    "mainCount": 1,
+    "path": "/tickets/1908a63a-c999-40f0-863b-1403001f0ebc",
+    "refusal": true,
+    "role": "Employee",
+    "safeReturn": true
+  },
+  "unrelatedPrivateFile": {
+    "refused": true,
+    "text": "{\"error\":\"FORBIDDEN\",\"message\":\"This resource is unavailable.\"}",
+    "url": "/api/tickets/1908a63a-c999-40f0-863b-1403001f0ebc/files/c5cbbbca-30c0-40d4-ac26-ea9a7548f872"
+  },
+  "normalSavedSignIn": true,
+  "initialProbeDiagnostics": [
+    {
+      "expectedPath": "/coverage",
+      "headings": [
+        "Coverage is management-only"
+      ],
+      "mainCount": 1,
+      "path": "/coverage",
+      "refusal": false,
+      "role": "Employee",
+      "safeReturn": false,
+      "pass": false
+    },
+    {
+      "expectedPath": "/replacements",
+      "headings": [
+        "Replacement requests are management-only"
+      ],
+      "mainCount": 1,
+      "path": "/replacements",
+      "refusal": false,
+      "role": "Employee",
+      "safeReturn": false,
+      "pass": false
+    }
+  ],
+  "diagnosticNote": "Initial assertion expected generic refusal copy. Coverage/replacements intentionally use management-only copy and a My Schedule return; their corrected checks passed."
+}

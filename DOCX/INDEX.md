@@ -1,7 +1,12 @@
+## Production recovery and migration 0016 — 2026-10-15
+
+- [Production recovery, preservation, snapshot incident and live role/workflow evidence](phase-reports/SCOPEIS_GAP_FIXES_PRODUCTION_2026_10_15.md)
+- Canonical `0016` is applied, State D/17/41; all 744 locked rows preserved. Normal sessions pass 66/66 route observations across all three roles, timetable views and ticket/private-file workflows. Existing roles/grants and all 61 assignments are retained; two QA tickets are archived. The restored-main branch identity and retained original are documented. Broad local browser verification remains 13/14; Settings stays unfinished.
+
 ## Frontend and backend gap implementation — 2026-10-14
 
 - [Implemented controls, history-preserving removal, evidence transport and verification](phase-reports/SCOPEIS_FRONTEND_BACKEND_GAP_FIXES_2026_10_14.md)
-- Implementation `3599844c255135e7e5ce85f2bf2156f26b0b2718` is pushed and verified on `origin/main` at the product owner's explicit request; [the delivery receipt](phase-reports/evidence/frontend-backend-gap-fixes-2026-10-14/delivery.json) records source delivery. All six focused desktop/phone journeys pass; the broad system run passed 13/14 gates with Aggregate E2E interrupted, so full browser/responsive certification remains open. Super Admin controls preserve the existing Admin and Employee boundaries. Additive migration `0016` is prepared and tested only against disposable databases; production migration remains pending and deployment is unverified. The audit below remains the historical baseline.
+- Implementation `3599844c255135e7e5ce85f2bf2156f26b0b2718` is pushed and verified on `origin/main` at the product owner's explicit request; [the delivery receipt](phase-reports/evidence/frontend-backend-gap-fixes-2026-10-14/delivery.json) records source delivery. All six focused desktop/phone journeys pass; the broad system run passed 13/14 gates with Aggregate E2E interrupted, so full browser/responsive certification remains open. Super Admin controls preserve the existing Admin and Employee boundaries. The subsequent [production release](phase-reports/SCOPEIS_GAP_FIXES_PRODUCTION_2026_10_15.md) applies `0016`, verifies preservation and exercises all three roles live. The audit below remains the historical baseline.
 
 ## Frontend and backend feature audit — 2026-10-14
 
