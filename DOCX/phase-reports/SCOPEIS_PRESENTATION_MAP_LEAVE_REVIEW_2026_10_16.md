@@ -1,6 +1,6 @@
 # Presentation, practical map and vacation-review context
 
-Status: **LOCAL_VERIFIED_SOURCE_DELIVERY_PENDING**. Implementation, source review and the final fresh-build browser verification are complete. The owner-authorized push and deployment check are next.
+Status: **FINAL_LOCAL_VERIFIED_SOURCE_DELIVERY_PENDING**. The initial implementation is deployed as `9ac7b80`; the final stored-text presentation follow-up is verified and awaiting its authorized push/deployment check.
 
 The owner requested readable button/text colours throughout the website, a more practical map with real dragging and wheel zoom, removal of the quoted map disclosure and all authored em dashes, and related employee activity during Super Admin vacation review. [The confirmed amendment](../project-memory/PRESENTATION_MAP_LEAVE_REVIEW_AMENDMENT_2026_10_16.md) records the scope and preserved boundaries.
 
@@ -23,6 +23,8 @@ Ten final screenshots are byte-preserved; selected final screenshots are visuall
 The initial broad unit/component diagnostic had one five-second cold-import timeout in an existing collaboration-boundary test; the unchanged focused suite passed 9/9 and the later whole run passed 425/425. Diagnostics are preserved separately. Focused repeats are not added to unique totals.
 
 ## Limits and delivery
+
+The initial application `9ac7b80e82a8c8ec51af60ce79217ad29f1421b9` was pushed to main and deployed successfully. Read-only use of the existing normal Super Admin session verified the named live map choices, synchronized assignment details, the date-bounded review panel on an actual pending vacation, and the exact Create project button's white foreground on ScopeIs blue. No form was submitted. This live check also found em dashes in stored demonstration addresses. The final follow-up adds a shared pure display formatter at visible text/label boundaries across the app, preserving original storage and control values. The [AST source review](evidence/presentation-map-leave-2026-10-16/display-only-transform.json) verifies 58 TSX files/620 display expressions and no other TSX logic changes after removing those formatter calls/imports. Fresh verification on the final 479-input snapshot passes **428/428 unit/components, types, whole lint and a guarded build/browser run 14/14**, including stored em dashes in record fields and a post-browser assertion that the raw source text is preserved. All four browser checkouts/databases are cleaned. The earlier 74 integration cases remain evidence for unchanged backend service/repository files. Final record-text screenshots and receipts have their own prefix; the earlier snapshots remain unchanged. No full system lock was repeated.
 
 The full historical 14-step system lock is not rerun for this bounded amendment. Browser contrast checks cover visible authored controls/text in the exercised states; zero-size indicator glyphs are excluded, and physical devices/exhaustive accessibility certification are not claimed. Map browser tests use controlled raster responses so geometry/fallback checks do not depend on a provider outage. Settings, deferred policies, automatic scheduling and broader Phase 12/13 remain outside this delivery.
 

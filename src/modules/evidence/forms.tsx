@@ -1,4 +1,6 @@
 "use client";
+import { displayText } from "@/shared/presentation/display-text";
+
 
 import { useActionState, useId, useState, type ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
@@ -30,12 +32,12 @@ const sections = [
 ] as const;
 
 function Feedback({ state }: { state: EvidenceActionState }) {
-  return state.error ? <p className="operation-error" role="alert">{state.error}</p> : state.success ? <p className="operation-success" role="status">{state.success}</p> : null;
+  return state.error ? <p className="operation-error" role="alert">{displayText(state.error)}</p> : state.success ? <p className="operation-success" role="status">{displayText(state.success)}</p> : null;
 }
 
 function Form({ action, title, children, submit }: { action: EvidenceAction; title: string; children: React.ReactNode; submit: string }) {
   const [state, formAction, pending] = useActionState(action, initial);
-  return <form className="operation-form compact" action={formAction} aria-label={title}>{children}<Feedback state={state} /><button className="button primary" type="submit" disabled={pending}>{pending ? "Saving…" : submit}</button></form>;
+  return <form className="operation-form compact" action={formAction} aria-label={displayText(title)}>{displayText(children)}<Feedback state={state} /><button className="button primary" type="submit" disabled={pending}>{displayText(pending ? "Saving…" : submit)}</button></form>;
 }
 
 /** Textual state badges: colour is never the only signal. */
@@ -69,7 +71,7 @@ function EvidenceFields({ item, kind, skills, values, onFieldChange }: { item?: 
     </div>
     {kind === "portfolio" || kind === "project_example" ? <label>Portfolio link (HTTPS only)<input name="externalUrl" type="url" inputMode="url" placeholder="https://" {...field("externalUrl", item?.externalUrl ?? "")} maxLength={2048} /></label> : null}
     <label>Details<textarea name="details" {...field("details", item?.details ?? "")} maxLength={1000} rows={2} /></label>
-    {kind === "certification" || kind === "supporting_document" ? <label>Related recorded skill<select name="relatedSkillId" {...field("relatedSkillId", item?.relatedSkillId ?? "")}><option value="">None</option>{skills.map((skill) => <option key={skill.id} value={skill.id}>{skill.name}</option>)}</select></label> : null}
+    {kind === "certification" || kind === "supporting_document" ? <label>Related recorded skill<select name="relatedSkillId" {...field("relatedSkillId", item?.relatedSkillId ?? "")}><option value="">None</option>{skills.map((skill) => <option key={skill.id} value={skill.id}>{displayText(skill.name)}</option>)}</select></label> : null}
   </>;
 }
 
@@ -100,12 +102,12 @@ function FileUploader({ evidenceId, version, replaceFileId, label, maxUploadByte
     } catch { setState({ kind: "error", message: "The file could not be uploaded." }); }
   }
 
-  return <form className="evidence-upload" onSubmit={upload} aria-label={label}>
-    <label htmlFor={`${fileFieldId}-file`}>{label}</label>
+  return <form className="evidence-upload" onSubmit={upload} aria-label={displayText(label)}>
+    <label htmlFor={`${fileFieldId}-file`}>{displayText(label)}</label>
     <input id={`${fileFieldId}-file`} name="file" type="file" accept=".pdf,.jpg,.jpeg,.png,.docx,application/pdf,image/jpeg,image/png,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required />
     <p className="operation-help">PDF, JPEG, PNG or Word document, up to {maxUploadBytes / (1024 * 1024)} MiB.</p>
     <button className="button" type="submit" disabled={state.kind === "busy" || state.kind === "ok"}>{state.kind === "busy" ? "Uploading…" : state.kind === "ok" ? "File attached" : "Upload private file"}</button>
-    {state.kind === "error" ? <p className="operation-error" role="alert">{state.message}</p> : state.kind === "ok" ? <p className="operation-success" role="status">{state.message}</p> : null}
+    {state.kind === "error" ? <p className="operation-error" role="alert">{displayText(state.message)}</p> : state.kind === "ok" ? <p className="operation-success" role="status">{displayText(state.message)}</p> : null}
   </form>;
 }
 
@@ -113,7 +115,7 @@ function FileList({ item }: { item: EvidenceItemView }) {
   if (!item.files.length) return <p className="operation-empty">No private file is attached.</p>;
   return <ul className="operation-list">{item.files.map((file) => <li key={file.id}>
     <div>
-      <strong>{file.originalFilename}</strong>
+      <strong>{displayText(file.originalFilename)}</strong>
       <span>Version {file.version} · {Math.max(1, Math.round(file.sizeBytes / 1024))} KB · {file.archivedAt ? "replaced" : "current"}</span>
     </div>
     {!file.archivedAt ? <EvidenceFileLink file={file} /> : null}
@@ -123,24 +125,24 @@ function FileList({ item }: { item: EvidenceItemView }) {
 function OwnerItem({ item, skills, maxUploadBytes }: { item: EvidenceItemView; skills: SkillOption[]; maxUploadBytes: number }) {
   return <article className="evidence-item" id={`evidence-${item.id}`}>
     <div className="evidence-item-head">
-      <div><strong>{item.title}</strong><span>{item.issuer ? `${item.issuer} · ` : ""}{expiryText(item)}{item.relatedSkillName ? ` · ${item.relatedSkillName}` : ""}</span></div>
+      <div><strong>{displayText(item.title)}</strong><span>{displayText(item.issuer ? `${item.issuer} · ` : "")}{displayText(expiryText(item))}{displayText(item.relatedSkillName ? ` · ${item.relatedSkillName}` : "")}</span></div>
       <Badges item={item} />
     </div>
-    {item.details ? <p>{item.details}</p> : null}
+    {item.details ? <p>{displayText(item.details)}</p> : null}
     {item.externalUrl ? <a className="operation-link" href={item.externalUrl} target="_blank" rel="noreferrer noopener">Open portfolio link</a> : null}
     <FileList item={item} />
     {!item.archivedAt ? <>
       <div className="people-record-actions">
-      <TaskDialog triggerLabel="Attach file" title={`Files for ${item.title}`} description="Attach or replace a private PDF, image, or Word document."><FileUploader evidenceId={item.id} version={item.version} label="Attach or replace file" maxUploadBytes={maxUploadBytes} /></TaskDialog>
-      <TaskDialog triggerLabel="Edit item" title={`Edit ${item.title}`}>
-        <Form action={updateEvidenceAction} title={`Edit ${item.title}`} submit="Save changes">
+      <TaskDialog triggerLabel="Attach file" title={displayText(`Files for ${item.title}`)} description="Attach or replace a private PDF, image, or Word document."><FileUploader evidenceId={item.id} version={item.version} label="Attach or replace file" maxUploadBytes={maxUploadBytes} /></TaskDialog>
+      <TaskDialog triggerLabel="Edit item" title={displayText(`Edit ${item.title}`)}>
+        <Form action={updateEvidenceAction} title={displayText(`Edit ${item.title}`)} submit="Save changes">
           <input type="hidden" name="evidenceId" value={item.id} />
           <input type="hidden" name="expectedVersion" value={item.version} />
           <EvidenceFields item={item} kind={item.kind} skills={skills} />
         </Form>
       </TaskDialog>
-      <TaskDialog triggerLabel="Archive item" title={`Archive ${item.title}`} description="Archiving preserves history and removes the item from active lists.">
-      <Form action={archiveEvidenceAction} title={`Archive ${item.title}`} submit="Archive">
+      <TaskDialog triggerLabel="Archive item" title={displayText(`Archive ${item.title}`)} description="Archiving preserves history and removes the item from active lists.">
+      <Form action={archiveEvidenceAction} title={displayText(`Archive ${item.title}`)} submit="Archive">
         <input type="hidden" name="evidenceId" value={item.id} />
         <input type="hidden" name="expectedVersion" value={item.version} />
       </Form>
@@ -160,7 +162,7 @@ function CreateEvidenceForm({ kind, skills, onCreateAnother, onBusyChange, maxUp
   const [values, setValues] = useState<Record<string, string>>({});
   if (state.savedItem && state.success) return <div className="evidence-saved-task">
     <Feedback state={state} />
-    <h3>{state.savedItem.title}</h3>
+    <h3>{displayText(state.savedItem.title)}</h3>
     {state.savedItem.archived ? <p>This item is archived. Start a new item to attach a file.</p> : <>
       <p>You can attach a private file now, or close this window and do it later.</p>
       <FileUploader evidenceId={state.savedItem.id} version={state.savedItem.version} label="Attach file to saved item" maxUploadBytes={maxUploadBytes} />
@@ -202,10 +204,10 @@ export function CapabilityEvidencePanel({ items, skills, maxUploadBytes = HOSTED
       const active = sectionItems.filter((item) => !item.archivedAt);
       const archived = sectionItems.filter((item) => item.archivedAt);
       return <details className="operation-panel evidence-category" key={section.kind}>
-        <summary><h3 id={`evidence-${section.kind}-title`}>{section.title}</h3><span>{active.length} active {active.length === 1 ? "item" : "items"}{archived.length ? ` · ${archived.length} archived` : ""}</span></summary>
+        <summary><h3 id={`evidence-${section.kind}-title`}>{section.title}</h3><span>{active.length} active {active.length === 1 ? "item" : "items"}{displayText(archived.length ? ` · ${archived.length} archived` : "")}</span></summary>
         <div className="evidence-category-content">
         {active.length ? <div className="evidence-list">{active.map((item) => <OwnerItem key={item.id} item={item} skills={skills} maxUploadBytes={maxUploadBytes} />)}</div> : <p className="operation-empty">Nothing recorded in this section yet.</p>}
-        {archived.length ? <details className="evidence-archive"><summary>{archived.length} archived item{archived.length === 1 ? "" : "s"}</summary><ul className="operation-list">{archived.map((item) => <li key={item.id}><div><strong>{item.title}</strong><span>Archived · {expiryText(item)}</span></div></li>)}</ul></details> : null}
+        {archived.length ? <details className="evidence-archive"><summary>{archived.length} archived item{archived.length === 1 ? "" : "s"}</summary><ul className="operation-list">{archived.map((item) => <li key={item.id}><div><strong>{displayText(item.title)}</strong><span>Archived · {displayText(expiryText(item))}</span></div></li>)}</ul></details> : null}
         </div>
       </details>;
     })}</div>
@@ -219,24 +221,24 @@ export function EvidenceReviewPanel({ items, employeeUserId, employeeName }: { i
     <header className="operations-heading"><div>
       <p className="eyebrow">Experience & documents</p>
       <h2 id="evidence-review-title">Capability evidence</h2>
-      <p>Evidence recorded by {employeeName}. Review status is informational; it does not change staffing eligibility.</p>
+      <p>Evidence recorded by {displayText(employeeName)}. Review status is informational; it does not change staffing eligibility.</p>
     </div></header>
     {active.length ? <div className="evidence-list">{active.map((item) => <article className="evidence-item" key={item.id} id={`evidence-${item.id}`}>
       <div className="evidence-item-head">
-        <div><strong>{item.title}</strong><span>{item.kind.replace("_", " ")} · {item.issuer ? `${item.issuer} · ` : ""}{expiryText(item)}{item.relatedSkillName ? ` · ${item.relatedSkillName}` : ""}</span></div>
+        <div><strong>{displayText(item.title)}</strong><span>{displayText(item.kind.replace("_", " "))} · {displayText(item.issuer ? `${item.issuer} · ` : "")}{displayText(expiryText(item))}{displayText(item.relatedSkillName ? ` · ${item.relatedSkillName}` : "")}</span></div>
         <Badges item={item} />
       </div>
-      {item.details ? <p>{item.details}</p> : null}
+      {item.details ? <p>{displayText(item.details)}</p> : null}
       {item.externalUrl ? <a className="operation-link" href={item.externalUrl} target="_blank" rel="noreferrer noopener">Open portfolio link</a> : null}
       <FileList item={item} />
-      <TaskDialog triggerLabel="Review evidence" title={`Review ${item.title}`} description="Mark the item reviewed, verify it, or reset its review state. This does not change staffing eligibility."><div className="evidence-review-actions">
-        <Form action={reviewEvidenceAction} title={`Mark ${item.title} reviewed`} submit="Mark reviewed">
+      <TaskDialog triggerLabel="Review evidence" title={displayText(`Review ${item.title}`)} description="Mark the item reviewed, verify it, or reset its review state. This does not change staffing eligibility."><div className="evidence-review-actions">
+        <Form action={reviewEvidenceAction} title={displayText(`Mark ${item.title} reviewed`)} submit="Mark reviewed">
           <input type="hidden" name="evidenceId" value={item.id} /><input type="hidden" name="expectedVersion" value={item.version} /><input type="hidden" name="state" value="reviewed" /><input type="hidden" name="ownerUserId" value={employeeUserId} />
         </Form>
-        <Form action={reviewEvidenceAction} title={`Verify ${item.title}`} submit="Mark verified">
+        <Form action={reviewEvidenceAction} title={displayText(`Verify ${item.title}`)} submit="Mark verified">
           <input type="hidden" name="evidenceId" value={item.id} /><input type="hidden" name="expectedVersion" value={item.version} /><input type="hidden" name="state" value="verified" /><input type="hidden" name="ownerUserId" value={employeeUserId} />
         </Form>
-        <Form action={reviewEvidenceAction} title={`Reset review state for ${item.title}`} submit="Reset to not reviewed">
+        <Form action={reviewEvidenceAction} title={displayText(`Reset review state for ${item.title}`)} submit="Reset to not reviewed">
           <input type="hidden" name="evidenceId" value={item.id} /><input type="hidden" name="expectedVersion" value={item.version} /><input type="hidden" name="state" value="unreviewed" /><input type="hidden" name="ownerUserId" value={employeeUserId} />
         </Form>
       </div></TaskDialog>
@@ -250,8 +252,8 @@ export function CertificationSummaryPanel({ rows, employeeName }: { rows: Certif
     <header className="operations-heading"><div>
       <p className="eyebrow">Qualifications</p>
       <h2 id="evidence-summary-title">Certification summary</h2>
-      <p>Certifications recorded by {employeeName}. Private files and portfolio details are withheld from this view.</p>
+      <p>Certifications recorded by {displayText(employeeName)}. Private files and portfolio details are withheld from this view.</p>
     </div></header>
-    {rows.length ? <ul className="operation-list">{rows.map((row) => <li key={row.id} id={`evidence-${row.id}`}><div><strong>{row.title}</strong><span>{row.issuer ? `${row.issuer} · ` : ""}{expiryText({ expiryDate: row.expiryDate, expiryStatus: row.expiryStatus } as EvidenceItemView)}{row.relatedSkillName ? ` · ${row.relatedSkillName}` : ""}</span><span>{row.reviewState === "verified" ? "Verified" : row.reviewState === "reviewed" ? "Reviewed" : "Not reviewed"}</span></div></li>)}</ul> : <p className="operation-empty">No certification summary is recorded for this employee.</p>}
+    {rows.length ? <ul className="operation-list">{rows.map((row) => <li key={row.id} id={`evidence-${row.id}`}><div><strong>{displayText(row.title)}</strong><span>{displayText(row.issuer ? `${row.issuer} · ` : "")}{displayText(expiryText({ expiryDate: row.expiryDate, expiryStatus: row.expiryStatus } as EvidenceItemView))}{displayText(row.relatedSkillName ? ` · ${row.relatedSkillName}` : "")}</span><span>{row.reviewState === "verified" ? "Verified" : row.reviewState === "reviewed" ? "Reviewed" : "Not reviewed"}</span></div></li>)}</ul> : <p className="operation-empty">No certification summary is recorded for this employee.</p>}
   </section>;
 }

@@ -1,4 +1,6 @@
 "use client";
+import { displayText } from "@/shared/presentation/display-text";
+
 
 import { useState } from "react";
 import { EVIDENCE_DOWNLOAD_CHUNK_BYTES, HOSTED_EVIDENCE_FILE_BYTES } from "./file-limits";
@@ -28,5 +30,5 @@ export function EvidenceFileLink({ file }: { file: { id: string; sizeBytes: numb
     } catch (cause) { setError(cause instanceof Error ? cause.message : "The file could not be downloaded. Try again."); }
     finally { setPending(false); }
   }
-  return <div><button className="button" type="button" onClick={download} disabled={pending}>{pending ? "Downloading…" : "Download file"}</button>{error ? <p className="operation-error" role="alert">{error}</p> : null}</div>;
+  return <div><button className="button" type="button" onClick={download} disabled={pending}>{pending ? "Downloading…" : "Download file"}</button>{error ? <p className="operation-error" role="alert">{displayText(error)}</p> : null}</div>;
 }

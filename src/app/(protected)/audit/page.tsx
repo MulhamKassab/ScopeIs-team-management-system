@@ -1,3 +1,4 @@
+import { displayText } from "@/shared/presentation/display-text";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentActor } from "@/modules/auth/session-service";
@@ -15,9 +16,9 @@ const selectStyle = { display: "block", width: "100%" } as const;
 function Filters({ view }: { view: AuditPageView }) {
   const { query, options } = view;
   return <form className="operation-form compact audit-filters" method="get" aria-label="Audit filters">
-    <label>Action<select name="action" defaultValue={query.action ?? ""} style={selectStyle}><option value="">Any action</option>{options.actions.map((action) => <option key={action} value={action}>{auditActionLabel(action)}</option>)}</select></label>
-    <label>Record type<select name="targetType" defaultValue={query.targetType ?? ""} style={selectStyle}><option value="">Any record type</option>{options.targetTypes.map((type) => <option key={type} value={type}>{type.replaceAll("_", " ")}</option>)}</select></label>
-    <label>Person<select name="actorUserId" defaultValue={query.actorUserId ?? ""} style={selectStyle}><option value="">Any person</option>{options.actors.map((actor) => <option key={actor.id} value={actor.id}>{actor.displayName}</option>)}</select></label>
+    <label>Action<select name="action" defaultValue={query.action ?? ""} style={selectStyle}><option value="">Any action</option>{options.actions.map((action) => <option key={action} value={action}>{displayText(auditActionLabel(action))}</option>)}</select></label>
+    <label>Record type<select name="targetType" defaultValue={query.targetType ?? ""} style={selectStyle}><option value="">Any record type</option>{options.targetTypes.map((type) => <option key={type} value={type}>{displayText(type.replaceAll("_", " "))}</option>)}</select></label>
+    <label>Person<select name="actorUserId" defaultValue={query.actorUserId ?? ""} style={selectStyle}><option value="">Any person</option>{options.actors.map((actor) => <option key={actor.id} value={actor.id}>{displayText(actor.displayName)}</option>)}</select></label>
     <div className="operation-form-grid">
       <label>From date<input type="date" name="from" defaultValue={query.from ?? ""} /></label>
       <label>To date<input type="date" name="to" defaultValue={query.to ?? ""} /></label>
@@ -42,12 +43,12 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
     <ul className="operation-list audit-list">
       {view.items.map((item) => <li key={item.id}>
         <div>
-          <strong>{item.label}</strong>
-          <span><time dateTime={item.occurredAt}>{formatDubaiDateTime(item.occurredAt)}</time> · {item.actorName ?? "Removed or unknown actor"}{item.actorRole ? ` (${item.actorRole === "SUPER_ADMIN" ? "Super Admin" : item.actorRole === "ADMIN" ? "Admin" : item.actorRole === "EMPLOYEE" ? "Employee" : "System"})` : ""}</span>
+          <strong>{displayText(item.label)}</strong>
+          <span><time dateTime={item.occurredAt}>{displayText(formatDubaiDateTime(item.occurredAt))}</time> · {displayText(item.actorName ?? "Removed or unknown actor")}{displayText(item.actorRole ? ` (${item.actorRole === "SUPER_ADMIN" ? "Super Admin" : item.actorRole === "ADMIN" ? "Admin" : item.actorRole === "EMPLOYEE" ? "Employee" : "System"})` : "")}</span>
           <details className="audit-record-details"><summary>Record details</summary>
-          <span className="audit-target">{item.targetType}{item.targetId ? ` · ${item.targetId}` : ""}</span>
-          {item.isRecognizedAction ? <span className="audit-action">{item.action}</span> : <span className="audit-action">Unrecognized action type · no metadata is shown.</span>}
-          {item.fields.length ? <dl className="audit-fields">{item.fields.map((field) => <div key={field.key}><dt>{field.key}</dt><dd>{field.value}</dd></div>)}</dl> : null}
+          <span className="audit-target">{displayText(item.targetType)}{displayText(item.targetId ? ` · ${item.targetId}` : "")}</span>
+          {item.isRecognizedAction ? <span className="audit-action">{displayText(item.action)}</span> : <span className="audit-action">Unrecognized action type · no metadata is shown.</span>}
+          {item.fields.length ? <dl className="audit-fields">{item.fields.map((field) => <div key={field.key}><dt>{displayText(field.key)}</dt><dd>{displayText(field.value)}</dd></div>)}</dl> : null}
           </details>
         </div>
       </li>)}

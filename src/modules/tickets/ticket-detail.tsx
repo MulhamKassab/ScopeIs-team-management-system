@@ -1,4 +1,6 @@
 "use client";
+import { displayText } from "@/shared/presentation/display-text";
+
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -39,7 +41,7 @@ function readWorkLog(form: FormData) {
 
 function WorkLogFields({ log, authorName }: { log?: WorkLog; authorName: string }) {
   return <>
-    <p className="ticket-file-meta">Recorded by {authorName}. Times use Dubai time.</p>
+    <p className="ticket-file-meta">Recorded by {displayText(authorName)}. Times use Dubai time.</p>
     <label>Work description<textarea name="description" rows={4} maxLength={5000} defaultValue={log?.description ?? ""} required data-dialog-autofocus /></label>
     <div className="operation-form-grid">
       <label>Work date and time<input name="loggedAt" type="datetime-local" defaultValue={localDubaiTime(log?.loggedAt ?? new Date().toISOString())} required /></label>
@@ -49,7 +51,7 @@ function WorkLogFields({ log, authorName }: { log?: WorkLog; authorName: string 
 }
 
 function DetailText({ heading, value }: { heading: string; value: string | null }) {
-  return <section className="ticket-detail-text"><h3>{heading}</h3><p className={value ? "ticket-text" : "ticket-file-meta"}>{value || "Nothing recorded yet."}</p></section>;
+  return <section className="ticket-detail-text"><h3>{displayText(heading)}</h3><p className={value ? "ticket-text" : "ticket-file-meta"}>{displayText(value || "Nothing recorded yet.")}</p></section>;
 }
 
 /** Bytes always pass through the private, freshly authorized attachment route. */
@@ -100,12 +102,12 @@ function TicketFileForm({ ticket, file, action, onSuccess, onReload, maxUploadBy
     } catch { setFeedback({ kind: "error", message: "The file could not be saved. Check your connection and try again." }); }
   }
 
-  return <form className="operation-form compact" aria-label={label} onSubmit={submit}>
+  return <form className="operation-form compact" aria-label={displayText(label)} onSubmit={submit}>
     {action === "upload" ? <>
       <label htmlFor={fieldId}>Choose file<input id={fieldId} name="file" type="file" required accept=".pdf,.jpg,.jpeg,.png,.docx,application/pdf,image/jpeg,image/png,application/vnd.openxmlformats-officedocument.wordprocessingml.document" /></label>
       <p>PDF, JPEG, PNG or Word document, up to {maxUploadBytes / (1024 * 1024)} MiB.</p>
     </> : <p>{action === "archive" ? "Archive this file to retain its history. You can restore it later." : "Restore this private file to the ticket."}</p>}
-    {feedback.message ? <p className={feedback.kind === "error" ? "operation-error" : "operation-success"} role={feedback.kind === "error" ? "alert" : "status"}>{feedback.message}</p> : null}
+    {feedback.message ? <p className={feedback.kind === "error" ? "operation-error" : "operation-success"} role={feedback.kind === "error" ? "alert" : "status"}>{displayText(feedback.message)}</p> : null}
     {feedback.stale ? <button type="button" className="button" onClick={async () => {
       try { await onReload(); setFeedback({ kind: "idle", message: "Latest record loaded. Review it before trying again." }); }
       catch { setFeedback({ kind: "error", stale: true, message: "The latest record could not be loaded. Try again." }); }
@@ -173,14 +175,14 @@ export function TicketDetailView({ initialData, workspace, actor, maxUploadBytes
   return <div className="operations-page tickets-page ticket-detail-page">
     <Link href={returnTo} className="button ticket-back"><ArrowLeft size={17} aria-hidden="true" />Back to tickets</Link>
     <nav className="ticket-breadcrumbs" aria-label="Ticket location"><ol>
-      <li>{currentWorkspace ? <Link href={ticketContainerHref(returnTo, { view: "tickets", workspace: currentWorkspace.id, board: "" })}>{currentWorkspace.name}</Link> : <span>Workspace</span>}</li>
-      <li>{dashboard ? <Link href={ticketContainerHref(returnTo, { view: dashboard.status === "ARCHIVED" ? "archive" : "tickets", workspace: ticket.workspaceId, board: dashboard.id })}>{dashboard.name}</Link> : <span>Dashboard</span>}</li>
-      <li><span aria-current="page">{ticketNumber(ticket.number)}</span></li>
+      <li>{currentWorkspace ? <Link href={ticketContainerHref(returnTo, { view: "tickets", workspace: currentWorkspace.id, board: "" })}>{displayText(currentWorkspace.name)}</Link> : <span>Workspace</span>}</li>
+      <li>{dashboard ? <Link href={ticketContainerHref(returnTo, { view: dashboard.status === "ARCHIVED" ? "archive" : "tickets", workspace: ticket.workspaceId, board: dashboard.id })}>{displayText(dashboard.name)}</Link> : <span>Dashboard</span>}</li>
+      <li><span aria-current="page">{displayText(ticketNumber(ticket.number))}</span></li>
     </ol></nav>
     <header className="operations-heading ticket-detail-heading">
       <div>
-        <p className="eyebrow">{ticketNumber(ticket.number)}</p>
-        <h1>{ticket.subject}</h1>
+        <p className="eyebrow">{displayText(ticketNumber(ticket.number))}</p>
+        <h1>{displayText(ticket.subject)}</h1>
         <div className="ticket-badges"><span className={`ticket-badge ticket-status-${ticket.status.toLowerCase()}`}>{ticketStatusLabels[ticket.status]}</span><span className={`ticket-badge ticket-priority-${ticket.priority.toLowerCase()}`}>{ticketPriorityLabels[ticket.priority]}</span>{ticket.archivedAt ? <span className="ticket-badge">Archived</span> : null}</div>
       </div>
       <div className="ticket-detail-actions">
@@ -203,14 +205,14 @@ export function TicketDetailView({ initialData, workspace, actor, maxUploadBytes
         <button type="button" className="button" disabled={refreshing} onClick={() => { setNotice(""); void refreshTicket(); }}><RotateCcw size={17} aria-hidden="true" />{refreshing ? "Refreshing…" : "Refresh ticket"}</button>
       </div>
     </header>
-    {notice ? <p className="operation-success" role="status">{notice}</p> : null}
-    {refreshError ? <p className="operation-error" role="alert">{refreshError}</p> : null}
-    {ticket.archivedAt ? <p className="operation-callout">Archived on {dateTime(ticket.archivedAt)}. This ticket is read-only until restored.</p> : !ticket.permissions.edit ? <p className="operation-callout">You have read-only access to this ticket.</p> : null}
+    {notice ? <p className="operation-success" role="status">{displayText(notice)}</p> : null}
+    {refreshError ? <p className="operation-error" role="alert">{displayText(refreshError)}</p> : null}
+    {ticket.archivedAt ? <p className="operation-callout">Archived on {displayText(dateTime(ticket.archivedAt))}. This ticket is read-only until restored.</p> : !ticket.permissions.edit ? <p className="operation-callout">You have read-only access to this ticket.</p> : null}
     <div className="ticket-detail-grid">
       <div className="ticket-detail-content">
         <section className="operation-panel" aria-label="Ticket details">
           <h2>Details</h2>
-          {ticket.status === "ON_HOLD" ? <div className="operation-callout"><strong>On hold</strong><p className="ticket-text">{ticket.onHoldReason}</p></div> : null}
+          {ticket.status === "ON_HOLD" ? <div className="operation-callout"><strong>On hold</strong><p className="ticket-text">{displayText(ticket.onHoldReason)}</p></div> : null}
           <DetailText heading="Description" value={ticket.summary} />
           {ticket.planning || ticket.workCompleted || ticket.notes ? <details className="ticket-extra-fields ticket-secondary-narratives"><summary>Planning, completed work and notes</summary>
             {ticket.planning ? <DetailText heading="Planning" value={ticket.planning} /> : null}
@@ -225,8 +227,8 @@ export function TicketDetailView({ initialData, workspace, actor, maxUploadBytes
             </TaskDialog> : null}
           </div>
           {ticket.workLogs.length ? <ul className="operation-list ticket-log-list">{ticket.workLogs.map((log) => <li key={log.id}>
-            <div><strong>{log.authorName}</strong><span>{dateTime(log.loggedAt)}{log.durationMinutes ? ` · ${log.durationMinutes} minutes` : ""}</span><p className="ticket-text">{log.description}</p></div>
-            {log.canEdit && ticket.permissions.log && writable ? <TaskDialog triggerLabel={`Edit work log by ${log.authorName} on ${dateTime(log.loggedAt)}`} triggerText="Edit" title="Edit work log" triggerClassName="button" triggerIcon={<Pencil size={16} aria-hidden="true" />}>
+            <div><strong>{displayText(log.authorName)}</strong><span>{displayText(dateTime(log.loggedAt))}{displayText(log.durationMinutes ? ` · ${log.durationMinutes} minutes` : "")}</span><p className="ticket-text">{displayText(log.description)}</p></div>
+            {log.canEdit && ticket.permissions.log && writable ? <TaskDialog triggerLabel={displayText(`Edit work log by ${log.authorName} on ${dateTime(log.loggedAt)}`)} triggerText="Edit" title="Edit work log" triggerClassName="button" triggerIcon={<Pencil size={16} aria-hidden="true" />}>
               <TicketActionForm label="Edit work log" submit="Save changes" getCommand={(form) => ({ action: "editWorkLog", ticketId: ticket.id, workLogId: log.id, version: ticket.version, ...readWorkLog(form) })} onSuccess={() => saved("Work log updated.")} onConflict={() => refreshTicket(includeArchived, true)}><WorkLogFields key={`${log.id}-${log.version}`} log={log} authorName={log.authorName} /></TicketActionForm>
             </TaskDialog> : null}
           </li>)}</ul> : <p className="operation-empty">No work logs yet.</p>}
@@ -237,26 +239,26 @@ export function TicketDetailView({ initialData, workspace, actor, maxUploadBytes
           </div>
           <label className="operation-check ticket-file-toggle"><input type="checkbox" checked={includeArchived} disabled={refreshing} onChange={(event) => { const checked = event.target.checked; setIncludeArchived(checked); void refreshTicket(checked); }} />Include archived files</label>
           {files.length ? <ul className="operation-list ticket-file-list">{files.filter((file) => includeArchived || !file.archivedAt).map((file) => <li key={file.id}>
-            <div><strong>{file.fileName}</strong><span>{Math.max(1, Math.ceil(file.byteSize / 1024))} KB · {file.uploaderName} · {dateTime(file.createdAt)}{file.archivedAt ? " · Archived" : ""}</span></div>
+            <div><strong>{displayText(file.fileName)}</strong><span>{Math.max(1, Math.ceil(file.byteSize / 1024))} KB · {displayText(file.uploaderName)} · {displayText(dateTime(file.createdAt))}{file.archivedAt ? " · Archived" : ""}</span></div>
             <div className="ticket-detail-actions">
-              {!file.archivedAt ? <a className="button" href={`/api/tickets/${ticket.id}/files/${file.id}`} aria-label={`Download ${file.fileName}`}><FileDown size={16} aria-hidden="true" />Download</a> : null}
-              {ticket.permissions.files && writable && (file.canArchive || file.canRestore) ? <TaskDialog triggerLabel={`${file.canRestore ? "Restore" : "Archive"} ${file.fileName}`} triggerText={file.canRestore ? "Restore" : "Archive"} title={file.canRestore ? "Restore private file" : "Archive private file"} triggerClassName="button"><TicketFileForm ticket={ticket} file={file} action={file.canRestore ? "restore" : "archive"} maxUploadBytes={maxUploadBytes} onSuccess={() => saved(file.canRestore ? "File restored." : "File archived.")} onReload={() => refreshTicket(includeArchived, true)} /></TaskDialog> : null}
+              {!file.archivedAt ? <a className="button" href={`/api/tickets/${ticket.id}/files/${file.id}`} aria-label={displayText(`Download ${file.fileName}`)}><FileDown size={16} aria-hidden="true" />Download</a> : null}
+              {ticket.permissions.files && writable && (file.canArchive || file.canRestore) ? <TaskDialog triggerLabel={displayText(`${file.canRestore ? "Restore" : "Archive"} ${file.fileName}`)} triggerText={file.canRestore ? "Restore" : "Archive"} title={file.canRestore ? "Restore private file" : "Archive private file"} triggerClassName="button"><TicketFileForm ticket={ticket} file={file} action={file.canRestore ? "restore" : "archive"} maxUploadBytes={maxUploadBytes} onSuccess={() => saved(file.canRestore ? "File restored." : "File archived.")} onReload={() => refreshTicket(includeArchived, true)} /></TaskDialog> : null}
             </div>
           </li>)}</ul> : <p className="operation-empty">No private files attached.</p>}
         </section>
       </div>
       <aside className="ticket-detail-aside">
-        <details className="operation-panel ticket-detail-facts"><summary>Ticket information</summary><dl className="ticket-facts"><div><dt>Created by</dt><dd>{ticket.creatorName}</dd></div><div><dt>Ticket date</dt><dd>{ticketDate(ticket.ticketDate)}</dd></div><div><dt>Due date</dt><dd>{ticket.dueDate ? ticketDate(ticket.dueDate) : "No due date"}</dd></div><div><dt>Last updated</dt><dd>{dateTime(ticket.updatedAt)}</dd></div></dl></details>
+        <details className="operation-panel ticket-detail-facts"><summary>Ticket information</summary><dl className="ticket-facts"><div><dt>Created by</dt><dd>{displayText(ticket.creatorName)}</dd></div><div><dt>Ticket date</dt><dd>{displayText(ticketDate(ticket.ticketDate))}</dd></div><div><dt>Due date</dt><dd>{displayText(ticket.dueDate ? ticketDate(ticket.dueDate) : "No due date")}</dd></div><div><dt>Last updated</dt><dd>{displayText(dateTime(ticket.updatedAt))}</dd></div></dl></details>
         <section className="operation-panel" aria-labelledby="ticket-people-heading"><div className="ticket-section-heading"><h2 id="ticket-people-heading">People</h2>
           {ticket.permissions.managePeople && writable ? <TaskDialog triggerLabel="Manage ticket people" triggerText="Manage" title="Manage ticket people" description="Assign multiple company people to work, or mention people for read-only access and notifications." triggerClassName="button" triggerIcon={<Users size={17} aria-hidden="true" />}>
             <TicketActionForm label="Manage ticket people" submit="Save people" getCommand={(form) => ({ action: "setParticipants", ticketId: ticket.id, version: ticket.version, assigneeIds: form.getAll("assigneeIds").map(String), observerIds: form.getAll("observerIds").map(String) })} onSuccess={() => saved("Ticket people updated.")} onConflict={() => refreshTicket(includeArchived, true)}>
-              <p>{ticket.creatorName} retains creator access.</p>
+              <p>{displayText(ticket.creatorName)} retains creator access.</p>
               <TicketPeopleFields key={ticket.version} people={workspace.people} creatorUserId={ticket.creatorUserId}
                 assigneeIds={ticket.participants.filter((person) => person.participation === "ASSIGNEE").map((person) => person.userId)}
                 observerIds={ticket.participants.filter((person) => person.participation === "OBSERVER").map((person) => person.userId)} />
             </TicketActionForm>
           </TaskDialog> : null}
-        </div><ul className="operation-list ticket-person-list">{ticket.participants.map((person) => <li key={person.userId}><div><strong>{person.displayName}</strong><span>{person.participation === "CREATOR" ? "Creator" : person.participation === "ASSIGNEE" ? "Assignee" : "Mentioned · read only"}</span></div></li>)}</ul></section>
+        </div><ul className="operation-list ticket-person-list">{ticket.participants.map((person) => <li key={person.userId}><div><strong>{displayText(person.displayName)}</strong><span>{person.participation === "CREATOR" ? "Creator" : person.participation === "ASSIGNEE" ? "Assignee" : "Mentioned · read only"}</span></div></li>)}</ul></section>
       </aside>
     </div>
   </div>;

@@ -1,3 +1,4 @@
+import { displayText } from "@/shared/presentation/display-text";
 import { notificationService } from "@/modules/notifications/service";
 import { env } from "@/server/env";
 import { redirect } from "next/navigation";
@@ -14,5 +15,5 @@ export default async function ProtectedLayout({ children }: { children: React.Re
   if (await mustChangePassword(actor.id)) redirect("/account/change-password");
   const navigation = navigationFor(actor);
   const unreadCount = await notificationService.unreadCount(actor);
-  return <ApplicationShell unreadCount={unreadCount} actor={actor} navigation={navigation} title="Team Management">{env().SCOPEIS_DEMO_WORKSPACE === "true" && <p className="demo-workspace-banner"><strong>Demo workspace</strong><span>Fictional company data · Changes are saved</span></p>}<PageJourneyHelp navigation={navigation} role={actor.role} />{children}</ApplicationShell>;
+  return <ApplicationShell unreadCount={unreadCount} actor={actor} navigation={navigation} title="Team Management">{env().SCOPEIS_DEMO_WORKSPACE === "true" && <p className="demo-workspace-banner"><strong>Demo workspace</strong><span>Fictional company data · Changes are saved</span></p>}<PageJourneyHelp navigation={navigation} role={actor.role} />{displayText(children)}</ApplicationShell>;
 }

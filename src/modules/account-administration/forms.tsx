@@ -1,4 +1,6 @@
 "use client";
+import { displayText } from "@/shared/presentation/display-text";
+
 
 import { useActionState, useState } from "react";
 import { TaskDialog } from "@/shared/components/task-dialog";
@@ -7,11 +9,11 @@ import type { AccountFormAction, AccountFormState } from "./actions";
 const initialState: AccountFormState = {};
 
 function FieldError({ id, message }: { id: string; message?: string }) {
-  return message ? <p id={id} className="form-error">{message}</p> : null;
+  return message ? <p id={id} className="form-error">{displayText(message)}</p> : null;
 }
 
 function StatusMessage({ state }: { state: AccountFormState }) {
-  return <>{state.success ? <p className="form-success" role="status">{state.success}</p> : null}{state.formError ? <p className="form-error" role="alert">{state.formError}</p> : null}</>;
+  return <>{state.success ? <p className="form-success" role="status">{displayText(state.success)}</p> : null}{state.formError ? <p className="form-error" role="alert">{displayText(state.formError)}</p> : null}</>;
 }
 
 export function PasswordNotice() {
@@ -22,7 +24,7 @@ export function CompleteWorkforceProfileForm({ action, userId, displayName }: { 
   const [state, formAction, pending] = useActionState(action, initialState);
   return <form action={formAction} className="account-form-actions">
     <input type="hidden" name="userId" value={userId} />
-    <button className="button" type="submit" disabled={pending} aria-label={`Complete workforce profile for ${displayName}`}>
+    <button className="button" type="submit" disabled={pending} aria-label={displayText(`Complete workforce profile for ${displayName}`)}>
       {pending ? "Completing profile…" : "Complete workforce profile"}
     </button>
     <StatusMessage state={state} />
@@ -105,7 +107,7 @@ function EnableCredentialsForm({ action, candidates }: { action: AccountFormActi
         <label htmlFor="enable-user">Workforce record <span aria-hidden="true">*</span></label>
         <select id="enable-user" name="userId" defaultValue="">
           <option value="">Choose a record</option>
-          {candidates.map((candidate) => <option key={candidate.userId} value={candidate.userId}>{candidate.displayName}{candidate.employeeCode ? ` · ${candidate.employeeCode}` : ""}</option>)}
+          {candidates.map((candidate) => <option key={candidate.userId} value={candidate.userId}>{displayText(candidate.displayName)}{displayText(candidate.employeeCode ? ` · ${candidate.employeeCode}` : "")}</option>)}
         </select>
 
         <label htmlFor="enable-username">Username <span aria-hidden="true">*</span></label>
@@ -127,7 +129,7 @@ function EnableCredentialsForm({ action, candidates }: { action: AccountFormActi
 
 /** Password-reset panel. The new password is hashed immediately and never echoed back. */
 export function ResetPasswordPanel({ action, row, needsCurrentPassword, anotherSuperAdmin }: { action: AccountFormAction; row: { userId: string; displayName: string; credentialVersion: number }; needsCurrentPassword: boolean; anotherSuperAdmin: boolean }) {
-  return <TaskDialog triggerLabel="Reset password" title={`Reset password for ${row.displayName}`} description="Set a new temporary password. Existing passwords cannot be viewed." triggerClassName="button"><ResetPasswordForm action={action} row={row} needsCurrentPassword={needsCurrentPassword} anotherSuperAdmin={anotherSuperAdmin} /></TaskDialog>;
+  return <TaskDialog triggerLabel="Reset password" title={displayText(`Reset password for ${row.displayName}`)} description="Set a new temporary password. Existing passwords cannot be viewed." triggerClassName="button"><ResetPasswordForm action={action} row={row} needsCurrentPassword={needsCurrentPassword} anotherSuperAdmin={anotherSuperAdmin} /></TaskDialog>;
 }
 
 function ResetPasswordForm({ action, row, needsCurrentPassword, anotherSuperAdmin }: { action: AccountFormAction; row: { userId: string; displayName: string; credentialVersion: number }; needsCurrentPassword: boolean; anotherSuperAdmin: boolean }) {

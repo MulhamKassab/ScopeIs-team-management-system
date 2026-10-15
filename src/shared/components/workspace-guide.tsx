@@ -1,4 +1,6 @@
 "use client";
+import { displayText } from "@/shared/presentation/display-text";
+
 
 import Link from "next/link";
 import { useState } from "react";
@@ -16,7 +18,7 @@ function FeatureList({ navigation, role }: { navigation: ModuleDefinition[]; rol
     <p className="workspace-feature-count" role="status">{features.length} feature{features.length === 1 ? "" : "s"} available in your workspace</p>
     {navigationGroupsFor(role).map((group) => {
       const items = group.keys.flatMap((key) => features.filter((item) => item.key === key));
-      return items.length ? <section key={group.label} className="workspace-feature-group" aria-label={group.label}><h3>{group.label}</h3><ul>{items.map((item) => <li key={item.key}><Link href={item.href}><span><strong>{item.label}</strong><span>{featureDescription(item.key, role)}</span></span><ArrowUpRight size={19} aria-hidden="true" /></Link></li>)}</ul></section> : null;
+      return items.length ? <section key={group.label} className="workspace-feature-group" aria-label={displayText(group.label)}><h3>{displayText(group.label)}</h3><ul>{items.map((item) => <li key={item.key}><Link href={item.href}><span><strong>{displayText(item.label)}</strong><span>{displayText(featureDescription(item.key, role))}</span></span><ArrowUpRight size={19} aria-hidden="true" /></Link></li>)}</ul></section> : null;
     })}
     {!features.length ? <div className="workspace-feature-empty"><h3>No matching feature</h3><p>Try a shorter name or the task you want to do.</p><button type="button" className="button" onClick={() => setQuery("")}>Show all features</button></div> : null}
   </div>;

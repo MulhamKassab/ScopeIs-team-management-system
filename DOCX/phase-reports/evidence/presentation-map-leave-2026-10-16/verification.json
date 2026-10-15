@@ -1,132 +1,84 @@
 {
-  "status": "LOCAL_VERIFIED_SOURCE_DELIVERY_PENDING",
-  "completedAt": "2026-10-15T21:06:01.494Z",
-  "baseCommit": "0217a36ddc0d96fe1a48dc05609e6883050b5207",
+  "status": "FINAL_LOCAL_VERIFIED_SOURCE_DELIVERY_PENDING",
+  "completedAt": "2026-10-15T21:23:05.158Z",
+  "applicationBase": "9ac7b80e82a8c8ec51af60ce79217ad29f1421b9",
+  "initialImplementation": "initial-verification.json",
   "unitComponents": {
-    "passed": 425,
+    "passed": 428,
     "failed": 0,
     "skipped": 0,
-    "receipt": "unit-component.json",
-    "sourceBasis": "source-inputs-before-label-refinement.json"
+    "receipt": "record-text-unit-component.json"
   },
   "integration": {
-    "leave": 7,
-    "tickets": 25,
-    "privateTicketFiles": 7,
-    "reporting": 35,
-    "total": 74
+    "passed": 74,
+    "sourceBasis": "initial implementation; all service/repository files unchanged in the display-only follow-up"
   },
-  "finalPresentationRefinement": {
-    "changedFiles": [
-      "src/app/map-workspace.css",
-      "src/modules/maps/planning-map-client.tsx",
-      "test/e2e/usability-review.spec.ts"
-    ],
-    "affectedGeometryComponents": 17,
-    "types": true,
-    "wholeLint": true,
-    "freshGuardedTypecheckAndProductionBuild": true,
-    "fullUnitComponentsRepeatedAfterRefinement": false
-  },
+  "types": true,
+  "wholeLint": true,
   "browser": {
     "passed": 14,
     "failed": 0,
     "skipped": 0,
     "flaky": 0,
-    "durationMs": 171289.723,
-    "receipt": "browser-results.json",
+    "receipt": "record-text-browser-results.json",
     "surfaces": 25,
-    "themes": [
-      "light",
-      "dark"
-    ],
     "projects": [
       "desktop",
       "mobile"
     ],
-    "realPointerPan": true,
-    "realWheelZoom": true,
-    "sharedMarkerChoices": true,
-    "phone320RtlLabelBounds": true,
-    "leaveReviewAndActualDecision": true,
-    "lowerRoleRefusals": true,
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "freshGuardedTypecheckAndBuild": true,
+    "storedTextRenderingVerified": true,
+    "originalDatabaseTextPreserved": true,
     "controlledRasterResponses": true
   },
   "inputs": {
-    "count": 477,
-    "matching": 477,
-    "changed": [],
-    "manifest": "source-inputs.json"
+    "count": 479,
+    "matching": 479,
+    "manifest": "source-inputs-record-text.json"
   },
+  "displayOnlySourceAudit": "display-only-transform.json",
   "registration": {
     "scenarios": 86,
-    "testFiles": 95,
+    "testFiles": 96,
     "protectedRoutes": 40
   },
   "cleanup": {
-    "ownedBrowserBuildsAllocated": 3,
-    "ownedBrowserBuildsCleaned": 3,
-    "ownedBrowserDatabasesRetained": 0,
-    "serviceDisposableDatabasesCleaned": true,
-    "existing5432RuntimeUntouched": true
+    "browserBuildsAllocated": 4,
+    "browserBuildsCleaned": 4,
+    "browserDatabasesRetained": 0,
+    "serviceDatabasesRetained": 0,
+    "existingLocalPostgreSqlUntouched": true
   },
   "productionBusinessWrites": 0,
   "fullSystemLockRerun": false,
   "images": [
     {
-      "path": "desktop-dark-project-colours.png",
-      "bytes": 323165,
-      "sha256": "7ce430aba007bbf7baad164bc12df102feea068fbe87889128463f655e1b6783"
+      "path": "record-text-desktop-practical-map.png",
+      "sha256": "efa5c13269e839ad8677e8789f2e8f11a4b096e428fe75558e514c24e9ec22dc"
     },
     {
-      "path": "desktop-light-project-colours.png",
-      "bytes": 291925,
-      "sha256": "7be3f3b5765ae98c1d31057965935641bde24d261da1675f363687cce30ee1a9"
+      "path": "record-text-mobile-map-320-rtl-dark.png",
+      "sha256": "eb8da14ac46a34af03de8dd05c9d4fd8c02325d2edc8eb191c43d99b99035471"
     },
     {
-      "path": "desktop-map-320-rtl-dark.png",
-      "bytes": 200321,
-      "sha256": "0aece942ec8ad4a32c7e7e3cd209eec70ee3bc2ca2753050d797246d982f66f3"
+      "path": "record-text-desktop-light-project-colours.png",
+      "sha256": "bc19fd3d593e7e44e7c7c8bbb96005f947361dfecf0ffd38d41179c632fd9413"
     },
     {
-      "path": "desktop-practical-map.png",
-      "bytes": 366625,
-      "sha256": "e0da4b3d1149718876b0f659e8753036e5bf33e2ddd2d77c6774042f32c96540"
+      "path": "record-text-mobile-dark-project-colours.png",
+      "sha256": "d214e6890f679d1a4290ed2ee9415bede7b7c933a005f80aa8d074b2b47f4f11"
     },
     {
-      "path": "desktop-vacation-review-context.png",
-      "bytes": 322808,
-      "sha256": "d5071745cec523b8b027a3005840c0da56ba691e3f7921c4df1cb11e0a60113e"
-    },
-    {
-      "path": "mobile-dark-project-colours.png",
-      "bytes": 749990,
-      "sha256": "d40fe07030f171aa2e9fe6e7d28f3c98110852926b2e2ebdb07c51447b74915b"
-    },
-    {
-      "path": "mobile-light-project-colours.png",
-      "bytes": 607740,
-      "sha256": "77b90500a7eb5661b7dfd234bab180348c821f7e8c68860d6d3dc333fcce1280"
-    },
-    {
-      "path": "mobile-map-320-rtl-dark.png",
-      "bytes": 547316,
-      "sha256": "d8dab41f5af9d1696449ed3a38a19886ed557242bb3c7dd5e5d7cc2ca6be2331"
-    },
-    {
-      "path": "mobile-practical-map.png",
-      "bytes": 687613,
-      "sha256": "9ff0367967134941d6805a30ff950429389492cd9a9e1244eb275865063a5489"
-    },
-    {
-      "path": "mobile-vacation-review-context.png",
-      "bytes": 707436,
-      "sha256": "3b4da80f0ba2b97915cccd9d90312f3ec56997b306ed27354955008fa3b5f4fb"
+      "path": "record-text-desktop-vacation-review-context.png",
+      "sha256": "d1e0c0f6dd2e4145ade4e39122d25ab68dcd40d4eb86468b27c68c2b606add3d"
     }
   ],
   "limits": [
-    "Visible rendered text/control contrast in exercised states; no physical-device or exhaustive accessibility certificate.",
-    "Full425-case unit/component run precedes the separately recorded three-file map-label/test expansion refinement; final affected17/types/lint/build/browser14 all pass.",
-    "Production deployment and authenticated live checks are not yet claimed."
+    "Bounded visible text/control contrast on tested routes/states; no exhaustive accessibility/physical-device certificate.",
+    "Final follow-up deployment and read-only live checks are pending."
   ]
 }

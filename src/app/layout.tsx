@@ -1,3 +1,4 @@
+import { displayText } from "@/shared/presentation/display-text";
 import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
 import "@/app/styles.css";
@@ -28,5 +29,5 @@ export const metadata: Metadata = { title: "ScopeIs Team Management", descriptio
 export const viewport: Viewport = { width: "device-width", initialScale: 1, viewportFit: "cover", interactiveWidget: "resizes-content" };
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const candidate = (await cookies()).get("scopeis-direction")?.value; const direction = directionSchema.safeParse(candidate).data ?? "ltr";
-  return <html lang="en" dir={direction} suppressHydrationWarning><body><ThemeBootScript /><AppMotion />{children}</body></html>;
+  return <html lang="en" dir={direction} suppressHydrationWarning><body><ThemeBootScript /><AppMotion />{displayText(children)}</body></html>;
 }

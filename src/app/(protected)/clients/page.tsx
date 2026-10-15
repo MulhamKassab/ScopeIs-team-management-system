@@ -1,3 +1,4 @@
+import { displayText } from "@/shared/presentation/display-text";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentActor } from "@/modules/auth/session-service";
@@ -23,6 +24,6 @@ export default async function ClientsPage({ searchParams }: { searchParams: Prom
     <RecordNavigation current="clients" />
     <form className="operation-search" method="get"><label>Search clients<input name="query" placeholder="Company name" defaultValue={params.query ?? ""} maxLength={100} /></label><label className="operation-check"><input type="checkbox" name="archived" value="true" defaultChecked={params.archived === "true"} /> Include archived</label><button className="button primary">Search</button></form>
     <div className="record-result-heading"><p>{records.length} {records.length === 1 ? "client" : "clients"}{filtered ? " found" : " in your workspace"}</p>{filtered ? <Link href="/clients">Clear filters</Link> : null}</div>
-    {records.length ? <div className="operation-cards">{records.map((client) => <article key={client.id}><RecordStatus status={client.status} /><h3>{client.companyName}</h3><p>{client.serviceSummary || "Add a service summary to help your team understand this client."}</p><Link className="button" href={`/clients/${client.id}`}>Open client</Link></article>)}</div> : <div className="operation-empty"><h3>{filtered ? "No clients match your search" : "No clients yet"}</h3><p>{filtered ? "Try another company name or clear the filters." : actor.role === "SUPER_ADMIN" ? "Create a client to start organising projects and work locations." : "Clients appear here when a Super Admin gives you access."}</p></div>}
+    {records.length ? <div className="operation-cards">{records.map((client) => <article key={client.id}><RecordStatus status={client.status} /><h3>{displayText(client.companyName)}</h3><p>{displayText(client.serviceSummary || "Add a service summary to help your team understand this client.")}</p><Link className="button" href={`/clients/${client.id}`}>Open client</Link></article>)}</div> : <div className="operation-empty"><h3>{filtered ? "No clients match your search" : "No clients yet"}</h3><p>{filtered ? "Try another company name or clear the filters." : actor.role === "SUPER_ADMIN" ? "Create a client to start organising projects and work locations." : "Clients appear here when a Super Admin gives you access."}</p></div>}
   </section>;
 }

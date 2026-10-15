@@ -43,6 +43,7 @@ test("semantic text and button colours stay readable across workspaces and creat
       failures.push(...(await contrastIssues(page)).map((issue) => `${theme} ${route} ${issue}`));
     }
     await page.goto(`/clients/${phase3Ids.alphaClient}`);
+    await expect(page.getByText("Fictional location · review entrance", { exact: true })).toBeVisible();
     const create = page.getByRole("button", { name: "Create project", exact: true });
     await expect(create).toBeEnabled(); await create.hover();
     failures.push(...(await contrastIssues(page)).map((issue) => `${theme} client hover ${issue}`));

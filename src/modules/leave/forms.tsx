@@ -1,10 +1,12 @@
 "use client";
+import { displayText } from "@/shared/presentation/display-text";
+
 import { useActionState, useState } from "react";
 import { cancelLeaveAction, decideLeaveAction, submitLeaveAction, updateLeaveAllowanceAction, type LeaveAction, type LeaveActionState } from "@/modules/leave/actions";
 import { announceWorkflowSuccess } from "@/shared/components/workflow-feedback";
 import { vacationPreview, type ApprovedVacationDates } from "@/modules/leave/vacation-preview";
 const initial: LeaveActionState = {};
-function FormStatus({ state }: { state: LeaveActionState }) { return <>{state.error ? <p className="operation-error" role="alert">{state.error}</p> : null}{state.success ? <p className="operation-success" role="status">{state.success}</p> : null}</>; }
+function FormStatus({ state }: { state: LeaveActionState }) { return <>{state.error ? <p className="operation-error" role="alert">{displayText(state.error)}</p> : null}{state.success ? <p className="operation-success" role="status">{displayText(state.success)}</p> : null}</>; }
 export function LeaveRequestForm({ allowance, approvedVacations = [] }: { allowance: number; approvedVacations?: ApprovedVacationDates[] }) {
   const [state, action, pending] = useActionState(submitLeaveAction as LeaveAction, initial);
   const [startDate, setStartDate] = useState("");

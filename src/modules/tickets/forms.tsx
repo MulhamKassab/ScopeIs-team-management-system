@@ -1,4 +1,6 @@
 "use client";
+import { displayText } from "@/shared/presentation/display-text";
+
 
 import { useId, useRef, useState, type FormEvent, type ReactNode } from "react";
 import type { TicketDetail, TicketPerson } from "./types";
@@ -38,15 +40,15 @@ export function TicketActionForm({ label, submit = "Save changes", getCommand, o
         conflict: error instanceof Error && "status" in error && error.status === 409 });
     } finally { saving.current = false; setPending(false); }
   }
-  return <form className="operation-form ticket-form" aria-label={label} onSubmit={save} aria-describedby={feedbackId} onInvalidCapture={(event) => {
+  return <form className="operation-form ticket-form" aria-label={displayText(label)} onSubmit={save} aria-describedby={feedbackId} onInvalidCapture={(event) => {
     // Required fields remain reachable when an optional section has been collapsed.
     let parent = event.target instanceof Element ? event.target.parentElement : null;
     while (parent) { if (parent instanceof HTMLDetailsElement) parent.open = true; parent = parent.parentElement; }
   }}>
-    <fieldset key={resetKey} disabled={pending}>{children}</fieldset>
+    <fieldset key={resetKey} disabled={pending}>{displayText(children)}</fieldset>
     <div id={feedbackId}>
-      {feedback.error ? <p className="operation-error" role="alert">{feedback.error}</p> : null}
-      {feedback.success ? <p className="operation-success" role="status">{feedback.success}</p> : null}
+      {feedback.error ? <p className="operation-error" role="alert">{displayText(feedback.error)}</p> : null}
+      {feedback.success ? <p className="operation-success" role="status">{displayText(feedback.success)}</p> : null}
       {feedback.conflict && onConflict ? <button type="button" className="button" disabled={pending} onClick={async () => {
         setPending(true);
         try { await onConflict(); setFeedback({}); }
@@ -54,7 +56,7 @@ export function TicketActionForm({ label, submit = "Save changes", getCommand, o
         finally { setPending(false); }
       }}>Reload latest record</button> : null}
     </div>
-    <button type="submit" className={`button ${danger ? "danger" : "primary"}`} disabled={pending}>{pending ? "Saving…" : submit}</button>
+    <button type="submit" className={`button ${danger ? "danger" : "primary"}`} disabled={pending}>{displayText(pending ? "Saving…" : submit)}</button>
   </form>;
 }
 
@@ -87,11 +89,11 @@ export function TicketPeopleFields({ people, creatorUserId, assigneeIds = [], ob
   }
   function picker(role: "assigned" | "mentioned", label: string, selected: string[]) {
     return <fieldset className="ticket-people-picker" key={role}>
-      <legend>{label}</legend>
-      <p className="ticket-file-meta">{selected.length} selected{selected.length ? ` · ${choices.filter((person) => selected.includes(person.userId)).map((person) => person.displayName).join(", ")}` : " · choose one or more"}</p>
+      <legend>{displayText(label)}</legend>
+      <p className="ticket-file-meta">{selected.length} selected{displayText(selected.length ? ` · ${choices.filter((person) => selected.includes(person.userId)).map((person) => person.displayName).join(", ")}` : " · choose one or more")}</p>
       <div className="ticket-people-options">{matching.map((person) => <label className="ticket-people-option" key={person.userId}>
         <input type="checkbox" checked={selected.includes(person.userId)} onChange={(event) => toggle(person.userId, role, event.target.checked)} />
-        <span>{person.displayName}</span>
+        <span>{displayText(person.displayName)}</span>
       </label>)}{!matching.length ? <p className="record-empty">{choices.length ? "No people match your search." : "No other active company people are available."}</p> : null}</div>
     </fieldset>;
   }
@@ -127,7 +129,7 @@ export function TicketFields({ ticket, compact = false, children }: { ticket?: P
   return <>
     <label>Subject<input name="subject" defaultValue={ticket?.subject ?? ""} maxLength={200} required data-dialog-autofocus /></label>
     <label>Description<textarea name="summary" defaultValue={ticket?.summary ?? ""} maxLength={10000} rows={4} /></label>
-    {children}
+    {displayText(children)}
     {compact ? <details className="ticket-extra-fields"><summary>More options</summary><p className="operation-help">Starts Open with Medium priority and today&apos;s Dubai date.</p>{options}</details> : options}
   </>;
 }

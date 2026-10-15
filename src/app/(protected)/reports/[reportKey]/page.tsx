@@ -1,3 +1,4 @@
+import { displayText } from "@/shared/presentation/display-text";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentActor } from "@/modules/auth/session-service";
@@ -32,7 +33,7 @@ export default async function ReportPage({ params, searchParams }: { params: Pro
       if (error.status === 404) notFound();
       return <section className="operations-page" aria-labelledby="report-error-title">
         <h1 id="report-error-title">Check report filters</h1>
-        <p role="alert">{error.message}</p>
+        <p role="alert">{displayText(error.message)}</p>
         <Link className="button" href={`/reports/${reportKey}`}>Reset filters</Link>
       </section>;
     }

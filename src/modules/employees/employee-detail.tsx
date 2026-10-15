@@ -1,3 +1,4 @@
+import { displayText } from "@/shared/presentation/display-text";
 import Link from "next/link";
 import type { ManagementEmployeeDetail } from "@/modules/employees/employee-services";
 
@@ -11,8 +12,8 @@ export function EmployeeDetail({ employee, canManage, managementPanel }: { emplo
   ];
   if ("workEmail" in employee) fields.push(["Work email", value(employee.workEmail)], ["Work phone", value(employee.workPhone)], ["Professional summary", value(employee.professionalSummary)], ["Default work location", value(employee.defaultWorkLocation)]);
   return <section className="employee-detail" aria-labelledby="employee-detail-title">
-    <header className="people-page-heading"><div><p className="eyebrow">Employee record</p><h2 id="employee-detail-title">{employee.user.displayName}</h2><p className="directory-intro">{value(employee.designationName)} · {employee.teamName ?? teamLabel(employee.team)}</p></div><Link href="/employees" className="button directory-clear">Back to directory</Link></header>
-    <dl>{fields.map(([label, fieldValue]) => <div key={label}><dt>{label}</dt><dd>{fieldValue}</dd></div>)}</dl>
-    {canManage ? managementPanel : null}
+    <header className="people-page-heading"><div><p className="eyebrow">Employee record</p><h2 id="employee-detail-title">{displayText(employee.user.displayName)}</h2><p className="directory-intro">{displayText(value(employee.designationName))} · {displayText(employee.teamName ?? teamLabel(employee.team))}</p></div><Link href="/employees" className="button directory-clear">Back to directory</Link></header>
+    <dl>{fields.map(([label, fieldValue]) => <div key={label}><dt>{displayText(label)}</dt><dd>{displayText(fieldValue)}</dd></div>)}</dl>
+    {displayText(canManage ? managementPanel : null)}
   </section>;
 }

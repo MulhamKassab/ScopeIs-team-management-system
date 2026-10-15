@@ -1,4 +1,6 @@
 "use client";
+import { displayText } from "@/shared/presentation/display-text";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Brand } from "@/shared/components/brand";
@@ -38,7 +40,7 @@ export function LoginScreen({ demoWorkspace = false }: { demoWorkspace?: boolean
         <input id="login-password" type={visible ? "text" : "password"} autoComplete="current-password" required value={password} onChange={(event) => setPassword(event.target.value)} disabled={pending} />
         <button type="button" className="icon-button" aria-label={visible ? "Hide password" : "Show password"} aria-pressed={visible} onClick={() => setVisible(!visible)}>{visible ? "Hide" : "Show"}</button>
       </div>
-      {error && <p className="form-error" role="alert">{error}</p>}
+      {error && <p className="form-error" role="alert">{displayText(error)}</p>}
       <button className="button primary login-submit" type="submit" disabled={pending} aria-busy={pending}>{pending ? "Signing in…" : "Sign in"}</button>
     </form>
   </section></main>;

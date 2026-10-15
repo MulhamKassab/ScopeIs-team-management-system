@@ -1,4 +1,6 @@
 "use client";
+import { displayText } from "@/shared/presentation/display-text";
+
 
 import Link from "next/link";
 import { useActionState } from "react";
@@ -12,14 +14,14 @@ import { formatDubaiDateTime } from "@/shared/format-date";
 const initial: NotificationActionState = {};
 
 function Feedback({ state }: { state: NotificationActionState }) {
-  return state.error ? <p className="operation-error" role="alert">{state.error}</p> : state.success ? <p className="operation-success" role="status">{state.success}</p> : null;
+  return state.error ? <p className="operation-error" role="alert">{displayText(state.error)}</p> : state.success ? <p className="operation-success" role="status">{displayText(state.success)}</p> : null;
 }
 
 function ActionButton({ action, title, label, fields, danger = false }: { action: NotificationAction; title: string; label: string; fields: Record<string, string>; danger?: boolean }) {
   const [state, formAction, pending] = useActionState(action, initial);
-  return <form action={formAction} className="notification-action" aria-label={title}>
+  return <form action={formAction} className="notification-action" aria-label={displayText(title)}>
     {Object.entries(fields).map(([name, value]) => <input key={name} type="hidden" name={name} value={value} />)}
-    <button className={`button ${danger ? "danger" : ""}`} type="submit" disabled={pending}>{pending ? "Saving…" : label}</button>
+    <button className={`button ${danger ? "danger" : ""}`} type="submit" disabled={pending}>{displayText(pending ? "Saving…" : label)}</button>
     <Feedback state={state} />
   </form>;
 }
@@ -46,13 +48,13 @@ export function NotificationCentre({ view, filter }: { view: NotificationPage; f
     <header className="operations-heading"><div><p className="eyebrow">Your updates</p><h2>Notifications</h2><p>{view.unreadCount} unread notification{view.unreadCount === 1 ? "" : "s"}. Keep track of schedule changes, requests and reviews.</p></div>
       <ActionButton action={markAllNotificationsReadAction} title="Mark all notifications read" label="Mark all read" fields={{}} />
     </header>
-    <nav className="notification-filters" aria-label="Notification filters">{filterLabels.map((entry) => <Link key={entry.key} aria-current={entry.key === filter ? "page" : undefined} className={entry.key === filter ? "button primary" : "button"} href={`/notifications?filter=${entry.key}`}>{entry.label}</Link>)}</nav>
+    <nav className="notification-filters" aria-label="Notification filters">{filterLabels.map((entry) => <Link key={entry.key} aria-current={entry.key === filter ? "page" : undefined} className={entry.key === filter ? "button primary" : "button"} href={`/notifications?filter=${entry.key}`}>{displayText(entry.label)}</Link>)}</nav>
     <ul className="operation-list notification-list">
       {view.items.map((item) => <li key={item.id} className={!item.isRead ? "notification-unread" : undefined}>
         <div>
-          <strong>{item.title}</strong>
-          <span>{item.summary}</span>
-          <span className="notification-state">{item.isRead ? "Read" : "Unread"}{item.isArchived ? " · Archived" : ""} · <time dateTime={item.createdAt}>{formatDubaiDateTime(item.createdAt)}</time></span>
+          <strong>{displayText(item.title)}</strong>
+          <span>{displayText(item.summary)}</span>
+          <span className="notification-state">{item.isRead ? "Read" : "Unread"}{item.isArchived ? " · Archived" : ""} · <time dateTime={item.createdAt}>{displayText(formatDubaiDateTime(item.createdAt))}</time></span>
           {item.href ? <Link className="button" href={item.href}>{notificationActionLabel(item.href)}</Link> : <span className="notification-unavailable">This notification has no available destination for your current access.</span>}
         </div>
         <div className="notification-controls">

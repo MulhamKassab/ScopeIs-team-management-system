@@ -1,4 +1,6 @@
 "use client";
+import { displayText } from "@/shared/presentation/display-text";
+
 import { useEffect, useState } from "react";
 import { CheckCircle2, X } from "lucide-react";
 
@@ -19,5 +21,5 @@ export function WorkflowFeedback() {
     window.addEventListener(completionEvent, onComplete);
     return () => window.removeEventListener(completionEvent, onComplete);
   }, []);
-  return <div className="workflow-feedback" role="status" aria-live="polite" aria-atomic="true">{message ? <><CheckCircle2 size={19} aria-hidden="true" /><span>{message}</span><button type="button" className="icon-button" aria-label="Dismiss confirmation" onClick={() => setMessage("")}><X size={17} aria-hidden="true" /></button></> : null}</div>;
+  return <div className="workflow-feedback" role="status" aria-live="polite" aria-atomic="true">{message ? <><CheckCircle2 size={19} aria-hidden="true" /><span>{displayText(message)}</span><button type="button" className="icon-button" aria-label="Dismiss confirmation" onClick={() => setMessage("")}><X size={17} aria-hidden="true" /></button></> : null}</div>;
 }

@@ -1,3 +1,4 @@
+import { displayText } from "@/shared/presentation/display-text";
 import Link from "next/link";
 import type { SafeAccountRowView } from "./presentation";
 import { CompleteWorkforceProfileForm, CreateAccountPanel, EnableCredentialsPanel, ResetPasswordPanel } from "./forms";
@@ -37,7 +38,7 @@ export function AccountTable(props: AccountTableProps) {
           <div><dt>Login configured</dt><dd>{summary.configured}</dd></div>
           <div><dt>Login missing</dt><dd>{summary.missing}</dd></div>
         </dl>
-        <p className="account-asof">As of {asOf}</p>
+        <p className="account-asof">As of {displayText(asOf)}</p>
       </section>
 
       <div className="account-list-toolbar"><div><h3>Team accounts</h3><p>{total} {total === 1 ? "account" : "accounts"} {filters && [filters.query, filters.role, filters.status, filters.credentials].some(Boolean) ? "matching your filters" : "in your team"}</p></div><div className="account-actions-row">
@@ -84,12 +85,12 @@ function AccountRow({ row, actingUserId, resetAction, completeProfileAction }: {
   const anotherSuperAdmin = !self && row.role === "SUPER_ADMIN";
   return (
     <tr role="row">
-      <th scope="row" role="rowheader"><span className="account-cell-stack"><strong>{row.displayName}</strong><small>{row.hasWorkforceProfile ? row.employeeCode : "Workforce profile missing"}</small></span></th>
-      <td role="cell" data-label="Sign-in identity"><span className="account-cell-stack"><span>{row.username}</span><small>{row.loginEmail}</small></span></td>
+      <th scope="row" role="rowheader"><span className="account-cell-stack"><strong>{displayText(row.displayName)}</strong><small>{displayText(row.hasWorkforceProfile ? row.employeeCode : "Workforce profile missing")}</small></span></th>
+      <td role="cell" data-label="Sign-in identity"><span className="account-cell-stack"><span>{displayText(row.username)}</span><small>{displayText(row.loginEmail)}</small></span></td>
       <td role="cell" data-label="System role">{row.role === "SUPER_ADMIN" ? "Super Admin" : row.role === "ADMIN" ? "Admin" : "Employee"}</td>
       <td role="cell" data-label="Status"><span className={`directory-status ${row.active ? "active" : "inactive"}`}>{row.active ? "Active" : "Inactive"}</span></td>
       <td role="cell" data-label="Sign-in access"><span className="account-cell-stack"><span>{row.credentialStatus}</span><small>{row.mustChangePassword ? "Password change required" : "No password change required"}</small><small>{row.lockStatus}</small></span></td>
-      <td role="cell" data-label="Credential history"><span className="account-cell-stack"><span>{row.credentialStatus === "Configured" ? row.passwordChangedAt : "Not available"}</span><small>Created {row.createdAt}</small></span></td>
+      <td role="cell" data-label="Credential history"><span className="account-cell-stack"><span>{displayText(row.credentialStatus === "Configured" ? row.passwordChangedAt : "Not available")}</span><small>Created {displayText(row.createdAt)}</small></span></td>
       <td role="cell" data-label="Management">
         <div className="account-row-actions">
           {!row.hasWorkforceProfile && row.active ? <CompleteWorkforceProfileForm action={completeProfileAction} userId={row.userId} displayName={row.displayName} /> : null}

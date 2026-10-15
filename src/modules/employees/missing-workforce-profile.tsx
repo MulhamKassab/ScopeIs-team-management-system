@@ -1,3 +1,4 @@
+import { displayText } from "@/shared/presentation/display-text";
 import Link from "next/link";
 import type { AuthenticatedActor } from "@/shared/types/foundation";
 import type { AccountFormAction } from "@/modules/account-administration/actions";
@@ -8,7 +9,7 @@ export function MissingWorkforceProfile({ actor, completeAction }: {
 }) {
   return <section className="employee-self-profile" aria-labelledby="profile-title">
     <header className="people-page-heading"><div><p className="eyebrow">My workspace</p><h2 id="profile-title">My profile</h2></div></header>
-    <div className="people-profile-card"><div className="people-profile-identity"><h3>{actor.displayName}</h3>
+    <div className="people-profile-card"><div className="people-profile-identity"><h3>{displayText(actor.displayName)}</h3>
       <p>Your sign-in account is ready. Your workforce profile has not been set up yet.</p>
       {actor.role === "SUPER_ADMIN" ? <><p>Complete your profile to add your work details, experience, and supporting documents.</p>
         <CompleteWorkforceProfileForm action={completeAction} userId={actor.id} displayName={actor.displayName} />

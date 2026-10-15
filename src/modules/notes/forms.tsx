@@ -1,4 +1,6 @@
 "use client";
+import { displayText } from "@/shared/presentation/display-text";
+
 
 import { useActionState } from "react";
 import { archiveManagementNoteAction, createManagementNoteAction, type NoteAction, type NoteActionState } from "@/modules/notes/actions";
@@ -7,12 +9,12 @@ import type { ManagementNoteView } from "@/modules/notes/service";
 const initial: NoteActionState = {};
 
 function Feedback({ state }: { state: NoteActionState }) {
-  return state.error ? <p className="operation-error" role="alert">{state.error}</p> : state.success ? <p className="operation-success" role="status">{state.success}</p> : null;
+  return state.error ? <p className="operation-error" role="alert">{displayText(state.error)}</p> : state.success ? <p className="operation-success" role="status">{displayText(state.success)}</p> : null;
 }
 
 function NoteForm({ action, title, children, submit, danger = false }: { action: NoteAction; title: string; children: React.ReactNode; submit: string; danger?: boolean }) {
   const [state, formAction, pending] = useActionState(action, initial);
-  return <form className="operation-form compact" action={formAction} aria-label={title}>{children}<Feedback state={state} /><button className={`button ${danger ? "danger" : "primary"}`} type="submit" disabled={pending}>{pending ? "Saving…" : submit}</button></form>;
+  return <form className="operation-form compact" action={formAction} aria-label={displayText(title)}>{displayText(children)}<Feedback state={state} /><button className={`button ${danger ? "danger" : "primary"}`} type="submit" disabled={pending}>{displayText(pending ? "Saving…" : submit)}</button></form>;
 }
 
 /**
@@ -26,9 +28,9 @@ export function ManagementNotePanel({ subjectUserId, subjectName, notes, canCrea
     <header className="operations-heading"><div>
       <p className="eyebrow">Management notes</p>
       <h2 id="management-notes-title">Management notes</h2>
-      <p>Notes about {subjectName} are private to their author unless shared upward. {subjectName} never sees these notes, and peer Admins cannot read each other&apos;s notes. Content is immutable; archive and write a new note to correct one.</p>
+      <p>Notes about {displayText(subjectName)} are private to their author unless shared upward. {displayText(subjectName)} never sees these notes, and peer Admins cannot read each other&apos;s notes. Content is immutable; archive and write a new note to correct one.</p>
     </div></header>
-    {canCreate ? <NoteForm action={createManagementNoteAction} title={`Add management note about ${subjectName}`} submit="Save note">
+    {canCreate ? <NoteForm action={createManagementNoteAction} title={displayText(`Add management note about ${subjectName}`)} submit="Save note">
       <input type="hidden" name="subjectUserId" value={subjectUserId} />
       <label>Visibility<select name="visibility" defaultValue="private_to_author"><option value="private_to_author">Private to me</option><option value="shared_upward">Shared upward</option></select></label>
       <label>Note<textarea name="content" maxLength={5000} rows={4} required /></label>
@@ -36,17 +38,17 @@ export function ManagementNotePanel({ subjectUserId, subjectName, notes, canCrea
     </NoteForm> : null}
     {active.length ? <div className="notes-list">{active.map((note) => <article className="note-item" key={note.id} id={`management-note-${note.id}`}>
       <div className="note-item-head">
-        <div><strong>{note.authorName}</strong><span>{note.authorRole.replace("_", " ")} · {note.visibility === "private_to_author" ? "Private to author" : "Shared upward"} · {note.createdAt.slice(0, 10)}</span></div>
+        <div><strong>{displayText(note.authorName)}</strong><span>{displayText(note.authorRole.replace("_", " "))} · {note.visibility === "private_to_author" ? "Private to author" : "Shared upward"} · {displayText(note.createdAt.slice(0, 10))}</span></div>
         {note.isAuthor ? <span className="note-badge">Your note</span> : null}
       </div>
-      <p>{note.content}</p>
-      {note.canArchive ? <NoteForm action={archiveManagementNoteAction} title={`Archive note from ${note.authorName}`} submit="Archive note" danger>
+      <p>{displayText(note.content)}</p>
+      {note.canArchive ? <NoteForm action={archiveManagementNoteAction} title={displayText(`Archive note from ${note.authorName}`)} submit="Archive note" danger>
         <input type="hidden" name="noteId" value={note.id} />
         <input type="hidden" name="expectedVersion" value={note.version} />
         <input type="hidden" name="subjectUserId" value={subjectUserId} />
         <label>Reason for archiving<input name="reason" minLength={3} maxLength={500} required /></label>
       </NoteForm> : null}
     </article>)}</div> : <p className="operation-empty">No management note is visible to you for this employee.</p>}
-    {archived.length ? <details className="notes-archive"><summary>{archived.length} archived note{archived.length === 1 ? "" : "s"}</summary><ul className="operation-list">{archived.map((note) => <li key={note.id}><div><strong>{note.authorName}</strong><span>Archived {note.archivedAt?.slice(0, 10)} · {note.visibility === "private_to_author" ? "Private to author" : "Shared upward"}</span></div></li>)}</ul></details> : null}
+    {archived.length ? <details className="notes-archive"><summary>{archived.length} archived note{archived.length === 1 ? "" : "s"}</summary><ul className="operation-list">{archived.map((note) => <li key={note.id}><div><strong>{displayText(note.authorName)}</strong><span>Archived {displayText(note.archivedAt?.slice(0, 10))} · {note.visibility === "private_to_author" ? "Private to author" : "Shared upward"}</span></div></li>)}</ul></details> : null}
   </section>;
 }

@@ -1,4 +1,6 @@
 "use client";
+import { displayText } from "@/shared/presentation/display-text";
+
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -59,8 +61,8 @@ function NewTicket({ data, actor, refresh, returnTo, preferredBoardId = "", pref
     getCommand={(form) => ({ action: "createTicket", boardId: board.id, version: board.version, ...readTicketFields(form),
       assigneeIds: form.getAll("assigneeIds").map(String), observerIds: form.getAll("observerIds").map(String) })}>
     <div className="operation-form-grid">
-      <label>Workspace<select value={selectedWorkspaceId} onChange={(event) => { setWorkspaceId(event.target.value); setBoardId(""); }}>{workspaces.map((workspace) => <option value={workspace.id} key={workspace.id}>{workspace.name}</option>)}</select></label>
-      <label>Dashboard<select value={board.id} onChange={(event) => setBoardId(event.target.value)}>{dashboards.map((entry) => <option value={entry.id} key={entry.id}>{entry.name}</option>)}</select></label>
+      <label>Workspace<select value={selectedWorkspaceId} onChange={(event) => { setWorkspaceId(event.target.value); setBoardId(""); }}>{workspaces.map((workspace) => <option value={workspace.id} key={workspace.id}>{displayText(workspace.name)}</option>)}</select></label>
+      <label>Dashboard<select value={board.id} onChange={(event) => setBoardId(event.target.value)}>{dashboards.map((entry) => <option value={entry.id} key={entry.id}>{displayText(entry.name)}</option>)}</select></label>
     </div>
     <TicketFields compact><TicketPeopleFields people={data.people} creatorUserId={actor.id} compact /></TicketFields>
   </TicketActionForm>;
@@ -73,8 +75,8 @@ function NewWorkspace({ data, actor, refresh }: { data: TicketWorkspaceData; act
     getCommand={(form) => ({ action: "createWorkspace", name: String(form.get("name") ?? ""), description: String(form.get("description") ?? ""), clientId: String(form.get("clientId") ?? "") || null, projectId: String(form.get("projectId") ?? "") || null })}>
     <label>Name<input name="name" maxLength={120} required data-dialog-autofocus /></label>
     <label>Description · optional<textarea name="description" maxLength={1000} rows={3} /></label>
-    <label>Client link · optional<select name="clientId" value={clientId} onChange={(event) => setClientId(event.target.value)}><option value="">No client link</option>{data.clients.map((client) => <option value={client.id} key={client.id}>{client.name}</option>)}</select></label>
-    <label>Project link · optional<select name="projectId" key={clientId} defaultValue=""><option value="">No project link</option>{projects.map((project) => <option value={project.id} key={project.id}>{project.name}</option>)}</select></label>
+    <label>Client link · optional<select name="clientId" value={clientId} onChange={(event) => setClientId(event.target.value)}><option value="">No client link</option>{data.clients.map((client) => <option value={client.id} key={client.id}>{displayText(client.name)}</option>)}</select></label>
+    <label>Project link · optional<select name="projectId" key={clientId} defaultValue=""><option value="">No project link</option>{projects.map((project) => <option value={project.id} key={project.id}>{displayText(project.name)}</option>)}</select></label>
     <p className="operation-help">A workspace contains dashboards, and each dashboard contains tickets. {actor.role === "ADMIN" ? "Choose a Client or Project within your current scope." : "Unlinked workspaces are managed by Super Admin."}</p>
   </TicketActionForm>;
 }
@@ -84,19 +86,19 @@ function WorkspacePeople({ workspace, data, refresh }: { workspace: TicketWorksp
   const available = eligible.filter((person) => !workspace.members.some((member) => member.userId === person.userId));
   return <div className="ticket-container-settings">
     <p className="operation-help">Give workspace access to people available within your scope. Ticket assignees and mentions are selected separately from all company people.</p>
-    <ul className="ticket-person-list">{workspace.members.map((member) => <li key={member.userId}><div><strong>{member.displayName}</strong><small>{member.role.replaceAll("_", " ").toLowerCase()}</small></div>
-      <TicketActionForm label={`Remove ${member.displayName} from workspace`} submit="Remove access" danger onSuccess={refresh} onConflict={refresh}
+    <ul className="ticket-person-list">{workspace.members.map((member) => <li key={member.userId}><div><strong>{displayText(member.displayName)}</strong><small>{displayText(member.role.replaceAll("_", " ").toLowerCase())}</small></div>
+      <TicketActionForm label={displayText(`Remove ${member.displayName} from workspace`)} submit="Remove access" danger onSuccess={refresh} onConflict={refresh}
         getCommand={() => ({ action: "setWorkspaceMember", workspaceId: workspace.id, userId: member.userId, active: false, version: workspace.version })}><span className="sr-only">Membership removal preserves ticket history.</span></TicketActionForm>
     </li>)}</ul>
     {available.length ? <TicketActionForm label="Add workspace access" submit="Add access" onSuccess={refresh} onConflict={refresh}
       getCommand={(form) => ({ action: "setWorkspaceMember", workspaceId: workspace.id, userId: String(form.get("userId")), active: true, version: workspace.version })}>
-      <label>Person<select name="userId" required>{available.map((person) => <option key={person.userId} value={person.userId}>{person.displayName}</option>)}</select></label>
+      <label>Person<select name="userId" required>{available.map((person) => <option key={person.userId} value={person.userId}>{displayText(person.displayName)}</option>)}</select></label>
     </TicketActionForm> : <p className="record-empty">No additional people are available within your scope.</p>}
   </div>;
 }
 
 function WorkspaceSettings({ workspace, refresh }: { workspace: TicketWorkspace; refresh: () => Promise<void> }) {
-  return <TicketActionForm label={`Edit workspace ${workspace.name}`} onSuccess={refresh} onConflict={refresh}
+  return <TicketActionForm label={displayText(`Edit workspace ${workspace.name}`)} onSuccess={refresh} onConflict={refresh}
     getCommand={(form) => ({ action: "updateWorkspace", workspaceId: workspace.id, version: workspace.version, name: String(form.get("name")), description: String(form.get("description") ?? "") })}>
     <label>Name<input name="name" defaultValue={workspace.name} maxLength={120} required data-dialog-autofocus /></label>
     <label>Description · optional<textarea name="description" defaultValue={workspace.description ?? ""} maxLength={1000} rows={3} /></label>
@@ -104,7 +106,7 @@ function WorkspaceSettings({ workspace, refresh }: { workspace: TicketWorkspace;
 }
 
 function BoardSettings({ board, refresh }: { board: TicketBoard; refresh: () => Promise<void> }) {
-  return <TicketActionForm label={`Edit ${board.name}`} onSuccess={refresh} onConflict={refresh}
+  return <TicketActionForm label={displayText(`Edit ${board.name}`)} onSuccess={refresh} onConflict={refresh}
     getCommand={(form) => ({ action: "updateBoard", boardId: board.id, version: board.version, name: String(form.get("name")), status: String(form.get("status")) })}>
     <label>Name<input name="name" defaultValue={board.name} maxLength={120} required /></label>
     <label>Dashboard lifecycle<select name="status" defaultValue={board.status}><option value="DRAFT">Draft</option><option value="PUBLISHED">Published</option><option value="ARCHIVED">Archived</option></select></label>
@@ -117,10 +119,10 @@ function TicketCard({ ticket, data, returnTo, compact = false }: { ticket: Ticke
   const workspace = data.workspaces.find((entry) => entry.id === board?.workspaceId);
   const href = ticketDetailHref(ticket.id, returnTo);
   return <li className={`ticket-card ${compact ? "ticket-card-compact" : ""}`}>
-    <div className="ticket-card-main"><span className="ticket-number">{ticketNumber(ticket.number)}</span><Link href={href} className="ticket-subject">{ticket.subject}</Link><span className="ticket-context">{workspace?.name} · {board?.name}</span><span className="ticket-relationships">{ticket.myParticipation.created ? <span>Created by you</span> : null}{ticket.myParticipation.assigned ? <span>Assigned to you</span> : null}{ticket.myParticipation.mentioned ? <span>Mentioned</span> : null}</span></div>
+    <div className="ticket-card-main"><span className="ticket-number">{displayText(ticketNumber(ticket.number))}</span><Link href={href} className="ticket-subject">{displayText(ticket.subject)}</Link><span className="ticket-context">{displayText(workspace?.name)} · {displayText(board?.name)}</span><span className="ticket-relationships">{ticket.myParticipation.created ? <span>Created by you</span> : null}{ticket.myParticipation.assigned ? <span>Assigned to you</span> : null}{ticket.myParticipation.mentioned ? <span>Mentioned</span> : null}</span></div>
     <div className="ticket-badges"><span className={`ticket-badge ticket-status-${ticket.status.toLowerCase()}`}>{ticketStatusLabels[ticket.status]}</span><span className={`ticket-badge ticket-priority-${ticket.priority.toLowerCase()}`}>{ticketPriorityLabels[ticket.priority]}</span></div>
-    <div className="ticket-card-meta"><span>{ticket.assignees.map((person) => person.displayName).join(", ") || `Created by ${ticket.creatorName}`}</span><span>{ticket.dueDate ? `Due ${ticketDate(ticket.dueDate)}` : ticketDate(ticket.ticketDate)}</span>{ticket.permissions.edit ? <span>Can update</span> : <span>Read only</span>}</div>
-    <Link className="ticket-open" href={href} aria-label={`Open ${ticketNumber(ticket.number)}: ${ticket.subject}`}><ArrowRight size={18} aria-hidden="true" /></Link>
+    <div className="ticket-card-meta"><span>{displayText(ticket.assignees.map((person) => person.displayName).join(", ") || `Created by ${ticket.creatorName}`)}</span><span>{displayText(ticket.dueDate ? `Due ${ticketDate(ticket.dueDate)}` : ticketDate(ticket.ticketDate))}</span>{ticket.permissions.edit ? <span>Can update</span> : <span>Read only</span>}</div>
+    <Link className="ticket-open" href={href} aria-label={displayText(`Open ${ticketNumber(ticket.number)}: ${ticket.subject}`)}><ArrowRight size={18} aria-hidden="true" /></Link>
   </li>;
 }
 
@@ -174,18 +176,18 @@ export function TicketWorkspaceView({ initialData, actor, initialQuery = {} }: {
       <button type="button" aria-pressed={filters.view === "workspaces"} onClick={() => change({ view: "workspaces" })}><Layers size={17} aria-hidden="true" />Workspaces</button>
       <button type="button" aria-pressed={filters.view === "archive"} onClick={() => change({ view: "archive" })}><Archive size={17} aria-hidden="true" />Archive</button>
     </nav>
-    {notice ? <p className="operation-help ticket-notice" role="status">{notice}</p> : null}
-    <nav className="ticket-relation-tabs" aria-label="Your ticket relationships">{(Object.keys(ticketRelationLabels) as TicketRelation[]).map((relation) => <button type="button" key={relation} aria-pressed={filters.relation === relation} onClick={() => change({ relation })}>{ticketRelationLabels[relation]}</button>)}</nav>
+    {notice ? <p className="operation-help ticket-notice" role="status">{displayText(notice)}</p> : null}
+    <nav className="ticket-relation-tabs" aria-label="Your ticket relationships">{(Object.keys(ticketRelationLabels) as TicketRelation[]).map((relation) => <button type="button" key={relation} aria-pressed={filters.relation === relation} onClick={() => change({ relation })}>{displayText(ticketRelationLabels[relation])}</button>)}</nav>
     <div className="ticket-filter-bar">
         <label className="ticket-search"><span>Search tickets</span><span className="ticket-search-input"><Search size={17} aria-hidden="true" /><input value={filters.search} maxLength={200} placeholder="Subject, ticket number or person" onChange={(event) => change({ search: event.target.value })} /></span></label>
-        <label>Workspace<select value={filters.workspace} onChange={(event) => change({ workspace: event.target.value })}><option value="">All workspaces</option>{data.workspaces.map((workspace) => <option value={workspace.id} key={workspace.id}>{workspace.name}</option>)}</select></label>
-        <label>Dashboard<select value={filters.board} onChange={(event) => change({ board: event.target.value })}><option value="">All dashboards</option>{activeBoards.map((board) => <option value={board.id} key={board.id}>{board.name}</option>)}</select></label>
+        <label>Workspace<select value={filters.workspace} onChange={(event) => change({ workspace: event.target.value })}><option value="">All workspaces</option>{data.workspaces.map((workspace) => <option value={workspace.id} key={workspace.id}>{displayText(workspace.name)}</option>)}</select></label>
+        <label>Dashboard<select value={filters.board} onChange={(event) => change({ board: event.target.value })}><option value="">All dashboards</option>{activeBoards.map((board) => <option value={board.id} key={board.id}>{displayText(board.name)}</option>)}</select></label>
     </div>
     <details className="ticket-filter-options"><summary>Status and priority{filters.status || filters.priority ? " · filtered" : ""}</summary><div className="ticket-filter-bar ticket-filter-bar-secondary">
       <label>Status<select value={filters.status} onChange={(event) => change({ status: event.target.value })}><option value="">All statuses</option>{ticketStatuses.map((status) => <option key={status} value={status}>{ticketStatusLabels[status]}</option>)}</select></label>
       <label>Priority<select value={filters.priority} onChange={(event) => change({ priority: event.target.value })}><option value="">All priorities</option>{ticketPriorities.map((priority) => <option key={priority} value={priority}>{ticketPriorityLabels[priority]}</option>)}</select></label>
     </div></details>
-    {hasFilters ? <div className="ticket-active-filters" aria-label="Active ticket filters">{chips.map((chip) => <button type="button" className="ticket-filter-chip" key={chip.key} aria-label={`Remove ${chip.label} filter`} onClick={() => change({ [chip.key]: chip.key === "relation" ? "all" : "" })}>{chip.label}<span aria-hidden="true">×</span></button>)}<button className="button" type="button" onClick={clearFilters}>Clear filters</button></div> : null}
+    {hasFilters ? <div className="ticket-active-filters" aria-label="Active ticket filters">{chips.map((chip) => <button type="button" className="ticket-filter-chip" key={chip.key} aria-label={displayText(`Remove ${chip.label} filter`)} onClick={() => change({ [chip.key]: chip.key === "relation" ? "all" : "" })}>{displayText(chip.label)}<span aria-hidden="true">×</span></button>)}<button className="button" type="button" onClick={clearFilters}>Clear filters</button></div> : null}
     {filters.view === "workspaces" && hasFilters ? <p className="operation-help">Filters are retained. Dashboard counts show matching tickets you can access.</p> : null}
     {filters.view !== "workspaces" ? <>
       {filters.view === "overview" ? <div className="ticket-overview">
@@ -194,7 +196,7 @@ export function TicketWorkspaceView({ initialData, actor, initialQuery = {} }: {
         <div className="ticket-workspace-cards">{data.workspaces.filter((workspace) => !filters.workspace || workspace.id === filters.workspace).map((workspace) => {
           const matching = tickets.filter((ticket) => data.boards.some((board) => board.id === ticket.boardId && board.workspaceId === workspace.id));
           const dashboardCount = activeBoards.filter((board) => board.workspaceId === workspace.id).length;
-          return <article key={workspace.id}><Folder size={22} aria-hidden="true" /><h3>{workspace.name}</h3>{workspace.description ? <p>{workspace.description}</p> : null}<span>{dashboardCount} dashboard{dashboardCount === 1 ? "" : "s"} · {matching.length} matching ticket{matching.length === 1 ? "" : "s"}</span><button type="button" className="button" onClick={() => change({ workspace: workspace.id, view: "workspaces" })}>Open dashboards<ArrowRight size={16} aria-hidden="true" /></button></article>;
+          return <article key={workspace.id}><Folder size={22} aria-hidden="true" /><h3>{displayText(workspace.name)}</h3>{workspace.description ? <p>{displayText(workspace.description)}</p> : null}<span>{dashboardCount} dashboard{dashboardCount === 1 ? "" : "s"} · {matching.length} matching ticket{matching.length === 1 ? "" : "s"}</span><button type="button" className="button" onClick={() => change({ workspace: workspace.id, view: "workspaces" })}>Open dashboards<ArrowRight size={16} aria-hidden="true" /></button></article>;
         })}</div>
         <h2>Needs attention</h2>{tickets.filter((ticket) => ticket.status === "ON_HOLD" || (ticket.status !== "CLOSED" && ["HIGH", "CRITICAL"].includes(ticket.priority))).length ? <ul className="ticket-list">{tickets.filter((ticket) => ticket.status === "ON_HOLD" || (ticket.status !== "CLOSED" && ["HIGH", "CRITICAL"].includes(ticket.priority))).slice(0, 8).map((ticket) => <TicketCard key={ticket.id} ticket={ticket} data={data} returnTo={returnTo} />)}</ul> : <p className="record-empty">No matching tickets need attention.</p>}
       </div> : <>
@@ -206,13 +208,13 @@ export function TicketWorkspaceView({ initialData, actor, initialQuery = {} }: {
       {filters.workspace ? <button className="button" type="button" onClick={() => change({ workspace: "", board: "" })}>Show all workspaces</button> : null}
       {data.workspaces.filter((workspace) => !filters.workspace || workspace.id === filters.workspace).map((workspace) => {
         const dashboards = data.boards.filter((board) => board.workspaceId === workspace.id && (!filters.board || board.id === filters.board));
-        return <section className="ticket-managed-workspace" key={`${workspace.id}:${workspace.version}`}><header><div><h3>{workspace.name}</h3>{workspace.description ? <p>{workspace.description}</p> : null}<span>{dashboards.length} dashboard{dashboards.length === 1 ? "" : "s"}{workspace.canManage ? ` · ${workspace.members.length} people with access` : ""}</span></div>{workspace.canManage ? <div className="ticket-heading-actions"><TaskDialog triggerLabel={`Edit workspace ${workspace.name}`} triggerText="Settings" title={`Workspace · ${workspace.name}`} triggerClassName="button"><WorkspaceSettings workspace={workspace} refresh={refresh} /></TaskDialog><TaskDialog triggerLabel={`Workspace access in ${workspace.name}`} triggerText="Workspace access" title={`Workspace access · ${workspace.name}`} triggerClassName="button" triggerIcon={<Users size={17} aria-hidden="true" />}><WorkspacePeople workspace={workspace} data={data} refresh={refresh} /></TaskDialog></div> : null}</header>
+        return <section className="ticket-managed-workspace" key={`${workspace.id}:${workspace.version}`}><header><div><h3>{displayText(workspace.name)}</h3>{workspace.description ? <p>{displayText(workspace.description)}</p> : null}<span>{dashboards.length} dashboard{dashboards.length === 1 ? "" : "s"}{displayText(workspace.canManage ? ` · ${workspace.members.length} people with access` : "")}</span></div>{workspace.canManage ? <div className="ticket-heading-actions"><TaskDialog triggerLabel={displayText(`Edit workspace ${workspace.name}`)} triggerText="Settings" title={displayText(`Workspace · ${workspace.name}`)} triggerClassName="button"><WorkspaceSettings workspace={workspace} refresh={refresh} /></TaskDialog><TaskDialog triggerLabel={displayText(`Workspace access in ${workspace.name}`)} triggerText="Workspace access" title={displayText(`Workspace access · ${workspace.name}`)} triggerClassName="button" triggerIcon={<Users size={17} aria-hidden="true" />}><WorkspacePeople workspace={workspace} data={data} refresh={refresh} /></TaskDialog></div> : null}</header>
           <div className="ticket-board-cards">{dashboards.map((board) => {
             const count = filterCompanyTickets(data, { ...filters, view: board.status === "ARCHIVED" ? "archive" : "tickets" }).filter((ticket) => ticket.boardId === board.id).length;
-            return <article key={`${board.id}:${board.version}`}><div><Layers size={19} aria-hidden="true" /><h4>{board.name}</h4><span className="ticket-badge">{boardStatusLabels[board.status]}</span><span>{count} ticket{count === 1 ? "" : "s"} you can view</span></div><div><button className="button" type="button" onClick={() => change({ workspace: workspace.id, board: board.id, view: board.status === "ARCHIVED" ? "archive" : "tickets" })}>Open tickets</button>{board.canManage ? <TaskDialog triggerLabel={`Edit dashboard ${board.name}`} triggerText="Settings" title={`Dashboard · ${board.name}`} triggerClassName="button"><BoardSettings board={board} refresh={refresh} /></TaskDialog> : null}</div></article>;
+            return <article key={`${board.id}:${board.version}`}><div><Layers size={19} aria-hidden="true" /><h4>{displayText(board.name)}</h4><span className="ticket-badge">{boardStatusLabels[board.status]}</span><span>{count} ticket{count === 1 ? "" : "s"} you can view</span></div><div><button className="button" type="button" onClick={() => change({ workspace: workspace.id, board: board.id, view: board.status === "ARCHIVED" ? "archive" : "tickets" })}>Open tickets</button>{board.canManage ? <TaskDialog triggerLabel={displayText(`Edit dashboard ${board.name}`)} triggerText="Settings" title={displayText(`Dashboard · ${board.name}`)} triggerClassName="button"><BoardSettings board={board} refresh={refresh} /></TaskDialog> : null}</div></article>;
           })}</div>
           {!dashboards.length ? <p className="record-empty">No dashboards are available here yet.</p> : null}
-          {workspace.canManage ? <TaskDialog triggerLabel={`New dashboard in ${workspace.name}`} triggerText="New dashboard" title={`Create a dashboard · ${workspace.name}`} triggerClassName="button" triggerIcon={<Plus size={17} aria-hidden="true" />}>
+          {workspace.canManage ? <TaskDialog triggerLabel={displayText(`New dashboard in ${workspace.name}`)} triggerText="New dashboard" title={displayText(`Create a dashboard · ${workspace.name}`)} triggerClassName="button" triggerIcon={<Plus size={17} aria-hidden="true" />}>
             <TicketActionForm label="Create dashboard" submit="Create dashboard" onSuccess={refresh} onConflict={refresh} getCommand={(form) => ({ action: "createBoard", workspaceId: workspace.id, version: workspace.version, name: String(form.get("name")), status: String(form.get("status")) })}><label>Name<input name="name" maxLength={120} required data-dialog-autofocus /></label><label>Lifecycle<select name="status" defaultValue="DRAFT"><option value="DRAFT">Draft</option><option value="PUBLISHED">Published</option></select></label><p className="operation-help">Published dashboards let everyone in the company create tickets. Draft dashboards stay within manager access.</p></TicketActionForm>
           </TaskDialog> : null}
         </section>;

@@ -1,3 +1,4 @@
+import { displayText } from "@/shared/presentation/display-text";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentActor } from "@/modules/auth/session-service";
@@ -29,9 +30,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const canOpenClient = clients.some((client) => client.id === view.client.id);
   const coordinator = options.employees.find((employee) => employee.id === view.project.responsibleAdminUserId);
   return <section className="operations-page records-workspace">
-    <nav className="record-breadcrumbs" aria-label="Breadcrumb"><Link href="/projects">Projects</Link><span aria-hidden="true">/</span>{canOpenClient ? <Link href={`/clients/${view.client.id}`}>{view.client.companyName}</Link> : <span>{view.client.companyName}</span>}<span aria-hidden="true">/</span><span aria-current="page">{view.project.name}</span></nav>
-    <header className="operations-heading"><div><p className="eyebrow">Project · {view.client.companyName}</p><h2>{view.project.name}</h2><p>Connect work locations and record what this project needs.</p></div><TaskDialog triggerLabel="Edit project" title="Edit project"><ProjectEditForm project={view.project} employees={options.employees} /></TaskDialog></header>
-    <dl className="record-summary"><div><dt>Status</dt><dd><RecordStatus status={view.project.status} /></dd></div><div><dt>Responsible Admin</dt><dd>{coordinator?.displayName ?? "Not assigned"}</dd></div><div><dt>Project dates</dt><dd><RecordDates start={view.project.startDate} end={view.project.endDate} /></dd></div></dl>
+    <nav className="record-breadcrumbs" aria-label="Breadcrumb"><Link href="/projects">Projects</Link><span aria-hidden="true">/</span>{canOpenClient ? <Link href={`/clients/${view.client.id}`}>{displayText(view.client.companyName)}</Link> : <span>{displayText(view.client.companyName)}</span>}<span aria-hidden="true">/</span><span aria-current="page">{displayText(view.project.name)}</span></nav>
+    <header className="operations-heading"><div><p className="eyebrow">Project · {displayText(view.client.companyName)}</p><h2>{displayText(view.project.name)}</h2><p>Connect work locations and record what this project needs.</p></div><TaskDialog triggerLabel="Edit project" title="Edit project"><ProjectEditForm project={view.project} employees={options.employees} /></TaskDialog></header>
+    <dl className="record-summary"><div><dt>Status</dt><dd><RecordStatus status={view.project.status} /></dd></div><div><dt>Responsible Admin</dt><dd>{displayText(coordinator?.displayName ?? "Not assigned")}</dd></div><div><dt>Project dates</dt><dd><RecordDates start={view.project.startDate} end={view.project.endDate} /></dd></div></dl>
     <ProjectLocationPanel projectId={view.project.id} candidates={view.locationMatches} linked={view.linkedLocations} />
     <SupportingDetailsPanel target={{ type: "PROJECT", id: view.project.id }} details={view.details} employees={options.employees} skills={options.skills} actorId={actor.id} isSuperAdmin={actor.role === "SUPER_ADMIN"} />
     {actor.role === "SUPER_ADMIN" ? <ScopeManagementPanel target={{ type: "PROJECT", id: view.project.id }} employees={options.employees} grants={grants} /> : null}

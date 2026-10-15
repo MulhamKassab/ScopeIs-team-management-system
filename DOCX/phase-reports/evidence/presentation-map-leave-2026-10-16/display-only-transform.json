@@ -1,0 +1,8 @@
+{
+  "baseApplication": "9ac7b80e82a8c8ec51af60ce79217ad29f1421b9",
+  "files": 58,
+  "displayExpressions": 620,
+  "otherTsxChanges": 0,
+  "method": "Remove formatter call/import AST spans; all Git-normalized original TSX source matches the deployed base. Repository CRLF/LF conversion is retained.",
+  "scope": "Rendered child text and human-readable label/title/description attributes only; identifiers, links, control values and event/actions are unchanged."
+}

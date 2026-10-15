@@ -1,4 +1,6 @@
 "use client";
+import { displayText } from "@/shared/presentation/display-text";
+
 
 import { useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { X } from "lucide-react";
@@ -147,7 +149,7 @@ export function TaskDialog({ triggerLabel, triggerText, triggerIcon, title, desc
   }, [open]);
 
   return <>
-    <button ref={trigger} type="button" className={triggerClassName} disabled={triggerDisabled || !ready} aria-busy={ready ? undefined : true} aria-haspopup="dialog" aria-label={triggerLabel} onClick={show}>{triggerIcon}<span>{triggerText ?? triggerLabel}</span></button>
+    <button ref={trigger} type="button" className={triggerClassName} disabled={triggerDisabled || !ready} aria-busy={ready ? undefined : true} aria-haspopup="dialog" aria-label={displayText(triggerLabel)} onClick={show}>{displayText(triggerIcon)}<span>{displayText(triggerText ?? triggerLabel)}</span></button>
     <dialog ref={dialog} className="task-dialog" aria-labelledby={`${id}-title`} aria-describedby={description ? `${id}-description` : undefined}
       onCancel={(event) => { event.preventDefault(); dismiss(); }} onClose={() => setOpen(false)}
       onClick={(event) => {
@@ -156,8 +158,8 @@ export function TaskDialog({ triggerLabel, triggerText, triggerIcon, title, desc
         if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dismiss();
       }}>
       {open ? <>
-        <header className="task-dialog-heading"><div><h2 id={`${id}-title`}>{title}</h2>{description ? <p id={`${id}-description`}>{description}</p> : null}</div><button type="button" className="icon-button" aria-label="Close" onClick={() => dismiss()}><X size={20} aria-hidden="true" /></button></header>
-        <div className="task-dialog-content" onClick={dismissOnNavigate ? (event) => { if ((event.target as Element).closest("a[href]")) dismiss(false); } : undefined}>{children}</div>
+        <header className="task-dialog-heading"><div><h2 id={`${id}-title`}>{displayText(title)}</h2>{description ? <p id={`${id}-description`}>{displayText(description)}</p> : null}</div><button type="button" className="icon-button" aria-label="Close" onClick={() => dismiss()}><X size={20} aria-hidden="true" /></button></header>
+        <div className="task-dialog-content" onClick={dismissOnNavigate ? (event) => { if ((event.target as Element).closest("a[href]")) dismiss(false); } : undefined}>{displayText(children)}</div>
       </> : null}
     </dialog>
   </>;

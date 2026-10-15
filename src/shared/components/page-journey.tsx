@@ -1,4 +1,6 @@
 "use client";
+import { displayText } from "@/shared/presentation/display-text";
+
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -16,9 +18,9 @@ export function PageJourneyHelp({ navigation, role }: { navigation: ModuleDefini
   const related = journey.related.flatMap((key) => navigation.filter((item) => item.key === key));
   return <div className="page-journey-bar">
     <details className="page-journey-help" key={pathname}>
-      <summary><CircleHelp size={17} aria-hidden="true" />How to use {active.label}</summary>
-      <div className="page-journey-content"><p className="journey-goal">{journey.goal}</p><ol>{journey.steps.map((item) => <li key={item.title}><strong>{item.title}</strong><p>{item.detail}</p></li>)}</ol>
-        {related.length ? <nav aria-label={`Related tools for ${active.label}`}>{related.map((item) => <Link className="button" key={item.key} href={item.href}>{item.label}<ArrowRight size={15} aria-hidden="true" /></Link>)}</nav> : null}
+      <summary><CircleHelp size={17} aria-hidden="true" />How to use {displayText(active.label)}</summary>
+      <div className="page-journey-content"><p className="journey-goal">{displayText(journey.goal)}</p><ol>{journey.steps.map((item) => <li key={item.title}><strong>{displayText(item.title)}</strong><p>{displayText(item.detail)}</p></li>)}</ol>
+        {related.length ? <nav aria-label={displayText(`Related tools for ${active.label}`)}>{related.map((item) => <Link className="button" key={item.key} href={item.href}>{displayText(item.label)}<ArrowRight size={15} aria-hidden="true" /></Link>)}</nav> : null}
       </div>
     </details>
   </div>;

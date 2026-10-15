@@ -1,3 +1,4 @@
+import { displayText } from "@/shared/presentation/display-text";
 import Link from "next/link";
 
 export function RecordNavigation({ current }: { current: "clients" | "projects" | "locations" }) {
@@ -9,10 +10,10 @@ export function RecordNavigation({ current }: { current: "clients" | "projects" 
 }
 
 export function RecordStatus({ status }: { status: string }) {
-  return <span className={`directory-status ${status === "ARCHIVED" ? "inactive" : "active"}`}>{status.replaceAll("_", " ").toLowerCase().replace(/^./, (letter) => letter.toUpperCase())}</span>;
+  return <span className={`directory-status ${status === "ARCHIVED" ? "inactive" : "active"}`}>{displayText(status.replaceAll("_", " ").toLowerCase().replace(/^./, (letter) => letter.toUpperCase()))}</span>;
 }
 
 export function RecordDates({ start, end }: { start: string | null; end: string | null }) {
   const format = (date: string) => new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(`${date}T00:00:00Z`));
-  return <>{start ? format(start) : "Start not set"} · {end ? format(end) : "No end date"}</>;
+  return <>{displayText(start ? format(start) : "Start not set")} · {displayText(end ? format(end) : "No end date")}</>;
 }
