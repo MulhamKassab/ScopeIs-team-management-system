@@ -8,6 +8,8 @@ import { dubaiCalendarYear, LEAVE_TIMEZONE, workingDays, workingDaysByYear } fro
 import { leaveRepository, type LeaveTransaction } from "@/modules/leave/repositories";
 import { allowanceUpdateSchema, leaveDecisionSchema, leaveSubmitSchema, leaveVersionSchema, parseLeave } from "@/modules/leave/validation";
 import type { AuthenticatedActor } from "@/shared/types/foundation";
+import { ticketService } from "@/modules/tickets/service";
+import { coverRequestLabel } from "@/modules/coverage/presentation";
 
 export { LEAVE_TIMEZONE, workingDays, dubaiCalendarYear } from "@/modules/leave/date-rules";
 function yearRange(year: number) { return { start: `${year}-01-01`, end: `${year}-12-31` }; }
@@ -39,8 +41,17 @@ export class LeaveService {
     if (actor.role !== "SUPER_ADMIN") throw new LeaveDomainError("NOT_FOUND");
     if (!leaveVersionSchema.shape.leaveRequestId.safeParse(requestId).success) throw new LeaveDomainError("NOT_FOUND");
     const request = await leaveRepository.request(db, requestId); if (!request) throw new LeaveDomainError("NOT_FOUND");
-    const [balances, publishedImpact, employeeName] = await Promise.all([this.requestBalances(db, request), leaveRepository.publishedImpact(db, request.employeeUserId, request.startDate, request.endDate), leaveRepository.employeeName(db, request.employeeUserId)]);
-    return { request, employeeName, balance: balances[0]!, balances, requestedWorkingDays: workingDays(request.startDate, request.endDate), publishedImpact };
+    const [balances, publishedImpact, employeeName, coverRequests, planningAssignments, otherLeave, assignedTickets] = await Promise.all([
+      this.requestBalances(db, request), leaveRepository.publishedImpact(db, request.employeeUserId, request.startDate, request.endDate), leaveRepository.employeeName(db, request.employeeUserId),
+      leaveRepository.relatedCover(db, request.employeeUserId, request.startDate, request.endDate), leaveRepository.planningImpact(db, request.employeeUserId, request.startDate, request.endDate),
+      leaveRepository.relatedLeave(db, request.employeeUserId, request.startDate, request.endDate, request.id), ticketService.leaveReviewAssignments(actor, request.employeeUserId, request.startDate, request.endDate),
+    ]);
+    return { request, employeeName, balance: balances[0]!, balances, requestedWorkingDays: workingDays(request.startDate, request.endDate), publishedImpact, relatedActivity: {
+      coverRequests: coverRequests.map((cover) => ({ ...cover, label: coverRequestLabel(cover), relationship: [
+        cover.anchorEmployeeUserId === request.employeeUserId ? cover.intent === "REPLACE_ASSIGNMENT" ? "Cover requested for this employee" : "Extra support alongside this employee" : null,
+        cover.selectedEmployeeUserId === request.employeeUserId ? "Selected to cover another assignment" : cover.nominatedEmployeeUserId === request.employeeUserId ? "Nominated to cover another assignment" : null,
+      ].filter(Boolean).join(" · ") })), planningAssignments, otherLeave, assignedTickets,
+    } };
   }
   async reviewQueue(actor: AuthenticatedActor) { if (actor.role !== "SUPER_ADMIN") throw new LeaveDomainError("NOT_FOUND"); return leaveRepository.pending(db); }
   async decide(actor: AuthenticatedActor, input: unknown) { if (actor.role !== "SUPER_ADMIN") throw new LeaveDomainError("FORBIDDEN"); const parsed = parseLeave(leaveDecisionSchema, input); const request = await leaveRepository.request(db, parsed.leaveRequestId); if (!request) throw new LeaveDomainError("NOT_FOUND"); return db.transaction(async (tx) => { await leaveRepository.lockAllowance(tx); await this.lockEmployee(tx, request.employeeUserId); await leaveRepository.lockRequest(tx, request.id); const current = await leaveRepository.request(tx, request.id); if (!current || current.version !== parsed.expectedVersion) throw new LeaveDomainError("STALE_VERSION"); if (current.status !== "PENDING") throw new LeaveDomainError("INVALID_STATE"); const publishedImpact = await leaveRepository.publishedImpact(tx, current.employeeUserId, current.startDate, current.endDate); if (parsed.decision === "APPROVED" && publishedImpact.length) throw new LeaveDomainError("PUBLISHED_ASSIGNMENT_CONFLICT"); if (parsed.decision === "APPROVED") { const balances = await this.requestBalances(tx, current); if (balances.some((balance) => balance.requestedWorkingDays > balance.remaining)) throw new LeaveDomainError("INSUFFICIENT_BALANCE"); }

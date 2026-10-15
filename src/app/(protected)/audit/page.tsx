@@ -46,7 +46,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
           <span><time dateTime={item.occurredAt}>{formatDubaiDateTime(item.occurredAt)}</time> · {item.actorName ?? "Removed or unknown actor"}{item.actorRole ? ` (${item.actorRole === "SUPER_ADMIN" ? "Super Admin" : item.actorRole === "ADMIN" ? "Admin" : item.actorRole === "EMPLOYEE" ? "Employee" : "System"})` : ""}</span>
           <details className="audit-record-details"><summary>Record details</summary>
           <span className="audit-target">{item.targetType}{item.targetId ? ` · ${item.targetId}` : ""}</span>
-          {item.isRecognizedAction ? <span className="audit-action">{item.action}</span> : <span className="audit-action">Unrecognized action type — no metadata is shown.</span>}
+          {item.isRecognizedAction ? <span className="audit-action">{item.action}</span> : <span className="audit-action">Unrecognized action type · no metadata is shown.</span>}
           {item.fields.length ? <dl className="audit-fields">{item.fields.map((field) => <div key={field.key}><dt>{field.key}</dt><dd>{field.value}</dd></div>)}</dl> : null}
           </details>
         </div>

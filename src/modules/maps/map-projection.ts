@@ -37,6 +37,17 @@ export function panMap(centre: MapCoordinate, zoom: number, dx: number, dy: numb
   return coordinateAtPixel({ x: origin.x - dx, y: origin.y - dy }, zoom);
 }
 
+/** Keep the geographic point beneath the cursor fixed while zooming. */
+export function zoomMapAt(camera: MapCamera, delta: number, point: Point, viewport: MapViewport): MapCamera {
+  const zoom = Math.max(MIN_MAP_ZOOM, Math.min(MAX_MAP_ZOOM, camera.zoom + delta));
+  if (zoom === camera.zoom) return camera;
+  const origin = worldPixel(camera.centre, camera.zoom);
+  const offset = { x: point.x - viewport.width / 2, y: point.y - viewport.height / 2 };
+  const anchor = coordinateAtPixel({ x: origin.x + offset.x, y: origin.y + offset.y }, camera.zoom);
+  const scaled = worldPixel(anchor, zoom);
+  return { zoom, centre: coordinateAtPixel({ x: scaled.x - offset.x, y: scaled.y - offset.y }, zoom) };
+}
+
 /** Fit the smallest geographic interval, including views that cross the antimeridian. */
 export function fitMapCoordinates(coordinates: MapCoordinate[], viewport: MapViewport, padding = 64): MapCamera {
   if (!coordinates.length) return { centre: { latitude: 25.2048, longitude: 55.2708 }, zoom: 11 };

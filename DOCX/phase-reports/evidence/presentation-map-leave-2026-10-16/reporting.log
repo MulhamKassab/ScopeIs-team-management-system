@@ -1,0 +1,21 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase11-reporting-service.test.ts [2m([22m[2m35 tests[22m[2m)[22m[33m 19878[2mms[22m[39m
+   [32m✓[39m Phase 11 published allocation (R1) and planning (R4) [2m(6)[22m
+     [33m[2m✓[22m[39m keeps Published allocation strictly Published and planning strictly Draft/Proposed[33m 759[2mms[22m[39m
+     [33m[2m✓[22m[39m rechecks scoped Admin dashboard facts while report access remains closed before and after revocation[33m 688[2mms[22m[39m
+   [32m✓[39m Phase 11 dashboards [2m(5)[22m
+     [33m[2m✓[22m[39m gives each role a distinct, honestly-sourced card set[33m 542[2mms[22m[39m
+   [32m✓[39m report filter and total regressions [2m(4)[22m
+     [33m[2m✓[22m[39m sums more than 5,000 source assignments before grouping and keeps the export row cap[33m 3805[2mms[22m[39m
+   [32m✓[39m aggregate export source completeness [2m(2)[22m
+     [33m[2m✓[22m[39m counts and paginates every balance employee and refuses an over-cap export[33m 10882[2mms[22m[39m
+     [33m[2m✓[22m[39m includes every assignment skill requirement before sorting and refuses an over-cap export[33m 1859[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m35 passed[39m[22m[90m (35)[39m
+[2m   Start at [22m 00:52:51
+[2m   Duration [22m 28.65s[2m (tests 72%, transform 14%, import 11%, setup 4%)[22m
+
+Phase 11 reporting service disposable database cleanup complete.

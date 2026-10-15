@@ -179,7 +179,7 @@ export class ReportingService {
       ]);
       return {
         columns: [{ key: "employee_name", label: "Employee" }, { key: "employee_code", label: "Employee code" }, { key: "team", label: "Team" }],
-        rows: rows.map((row) => ({ employee_name: row.displayName, employee_code: row.employeeCode ?? "—", team: row.team ?? "No team recorded" })),
+        rows: rows.map((row) => ({ employee_name: row.displayName, employee_code: row.employeeCode ?? "Not recorded", team: row.team ?? "No team recorded" })),
         total,
         notes: ["A person listed here may still hold Draft or Proposed work; this report reads the current Published schedule only."],
       };
@@ -210,7 +210,7 @@ export class ReportingService {
       return {
         columns: [...ReportingService.assignmentColumns(true), { key: "period_status", label: "Period status" }, { key: "revision_number", label: "Revision" }],
         rows: projected, total: undefined, notes: [
-          `${PLANNING_DATA_STATE} — Draft and Proposed scheduling only. These figures are never combined with Published allocation.`,
+          `${PLANNING_DATA_STATE} · Draft and Proposed scheduling only. These figures are never combined with Published allocation.`,
           `For comparison, this scope holds ${count} current Published assignment(s) in the same window.`,
         ],
       };
@@ -334,7 +334,7 @@ export class ReportingService {
             || (requirement.locationId !== null && request.scope.locationIds.includes(requirement.locationId))))
       ).map((requirement) => {
         const recorded = counts.get(requirement.skillId)?.size ?? 0;
-        const scopeLabel = requirement.clientName ?? requirement.projectName ?? requirement.locationName ?? "—";
+        const scopeLabel = requirement.clientName ?? requirement.projectName ?? requirement.locationName ?? "Not recorded";
         return {
           requirement_type: "Operational rule", scope: scopeLabel, skill_name: requirement.skillName,
           required_count: String(requirement.requiredCount), recorded_count: String(recorded),
@@ -378,8 +378,8 @@ export class ReportingService {
            { key: "review_state", label: "Review state" }, { key: "related_skill", label: "Related skill" }];
       const projected = rows.map((row) => {
         const base = {
-          title: row.title, issuer: row.issuer ?? "—", issue_date: row.issueDate ?? "—", expiry_date: row.expiryDate ?? "No expiry date",
-          expiry_state: deriveExpiryStatus(row.expiryDate), review_state: row.reviewState, related_skill: row.skillName ?? "—",
+          title: row.title, issuer: row.issuer ?? "Not recorded", issue_date: row.issueDate ?? "Not recorded", expiry_date: row.expiryDate ?? "No expiry date",
+          expiry_state: deriveExpiryStatus(row.expiryDate), review_state: row.reviewState, related_skill: row.skillName ?? "Not recorded",
         };
         return includePrivate ? { employee_name: row.ownerName, ...base } : base;
       });
@@ -399,7 +399,7 @@ export class ReportingService {
         columns: [{ key: "kind", label: "Type" }, { key: "title", label: "Title" }, { key: "employee_name", label: "Employee" }, { key: "submitted_at", label: "Submitted at" }],
         rows: rows.map((row) => ({
           kind: row.kind, title: row.title, employee_name: row.ownerName,
-          submitted_at: row.lastSubmittedAt ? new Intl.DateTimeFormat("en-GB", { dateStyle: "short", timeStyle: "short", timeZone: "Asia/Dubai" }).format(row.lastSubmittedAt) : "—",
+          submitted_at: row.lastSubmittedAt ? new Intl.DateTimeFormat("en-GB", { dateStyle: "short", timeStyle: "short", timeZone: "Asia/Dubai" }).format(row.lastSubmittedAt) : "Not recorded",
         })),
         total,
         notes: ["Oldest submissions first. File contents, storage keys and private links are never included."],
@@ -422,9 +422,9 @@ export class ReportingService {
         ],
         rows: rows.map((row) => ({
           planning_month: row.planningMonth.slice(0, 7), client_name: row.clientName, effective_state: row.effectiveState,
-          latest_revision: String(row.latestRevision), published_revision: row.publishedRevision === null ? "—" : String(row.publishedRevision),
+          latest_revision: String(row.latestRevision), published_revision: row.publishedRevision === null ? "Not recorded" : String(row.publishedRevision),
           published_assignments: String(row.publishedPeriodId ? countByPeriod.get(row.publishedPeriodId) ?? 0 : 0),
-          published_at: row.publishedAt ? new Intl.DateTimeFormat("en-GB", { dateStyle: "short", timeStyle: "short", timeZone: "Asia/Dubai" }).format(new Date(row.publishedAt)) : "—",
+          published_at: row.publishedAt ? new Intl.DateTimeFormat("en-GB", { dateStyle: "short", timeStyle: "short", timeZone: "Asia/Dubai" }).format(new Date(row.publishedAt)) : "Not recorded",
         })),
         total,
         notes: ["Date filters include the planning months that intersect the selected range. Each client-month appears once with its effective state: Published when a current published revision exists, otherwise the open Draft or Proposed state."],
@@ -445,7 +445,7 @@ export class ReportingService {
           occurred_at: new Intl.DateTimeFormat("en-GB", { dateStyle: "short", timeStyle: "medium", timeZone: "Asia/Dubai" }).format(new Date(item.occurredAt)),
           action: item.label, target: `${item.targetType}${item.targetId ? ` · ${item.targetId}` : ""}`,
           actor: item.actorName ?? "Removed actor",
-          safe_fields: item.fields.map((field) => `${field.key}=${field.value}`).join("; ") || "—",
+          safe_fields: item.fields.map((field) => `${field.key}=${field.value}`).join("; ") || "Not recorded",
         })),
         total: history.total,
         notes: ["Only allowlisted, safe metadata is rendered. Unknown action types show a generic label with no detail. Audit history has no export."],
@@ -593,8 +593,8 @@ export class ReportingService {
         { key: "pending-leave", label: "Pending leave requests", question: "What is waiting on a decision?", value: String(pendingLeave), href: "/leave" },
         { key: "approved-leave-days", label: "Approved leave days this month", question: "How much leave is approved this month?", value: String(approvedDays), href: "/reports/approved-leave" },
         { key: "pending-replacements", label: "Pending replacement requests", question: "Which coverage decisions are open?", value: String(pendingReplacements), href: "/replacements" },
-        { key: "awaiting-review", label: "Evidence awaiting review", question: "What needs a Super Admin review?", value: awaitingReview === null ? "—" : String(awaitingReview), href: "/reports/evidence-review-queue" },
-        { key: "expired-certifications", label: "Expired certifications", question: "Which certifications have lapsed?", value: expiredCertifications === null ? "—" : String(expiredCertifications), href: "/reports/certification-status" },
+        { key: "awaiting-review", label: "Evidence awaiting review", question: "What needs a Super Admin review?", value: awaitingReview === null ? "Not recorded" : String(awaitingReview), href: "/reports/evidence-review-queue" },
+        { key: "expired-certifications", label: "Expired certifications", question: "Which certifications have lapsed?", value: expiredCertifications === null ? "Not recorded" : String(expiredCertifications), href: "/reports/certification-status" },
       ],
       sections: [
         { key: "employees-by-team", label: "Employees by team", question: "How is the workforce distributed across teams?", columns: [{ key: "team", label: "Team" }, { key: "count", label: "Employees" }], rows: teams.map((row) => ({ team: row.team ?? "No team recorded", count: String(row.value) })), emptyState: "No active employee is recorded yet.", href: "/employees" },

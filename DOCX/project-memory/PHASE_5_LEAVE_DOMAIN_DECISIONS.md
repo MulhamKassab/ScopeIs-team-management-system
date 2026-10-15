@@ -1,5 +1,9 @@
 # Phase 5 Leave Domain Decisions
 
+## Confirmed review context, 16 October 2026
+
+The owner authorized [employee activity during the requested dates](PRESENTATION_MAP_LEAVE_REVIEW_AMENDMENT_2026_10_16.md) in Super Admin review: cover requests for the employee or nominating/selecting them as cover, Draft/Proposed assignments, other overlapping leave and active assigned tickets whose recorded date range overlaps. Show relationship, status/publication facts and links; distinguish closed history. Ticket context is read through the ticket service's current session/role/permission checks and does not reserve working time. Other roles receive no review context. Published-conflict blocking, balances, full-date semantics, versioning, transactional decision checks and separate publication stay unchanged. This is a read-only contextual connection, not automatic ticket/workforce scheduling.
+
 ## Confirmed Cover and access amendment — 2026-10-15
 
 The owner authorized the [consolidated Cover workspace and access amendment](COVER_WORKSPACE_AND_ACCESS_AMENDMENT_2026_10_15.md). It supersedes older statements permitting Admin unpublished timetable/team-leave/report reads or project creation. Super Admin alone holds those capabilities; Employee own vacation self-service remains. Cover unifies timetable selection, creation, versioned editing/cancellation and direct decisions, with separate publication. The main timetable exposes assignment creation and the map gains place labels and selected-work controls. Existing scope, privacy, conflict, accessibility and RTL rules remain.

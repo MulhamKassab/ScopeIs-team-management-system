@@ -1,0 +1,37 @@
+.planning-map-workspace { grid-template-columns: minmax(260px, .52fr) minmax(0, 1fr); }
+.planning-map-sidebar { position: sticky; inset-block-start: 96px; }
+.planning-map-list { padding: 16px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); }
+.map-list-intro { margin: 0 0 8px; font-size: .8125rem; line-height: 1.5; color: var(--muted); }
+.map-assignment-results { max-block-size: 620px; }
+.map-list-row-heading strong { color: var(--text); font-size: .9375rem; }
+.planning-map-list .map-assignment-results button { min-block-size: 94px; }
+.map-fit-controls .button { flex: 1 1 auto; white-space: nowrap; overflow-wrap: normal; }
+.planning-map-list .map-assignment-results button > span { font-size: .8125rem; }
+.planning-map-canvas { user-select: none; }
+.planning-map-canvas[data-dragging="true"] { cursor: grabbing; }
+.map-pin-label { max-width: 190px; text-align: start; white-space: normal; line-height: 1.35; pointer-events: auto; cursor: pointer; }
+.map-pin-label small { display: block; color: var(--muted); font-size: .6875rem; max-block-size: 2.7em; overflow: hidden; margin-block-start: 2px; }
+.map-place-assignments { padding: 16px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); }
+.map-place-assignments h3 { margin: 0 0 4px; font-size: 1rem; }
+.map-place-assignments > div > span { font-size: .8125rem; color: var(--muted); }
+.map-place-assignments > div:last-child { display: grid; gap: 8px; margin-block-start: 12px; }
+.map-place-assignments .button { display: grid; text-align: start; justify-content: stretch; gap: 4px; }
+.map-place-assignments .button > span { font-size: .8125rem; color: var(--muted); }
+.map-place-assignments .button[aria-pressed="true"] { border-color: var(--primary); background: var(--primary-soft); }
+.planning-map-detail .map-assignment-facts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.map-detail-actions { display: flex; flex-wrap: wrap; }
+@media (max-width: 1100px) {
+  .planning-map-workspace { grid-template-columns: minmax(0, 1fr); }
+  .planning-map-sidebar { position: static; display: block; }
+  .map-assignment-results { max-block-size: 260px; }
+}
+@media (max-width: 650px) {
+  .planning-map-list { padding: 12px; }
+  .planning-map-detail .map-assignment-facts { grid-template-columns: minmax(0, 1fr); }
+  .map-detail-actions .button { inline-size: 100%; }
+  .map-pin-label { max-width: 140px; }
+}
+@media (forced-colors: active) {
+  .map-place-assignments, .planning-map-list { border-color: CanvasText; }
+  .map-place-assignments .button[aria-pressed="true"] { border-color: Highlight; }
+}

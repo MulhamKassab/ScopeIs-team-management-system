@@ -1,0 +1,29 @@
+{
+  "initialUnitComponent": {
+    "passed": 424,
+    "failed": 1,
+    "reason": "Existing Phase10 DB-boundary dynamic import exceeded the default5000ms timeout during concurrent initial lint/types. No assertion failure or application error."
+  },
+  "focusedBoundaryRepeat": {
+    "passed": 9,
+    "total": 9
+  },
+  "finalUnitComponent": {
+    "passed": 425,
+    "failed": 0,
+    "skipped": 0,
+    "receipt": "unit-component.json"
+  },
+  "initialBrowser": {
+    "passed": 13,
+    "failed": 1,
+    "reason": "Contrast checker treated font-size:0 calendar indicator text as visible text. Fixed checker skips zero-size glyphs; accessible day-button names remain.",
+    "receipt": "browser-indicator-diagnostic.json"
+  },
+  "finalBrowser": {
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "receipt": "browser-results.json"
+  }
+}

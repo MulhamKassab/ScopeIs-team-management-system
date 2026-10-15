@@ -1,0 +1,9 @@
+{
+  "capturedAt": "2026-10-15T21:08:15.632Z",
+  "inputs": 477,
+  "matching": 477,
+  "rawSha256Matching": true,
+  "gitCleanFilteredIndexMatching": true,
+  "manifest": "source-inputs.json",
+  "unrelatedTestPyExcluded": true
+}

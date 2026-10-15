@@ -1,0 +1,27 @@
+/* Semantic action colours must survive page-specific link and card styles. */
+:is(.app-shell, .task-dialog, .login-card) .button.primary {
+  color: var(--on-primary);
+  background-color: var(--control-fill, var(--primary));
+  border-color: var(--control-fill, var(--primary));
+}
+:is(.app-shell, .task-dialog, .login-card) .button.primary :is(span, strong, small, svg) { color: inherit; }
+:is(.app-shell, .task-dialog, .login-card) :is(button, .button):disabled {
+  color: var(--muted);
+  background: var(--surface-muted);
+  border-color: var(--border);
+  box-shadow: none;
+  opacity: 1;
+  cursor: not-allowed;
+}
+/* The overview's pale action is an intentional inverse primary action. */
+.dashboard-page > .reporting-page-heading > .button.primary { color: #163b99; background-color: var(--control-fill, #fff); }
+.leave-related-activity { display: grid; gap: 18px; margin-block: 18px; padding: 18px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface-muted); }
+.leave-related-activity h4, .leave-related-activity h5 { margin: 0 0 8px; color: var(--text); font-size: .9375rem; }
+.leave-related-activity p { margin: 0 0 8px; color: var(--muted); font-size: .8125rem; line-height: 1.55; }
+.leave-related-activity .workflow-queue { padding: 0; list-style: none; margin: 0; }
+.leave-related-activity .workflow-queue > li { flex-wrap: wrap; }
+.leave-related-activity summary { cursor: pointer; min-block-size: 44px; align-content: center; font-size: .8125rem; }
+@media (forced-colors: active) {
+  :is(.app-shell, .task-dialog, .login-card) .button.primary { color: ButtonText; background: ButtonFace; border-color: ButtonText; }
+  :is(.app-shell, .task-dialog, .login-card) :is(button, .button):disabled { color: GrayText; border-color: GrayText; }
+}

@@ -47,6 +47,21 @@ async function create(boardId: string, version: number, actor = actors.nora, ext
 async function countAudit(id: string) { return (await db.select().from(auditEvents).where(and(eq(auditEvents.targetType, "ticket"), eq(auditEvents.targetId, id)))).length; }
 
 describe("Company tickets PostgreSQL access boundaries", () => {
+  it("projects only active assigned overlapping tickets to a currently authorized Super Admin vacation review", async () => {
+    const board = await workspace();
+    const assigned = await create(board.boardId, board.boardVersion, actors.nora, { ticketDate: "2039-06-01", dueDate: "2039-06-30", assigneeIds: [ids.cora] });
+    const outside = await create(board.boardId, board.boardVersion, actors.nora, { ticketDate: "2039-07-01", assigneeIds: [ids.cora] });
+    const observer = await create(board.boardId, board.boardVersion, actors.nora, { ticketDate: "2039-06-12", observerIds: [ids.cora] });
+    const closed = await create(board.boardId, board.boardVersion, actors.nora, { ticketDate: "2039-06-12", assigneeIds: [ids.cora] });
+    await db.update(tickets).set({ status: "CLOSED" }).where(eq(tickets.id, closed.id));
+    const result = await ticketService.leaveReviewAssignments(actors.nora, ids.cora, "2039-06-12", "2039-06-13");
+    expect(result.map((ticket) => ticket.id)).toEqual([assigned.id]);
+    expect(result.every((ticket) => ![outside.id, observer.id, closed.id].includes(ticket.id))).toBe(true);
+    expect((await ticketService.leaveReviewAssignments(actors.nora, ids.cora, "2039-06-30", "2039-06-30")).map((ticket) => ticket.id)).toEqual([assigned.id]);
+    await expect(ticketService.leaveReviewAssignments(actors.ava, ids.cora, "2039-06-12", "2039-06-13")).rejects.toMatchObject({ status: 404 });
+    await expect(ticketService.leaveReviewAssignments({ ...actors.ava, role: "SUPER_ADMIN" }, ids.cora, "2039-06-12", "2039-06-13")).rejects.toMatchObject({ status: 404 });
+    await expect(ticketService.leaveReviewAssignments(actors.cora, ids.cora, "2039-06-12", "2039-06-13")).rejects.toMatchObject({ status: 404 });
+  });
   it("consolidates current related and supervised tickets across workspaces without exposing unrelated work", async () => {
     const linked = await workspace();
     const unlinked = await workspace({ linked: false, noMembers: true });

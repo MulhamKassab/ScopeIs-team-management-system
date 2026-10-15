@@ -1,5 +1,9 @@
 # Company ticket workflow — confirmed implementation decisions
 
+## Vacation-review context, confirmed 16 October 2026
+
+The owner authorized a read-only [vacation-review connection](PRESENTATION_MAP_LEAVE_REVIEW_AMENDMENT_2026_10_16.md). The ticket service projects only currently authorized, active assigned tickets with recorded date ranges overlapping the requested vacation to a currently authenticated Super Admin. Closed/archived tickets and archived dashboards are excluded; observers alone do not count as assignees. Ticket subject/status/date links are contextual information, not authoritative booked time, availability, an automatic scheduling effect or the deferred workforce handoff. Existing participant, scope, session and supervision rules remain unchanged.
+
 ## Current experience amendment — confirmed 12 October 2026
 
 The product owner authorized implementation of the [9 October UI clarity review](../phase-reports/SCOPEIS_UI_CLARITY_REVIEW_2026_10_09.md), followed by a push to `main` and deployment. The ticket starting view is now **All accessible tickets for every role**, consolidated across all authorized workspaces and dashboards. A person does not have to enter a workspace or dashboard before finding their related work. This replaces the earlier Employee “My tickets” and management Overview defaults; **Overview remains available as a secondary view**, alongside operational Tickets and workspace administration.

@@ -182,6 +182,7 @@ notification, privacy, transaction, and concurrency expectations) lives in the m
 | UI-02 | 1–11 | responsive, visual, discovery and map journeys | e2e | test/e2e/responsive.spec.ts |
 | UI-03 | 1–11 | finite motion, modal focus and desktop/phone interactions | e2e | test/e2e/responsive.spec.ts |
 | UI-04 | Cross-phase UI clarity | consolidated authorized ticket views, relationship filters and retained context | e2e | test/e2e/tickets.spec.ts |
+| UI-05 | 1-12 | semantic colours, practical map and date-bounded vacation context | e2e | test/e2e/usability-review.spec.ts |
 
 The aggregate E2E runner registers 15 suites, including the guarded responsive and Company ticket runners. Each suite owns its disposable database and port; the UI runner uses an isolated safe build and fictional edge-case fixtures. The [12 October bounded verification](../phase-reports/SCOPEIS_FULL_RESPONSIVE_ROLE_VERIFICATION_2026_10_12.md) passed the complete responsive suite 24/24 and all three ordinary live-role journeys; it does not certify a new full system lock or general Phase 13 readiness. Presentation checks do not replace service authorization evidence or certify physical devices.
 
@@ -218,3 +219,4 @@ The current machine-readable manifest uses `SCOPEIS_PHASE_12_COMPANY_TICKETS_LOC
 | TKT-12 | 12 | generic ticket notifications and current authorized destinations | unit | test/unit/ticket-notification-destinations.test.ts |
 
 `npm run test:tickets` runs the service and private-file integration suites in separate owned disposable databases. `npm run test:tickets-e2e` owns its database, loopback port, safe build and private fictional upload directory. Both are included in the aggregate runner registration. The earlier monthly timetable integration file is also explicitly registered so the fail-closed manifest matches the existing aggregate integration gate.
+

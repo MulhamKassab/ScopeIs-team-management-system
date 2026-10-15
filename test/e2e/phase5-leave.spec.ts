@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { signIn, signOut } from "./sign-in";
+import { displayDate } from "../../src/modules/scheduling/calendar-dates";
 test.skip(process.env.SCOPEIS_PHASE5_E2E !== "true", "Run with the guarded Phase 5 fixture runner.");
 test("Employee previews and requests a vacation, Super Admin decides it, and Admin cannot read team leave", async ({ page }, testInfo) => {
   const startDate = testInfo.project.name === "mobile" ? "2026-11-09" : "2026-11-02";
@@ -38,7 +39,7 @@ test("Employee previews and requests a vacation, Super Admin decides it, and Adm
 
   await signIn(page, "Nora Albright");
   await page.goto("/leave");
-  await page.getByRole("link", { name: "Review", exact: true }).click();
+  await page.locator(".workflow-queue > li").filter({ hasText: displayDate(startDate) }).getByRole("link", { name: "Review", exact: true }).click();
   await expect(page.getByText(`Private reason: ${privateReason}`, { exact: true })).toBeVisible();
   const decision = page.getByRole("form", { name: "Decide leave request" });
   await decision.getByLabel("Decision").selectOption("APPROVED");

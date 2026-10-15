@@ -1,5 +1,9 @@
 # UI/UX Foundation
 
+## Confirmed presentation and practical map amendment, 16 October 2026
+
+The owner authorized [consistent control/text colours, a practical map and date-bounded vacation-review context](PRESENTATION_MAP_LEAVE_REVIEW_AMENDMENT_2026_10_16.md), with implementation and push to main. Semantic primary foregrounds survive contextual link/card styles; disabled controls remain readable in both themes. Authored website copy and empty-value labels use no em dashes. The map puts an identifiable people/worksite list beside the canvas, offers explicit shared-marker choices and pointer-centred wheel zoom, and removes the requested long controls/privacy disclosure. Existing attribution, static/published status, exact/coarse privacy, scopes, touch/keyboard access, RTL and reduced motion remain. Super Admin vacation review includes related cover, unpublished work, other leave and permission-filtered assigned tickets; it changes no approval rule.
+
 ## Confirmed Cover and access amendment — 2026-10-15
 
 The owner authorized the [consolidated Cover workspace and access amendment](COVER_WORKSPACE_AND_ACCESS_AMENDMENT_2026_10_15.md). It supersedes older statements permitting Admin unpublished timetable/team-leave/report reads or project creation. Super Admin alone holds those capabilities; Employee own vacation self-service remains. Cover unifies timetable selection, creation, versioned editing/cancellation and direct decisions, with separate publication. The main timetable exposes assignment creation and the map gains place labels and selected-work controls. Existing scope, privacy, conflict, accessibility and RTL rules remain.

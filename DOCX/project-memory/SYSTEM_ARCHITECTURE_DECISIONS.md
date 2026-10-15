@@ -1,5 +1,9 @@
 # System Architecture Decisions
 
+## Presentation and read-only review context, 16 October 2026
+
+The [confirmed amendment](PRESENTATION_MAP_LEAVE_REVIEW_AMENDMENT_2026_10_16.md) uses existing UI tokens, the provider-neutral browser map and date-bounded repositories for vacation review. Related ticket metadata is projected by the ticket service after its current session, role and ticket-permission checks; the leave module never queries private ticket rows directly or turns ticket dates into booked time. This is contextual reading within the already implemented Phase 12 core, not an automatic workforce handoff. No schema, provider, authentication, worker or approval-policy change is introduced.
+
 ## Confirmed Cover and access amendment — 2026-10-15
 
 The owner authorized the [consolidated Cover workspace and access amendment](COVER_WORKSPACE_AND_ACCESS_AMENDMENT_2026_10_15.md). It supersedes older statements permitting Admin unpublished timetable/team-leave/report reads or project creation. Super Admin alone holds those capabilities; Employee own vacation self-service remains. Cover unifies timetable selection, creation, versioned editing/cancellation and direct decisions, with separate publication. The main timetable exposes assignment creation and the map gains place labels and selected-work controls. Existing scope, privacy, conflict, accessibility and RTL rules remain.

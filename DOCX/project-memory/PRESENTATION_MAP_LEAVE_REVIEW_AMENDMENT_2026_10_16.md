@@ -1,0 +1,14 @@
+# Presentation, practical map and leave-review context
+
+Confirmed by the product owner on 16 October 2026. Implementation and push to main are authorized.
+
+- Use consistent semantic text/control colours throughout the application. Primary actions must retain a contrasting foreground even inside record cards and headings. Disabled, selected, hover, light, dark and forced-colour states remain distinguishable and readable.
+- Remove em dashes from authored website copy and empty-value placeholders. Use meaningful missing-value text, punctuation or a blank calendar cell with an accessible label. Preserve user-entered data and historical documents.
+- Present the work map as an identifiable list of people and their work locations beside the geographic view. A shared marker must expose its assignments explicitly instead of requiring repeated guesses/cycling. Keep selected list/map details synchronized and provide real pointer dragging, wheel zoom at the pointer, keyboard controls and touch interaction. Retain the existing provider, attribution, published-only projection, exact/coarse privacy and role/scope boundaries.
+- Remove the requested “Map controls and privacy” disclosure and its two paragraphs. Keep concise named controls, the existing published/static status, coordinate-precision facts and mandatory provider attribution. No new provider or location tracking is introduced.
+- Super Admin vacation review shows date-bounded related cover requests (employee being covered or nominated/selected to cover), Draft/Proposed work, other leave and authorized assigned tickets with overlapping ticket dates, alongside current Published conflicts. Label request status, relationship and publication state, and provide direct links. Closed/cancelled history is distinct from active work. Ticket dates are informational, not booked work time.
+- Read ticket context through the ticket module's existing permission checks. Review context is Super Admin-only; Employee and Admin do not receive it. Existing Published-assignment approval blocking, balances, locks, version checks and separate schedule publication remain unchanged. Context does not automatically approve/reject requests or change assignments.
+
+Use the current modular monolith, repositories/services and UI tokens. No schema, authentication, provider, background service or production business-data change is required. Preserve responsive reflow, RTL, native dialog focus, 44px controls and reduced motion.
+
+Delivery: implementation and bounded local verification are complete under [the report](../phase-reports/SCOPEIS_PRESENTATION_MAP_LEAVE_REVIEW_2026_10_16.md): 425 unit/components, 74 integration; separately recorded final map refinement 17 affected geometry/components, types/lint and fresh-build browser 14/14. Source delivery and deployment verification are pending. No broader system-lock or Phase 13 certificate is implied.

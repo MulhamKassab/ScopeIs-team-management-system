@@ -1,0 +1,16 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase5-leave-service.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 2269[2mms[22m[39m
+   [33m[2m✓[22m[39m shows date-bounded cover relationships, unpublished work and closed leave without leaking review context to lower roles[33m 819[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 00:52:50
+[2m   Duration [22m 9.29s[2m (import 35%, transform 28%, tests 28%, setup 9%)[22m
+
+[2m  Transform [22m [33mtransforming modules took 2.31s[39m[2m · 28% of tracked time, re-done on every run[22m
+[2m            [22m [2mpersist transforms across runs with [22m[33mfsModuleCache: true[39m
+[2m            [22m [2mlearn more: https://vitest.dev/guide/improving-performance#caching-between-reruns[22m
+
+Phase 5 leave service disposable database cleanup complete.

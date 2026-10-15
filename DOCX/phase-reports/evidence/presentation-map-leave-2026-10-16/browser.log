@@ -1,0 +1,22 @@
+{"event":"browser_build_directory_allocated","ownerPid":44980,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-ZbxhJM"}
+
+Running 14 tests using 1 worker
+
+  ok  1 [desktop] › test\e2e\phase5-leave.spec.ts:5:1 › Employee previews and requests a vacation, Super Admin decides it, and Admin cannot read team leave (11.7s)
+  ok  2 [desktop] › test\e2e\phase8-planning-map.spec.ts:8:1 › Super Admin sees static Published planning facts and safe fallback (2.3s)
+  ok  3 [desktop] › test\e2e\phase8-planning-map.spec.ts:9:1 › Scoped Admin receives only the coarse Team × operational intersection and Employee is denied (3.2s)
+  ok  4 [desktop] › test\e2e\phase8-planning-map.spec.ts:11:1 › filter form accepts All authorized and employee identifiers, and map dragging follows the pointer (3.9s)
+  ok  5 [desktop] › test\e2e\usability-review.spec.ts:34:1 › semantic text and button colours stay readable across workspaces and create dialogs in both themes (18.2s)
+  ok  6 [desktop] › test\e2e\usability-review.spec.ts:57:1 › map identifies shared-place people and supports real dragging, wheel zoom and RTL phone reflow (2.9s)
+  ok  7 [desktop] › test\e2e\usability-review.spec.ts:91:1 › vacation reviewer sees dated cover, planning, leave and ticket context while lower roles remain private (3.7s)
+  ok  8 [mobile] › test\e2e\phase5-leave.spec.ts:5:1 › Employee previews and requests a vacation, Super Admin decides it, and Admin cannot read team leave (8.0s)
+  ok  9 [mobile] › test\e2e\phase8-planning-map.spec.ts:8:1 › Super Admin sees static Published planning facts and safe fallback (1.8s)
+  ok 10 [mobile] › test\e2e\phase8-planning-map.spec.ts:9:1 › Scoped Admin receives only the coarse Team × operational intersection and Employee is denied (2.8s)
+  ok 11 [mobile] › test\e2e\phase8-planning-map.spec.ts:11:1 › filter form accepts All authorized and employee identifiers, and map dragging follows the pointer (11.9s)
+  ok 12 [mobile] › test\e2e\usability-review.spec.ts:34:1 › semantic text and button colours stay readable across workspaces and create dialogs in both themes (15.8s)
+  ok 13 [mobile] › test\e2e\usability-review.spec.ts:57:1 › map identifies shared-place people and supports real dragging, wheel zoom and RTL phone reflow (3.1s)
+  ok 14 [mobile] › test\e2e\usability-review.spec.ts:91:1 › vacation reviewer sees dated cover, planning, leave and ticket context while lower roles remain private (8.2s)
+
+  14 passed (2.9m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":44980,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-ZbxhJM"}
+Usability review disposable database/build cleanup complete.

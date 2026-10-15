@@ -20,7 +20,7 @@ export type ExportPayload = { filename: string; body: string; headers: Record<st
  * Authorization is re-resolved here rather than trusted from the page render, so a revoked grant or a
  * demotion between the page load and the export click cannot produce a file. The projection is the same
  * one the page renders. Over-cap results are refused, never truncated, and every outcome is audited with
- * safe metadata only — never a row value, an employee name, or the file bytes.
+ * safe metadata only · never a row value, an employee name, or the file bytes.
  */
 export class ReportExportService {
   constructor(private readonly auditWriter: AuditWriter = writeAuditEvent) {}

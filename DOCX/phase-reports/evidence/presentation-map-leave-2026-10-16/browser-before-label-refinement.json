@@ -1,0 +1,677 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\m.kassab\\OneDrive - Sharjah Investment & Development Authority\\Desktop\\Applications\\CodeBase\\For Me\\Team management system\\node_modules\\playwright\\cli.js",
+      "test",
+      "--config",
+      "playwright.usability.config.ts"
+    ],
+    "configFile": "C:\\Users\\m.kassab\\OneDrive - Sharjah Investment & Development Authority\\Desktop\\Applications\\CodeBase\\For Me\\Team management system\\playwright.usability.config.ts",
+    "rootDir": "C:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system/test/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system/test-results/usability-review",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "C:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system/test/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "usability-review.spec.ts",
+          "phase5-leave.spec.ts",
+          "phase8-planning-map.spec.ts"
+        ],
+        "timeout": 300000
+      },
+      {
+        "outputDir": "C:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system/test-results/usability-review",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "C:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system/test/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "usability-review.spec.ts",
+          "phase5-leave.spec.ts",
+          "phase8-planning-map.spec.ts"
+        ],
+        "timeout": 300000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\m.kassab\\OneDrive - Sharjah Investment & Development Authority\\Desktop\\Applications\\CodeBase\\For Me\\Team management system\\test-results\\usability-review",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop",
+        "testDir": "C:\\Users\\m.kassab\\OneDrive - Sharjah Investment & Development Authority\\Desktop\\Applications\\CodeBase\\For Me\\Team management system\\test\\e2e",
+        "snapshotDir": "C:\\Users\\m.kassab\\OneDrive - Sharjah Investment & Development Authority\\Desktop\\Applications\\CodeBase\\For Me\\Team management system\\test\\e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "usability-review.spec.ts",
+          "phase5-leave.spec.ts",
+          "phase8-planning-map.spec.ts"
+        ],
+        "timeout": 300000,
+        "use": {
+          "baseURL": "http://127.0.0.1:57750",
+          "browserName": "chromium",
+          "trace": "retain-on-failure",
+          "viewport": {
+            "width": 1440,
+            "height": 1000
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\m.kassab\\OneDrive - Sharjah Investment & Development Authority\\Desktop\\Applications\\CodeBase\\For Me\\Team management system\\test-results\\usability-review",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "mobile",
+        "testDir": "C:\\Users\\m.kassab\\OneDrive - Sharjah Investment & Development Authority\\Desktop\\Applications\\CodeBase\\For Me\\Team management system\\test\\e2e",
+        "snapshotDir": "C:\\Users\\m.kassab\\OneDrive - Sharjah Investment & Development Authority\\Desktop\\Applications\\CodeBase\\For Me\\Team management system\\test\\e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "usability-review.spec.ts",
+          "phase5-leave.spec.ts",
+          "phase8-planning-map.spec.ts"
+        ],
+        "timeout": 300000,
+        "use": {
+          "baseURL": "http://127.0.0.1:57750",
+          "browserName": "chromium",
+          "trace": "retain-on-failure",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "deviceScaleFactor": 2,
+          "isMobile": true,
+          "hasTouch": true
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/usability-review-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": {
+      "command": "node scripts/run-phase2-safe-build.mjs --serve-port 57750",
+      "url": "http://127.0.0.1:57750/login",
+      "reuseExistingServer": false,
+      "gracefulShutdown": {
+        "signal": "SIGTERM",
+        "timeout": 10000
+      },
+      "timeout": 600000
+    }
+  },
+  "suites": [
+    {
+      "title": "phase5-leave.spec.ts",
+      "file": "phase5-leave.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Employee previews and requests a vacation, Super Admin decides it, and Admin cannot read team leave",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11032,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T20:57:11.909Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "47055e76502dad6b6659-4481b96b7f71d9b23e9c",
+          "file": "phase5-leave.spec.ts",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "Employee previews and requests a vacation, Super Admin decides it, and Admin cannot read team leave",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7420,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T20:57:54.581Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "47055e76502dad6b6659-ceb7578804be45ad98b5",
+          "file": "phase5-leave.spec.ts",
+          "line": 5,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "phase8-planning-map.spec.ts",
+      "file": "phase8-planning-map.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Super Admin sees static Published planning facts and safe fallback",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2543,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T20:57:23.144Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e051915db3f7b0400401-1552e800103c5212a49b",
+          "file": "phase8-planning-map.spec.ts",
+          "line": 8,
+          "column": 1
+        },
+        {
+          "title": "Scoped Admin receives only the coarse Team × operational intersection and Employee is denied",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3989,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T20:57:25.703Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e051915db3f7b0400401-8b1661bc216a0cea4dc3",
+          "file": "phase8-planning-map.spec.ts",
+          "line": 9,
+          "column": 1
+        },
+        {
+          "title": "filter form accepts All authorized and employee identifiers, and map dragging follows the pointer",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4367,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T20:57:29.708Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e051915db3f7b0400401-46e9779bc8318baedfe1",
+          "file": "phase8-planning-map.spec.ts",
+          "line": 11,
+          "column": 1
+        },
+        {
+          "title": "Super Admin sees static Published planning facts and safe fallback",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1477,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T20:58:02.224Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e051915db3f7b0400401-5bfbbc666bb6d0bb4e75",
+          "file": "phase8-planning-map.spec.ts",
+          "line": 8,
+          "column": 1
+        },
+        {
+          "title": "Scoped Admin receives only the coarse Team × operational intersection and Employee is denied",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2351,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T20:58:03.711Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e051915db3f7b0400401-81c3754332be1b295636",
+          "file": "phase8-planning-map.spec.ts",
+          "line": 9,
+          "column": 1
+        },
+        {
+          "title": "filter form accepts All authorized and employee identifiers, and map dragging follows the pointer",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2997,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T20:58:06.075Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e051915db3f7b0400401-e6dc97dd3426295a0deb",
+          "file": "phase8-planning-map.spec.ts",
+          "line": 11,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "usability-review.spec.ts",
+      "file": "usability-review.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "semantic text and button colours stay readable across workspaces and create dialogs in both themes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12308,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T20:57:34.129Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "55407643efe0de318288-619a25bc12420c18f506",
+          "file": "usability-review.spec.ts",
+          "line": 34,
+          "column": 1
+        },
+        {
+          "title": "map identifies shared-place people and supports real dragging, wheel zoom and RTL phone reflow",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3139,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T20:57:46.459Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "55407643efe0de318288-52939cf7b33ab602ada9",
+          "file": "usability-review.spec.ts",
+          "line": 57,
+          "column": 1
+        },
+        {
+          "title": "vacation reviewer sees dated cover, planning, leave and ticket context while lower roles remain private",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3917,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T20:57:49.620Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "55407643efe0de318288-f93286253d9a16ff415f",
+          "file": "usability-review.spec.ts",
+          "line": 87,
+          "column": 1
+        },
+        {
+          "title": "semantic text and button colours stay readable across workspaces and create dialogs in both themes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8771,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T20:58:09.102Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "55407643efe0de318288-405425ee7e1579978c3e",
+          "file": "usability-review.spec.ts",
+          "line": 34,
+          "column": 1
+        },
+        {
+          "title": "map identifies shared-place people and supports real dragging, wheel zoom and RTL phone reflow",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2988,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T20:58:17.883Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "55407643efe0de318288-558fb68fc9aae5759c9b",
+          "file": "usability-review.spec.ts",
+          "line": 57,
+          "column": 1
+        },
+        {
+          "title": "vacation reviewer sees dated cover, planning, leave and ticket context while lower roles remain private",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 300000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3676,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T20:58:20.887Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "55407643efe0de318288-e3e22b8bc796dba0bfa1",
+          "file": "usability-review.spec.ts",
+          "line": 87,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-15T20:55:59.995Z",
+    "duration": 145677.933,
+    "expected": 14,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

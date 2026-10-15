@@ -1,5 +1,9 @@
 # Implementation Status Tracker
 
+## Presentation, practical map and vacation review, 16 October 2026
+
+Status `VERIFICATION_PENDING` for source delivery of the owner-authorized [bounded amendment](PRESENTATION_MAP_LEAVE_REVIEW_AMENDMENT_2026_10_16.md). Semantic colours, authored copy cleanup, explicit map selection/drag/wheel interaction and date-bounded Super Admin review context are implemented. Whole unit/components pass 425/425 and affected integration 74/74. The separately bound small map-label refinement passes types, whole lint, affected geometry/components 17/17 and fresh-build phone/desktop browser 14/14 across all main workspaces in both themes. Local verification is complete; the requested push and deployment check follow. [The report](../phase-reports/SCOPEIS_PRESENTATION_MAP_LEAVE_REVIEW_2026_10_16.md) keeps this separate from the prior release and does not close broader/deferred phases.
+
 ## Cover and access amendment — 2026-10-15
 
 [Bounded implementation and visual evidence](../phase-reports/SCOPEIS_COVER_WORKSPACE_IMPLEMENTATION_2026_10_15.md) are reviewed and locally verified. This unifies Cover, exposes main-timetable assignment creation, improves the map and enforces Super Admin-only unpublished/team-leave/report/project-creation access. Employee own vacations remain. The additional Published-editor TEAM projection repair passes its before/after regression, including immediate grant revocation. The [combined full run](../phase-reports/SCOPEIS_BROWSER_VERIFICATION_2026_10_15.md) passes 14/14,813 cases, all 15 browser suites/responsive 24/24. Its final CSS-only follow-up separately passes 4/4 and guarded typecheck/build. Application `741595b198f84e759445691477d9f4522d99953b` is pushed/deployed; normal roles 32/32,anonymous 17/17 and all six data-preservation fingerprints pass. This closes the bounded delivery and Phase 4.12 QA; broader/deferred phase scope remains.

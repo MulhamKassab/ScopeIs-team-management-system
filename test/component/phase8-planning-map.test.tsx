@@ -70,14 +70,16 @@ describe("Phase 8 map interactions", () => {
     expect(parseFloat(employee.style.left)).toBeCloseTo(before.x - 30, 6);
   });
 
-  it("groups coincident assignments, cycles them and synchronizes search, selection and layers", () => {
+  it("offers explicit people choices for shared markers and synchronizes search, selection and layers", () => {
     const second = { ...projection.assignments[0], id: "b", employeeId: "other", employeeName: "Second Employee", startTime: "12:00", endTime: "14:00", unavailable: false, coverageGap: false };
     render(<PlanningMapClient projection={{ ...projection, role: "SUPER_ADMIN", assignments: [...projection.assignments, second] }} />);
     const group = screen.getByRole("button", { name: /Employee: Fictional Employee, Second Employee · 2 assignments/ });
     fireEvent.click(group);
+    const choices = screen.getByRole("region", { name: "Assignments at selected place" });
+    fireEvent.click(within(choices).getByRole("button", { name: /Second Employee/ }));
     expect(screen.getByRole("heading", { name: "Second Employee" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "View coverage" })).toHaveAttribute("href", "/coverage?assignment=b");
-    fireEvent.click(group);
+    fireEvent.click(within(choices).getByRole("button", { name: /Fictional Employee/ }));
     expect(screen.getByRole("heading", { name: "Fictional Employee" })).toBeInTheDocument();
     fireEvent.change(screen.getByRole("searchbox", { name: "Search published assignments" }), { target: { value: "second site" } });
     expect(screen.getByRole("heading", { name: "Second Employee" })).toBeInTheDocument();
@@ -118,6 +120,20 @@ describe("Phase 8 map interactions", () => {
     fireEvent.click(screen.getByRole("button", { name: "Lock map to scroll" }));
     expect(canvas).not.toHaveClass("map-touch-active");
   });
+});
+
+it("zooms with the wheel, preserves browser Ctrl-wheel zoom and removes the retired map disclosure", () => {
+  render(<PlanningMapClient projection={projection} />);
+  const canvas = screen.getByLabelText("Static planning map");
+  const marker = screen.getByRole("button", { name: "Worksite: Fictional Site" });
+  const before = parseFloat(marker.style.left);
+  fireEvent.wheel(canvas, { deltaY: -120, clientX: 360, clientY: 260 });
+  expect(parseFloat(marker.style.left) - 360).toBeCloseTo((before - 360) * 2, 6);
+  const zoomed = parseFloat(marker.style.left);
+  fireEvent.wheel(canvas, { deltaY: -120, ctrlKey: true, clientX: 360, clientY: 260 });
+  expect(parseFloat(marker.style.left)).toBe(zoomed);
+  expect(screen.queryByText("Map controls and privacy")).not.toBeInTheDocument();
+  expect(screen.getByRole("link", { name: /OpenStreetMap/ })).toBeVisible();
 });
 
 it("shows place labels and moves between assignments with focused map selection", () => {

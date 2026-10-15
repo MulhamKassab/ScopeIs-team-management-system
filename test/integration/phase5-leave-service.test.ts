@@ -1,13 +1,47 @@
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { eq } from "drizzle-orm";
 import { db } from "@/db/client";
-import { projects } from "@/db/schema";
+import { leaveRequests, projects, replacementRequests, scheduleAssignments, schedulePeriods } from "@/db/schema";
+import { createSessionRecord } from "@/modules/auth/session-record";
 import { phase3Ids, phase4Ids } from "../../scripts/phase4-test-fixtures.mjs";
 import { LeaveService, leaveService, dubaiCalendarYear, workingDays } from "@/modules/leave/service";
 import { schedulingService } from "@/modules/scheduling/service";
 import type { AuthenticatedActor } from "@/shared/types/foundation";
 const actor = (id: string, role: AuthenticatedActor["role"]): AuthenticatedActor => ({ id, role, displayName: id, sessionId: `s-${id}`, sessionVersion: 1, scopes: [], authenticationMode: "mock" });
 const nora = actor("mock-super-admin-nora", "SUPER_ADMIN"), ava = actor("mock-admin-ava", "ADMIN"), cora = actor("mock-employee-cora", "EMPLOYEE");
+beforeAll(async () => { Object.assign(nora, (await db.transaction((tx) => createSessionRecord(tx, nora, new Date(), 1))).actor); });
+
+it("shows date-bounded cover relationships, unpublished work and closed leave without leaking review context to lower roles", async () => {
+  const period = await schedulingService.createPeriod(nora, { clientId: phase3Ids.alphaClient, month: "2045-06" });
+  const makeAssignment = async (employeeUserId: string, date: string) => (await db.insert(scheduleAssignments).values({ schedulePeriodId: period.id, employeeUserId, projectId: phase3Ids.alphaProjectOne, locationId: phase3Ids.alphaLocation, assignmentDate: date, startTime: "09:00", endTime: "11:00" }).returning())[0]!;
+  const own = await makeAssignment(cora.id, "2045-06-12");
+  const other = await makeAssignment("mock-employee-dan", "2045-06-13");
+  const outside = await makeAssignment(cora.id, "2045-06-14");
+  const common = { intent: "REPLACE_ASSIGNMENT" as const, requesterUserId: nora.id, observedRequiredEmployeeCount: 1, observedEligibleEmployeeCount: 0 };
+  const requests = await db.insert(replacementRequests).values([
+    { ...common, anchorAssignmentId: own.id },
+    { ...common, anchorAssignmentId: other.id, nominatedEmployeeUserId: cora.id },
+    { ...common, anchorAssignmentId: other.id, selectedEmployeeUserId: cora.id, status: "APPROVED", decidedByUserId: nora.id, effectSchedulePeriodId: period.id, effectStatus: "APPLIED_TO_DRAFT" },
+    { ...common, anchorAssignmentId: own.id, status: "REJECTED" },
+    { ...common, anchorAssignmentId: outside.id },
+  ]).returning();
+  await db.insert(leaveRequests).values({ employeeUserId: cora.id, startDate: "2045-06-11", endDate: "2045-06-12", status: "CANCELLED" });
+  const request = await leaveService.submit(cora, { startDate: "2045-06-12", endDate: "2045-06-13" });
+  const review = await leaveService.getReview(nora, request.id);
+  expect(review.relatedActivity.coverRequests.map((row) => row.id).sort()).toEqual(requests.slice(0, 4).map((row) => row.id).sort());
+  expect(review.relatedActivity.coverRequests).toEqual(expect.arrayContaining([
+    expect.objectContaining({ relationship: "Cover requested for this employee", label: "Awaiting decision" }),
+    expect.objectContaining({ relationship: "Nominated to cover another assignment" }),
+    expect.objectContaining({ relationship: "Selected to cover another assignment", label: "Draft prepared" }),
+    expect.objectContaining({ label: "Cancelled" }),
+  ]));
+  expect(review.relatedActivity.planningAssignments.map((row) => row.id)).toEqual([own.id]);
+  expect(review.relatedActivity.otherLeave).toEqual([expect.objectContaining({ status: "CANCELLED" })]);
+  expect(review.publishedImpact).toEqual([]);
+  expect(await db.select().from(schedulePeriods).where(eq(schedulePeriods.id, period.id))).toEqual([expect.objectContaining({ status: "DRAFT" })]);
+  await expect(leaveService.getReview(ava, request.id)).rejects.toMatchObject({ code: "NOT_FOUND" });
+  await expect(leaveService.getReview(cora, request.id)).rejects.toMatchObject({ code: "NOT_FOUND" });
+});
 describe("Phase 5 leave service", () => { it("enforces privacy, lifecycle, balance, and schedule leave integrity", async () => {
   const request = await leaveService.submit(cora, { startDate: "2026-09-14", endDate: "2026-09-20", privateReason: "Private medical note" });
   await expect(leaveService.submit(cora, { startDate: "2026-09-18", endDate: "2026-09-22" })).rejects.toMatchObject({ code: "ACTIVE_OVERLAP" });

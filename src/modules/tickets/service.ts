@@ -85,6 +85,22 @@ export class TicketService {
     const participation = snapshot.participants.find((entry) => entry.ticketId === ticket.id && entry.userId === actor.id && entry.active)?.role;
     return { id: ticket.id, number: ticket.number, subject: ticket.subject, status: ticket.status, priority: ticket.priority, ticketDate: ticket.ticketDate, dueDate: ticket.dueDate, boardId: ticket.boardId, creatorName: snapshot.people.find((person) => person.user.id === ticket.creatorUserId)?.user.displayName ?? "Former colleague", assignees: snapshot.participants.filter((entry) => entry.ticketId === ticket.id && entry.active && entry.role === "ASSIGNEE").map((entry) => ({ userId: entry.userId, displayName: snapshot.people.find((person) => person.user.id === entry.userId)?.user.displayName ?? "Former colleague" })), myParticipation: { created: ticket.creatorUserId === actor.id, assigned: participation === "ASSIGNEE", mentioned: participation === "OBSERVER" }, version: ticket.version, archivedAt: ticket.archivedAt?.toISOString() ?? null, permissions };
   }
+  async leaveReviewAssignments(supplied: AuthenticatedActor, employeeUserId: string, startDate: string, endDate: string) {
+    return this.consistentRead(async (tx) => {
+      await ticketRepository.lockReadSnapshot(tx);
+      const actor = await this.currentActor(tx, supplied, true);
+      if (actor.role !== "SUPER_ADMIN") throw unavailable();
+      const snapshot = await ticketRepository.snapshot(tx);
+      return snapshot.tickets.flatMap((ticket) => {
+        if (ticket.archivedAt || ticket.status === "CLOSED" || ticket.ticketDate > endDate || (ticket.dueDate ?? ticket.ticketDate) < startDate) return [];
+        if (snapshot.boards.find((board) => board.id === ticket.boardId)?.status === "ARCHIVED") return [];
+        if (!snapshot.participants.some((person) => person.ticketId === ticket.id && person.userId === employeeUserId && person.active && person.role === "ASSIGNEE")) return [];
+        if (!this.ticketContext(actor, ticket, snapshot)) return [];
+        return [{ id: ticket.id, number: ticket.number, subject: ticket.subject, status: ticket.status, ticketDate: ticket.ticketDate, dueDate: ticket.dueDate }];
+      }).sort((first, second) => first.ticketDate.localeCompare(second.ticketDate) || first.number - second.number);
+    });
+  }
+
   async workspace(supplied: AuthenticatedActor): Promise<TicketWorkspaceData> {
     return this.consistentRead(async (tx) => {
     // Ordered SHARE locks serialize revocation; the repeatable snapshot also excludes new-container phantoms.

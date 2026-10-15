@@ -105,7 +105,8 @@
         "test/e2e/credential-login.spec.ts",
         "test/e2e/account-administration.spec.ts",
         "test/e2e/responsive.spec.ts",
-        "test/e2e/tickets.spec.ts"
+        "test/e2e/tickets.spec.ts",
+        "test/e2e/usability-review.spec.ts"
       ]
     },
     "test:tickets": {
@@ -117,6 +118,13 @@
     "test:tickets-e2e": {
       "files": [
         "test/e2e/tickets.spec.ts"
+      ]
+    },
+    "test:usability-review": {
+      "files": [
+        "test/e2e/usability-review.spec.ts",
+        "test/e2e/phase5-leave.spec.ts",
+        "test/e2e/phase8-planning-map.spec.ts"
       ]
     }
   },
@@ -2160,6 +2168,30 @@
       "automatedTestFile": "test/integration/phase7-coverage-service.test.ts",
       "testName": "Consolidated Cover lifecycle and role amendment",
       "testLayer": "integration",
+      "status": "automated"
+    },
+    {
+      "scenarioId": "UI-05",
+      "owningPhase": "Phase 1-12",
+      "module": "presentation, practical map and vacation review",
+      "requirementRef": "PRESENTATION_MAP_LEAVE_REVIEW_AMENDMENT_2026_10_16",
+      "actor": "Authorized fictional desktop and phone users",
+      "startingRole": "SUPER_ADMIN",
+      "activeStatus": "active",
+      "scopeGrants": "Existing fictional role and TEAM/operational fixtures.",
+      "preconditions": "An isolated safe build, owned disposable database and allocated loopback port.",
+      "input": "Light/dark controls, pointer drag and wheel zoom, shared-place choices and dated vacation context.",
+      "action": "Run the guarded usability review browser runner.",
+      "expectedResult": "Text/control contrast remains readable; real map interactions work; related employee activity is visible only to Super Admin.",
+      "expectedDataMutation": "Disposable fictional fixture and ordinary local journey changes only; no production business-data writes.",
+      "expectedAuditEvent": "Normal fictional sign-in audit records only.",
+      "expectedNotification": "None.",
+      "privacyExpectation": "Existing map projection and current ticket/session permissions remain authoritative; vacation review stays Super Admin-only.",
+      "transactionExpectation": "No domain mutation or new transaction is introduced.",
+      "concurrencyExpectation": "Dismissal is bounded and repeated activation cannot leave focus or scroll locked.",
+      "automatedTestFile": "test/e2e/usability-review.spec.ts",
+      "testName": "semantic colours, practical map and related vacation review journeys",
+      "testLayer": "e2e",
       "status": "automated"
     }
   ],

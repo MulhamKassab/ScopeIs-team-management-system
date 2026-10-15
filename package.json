@@ -21,6 +21,7 @@
     "test:integration": "node scripts/run-aggregate-integration-tests.mjs",
     "test:e2e": "node scripts/run-aggregate-e2e-tests.mjs",
     "test:responsive": "node scripts/run-responsive-playwright.mjs",
+    "test:usability-review": "node scripts/run-usability-review-playwright.mjs",
     "test:route-certification": "node scripts/run-phase1-route-certification.mjs",
     "test:migration": "node scripts/run-phase2-migration-tests.mjs",
     "test:seed-smoke": "node scripts/run-seed-smoke.mjs",

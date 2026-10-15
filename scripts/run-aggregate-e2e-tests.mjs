@@ -40,13 +40,14 @@ const suites = [
   { name: "Super Admin account administration", script: "run-account-e2e.mjs" },
   { name: "Company tickets and private files", script: "run-ticket-playwright.mjs" },
   { name: "Responsive UI, task discovery and planning workspace", script: "run-responsive-playwright.mjs" },
+  { name: "Semantic colours, practical map and vacation-review context", script: "run-usability-review-playwright.mjs", args: ["usability-review.spec.ts"] },
 ];
 
-function runSuite(script) {
+function runSuite(script, args = []) {
   // Each runner forwards Playwright arguments. A suite must only clear its own
   // output directory, preserving earlier failure contexts and screenshots.
   const outputDirectory = join(repositoryRoot, "test-results", "aggregate", basename(script, ".mjs"));
-  const child = spawn(process.execPath, [join(repositoryRoot, "scripts", script), "--output", outputDirectory], { cwd: repositoryRoot, stdio: "inherit" });
+  const child = spawn(process.execPath, [join(repositoryRoot, "scripts", script), ...args, "--output", outputDirectory], { cwd: repositoryRoot, stdio: "inherit" });
   return new Promise((resolve, reject) => {
     child.once("error", reject);
     child.once("exit", (code, signal) => resolve({ exitCode: code ?? (signal ? 1 : 0), signal }));
@@ -60,7 +61,7 @@ for (const suite of suites) {
   let exitCode = 1;
   let failure;
   try {
-    const result = await runSuite(suite.script);
+    const result = await runSuite(suite.script, suite.args);
     exitCode = result.exitCode;
     if (result.signal) failure = `terminated by ${result.signal}`;
   } catch (error) {

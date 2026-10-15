@@ -1,5 +1,9 @@
 # Phase 8 Static Planning Map decisions
 
+## Confirmed practical presentation, 16 October 2026
+
+The owner authorized [a clear people/worksite list, explicit shared-marker choices, dragging and wheel zoom](PRESENTATION_MAP_LEAVE_REVIEW_AMENDMENT_2026_10_16.md). The selected assignment and geographic highlight stay synchronized; wheel/double-click zoom anchors at the pointer, while Ctrl-wheel remains browser zoom. Touch interaction/scroll locking and keyboard controls remain. The requested long “Map controls and privacy” disclosure is removed, superseding the earlier requirement to display that disclosure. Provider attribution, Published/static status, precision facts, browser-only tiles, exact/coarse projection and all existing server scopes remain binding. No provider or live tracking is added.
+
 ## Confirmed Cover and access amendment — 2026-10-15
 
 The owner authorized the [consolidated Cover workspace and access amendment](COVER_WORKSPACE_AND_ACCESS_AMENDMENT_2026_10_15.md). It supersedes older statements permitting Admin unpublished timetable/team-leave/report reads or project creation. Super Admin alone holds those capabilities; Employee own vacation self-service remains. Cover unifies timetable selection, creation, versioned editing/cancellation and direct decisions, with separate publication. The main timetable exposes assignment creation and the map gains place labels and selected-work controls. Existing scope, privacy, conflict, accessibility and RTL rules remain.

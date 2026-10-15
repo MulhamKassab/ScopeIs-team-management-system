@@ -1,3 +1,7 @@
+## Presentation, practical map and vacation-review context, 16 October 2026
+
+- [Confirmed requirements](project-memory/PRESENTATION_MAP_LEAVE_REVIEW_AMENDMENT_2026_10_16.md). Implementation and push to main are authorized; verification and delivery are in progress. Existing role, provider, privacy and approval boundaries remain.
+
 ## Consolidated Cover and access amendment — 2026-10-15
 
 [Combined browser/Cover production release](phase-reports/SCOPEIS_BROWSER_VERIFICATION_2026_10_15.md): application `741595b198f84e759445691477d9f4522d99953b` is pushed/deployed, normal roles 32/32 and anonymous 17/17 pass, all six preservation fingerprints match. Local scope: full 14/14/813 cases, 15 browser suites/responsive 24/24; separately manifested CSS-only follow-up 4/4 and guarded typecheck/build. [Release receipt](phase-reports/evidence/browser-verification-2026-10-15/production-release.json).

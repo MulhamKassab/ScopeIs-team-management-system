@@ -1,9 +1,23 @@
 import { describe, expect, it } from "vitest";
-import { coordinateAtPixel, fitMapCoordinates, mapPosition, panMap, visibleMapTiles, worldPixel } from "@/modules/maps/map-projection";
+import { coordinateAtPixel, fitMapCoordinates, mapPosition, panMap, visibleMapTiles, worldPixel, zoomMapAt } from "@/modules/maps/map-projection";
 
 describe("Phase 8 map geometry", () => {
   const centre = { latitude: 0, longitude: 0 };
   const viewport = { width: 512, height: 512 };
+
+  it("anchors wheel zoom beneath the pointer, including longitude wrap and zoom limits", () => {
+    for (const centre of [{ latitude: 25.2, longitude: 55.27 }, { latitude: 0, longitude: 179.99 }]) {
+      const camera = { centre, zoom: 11 };
+      const point = { x: 390, y: 120 };
+      const origin = worldPixel(centre, camera.zoom);
+      const anchor = coordinateAtPixel({ x: origin.x + point.x - 256, y: origin.y + point.y - 256 }, camera.zoom);
+      const zoomed = zoomMapAt(camera, 1, point, viewport);
+      expect(mapPosition(anchor, zoomed.centre, zoomed.zoom, viewport).x).toBeCloseTo(point.x, 5);
+      expect(mapPosition(anchor, zoomed.centre, zoomed.zoom, viewport).y).toBeCloseTo(point.y, 5);
+      expect(zoomMapAt({ centre, zoom: 18 }, 1, point, viewport)).toEqual({ centre, zoom: 18 });
+      expect(zoomMapAt({ centre, zoom: 0 }, -1, point, viewport)).toEqual({ centre, zoom: 0 });
+    }
+  });
 
   it("aligns known equator coordinates with their raster tile pixels", () => {
     expect(worldPixel(centre, 2)).toEqual({ x: 512, y: 512 });

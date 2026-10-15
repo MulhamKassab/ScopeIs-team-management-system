@@ -7,7 +7,7 @@ export const REPORTING_TIMEZONE_LABEL = "Asia/Dubai";
 export function missingSourceLabel(source: string) { return `${UNAVAILABLE_SOURCE_STATE}: ${source}`; }
 export const zeroStateNote = "A zero means there are no matching records in your current view.";
 export function asOfLabel(asOf: string) { return `As of ${asOf} (${REPORTING_TIMEZONE_LABEL})`; }
-export function planningBanner() { return "PLANNING (unpublished) — Draft and Proposed schedules only. These figures are separate from Published assignments."; }
+export function planningBanner() { return "PLANNING (unpublished) · Draft and Proposed schedules only. These figures are separate from Published assignments."; }
 export function exportRefusalCopy(message: string) { return message; }
 export const reportIndexIntro = "Choose what you want to understand about the team. Each report uses the records you can access.";
 export function reportTitle(key: string, fallback: string) {

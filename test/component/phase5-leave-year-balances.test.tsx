@@ -18,7 +18,7 @@ describe("Leave request calendar-year balances", () => {
 
   it("shows both annual balances when Super Admin reviews a cross-year request", async () => {
     mocks.actor.mockResolvedValue({ role: "SUPER_ADMIN" });
-    mocks.review.mockResolvedValue({ request: { id: "pending", employeeUserId: "fictional-employee", startDate: "2040-12-31", endDate: "2041-01-25", status: "PENDING", version: 1 }, requestedWorkingDays: 20, publishedImpact: [], balances: [{ year: 2040, allowance: 22, used: 20, remaining: 2, requestedWorkingDays: 1, projectedRemaining: 1 }, { year: 2041, allowance: 22, used: 0, remaining: 22, requestedWorkingDays: 19, projectedRemaining: 3 }] });
+    mocks.review.mockResolvedValue({ request: { id: "pending", employeeUserId: "fictional-employee", startDate: "2040-12-31", endDate: "2041-01-25", status: "PENDING", version: 1 }, requestedWorkingDays: 20, publishedImpact: [], relatedActivity: { coverRequests: [], planningAssignments: [], otherLeave: [], assignedTickets: [] }, balances: [{ year: 2040, allowance: 22, used: 20, remaining: 2, requestedWorkingDays: 1, projectedRemaining: 1 }, { year: 2041, allowance: 22, used: 0, remaining: 22, requestedWorkingDays: 19, projectedRemaining: 3 }] });
     render(await LeavePage({ searchParams: Promise.resolve({ request: "pending" }) }));
     expect(screen.getByRole("heading", { name: "Calendar year 2040" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Calendar year 2041" })).toBeInTheDocument();
