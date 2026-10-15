@@ -1,0 +1,83 @@
+{"event":"browser_build_directory_allocated","ownerPid":19480,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-rBJIkq"}
+
+Running 2 tests using 1 worker
+
+  x  1 [desktop] › test\e2e\phase6-capabilities.spec.ts:6:1 › dialog triggers wait for JavaScript readiness before accepting a skill-recording click (12.4s)
+  x  2 [mobile] › test\e2e\phase6-capabilities.spec.ts:6:1 › dialog triggers wait for JavaScript readiness before accepting a skill-recording click (7.3s)
+
+
+  1) [desktop] › test\e2e\phase6-capabilities.spec.ts:6:1 › dialog triggers wait for JavaScript readiness before accepting a skill-recording click 
+
+    Error: expect(locator).toBeDisabled() failed
+
+    Locator:  getByRole('button', { name: 'Record a skill for Cora Bell', exact: true })
+    Expected: disabled
+    Received: enabled
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeDisabled" getByRole('button', { name: 'Record a skill for Cora Bell', exact: true }) with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Record a skill for Cora Bell', exact: true })
+        14 × locator resolved to <button type="button" class="button primary" aria-haspopup="dialog" aria-label="Record a skill for Cora Bell">…</button>
+           - unexpected value "enabled"
+
+
+      14 |     const trigger = coldPage.getByRole("button", { name: "Record a skill for Cora Bell", exact: true });
+      15 |     await expect(trigger).toBeVisible();
+    > 16 |     await expect(trigger).toBeDisabled();
+         |                           ^
+      17 |     releaseScripts();
+      18 |     await expect(trigger).toBeEnabled({ timeout: 30_000 });
+      19 |     await trigger.click();
+        at C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\phase6-capabilities.spec.ts:16:27
+
+    Error Context: test-results\dialog-readiness-before\phase6-capabilities-dialog-bd2cc-ing-a-skill-recording-click-desktop\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\dialog-readiness-before\phase6-capabilities-dialog-bd2cc-ing-a-skill-recording-click-desktop\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\dialog-readiness-before\phase6-capabilities-dialog-bd2cc-ing-a-skill-recording-click-desktop\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile] › test\e2e\phase6-capabilities.spec.ts:6:1 › dialog triggers wait for JavaScript readiness before accepting a skill-recording click 
+
+    Error: expect(locator).toBeDisabled() failed
+
+    Locator:  getByRole('button', { name: 'Record a skill for Cora Bell', exact: true })
+    Expected: disabled
+    Received: enabled
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeDisabled" getByRole('button', { name: 'Record a skill for Cora Bell', exact: true }) with timeout 5000ms
+      - waiting for getByRole('button', { name: 'Record a skill for Cora Bell', exact: true })
+        14 × locator resolved to <button type="button" class="button primary" aria-haspopup="dialog" aria-label="Record a skill for Cora Bell">…</button>
+           - unexpected value "enabled"
+
+
+      14 |     const trigger = coldPage.getByRole("button", { name: "Record a skill for Cora Bell", exact: true });
+      15 |     await expect(trigger).toBeVisible();
+    > 16 |     await expect(trigger).toBeDisabled();
+         |                           ^
+      17 |     releaseScripts();
+      18 |     await expect(trigger).toBeEnabled({ timeout: 30_000 });
+      19 |     await trigger.click();
+        at C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\phase6-capabilities.spec.ts:16:27
+
+    Error Context: test-results\dialog-readiness-before\phase6-capabilities-dialog-bd2cc-ing-a-skill-recording-click-mobile\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\dialog-readiness-before\phase6-capabilities-dialog-bd2cc-ing-a-skill-recording-click-mobile\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\dialog-readiness-before\phase6-capabilities-dialog-bd2cc-ing-a-skill-recording-click-mobile\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [desktop] › test\e2e\phase6-capabilities.spec.ts:6:1 › dialog triggers wait for JavaScript readiness before accepting a skill-recording click 
+    [mobile] › test\e2e\phase6-capabilities.spec.ts:6:1 › dialog triggers wait for JavaScript readiness before accepting a skill-recording click 
+{"event":"browser_build_directory_cleanup_complete","ownerPid":19480,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-rBJIkq"}
+Phase 6 browser disposable database cleanup complete.

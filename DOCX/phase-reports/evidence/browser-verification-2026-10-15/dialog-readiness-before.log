@@ -1,0 +1,35 @@
+
+ RUN  v5.0.3 C:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system
+
+ ❯ test/component/task-dialog.test.tsx (11 tests | 1 failed | 10 skipped) 43ms
+   ❯ focused task UI (11)
+     × keeps server-rendered task buttons disabled until hydration makes them interactive 39ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/component/task-dialog.test.tsx > focused task UI > keeps server-rendered task buttons disabled until hydration makes them interactive
+Error: expect(element).toBeDisabled()
+
+Received element is not disabled:
+  <button
+  aria-haspopup="dialog"
+  aria-label="Record skill"
+  class="button primary"
+  type="button"
+/>
+ ❯ test/component/task-dialog.test.tsx:41:23
+     39|     try {
+     40|       const trigger = container.querySelector("button")!;
+     41|       expect(trigger).toBeDisabled();
+       |                       ^
+     42|       await act(async () => { root = hydrateRoot(container, task); });
+     43|       expect(trigger).toBeEnabled();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 10 skipped (11)
+   Start at  14:42:29
+   Duration  33.42s (environment 81%, setup 15%, import 2%, transform 1%)
+

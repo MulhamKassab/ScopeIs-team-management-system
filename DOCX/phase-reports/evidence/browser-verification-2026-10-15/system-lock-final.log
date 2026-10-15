@@ -1,0 +1,1640 @@
+
+===== SYSTEM LOCK :: Scenario manifest validation =====
+Scenario manifest validation (PASS):
+  Checkpoint: SCOPEIS_PHASE_12_COMPANY_TICKETS_LOCAL_INTEGRATION_R1
+  Scenarios: 85 (84 automated, 1 manual)
+  Domain counts: SYS=13, AUTH=7, EMP=7, ORG=4, SCH=4, LEV=4, SKL=4, CVR=5, MAP=5, EVD=4, COL=4, NTF=2, AUD=2, RPT=4, UI=4, TKT=12
+  Registered test files: 94; runner-covered files: 94
+  Protected routes: 40; route certification evidence present.
+----- Scenario manifest validation: PASS -----
+
+===== SYSTEM LOCK :: Typecheck =====
+----- Typecheck: PASS -----
+
+===== SYSTEM LOCK :: Lint =====
+----- Lint: PASS -----
+
+===== SYSTEM LOCK :: Unit tests =====
+
+ RUN  v5.0.3 C:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system
+
+{"event":"browser_build_directory_allocated","ownerPid":37948,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-R7VagT"}
+{"event":"browser_build_directory_cleanup_complete","ownerPid":37948,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-R7VagT"}
+{"event":"browser_build_directory_allocated","ownerPid":37948,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-l34AyK"}
+{"event":"browser_build_directory_cleanup_complete","ownerPid":37948,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-l34AyK"}
+
+ Test Files  32 passed (32)
+      Tests  243 passed (243)
+   Start at  21:16:51
+   Duration  15.59s (setup 38%, import 36%, transform 15%, tests 9%, worker 2%)
+
+     Import  127 modules were evaluated 249 times · 4.16s total, 36% of tracked time
+             ~2.04s faster with isolate: false — shared modules are evaluated once per worker instead of once per file
+             learn more: https://vitest.dev/guide/improving-performance#test-isolation
+
+----- Unit tests: PASS -----
+
+===== SYSTEM LOCK :: Component tests =====
+
+ RUN  v5.0.3 C:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system
+
+Not implemented: navigation to another Document
+
+ Test Files  28 passed (28)
+      Tests  180 passed (180)
+   Start at  21:17:07
+   Duration  52.38s (environment 54%, tests 23%, setup 10%, import 9%, transform 4%, worker 1%)
+
+    Isolate  28 workers spawned · ~1.07s startup each (spawn + environment, per file)
+             at least ~28.92s faster with isolate: false — reuses workers across files instead of one per file
+
+----- Component tests: PASS -----
+
+===== SYSTEM LOCK :: Aggregate integration tests =====
+
+=== Phase 1 PostgreSQL foundation :: test/integration/foundation-postgres.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/integration/foundation-postgres.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 106[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 21:18:02
+[2m   Duration [22m 1.41s[2m (import 55%, transform 23%, setup 13%, tests 8%, worker 1%)[22m
+
+--- Phase 1 PostgreSQL foundation: PASS ---
+
+=== Phase 2 employee core service :: test/integration/phase2-core-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/integration/phase2-core-service.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 527[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 21:18:06
+[2m   Duration [22m 1.61s[2m (tests 36%, import 35%, transform 20%, setup 9%)[22m
+
+--- Phase 2 employee core service: PASS ---
+
+=== Phase 3 operational service :: test/integration/phase3-operational-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/integration/phase3-operational-service.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 434[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 21:18:10
+[2m   Duration [22m 1.37s[2m (tests 35%, import 35%, transform 19%, setup 11%, worker 1%)[22m
+
+--- Phase 3 operational service: PASS ---
+
+=== Monthly timetable and organisation service :: test/integration/timetable-organisation.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/integration/timetable-organisation.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 542[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 21:18:15
+[2m   Duration [22m 1.83s[2m (tests 32%, import 31%, transform 28%, setup 8%, worker 1%)[22m
+
+--- Monthly timetable and organisation service: PASS ---
+
+=== Phase 4 scheduling service :: test/integration/phase4-scheduling-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/integration/phase4-scheduling-service.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 1571[2mms[22m[39m
+   [32m✓[39m Schedule revision and scope regressions [2m(4)[22m
+     [33m[2m✓[22m[39m publishes successive unchanged revisions and releases historical assignment slots[33m 339[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+[2m   Start at [22m 21:18:20
+[2m   Duration [22m 4.39s[2m (tests 39%, import 25%, transform 22%, setup 13%, worker 1%)[22m
+
+--- Phase 4 scheduling service: PASS ---
+
+=== Phase 5 leave service :: test/integration/phase5-leave-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/integration/phase5-leave-service.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 677[2mms[22m[39m
+   [32m✓[39m Phase 5 leave service [2m(3)[22m
+     [33m[2m✓[22m[39m enforces privacy, lifecycle, balance, and schedule leave integrity[33m 330[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 21:18:28
+[2m   Duration [22m 1.96s[2m (tests 38%, import 29%, transform 22%, setup 10%, worker 1%)[22m
+
+--- Phase 5 leave service: PASS ---
+
+=== Phase 6 capabilities service :: test/integration/phase6-capabilities-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/integration/phase6-capabilities-service.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 610[2mms[22m[39m
+   [32m✓[39m Phase 6 skills and operational capabilities [2m(3)[22m
+     [33m[2m✓[22m[39m unions Client, Project, Location, and assignment requirements and leaves the schedule lifecycle non-blocking[33m 312[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 21:18:33
+[2m   Duration [22m 2.41s[2m (import 36%, tests 28%, transform 24%, setup 12%, worker 1%)[22m
+
+--- Phase 6 capabilities service: PASS ---
+
+=== Phase 7 coverage service :: test/integration/phase7-coverage-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/integration/phase7-coverage-service.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 3828[2mms[22m[39m
+   [32m✓[39m Coverage and support conflict integrity [2m(12)[22m
+     [33m[2m✓[22m[39m rechecks independent gaps under the schedule lock so simultaneous approvals cannot overfill one shortage[33m 310[2mms[22m[39m
+     [33m[2m✓[22m[39m shares employee-time locks with manual scheduling across different clients[33m 308[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m22 passed[39m[22m[90m (22)[39m
+[2m   Start at [22m 21:18:38
+[2m   Duration [22m 5.22s[2m (tests 75%, import 11%, transform 11%, setup 3%)[22m
+
+--- Phase 7 coverage service: PASS ---
+
+=== Phase 8 planning map service :: test/integration/phase8-planning-map-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/integration/phase8-planning-map-service.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 424[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m   Start at [22m 21:18:48
+[2m   Duration [22m 1.79s[2m (import 33%, transform 31%, tests 26%, setup 10%, worker 1%)[22m
+
+--- Phase 8 planning map service: PASS ---
+
+=== Phase 9 capability evidence service :: test/integration/phase9-evidence-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/integration/phase9-evidence-service.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 625[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m12 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 21:18:52
+[2m   Duration [22m 2.28s[2m (import 37%, tests 29%, transform 25%, setup 7%)[22m
+
+--- Phase 9 capability evidence service: PASS ---
+
+=== Phase 10 collaboration and governance service :: test/integration/phase10-collaboration-service.test.ts, test/integration/phase10-management-note-authorization.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/integration/phase10-collaboration-service.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 745[2mms[22m[39m
+ [32m✓[39m test/integration/phase10-management-note-authorization.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 447[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m26 passed[39m[22m[90m (26)[39m
+[2m   Start at [22m 21:18:58
+[2m   Duration [22m 4.27s[2m (import 37%, tests 31%, transform 21%, setup 11%, worker 1%)[22m
+
+--- Phase 10 collaboration and governance service: PASS ---
+
+=== Phase 11 reporting service :: test/integration/phase11-reporting-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/integration/phase11-reporting-service.test.ts [2m([22m[2m35 tests[22m[2m)[22m[33m 2999[2mms[22m[39m
+   [32m✓[39m report filter and total regressions [2m(4)[22m
+     [33m[2m✓[22m[39m sums more than 5,000 source assignments before grouping and keeps the export row cap[33m 533[2mms[22m[39m
+   [32m✓[39m aggregate export source completeness [2m(2)[22m
+     [33m[2m✓[22m[39m counts and paginates every balance employee and refuses an over-cap export[33m 1124[2mms[22m[39m
+     [33m[2m✓[22m[39m includes every assignment skill requirement before sorting and refuses an over-cap export[33m 355[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m35 passed[39m[22m[90m (35)[39m
+[2m   Start at [22m 21:19:05
+[2m   Duration [22m 4.67s[2m (tests 66%, import 14%, transform 13%, setup 6%)[22m
+
+--- Phase 11 reporting service: PASS ---
+
+=== Credential authentication service :: test/integration/credential-authentication.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/integration/credential-authentication.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 3774[2mms[22m[39m
+   [32m✓[39m credential authentication service [2m(20)[22m
+     [32m✓[39m bootstrap [2m(4)[22m
+       [33m[2m✓[22m[39m initializes exactly five credentials once and is idempotent on re-run[33m 635[2mms[22m[39m
+     [32m✓[39m credential login [2m(6)[22m
+       [33m[2m✓[22m[39m accepts every approved account by username and by email[33m 643[2mms[22m[39m
+     [32m✓[39m brute-force protection [2m(4)[22m
+       [33m[2m✓[22m[39m locks after five failures within the window and refuses further attempts[33m 405[2mms[22m[39m
+       [33m[2m✓[22m[39m serializes concurrent failures so the threshold cannot be bypassed[33m 836[2mms[22m[39m
+       [33m[2m✓[22m[39m resets the failure counters after a successful login[33m 333[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m20 passed[39m[22m[90m (20)[39m
+[2m   Start at [22m 21:19:12
+[2m   Duration [22m 4.82s[2m (tests 81%, import 10%, transform 5%, setup 3%)[22m
+
+--- Credential authentication service: PASS ---
+
+=== Account administration service :: test/integration/account-administration.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/integration/account-administration.test.ts [2m([22m[2m30 tests[22m[2m)[22m[33m 3110[2mms[22m[39m
+   [32m✓[39m account administration service [2m(30)[22m
+     [32m✓[39m password reset [2m(7)[22m
+       [33m[2m✓[22m[39m rotates a self-reset session under the new version and invalidates every old session[33m 367[2mms[22m[39m
+       [33m[2m✓[22m[39m changes hash and salt, clears lock, bumps version, revokes sessions and audits once[33m 309[2mms[22m[39m
+     [32m✓[39m self password change [2m(3)[22m
+       [33m[2m✓[22m[39m rejects the account's stored username or login email as the new password[33m 340[2mms[22m[39m
+       [33m[2m✓[22m[39m clears the requirement, rotates the session, and audits without password content[33m 430[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m30 passed[39m[22m[90m (30)[39m
+[2m   Start at [22m 21:19:20
+[2m   Duration [22m 4.34s[2m (tests 74%, import 13%, transform 9%, setup 4%)[22m
+
+--- Account administration service: PASS ---
+
+=== Company ticket service :: test/integration/tickets.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/integration/tickets.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 5526[2mms[22m[39m
+   [32m✓[39m Company tickets PostgreSQL access boundaries [2m(24)[22m
+     [33m[2m✓[22m[39m consolidates current related and supervised tickets across workspaces without exposing unrelated work[33m 352[2mms[22m[39m
+     [33m[2m✓[22m[39m lets every company role create in published dashboards and shares only explicit tickets without enrollment[33m 524[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps container supervision scoped while explicit tickets can cross all company roles and teams[33m 385[2mms[22m[39m
+     [33m[2m✓[22m[39m allows creator grants across teams while assignees work and mentioned people remain read-only[33m 336[2mms[22m[39m
+     [33m[2m✓[22m[39m uses retained archives, restores creator access and limits work-log edits to authors[33m 345[2mms[22m[39m
+     [33m[2m✓[22m[39m handles membership/board changes under shared parent locks without changing schedules or leave[33m 331[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m24 passed[39m[22m[90m (24)[39m
+[2m   Start at [22m 21:19:27
+[2m   Duration [22m 6.66s[2m (tests 85%, import 7%, transform 6%, setup 2%)[22m
+
+--- Company ticket service: PASS ---
+
+=== Company ticket private files :: test/integration/ticket-files.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/integration/ticket-files.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1305[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 21:19:36
+[2m   Duration [22m 2.45s[2m (tests 56%, import 25%, transform 12%, setup 6%)[22m
+
+--- Company ticket private files: PASS ---
+
+Aggregate integration summary (each suite in its own disposable database):
+  PASS  Phase 1 PostgreSQL foundation
+  PASS  Phase 2 employee core service
+  PASS  Phase 3 operational service
+  PASS  Monthly timetable and organisation service
+  PASS  Phase 4 scheduling service
+  PASS  Phase 5 leave service
+  PASS  Phase 6 capabilities service
+  PASS  Phase 7 coverage service
+  PASS  Phase 8 planning map service
+  PASS  Phase 9 capability evidence service
+  PASS  Phase 10 collaboration and governance service
+  PASS  Phase 11 reporting service
+  PASS  Credential authentication service
+  PASS  Account administration service
+  PASS  Company ticket service
+  PASS  Company ticket private files
+  Overall: 16/16 suites passed
+----- Aggregate integration tests: PASS -----
+
+===== SYSTEM LOCK :: Migration tests =====
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/migration/phase2-database-foundation.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 24322[2mms[22m[39m
+   [32m✓[39m Phase 2 database foundation reconciliation [2m(11)[22m
+     [33m[2m✓[22m[39m performs a clean normal migration install and is idempotent[33m 1633[2mms[22m[39m
+     [33m[2m✓[22m[39m upgrades the previous account-management schema and backfills teams without changing membership or grants[33m 1705[2mms[22m[39m
+     [33m[2m✓[22m[39m adds Company tickets and assignment omission while preserving prior workforce data and ledger facts[33m 1992[2mms[22m[39m
+     [33m[2m✓[22m[39m dry-runs and safely adopts an exact ledgerless Phase 1 database[33m 1884[2mms[22m[39m
+     [33m[2m✓[22m[39m dry-runs and safely adopts an exact ledgerless Phase 1+2 database[33m 2158[2mms[22m[39m
+     [33m[2m✓[22m[39m refuses a partial Phase 2 schema with a non-zero CLI exit and no mutation[33m 1640[2mms[22m[39m
+     [33m[2m✓[22m[39m refuses ledger/schema disagreement with a non-zero exit and no mutation[33m 2528[2mms[22m[39m
+     [33m[2m✓[22m[39m uses all eight authoritative Drizzle tables with real relationships and constraints[33m 1821[2mms[22m[39m
+     [33m[2m✓[22m[39m uses all seven Company ticket tables with enforced relationships and content constraints[33m 2464[2mms[22m[39m
+     [33m[2m✓[22m[39m detects migration, journal, manifest, and TypeScript-schema drift[33m 5608[2mms[22m[39m
+     [33m[2m✓[22m[39m cleans up a disposable database even after a deliberate callback failure[33m 874[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 21:19:39
+[2m   Duration [22m 25.10s[2m (tests 97%, import 1%, transform 1%, setup 1%)[22m
+
+----- Migration tests: PASS -----
+
+===== SYSTEM LOCK :: Route certification =====
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 34ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 20.0s
+  Running TypeScript ...
+  Finished TypeScript in 15.6s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 834ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[module]
+├ ƒ /account/change-password
+├ ƒ /accounts
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/mock-login
+├ ƒ /api/evidence/[evidenceId]/files
+├ ƒ /api/evidence/files/[fileId]
+├ ƒ /api/foundation/scope/[scopeRef]
+├ ƒ /api/reports/[reportKey]/export
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[ticketId]
+├ ƒ /api/tickets/[ticketId]/files
+├ ƒ /api/tickets/[ticketId]/files/[fileId]
+├ ƒ /api/tickets/commands
+├ ƒ /arrangements
+├ ƒ /audit
+├ ƒ /clients
+├ ƒ /clients/[clientId]
+├ ƒ /coverage
+├ ƒ /dashboard
+├ ƒ /designations
+├ ƒ /employees
+├ ƒ /employees/[userId]
+├ ƒ /leave
+├ ƒ /locations
+├ ƒ /locations/[locationId]
+├ ƒ /login
+├ ƒ /map
+├ ƒ /notifications
+├ ƒ /profile
+├ ƒ /projects
+├ ƒ /projects/[projectId]
+├ ƒ /replacements
+├ ƒ /reports
+├ ƒ /reports/[reportKey]
+├ ƒ /requests
+├ ƒ /schedule
+├ ƒ /skills
+├ ƒ /teams
+├ ƒ /tickets
+└ ƒ /tickets/[ticketId]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+▲ Next.js 16.4.0
+- Local:         http://127.0.0.1:57986
+- Network:       http://127.0.0.1:57986
+✓ Ready in 188ms
+✓ Running next.config.ts took 42ms
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system[39m
+
+ [32m✓[39m test/route-certification/phase1-http.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 9175[2mms[22m[39m
+   [32m✓[39m Phase 1 public HTTP route certification [2m(21)[22m
+     [33m[2m✓[22m[39m Nora Albright receives only the certified role and scope access[33m 1238[2mms[22m[39m
+     [33m[2m✓[22m[39m Ava Mercer receives only the certified role and scope access[33m 831[2mms[22m[39m
+     [33m[2m✓[22m[39m Ben Iqbal receives only the certified role and scope access[33m 732[2mms[22m[39m
+     [33m[2m✓[22m[39m Cora Bell receives only the certified role and scope access[33m 653[2mms[22m[39m
+     [33m[2m✓[22m[39m Dan Rowan receives only the certified role and scope access[33m 680[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps /accounts Super Admin-only and never returns credential secrets[33m 350[2mms[22m[39m
+     [33m[2m✓[22m[39m certifies Phase 11 reporting routes, role boundaries and export refusals[33m 571[2mms[22m[39m
+     [33m[2m✓[22m[39m protects Company ticket routes and keeps missing ticket and file identities private[33m 1087[2mms[22m[39m
+     [33m[2m✓[22m[39m refuses unsafe ticket origins, malformed commands and unsupported methods without ticket state[33m 317[2mms[22m[39m
+     [33m[2m✓[22m[39m enforces creator, assignee and read-only observer ticket access over HTTP[33m 1484[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m21 passed[39m[22m[90m (21)[39m
+[2m   Start at [22m 21:20:56
+[2m   Duration [22m 9.58s[2m (tests 97%, setup 2%, transform 1%)[22m
+
+Phase 1 route certification runner cleanup complete.
+----- Route certification: PASS -----
+
+===== SYSTEM LOCK :: Isolation tests =====
+Isolation proof
+  PASS  disposable databases are distinct — scopeis_isolation_probe_one_30552_17def56739_test vs scopeis_isolation_probe_two_30552_59db12a067_test
+  PASS  disposable database names are test-scoped — persistent target is scopeis_browser_verification_base_test
+  PASS  one disposable database cannot see the other's rows — observed 0 and 0
+  PASS  disposable databases are dropped after their suite finishes
+  PASS  persistent configured test database is unchanged by disposable work
+  PASS  allocated loopback ports are unique — 64196, 64197, 64198
+  PASS  allocated loopback ports are non-privileged
+  PASS  unsafe disposable names are refused — 5/5 refused
+  PASS  no harness or configuration file loads or reads .env.production — 82 files scanned
+Isolation proof: 9/9 checks passed
+----- Isolation tests: PASS -----
+
+===== SYSTEM LOCK :: Seed smoke =====
+Seeded 5 fictional mock personas.
+Fictional seed pass 1 completed (idempotent re-run included).
+Seeded 5 fictional mock personas.
+Fictional seed pass 2 completed (idempotent re-run included).
+Fictional seed smoke verified 5 personas and 2 non-duplicated Admin scope grants.
+Fictional seed smoke verified capability evidence with an opaque private file object.
+Fictional seed smoke verified shared-note revision history, notification, audit event, and the discussion parent guard.
+Seed smoke disposable database cleanup complete (PASS).
+----- Seed smoke: PASS -----
+
+===== SYSTEM LOCK :: Fresh-system smoke =====
+System smoke verified migration State D and fingerprint tables.
+Seeded 5 fictional mock personas.
+System smoke seed pass 1 completed.
+Seeded 5 fictional mock personas.
+System smoke seed pass 2 completed.
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 38ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 19.2s
+  Running TypeScript ...
+  Finished TypeScript in 15.9s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 721ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[module]
+├ ƒ /account/change-password
+├ ƒ /accounts
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/mock-login
+├ ƒ /api/evidence/[evidenceId]/files
+├ ƒ /api/evidence/files/[fileId]
+├ ƒ /api/foundation/scope/[scopeRef]
+├ ƒ /api/reports/[reportKey]/export
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[ticketId]
+├ ƒ /api/tickets/[ticketId]/files
+├ ƒ /api/tickets/[ticketId]/files/[fileId]
+├ ƒ /api/tickets/commands
+├ ƒ /arrangements
+├ ƒ /audit
+├ ƒ /clients
+├ ƒ /clients/[clientId]
+├ ƒ /coverage
+├ ƒ /dashboard
+├ ƒ /designations
+├ ƒ /employees
+├ ƒ /employees/[userId]
+├ ƒ /leave
+├ ƒ /locations
+├ ƒ /locations/[locationId]
+├ ƒ /login
+├ ƒ /map
+├ ƒ /notifications
+├ ƒ /profile
+├ ƒ /projects
+├ ƒ /projects/[projectId]
+├ ƒ /replacements
+├ ƒ /reports
+├ ƒ /reports/[reportKey]
+├ ƒ /requests
+├ ƒ /schedule
+├ ƒ /skills
+├ ƒ /teams
+├ ƒ /tickets
+└ ƒ /tickets/[ticketId]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+▲ Next.js 16.4.0
+- Local:         http://127.0.0.1:52833
+- Network:       http://127.0.0.1:52833
+✓ Ready in 202ms
+✓ Running next.config.ts took 47ms
+System smoke server ready on loopback port.
+System smoke verified anonymous enforcement.
+System smoke verified all five persona route and scope contracts plus sign-in audit events.
+System smoke verified a recipient notification round-trip.
+Phase 2 safe build preflight passed: isolated copy contains no .env* files.
+Phase 2 isolated typecheck passed.
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 35ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 21.2s
+  Running TypeScript ...
+  Finished TypeScript in 19.5s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 821ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[module]
+├ ƒ /account/change-password
+├ ƒ /accounts
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/mock-login
+├ ƒ /api/evidence/[evidenceId]/files
+├ ƒ /api/evidence/files/[fileId]
+├ ƒ /api/foundation/scope/[scopeRef]
+├ ƒ /api/reports/[reportKey]/export
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[ticketId]
+├ ƒ /api/tickets/[ticketId]/files
+├ ƒ /api/tickets/[ticketId]/files/[fileId]
+├ ƒ /api/tickets/commands
+├ ƒ /arrangements
+├ ƒ /audit
+├ ƒ /clients
+├ ƒ /clients/[clientId]
+├ ƒ /coverage
+├ ƒ /dashboard
+├ ƒ /designations
+├ ƒ /employees
+├ ƒ /employees/[userId]
+├ ƒ /leave
+├ ƒ /locations
+├ ƒ /locations/[locationId]
+├ ƒ /login
+├ ƒ /map
+├ ƒ /notifications
+├ ƒ /profile
+├ ƒ /projects
+├ ƒ /projects/[projectId]
+├ ƒ /replacements
+├ ƒ /reports
+├ ƒ /reports/[reportKey]
+├ ƒ /requests
+├ ƒ /schedule
+├ ƒ /skills
+├ ƒ /teams
+├ ƒ /tickets
+└ ƒ /tickets/[ticketId]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+Phase 2 isolated safe build cleanup complete.
+System smoke safe build completed.
+System smoke disposable environment cleanup complete (PASS).
+----- Fresh-system smoke: PASS -----
+
+===== SYSTEM LOCK :: Aggregate E2E =====
+
+=== Phase 1 foundation shell, personas, and scope :: node scripts/run-phase1-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":36692,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-k4Rf5H"}
+
+Running 14 tests using 2 workers
+
+  ok  1 [desktop] › test\e2e\foundation.spec.ts:22:1 › unauthenticated users do not receive protected shell navigation (720ms)
+  ok  2 [mobile] › test\e2e\foundation.spec.ts:22:1 › unauthenticated users do not receive protected shell navigation (697ms)
+  ok  3 [desktop] › test\e2e\foundation.spec.ts:28:1 › Super Admin receives global shell navigation (2.0s)
+  ok  4 [mobile] › test\e2e\foundation.spec.ts:28:1 › Super Admin receives global shell navigation (2.8s)
+  ok  5 [desktop] › test\e2e\foundation.spec.ts:42:1 › Admin scope is enforced by the direct server seam (1.7s)
+  ok  6 [mobile] › test\e2e\foundation.spec.ts:42:1 › Admin scope is enforced by the direct server seam (1.8s)
+  ok  7 [desktop] › test\e2e\foundation.spec.ts:59:1 › Admin Bravo receives only Bravo scope (1.3s)
+  ok  8 [mobile] › test\e2e\foundation.spec.ts:59:1 › Admin Bravo receives only Bravo scope (1.3s)
+  ok  9 [desktop] › test\e2e\foundation.spec.ts:69:1 › Employee navigation excludes management-only modules (2.2s)
+  ok 10 [mobile] › test\e2e\foundation.spec.ts:69:1 › Employee navigation excludes management-only modules (2.5s)
+  ok 11 [desktop] › test\e2e\foundation.spec.ts:85:1 › Employee Bravo remains outside management pages and scopes (2.0s)
+  ok 12 [mobile] › test\e2e\foundation.spec.ts:85:1 › Employee Bravo remains outside management pages and scopes (2.5s)
+  ok 13 [desktop] › test\e2e\foundation.spec.ts:96:1 › theme preference and RTL shell state persist safely (4.1s)
+  ok 14 [mobile] › test\e2e\foundation.spec.ts:96:1 › theme preference and RTL shell state persist safely (4.1s)
+
+  14 passed (1.1m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":36692,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-k4Rf5H"}
+--- Phase 1 foundation shell, personas, and scope: PASS ---
+
+=== Phase 2 employee directory :: node scripts/run-phase2-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":35740,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-Vdtqot"}
+
+Running 20 tests using 2 workers
+
+  ok  1 [desktop] › test\e2e\employee-directory.spec.ts:4:1 › Super Admin searches employee name and employee code (2.8s)
+  ok  2 [mobile] › test\e2e\employee-directory.spec.ts:4:1 › Super Admin searches employee name and employee code (2.8s)
+  ok  4 [mobile] › test\e2e\employee-directory.spec.ts:17:1 › Super Admin creates a workforce record with a server-generated code and no editable code field (2.9s)
+  ok  3 [desktop] › test\e2e\employee-directory.spec.ts:17:1 › Super Admin creates a workforce record with a server-generated code and no editable code field (3.3s)
+  ok  5 [mobile] › test\e2e\employee-directory.spec.ts:36:1 › creation form returns field-level validation errors (2.7s)
+  ok  6 [desktop] › test\e2e\employee-directory.spec.ts:36:1 › creation form returns field-level validation errors (2.3s)
+  ok  7 [mobile] › test\e2e\employee-directory.spec.ts:46:1 › Super Admin combines designation, team, and status filters (1.7s)
+  ok  8 [desktop] › test\e2e\employee-directory.spec.ts:46:1 › Super Admin combines designation, team, and status filters (2.2s)
+  ok  9 [mobile] › test\e2e\employee-directory.spec.ts:60:1 › Admin filtering remains safe within their Team scope (1.4s)
+  ok 10 [desktop] › test\e2e\employee-directory.spec.ts:60:1 › Admin filtering remains safe within their Team scope (1.3s)
+  ok 11 [mobile] › test\e2e\employee-directory.spec.ts:72:1 › invalid repeated directory parameters fail safely (1.4s)
+  ok 12 [desktop] › test\e2e\employee-directory.spec.ts:72:1 › invalid repeated directory parameters fail safely (1.8s)
+  ok 13 [mobile] › test\e2e\employee-directory.spec.ts:81:1 › Employee is forbidden from the workforce directory (2.0s)
+  ok 14 [desktop] › test\e2e\employee-directory.spec.ts:81:1 › Employee is forbidden from the workforce directory (1.9s)
+  ok 15 [mobile] › test\e2e\employee-directory.spec.ts:89:1 › management details preserve Admin privacy and provide visible Super Admin controls (7.1s)
+  ok 16 [desktop] › test\e2e\employee-directory.spec.ts:89:1 › management details preserve Admin privacy and provide visible Super Admin controls (7.8s)
+  ok 17 [mobile] › test\e2e\employee-directory.spec.ts:114:1 › Super Admin can use visible management controls without granting manager or Admin authority implicitly (12.1s)
+  ok 18 [desktop] › test\e2e\employee-directory.spec.ts:114:1 › Super Admin can use visible management controls without granting manager or Admin authority implicitly (11.1s)
+  ok 19 [mobile] › test\e2e\employee-directory.spec.ts:165:1 › Employee views and updates only the self-service profile (4.4s)
+  ok 20 [desktop] › test\e2e\employee-directory.spec.ts:165:1 › Employee views and updates only the self-service profile (4.1s)
+
+  20 passed (2.4m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":35740,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-Vdtqot"}
+--- Phase 2 employee directory: PASS ---
+
+=== Phase 3 client/project/location :: node scripts/run-phase3-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":10268,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-pXSetL"}
+
+Running 14 tests using 2 workers
+
+  ok  1 [desktop] › test\e2e\phase3-operations.spec.ts:20:1 › Super Admin creates Client → Projects → new Location and deliberately reuses it (17.6s)
+  ok  2 [mobile] › test\e2e\phase3-operations.spec.ts:20:1 › Super Admin creates Client → Projects → new Location and deliberately reuses it (19.8s)
+  ok  3 [desktop] › test\e2e\phase3-operations.spec.ts:31:1 › Client-scoped Admin reads descendants without client/project creation while implicit scopes remain denied (5.4s)
+  ok  4 [mobile] › test\e2e\phase3-operations.spec.ts:31:1 › Client-scoped Admin reads descendants without client/project creation while implicit scopes remain denied (5.5s)
+  ok  5 [desktop] › test\e2e\phase3-operations.spec.ts:36:1 › Project and Location scopes never climb upward or reach siblings (3.7s)
+  ok  6 [mobile] › test\e2e\phase3-operations.spec.ts:36:1 › Project and Location scopes never climb upward or reach siblings (2.8s)
+  ok  7 [desktop] › test\e2e\phase3-operations.spec.ts:41:1 › Employee has no Phase 3 navigation, pages, or sensitive operational projection (2.5s)
+  ok  8 [mobile] › test\e2e\phase3-operations.spec.ts:41:1 › Employee has no Phase 3 navigation, pages, or sensitive operational projection (2.4s)
+  ok  9 [desktop] › test\e2e\phase3-operations.spec.ts:45:1 › archive safeguards and stale submissions fail with understandable state (9.9s)
+  ok 10 [mobile] › test\e2e\phase3-operations.spec.ts:45:1 › archive safeguards and stale submissions fail with understandable state (9.1s)
+  ok 11 [desktop] › test\e2e\phase3-operations.spec.ts:50:1 › cross-client and invalid coordinate submissions cannot create hidden relationships (8.8s)
+  ok 12 [mobile] › test\e2e\phase3-operations.spec.ts:50:1 › cross-client and invalid coordinate submissions cannot create hidden relationships (9.6s)
+  ok 13 [desktop] › test\e2e\phase3-operations.spec.ts:55:1 › Super Admin scope control is explicit and separate from Account Manager (8.8s)
+  ok 14 [mobile] › test\e2e\phase3-operations.spec.ts:55:1 › Super Admin scope control is explicit and separate from Account Manager (7.8s)
+
+  14 passed (2.5m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":10268,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-pXSetL"}
+--- Phase 3 client/project/location: PASS ---
+
+=== Phase 4 scheduling publication :: node scripts/run-phase4-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":41252,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-NnppyE"}
+
+Running 2 tests using 2 workers
+
+  ok 1 [desktop] › test\e2e\phase4-scheduling.spec.ts:42:1 › Super Admin publishes, Admin reads only current Published schedules, and Employee sees own Published work (40.4s)
+  ok 2 [mobile] › test\e2e\phase4-scheduling.spec.ts:42:1 › Super Admin publishes, Admin reads only current Published schedules, and Employee sees own Published work (41.3s)
+
+  2 passed (2.1m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":41252,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-NnppyE"}
+--- Phase 4 scheduling publication: PASS ---
+
+=== Phase 5 leave and availability :: node scripts/run-phase5-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":23208,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-vhlgr9"}
+
+Running 2 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase5-leave.spec.ts:4:1 › Employee previews and requests a vacation, Super Admin decides it, and Admin cannot read team leave (9.5s)
+  ok 2 [mobile] › test\e2e\phase5-leave.spec.ts:4:1 › Employee previews and requests a vacation, Super Admin decides it, and Admin cannot read team leave (7.3s)
+
+  2 passed (1.9m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":23208,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-vhlgr9"}
+Phase 5 browser disposable database cleanup complete.
+--- Phase 5 leave and availability: PASS ---
+
+=== Phase 6 skills and capabilities :: node scripts/run-phase6-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":45536,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-LC9hAq"}
+
+Running 6 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase6-capabilities.spec.ts:6:1 › dialog triggers wait for JavaScript readiness before accepting a skill-recording click (2.4s)
+  ok 2 [desktop] › test\e2e\phase6-capabilities.spec.ts:28:1 › Super Admin records a skill and the Employee sees only their own recorded fact (8.2s)
+  ok 3 [desktop] › test\e2e\phase6-capabilities.spec.ts:60:1 › Super Admin manages missing controls while Admin and Employee remain excluded (14.8s)
+  ok 4 [mobile] › test\e2e\phase6-capabilities.spec.ts:6:1 › dialog triggers wait for JavaScript readiness before accepting a skill-recording click (1.4s)
+  ok 5 [mobile] › test\e2e\phase6-capabilities.spec.ts:28:1 › Super Admin records a skill and the Employee sees only their own recorded fact (6.1s)
+  ok 6 [mobile] › test\e2e\phase6-capabilities.spec.ts:60:1 › Super Admin manages missing controls while Admin and Employee remain excluded (14.5s)
+
+  6 passed (2.2m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":45536,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-LC9hAq"}
+Phase 6 browser disposable database cleanup complete.
+--- Phase 6 skills and capabilities: PASS ---
+
+=== Phase 7 coverage and replacement :: node scripts/run-phase7-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":46272,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-s9ozWl"}
+
+Running 2 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase7-coverage.spec.ts:6:1 › Cover combines timetable requests, editing, cancellation and direct decisions with role-safe planning (25.3s)
+  ok 2 [mobile] › test\e2e\phase7-coverage.spec.ts:6:1 › Cover combines timetable requests, editing, cancellation and direct decisions with role-safe planning (20.0s)
+
+  2 passed (2.2m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":46272,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-s9ozWl"}
+Phase 7 browser disposable database cleanup complete.
+--- Phase 7 coverage and replacement: PASS ---
+
+=== Phase 8 static planning map :: node scripts/run-phase8-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":42168,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-b36RFG"}
+
+Running 6 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase8-planning-map.spec.ts:8:1 › Super Admin sees static Published planning facts and safe fallback (2.6s)
+  ok 2 [desktop] › test\e2e\phase8-planning-map.spec.ts:9:1 › Scoped Admin receives only the coarse Team × operational intersection and Employee is denied (3.4s)
+  ok 3 [desktop] › test\e2e\phase8-planning-map.spec.ts:11:1 › filter form accepts All authorized and employee identifiers, and map dragging follows the pointer (3.5s)
+  ok 4 [mobile] › test\e2e\phase8-planning-map.spec.ts:8:1 › Super Admin sees static Published planning facts and safe fallback (1.5s)
+  ok 5 [mobile] › test\e2e\phase8-planning-map.spec.ts:9:1 › Scoped Admin receives only the coarse Team × operational intersection and Employee is denied (2.1s)
+  ok 6 [mobile] › test\e2e\phase8-planning-map.spec.ts:11:1 › filter form accepts All authorized and employee identifiers, and map dragging follows the pointer (2.6s)
+
+  6 passed (1.9m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":42168,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-b36RFG"}
+Phase 8 browser disposable database cleanup complete.
+--- Phase 8 static planning map: PASS ---
+
+=== Phase 9 capability evidence :: node scripts/run-phase9-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":17164,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-2hHyrr"}
+
+Running 4 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase9-evidence.spec.ts:25:1 › Employee saves capability evidence privately, Super Admin reviews and verifies it, and the owner archives it (19.0s)
+  ok 2 [desktop] › test\e2e\phase9-evidence.spec.ts:132:1 › Scoped Admin receives certification summary only and Employee is denied management evidence (6.5s)
+  ok 3 [mobile] › test\e2e\phase9-evidence.spec.ts:25:1 › Employee saves capability evidence privately, Super Admin reviews and verifies it, and the owner archives it (12.6s)
+  ok 4 [mobile] › test\e2e\phase9-evidence.spec.ts:132:1 › Scoped Admin receives certification summary only and Employee is denied management evidence (7.9s)
+
+  4 passed (2.5m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":17164,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-2hHyrr"}
+Phase 9 browser disposable database cleanup complete.
+--- Phase 9 capability evidence: PASS ---
+
+=== Phase 10 collaboration and governance :: node scripts/run-phase10-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":44924,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-gIdOm5"}
+
+Running 2 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase10-collaboration.spec.ts:11:1 › Admin governs shared notes and management notes, participants discuss a request, and notifications and audit stay scoped (14.8s)
+  ok 2 [mobile] › test\e2e\phase10-collaboration.spec.ts:11:1 › Admin governs shared notes and management notes, participants discuss a request, and notifications and audit stay scoped (11.1s)
+
+  2 passed (1.9m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":44924,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-gIdOm5"}
+Phase 10 browser disposable database cleanup complete.
+--- Phase 10 collaboration and governance: PASS ---
+
+=== Phase 11 dashboards, reports and exports :: node scripts/run-phase11-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":26144,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-JRDUp1"}
+
+Running 8 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase11-reporting.spec.ts:20:1 › Super Admin reporting: dashboard, published allocation drill-down, planning separation, and a bounded CSV export (2.6s)
+  ok 2 [desktop] › test\e2e\phase11-reporting.spec.ts:76:1 › Scoped Admin dashboard remains useful while every report and export is refused (3.0s)
+  ok 3 [desktop] › test\e2e\phase11-reporting.spec.ts:104:1 › Employee dashboard is self-only and reporting stays closed (3.8s)
+  ok 4 [desktop] › test\e2e\phase11-reporting.spec.ts:160:1 › report filters apply without errors, retain their values and export the same conflict window (2.5s)
+  ok 5 [mobile] › test\e2e\phase11-reporting.spec.ts:20:1 › Super Admin reporting: dashboard, published allocation drill-down, planning separation, and a bounded CSV export (1.6s)
+  ok 6 [mobile] › test\e2e\phase11-reporting.spec.ts:76:1 › Scoped Admin dashboard remains useful while every report and export is refused (2.2s)
+  ok 7 [mobile] › test\e2e\phase11-reporting.spec.ts:104:1 › Employee dashboard is self-only and reporting stays closed (2.9s)
+  ok 8 [mobile] › test\e2e\phase11-reporting.spec.ts:160:1 › report filters apply without errors, retain their values and export the same conflict window (2.1s)
+
+  8 passed (1.9m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":26144,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-JRDUp1"}
+Phase 11 browser disposable database cleanup complete.
+--- Phase 11 dashboards, reports and exports: PASS ---
+
+=== Credential authentication login :: node scripts/run-credential-e2e.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":44344,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-KVWJpb"}
+[WebServer] Phase 2 safe build preflight passed: isolated copy contains no .env* files.
+[WebServer] Phase 2 isolated typecheck passed.
+[WebServer] ▲ Next.js 16.4.0 (webpack)
+[WebServer] ✓ Running next.config.ts took 44ms
+[WebServer] 
+[WebServer]   Creating an optimized production build ...
+[WebServer] ✓ Compiled successfully in 22.5s
+[WebServer]   Running TypeScript ...
+[WebServer]   Finished TypeScript in 23.5s ...
+[WebServer]   Collecting page data using 7 workers ...
+[WebServer]   Generating static pages using 7 workers (0/8) ...
+[WebServer]   Generating static pages using 7 workers (2/8) 
+[WebServer]   Generating static pages using 7 workers (4/8) 
+[WebServer]   Generating static pages using 7 workers (6/8) 
+[WebServer] ✓ Generating static pages using 7 workers (8/8) in 1720ms
+[WebServer]   Finalizing page optimization ...
+[WebServer]   Collecting build traces ...
+[WebServer] 
+[WebServer] Route (app)
+[WebServer] ┌ ƒ /
+[WebServer] ├ ƒ /_not-found
+[WebServer] ├ ƒ /[module]
+[WebServer] ├ ƒ /account/change-password
+[WebServer] ├ ƒ /accounts
+[WebServer] ├ ƒ /api/auth/login
+[WebServer] ├ ƒ /api/auth/logout
+[WebServer] ├ ƒ /api/auth/mock-login
+[WebServer] ├ ƒ /api/evidence/[evidenceId]/files
+[WebServer] ├ ƒ /api/evidence/files/[fileId]
+[WebServer] ├ ƒ /api/foundation/scope/[scopeRef]
+[WebServer] ├ ƒ /api/reports/[reportKey]/export
+[WebServer] ├ ƒ /api/tickets
+[WebServer] ├ ƒ /api/tickets/[ticketId]
+[WebServer] ├ ƒ /api/tickets/[ticketId]/files
+[WebServer] ├ ƒ /api/tickets/[ticketId]/files/[fileId]
+[WebServer] ├ ƒ /api/tickets/commands
+[WebServer] ├ ƒ /arrangements
+[WebServer] ├ ƒ /audit
+[WebServer] ├ ƒ /clients
+[WebServer] ├ ƒ /clients/[clientId]
+[WebServer] ├ ƒ /coverage
+[WebServer] ├ ƒ /dashboard
+[WebServer] ├ ƒ /designations
+[WebServer] ├ ƒ /employees
+[WebServer] ├ ƒ /employees/[userId]
+[WebServer] ├ ƒ /leave
+[WebServer] ├ ƒ /locations
+[WebServer] ├ ƒ /locations/[locationId]
+[WebServer] ├ ƒ /login
+[WebServer] ├ ƒ /map
+[WebServer] ├ ƒ /notifications
+[WebServer] ├ ƒ /profile
+[WebServer] ├ ƒ /projects
+[WebServer] ├ ƒ /projects/[projectId]
+[WebServer] ├ ƒ /replacements
+[WebServer] ├ ƒ /reports
+[WebServer] ├ ƒ /reports/[reportKey]
+[WebServer] ├ ƒ /requests
+[WebServer] ├ ƒ /schedule
+[WebServer] ├ ƒ /skills
+[WebServer] ├ ƒ /teams
+[WebServer] ├ ƒ /tickets
+[WebServer] └ ƒ /tickets/[ticketId]
+[WebServer] 
+[WebServer] 
+[WebServer] ƒ  (Dynamic)  server-rendered on demand
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.0
+[WebServer] - Local:         http://127.0.0.1:56198
+[WebServer] - Network:       http://127.0.0.1:56198
+[WebServer] ✓ Ready in 236ms
+[WebServer] ✓ Running next.config.ts took 48ms
+
+Running 2 tests using 1 worker
+
+{"loginStatus":200,"errorCode":null,"browserErrors":{"console":0,"page":0}}
+  ok 1 [desktop] › test\e2e\credential-login.spec.ts:5:1 › credential login creates an opaque session and reaches the dashboard (1.1s)
+{"loginStatus":200,"errorCode":null,"browserErrors":{"console":0,"page":0}}
+  ok 2 [mobile] › test\e2e\credential-login.spec.ts:5:1 › credential login creates an opaque session and reaches the dashboard (1.8s)
+
+  2 passed (1.7m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":44344,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-KVWJpb"}
+Credential browser disposable database cleanup complete.
+--- Credential authentication login: PASS ---
+
+=== Super Admin account administration :: node scripts/run-account-e2e.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":44720,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-TpXM1T"}
+[WebServer] Phase 2 safe build preflight passed: isolated copy contains no .env* files.
+[WebServer] Phase 2 isolated typecheck passed.
+[WebServer] ▲ Next.js 16.4.0 (webpack)
+[WebServer] ✓ Running next.config.ts took 44ms
+[WebServer] 
+[WebServer]   Creating an optimized production build ...
+[WebServer] ✓ Compiled successfully in 24.3s
+[WebServer]   Running TypeScript ...
+[WebServer]   Finished TypeScript in 20.5s ...
+[WebServer]   Collecting page data using 7 workers ...
+[WebServer]   Generating static pages using 7 workers (0/8) ...
+[WebServer]   Generating static pages using 7 workers (2/8) 
+[WebServer]   Generating static pages using 7 workers (4/8) 
+[WebServer]   Generating static pages using 7 workers (6/8) 
+[WebServer] ✓ Generating static pages using 7 workers (8/8) in 996ms
+[WebServer]   Finalizing page optimization ...
+[WebServer]   Collecting build traces ...
+[WebServer] 
+[WebServer] Route (app)
+[WebServer] ┌ ƒ /
+[WebServer] ├ ƒ /_not-found
+[WebServer] ├ ƒ /[module]
+[WebServer] ├ ƒ /account/change-password
+[WebServer] ├ ƒ /accounts
+[WebServer] ├ ƒ /api/auth/login
+[WebServer] ├ ƒ /api/auth/logout
+[WebServer] ├ ƒ /api/auth/mock-login
+[WebServer] ├ ƒ /api/evidence/[evidenceId]/files
+[WebServer] ├ ƒ /api/evidence/files/[fileId]
+[WebServer] ├ ƒ /api/foundation/scope/[scopeRef]
+[WebServer] ├ ƒ /api/reports/[reportKey]/export
+[WebServer] ├ ƒ /api/tickets
+[WebServer] ├ ƒ /api/tickets/[ticketId]
+[WebServer] ├ ƒ /api/tickets/[ticketId]/files
+[WebServer] ├ ƒ /api/tickets/[ticketId]/files/[fileId]
+[WebServer] ├ ƒ /api/tickets/commands
+[WebServer] ├ ƒ /arrangements
+[WebServer] ├ ƒ /audit
+[WebServer] ├ ƒ /clients
+[WebServer] ├ ƒ /clients/[clientId]
+[WebServer] ├ ƒ /coverage
+[WebServer] ├ ƒ /dashboard
+[WebServer] ├ ƒ /designations
+[WebServer] ├ ƒ /employees
+[WebServer] ├ ƒ /employees/[userId]
+[WebServer] ├ ƒ /leave
+[WebServer] ├ ƒ /locations
+[WebServer] ├ ƒ /locations/[locationId]
+[WebServer] ├ ƒ /login
+[WebServer] ├ ƒ /map
+[WebServer] ├ ƒ /notifications
+[WebServer] ├ ƒ /profile
+[WebServer] ├ ƒ /projects
+[WebServer] ├ ƒ /projects/[projectId]
+[WebServer] ├ ƒ /replacements
+[WebServer] ├ ƒ /reports
+[WebServer] ├ ƒ /reports/[reportKey]
+[WebServer] ├ ƒ /requests
+[WebServer] ├ ƒ /schedule
+[WebServer] ├ ƒ /skills
+[WebServer] ├ ƒ /teams
+[WebServer] ├ ƒ /tickets
+[WebServer] └ ƒ /tickets/[ticketId]
+[WebServer] 
+[WebServer] 
+[WebServer] ƒ  (Dynamic)  server-rendered on demand
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.0
+[WebServer] - Local:         http://127.0.0.1:62379
+[WebServer] - Network:       http://127.0.0.1:62379
+[WebServer] ✓ Ready in 258ms
+[WebServer] ✓ Running next.config.ts took 65ms
+
+Running 4 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\account-administration.spec.ts:42:1 › Super Admin creates and resets an account; other roles cannot reach /accounts (14.0s)
+  ok 2 [desktop] › test\e2e\account-administration.spec.ts:116:1 › legacy accounts recover My Profile and appear in the directory after Super Admin completes setup (6.9s)
+  ok 3 [mobile] › test\e2e\account-administration.spec.ts:42:1 › Super Admin creates and resets an account; other roles cannot reach /accounts (11.0s)
+  ok 4 [mobile] › test\e2e\account-administration.spec.ts:116:1 › legacy accounts recover My Profile and appear in the directory after Super Admin completes setup (5.9s)
+
+  4 passed (2.1m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":44720,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-TpXM1T"}
+Account administration browser disposable database cleanup complete.
+--- Super Admin account administration: PASS ---
+
+=== Company tickets and private files :: node scripts/run-ticket-playwright.mjs (own disposable database + allocated port) ===
+Phase 2 safe build preflight passed: isolated copy contains no .env* files.
+Phase 2 isolated typecheck passed.
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 45ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 22.8s
+  Running TypeScript ...
+  Finished TypeScript in 20.1s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 845ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[module]
+├ ƒ /account/change-password
+├ ƒ /accounts
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/mock-login
+├ ƒ /api/evidence/[evidenceId]/files
+├ ƒ /api/evidence/files/[fileId]
+├ ƒ /api/foundation/scope/[scopeRef]
+├ ƒ /api/reports/[reportKey]/export
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[ticketId]
+├ ƒ /api/tickets/[ticketId]/files
+├ ƒ /api/tickets/[ticketId]/files/[fileId]
+├ ƒ /api/tickets/commands
+├ ƒ /arrangements
+├ ƒ /audit
+├ ƒ /clients
+├ ƒ /clients/[clientId]
+├ ƒ /coverage
+├ ƒ /dashboard
+├ ƒ /designations
+├ ƒ /employees
+├ ƒ /employees/[userId]
+├ ƒ /leave
+├ ƒ /locations
+├ ƒ /locations/[locationId]
+├ ƒ /login
+├ ƒ /map
+├ ƒ /notifications
+├ ƒ /profile
+├ ƒ /projects
+├ ƒ /projects/[projectId]
+├ ƒ /replacements
+├ ƒ /reports
+├ ƒ /reports/[reportKey]
+├ ƒ /requests
+├ ƒ /schedule
+├ ƒ /skills
+├ ƒ /teams
+├ ƒ /tickets
+└ ƒ /tickets/[ticketId]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+▲ Next.js 16.4.0
+- Local:         http://127.0.0.1:53310
+- Network:       http://127.0.0.1:53310
+✓ Ready in 208ms
+✓ Running next.config.ts took 45ms
+
+Running 14 tests using 1 worker
+
+  ok  1 [desktop] › test\e2e\tickets.spec.ts:52:1 › manager creates and edits Company workspaces, publishes dashboards and grants ticket people while retaining management navigation (10.4s)
+  ok  2 [desktop] › test\e2e\tickets.spec.ts:113:1 › Employee lands on tickets and creates, holds, closes, logs, archives and restores their own work (10.8s)
+  ok  3 [desktop] › test\e2e\tickets.spec.ts:169:1 › company users create without enrollment, navigate nested dashboards, assign several people and mention with read-only notifications (15.8s)
+  ok  4 [desktop] › test\e2e\tickets.spec.ts:294:1 › mentioned people and unrelated members receive current read-only and non-enumerating ticket boundaries (3.5s)
+  ok  5 [desktop] › test\e2e\tickets.spec.ts:311:1 › private upload and download work through current participant access and stop after revocation (5.5s)
+  ok  6 [desktop] › test\e2e\tickets.spec.ts:340:1 › Overview, Tickets, list and Kanban retain shared filters across refresh and fit the viewport (2.6s)
+  ok  7 [desktop] › test\e2e\tickets.spec.ts:374:1 › every role starts with all accessible work across destinations, can narrow relationships and return without losing context (10.6s)
+  ok  8 [mobile] › test\e2e\tickets.spec.ts:52:1 › manager creates and edits Company workspaces, publishes dashboards and grants ticket people while retaining management navigation (8.8s)
+  ok  9 [mobile] › test\e2e\tickets.spec.ts:113:1 › Employee lands on tickets and creates, holds, closes, logs, archives and restores their own work (10.1s)
+  ok 10 [mobile] › test\e2e\tickets.spec.ts:169:1 › company users create without enrollment, navigate nested dashboards, assign several people and mention with read-only notifications (15.4s)
+  ok 11 [mobile] › test\e2e\tickets.spec.ts:294:1 › mentioned people and unrelated members receive current read-only and non-enumerating ticket boundaries (2.7s)
+  ok 12 [mobile] › test\e2e\tickets.spec.ts:311:1 › private upload and download work through current participant access and stop after revocation (5.2s)
+  ok 13 [mobile] › test\e2e\tickets.spec.ts:340:1 › Overview, Tickets, list and Kanban retain shared filters across refresh and fit the viewport (2.5s)
+  ok 14 [mobile] › test\e2e\tickets.spec.ts:374:1 › every role starts with all accessible work across destinations, can narrow relationships and return without losing context (10.1s)
+
+  14 passed (1.9m)
+Company ticket browser cleanup complete: 1 databases created, 1 dropped, 0 retained; owned server stopped, build checkout and private fictional file directory removed.
+--- Company tickets and private files: PASS ---
+
+=== Responsive UI, task discovery and planning workspace :: node scripts/run-responsive-playwright.mjs (own disposable database + allocated port) ===
+Phase 2 safe build preflight passed: isolated copy contains no .env* files.
+Phase 2 isolated typecheck passed.
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 54ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 26.9s
+  Running TypeScript ...
+  Finished TypeScript in 21.2s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 631ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[module]
+├ ƒ /account/change-password
+├ ƒ /accounts
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/mock-login
+├ ƒ /api/evidence/[evidenceId]/files
+├ ƒ /api/evidence/files/[fileId]
+├ ƒ /api/foundation/scope/[scopeRef]
+├ ƒ /api/reports/[reportKey]/export
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[ticketId]
+├ ƒ /api/tickets/[ticketId]/files
+├ ƒ /api/tickets/[ticketId]/files/[fileId]
+├ ƒ /api/tickets/commands
+├ ƒ /arrangements
+├ ƒ /audit
+├ ƒ /clients
+├ ƒ /clients/[clientId]
+├ ƒ /coverage
+├ ƒ /dashboard
+├ ƒ /designations
+├ ƒ /employees
+├ ƒ /employees/[userId]
+├ ƒ /leave
+├ ƒ /locations
+├ ƒ /locations/[locationId]
+├ ƒ /login
+├ ƒ /map
+├ ƒ /notifications
+├ ƒ /profile
+├ ƒ /projects
+├ ƒ /projects/[projectId]
+├ ƒ /replacements
+├ ƒ /reports
+├ ƒ /reports/[reportKey]
+├ ƒ /requests
+├ ƒ /schedule
+├ ƒ /skills
+├ ƒ /teams
+├ ƒ /tickets
+└ ƒ /tickets/[ticketId]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+▲ Next.js 16.4.0
+- Local:         http://127.0.0.1:64735
+- Network:       http://127.0.0.1:64735
+✓ Ready in 282ms
+✓ Running next.config.ts took 54ms
+Responsive browser: Google Chrome (C:\Users\m.kassab\AppData\Local\Google\Chrome\Application\chrome.exe).
+
+Running 24 tests using 1 worker
+
+Responsive browser: Google Chrome (C:\Users\m.kassab\AppData\Local\Google\Chrome\Application\chrome.exe).
+  ok  1 test\e2e\responsive.spec.ts:51:3 › expressive motion › motion stays finite, preserves modal focus and works across desktop and phone (11.6s)
+  ok  2 test\e2e\responsive.spec.ts:195:35 › all management screens and report tables fit from phone to wide desktop · 320×640 (15.3s)
+  ok  3 test\e2e\responsive.spec.ts:195:35 › all management screens and report tables fit from phone to wide desktop · 390×844 (16.1s)
+  ok  4 test\e2e\responsive.spec.ts:195:35 › all management screens and report tables fit from phone to wide desktop · 600×900 (28.0s)
+  ok  5 test\e2e\responsive.spec.ts:195:35 › all management screens and report tables fit from phone to wide desktop · 768×1024 (24.2s)
+  ok  6 test\e2e\responsive.spec.ts:195:35 › all management screens and report tables fit from phone to wide desktop · 820×1180 (22.7s)
+  ok  7 test\e2e\responsive.spec.ts:195:35 › all management screens and report tables fit from phone to wide desktop · 1024×768 (24.7s)
+  ok  8 test\e2e\responsive.spec.ts:195:35 › all management screens and report tables fit from phone to wide desktop · 1280×800 (40.5s)
+  ok  9 test\e2e\responsive.spec.ts:195:35 › all management screens and report tables fit from phone to wide desktop · 1920×1080 (39.3s)
+  ok 10 test\e2e\responsive.spec.ts:231:114 › create and review dialogs fit phones, tablets, and short landscape screens · 320×640 (1.9m)
+  ok 11 test\e2e\responsive.spec.ts:231:114 › create and review dialogs fit phones, tablets, and short landscape screens · 768×360 (1.9m)
+  ok 12 test\e2e\responsive.spec.ts:231:114 › create and review dialogs fit phones, tablets, and short landscape screens · 1024×768 (2.1m)
+  ok 13 test\e2e\responsive.spec.ts:263:1 › role navigation, RTL, dark theme and enlarged text reflow (1.6m)
+  ok 14 test\e2e\responsive.spec.ts:307:1 › sign in, password change and unavailable pages fit every viewport (19.0s)
+  ok 15 test\e2e\responsive.spec.ts:328:1 › More navigation stays usable on tablets and closes with focus restored on desktop (4.5s)
+  ok 16 test\e2e\responsive.spec.ts:350:1 › task dialogs keep fields and actions above a simulated mobile keyboard (4.0s)
+  ok 17 test\e2e\responsive.spec.ts:379:1 › visual controls keep contrast, focus and native modal behavior in both themes (12.9s)
+  ok 18 test\e2e\responsive.spec.ts:460:1 › reduced motion removes decorative movement and forced colors retain controls (3.8s)
+  ok 19 test\e2e\responsive.spec.ts:488:1 › desktop hover is tactile and reduced motion removes its movement (5.7s)
+  ok 20 test\e2e\responsive.spec.ts:509:1 › the planning workspace fits its pins and exposes filters, search and next actions on every screen (39.1s)
+  ok 21 test\e2e\responsive.spec.ts:563:1 › feature discovery stays usable and role-specific on phone, desktop and RTL with larger text (27.2s)
+  ok 22 test\e2e\responsive.spec.ts:605:1 › monthly timetable and people catalogues stay usable across phone, desktop, RTL and reduced motion (43.4s)
+  ok 23 test\e2e\responsive.spec.ts:670:1 › clear user journeys keep every authorized tab understandable and make the main tasks work on phone and desktop (1.2m)
+  ok 24 test\e2e\responsive.spec.ts:750:1 › populated tickets, destination filters and work dialogs fit every responsive viewport (1.3m)
+
+  Slow test file: test\e2e\responsive.spec.ts (16.3m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  24 passed (16.6m)
+Responsive browser cleanup complete: 1 databases created, 1 dropped, 0 retained; owned process trees stopped, build checkout and private fictional file directory removed.
+--- Responsive UI, task discovery and planning workspace: PASS ---
+
+Aggregate E2E summary (each phase runner isolated on its own disposable database and port):
+  PASS  Phase 1 foundation shell, personas, and scope
+  PASS  Phase 2 employee directory
+  PASS  Phase 3 client/project/location
+  PASS  Phase 4 scheduling publication
+  PASS  Phase 5 leave and availability
+  PASS  Phase 6 skills and capabilities
+  PASS  Phase 7 coverage and replacement
+  PASS  Phase 8 static planning map
+  PASS  Phase 9 capability evidence
+  PASS  Phase 10 collaboration and governance
+  PASS  Phase 11 dashboards, reports and exports
+  PASS  Credential authentication login
+  PASS  Super Admin account administration
+  PASS  Company tickets and private files
+  PASS  Responsive UI, task discovery and planning workspace
+  Overall: 15/15 suites passed
+----- Aggregate E2E: PASS -----
+
+===== SYSTEM LOCK :: Safe build =====
+Phase 2 safe build preflight passed: isolated copy contains no .env* files.
+Phase 2 isolated typecheck passed.
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 215ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 59s
+  Running TypeScript ...
+  Finished TypeScript in 29.8s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 1530ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[module]
+├ ƒ /account/change-password
+├ ƒ /accounts
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/mock-login
+├ ƒ /api/evidence/[evidenceId]/files
+├ ƒ /api/evidence/files/[fileId]
+├ ƒ /api/foundation/scope/[scopeRef]
+├ ƒ /api/reports/[reportKey]/export
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[ticketId]
+├ ƒ /api/tickets/[ticketId]/files
+├ ƒ /api/tickets/[ticketId]/files/[fileId]
+├ ƒ /api/tickets/commands
+├ ƒ /arrangements
+├ ƒ /audit
+├ ƒ /clients
+├ ƒ /clients/[clientId]
+├ ƒ /coverage
+├ ƒ /dashboard
+├ ƒ /designations
+├ ƒ /employees
+├ ƒ /employees/[userId]
+├ ƒ /leave
+├ ƒ /locations
+├ ƒ /locations/[locationId]
+├ ƒ /login
+├ ƒ /map
+├ ƒ /notifications
+├ ƒ /profile
+├ ƒ /projects
+├ ƒ /projects/[projectId]
+├ ƒ /replacements
+├ ƒ /reports
+├ ƒ /reports/[reportKey]
+├ ƒ /requests
+├ ƒ /schedule
+├ ƒ /skills
+├ ƒ /teams
+├ ƒ /tickets
+└ ƒ /tickets/[ticketId]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+Phase 2 isolated safe build cleanup complete.
+----- Safe build: PASS -----
+
+===== SYSTEM LOCK :: Diff whitespace check =====
+warning: in the working copy of 'AGENTS.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'DOCX/INDEX.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'DOCX/project-memory/DECISIONS_AND_CONSTRAINTS.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'DOCX/project-memory/IMPLEMENTATION_STATUS_TRACKER.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'DOCX/project-memory/PHASE_11_REPORTING_DECISIONS.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'DOCX/project-memory/PHASE_3_OPERATIONAL_DOMAIN_DECISIONS.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'DOCX/project-memory/PHASE_4_SCHEDULING_DOMAIN_DECISIONS.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'DOCX/project-memory/PHASE_5_LEAVE_DOMAIN_DECISIONS.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'DOCX/project-memory/PHASE_7_COVERAGE_REPLACEMENT_DECISIONS.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'DOCX/project-memory/PHASE_8_STATIC_PLANNING_MAP_DECISIONS.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'DOCX/project-memory/ROLE_AND_PERMISSION_MODEL.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'DOCX/project-memory/SYSTEM_ARCHITECTURE_DECISIONS.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'DOCX/project-memory/UI_UX_FOUNDATION.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'DOCX/project-memory/USER_JOURNEYS.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'PROJECT_CONTEXT.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'eslint.config.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'next.config.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'package-lock.json', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'package.json', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'playwright.responsive.config.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'public/previews/company-tickets.html', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/bootstrap-existing-user-credentials.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/company-demo-data.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/company-demo-pdf.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/company-demo-roster-test-fixture.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/disposable-test-database.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/phase1-test-environment.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/phase10-test-fixtures.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/phase11-test-fixtures.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/phase2-migration-core.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/phase2-migration-state.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/phase3-test-fixtures.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/phase4-test-fixtures.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/phase8-test-fixtures.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/phase9-test-fixtures.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/responsive-test-fixtures.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-account-administration-service-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-aggregate-e2e-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-aggregate-integration-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-credential-service-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase1-integration-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase1-route-certification.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase1-safe-build.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase10-service-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase11-service-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase2-core-service-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase2-manual-qa.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase2-migration-command.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase2-migration-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase2-safe-build.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase3-manual-qa.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase3-service-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase4-service-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase5-service-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase6-service-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase7-service-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase8-service-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-phase9-service-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-responsive-playwright.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-seed-smoke.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-system-concurrency-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-system-lock.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-system-smoke.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-timetable-service-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/schema-fingerprint.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/seed-company-demo-files.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/seed-company-demo.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/start-phase1-test-server.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/start-phase2-test-server.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/test-company-demo.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/update-company-demo-roster.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/upgrade-team-catalogue.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/validate-phase2-runbook.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/verify-isolation.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/verify-scenario-manifest.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(auth)/login/login-screen.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(auth)/login/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/[module]/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/accounts/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/audit/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/clients/[clientId]/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/clients/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/dashboard/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/designations/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/employees/[userId]/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/employees/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/layout.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/locations/[locationId]/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/locations/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/notifications/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/profile/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/projects/[projectId]/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/replacements/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/reports/[reportKey]/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/reports/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/skills/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/teams/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/(protected)/template.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/account.css', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/account/change-password/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/api/auth/login/route.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/api/auth/logout/route.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/api/auth/mock-login/route.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/api/evidence/[evidenceId]/files/route.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/api/evidence/files/[fileId]/route.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/api/foundation/scope/[scopeRef]/route.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/api/reports/[reportKey]/export/route.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/design.css', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/error.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/experience.css', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/journeys.css', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/layout.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/motion.css', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/not-found.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/people.css', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/phase10.css', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/phase11.css', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/records.css', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/responsive.css', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/route-motion.css', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/secondary.css', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/styles.css', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/timetable.css', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/visuals.css', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/app/workflows.css', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/db/client/index.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/db/migrations/meta/0014_snapshot.json', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/db/schema/index.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/db/seed/fixtures.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/db/seed/index.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/db/validate.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/account-administration/actions.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/account-administration/domain-error.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/account-administration/forms.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/account-administration/messages.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/account-administration/presentation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/account-administration/query.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/account-administration/repositories.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/account-administration/service.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/account-administration/table.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/account-administration/validation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/audit/audit-service.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/audit/domain-error.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/audit/repositories.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/audit/service.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/auth/actions.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/auth/authentication-provider.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/auth/credential-bootstrap.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/auth/credential-repository.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/auth/credential-service.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/auth/credential-validation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/auth/password.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/auth/session-record.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/auth/session-service.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/authorization/authorization-service.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/authorization/capabilities.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/authorization/current-actor.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/authorization/operational-scope.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/capabilities/actions.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/capabilities/domain-error.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/capabilities/forms.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/capabilities/repositories.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/capabilities/service.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/capabilities/validation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/coverage/actions.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/coverage/domain-error.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/coverage/forms.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/coverage/validation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/coverage/work-picker.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/discussions/actions.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/discussions/domain-error.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/discussions/forms.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/discussions/repositories.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/discussions/validation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/contracts.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/domain-error.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/employee-create-action.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/employee-create-form.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/employee-detail.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/employee-directory-query.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/employee-directory.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/employee-management-actions.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/employee-management-panel.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/employee-policy.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/employee-repositories.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/employee-services.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/employee-validation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/missing-workforce-profile.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/organisation-actions.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/organisation-forms.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/organisation-page.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/organisation-service.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/self-profile-form.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/employees/team-options.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/evidence/actions.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/evidence/delivery.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/evidence/domain-error.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/evidence/file-validation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/evidence/forms.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/evidence/http.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/evidence/repositories.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/evidence/service.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/evidence/validation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/leave/actions.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/leave/date-rules.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/leave/domain-error.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/leave/forms.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/leave/repositories.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/leave/validation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/maps/map-adapter.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/maps/map-projection.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/maps/planning-presentation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/maps/repositories.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/maps/validation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/navigation/navigation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/notes/actions.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/notes/domain-error.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/notes/forms.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/notes/repositories.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/notes/service.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/notes/validation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/notifications/actions.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/notifications/domain-error.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/notifications/forms.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/notifications/notification-service.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/notifications/presentation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/notifications/repositories.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/notifications/service.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/operations/actions.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/operations/domain-error.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/operations/forms.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/operations/record-navigation.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/operations/repositories.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/operations/validation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/reporting/csv.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/reporting/date-rules.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/reporting/domain-error.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/reporting/export-service.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/reporting/forms.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/reporting/presentation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/reporting/validation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/scheduling/actions.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/scheduling/calendar-dates.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/scheduling/domain-error.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/scheduling/month-navigation.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/scheduling/repositories.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/scheduling/timetable-service.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/modules/scheduling/validation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/server/env.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/server/http.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/server/providers/evidence-storage.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/server/providers/unconfigured-providers.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/server/providers/vercel-blob-provider.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/server/repositories/foundation-repository.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/server/transactions/foundation-transaction.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/shared/components/app-motion.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/shared/components/brand.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/shared/components/page-journey.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/shared/components/shell.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/shared/components/states.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/shared/components/task-dialog.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/shared/components/theme-provider.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/shared/components/workflow-feedback.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/shared/components/workspace-guide.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/shared/errors/app-error.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/shared/format-date.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/shared/types/foundation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'src/shared/validation/foundation.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/account-administration.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/credential-login.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/database-boundary.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/employee-detail.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/employee-directory.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/mobile-navigation-dialog.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/phase10-collaboration-forms.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/phase11-reporting-forms.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/phase3-operational-forms.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/phase4-schedule-month-navigation.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/phase4-scheduling-forms.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/phase5-leave-forms.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/phase5-leave-year-balances.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/phase6-capability-forms.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/phase7-coverage-forms.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/phase8-planning-map.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/phase9-evidence-forms.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/profile-page.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/states.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/task-dialog.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/timetable.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/component/workflow-feedback.test.tsx', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/e2e/account-administration.spec.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/e2e/credential-login.spec.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/e2e/employee-directory.spec.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/e2e/foundation.spec.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/e2e/phase11-reporting.spec.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/e2e/phase3-operations.spec.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/e2e/phase5-leave.spec.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/e2e/phase6-capabilities.spec.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/e2e/phase8-planning-map.spec.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/e2e/phase9-evidence.spec.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/e2e/sign-in.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/integration/account-administration.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/integration/credential-authentication.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/integration/foundation-postgres.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/integration/phase10-management-note-authorization.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/integration/phase2-core-service.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/integration/phase4-scheduling-service.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/integration/phase6-capabilities-service.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/integration/phase8-planning-map-service.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/integration/phase9-evidence-service.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/migration/phase2-database-foundation.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/server-only.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/setup.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/account-administration.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/audit-validation.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/authorization.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/calendar-dates.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/credential-authentication.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/employee-create-validation.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/employee-directory-query.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/employee-policy.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/environment-guard.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/evidence-validation.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/mock-auth-boundaries.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/password-change-session-gate.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/phase3-operational-validation.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/phase4-scheduling-validation.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/phase5-leave-validation.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/phase6-capabilities-validation.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/phase8-map-projection.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/phase8-map-validation.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/unit/schema-fingerprint.test.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'tsconfig.json', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'vitest.config.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/cover-workspace-test-fixtures.mjs', CRLF will be replaced by LF the next time Git touches it
+----- Diff whitespace check: PASS -----
+
+System-lock summary (fail-closed):
+  PASS  Scenario manifest validation
+  PASS  Typecheck
+  PASS  Lint
+  PASS  Unit tests
+  PASS  Component tests
+  PASS  Aggregate integration tests
+  PASS  Migration tests
+  PASS  Route certification
+  PASS  Isolation tests
+  PASS  Seed smoke
+  PASS  Fresh-system smoke
+  PASS  Aggregate E2E
+  PASS  Safe build
+  PASS  Diff whitespace check
+  Overall: 14/14 steps passed; 0 interruption(s).
+  SYSTEM LOCK: GREEN

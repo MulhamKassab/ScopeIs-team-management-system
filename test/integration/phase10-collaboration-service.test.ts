@@ -127,7 +127,7 @@ describe("Phase 10 replacement-request discussions", () => {
     const thread = await discussionService.openThread(ava, phase10Ids.discussionRequest);
     expect(thread.threadId).toBeNull();
     expect(thread.requestedAt).toBeTruthy();
-    expect(thread.workContext).toMatchObject({ employeeName: "Cora Bell", date: "2027-10-12" });
+    expect(thread.workContext).toBeNull(); // Participation does not disclose unpublished work to Admin.
     const employeeThread = await discussionService.openThread(cora, phase10Ids.discussionRequest);
     expect(employeeThread.workContext).toBeNull();
     expect((await discussionService.openThread({ ...cora, role: "SUPER_ADMIN" }, phase10Ids.discussionRequest)).workContext).toBeNull();

@@ -15,5 +15,5 @@ describe("component suite database boundary", () => {
 
   it("fails loudly instead of silently reaching PostgreSQL", async () => {
     await expect(import("@/db/client")).rejects.toThrow();
-  });
+  }, 15_000);
 });

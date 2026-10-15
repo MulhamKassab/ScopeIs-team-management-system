@@ -18,15 +18,15 @@ const seedEntry = join(repositoryRoot, "src", "db", "seed", "index.ts");
 
 const moduleKeys = ["dashboard", "employees", "accounts", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "audit", "settings", "profile", "requests", "tickets"];
 const superAdminModules = [...moduleKeys];
-const adminModules = ["dashboard", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "profile", "tickets"];
+const adminModules = ["dashboard", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "coverage", "replacements", "notifications", "profile", "requests", "tickets"];
 const employeeModules = ["dashboard", "skills", "schedule", "leave", "profile", "notifications", "requests", "tickets"];
 
 const personas = [
   { id: "mock-super-admin-nora", name: "Nora Albright", role: "SUPER_ADMIN", allowed: superAdminModules, refusal: [], alpha: 200, bravo: 200 },
   { id: "mock-admin-ava", name: "Ava Mercer", role: "ADMIN", allowed: adminModules, refusal: [], alpha: 200, bravo: 403 },
   { id: "mock-admin-ben", name: "Ben Iqbal", role: "ADMIN", allowed: adminModules, refusal: [], alpha: 403, bravo: 200 },
-  { id: "mock-employee-cora", name: "Cora Bell", role: "EMPLOYEE", allowed: employeeModules, refusal: ["coverage", "replacements"], alpha: 403, bravo: 403 },
-  { id: "mock-employee-dan", name: "Dan Rowan", role: "EMPLOYEE", allowed: employeeModules, refusal: ["coverage", "replacements"], alpha: 403, bravo: 403 },
+  { id: "mock-employee-cora", name: "Cora Bell", role: "EMPLOYEE", allowed: employeeModules, refusal: ["coverage"], alpha: 403, bravo: 403 },
+  { id: "mock-employee-dan", name: "Dan Rowan", role: "EMPLOYEE", allowed: employeeModules, refusal: ["coverage"], alpha: 403, bravo: 403 },
 ];
 
 async function request(base, path, options = {}) {
@@ -125,8 +125,9 @@ try { await withDisposableTestDatabase("system_smoke", async ({ databaseUrl, env
           const allowed = persona.allowed.includes(moduleKey);
           const refusal = persona.refusal.includes(moduleKey);
           const page = await request(base, `/${moduleKey}`, { headers: { Cookie: session.cookie } });
-          const expected = allowed || refusal ? 200 : 404;
+          const expected = moduleKey === "replacements" ? 307 : allowed || refusal ? 200 : 404;
           if (page.status !== expected) throw new Error(`${persona.id} /${moduleKey} returned ${page.status}, expected ${expected}.`);
+          if (moduleKey === "replacements" && page.headers.get("location") !== "/coverage#current-requests") throw new Error("Legacy cover requests did not redirect to the current Cover queue.");
           if (refusal && !(await page.text()).includes("management-only")) throw new Error(`${persona.id} /${moduleKey} refusal did not state management-only.`);
         }
 
@@ -154,8 +155,10 @@ try { await withDisposableTestDatabase("system_smoke", async ({ databaseUrl, env
 } finally { await rm(temporaryApplication, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }); }
 
 // Step 12: run the sanctioned isolated build.
-const build = await runChild(process.execPath, [join(repositoryRoot, "scripts", "run-phase2-safe-build.mjs")], { cwd: repositoryRoot, timeoutMs: 180_000 });
-if (build.exitCode !== 0 || build.timedOut) throw new Error("System smoke safe build failed.");
+// Match the standalone system-lock safe-build budget: the isolated checkout
+// performs both a clean typecheck and a production build before cleanup.
+const build = await runChild(process.execPath, [join(repositoryRoot, "scripts", "run-phase2-safe-build.mjs")], { cwd: repositoryRoot, timeoutMs: 300_000 });
+if (build.exitCode !== 0 || build.timedOut) throw new Error(build.timedOut ? "System smoke safe build exceeded its 300-second deadline." : `System smoke safe build failed (exit ${build.exitCode}).`);
 process.stdout.write("System smoke safe build completed.\n");
 
 exitCode = 0;

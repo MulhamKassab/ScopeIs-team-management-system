@@ -1,5 +1,9 @@
 # Phase 3 Operational Domain Decisions
 
+## Confirmed Cover and access amendment — 2026-10-15
+
+The owner authorized the [consolidated Cover workspace and access amendment](COVER_WORKSPACE_AND_ACCESS_AMENDMENT_2026_10_15.md). It supersedes older statements permitting Admin unpublished timetable/team-leave/report reads or project creation. Super Admin alone holds those capabilities; Employee own vacation self-service remains. Cover unifies timetable selection, creation, versioned editing/cancellation and direct decisions, with separate publication. The main timetable exposes assignment creation and the map gains place labels and selected-work controls. Existing scope, privacy, conflict, accessibility and RTL rules remain.
+
 ## Status and scope
 
 `SCOPEIS_PHASE_3_CLIENT_PROJECT_LOCATION_JOURNEY_R1` is the authorized Phase 3 implementation. It delivers the bounded operational journey: Super Admin creates a Client; an authorized manager creates a Project; the manager deliberately creates or reuses a same-client Location; the resulting structure is queryable by later scheduling work. Phase 4 scheduling and every later journey remain excluded.

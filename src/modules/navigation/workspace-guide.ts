@@ -33,7 +33,7 @@ const descriptions: Record<ModuleKey, { description: string; keywords: string }>
   projects: { description: "Organize client work, linked locations and staffing requirements.", keywords: "jobs operations requirements skills staffing contacts notes" },
   locations: { description: "Manage worksites, project links and staffing requirements.", keywords: "sites addresses coordinates contacts notes staffing geography" },
   leave: { description: "Request leave, follow its status and check annual balances.", keywords: "holiday vacation absence unavailable approve reject annual balance days" },
-  coverage: { description: "Review staffing and skill gaps for an assignment, then request support.", keywords: "coverage cover shortage requirements qualification candidates replacement support" },
+  coverage: { description: "Request cover from a timetable cell. Create, edit, cancel and review requests on one page.", keywords: "coverage cover shortage requirements qualification candidates replacement support" },
   replacements: { description: "Review requests to replace someone or add extra support.", keywords: "replacements cover requests support staffing swap coverage candidate ranking approve reject draft" },
   requests: { description: "Open the requests you participate in and continue the discussion.", keywords: "requests assignments discussion messages comments participants conversation" },
   notifications: { description: "Read your latest updates and manage read, unread and archived messages.", keywords: "alerts inbox notifications archive status" },
@@ -54,7 +54,7 @@ export function featureDescription(key: ModuleKey, role: SystemRole) {
   if (role === "SUPER_ADMIN" && key === "leave") return "Review leave requests, record decisions and check annual balances.";
   if (role === "ADMIN" && key === "leave") return "View approved leave within your team. Private reasons and balances are not shown.";
   if (role === "ADMIN" && key === "replacements") return "Follow Super Admin decisions on the cover requests you created.";
-  if (role === "ADMIN" && key === "schedule") return "View schedules within your access. Super Admin prepares and publishes them.";
+  if (role === "ADMIN" && key === "schedule") return "View the published timetable within your access and request cover.";
   return descriptions[key].description;
 }
 

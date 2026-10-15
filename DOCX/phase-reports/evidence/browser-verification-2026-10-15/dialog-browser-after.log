@@ -1,0 +1,14 @@
+{"event":"browser_build_directory_allocated","ownerPid":10796,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-IpxGxG"}
+
+Running 6 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase6-capabilities.spec.ts:6:1 › dialog triggers wait for JavaScript readiness before accepting a skill-recording click (3.1s)
+  ok 2 [desktop] › test\e2e\phase6-capabilities.spec.ts:28:1 › Super Admin records a skill and the Employee sees only their own recorded fact (8.3s)
+  ok 3 [desktop] › test\e2e\phase6-capabilities.spec.ts:60:1 › Super Admin manages missing controls while Admin and Employee remain excluded (16.7s)
+  ok 4 [mobile] › test\e2e\phase6-capabilities.spec.ts:6:1 › dialog triggers wait for JavaScript readiness before accepting a skill-recording click (1.9s)
+  ok 5 [mobile] › test\e2e\phase6-capabilities.spec.ts:28:1 › Super Admin records a skill and the Employee sees only their own recorded fact (9.9s)
+  ok 6 [mobile] › test\e2e\phase6-capabilities.spec.ts:60:1 › Super Admin manages missing controls while Admin and Employee remain excluded (18.8s)
+
+  6 passed (4.3m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":10796,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-IpxGxG"}
+Phase 6 browser disposable database cleanup complete.

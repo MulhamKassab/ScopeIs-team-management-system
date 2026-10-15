@@ -1,0 +1,7 @@
+{
+  "recordedAt": "2026-10-15T11:08:39.986Z",
+  "reason": "Operator stopped the frozen candidate before browser stages after two 5000ms component test deadlines. 175/177 passed; no functional assertion failure. Source and timing repairs require a fresh complete lock.",
+  "rootPid": 34584,
+  "databaseDropped": "scopeis_p2_migrated_test_26504_10",
+  "noBuildServerHadStarted": true
+}

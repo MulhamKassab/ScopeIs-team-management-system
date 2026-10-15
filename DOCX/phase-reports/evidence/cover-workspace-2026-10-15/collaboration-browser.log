@@ -1,0 +1,38 @@
+{"event":"browser_build_directory_allocated","ownerPid":35216,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-adnZFh"}
+
+Running 2 tests using 1 worker
+
+  x  1 [desktop] › test\e2e\phase10-collaboration.spec.ts:10:1 › Admin governs shared notes and management notes, participants discuss a request, and notifications and audit stay scoped (14.1s)
+  ok 2 [mobile] › test\e2e\phase10-collaboration.spec.ts:10:1 › Admin governs shared notes and management notes, participants discuss a request, and notifications and audit stay scoped (27.7s)
+
+
+  1) [desktop] › test\e2e\phase10-collaboration.spec.ts:10:1 › Admin governs shared notes and management notes, participants discuss a request, and notifications and audit stay scoped 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('region', { name: 'Management notes' }).getByText('Management note saved.')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('region', { name: 'Management notes' }).getByText('Management note saved.') with timeout 5000ms
+      - waiting for getByRole('region', { name: 'Management notes' }).getByText('Management note saved.')
+
+
+      50 |   await createManagementNote.getByLabel("Note").fill(managementNote);
+      51 |   await createManagementNote.getByRole("button", { name: "Save note" }).click();
+    > 52 |   await expect(notePanel.getByText("Management note saved.")).toBeVisible();
+         |                                                               ^
+      53 |   await expect(notePanel.getByText(managementNote)).toBeVisible();
+      54 |   await expectNoHorizontalOverflow(page);
+      55 |
+        at C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\phase10-collaboration.spec.ts:52:63
+
+    Error Context: test-results\phase10-collaboration-Admi-67b62-tions-and-audit-stay-scoped-desktop\error-context.md
+
+  1 failed
+    [desktop] › test\e2e\phase10-collaboration.spec.ts:10:1 › Admin governs shared notes and management notes, participants discuss a request, and notifications and audit stay scoped 
+  1 passed (4.2m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":35216,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-adnZFh"}
+Phase 10 browser disposable database cleanup complete.

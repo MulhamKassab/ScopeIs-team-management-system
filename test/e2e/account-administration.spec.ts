@@ -17,6 +17,18 @@ async function openAccounts(page: import("@playwright/test").Page) {
   await expect(page.getByRole("heading", { name: "Accounts", exact: true })).toBeVisible();
 }
 
+async function signInTemporaryAccount(page: import("@playwright/test").Page, identifier: string, password: string) {
+  await page.goto("/login");
+  await page.getByLabel("Username or email").fill(identifier);
+  await page.getByLabel("Password", { exact: true }).fill(password);
+  const [response] = await Promise.all([
+    page.waitForResponse((response) => response.request().method() === "POST" && new URL(response.url()).pathname === "/api/auth/login"),
+    page.getByRole("button", { name: "Sign in" }).click(),
+  ]);
+  expect(response.status()).toBe(200);
+  await expect(page).toHaveURL(/\/account\/change-password$/, { timeout: 30_000 });
+}
+
 async function completeWorkforceProfile(page: import("@playwright/test").Page, displayName: string) {
   const path = new URL(page.url()).pathname;
   const [response] = await Promise.all([
@@ -55,11 +67,7 @@ test("Super Admin creates and resets an account; other roles cannot reach /accou
 
   // The created user signs in with the temporary password and is forced to change it.
   await signOut(page);
-  await page.goto("/login");
-  await page.getByLabel("Username or email").fill(username);
-  await page.getByLabel("Password", { exact: true }).fill(TEMP);
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await expect(page).toHaveURL(/\/account\/change-password$/);
+  await signInTemporaryAccount(page, username, TEMP);
   await expect(page.getByRole("button", { name: "Log out" })).toBeVisible();
   // The required-change gate covers direct business endpoints, not just the page layout.
   expect((await page.request.get("/api/reports/employee-directory/export")).status()).toBe(401);
@@ -97,11 +105,7 @@ test("Super Admin creates and resets an account; other roles cannot reach /accou
   }
 
   // The reset temporary password works by login email, and no page shows a hash.
-  await page.goto("/login");
-  await page.getByLabel("Username or email").fill(email);
-  await page.getByLabel("Password", { exact: true }).fill(RESET);
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await expect(page).toHaveURL(/\/account\/change-password$/);
+  await signInTemporaryAccount(page, email, RESET);
   expect((await page.locator("body").innerText())).not.toMatch(/scrypt\$|password_hash/i);
   await expectNoHorizontalOverflow(page);
   await page.getByRole("button", { name: "Log out" }).click();

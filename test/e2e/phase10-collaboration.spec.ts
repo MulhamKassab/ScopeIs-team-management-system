@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { signIn, signOut } from "./sign-in";
+import { phase10Ids } from "../../scripts/phase10-test-fixtures.mjs";
 
 test.skip(process.env.SCOPEIS_PHASE10_E2E !== "true", "Run with the guarded Phase 10 fixture runner.");
 
@@ -53,10 +54,17 @@ test("Admin governs shared notes and management notes, participants discuss a re
   await expect(notePanel.getByText(managementNote)).toBeVisible();
   await expectNoHorizontalOverflow(page);
 
+  const coverResponse = await page.request.get("/coverage");
+  expect(coverResponse.status()).toBe(200);
+  const coverHtml = await coverResponse.text();
+  expect(coverHtml).toContain(phase10Ids.discussionRequest);
+  expect(coverHtml).not.toContain(phase10Ids.discussionPeriod);
+  expect(coverHtml).not.toContain(phase10Ids.discussionAnchor);
+
   // 4. The participant Admin posts to the replacement-request discussion.
-  await page.goto("/replacements");
+  await page.goto("/requests");
   await page.locator(".request-conversation > summary").filter({ hasText: "Extra support" }).click();
-  const discussion = page.getByRole("region", { name: /Discussion · Extra support/ });
+  const discussion = page.getByRole("region", { name: /Request · Extra support/ });
   await expect(discussion).toBeVisible();
   const composer = discussion.getByRole("form", { name: /Post a message in/ });
   await composer.getByLabel("Message").fill(discussionMessage);
@@ -90,7 +98,7 @@ test("Admin governs shared notes and management notes, participants discuss a re
 
   // 7. The Employee cannot reach management-only surfaces.
   await page.goto("/replacements");
-  await expect(page.getByText("Replacement requests are management-only")).toBeVisible();
+  await expect(page.getByText("Cover is management-only")).toBeVisible();
   expect((await page.goto("/audit"))?.status()).toBe(404);
 
   // 8. The Employee's notification centre offers read, unread, archive, and restore as separate actions.

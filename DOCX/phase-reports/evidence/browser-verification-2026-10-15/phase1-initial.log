@@ -1,0 +1,21 @@
+{"event":"browser_build_directory_allocated","ownerPid":2648,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-EWKlEz"}
+
+Running 14 tests using 1 worker
+
+  ok  1 [desktop] › test\e2e\foundation.spec.ts:20:1 › unauthenticated users do not receive protected shell navigation (2.9s)
+  ok  2 [desktop] › test\e2e\foundation.spec.ts:26:1 › Super Admin receives global shell navigation (3.4s)
+  ok  3 [desktop] › test\e2e\foundation.spec.ts:38:1 › Admin scope is enforced by the direct server seam (3.9s)
+  ok  4 [desktop] › test\e2e\foundation.spec.ts:55:1 › Admin Bravo receives only Bravo scope (1.5s)
+  ok  5 [desktop] › test\e2e\foundation.spec.ts:65:1 › Employee navigation excludes management-only modules (2.0s)
+  ok  6 [desktop] › test\e2e\foundation.spec.ts:81:1 › Employee Bravo remains outside management pages and scopes (1.5s)
+  ok  7 [desktop] › test\e2e\foundation.spec.ts:92:1 › theme preference and RTL shell state persist safely (2.7s)
+  ok  8 [mobile] › test\e2e\foundation.spec.ts:20:1 › unauthenticated users do not receive protected shell navigation (644ms)
+  ok  9 [mobile] › test\e2e\foundation.spec.ts:26:1 › Super Admin receives global shell navigation (3.3s)
+  ok 10 [mobile] › test\e2e\foundation.spec.ts:38:1 › Admin scope is enforced by the direct server seam (3.0s)
+  ok 11 [mobile] › test\e2e\foundation.spec.ts:55:1 › Admin Bravo receives only Bravo scope (2.5s)
+  ok 12 [mobile] › test\e2e\foundation.spec.ts:65:1 › Employee navigation excludes management-only modules (4.1s)
+  ok 13 [mobile] › test\e2e\foundation.spec.ts:81:1 › Employee Bravo remains outside management pages and scopes (5.2s)
+  ok 14 [mobile] › test\e2e\foundation.spec.ts:92:1 › theme preference and RTL shell state persist safely (5.6s)
+
+  14 passed (4.1m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":2648,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-EWKlEz"}

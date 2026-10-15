@@ -1,0 +1,29 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase7-coverage-service.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 8616[2mms[22m[39m
+   [32m✓[39m Coverage and support conflict integrity [2m(12)[22m
+     [33m[2m✓[22m[39m serializes duplicate support requests before either can create another review item[33m 555[2mms[22m[39m
+     [33m[2m✓[22m[39m rechecks independent gaps under the schedule lock so simultaneous approvals cannot overfill one shortage[33m 539[2mms[22m[39m
+     [33m[2m✓[22m[39m never offers the anchor person as their own replacement or additional support[33m 382[2mms[22m[39m
+     [33m[2m✓[22m[39m preserves support when a replacement updates the same Published plan and reuses its one Draft[33m 682[2mms[22m[39m
+     [33m[2m✓[22m[39m refuses stale support after the original person has already been replaced, while allowing rejection[33m 406[2mms[22m[39m
+     [33m[2m✓[22m[39m shares employee-time locks with manual scheduling across different clients[33m 558[2mms[22m[39m
+     [33m[2m✓[22m[39m allows adjacent work after support ends without treating it as an overlap[33m 334[2mms[22m[39m
+     [33m[2m✓[22m[39m rolls back the entire approval, Draft revision and assignments when notification persistence fails[33m 317[2mms[22m[39m
+     [33m[2m✓[22m[39m handles approval racing publication of an existing revision without deadlock or a second Draft[33m 321[2mms[22m[39m
+     [33m[2m✓[22m[39m uses the same lock order as publication when adjacent work belongs to another client[33m 400[2mms[22m[39m
+   [32m✓[39m Phase 7 coverage and replacement journey [2m(4)[22m
+     [33m[2m✓[22m[39m keeps independent coverage rules non-blocking and applies an approved add request only to Draft[33m 344[2mms[22m[39m
+     [33m[2m✓[22m[39m returns Proposed to Draft and creates an immutable Draft revision from Published[33m 890[2mms[22m[39m
+   [32m✓[39m Consolidated Cover lifecycle and role amendment [2m(3)[22m
+     [33m[2m✓[22m[39m allows a Published replacement without a gap, edits and cancels it, retains history, then approves only a Draft[33m 752[2mms[22m[39m
+   [33m[2m✓[22m[39m reads publication from the approved effect period after publishing and superseding it[33m 527[2mms[22m[39m
+ [32m✓[39m test/unit/phase7-coverage-validation.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m24 passed[39m[22m[90m (24)[39m
+[2m   Start at [22m 19:21:41
+[2m   Duration [22m 12.10s[2m (tests 75%, import 11%, transform 8%, setup 5%)[22m
+
+Phase 7 coverage disposable database cleanup complete.

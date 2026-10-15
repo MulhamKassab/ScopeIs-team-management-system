@@ -19,7 +19,7 @@ export const modules: Record<ModuleKey, ModuleDefinition> = {
   schedule: { key: "schedule", href: "/schedule", label: "Timetable", purpose: "Monthly Draft, Proposed, Published scheduling and My Schedule.", phase: 4, capability: "module:schedule:view", mobilePrimary: true },
   map: { key: "map", href: "/map", label: "Work map", purpose: "Published, selected-date static planning facts; never live tracking.", phase: 8, capability: "module:map:view" },
   leave: { key: "leave", href: "/leave", label: "Leave", purpose: "Annual leave requests, decisions, balances, and approved unavailability.", phase: 5, capability: "module:leave:view", mobilePrimary: true },
-  coverage: { key: "coverage", href: "/coverage", label: "Find cover", purpose: "Explainable independent staffing and qualification gaps.", phase: 7, capability: "module:coverage:view" },
+  coverage: { key: "coverage", href: "/coverage", label: "Cover", purpose: "Request, edit, cancel and review cover from the published timetable.", phase: 7, capability: "module:coverage:view" },
   replacements: { key: "replacements", href: "/replacements", label: "Cover requests", purpose: "Super Admin-reviewed replacement requests with Draft-only effects.", phase: 7, capability: "module:replacements:view", mobilePrimary: true },
   notifications: { key: "notifications", href: "/notifications", label: "Notifications", purpose: "Your in-application notification centre. Read, unread, and archive states stay independent.", phase: 10, capability: "module:notifications:view" },
   reports: { key: "reports", href: "/reports", label: "Reports", purpose: "Authorized operational reports with bounded CSV exports.", phase: 11, capability: "module:reports:view" },
@@ -36,7 +36,7 @@ export function workspaceHomeFor(role: SystemRole) { return role === "EMPLOYEE" 
 
 export function navigationFor(actor: AuthenticatedActor) {
   const authorized = Object.values(modules).filter((module) => can(actor, module.capability));
-  if (actor.role !== "EMPLOYEE") return authorized;
+  if (actor.role !== "EMPLOYEE") return authorized.filter((module) => module.key !== "replacements").map((module) => ({ ...module, label: module.key === "requests" ? "Conversations" : module.label, mobilePrimary: ["dashboard", "schedule", "coverage", "map"].includes(module.key) }));
   const keys: ModuleKey[] = ["tickets", "schedule", "leave", "profile", "dashboard", "notifications", "requests"];
   return keys.flatMap((key) => authorized.filter((module) => module.key === key)).map((module) => ({
     ...module,

@@ -1,0 +1,277 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\m.kassab\\.codex\\worktrees\\combined-browser-release\\Team management system\\node_modules\\playwright\\cli.js",
+      "test",
+      "--config",
+      "playwright.responsive.config.ts",
+      "--grep",
+      "monthly timetable and people catalogues|clear user journeys|role navigation, RTL|planning workspace fits",
+      "--output",
+      "test-results/mobile-labels-after"
+    ],
+    "configFile": "C:\\Users\\m.kassab\\.codex\\worktrees\\combined-browser-release\\Team management system\\playwright.responsive.config.ts",
+    "rootDir": "C:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system/test/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system/test-results/mobile-labels-after",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system/test/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "responsive.spec.ts"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\m.kassab\\.codex\\worktrees\\combined-browser-release\\Team management system\\test-results\\mobile-labels-after",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\m.kassab\\.codex\\worktrees\\combined-browser-release\\Team management system\\test\\e2e",
+        "snapshotDir": "C:\\Users\\m.kassab\\.codex\\worktrees\\combined-browser-release\\Team management system\\test\\e2e",
+        "testIgnore": [],
+        "testMatch": "responsive.spec.ts",
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:55119",
+          "browserName": "chromium",
+          "channel": "chrome",
+          "launchOptions": {
+            "executablePath": "C:\\Users\\m.kassab\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe"
+          },
+          "hasTouch": true,
+          "actionTimeout": 10000,
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/responsive-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "responsive.spec.ts",
+      "file": "responsive.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "role navigation, RTL, dark theme and enlarged text reflow",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 115201,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:18:30.959Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-a6dc555db7bd4d348b8e",
+          "file": "responsive.spec.ts",
+          "line": 263,
+          "column": 1
+        },
+        {
+          "title": "the planning workspace fits its pins and exposes filters, search and next actions on every screen",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 43911,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:20:27.480Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-1111d9e29f454dfaac6d",
+          "file": "responsive.spec.ts",
+          "line": 509,
+          "column": 1
+        },
+        {
+          "title": "monthly timetable and people catalogues stay usable across phone, desktop, RTL and reduced motion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 67949,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:21:11.422Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-a345e7f51936261ebaa1",
+          "file": "responsive.spec.ts",
+          "line": 605,
+          "column": 1
+        },
+        {
+          "title": "clear user journeys keep every authorized tab understandable and make the main tasks work on phone and desktop",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 85490,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:22:19.433Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-8ded97b0b050d337d80f",
+          "file": "responsive.spec.ts",
+          "line": 670,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-15T18:18:29.412Z",
+    "duration": 322687.308,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

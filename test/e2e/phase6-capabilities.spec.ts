@@ -3,6 +3,28 @@ import { signIn, signOut } from "./sign-in";
 
 test.skip(process.env.SCOPEIS_PHASE6_E2E !== "true", "Run with the guarded Phase 6 fixture runner.");
 
+test("dialog triggers wait for JavaScript readiness before accepting a skill-recording click", async ({ page, context }) => {
+  await signIn(page, "Nora Albright");
+  const coldPage = await context.newPage();
+  let releaseScripts!: () => void;
+  const scriptsReady = new Promise<void>((resolve) => { releaseScripts = resolve; });
+  await coldPage.route("**/_next/static/**/*.js", async (route) => { await scriptsReady; await route.continue(); });
+  try {
+    await coldPage.goto("/skills?employee=mock-employee-cora", { waitUntil: "commit" });
+    const trigger = coldPage.getByRole("button", { name: "Record a skill for Cora Bell", exact: true });
+    await expect(trigger).toBeVisible();
+    await expect(trigger).toBeDisabled();
+    releaseScripts();
+    await expect(trigger).toBeEnabled({ timeout: 30_000 });
+    await trigger.click();
+    await expect(coldPage.getByRole("dialog", { name: "Record a skill · Cora Bell", exact: true })).toBeVisible();
+  } finally {
+    releaseScripts();
+    await coldPage.unrouteAll({ behavior: "wait" });
+    await coldPage.close();
+  }
+});
+
 test("Super Admin records a skill and the Employee sees only their own recorded fact", async ({ page }) => {
   const skillName = `Browser capability ${test.info().project.name}`;
   await signIn(page, "Nora Albright");

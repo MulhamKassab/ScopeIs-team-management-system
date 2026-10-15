@@ -1,0 +1,11 @@
+{"event":"browser_build_directory_allocated","ownerPid":876,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-lvXgF2"}
+
+Running 4 tests using 4 workers
+
+  ok 4 [mobile] › test\e2e\foundation.spec.ts:96:1 › theme preference and RTL shell state persist safely (10.3s)
+  ok 3 [desktop] › test\e2e\foundation.spec.ts:96:1 › theme preference and RTL shell state persist safely (11.5s)
+  ok 2 [mobile] › test\e2e\foundation.spec.ts:96:1 › theme preference and RTL shell state persist safely (12.0s)
+  ok 1 [desktop] › test\e2e\foundation.spec.ts:96:1 › theme preference and RTL shell state persist safely (29.1s)
+
+  4 passed (3.6m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":876,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-lvXgF2"}

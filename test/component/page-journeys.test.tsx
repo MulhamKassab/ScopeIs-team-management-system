@@ -11,12 +11,12 @@ import type { AuthenticatedActor } from "@/shared/types/foundation";
 vi.mock("next/navigation", () => ({ usePathname: () => "/schedule" }));
 
 describe("task guidance", () => {
-  it("describes Admin schedule reads and approved team leave without promising self-service or draft writes", () => {
+  it("describes Admin schedule reads and restricted team leave without promising self-service or draft writes", () => {
     for (const key of ["schedule", "clients", "projects", "locations", "skills"] as const) {
       const guide = pageJourney(key, "ADMIN");
       expect(JSON.stringify(guide)).not.toMatch(/Propose the Draft|Choose Plan work|to assign people|to plan who/);
     }
-    expect(pageJourney("leave", "ADMIN").goal).toContain("approved leave");
+    expect(pageJourney("leave", "ADMIN").goal).toContain("Super Admin only");
     expect(JSON.stringify(pageJourney("leave", "ADMIN"))).not.toMatch(/submit a leave request|Check your balance/);
     for (const role of ["SUPER_ADMIN", "ADMIN", "EMPLOYEE"] as const) expect(JSON.stringify(pageJourney("tickets", role))).not.toMatch(/\bboard\b/);
   });

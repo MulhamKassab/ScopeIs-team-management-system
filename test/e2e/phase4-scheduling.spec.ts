@@ -6,7 +6,14 @@ async function selectContaining(select: import("@playwright/test").Locator, text
 async function assertAdminReadOnly(page: Page, periodUrl: string, status: "DRAFT" | "PROPOSED" | "PUBLISHED", testInfo: TestInfo) {
   await signOut(page);
   await signIn(page, "Ava Mercer");
-  await page.goto(periodUrl);
+  const response = await page.goto(periodUrl);
+  if (status !== "PUBLISHED") {
+    expect(response?.status()).toBe(404);
+    await expect(page.getByRole("main")).toHaveCount(1);
+    await expect(page.getByRole("link", { name: "Return to a safe page" })).toBeVisible();
+    await expect(page.getByText("Use the reception desk.", { exact: true })).toHaveCount(0);
+  } else {
+  expect(response?.status()).toBe(200);
   await expect(page.getByRole("heading", { name: "Schedule details", exact: true })).toBeVisible();
   await expect(page.getByText("Read only", { exact: true })).toBeVisible();
   await expect(page.getByText(/editor below to plan work/)).toHaveCount(0);
@@ -20,22 +27,19 @@ async function assertAdminReadOnly(page: Page, periodUrl: string, status: "DRAFT
   await expect(assignment.getByRole("form", { name: "Add assignment skill requirement", exact: true })).toHaveCount(0);
   await expect(assignment.getByLabel("Required skill", { exact: true })).toHaveCount(0);
   await expect(assignment.getByRole("button", { name: "Archive", exact: true })).toHaveCount(0);
-  for (const name of ["New monthly schedule", "Add assignment", "Edit assignment", "Remove", "Propose for review", "Return to Draft", "Publish schedule", "Create Draft revision"]) {
+  }
+  for (const name of ["Create assignment", "New monthly schedule", "Add assignment", "Edit assignment", "Remove", "Propose for review", "Return to Draft", "Publish schedule", "Create Draft revision"]) {
     await expect(page.getByRole("button", { name, exact: true })).toHaveCount(0);
   }
   await expect(page.getByRole("form", { name: /Create a monthly Draft|Add schedule assignment|Edit schedule assignment|Propose this Draft|Publish Proposed schedule|Create an editable revision/ })).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
   await page.screenshot({ path: `test-results/admin-schedule-access-amendment/${testInfo.project.name}-admin-${status.toLowerCase()}.png`, fullPage: true });
-  if (status === "DRAFT" && testInfo.project.name === "desktop") {
-    await page.locator("#schedule-editor").scrollIntoViewIfNeeded();
-    await page.screenshot({ path: "test-results/admin-schedule-access-amendment/desktop-admin-draft-details.png" });
-  }
   await signOut(page);
   await signIn(page, "Nora Albright");
   await page.goto(periodUrl);
 }
 
-test("Super Admin publishes, Admin reads every schedule state, and Employee sees only Published work", async ({ page }, testInfo) => {
+test("Super Admin publishes, Admin reads only current Published schedules, and Employee sees own Published work", async ({ page }, testInfo) => {
   test.setTimeout(120_000);
   const month = page.viewportSize()?.width === 390 ? "2026-06" : "2026-05";
   const assignmentDate = `${month}-06`;
@@ -74,10 +78,10 @@ test("Super Admin publishes, Admin reads every schedule state, and Employee sees
   await page.getByRole("button", { name: "Go", exact: true }).click();
   await page.getByRole("link", { name: /^PUBLISHED Alpha Facilities/ }).click();
   await page.getByRole("link", { name: "Review coverage", exact: true }).first().click();
-  await expect(page.getByRole("heading", { name: "Find cover", exact: true })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Cora Bell", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Cover", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /^Cora Bell ·/ })).toBeVisible();
   await expect(page.getByLabel("Assignment ID")).toHaveCount(0);
-  await page.getByRole("link", { name: "Open this schedule", exact: true }).click();
+  await page.goto(periodUrl);
   await page.getByRole("button", { name: "Create Draft revision", exact: true }).click();
   await page.getByRole("link", { name: /DRAFT Alpha Facilities Revision 2/ }).click();
   await expect(page.getByRole("button", { name: "Edit assignment", exact: true })).toBeVisible();

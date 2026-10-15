@@ -65,7 +65,7 @@ export class DiscussionService {
       } catch (error) { if (!(error instanceof CoverageDomainError)) throw error; }
     }
     return {
-      requestId: request.id, threadId: thread?.id ?? null, intent: request.intent, status: request.status,
+      requestId: request.id, threadId: thread?.id ?? null, intent: request.intent, status: request.status === "REJECTED" && request.decidedByUserId === null ? "CANCELLED" : request.status,
       requestedAt: request.createdAt.toISOString(), workContext,
       participants: { requesterUserId: request.requesterUserId, nominatedEmployeeUserId: request.nominatedEmployeeUserId, selectedEmployeeUserId: request.selectedEmployeeUserId },
       messages: await this.messageViews(rows, actor),
@@ -80,7 +80,7 @@ export class DiscussionService {
     for (const { request, thread } of rows) {
       const latest = thread ? await discussionRepository.latestMessage(db, thread.id) : null;
       threads.push({
-        requestId: request.id, threadId: thread?.id ?? null, intent: request.intent, status: request.status,
+        requestId: request.id, threadId: thread?.id ?? null, intent: request.intent, status: request.status === "REJECTED" && request.decidedByUserId === null ? "CANCELLED" : request.status,
         requestedAt: request.createdAt.toISOString(),
         participants: { requesterUserId: request.requesterUserId, nominatedEmployeeUserId: request.nominatedEmployeeUserId, selectedEmployeeUserId: request.selectedEmployeeUserId },
         messages: [], lastMessageAt: latest ? latest.message.createdAt.toISOString() : null,

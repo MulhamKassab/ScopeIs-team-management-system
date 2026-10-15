@@ -1,5 +1,9 @@
 # Decisions and Constraints
 
+## Confirmed Cover and access amendment — 2026-10-15
+
+The owner authorized the [consolidated Cover workspace and access amendment](COVER_WORKSPACE_AND_ACCESS_AMENDMENT_2026_10_15.md). It supersedes older statements permitting Admin unpublished timetable/team-leave/report reads or project creation. Super Admin alone holds those capabilities; Employee own vacation self-service remains. Cover unifies timetable selection, creation, versioned editing/cancellation and direct decisions, with separate publication. The main timetable exposes assignment creation and the map gains place labels and selected-work controls. Existing scope, privacy, conflict, accessibility and RTL rules remain.
+
 Technical implementation direction is recorded separately in [`SYSTEM_ARCHITECTURE_DECISIONS.md`](SYSTEM_ARCHITECTURE_DECISIONS.md). This file remains authoritative for product decisions, constraints, and unresolved policies.
 
 ## Confirmed decisions

@@ -1,0 +1,12 @@
+
+ RUN  v5.0.3 C:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system
+
+
+ Test Files  6 passed (6)
+      Tests  50 passed (50)
+   Start at  18:32:23
+   Duration  21.43s (environment 34%, tests 32%, transform 13%, import 11%, setup 9%)
+
+    Isolate  6 workers spawned · ~1.37s startup each (spawn + environment, per file)
+             at least ~6.86s faster with isolate: false — reuses workers across files instead of one per file
+

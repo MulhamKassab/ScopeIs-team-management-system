@@ -95,21 +95,11 @@ describe("Phase 11 reporting contracts", () => {
       expect(canViewReport("EMPLOYEE", key)).toBe(false);
       expect(canExportReport("EMPLOYEE", key)).toBe(false);
     }
-    // A scoped Admin reaches the approved set, including the planning view, and not the excluded ones.
-    for (const key of ["published-allocation", "unallocated-employees", "scheduled-hours", "planning-unpublished", "approved-leave", "coverage-replacement", "skills-coverage", "skill-gaps", "certification-status", "schedule-lifecycle"] as const) {
-      expect(canViewReport("ADMIN", key)).toBe(true);
-    }
-    for (const key of ["leave-balance", "evidence-review-queue", "audit-history"] as const) {
-      expect(canViewReport("ADMIN", key)).toBe(false);
-    }
-    // Admin exports stay limited to Published allocation and the certification summary projection.
     for (const key of reportKeys) {
-      const expected = key === "published-allocation" || key === "certification-status";
-      expect(canExportReport("ADMIN", key)).toBe(expected);
+      expect(canViewReport("ADMIN", key)).toBe(false);
+      expect(canExportReport("ADMIN", key)).toBe(false);
+      expect(canViewReport("SUPER_ADMIN", key)).toBe(true);
     }
-    // Planning is view-only for Admin and exportable for Super Admin; audit is never exportable.
-    expect(canViewReport("ADMIN", "planning-unpublished")).toBe(true);
-    expect(canExportReport("ADMIN", "planning-unpublished")).toBe(false);
     expect(canExportReport("SUPER_ADMIN", "planning-unpublished")).toBe(true);
     expect(canExportReport("SUPER_ADMIN", "audit-history")).toBe(false);
   });

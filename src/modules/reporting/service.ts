@@ -288,7 +288,7 @@ export class ReportingService {
         rows: rows.map((row) => ({
           requested_at: new Intl.DateTimeFormat("en-GB", { dateStyle: "short", timeStyle: "short", timeZone: "Asia/Dubai" }).format(row.createdAt),
           intent: row.intent === "REPLACE_ASSIGNMENT" ? "Replace assignment employee" : "Add coverage assignment",
-          status: row.status, effect_status: row.effectStatus, requested_by: row.requesterName,
+          status: row.status === "REJECTED" && row.decidedByUserId === null ? "CANCELLED" : row.status, effect_status: row.effectStatus, requested_by: row.requesterName,
           observed_required: String(row.observedRequiredEmployeeCount), observed_eligible: String(row.observedEligibleEmployeeCount),
         })),
         total,
@@ -456,7 +456,7 @@ export class ReportingService {
   /** The report index, filtered to the reports this role may open. */
   async index(actor: AuthenticatedActor) {
     const current = await resolveCurrentActor(actor);
-    if (!current) throw new ReportDomainError("NOT_FOUND");
+    if (!current || current.role !== "SUPER_ADMIN") throw new ReportDomainError("NOT_FOUND");
     const scope = resolveScope(current);
     const [options, lifecycle] = await Promise.all([reportingRepository.filterOptions(scope), reportingRepository.scheduleLifecycleCount(scope)]);
     return {
@@ -543,8 +543,8 @@ export class ReportingService {
       reportingRepository.currentPublishedPeriodCount(scope, month),
       reportingRepository.publishedAssignmentCount(scope, window),
       reportingRepository.unallocatedEmployeeCount(scope, window),
-      reportingRepository.pendingLeaveCount(scope),
-      reportingRepository.approvedLeave(scope, window, MAX_EXPORT_ROWS, 0),
+      current.role === "SUPER_ADMIN" ? reportingRepository.pendingLeaveCount(scope) : Promise.resolve(0),
+      current.role === "SUPER_ADMIN" ? reportingRepository.approvedLeave(scope, window, MAX_EXPORT_ROWS, 0) : Promise.resolve([]),
       reportingRepository.pendingReplacementCount(scope),
       current.role === "SUPER_ADMIN" ? reportingRepository.evidenceAwaitingReviewCount() : Promise.resolve(null),
       current.role === "SUPER_ADMIN" ? reportingRepository.expiredCertificationCount(scope, today) : Promise.resolve(null),
@@ -573,12 +573,10 @@ export class ReportingService {
         cards: [
           { key: "employees-in-scope", label: "Active employees in my scope", question: "How many people can I see?", value: String(activeEmployees), href: "/employees" },
           { key: "published-periods", label: "Current Published client-months", question: "Which client months are published in my scope?", value: String(publishedPeriods), href: "/schedule" },
-          { key: "published-assignments", label: "Published assignments this month", question: "How much published staffing exists this month?", value: String(publishedAssignments), href: "/reports/published-allocation" },
-          { key: "unallocated", label: "Employees with no Published assignment this month", question: "Who is unallocated in the plan?", value: String(unallocated), href: "/reports/unallocated-employees" },
-          { key: "pending-leave", label: "Pending leave requests", question: "What is waiting on a decision?", value: String(pendingLeave), href: "/leave" },
-          { key: "approved-leave-days", label: "Approved leave days this month", question: "How much leave is approved this month?", value: String(approvedDays), href: "/reports/approved-leave" },
-          { key: "my-replacements", label: "Replacement requests I raised", question: "What did I request?", value: String(myRequests), href: "/replacements" },
-          { key: "certifications", label: "Certifications in my scope", question: "How many certifications are recorded?", value: String(certifications), href: "/reports/certification-status" },
+          { key: "published-assignments", label: "Published assignments this month", question: "How much published staffing exists this month?", value: String(publishedAssignments), href: "/schedule" },
+          { key: "unallocated", label: "Employees with no Published assignment this month", question: "Who is unallocated in the plan?", value: String(unallocated), href: "/schedule" },
+          { key: "my-replacements", label: "Replacement requests I raised", question: "What did I request?", value: String(myRequests), href: "/coverage" },
+          { key: "certifications", label: "Certifications in my scope", question: "How many certifications are recorded?", value: String(certifications), href: "/skills" },
         ],
         sections: [{ key: "employees-by-team", label: "Employees by team", question: "How is the workforce distributed across teams?", columns: [{ key: "team", label: "Team" }, { key: "count", label: "Employees" }], rows: teams.map((row) => ({ team: row.team ?? "No team recorded", count: String(row.value) })), emptyState: "No active employee is recorded in your current scope.", href: "/employees" }],
         notes: ["Every card is recalculated from your current scope on each request.", "Private leave reasons, management notes, evidence files and audit history are outside your reporting scope."],

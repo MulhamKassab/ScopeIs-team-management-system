@@ -161,6 +161,9 @@ test("Scoped Admin receives certification summary only and Employee is denied ma
   await expectNoHorizontalOverflow(page);
 
   // A different TEAM's Admin receives a non-enumerating refusal for the same record.
+  // The retained scoped employee summary does not grant access to report routes.
+  expect((await page.goto("/reports/certification-status"))?.status()).toBe(404);
+  await expect(page.getByRole("link", { name: "Return to a safe page" })).toBeVisible();
   await signOut(page);
   await signIn(page, "Ben Iqbal");
   const crossTeam = await page.goto("/employees/mock-employee-cora");

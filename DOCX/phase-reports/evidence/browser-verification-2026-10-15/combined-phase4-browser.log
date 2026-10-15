@@ -1,0 +1,9 @@
+{"event":"browser_build_directory_allocated","ownerPid":42128,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-hO9tRs"}
+
+Running 2 tests using 2 workers
+
+  ok 1 [mobile] › test\e2e\phase4-scheduling.spec.ts:42:1 › Super Admin publishes, Admin reads only current Published schedules, and Employee sees own Published work (29.8s)
+  ok 2 [desktop] › test\e2e\phase4-scheduling.spec.ts:42:1 › Super Admin publishes, Admin reads only current Published schedules, and Employee sees own Published work (31.0s)
+
+  2 passed (2.9m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":42128,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-hO9tRs"}

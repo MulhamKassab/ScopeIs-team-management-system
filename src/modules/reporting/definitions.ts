@@ -54,7 +54,7 @@ export type ReportDefinition = {
   planning?: boolean;
 };
 
-const MANAGEMENT: readonly SystemRole[] = ["SUPER_ADMIN", "ADMIN"];
+const MANAGEMENT: readonly SystemRole[] = ["SUPER_ADMIN"];
 const SUPER_ADMIN_ONLY: readonly SystemRole[] = ["SUPER_ADMIN"];
 const TWELVE_MONTHS = 366;
 const NINETY_DAYS = 90;
@@ -245,8 +245,8 @@ export function reportDefinition(key: string): ReportDefinition | null {
 }
 
 export function reportLabel(key: ReportKey) { return reports[key].label; }
-export function canViewReport(role: SystemRole, key: ReportKey) { return reports[key].viewRoles.includes(role); }
-export function canExportReport(role: SystemRole, key: ReportKey) { return reports[key].exportRoles.includes(role); }
+export function canViewReport(role: SystemRole, key: ReportKey) { return role === "SUPER_ADMIN" && reports[key].viewRoles.includes(role); }
+export function canExportReport(role: SystemRole, key: ReportKey) { return role === "SUPER_ADMIN" && reports[key].exportRoles.includes(role); }
 
 /** The literal data-state marker every unpublished planning row and file must carry. */
 export const PLANNING_DATA_STATE = "PLANNING (unpublished)";

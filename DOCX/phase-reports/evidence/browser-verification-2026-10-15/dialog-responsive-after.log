@@ -1,0 +1,81 @@
+Phase 2 safe build preflight passed: isolated copy contains no .env* files.
+Phase 2 isolated typecheck passed.
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 125ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 41s
+  Running TypeScript ...
+  Finished TypeScript in 51s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 1212ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[module]
+├ ƒ /account/change-password
+├ ƒ /accounts
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/mock-login
+├ ƒ /api/evidence/[evidenceId]/files
+├ ƒ /api/evidence/files/[fileId]
+├ ƒ /api/foundation/scope/[scopeRef]
+├ ƒ /api/reports/[reportKey]/export
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[ticketId]
+├ ƒ /api/tickets/[ticketId]/files
+├ ƒ /api/tickets/[ticketId]/files/[fileId]
+├ ƒ /api/tickets/commands
+├ ƒ /arrangements
+├ ƒ /audit
+├ ƒ /clients
+├ ƒ /clients/[clientId]
+├ ƒ /coverage
+├ ƒ /dashboard
+├ ƒ /designations
+├ ƒ /employees
+├ ƒ /employees/[userId]
+├ ƒ /leave
+├ ƒ /locations
+├ ƒ /locations/[locationId]
+├ ƒ /login
+├ ƒ /map
+├ ƒ /notifications
+├ ƒ /profile
+├ ƒ /projects
+├ ƒ /projects/[projectId]
+├ ƒ /replacements
+├ ƒ /reports
+├ ƒ /reports/[reportKey]
+├ ƒ /requests
+├ ƒ /schedule
+├ ƒ /skills
+├ ƒ /teams
+├ ƒ /tickets
+└ ƒ /tickets/[ticketId]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+▲ Next.js 16.4.0
+- Local:         http://127.0.0.1:56112
+- Network:       http://127.0.0.1:56112
+✓ Ready in 446ms
+✓ Running next.config.ts took 119ms
+Responsive browser: Google Chrome (C:\Users\m.kassab\AppData\Local\Google\Chrome\Application\chrome.exe).
+
+Running 1 test using 1 worker
+
+Responsive browser: Google Chrome (C:\Users\m.kassab\AppData\Local\Google\Chrome\Application\chrome.exe).
+  ok 1 test\e2e\responsive.spec.ts:664:1 › clear user journeys keep every authorized tab understandable and make the main tasks work on phone and desktop (54.1s)
+
+  1 passed (1.1m)
+Responsive browser cleanup complete: 1 databases created, 1 dropped, 0 retained; owned process trees stopped, build checkout and private fictional file directory removed.

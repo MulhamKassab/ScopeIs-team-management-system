@@ -1,0 +1,379 @@
+{
+  "capturedAt": "2026-10-15T18:16:22.005Z",
+  "privateScreenshotsRetained": 62,
+  "selectedPublicScreenshots": 6,
+  "images": [
+    {
+      "source": "responsive-all-management--26d94--to-wide-desktop-·-820×1180/820-account-card.png",
+      "sha256": "f4646133423e8b42e96445899cbc71e69d810265df020c317959140ab5237cae",
+      "bytes": 22184,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-all-management--26d94--to-wide-desktop-·-820×1180/820-accounts.png",
+      "sha256": "419b07074c72b20444fe80deab104f78680196ecee1bd4b0a71aa3c1a9c53454",
+      "bytes": 119477,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-all-management--26d94--to-wide-desktop-·-820×1180/820-dashboard.png",
+      "sha256": "9a4b08412856efd3c4685b8b0724a99d7d7b35acd74fb68574682d7a30fb6ca1",
+      "bytes": 215758,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-all-management--26d94--to-wide-desktop-·-820×1180/820-schedule.png",
+      "sha256": "6626e99ecb0322731e5dc90bc694d9e651f087e034fefafb83069d14773d3064",
+      "bytes": 108171,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-all-management--9e643--to-wide-desktop-·-1280×800/1280-account-card.png",
+      "sha256": "ade139f6f9d306f0198a58b6cb62230461e635520a3094495b6fe04b141b5776",
+      "bytes": 12273,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-all-management--9e643--to-wide-desktop-·-1280×800/1280-accounts.png",
+      "sha256": "c9f180683b9095d64500a4b683db9c360bdbc8beb3dd5fbd6fe5e7579ff6df32",
+      "bytes": 158700,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-all-management--9e643--to-wide-desktop-·-1280×800/1280-dashboard.png",
+      "sha256": "0abef5833b497d1375340fcfcf99499987ebcc5bf871d7a14843bf0a6413c116",
+      "bytes": 258867,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-all-management--9e643--to-wide-desktop-·-1280×800/1280-schedule.png",
+      "sha256": "bfda98e9d8e9a9fb54f57382b813d5e9228b91ed03b4d3caf5a8c959dd1c9d9a",
+      "bytes": 147425,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-all-management--c737a-e-to-wide-desktop-·-320×640/320-account-card.png",
+      "sha256": "dc64ced5405fc98f9ace137c00c39887aefd0213dd29fa5143202b8425f634eb",
+      "bytes": 25592,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-all-management--c737a-e-to-wide-desktop-·-320×640/320-accounts.png",
+      "sha256": "7a6408461ef44fc4ab299784bf260afdd3386943dfb48de1c1c8a8af04128937",
+      "bytes": 45480,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-all-management--c737a-e-to-wide-desktop-·-320×640/320-dashboard.png",
+      "sha256": "a9f5599ea9408ea19a674957580b9123e9bd47a59fca33a8bf934a8d2f1cae93",
+      "bytes": 92293,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-all-management--c737a-e-to-wide-desktop-·-320×640/320-schedule.png",
+      "sha256": "78c5d40245b46fe95d83a3005033b3e9548fbb8664e8786fcb5a013519e9c0cf",
+      "bytes": 48733,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-all-management--daa1e-e-to-wide-desktop-·-390×844/390-account-card.png",
+      "sha256": "757eb671ba55752d34dbaf0a85299ff3e6341cff3075cb33f13b62b01e260fc6",
+      "bytes": 21000,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-all-management--daa1e-e-to-wide-desktop-·-390×844/390-accounts.png",
+      "sha256": "457b50bb47fc5ed63e83186cf89612289ee42b53a25a3ab3decf728df8521dbc",
+      "bytes": 61988,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-all-management--daa1e-e-to-wide-desktop-·-390×844/390-dashboard.png",
+      "sha256": "1b6fa27897069f3f17831fd9206b24c1accc01101d4874e9fb7360a31d2c6b7c",
+      "bytes": 124182,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-all-management--daa1e-e-to-wide-desktop-·-390×844/390-schedule.png",
+      "sha256": "0bb21c4dbfbdd363c2fb2841dffc4e17d613fec2a87d3cc59f38c13dc4d4bbd6",
+      "bytes": 66900,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-clear-user-jour-6d94e-s-work-on-phone-and-desktop/1280-clear-coverage.png",
+      "sha256": "2dc6676188824371e4dcc1c6534414d9ba05dd00f160be60b7f8dc732f6afd80",
+      "bytes": 158565,
+      "publicPath": "full-run-screenshots/1280-clear-coverage.png"
+    },
+    {
+      "source": "responsive-clear-user-jour-6d94e-s-work-on-phone-and-desktop/1280-clear-home.png",
+      "sha256": "c9c540c9f3bd9bbac38d5c7014ed3ed86530f1abb54c950a791bf53bdc4da62b",
+      "bytes": 163721,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-clear-user-jour-6d94e-s-work-on-phone-and-desktop/1280-clear-skills.png",
+      "sha256": "b8defa0bfa6b84682d13444b39a584b8f45832faf955a3ed6069d1c2c3255633",
+      "bytes": 157794,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-clear-user-jour-6d94e-s-work-on-phone-and-desktop/320-clear-coverage.png",
+      "sha256": "ea3e7a99c136c566aedc5042b2f2158540e5390bf9195bd970d13701d31bcddb",
+      "bytes": 62059,
+      "publicPath": "full-run-screenshots/320-clear-coverage.png"
+    },
+    {
+      "source": "responsive-clear-user-jour-6d94e-s-work-on-phone-and-desktop/320-clear-home.png",
+      "sha256": "8bfe61eee4db8592e3226ab75dee4df54d88759e585b31abe72863f5f590bd0c",
+      "bytes": 53234,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-clear-user-jour-6d94e-s-work-on-phone-and-desktop/320-clear-rtl-guide.png",
+      "sha256": "498f928c7f1e0eb77b20c37eead5cdb7709c5722549e81d1723d0b56923cd8fe",
+      "bytes": 56655,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-clear-user-jour-6d94e-s-work-on-phone-and-desktop/320-clear-skills.png",
+      "sha256": "0d2a213c1ccece4ef0e386bca43fa96906c00664477d25cfde11e40d869dfa19",
+      "bytes": 74278,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-clear-user-jour-6d94e-s-work-on-phone-and-desktop/390-clear-coverage.png",
+      "sha256": "7b09d727ebf83b5d9ff6915417a69af7eb4e8e5f1e1bb598d3d5bcc64c00d588",
+      "bytes": 67724,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-clear-user-jour-6d94e-s-work-on-phone-and-desktop/390-clear-home.png",
+      "sha256": "686a743a4b50efd1e0a176232fd8ce5c59e94ac6db95ea7b7192ba9f1ab05d65",
+      "bytes": 62195,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-clear-user-jour-6d94e-s-work-on-phone-and-desktop/390-clear-skills.png",
+      "sha256": "a73b7c8fac9f120e178d46db333910730f90fea4d246849948718ef3b7c29529",
+      "bytes": 66207,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-create-and-revi-4a094-landscape-screens-·-768×360/768-360-account-dialog.png",
+      "sha256": "547aba598c8b3af74faf919f4c01b2b8d86076ce026ef71b8fb0292346422c96",
+      "bytes": 43922,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-create-and-revi-c0e46-landscape-screens-·-320×640/320-640-account-dialog.png",
+      "sha256": "334e1275fbb53712b1489540cf1419d6c07d7531d9c055bf1cbcb9d91bb4d0f7",
+      "bytes": 44202,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-create-and-revi-ed0b7-andscape-screens-·-1024×768/1024-768-account-dialog.png",
+      "sha256": "5c80607ff446932967786229f1959246b71e43f301cc72a124768653d587fdf3",
+      "bytes": 108361,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-expressive-moti-881c3-ks-across-desktop-and-phone/1280-motion-feature-dialog.png",
+      "sha256": "021ee8ef5a3b9fd0151253451079c14399a2dcbdb406588717c80fab7bb95d32",
+      "bytes": 165310,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-expressive-moti-881c3-ks-across-desktop-and-phone/390-motion-more-navigation.png",
+      "sha256": "1b79b2aebc84400e378038f1b36dbcc997d5d92a057cc3a3ffebda9507356b0a",
+      "bytes": 27227,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-feature-discove-87d28-op-and-RTL-with-larger-text/320-rtl-large-text-feature-guide.png",
+      "sha256": "d9f61dd8ebb73ee66970305e9a9361d3e214caaf62a2bbfd00f149e39d1fe7db",
+      "bytes": 65202,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-feature-discove-87d28-op-and-RTL-with-larger-text/320-rtl-large-text-planning-filters.png",
+      "sha256": "7471a6857b37f80d467f872613ea0868e2f75562f0c493b579176c3c434e268c",
+      "bytes": 41313,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-monthly-timetab-eb4f0-ktop-RTL-and-reduced-motion/timetable-mobile-rtl.png",
+      "sha256": "612b73e0e1f00b2b1cee232f39f5d6d6d0c77c2e113fb8f7d4b9270db4dcb58b",
+      "bytes": 136166,
+      "publicPath": "full-run-screenshots/timetable-mobile-rtl.png"
+    },
+    {
+      "source": "responsive-populated-ticke-ad4bc-t-every-responsive-viewport/1024-populated-ticket-detail.png",
+      "sha256": "6c9ced979a43918e4379445403c156cd3cbf2cc1864d1c778f9c1bbded5347f2",
+      "bytes": 146639,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-populated-ticke-ad4bc-t-every-responsive-viewport/1280-populated-ticket-detail.png",
+      "sha256": "6ed4f4afbb8f7d566901e0d32d43c24d07df73a240ca994a9f751a2e123a2c09",
+      "bytes": 227396,
+      "publicPath": "full-run-screenshots/1280-populated-ticket-detail.png"
+    },
+    {
+      "source": "responsive-populated-ticke-ad4bc-t-every-responsive-viewport/1920-populated-ticket-detail.png",
+      "sha256": "634ef0b1c40fbab5f824fb9cf2ab3d920dd139dc81fdd5cb15b501449e26640a",
+      "bytes": 318947,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-populated-ticke-ad4bc-t-every-responsive-viewport/320-populated-ticket-detail.png",
+      "sha256": "feac6aa86663c2c773b017b4eef2104c71c12039ed9adb047f38637f9e98575d",
+      "bytes": 68044,
+      "publicPath": "full-run-screenshots/320-populated-ticket-detail.png"
+    },
+    {
+      "source": "responsive-populated-ticke-ad4bc-t-every-responsive-viewport/390-populated-ticket-detail.png",
+      "sha256": "4a12220c2ccf68a1ba887f3d230bd4214dc3796a201d08576354679ba05faf8d",
+      "bytes": 108887,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-populated-ticke-ad4bc-t-every-responsive-viewport/600-populated-ticket-detail.png",
+      "sha256": "ee33abdcedf50c414b9f971234890266417ba41a108720e714fc61b927fab6ca",
+      "bytes": 140374,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-populated-ticke-ad4bc-t-every-responsive-viewport/768-populated-ticket-detail.png",
+      "sha256": "419df01acb9528b9cdfe616ec67d8e9b7b748c8b57ed5ab0ebf444f865fca0bb",
+      "bytes": 163293,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-populated-ticke-ad4bc-t-every-responsive-viewport/820-populated-ticket-detail.png",
+      "sha256": "00c225006fa85ae65636fc9c41aea741a84812808270b8121a2f99b6c65ecb14",
+      "bytes": 209972,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-role-navigation-eaecd-me-and-enlarged-text-reflow/1280-rtl-dark-large-text.png",
+      "sha256": "7568a39adee510d8205fe477b38df69573c84067b375c1f8e4c0f4827e76642f",
+      "bytes": 418730,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-role-navigation-eaecd-me-and-enlarged-text-reflow/320-rtl-dark-large-text.png",
+      "sha256": "5e928ea9f7758b97e0bf85f9de02a38471f91b44cc88884eb1c97f1ffd1e01d4",
+      "bytes": 156712,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-role-navigation-eaecd-me-and-enlarged-text-reflow/820-rtl-dark-large-text.png",
+      "sha256": "3b407b4e7f3542e4dd8adfef80b738093b3696f3c3d5b9a313e9798d87b18ab2",
+      "bytes": 266342,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-the-planning-wo-3b24c-ext-actions-on-every-screen/1024-planning-workspace.png",
+      "sha256": "7ff99b76cf4c326f52d61b7f975e5ba9af5f20dac5666bf770197ee0f40becaa",
+      "bytes": 152785,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-the-planning-wo-3b24c-ext-actions-on-every-screen/1280-planning-workspace.png",
+      "sha256": "1b862818f8e15a819108a5a76175678ed6d8ef4a5271ba98d2ecddbb132dc0cf",
+      "bytes": 210740,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-the-planning-wo-3b24c-ext-actions-on-every-screen/1920-planning-workspace.png",
+      "sha256": "92e68fde9c7180fb38e5f3531733c749f559024209726cd1ca4649f3d2e5d845",
+      "bytes": 239249,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-the-planning-wo-3b24c-ext-actions-on-every-screen/320-planning-workspace.png",
+      "sha256": "51843e1c3c43d1f72f0e101d32de13171b48361e1dfb2143b6f5985f9c33c2d7",
+      "bytes": 46536,
+      "publicPath": "full-run-screenshots/320-planning-workspace.png"
+    },
+    {
+      "source": "responsive-the-planning-wo-3b24c-ext-actions-on-every-screen/390-planning-workspace.png",
+      "sha256": "9724ce9a886ba43ac5838db07752361f4e30680f63df6931c90625413dfb5f1a",
+      "bytes": 70941,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-the-planning-wo-3b24c-ext-actions-on-every-screen/600-planning-workspace.png",
+      "sha256": "c0af5e086d1ebb6dc87525a19fb475800fddaddd7548e91401850719c15915a8",
+      "bytes": 99831,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-the-planning-wo-3b24c-ext-actions-on-every-screen/768-planning-workspace.png",
+      "sha256": "98e7b615aaed6a564ab981b927ec380cad4fbe56f07394203bec043a9e3252a0",
+      "bytes": 125430,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-the-planning-wo-3b24c-ext-actions-on-every-screen/820-planning-workspace.png",
+      "sha256": "657dcee5f5afbd33ea3b5ad7c9771538d2560120429622c55698598c848e67bb",
+      "bytes": 132673,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-visual-controls-0c467-dal-behavior-in-both-themes/1280-dark-dashboard.png",
+      "sha256": "1ed41f0c677e226ecf0dac2dd17e2557b43b0c52b36a111c4ab741d3319a8397",
+      "bytes": 313977,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-visual-controls-0c467-dal-behavior-in-both-themes/1280-light-dashboard.png",
+      "sha256": "146b8f285359af56a8298cf711e44d8871a20edb262d7238c55df06e50989607",
+      "bytes": 285779,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-visual-controls-0c467-dal-behavior-in-both-themes/390-dark-dashboard.png",
+      "sha256": "c627d7d569908c5f57290735cadee95c6d2f651bb073bc7bfcdd411f28a92aca",
+      "bytes": 136310,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-visual-controls-0c467-dal-behavior-in-both-themes/390-dark-focused-dialog.png",
+      "sha256": "8adae831ebdb4264a50f5dd59287b051d51a7ad4e6d65a57024e4675ab1dceb1",
+      "bytes": 55773,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-visual-controls-0c467-dal-behavior-in-both-themes/390-dark-navigation.png",
+      "sha256": "08187ec340cb97e584155b28bcf7b97e1ac9b12e852cd539d75d8a33c912b87c",
+      "bytes": 27196,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-visual-controls-0c467-dal-behavior-in-both-themes/390-light-dashboard.png",
+      "sha256": "e8b9e816dd0aa8e5d9fec961a5ecc3e569eb0665043613035c3cb02c6f55987f",
+      "bytes": 124191,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-visual-controls-0c467-dal-behavior-in-both-themes/390-light-focused-dialog.png",
+      "sha256": "3d9356e7a4dea8e5cf9adaa046b7fbadfe9c4eba53fad8c0c1ca827dc47050f6",
+      "bytes": 49523,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-visual-controls-0c467-dal-behavior-in-both-themes/390-light-login.png",
+      "sha256": "b9d5d814d68ace3096d25cf964919820f3c4023ffac65a2d38c670c61b74ad66",
+      "bytes": 65613,
+      "publicPath": null
+    },
+    {
+      "source": "responsive-visual-controls-0c467-dal-behavior-in-both-themes/390-light-navigation.png",
+      "sha256": "ed29fc2a73f3202b24e128c5f91c39cfbe0ac6b3d1f1d8ee8ca5d375266f7e24",
+      "bytes": 27226,
+      "publicPath": null
+    }
+  ]
+}

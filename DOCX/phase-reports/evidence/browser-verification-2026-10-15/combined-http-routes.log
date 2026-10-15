@@ -1,0 +1,94 @@
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 74ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 40s
+  Running TypeScript ...
+  Finished TypeScript in 30.5s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 1035ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[module]
+├ ƒ /account/change-password
+├ ƒ /accounts
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/mock-login
+├ ƒ /api/evidence/[evidenceId]/files
+├ ƒ /api/evidence/files/[fileId]
+├ ƒ /api/foundation/scope/[scopeRef]
+├ ƒ /api/reports/[reportKey]/export
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[ticketId]
+├ ƒ /api/tickets/[ticketId]/files
+├ ƒ /api/tickets/[ticketId]/files/[fileId]
+├ ƒ /api/tickets/commands
+├ ƒ /arrangements
+├ ƒ /audit
+├ ƒ /clients
+├ ƒ /clients/[clientId]
+├ ƒ /coverage
+├ ƒ /dashboard
+├ ƒ /designations
+├ ƒ /employees
+├ ƒ /employees/[userId]
+├ ƒ /leave
+├ ƒ /locations
+├ ƒ /locations/[locationId]
+├ ƒ /login
+├ ƒ /map
+├ ƒ /notifications
+├ ƒ /profile
+├ ƒ /projects
+├ ƒ /projects/[projectId]
+├ ƒ /replacements
+├ ƒ /reports
+├ ƒ /reports/[reportKey]
+├ ƒ /requests
+├ ƒ /schedule
+├ ƒ /skills
+├ ƒ /teams
+├ ƒ /tickets
+└ ƒ /tickets/[ticketId]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+▲ Next.js 16.4.0
+- Local:         http://127.0.0.1:62740
+- Network:       http://127.0.0.1:62740
+✓ Ready in 358ms
+✓ Running next.config.ts took 65ms
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/route-certification/phase1-http.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 14615[2mms[22m[39m
+   [32m✓[39m Phase 1 public HTTP route certification [2m(21)[22m
+     [33m[2m✓[22m[39m keeps unauthenticated users outside protected pages and APIs[33m 633[2mms[22m[39m
+     [33m[2m✓[22m[39m Nora Albright receives only the certified role and scope access[33m 2363[2mms[22m[39m
+     [33m[2m✓[22m[39m Ava Mercer receives only the certified role and scope access[33m 1294[2mms[22m[39m
+     [33m[2m✓[22m[39m Ben Iqbal receives only the certified role and scope access[33m 1161[2mms[22m[39m
+     [33m[2m✓[22m[39m Cora Bell receives only the certified role and scope access[33m 1040[2mms[22m[39m
+     [33m[2m✓[22m[39m Dan Rowan receives only the certified role and scope access[33m 918[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps /accounts Super Admin-only and never returns credential secrets[33m 551[2mms[22m[39m
+     [33m[2m✓[22m[39m certifies credential login, generic refusals, and no-store headers[33m 415[2mms[22m[39m
+     [33m[2m✓[22m[39m certifies Phase 11 reporting routes, role boundaries and export refusals[33m 812[2mms[22m[39m
+     [33m[2m✓[22m[39m protects Company ticket routes and keeps missing ticket and file identities private[33m 1539[2mms[22m[39m
+     [33m[2m✓[22m[39m refuses unsafe ticket origins, malformed commands and unsupported methods without ticket state[33m 348[2mms[22m[39m
+     [33m[2m✓[22m[39m enforces creator, assignee and read-only observer ticket access over HTTP[33m 2214[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m21 passed[39m[22m[90m (21)[39m
+[2m   Start at [22m 18:51:22
+[2m   Duration [22m 15.45s[2m (tests 96%, setup 2%, transform 1%, import 1%)[22m
+
+Phase 1 route certification runner cleanup complete.

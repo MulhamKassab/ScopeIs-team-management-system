@@ -1,7 +1,13 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { X } from "lucide-react";
+
+// Server HTML must not advertise a clickable task before its handler exists.
+// The initial hydration snapshot matches the server, then React enables it.
+function subscribeToReadiness() { return () => undefined; }
+function clientReadySnapshot() { return true; }
+function serverReadySnapshot() { return false; }
 
 function animationTime(value: string) {
   const amount = Number.parseFloat(value);
@@ -35,6 +41,7 @@ export function TaskDialog({ triggerLabel, triggerText, triggerIcon, title, desc
   triggerDisabled?: boolean;
   dismissOnNavigate?: boolean;
 }) {
+  const ready = useSyncExternalStore(subscribeToReadiness, clientReadySnapshot, serverReadySnapshot);
   const id = useId();
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
@@ -140,7 +147,7 @@ export function TaskDialog({ triggerLabel, triggerText, triggerIcon, title, desc
   }, [open]);
 
   return <>
-    <button ref={trigger} type="button" className={triggerClassName} disabled={triggerDisabled} aria-haspopup="dialog" aria-label={triggerLabel} onClick={show}>{triggerIcon}<span>{triggerText ?? triggerLabel}</span></button>
+    <button ref={trigger} type="button" className={triggerClassName} disabled={triggerDisabled || !ready} aria-busy={ready ? undefined : true} aria-haspopup="dialog" aria-label={triggerLabel} onClick={show}>{triggerIcon}<span>{triggerText ?? triggerLabel}</span></button>
     <dialog ref={dialog} className="task-dialog" aria-labelledby={`${id}-title`} aria-describedby={description ? `${id}-description` : undefined}
       onCancel={(event) => { event.preventDefault(); dismiss(); }} onClose={() => setOpen(false)}
       onClick={(event) => {

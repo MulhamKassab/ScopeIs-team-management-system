@@ -1,0 +1,1418 @@
+
+===== SYSTEM LOCK :: Scenario manifest validation =====
+Scenario manifest validation (PASS):
+  Checkpoint: SCOPEIS_PHASE_12_COMPANY_TICKETS_LOCAL_INTEGRATION_R1
+  Scenarios: 84 (83 automated, 1 manual)
+  Domain counts: SYS=13, AUTH=7, EMP=7, ORG=4, SCH=4, LEV=4, SKL=4, CVR=4, MAP=5, EVD=4, COL=4, NTF=2, AUD=2, RPT=4, UI=4, TKT=12
+  Registered test files: 94; runner-covered files: 94
+  Protected routes: 40; route certification evidence present.
+----- Scenario manifest validation: PASS -----
+
+===== SYSTEM LOCK :: Typecheck =====
+----- Typecheck: PASS -----
+
+===== SYSTEM LOCK :: Lint =====
+----- Lint: PASS -----
+
+===== SYSTEM LOCK :: Unit tests =====
+
+ RUN  v5.0.3 C:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system
+
+{"event":"browser_build_directory_allocated","ownerPid":6936,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-hOXg5Y"}
+{"event":"browser_build_directory_cleanup_complete","ownerPid":6936,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-hOXg5Y"}
+{"event":"browser_build_directory_allocated","ownerPid":6936,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-EleEv8"}
+{"event":"browser_build_directory_cleanup_complete","ownerPid":6936,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-EleEv8"}
+
+ Test Files  32 passed (32)
+      Tests  242 passed (242)
+   Start at  13:33:09
+   Duration  38.12s (setup 43%, import 39%, transform 9%, tests 8%, worker 2%)
+
+     Import  126 modules were evaluated 248 times · 11.23s total, 39% of tracked time
+             ~5.53s faster with isolate: false — shared modules are evaluated once per worker instead of once per file
+             learn more: https://vitest.dev/guide/improving-performance#test-isolation
+
+----- Unit tests: PASS -----
+
+===== SYSTEM LOCK :: Component tests =====
+
+ RUN  v5.0.3 C:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system
+
+Not implemented: navigation to another Document
+
+ Test Files  28 passed (28)
+      Tests  176 passed (176)
+   Start at  13:33:48
+   Duration  96.37s (environment 56%, tests 24%, setup 10%, import 8%, transform 2%, worker 1%)
+
+    Isolate  28 workers spawned · ~2.01s startup each (spawn + environment, per file)
+             at least ~54.24s faster with isolate: false — reuses workers across files instead of one per file
+
+----- Component tests: PASS -----
+
+===== SYSTEM LOCK :: Aggregate integration tests =====
+
+=== Phase 1 PostgreSQL foundation :: test/integration/foundation-postgres.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/foundation-postgres.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 133[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 13:35:29
+[2m   Duration [22m 2.07s[2m (import 57%, transform 18%, setup 17%, tests 7%, worker 1%)[22m
+
+--- Phase 1 PostgreSQL foundation: PASS ---
+
+=== Phase 2 employee core service :: test/integration/phase2-core-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase2-core-service.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 862[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 13:35:36
+[2m   Duration [22m 3.62s[2m (import 39%, tests 27%, transform 22%, setup 11%)[22m
+
+--- Phase 2 employee core service: PASS ---
+
+=== Phase 3 operational service :: test/integration/phase3-operational-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase3-operational-service.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 719[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 13:35:46
+[2m   Duration [22m 3.26s[2m (import 40%, tests 26%, transform 18%, setup 15%, worker 1%)[22m
+
+--- Phase 3 operational service: PASS ---
+
+=== Monthly timetable and organisation service :: test/integration/timetable-organisation.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/timetable-organisation.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 629[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 13:35:55
+[2m   Duration [22m 3.35s[2m (import 40%, tests 21%, transform 20%, setup 19%, worker 1%)[22m
+
+--- Monthly timetable and organisation service: PASS ---
+
+=== Phase 4 scheduling service :: test/integration/phase4-scheduling-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase4-scheduling-service.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 1486[2mms[22m[39m
+   [32m✓[39m Schedule revision and scope regressions [2m(4)[22m
+     [33m[2m✓[22m[39m publishes successive unchanged revisions and releases historical assignment slots[33m 368[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+[2m   Start at [22m 13:36:02
+[2m   Duration [22m 3.45s[2m (tests 46%, import 26%, transform 21%, setup 8%)[22m
+
+--- Phase 4 scheduling service: PASS ---
+
+=== Phase 5 leave service :: test/integration/phase5-leave-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase5-leave-service.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 642[2mms[22m[39m
+   [32m✓[39m Phase 5 leave service [2m(3)[22m
+     [33m[2m✓[22m[39m enforces privacy, lifecycle, balance, and schedule leave integrity[33m 307[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 13:36:09
+[2m   Duration [22m 2.29s[2m (import 37%, tests 30%, transform 20%, setup 12%)[22m
+
+--- Phase 5 leave service: PASS ---
+
+=== Phase 6 capabilities service :: test/integration/phase6-capabilities-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase6-capabilities-service.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 635[2mms[22m[39m
+   [32m✓[39m Phase 6 skills and operational capabilities [2m(3)[22m
+     [33m[2m✓[22m[39m unions Client, Project, Location, and assignment requirements and leaves the schedule lifecycle non-blocking[33m 342[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 13:36:14
+[2m   Duration [22m 2.07s[2m (tests 33%, import 31%, transform 25%, setup 10%)[22m
+
+--- Phase 6 capabilities service: PASS ---
+
+=== Phase 7 coverage service :: test/integration/phase7-coverage-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase7-coverage-service.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 3978[2mms[22m[39m
+   [32m✓[39m Coverage and support conflict integrity [2m(12)[22m
+     [33m[2m✓[22m[39m serializes duplicate support requests before either can create another review item[33m 333[2mms[22m[39m
+     [33m[2m✓[22m[39m rechecks independent gaps under the schedule lock so simultaneous approvals cannot overfill one shortage[33m 602[2mms[22m[39m
+     [33m[2m✓[22m[39m preserves support when a replacement updates the same Published plan and reuses its one Draft[33m 350[2mms[22m[39m
+     [33m[2m✓[22m[39m shares employee-time locks with manual scheduling across different clients[33m 333[2mms[22m[39m
+   [32m✓[39m Phase 7 coverage and replacement journey [2m(4)[22m
+     [33m[2m✓[22m[39m returns Proposed to Draft and creates an immutable Draft revision from Published[33m 321[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m18 passed[39m[22m[90m (18)[39m
+[2m   Start at [22m 13:36:19
+[2m   Duration [22m 5.80s[2m (tests 71%, import 15%, transform 11%, setup 4%)[22m
+
+--- Phase 7 coverage service: PASS ---
+
+=== Phase 8 planning map service :: test/integration/phase8-planning-map-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase8-planning-map-service.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 367[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m   Start at [22m 13:36:28
+[2m   Duration [22m 2.15s[2m (import 38%, transform 30%, tests 19%, setup 13%)[22m
+
+--- Phase 8 planning map service: PASS ---
+
+=== Phase 9 capability evidence service :: test/integration/phase9-evidence-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase9-evidence-service.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 670[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m12 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 13:36:34
+[2m   Duration [22m 2.57s[2m (import 37%, tests 28%, transform 24%, setup 11%)[22m
+
+--- Phase 9 capability evidence service: PASS ---
+
+=== Phase 10 collaboration and governance service :: test/integration/phase10-collaboration-service.test.ts, test/integration/phase10-management-note-authorization.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase10-collaboration-service.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 779[2mms[22m[39m
+ [32m✓[39m test/integration/phase10-management-note-authorization.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 470[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m26 passed[39m[22m[90m (26)[39m
+[2m   Start at [22m 13:36:40
+[2m   Duration [22m 4.88s[2m (import 38%, tests 28%, transform 21%, setup 12%)[22m
+
+--- Phase 10 collaboration and governance service: PASS ---
+
+=== Phase 11 reporting service :: test/integration/phase11-reporting-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase11-reporting-service.test.ts [2m([22m[2m35 tests[22m[2m)[22m[33m 7594[2mms[22m[39m
+   [32m✓[39m Phase 11 published allocation (R1) and planning (R4) [2m(6)[22m
+     [33m[2m✓[22m[39m keeps Published allocation strictly Published and planning strictly Draft/Proposed[33m 514[2mms[22m[39m
+   [32m✓[39m Phase 11 dashboards [2m(5)[22m
+     [33m[2m✓[22m[39m gives each role a distinct, honestly-sourced card set[33m 437[2mms[22m[39m
+   [32m✓[39m report filter and total regressions [2m(4)[22m
+     [33m[2m✓[22m[39m sums more than 5,000 source assignments before grouping and keeps the export row cap[33m 1260[2mms[22m[39m
+   [32m✓[39m aggregate export source completeness [2m(2)[22m
+     [33m[2m✓[22m[39m counts and paginates every balance employee and refuses an over-cap export[33m 3349[2mms[22m[39m
+     [33m[2m✓[22m[39m includes every assignment skill requirement before sorting and refuses an over-cap export[33m 698[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m35 passed[39m[22m[90m (35)[39m
+[2m   Start at [22m 13:36:51
+[2m   Duration [22m 12.00s[2m (tests 65%, import 17%, transform 14%, setup 4%)[22m
+
+--- Phase 11 reporting service: PASS ---
+
+=== Credential authentication service :: test/integration/credential-authentication.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/credential-authentication.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 5968[2mms[22m[39m
+   [32m✓[39m credential authentication service [2m(20)[22m
+     [32m✓[39m bootstrap [2m(4)[22m
+       [33m[2m✓[22m[39m initializes exactly five credentials once and is idempotent on re-run[33m 896[2mms[22m[39m
+     [32m✓[39m credential login [2m(6)[22m
+       [33m[2m✓[22m[39m accepts every approved account by username and by email[33m 920[2mms[22m[39m
+     [32m✓[39m brute-force protection [2m(4)[22m
+       [33m[2m✓[22m[39m locks after five failures within the window and refuses further attempts[33m 717[2mms[22m[39m
+       [33m[2m✓[22m[39m serializes concurrent failures so the threshold cannot be bypassed[33m 1583[2mms[22m[39m
+       [33m[2m✓[22m[39m resets the failure counters after a successful login[33m 453[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m20 passed[39m[22m[90m (20)[39m
+[2m   Start at [22m 13:37:06
+[2m   Duration [22m 7.73s[2m (tests 80%, import 12%, transform 5%, setup 3%)[22m
+
+--- Credential authentication service: PASS ---
+
+=== Account administration service :: test/integration/account-administration.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/account-administration.test.ts [2m([22m[2m30 tests[22m[2m)[22m[33m 3966[2mms[22m[39m
+   [32m✓[39m account administration service [2m(30)[22m
+     [32m✓[39m password reset [2m(7)[22m
+       [33m[2m✓[22m[39m rotates a self-reset session under the new version and invalidates every old session[33m 543[2mms[22m[39m
+       [33m[2m✓[22m[39m rolls back a self-reset and keeps its session valid if audit persistence fails[33m 352[2mms[22m[39m
+       [33m[2m✓[22m[39m changes hash and salt, clears lock, bumps version, revokes sessions and audits once[33m 441[2mms[22m[39m
+     [32m✓[39m self password change [2m(3)[22m
+       [33m[2m✓[22m[39m rejects the account's stored username or login email as the new password[33m 352[2mms[22m[39m
+       [33m[2m✓[22m[39m clears the requirement, rotates the session, and audits without password content[33m 422[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m30 passed[39m[22m[90m (30)[39m
+[2m   Start at [22m 13:37:18
+[2m   Duration [22m 5.76s[2m (tests 72%, import 15%, transform 7%, setup 5%)[22m
+
+--- Account administration service: PASS ---
+
+=== Company ticket service :: test/integration/tickets.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/tickets.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 6741[2mms[22m[39m
+   [32m✓[39m Company tickets PostgreSQL access boundaries [2m(24)[22m
+     [33m[2m✓[22m[39m consolidates current related and supervised tickets across workspaces without exposing unrelated work[33m 415[2mms[22m[39m
+     [33m[2m✓[22m[39m lets every company role create in published dashboards and shares only explicit tickets without enrollment[33m 592[2mms[22m[39m
+     [33m[2m✓[22m[39m preserves multiple dashboards and tickets and validates every selected active person under the creation transaction[33m 345[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps container supervision scoped while explicit tickets can cross all company roles and teams[33m 477[2mms[22m[39m
+     [33m[2m✓[22m[39m allows creator grants across teams while assignees work and mentioned people remain read-only[33m 412[2mms[22m[39m
+     [33m[2m✓[22m[39m rechecks board versions, lifecycle and required hold reasons on every transition[33m 333[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps explicit sharing independent of membership while participation and supervisory scopes revoke immediately[33m 312[2mms[22m[39m
+     [33m[2m✓[22m[39m serializes current grant/activity revocation with list and detail projection reads[33m 338[2mms[22m[39m
+     [33m[2m✓[22m[39m uses retained archives, restores creator access and limits work-log edits to authors[33m 358[2mms[22m[39m
+     [33m[2m✓[22m[39m handles membership/board changes under shared parent locks without changing schedules or leave[33m 449[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m24 passed[39m[22m[90m (24)[39m
+[2m   Start at [22m 13:37:27
+[2m   Duration [22m 8.27s[2m (tests 83%, import 9%, transform 5%, setup 2%)[22m
+
+--- Company ticket service: PASS ---
+
+=== Company ticket private files :: test/integration/ticket-files.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/ticket-files.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1944[2mms[22m[39m
+   [32m✓[39m Company private ticket files [2m(7)[22m
+     [33m[2m✓[22m[39m authorizes live participants, gives scoped management access, and withholds storage keys[33m 350[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 13:37:39
+[2m   Duration [22m 3.72s[2m (tests 55%, import 28%, transform 9%, setup 8%)[22m
+
+--- Company ticket private files: PASS ---
+
+Aggregate integration summary (each suite in its own disposable database):
+  PASS  Phase 1 PostgreSQL foundation
+  PASS  Phase 2 employee core service
+  PASS  Phase 3 operational service
+  PASS  Monthly timetable and organisation service
+  PASS  Phase 4 scheduling service
+  PASS  Phase 5 leave service
+  PASS  Phase 6 capabilities service
+  PASS  Phase 7 coverage service
+  PASS  Phase 8 planning map service
+  PASS  Phase 9 capability evidence service
+  PASS  Phase 10 collaboration and governance service
+  PASS  Phase 11 reporting service
+  PASS  Credential authentication service
+  PASS  Account administration service
+  PASS  Company ticket service
+  PASS  Company ticket private files
+  Overall: 16/16 suites passed
+----- Aggregate integration tests: PASS -----
+
+===== SYSTEM LOCK :: Migration tests =====
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/migration/phase2-database-foundation.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 43912[2mms[22m[39m
+   [32m✓[39m Phase 2 database foundation reconciliation [2m(11)[22m
+     [33m[2m✓[22m[39m performs a clean normal migration install and is idempotent[33m 3316[2mms[22m[39m
+     [33m[2m✓[22m[39m upgrades the previous account-management schema and backfills teams without changing membership or grants[33m 2704[2mms[22m[39m
+     [33m[2m✓[22m[39m adds Company tickets and assignment omission while preserving prior workforce data and ledger facts[33m 3586[2mms[22m[39m
+     [33m[2m✓[22m[39m dry-runs and safely adopts an exact ledgerless Phase 1 database[33m 3464[2mms[22m[39m
+     [33m[2m✓[22m[39m dry-runs and safely adopts an exact ledgerless Phase 1+2 database[33m 2990[2mms[22m[39m
+     [33m[2m✓[22m[39m refuses a partial Phase 2 schema with a non-zero CLI exit and no mutation[33m 2360[2mms[22m[39m
+     [33m[2m✓[22m[39m refuses ledger/schema disagreement with a non-zero exit and no mutation[33m 4623[2mms[22m[39m
+     [33m[2m✓[22m[39m uses all eight authoritative Drizzle tables with real relationships and constraints[33m 3162[2mms[22m[39m
+     [33m[2m✓[22m[39m uses all seven Company ticket tables with enforced relationships and content constraints[33m 3486[2mms[22m[39m
+     [33m[2m✓[22m[39m detects migration, journal, manifest, and TypeScript-schema drift[33m 12863[2mms[22m[39m
+     [33m[2m✓[22m[39m cleans up a disposable database even after a deliberate callback failure[33m 1322[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 13:37:44
+[2m   Duration [22m 45.20s[2m (tests 98%, import 1%, setup 1%)[22m
+
+----- Migration tests: PASS -----
+
+===== SYSTEM LOCK :: Route certification =====
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 176ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 22.0s
+  Running TypeScript ...
+  Finished TypeScript in 18.6s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 733ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[module]
+├ ƒ /account/change-password
+├ ƒ /accounts
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/mock-login
+├ ƒ /api/evidence/[evidenceId]/files
+├ ƒ /api/evidence/files/[fileId]
+├ ƒ /api/foundation/scope/[scopeRef]
+├ ƒ /api/reports/[reportKey]/export
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[ticketId]
+├ ƒ /api/tickets/[ticketId]/files
+├ ƒ /api/tickets/[ticketId]/files/[fileId]
+├ ƒ /api/tickets/commands
+├ ƒ /arrangements
+├ ƒ /audit
+├ ƒ /clients
+├ ƒ /clients/[clientId]
+├ ƒ /coverage
+├ ƒ /dashboard
+├ ƒ /designations
+├ ƒ /employees
+├ ƒ /employees/[userId]
+├ ƒ /leave
+├ ƒ /locations
+├ ƒ /locations/[locationId]
+├ ƒ /login
+├ ƒ /map
+├ ƒ /notifications
+├ ƒ /profile
+├ ƒ /projects
+├ ƒ /projects/[projectId]
+├ ƒ /replacements
+├ ƒ /reports
+├ ƒ /reports/[reportKey]
+├ ƒ /requests
+├ ƒ /schedule
+├ ƒ /skills
+├ ƒ /teams
+├ ƒ /tickets
+└ ƒ /tickets/[ticketId]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+▲ Next.js 16.4.0
+- Local:         http://127.0.0.1:55151
+- Network:       http://127.0.0.1:55151
+✓ Ready in 430ms
+✓ Running next.config.ts took 87ms
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/route-certification/phase1-http.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 8877[2mms[22m[39m
+   [32m✓[39m Phase 1 public HTTP route certification [2m(21)[22m
+     [33m[2m✓[22m[39m keeps unauthenticated users outside protected pages and APIs[33m 413[2mms[22m[39m
+     [33m[2m✓[22m[39m Nora Albright receives only the certified role and scope access[33m 1519[2mms[22m[39m
+     [33m[2m✓[22m[39m Ava Mercer receives only the certified role and scope access[33m 767[2mms[22m[39m
+     [33m[2m✓[22m[39m Ben Iqbal receives only the certified role and scope access[33m 668[2mms[22m[39m
+     [33m[2m✓[22m[39m Cora Bell receives only the certified role and scope access[33m 542[2mms[22m[39m
+     [33m[2m✓[22m[39m Dan Rowan receives only the certified role and scope access[33m 561[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps /accounts Super Admin-only and never returns credential secrets[33m 329[2mms[22m[39m
+     [33m[2m✓[22m[39m certifies Phase 11 reporting routes, role boundaries and export refusals[33m 481[2mms[22m[39m
+     [33m[2m✓[22m[39m protects Company ticket routes and keeps missing ticket and file identities private[33m 953[2mms[22m[39m
+     [33m[2m✓[22m[39m refuses unsafe ticket origins, malformed commands and unsupported methods without ticket state[33m 324[2mms[22m[39m
+     [33m[2m✓[22m[39m enforces creator, assignee and read-only observer ticket access over HTTP[33m 1309[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m21 passed[39m[22m[90m (21)[39m
+[2m   Start at [22m 13:39:36
+[2m   Duration [22m 9.76s[2m (tests 94%, setup 4%, transform 1%, import 1%)[22m
+
+Phase 1 route certification runner cleanup complete.
+----- Route certification: PASS -----
+
+===== SYSTEM LOCK :: Isolation tests =====
+Isolation proof
+  PASS  disposable databases are distinct — scopeis_isolation_probe_one_37112_f872b192d4_test vs scopeis_isolation_probe_two_37112_188e2d7d09_test
+  PASS  disposable database names are test-scoped — persistent target is scopeis_browser_verification_base_test
+  PASS  one disposable database cannot see the other's rows — observed 0 and 0
+  PASS  disposable databases are dropped after their suite finishes
+  PASS  persistent configured test database is unchanged by disposable work
+  PASS  allocated loopback ports are unique — 60728, 60729, 60730
+  PASS  allocated loopback ports are non-privileged
+  PASS  unsafe disposable names are refused — 5/5 refused
+  PASS  no harness or configuration file loads or reads .env.production — 81 files scanned
+Isolation proof: 9/9 checks passed
+----- Isolation tests: PASS -----
+
+===== SYSTEM LOCK :: Seed smoke =====
+Seeded 5 fictional mock personas.
+Fictional seed pass 1 completed (idempotent re-run included).
+Seeded 5 fictional mock personas.
+Fictional seed pass 2 completed (idempotent re-run included).
+Fictional seed smoke verified 5 personas and 2 non-duplicated Admin scope grants.
+Fictional seed smoke verified capability evidence with an opaque private file object.
+Fictional seed smoke verified shared-note revision history, notification, audit event, and the discussion parent guard.
+Seed smoke disposable database cleanup complete (PASS).
+----- Seed smoke: PASS -----
+
+===== SYSTEM LOCK :: Fresh-system smoke =====
+System smoke verified migration State D and fingerprint tables.
+Seeded 5 fictional mock personas.
+System smoke seed pass 1 completed.
+Seeded 5 fictional mock personas.
+System smoke seed pass 2 completed.
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 260ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 38.2s
+  Running TypeScript ...
+  Finished TypeScript in 18.5s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 416ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[module]
+├ ƒ /account/change-password
+├ ƒ /accounts
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/mock-login
+├ ƒ /api/evidence/[evidenceId]/files
+├ ƒ /api/evidence/files/[fileId]
+├ ƒ /api/foundation/scope/[scopeRef]
+├ ƒ /api/reports/[reportKey]/export
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[ticketId]
+├ ƒ /api/tickets/[ticketId]/files
+├ ƒ /api/tickets/[ticketId]/files/[fileId]
+├ ƒ /api/tickets/commands
+├ ƒ /arrangements
+├ ƒ /audit
+├ ƒ /clients
+├ ƒ /clients/[clientId]
+├ ƒ /coverage
+├ ƒ /dashboard
+├ ƒ /designations
+├ ƒ /employees
+├ ƒ /employees/[userId]
+├ ƒ /leave
+├ ƒ /locations
+├ ƒ /locations/[locationId]
+├ ƒ /login
+├ ƒ /map
+├ ƒ /notifications
+├ ƒ /profile
+├ ƒ /projects
+├ ƒ /projects/[projectId]
+├ ƒ /replacements
+├ ƒ /reports
+├ ƒ /reports/[reportKey]
+├ ƒ /requests
+├ ƒ /schedule
+├ ƒ /skills
+├ ƒ /teams
+├ ƒ /tickets
+└ ƒ /tickets/[ticketId]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+▲ Next.js 16.4.0
+- Local:         http://127.0.0.1:63950
+- Network:       http://127.0.0.1:63950
+✓ Ready in 260ms
+✓ Running next.config.ts took 58ms
+System smoke server ready on loopback port.
+System smoke verified anonymous enforcement.
+System smoke verified all five persona route and scope contracts plus sign-in audit events.
+System smoke verified a recipient notification round-trip.
+Phase 2 safe build preflight passed: isolated copy contains no .env* files.
+Phase 2 isolated typecheck passed.
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 43ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 17.5s
+  Running TypeScript ...
+  Finished TypeScript in 11.5s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 882ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[module]
+├ ƒ /account/change-password
+├ ƒ /accounts
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/mock-login
+├ ƒ /api/evidence/[evidenceId]/files
+├ ƒ /api/evidence/files/[fileId]
+├ ƒ /api/foundation/scope/[scopeRef]
+├ ƒ /api/reports/[reportKey]/export
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[ticketId]
+├ ƒ /api/tickets/[ticketId]/files
+├ ƒ /api/tickets/[ticketId]/files/[fileId]
+├ ƒ /api/tickets/commands
+├ ƒ /arrangements
+├ ƒ /audit
+├ ƒ /clients
+├ ƒ /clients/[clientId]
+├ ƒ /coverage
+├ ƒ /dashboard
+├ ƒ /designations
+├ ƒ /employees
+├ ƒ /employees/[userId]
+├ ƒ /leave
+├ ƒ /locations
+├ ƒ /locations/[locationId]
+├ ƒ /login
+├ ƒ /map
+├ ƒ /notifications
+├ ƒ /profile
+├ ƒ /projects
+├ ƒ /projects/[projectId]
+├ ƒ /replacements
+├ ƒ /reports
+├ ƒ /reports/[reportKey]
+├ ƒ /requests
+├ ƒ /schedule
+├ ƒ /skills
+├ ƒ /teams
+├ ƒ /tickets
+└ ƒ /tickets/[ticketId]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+Phase 2 isolated safe build cleanup complete.
+System smoke safe build completed.
+System smoke disposable environment cleanup complete (PASS).
+----- Fresh-system smoke: PASS -----
+
+===== SYSTEM LOCK :: Aggregate E2E =====
+
+=== Phase 1 foundation shell, personas, and scope :: node scripts/run-phase1-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":7776,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-ydaxj0"}
+
+Running 14 tests using 2 workers
+
+  ok  2 [mobile] › test\e2e\foundation.spec.ts:20:1 › unauthenticated users do not receive protected shell navigation (3.0s)
+  ok  1 [desktop] › test\e2e\foundation.spec.ts:20:1 › unauthenticated users do not receive protected shell navigation (3.0s)
+  ok  4 [desktop] › test\e2e\foundation.spec.ts:26:1 › Super Admin receives global shell navigation (6.7s)
+  ok  3 [mobile] › test\e2e\foundation.spec.ts:26:1 › Super Admin receives global shell navigation (7.1s)
+  ok  5 [desktop] › test\e2e\foundation.spec.ts:38:1 › Admin scope is enforced by the direct server seam (8.1s)
+  ok  6 [mobile] › test\e2e\foundation.spec.ts:38:1 › Admin scope is enforced by the direct server seam (8.8s)
+  ok  7 [desktop] › test\e2e\foundation.spec.ts:55:1 › Admin Bravo receives only Bravo scope (3.5s)
+  ok  8 [mobile] › test\e2e\foundation.spec.ts:55:1 › Admin Bravo receives only Bravo scope (3.9s)
+  ok  9 [desktop] › test\e2e\foundation.spec.ts:65:1 › Employee navigation excludes management-only modules (10.1s)
+  ok 10 [mobile] › test\e2e\foundation.spec.ts:65:1 › Employee navigation excludes management-only modules (10.9s)
+  ok 11 [desktop] › test\e2e\foundation.spec.ts:81:1 › Employee Bravo remains outside management pages and scopes (4.3s)
+  ok 12 [mobile] › test\e2e\foundation.spec.ts:81:1 › Employee Bravo remains outside management pages and scopes (3.7s)
+  ok 13 [desktop] › test\e2e\foundation.spec.ts:92:1 › theme preference and RTL shell state persist safely (6.2s)
+  ok 14 [mobile] › test\e2e\foundation.spec.ts:92:1 › theme preference and RTL shell state persist safely (6.6s)
+
+  14 passed (2.0m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":7776,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-ydaxj0"}
+--- Phase 1 foundation shell, personas, and scope: PASS ---
+
+=== Phase 2 employee directory :: node scripts/run-phase2-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":25632,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-FnF497"}
+
+Running 20 tests using 2 workers
+
+  ok  2 [desktop] › test\e2e\employee-directory.spec.ts:4:1 › Super Admin searches employee name and employee code (2.6s)
+  ok  1 [mobile] › test\e2e\employee-directory.spec.ts:4:1 › Super Admin searches employee name and employee code (2.7s)
+  ok  3 [desktop] › test\e2e\employee-directory.spec.ts:17:1 › Super Admin creates a workforce record with a server-generated code and no editable code field (2.0s)
+  ok  4 [mobile] › test\e2e\employee-directory.spec.ts:17:1 › Super Admin creates a workforce record with a server-generated code and no editable code field (4.3s)
+  ok  5 [desktop] › test\e2e\employee-directory.spec.ts:36:1 › creation form returns field-level validation errors (3.4s)
+  ok  7 [desktop] › test\e2e\employee-directory.spec.ts:46:1 › Super Admin combines designation, team, and status filters (1.7s)
+  ok  6 [mobile] › test\e2e\employee-directory.spec.ts:36:1 › creation form returns field-level validation errors (3.0s)
+  ok  8 [desktop] › test\e2e\employee-directory.spec.ts:60:1 › Admin filtering remains safe within their Team scope (1.5s)
+  ok  9 [mobile] › test\e2e\employee-directory.spec.ts:46:1 › Super Admin combines designation, team, and status filters (2.1s)
+  ok 10 [desktop] › test\e2e\employee-directory.spec.ts:72:1 › invalid repeated directory parameters fail safely (1.4s)
+  ok 11 [mobile] › test\e2e\employee-directory.spec.ts:60:1 › Admin filtering remains safe within their Team scope (1.4s)
+  ok 12 [desktop] › test\e2e\employee-directory.spec.ts:81:1 › Employee is forbidden from the workforce directory (1.5s)
+  ok 13 [mobile] › test\e2e\employee-directory.spec.ts:72:1 › invalid repeated directory parameters fail safely (1.6s)
+  ok 15 [mobile] › test\e2e\employee-directory.spec.ts:81:1 › Employee is forbidden from the workforce directory (2.2s)
+  ok 14 [desktop] › test\e2e\employee-directory.spec.ts:89:1 › management details preserve Admin privacy and provide visible Super Admin controls (6.6s)
+  ok 16 [mobile] › test\e2e\employee-directory.spec.ts:89:1 › management details preserve Admin privacy and provide visible Super Admin controls (6.8s)
+  ok 17 [desktop] › test\e2e\employee-directory.spec.ts:114:1 › Super Admin can use visible management controls without granting manager or Admin authority implicitly (10.8s)
+  ok 19 [desktop] › test\e2e\employee-directory.spec.ts:162:1 › Employee views and updates only the self-service profile (9.3s)
+  x  18 [mobile] › test\e2e\employee-directory.spec.ts:114:1 › Super Admin can use visible management controls without granting manager or Admin authority implicitly (30.0s)
+  ok 20 [mobile] › test\e2e\employee-directory.spec.ts:162:1 › Employee views and updates only the self-service profile (5.0s)
+
+
+  1) [mobile] › test\e2e\employee-directory.spec.ts:114:1 › Super Admin can use visible management controls without granting manager or Admin authority implicitly 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('form', { name: 'Team and job title' }).getByRole('button', { name: 'Save changes' })
+        - locator resolved to <button type="submit" class="button primary">Save changes</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+        - element is not stable
+      - retrying click action
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+
+
+      133 |   await assignments.getByRole("combobox", { name: "Team", exact: true }).selectOption("team:alpha");
+      134 |   await assignments.getByLabel(/Working pattern/).fill("Hybrid weekdays");
+    > 135 |   await assignments.getByRole("button", { name: "Save changes" }).click();
+          |                                                                   ^
+      136 |   await expect(assignments.getByText("Team and job title saved.")).toBeVisible();
+      137 |   await page.getByRole("dialog").getByRole("button", { name: "Close", exact: true }).click();
+      138 |   await page.getByRole("button", { name: "Change system role", exact: true }).click();
+        at C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\employee-directory.spec.ts:135:67
+
+    Error Context: test-results\employee-directory-Super-A-5fb27--Admin-authority-implicitly-mobile\error-context.md
+
+  1 failed
+    [mobile] › test\e2e\employee-directory.spec.ts:114:1 › Super Admin can use visible management controls without granting manager or Admin authority implicitly 
+  19 passed (4.2m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":25632,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-FnF497"}
+--- Phase 2 employee directory: FAIL ---
+
+=== Phase 3 client/project/location :: node scripts/run-phase3-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":23160,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-vQKvmb"}
+
+Running 14 tests using 2 workers
+
+  ok  1 [mobile] › test\e2e\phase3-operations.spec.ts:20:1 › Super Admin creates Client → Projects → new Location and deliberately reuses it (13.5s)
+  ok  2 [desktop] › test\e2e\phase3-operations.spec.ts:20:1 › Super Admin creates Client → Projects → new Location and deliberately reuses it (13.8s)
+  ok  3 [mobile] › test\e2e\phase3-operations.spec.ts:31:1 › Client-scoped Admin manages descendants while relationship-only and unscoped Admins remain denied (4.8s)
+  ok  4 [desktop] › test\e2e\phase3-operations.spec.ts:31:1 › Client-scoped Admin manages descendants while relationship-only and unscoped Admins remain denied (5.2s)
+  ok  5 [mobile] › test\e2e\phase3-operations.spec.ts:36:1 › Project and Location scopes never climb upward or reach siblings (3.6s)
+  ok  6 [desktop] › test\e2e\phase3-operations.spec.ts:36:1 › Project and Location scopes never climb upward or reach siblings (3.4s)
+  ok  7 [mobile] › test\e2e\phase3-operations.spec.ts:41:1 › Employee has no Phase 3 navigation, pages, or sensitive operational projection (2.8s)
+  ok  8 [desktop] › test\e2e\phase3-operations.spec.ts:41:1 › Employee has no Phase 3 navigation, pages, or sensitive operational projection (2.6s)
+  ok  9 [mobile] › test\e2e\phase3-operations.spec.ts:45:1 › archive safeguards and stale submissions fail with understandable state (7.2s)
+  ok 10 [desktop] › test\e2e\phase3-operations.spec.ts:45:1 › archive safeguards and stale submissions fail with understandable state (7.7s)
+  ok 11 [mobile] › test\e2e\phase3-operations.spec.ts:50:1 › cross-client and invalid coordinate submissions cannot create hidden relationships (8.2s)
+  ok 12 [desktop] › test\e2e\phase3-operations.spec.ts:50:1 › cross-client and invalid coordinate submissions cannot create hidden relationships (8.3s)
+  ok 13 [mobile] › test\e2e\phase3-operations.spec.ts:55:1 › Super Admin scope control is explicit and separate from Account Manager (5.3s)
+  ok 14 [desktop] › test\e2e\phase3-operations.spec.ts:55:1 › Super Admin scope control is explicit and separate from Account Manager (5.2s)
+
+  14 passed (2.7m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":23160,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-vQKvmb"}
+--- Phase 3 client/project/location: PASS ---
+
+=== Phase 4 scheduling publication :: node scripts/run-phase4-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":28228,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-69cWgD"}
+
+Running 2 tests using 2 workers
+
+  ok 1 [mobile] › test\e2e\phase4-scheduling.spec.ts:38:1 › Super Admin publishes, Admin reads every schedule state, and Employee sees only Published work (39.4s)
+  ok 2 [desktop] › test\e2e\phase4-scheduling.spec.ts:38:1 › Super Admin publishes, Admin reads every schedule state, and Employee sees only Published work (42.4s)
+
+  2 passed (2.6m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":28228,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-69cWgD"}
+--- Phase 4 scheduling publication: PASS ---
+
+=== Phase 5 leave and availability :: node scripts/run-phase5-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":20308,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-fJb90K"}
+
+Running 2 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase5-leave.spec.ts:4:1 › Employee previews and requests a vacation, Super Admin decides it, and Admin reads only approved team dates (7.0s)
+  ok 2 [mobile] › test\e2e\phase5-leave.spec.ts:4:1 › Employee previews and requests a vacation, Super Admin decides it, and Admin reads only approved team dates (5.3s)
+
+  2 passed (1.9m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":20308,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-fJb90K"}
+Phase 5 browser disposable database cleanup complete.
+--- Phase 5 leave and availability: PASS ---
+
+=== Phase 6 skills and capabilities :: node scripts/run-phase6-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":29012,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-8hOWex"}
+
+Running 4 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase6-capabilities.spec.ts:6:1 › Super Admin records a skill and the Employee sees only their own recorded fact (7.4s)
+  ok 2 [desktop] › test\e2e\phase6-capabilities.spec.ts:38:1 › Super Admin manages missing controls while Admin and Employee remain excluded (16.2s)
+  ok 3 [mobile] › test\e2e\phase6-capabilities.spec.ts:6:1 › Super Admin records a skill and the Employee sees only their own recorded fact (7.2s)
+  ok 4 [mobile] › test\e2e\phase6-capabilities.spec.ts:38:1 › Super Admin manages missing controls while Admin and Employee remain excluded (14.7s)
+
+  4 passed (3.2m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":29012,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-8hOWex"}
+Phase 6 browser disposable database cleanup complete.
+--- Phase 6 skills and capabilities: PASS ---
+
+=== Phase 7 coverage and replacement :: node scripts/run-phase7-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":24324,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-pq40ez"}
+
+Running 4 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase7-coverage.spec.ts:4:1 › Super Admin sees non-blocking coverage and replacement workspaces; Employee is kept out (4.3s)
+  ok 2 [desktop] › test\e2e\phase7-coverage.spec.ts:6:1 › replacement decision confirmation stays visible after its pending card and dialog disappear (12.0s)
+  ok 3 [mobile] › test\e2e\phase7-coverage.spec.ts:4:1 › Super Admin sees non-blocking coverage and replacement workspaces; Employee is kept out (3.8s)
+  ok 4 [mobile] › test\e2e\phase7-coverage.spec.ts:6:1 › replacement decision confirmation stays visible after its pending card and dialog disappear (11.0s)
+
+  4 passed (2.0m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":24324,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-pq40ez"}
+Phase 7 browser disposable database cleanup complete.
+--- Phase 7 coverage and replacement: PASS ---
+
+=== Phase 8 static planning map :: node scripts/run-phase8-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":40596,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-P8jOxS"}
+
+Running 6 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase8-planning-map.spec.ts:8:1 › Super Admin sees static Published planning facts and safe fallback (2.7s)
+  ok 2 [desktop] › test\e2e\phase8-planning-map.spec.ts:9:1 › Scoped Admin receives only the coarse Team × operational intersection and Employee is denied (3.0s)
+  ok 3 [desktop] › test\e2e\phase8-planning-map.spec.ts:11:1 › filter form accepts All authorized and employee identifiers, and map dragging follows the pointer (3.7s)
+  ok 4 [mobile] › test\e2e\phase8-planning-map.spec.ts:8:1 › Super Admin sees static Published planning facts and safe fallback (1.4s)
+  ok 5 [mobile] › test\e2e\phase8-planning-map.spec.ts:9:1 › Scoped Admin receives only the coarse Team × operational intersection and Employee is denied (2.3s)
+  ok 6 [mobile] › test\e2e\phase8-planning-map.spec.ts:11:1 › filter form accepts All authorized and employee identifiers, and map dragging follows the pointer (3.1s)
+
+  6 passed (1.9m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":40596,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-P8jOxS"}
+Phase 8 browser disposable database cleanup complete.
+--- Phase 8 static planning map: PASS ---
+
+=== Phase 9 capability evidence :: node scripts/run-phase9-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":6612,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-t1mxad"}
+
+Running 4 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase9-evidence.spec.ts:25:1 › Employee saves capability evidence privately, Super Admin reviews and verifies it, and the owner archives it (9.5s)
+  ok 2 [desktop] › test\e2e\phase9-evidence.spec.ts:132:1 › Scoped Admin receives certification summary only and Employee is denied management evidence (4.4s)
+  ok 3 [mobile] › test\e2e\phase9-evidence.spec.ts:25:1 › Employee saves capability evidence privately, Super Admin reviews and verifies it, and the owner archives it (7.0s)
+  ok 4 [mobile] › test\e2e\phase9-evidence.spec.ts:132:1 › Scoped Admin receives certification summary only and Employee is denied management evidence (3.7s)
+
+  4 passed (1.8m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":6612,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-t1mxad"}
+Phase 9 browser disposable database cleanup complete.
+--- Phase 9 capability evidence: PASS ---
+
+=== Phase 10 collaboration and governance :: node scripts/run-phase10-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":3404,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-i9zTdP"}
+
+Running 2 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase10-collaboration.spec.ts:10:1 › Admin governs shared notes and management notes, participants discuss a request, and notifications and audit stay scoped (13.4s)
+  ok 2 [mobile] › test\e2e\phase10-collaboration.spec.ts:10:1 › Admin governs shared notes and management notes, participants discuss a request, and notifications and audit stay scoped (11.0s)
+
+  2 passed (2.2m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":3404,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-i9zTdP"}
+Phase 10 browser disposable database cleanup complete.
+--- Phase 10 collaboration and governance: PASS ---
+
+=== Phase 11 dashboards, reports and exports :: node scripts/run-phase11-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":18740,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-k44ILC"}
+
+Running 8 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase11-reporting.spec.ts:20:1 › Super Admin reporting: dashboard, published allocation drill-down, planning separation, and a bounded CSV export (2.4s)
+  ok 2 [desktop] › test\e2e\phase11-reporting.spec.ts:76:1 › Scoped Admin reporting is scope-bounded, may open planning, may not reach audit, and may not export planning (2.3s)
+  ok 3 [desktop] › test\e2e\phase11-reporting.spec.ts:121:1 › Employee dashboard is self-only and reporting stays closed (4.1s)
+  ok 4 [desktop] › test\e2e\phase11-reporting.spec.ts:177:1 › report filters apply without errors, retain their values and export the same conflict window (2.8s)
+  ok 5 [mobile] › test\e2e\phase11-reporting.spec.ts:20:1 › Super Admin reporting: dashboard, published allocation drill-down, planning separation, and a bounded CSV export (1.6s)
+  ok 6 [mobile] › test\e2e\phase11-reporting.spec.ts:76:1 › Scoped Admin reporting is scope-bounded, may open planning, may not reach audit, and may not export planning (2.2s)
+  ok 7 [mobile] › test\e2e\phase11-reporting.spec.ts:121:1 › Employee dashboard is self-only and reporting stays closed (3.4s)
+  ok 8 [mobile] › test\e2e\phase11-reporting.spec.ts:177:1 › report filters apply without errors, retain their values and export the same conflict window (2.3s)
+
+  8 passed (1.9m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":18740,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-k44ILC"}
+Phase 11 browser disposable database cleanup complete.
+--- Phase 11 dashboards, reports and exports: PASS ---
+
+=== Credential authentication login :: node scripts/run-credential-e2e.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":41600,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-bCVjDk"}
+[WebServer] Phase 2 safe build preflight passed: isolated copy contains no .env* files.
+[WebServer] Phase 2 isolated typecheck passed.
+[WebServer] ▲ Next.js 16.4.0 (webpack)
+[WebServer] ✓ Running next.config.ts took 47ms
+[WebServer] 
+[WebServer]   Creating an optimized production build ...
+[WebServer] ✓ Compiled successfully in 29.5s
+[WebServer]   Running TypeScript ...
+[WebServer]   Finished TypeScript in 34.8s ...
+[WebServer]   Collecting page data using 7 workers ...
+[WebServer]   Generating static pages using 7 workers (0/8) ...
+[WebServer]   Generating static pages using 7 workers (2/8) 
+[WebServer]   Generating static pages using 7 workers (4/8) 
+[WebServer]   Generating static pages using 7 workers (6/8) 
+[WebServer] ✓ Generating static pages using 7 workers (8/8) in 1430ms
+[WebServer]   Finalizing page optimization ...
+[WebServer]   Collecting build traces ...
+[WebServer] 
+[WebServer] Route (app)
+[WebServer] ┌ ƒ /
+[WebServer] ├ ƒ /_not-found
+[WebServer] ├ ƒ /[module]
+[WebServer] ├ ƒ /account/change-password
+[WebServer] ├ ƒ /accounts
+[WebServer] ├ ƒ /api/auth/login
+[WebServer] ├ ƒ /api/auth/logout
+[WebServer] ├ ƒ /api/auth/mock-login
+[WebServer] ├ ƒ /api/evidence/[evidenceId]/files
+[WebServer] ├ ƒ /api/evidence/files/[fileId]
+[WebServer] ├ ƒ /api/foundation/scope/[scopeRef]
+[WebServer] ├ ƒ /api/reports/[reportKey]/export
+[WebServer] ├ ƒ /api/tickets
+[WebServer] ├ ƒ /api/tickets/[ticketId]
+[WebServer] ├ ƒ /api/tickets/[ticketId]/files
+[WebServer] ├ ƒ /api/tickets/[ticketId]/files/[fileId]
+[WebServer] ├ ƒ /api/tickets/commands
+[WebServer] ├ ƒ /arrangements
+[WebServer] ├ ƒ /audit
+[WebServer] ├ ƒ /clients
+[WebServer] ├ ƒ /clients/[clientId]
+[WebServer] ├ ƒ /coverage
+[WebServer] ├ ƒ /dashboard
+[WebServer] ├ ƒ /designations
+[WebServer] ├ ƒ /employees
+[WebServer] ├ ƒ /employees/[userId]
+[WebServer] ├ ƒ /leave
+[WebServer] ├ ƒ /locations
+[WebServer] ├ ƒ /locations/[locationId]
+[WebServer] ├ ƒ /login
+[WebServer] ├ ƒ /map
+[WebServer] ├ ƒ /notifications
+[WebServer] ├ ƒ /profile
+[WebServer] ├ ƒ /projects
+[WebServer] ├ ƒ /projects/[projectId]
+[WebServer] ├ ƒ /replacements
+[WebServer] ├ ƒ /reports
+[WebServer] ├ ƒ /reports/[reportKey]
+[WebServer] ├ ƒ /requests
+[WebServer] ├ ƒ /schedule
+[WebServer] ├ ƒ /skills
+[WebServer] ├ ƒ /teams
+[WebServer] ├ ƒ /tickets
+[WebServer] └ ƒ /tickets/[ticketId]
+[WebServer] 
+[WebServer] 
+[WebServer] ƒ  (Dynamic)  server-rendered on demand
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.0
+[WebServer] - Local:         http://127.0.0.1:53230
+[WebServer] - Network:       http://127.0.0.1:53230
+[WebServer] ✓ Ready in 324ms
+[WebServer] ✓ Running next.config.ts took 55ms
+
+Running 2 tests using 1 worker
+
+{"loginStatus":200,"errorCode":null,"browserErrors":{"console":0,"page":0}}
+  ok 1 [desktop] › test\e2e\credential-login.spec.ts:5:1 › credential login creates an opaque session and reaches the dashboard (1.8s)
+{"loginStatus":200,"errorCode":null,"browserErrors":{"console":0,"page":0}}
+  ok 2 [mobile] › test\e2e\credential-login.spec.ts:5:1 › credential login creates an opaque session and reaches the dashboard (736ms)
+
+  2 passed (2.0m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":41600,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-bCVjDk"}
+Credential browser disposable database cleanup complete.
+--- Credential authentication login: PASS ---
+
+=== Super Admin account administration :: node scripts/run-account-e2e.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":38944,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-uECrgo"}
+[WebServer] Phase 2 safe build preflight passed: isolated copy contains no .env* files.
+[WebServer] Phase 2 isolated typecheck passed.
+[WebServer] ▲ Next.js 16.4.0 (webpack)
+[WebServer] ✓ Running next.config.ts took 63ms
+[WebServer] 
+[WebServer]   Creating an optimized production build ...
+[WebServer] ✓ Compiled successfully in 29.4s
+[WebServer]   Running TypeScript ...
+[WebServer]   Finished TypeScript in 22.7s ...
+[WebServer]   Collecting page data using 7 workers ...
+[WebServer]   Generating static pages using 7 workers (0/8) ...
+[WebServer]   Generating static pages using 7 workers (2/8) 
+[WebServer]   Generating static pages using 7 workers (4/8) 
+[WebServer]   Generating static pages using 7 workers (6/8) 
+[WebServer] ✓ Generating static pages using 7 workers (8/8) in 869ms
+[WebServer]   Finalizing page optimization ...
+[WebServer]   Collecting build traces ...
+[WebServer] 
+[WebServer] Route (app)
+[WebServer] ┌ ƒ /
+[WebServer] ├ ƒ /_not-found
+[WebServer] ├ ƒ /[module]
+[WebServer] ├ ƒ /account/change-password
+[WebServer] ├ ƒ /accounts
+[WebServer] ├ ƒ /api/auth/login
+[WebServer] ├ ƒ /api/auth/logout
+[WebServer] ├ ƒ /api/auth/mock-login
+[WebServer] ├ ƒ /api/evidence/[evidenceId]/files
+[WebServer] ├ ƒ /api/evidence/files/[fileId]
+[WebServer] ├ ƒ /api/foundation/scope/[scopeRef]
+[WebServer] ├ ƒ /api/reports/[reportKey]/export
+[WebServer] ├ ƒ /api/tickets
+[WebServer] ├ ƒ /api/tickets/[ticketId]
+[WebServer] ├ ƒ /api/tickets/[ticketId]/files
+[WebServer] ├ ƒ /api/tickets/[ticketId]/files/[fileId]
+[WebServer] ├ ƒ /api/tickets/commands
+[WebServer] ├ ƒ /arrangements
+[WebServer] ├ ƒ /audit
+[WebServer] ├ ƒ /clients
+[WebServer] ├ ƒ /clients/[clientId]
+[WebServer] ├ ƒ /coverage
+[WebServer] ├ ƒ /dashboard
+[WebServer] ├ ƒ /designations
+[WebServer] ├ ƒ /employees
+[WebServer] ├ ƒ /employees/[userId]
+[WebServer] ├ ƒ /leave
+[WebServer] ├ ƒ /locations
+[WebServer] ├ ƒ /locations/[locationId]
+[WebServer] ├ ƒ /login
+[WebServer] ├ ƒ /map
+[WebServer] ├ ƒ /notifications
+[WebServer] ├ ƒ /profile
+[WebServer] ├ ƒ /projects
+[WebServer] ├ ƒ /projects/[projectId]
+[WebServer] ├ ƒ /replacements
+[WebServer] ├ ƒ /reports
+[WebServer] ├ ƒ /reports/[reportKey]
+[WebServer] ├ ƒ /requests
+[WebServer] ├ ƒ /schedule
+[WebServer] ├ ƒ /skills
+[WebServer] ├ ƒ /teams
+[WebServer] ├ ƒ /tickets
+[WebServer] └ ƒ /tickets/[ticketId]
+[WebServer] 
+[WebServer] 
+[WebServer] ƒ  (Dynamic)  server-rendered on demand
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.0
+[WebServer] - Local:         http://127.0.0.1:58307
+[WebServer] - Network:       http://127.0.0.1:58307
+[WebServer] ✓ Ready in 268ms
+[WebServer] ✓ Running next.config.ts took 67ms
+
+Running 4 tests using 1 worker
+
+  x  1 [desktop] › test\e2e\account-administration.spec.ts:30:1 › Super Admin creates and resets an account; other roles cannot reach /accounts (10.1s)
+  ok 2 [desktop] › test\e2e\account-administration.spec.ts:112:1 › legacy accounts recover My Profile and appear in the directory after Super Admin completes setup (9.7s)
+  ok 3 [mobile] › test\e2e\account-administration.spec.ts:30:1 › Super Admin creates and resets an account; other roles cannot reach /accounts (12.5s)
+  ok 4 [mobile] › test\e2e\account-administration.spec.ts:112:1 › legacy accounts recover My Profile and appear in the directory after Super Admin completes setup (7.9s)
+
+
+  1) [desktop] › test\e2e\account-administration.spec.ts:30:1 › Super Admin creates and resets an account; other roles cannot reach /accounts 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/account\/change-password$/
+    Received string:  "http://127.0.0.1:58307/login"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        3 × locator resolved to <html lang="en" dir="ltr" data-theme="light">…</html>
+          - unexpected value "http://127.0.0.1:58307/login"
+
+
+      60 |   await page.getByLabel("Password", { exact: true }).fill(TEMP);
+      61 |   await page.getByRole("button", { name: "Sign in" }).click();
+    > 62 |   await expect(page).toHaveURL(/\/account\/change-password$/);
+         |                      ^
+      63 |   await expect(page.getByRole("button", { name: "Log out" })).toBeVisible();
+      64 |   // The required-change gate covers direct business endpoints, not just the page layout.
+      65 |   expect((await page.request.get("/api/reports/employee-directory/export")).status()).toBe(401);
+        at C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\account-administration.spec.ts:62:22
+
+    Error Context: test-results\account-administration-Sup-c141e-roles-cannot-reach-accounts-desktop\error-context.md
+
+  1 failed
+    [desktop] › test\e2e\account-administration.spec.ts:30:1 › Super Admin creates and resets an account; other roles cannot reach /accounts 
+  3 passed (2.4m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":38944,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-uECrgo"}
+Account administration browser disposable database cleanup complete.
+--- Super Admin account administration: FAIL ---
+
+=== Company tickets and private files :: node scripts/run-ticket-playwright.mjs (own disposable database + allocated port) ===
+Phase 2 safe build preflight passed: isolated copy contains no .env* files.
+Phase 2 isolated typecheck passed.
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 38ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 21.6s
+  Running TypeScript ...
+  Finished TypeScript in 17.4s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 645ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[module]
+├ ƒ /account/change-password
+├ ƒ /accounts
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/mock-login
+├ ƒ /api/evidence/[evidenceId]/files
+├ ƒ /api/evidence/files/[fileId]
+├ ƒ /api/foundation/scope/[scopeRef]
+├ ƒ /api/reports/[reportKey]/export
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[ticketId]
+├ ƒ /api/tickets/[ticketId]/files
+├ ƒ /api/tickets/[ticketId]/files/[fileId]
+├ ƒ /api/tickets/commands
+├ ƒ /arrangements
+├ ƒ /audit
+├ ƒ /clients
+├ ƒ /clients/[clientId]
+├ ƒ /coverage
+├ ƒ /dashboard
+├ ƒ /designations
+├ ƒ /employees
+├ ƒ /employees/[userId]
+├ ƒ /leave
+├ ƒ /locations
+├ ƒ /locations/[locationId]
+├ ƒ /login
+├ ƒ /map
+├ ƒ /notifications
+├ ƒ /profile
+├ ƒ /projects
+├ ƒ /projects/[projectId]
+├ ƒ /replacements
+├ ƒ /reports
+├ ƒ /reports/[reportKey]
+├ ƒ /requests
+├ ƒ /schedule
+├ ƒ /skills
+├ ƒ /teams
+├ ƒ /tickets
+└ ƒ /tickets/[ticketId]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+▲ Next.js 16.4.0
+- Local:         http://127.0.0.1:62053
+- Network:       http://127.0.0.1:62053
+✓ Ready in 195ms
+✓ Running next.config.ts took 59ms
+
+Running 14 tests using 1 worker
+
+  ok  1 [desktop] › test\e2e\tickets.spec.ts:52:1 › manager creates and edits Company workspaces, publishes dashboards and grants ticket people while retaining management navigation (9.7s)
+  ok  2 [desktop] › test\e2e\tickets.spec.ts:113:1 › Employee lands on tickets and creates, holds, closes, logs, archives and restores their own work (9.9s)
+  ok  3 [desktop] › test\e2e\tickets.spec.ts:169:1 › company users create without enrollment, navigate nested dashboards, assign several people and mention with read-only notifications (14.7s)
+  ok  4 [desktop] › test\e2e\tickets.spec.ts:294:1 › mentioned people and unrelated members receive current read-only and non-enumerating ticket boundaries (3.8s)
+  ok  5 [desktop] › test\e2e\tickets.spec.ts:311:1 › private upload and download work through current participant access and stop after revocation (6.1s)
+  ok  6 [desktop] › test\e2e\tickets.spec.ts:340:1 › Overview, Tickets, list and Kanban retain shared filters across refresh and fit the viewport (2.3s)
+  ok  7 [desktop] › test\e2e\tickets.spec.ts:374:1 › every role starts with all accessible work across destinations, can narrow relationships and return without losing context (9.9s)
+  ok  8 [mobile] › test\e2e\tickets.spec.ts:52:1 › manager creates and edits Company workspaces, publishes dashboards and grants ticket people while retaining management navigation (9.6s)
+  ok  9 [mobile] › test\e2e\tickets.spec.ts:113:1 › Employee lands on tickets and creates, holds, closes, logs, archives and restores their own work (10.4s)
+  ok 10 [mobile] › test\e2e\tickets.spec.ts:169:1 › company users create without enrollment, navigate nested dashboards, assign several people and mention with read-only notifications (15.9s)
+  ok 11 [mobile] › test\e2e\tickets.spec.ts:294:1 › mentioned people and unrelated members receive current read-only and non-enumerating ticket boundaries (3.0s)
+  ok 12 [mobile] › test\e2e\tickets.spec.ts:311:1 › private upload and download work through current participant access and stop after revocation (5.3s)
+  ok 13 [mobile] › test\e2e\tickets.spec.ts:340:1 › Overview, Tickets, list and Kanban retain shared filters across refresh and fit the viewport (2.8s)
+  ok 14 [mobile] › test\e2e\tickets.spec.ts:374:1 › every role starts with all accessible work across destinations, can narrow relationships and return without losing context (10.2s)
+
+  14 passed (2.0m)
+Company ticket browser cleanup complete: 1 databases created, 1 dropped, 0 retained; owned server stopped, build checkout and private fictional file directory removed.
+--- Company tickets and private files: PASS ---
+
+=== Responsive UI, task discovery and planning workspace :: node scripts/run-responsive-playwright.mjs (own disposable database + allocated port) ===
+Phase 2 safe build preflight passed: isolated copy contains no .env* files.
+Phase 2 isolated typecheck passed.
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 50ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 27.2s
+  Running TypeScript ...
+  Finished TypeScript in 20.4s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 949ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[module]
+├ ƒ /account/change-password
+├ ƒ /accounts
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/mock-login
+├ ƒ /api/evidence/[evidenceId]/files
+├ ƒ /api/evidence/files/[fileId]
+├ ƒ /api/foundation/scope/[scopeRef]
+├ ƒ /api/reports/[reportKey]/export
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[ticketId]
+├ ƒ /api/tickets/[ticketId]/files
+├ ƒ /api/tickets/[ticketId]/files/[fileId]
+├ ƒ /api/tickets/commands
+├ ƒ /arrangements
+├ ƒ /audit
+├ ƒ /clients
+├ ƒ /clients/[clientId]
+├ ƒ /coverage
+├ ƒ /dashboard
+├ ƒ /designations
+├ ƒ /employees
+├ ƒ /employees/[userId]
+├ ƒ /leave
+├ ƒ /locations
+├ ƒ /locations/[locationId]
+├ ƒ /login
+├ ƒ /map
+├ ƒ /notifications
+├ ƒ /profile
+├ ƒ /projects
+├ ƒ /projects/[projectId]
+├ ƒ /replacements
+├ ƒ /reports
+├ ƒ /reports/[reportKey]
+├ ƒ /requests
+├ ƒ /schedule
+├ ƒ /skills
+├ ƒ /teams
+├ ƒ /tickets
+└ ƒ /tickets/[ticketId]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+▲ Next.js 16.4.0
+- Local:         http://127.0.0.1:50790
+- Network:       http://127.0.0.1:50790
+✓ Ready in 299ms
+✓ Running next.config.ts took 64ms
+Responsive browser: Google Chrome (C:\Users\m.kassab\AppData\Local\Google\Chrome\Application\chrome.exe).
+
+Running 24 tests using 1 worker
+
+Responsive browser: Google Chrome (C:\Users\m.kassab\AppData\Local\Google\Chrome\Application\chrome.exe).
+  ok  1 test\e2e\responsive.spec.ts:51:3 › expressive motion › motion stays finite, preserves modal focus and works across desktop and phone (23.5s)
+  ok  2 test\e2e\responsive.spec.ts:195:35 › all management screens and report tables fit from phone to wide desktop · 320×640 (35.4s)
+  ok  3 test\e2e\responsive.spec.ts:195:35 › all management screens and report tables fit from phone to wide desktop · 390×844 (37.8s)
+  ok  4 test\e2e\responsive.spec.ts:195:35 › all management screens and report tables fit from phone to wide desktop · 600×900 (28.5s)
+  ok  5 test\e2e\responsive.spec.ts:195:35 › all management screens and report tables fit from phone to wide desktop · 768×1024 (26.1s)
+  ok  6 test\e2e\responsive.spec.ts:195:35 › all management screens and report tables fit from phone to wide desktop · 820×1180 (34.2s)
+  ok  7 test\e2e\responsive.spec.ts:195:35 › all management screens and report tables fit from phone to wide desktop · 1024×768 (34.8s)
+  ok  8 test\e2e\responsive.spec.ts:195:35 › all management screens and report tables fit from phone to wide desktop · 1280×800 (1.4m)
+  ok  9 test\e2e\responsive.spec.ts:195:35 › all management screens and report tables fit from phone to wide desktop · 1920×1080 (1.0m)
+  ok 10 test\e2e\responsive.spec.ts:228:114 › create and review dialogs fit phones, tablets, and short landscape screens · 320×640 (1.7m)
+  ok 11 test\e2e\responsive.spec.ts:228:114 › create and review dialogs fit phones, tablets, and short landscape screens · 768×360 (1.7m)
+  ok 12 test\e2e\responsive.spec.ts:228:114 › create and review dialogs fit phones, tablets, and short landscape screens · 1024×768 (1.9m)
+  ok 13 test\e2e\responsive.spec.ts:260:1 › role navigation, RTL, dark theme and enlarged text reflow (2.0m)
+  ok 14 test\e2e\responsive.spec.ts:303:1 › sign in, password change and unavailable pages fit every viewport (14.0s)
+  ok 15 test\e2e\responsive.spec.ts:324:1 › More navigation stays usable on tablets and closes with focus restored on desktop (3.8s)
+  ok 16 test\e2e\responsive.spec.ts:346:1 › task dialogs keep fields and actions above a simulated mobile keyboard (4.1s)
+  ok 17 test\e2e\responsive.spec.ts:375:1 › visual controls keep contrast, focus and native modal behavior in both themes (10.4s)
+  ok 18 test\e2e\responsive.spec.ts:456:1 › reduced motion removes decorative movement and forced colors retain controls (2.8s)
+  ok 19 test\e2e\responsive.spec.ts:484:1 › desktop hover is tactile and reduced motion removes its movement (4.2s)
+  ok 20 test\e2e\responsive.spec.ts:505:1 › the planning workspace fits its pins and exposes filters, search and next actions on every screen (24.8s)
+  ok 21 test\e2e\responsive.spec.ts:559:1 › feature discovery stays usable and role-specific on phone, desktop and RTL with larger text (31.7s)
+  ok 22 test\e2e\responsive.spec.ts:601:1 › monthly timetable and people catalogues stay usable across phone, desktop, RTL and reduced motion (27.3s)
+  x  23 test\e2e\responsive.spec.ts:664:1 › clear user journeys keep every authorized tab understandable and make the main tasks work on phone and desktop (1.2m)
+Responsive browser: Google Chrome (C:\Users\m.kassab\AppData\Local\Google\Chrome\Application\chrome.exe).
+  ok 24 test\e2e\responsive.spec.ts:739:1 › populated tickets, destination filters and work dialogs fit every responsive viewport (1.3m)
+
+
+  1) test\e2e\responsive.spec.ts:664:1 › clear user journeys keep every authorized tab understandable and make the main tasks work on phone and desktop 
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByRole('dialog').getByRole('form', { name: 'Record employee skill' }).locator('input[name="employeeUserId"]')
+    Expected: "mock-employee-cora"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveValue" getByRole('dialog').getByRole('form', { name: 'Record employee skill' }).locator('input[name="employeeUserId"]') with timeout 5000ms
+      - waiting for getByRole('dialog').getByRole('form', { name: 'Record employee skill' }).locator('input[name="employeeUserId"]')
+
+
+      715 |     await page.getByRole("button", { name: /^Record a skill for Cora Bell/ }).click();
+      716 |     const record = page.getByRole("dialog").getByRole("form", { name: "Record employee skill" });
+    > 717 |     await expect(record.locator('input[name="employeeUserId"]')).toHaveValue("mock-employee-cora");
+          |                                                                  ^
+      718 |     await expect(record.getByRole("combobox")).toHaveCount(1);
+      719 |     issues.push(...await layoutIssues(page, `${width}px selected-person skill dialog`));
+      720 |     await page.keyboard.press("Escape");
+        at C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\responsive.spec.ts:717:66
+
+    Error Context: test-results\responsive\responsive-clear-user-jour-6d94e-s-work-on-phone-and-desktop\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\responsive\responsive-clear-user-jour-6d94e-s-work-on-phone-and-desktop\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\responsive\responsive-clear-user-jour-6d94e-s-work-on-phone-and-desktop\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    test\e2e\responsive.spec.ts:664:1 › clear user journeys keep every authorized tab understandable and make the main tasks work on phone and desktop 
+  23 passed (18.8m)
+Responsive browser cleanup complete: 1 databases created, 1 dropped, 0 retained; owned process trees stopped, build checkout and private fictional file directory removed.
+--- Responsive UI, task discovery and planning workspace: FAIL ---
+
+Aggregate E2E summary (each phase runner isolated on its own disposable database and port):
+  PASS  Phase 1 foundation shell, personas, and scope
+  FAIL  Phase 2 employee directory
+  PASS  Phase 3 client/project/location
+  PASS  Phase 4 scheduling publication
+  PASS  Phase 5 leave and availability
+  PASS  Phase 6 skills and capabilities
+  PASS  Phase 7 coverage and replacement
+  PASS  Phase 8 static planning map
+  PASS  Phase 9 capability evidence
+  PASS  Phase 10 collaboration and governance
+  PASS  Phase 11 dashboards, reports and exports
+  PASS  Credential authentication login
+  FAIL  Super Admin account administration
+  PASS  Company tickets and private files
+  FAIL  Responsive UI, task discovery and planning workspace
+  Overall: 12/15 suites passed
+----- Aggregate E2E: FAIL -----
+
+===== SYSTEM LOCK :: Safe build =====
+Phase 2 safe build preflight passed: isolated copy contains no .env* files.
+Phase 2 isolated typecheck passed.
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 148ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 37.0s
+  Running TypeScript ...
+  Finished TypeScript in 25.1s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 863ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[module]
+├ ƒ /account/change-password
+├ ƒ /accounts
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/mock-login
+├ ƒ /api/evidence/[evidenceId]/files
+├ ƒ /api/evidence/files/[fileId]
+├ ƒ /api/foundation/scope/[scopeRef]
+├ ƒ /api/reports/[reportKey]/export
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[ticketId]
+├ ƒ /api/tickets/[ticketId]/files
+├ ƒ /api/tickets/[ticketId]/files/[fileId]
+├ ƒ /api/tickets/commands
+├ ƒ /arrangements
+├ ƒ /audit
+├ ƒ /clients
+├ ƒ /clients/[clientId]
+├ ƒ /coverage
+├ ƒ /dashboard
+├ ƒ /designations
+├ ƒ /employees
+├ ƒ /employees/[userId]
+├ ƒ /leave
+├ ƒ /locations
+├ ƒ /locations/[locationId]
+├ ƒ /login
+├ ƒ /map
+├ ƒ /notifications
+├ ƒ /profile
+├ ƒ /projects
+├ ƒ /projects/[projectId]
+├ ƒ /replacements
+├ ƒ /reports
+├ ƒ /reports/[reportKey]
+├ ƒ /requests
+├ ƒ /schedule
+├ ƒ /skills
+├ ƒ /teams
+├ ƒ /tickets
+└ ƒ /tickets/[ticketId]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+Phase 2 isolated safe build cleanup complete.
+----- Safe build: PASS -----
+
+===== SYSTEM LOCK :: Diff whitespace check =====
+warning: in the working copy of 'scripts/run-aggregate-e2e-tests.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'scripts/run-system-smoke.mjs', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/e2e/account-administration.spec.ts', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'test/e2e/employee-directory.spec.ts', CRLF will be replaced by LF the next time Git touches it
+----- Diff whitespace check: PASS -----
+
+System-lock summary (fail-closed):
+  PASS  Scenario manifest validation
+  PASS  Typecheck
+  PASS  Lint
+  PASS  Unit tests
+  PASS  Component tests
+  PASS  Aggregate integration tests
+  PASS  Migration tests
+  PASS  Route certification
+  PASS  Isolation tests
+  PASS  Seed smoke
+  PASS  Fresh-system smoke
+  FAIL  Aggregate E2E
+  PASS  Safe build
+  PASS  Diff whitespace check
+  Overall: 13/14 steps passed; 0 interruption(s).
+  SYSTEM LOCK: RED (do not commit or push)

@@ -1,6 +1,8 @@
 // @vitest-environment jsdom
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { hydrateRoot } from "react-dom/client";
+import { renderToString } from "react-dom/server";
 import { TaskDialog } from "@/shared/components/task-dialog";
 import { ThemeToggle } from "@/shared/components/theme-provider";
 
@@ -28,6 +30,26 @@ function animationEvent(target: Element, name = "scopeis-dialog-exit", pseudoEle
 }
 
 describe("focused task UI", () => {
+  it("keeps server-rendered task buttons disabled until hydration makes them interactive", async () => {
+    const task = <TaskDialog triggerLabel="Record skill" title="Record a skill"><input aria-label="Skill description" /></TaskDialog>;
+    const container = document.createElement("div");
+    container.innerHTML = renderToString(task);
+    document.body.append(container);
+    let root: ReturnType<typeof hydrateRoot> | undefined;
+    try {
+      const trigger = container.querySelector("button")!;
+      expect(trigger).toBeDisabled();
+      await act(async () => { root = hydrateRoot(container, task); });
+      expect(trigger).toBeEnabled();
+      fireEvent.click(trigger);
+      expect(screen.getByRole("dialog", { name: "Record a skill" })).toBeVisible();
+      expect(screen.getByLabelText("Skill description")).toBeVisible();
+    } finally {
+      await act(async () => root?.unmount());
+      container.remove();
+    }
+  });
+
   it("keeps forms out of the page until requested and returns to the trigger on cancellation", () => {
     render(<TaskDialog triggerLabel="Add project" title="New project" description="Add a project for this client."><label>Project name<input /></label></TaskDialog>);
     expect(screen.queryByLabelText("Project name")).not.toBeInTheDocument();

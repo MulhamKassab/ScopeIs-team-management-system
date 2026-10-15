@@ -1,0 +1,131 @@
+{
+  "verifiedAt": "2026-10-15T15:25:59.980Z",
+  "baseline": "48e3e7cb5b7312a103fe1dbdfa88263605a6231b",
+  "injection": {
+    "exitCode": 0,
+    "timedOut": true
+  },
+  "checks": [
+    {
+      "variant": "baseline",
+      "phase": 5,
+      "sourcePath": "scripts\\run-phase5-playwright.mjs",
+      "sha256": "d84dc666d294c996e5d717a789bc7aa0f7713bf8c8be5856ca219a1efc54543b",
+      "rejectsExpiredZeroExit": false,
+      "forwardsOutput": false,
+      "cleanupReached": true,
+      "passed": false
+    },
+    {
+      "variant": "baseline",
+      "phase": 6,
+      "sourcePath": "scripts\\run-phase6-playwright.mjs",
+      "sha256": "cd8c4836f0dbb244e2c98fab44fc1c31b589689a98f204bd6b2ed28ffb811d5f",
+      "rejectsExpiredZeroExit": false,
+      "forwardsOutput": false,
+      "cleanupReached": true,
+      "passed": false
+    },
+    {
+      "variant": "baseline",
+      "phase": 7,
+      "sourcePath": "scripts\\run-phase7-playwright.mjs",
+      "sha256": "a6a67b03deb4475593b546b1f91ae44d4834aa66f22a065a7ea4ac83e338f9e9",
+      "rejectsExpiredZeroExit": false,
+      "forwardsOutput": false,
+      "cleanupReached": true,
+      "passed": false
+    },
+    {
+      "variant": "baseline",
+      "phase": 8,
+      "sourcePath": "scripts\\run-phase8-playwright.mjs",
+      "sha256": "441ba6acaa3d4c2cfc35b45e9185b0df325665141e0ac4a90461cefebe478d8e",
+      "rejectsExpiredZeroExit": false,
+      "forwardsOutput": false,
+      "cleanupReached": true,
+      "passed": false
+    },
+    {
+      "variant": "baseline",
+      "phase": 10,
+      "sourcePath": "scripts\\run-phase10-playwright.mjs",
+      "sha256": "c2b2fd7520d63ee0cfe13a8db7ffb8e0104077a87cd0943d8e189c5057cd71df",
+      "rejectsExpiredZeroExit": true,
+      "forwardsOutput": false,
+      "cleanupReached": true,
+      "passed": false
+    },
+    {
+      "variant": "baseline",
+      "phase": 11,
+      "sourcePath": "scripts\\run-phase11-playwright.mjs",
+      "sha256": "0dc901a62b2fcfa0461cba2e90772b55785a9c19f23d93c807dab3a5308eb266",
+      "rejectsExpiredZeroExit": true,
+      "forwardsOutput": false,
+      "cleanupReached": true,
+      "passed": false
+    },
+    {
+      "variant": "working",
+      "phase": 5,
+      "sourcePath": "scripts\\run-phase5-playwright.mjs",
+      "sha256": "a3d3c1f0f8a1a78cfa8a9613535d472a208adb5e7c6844cae4f5dd35f64b1eac",
+      "rejectsExpiredZeroExit": true,
+      "forwardsOutput": true,
+      "cleanupReached": true,
+      "passed": true
+    },
+    {
+      "variant": "working",
+      "phase": 6,
+      "sourcePath": "scripts\\run-phase6-playwright.mjs",
+      "sha256": "0328e3b8aa67fe2b19b17c5db03e6f74232391b7d6c8dcdd1a2de9eb6b3f6eaa",
+      "rejectsExpiredZeroExit": true,
+      "forwardsOutput": true,
+      "cleanupReached": true,
+      "passed": true
+    },
+    {
+      "variant": "working",
+      "phase": 7,
+      "sourcePath": "scripts\\run-phase7-playwright.mjs",
+      "sha256": "f19b505c65b7d8bfbf11f40cd764d26eb6f9bd31c7f0fb17015c01ae8b372119",
+      "rejectsExpiredZeroExit": true,
+      "forwardsOutput": true,
+      "cleanupReached": true,
+      "passed": true
+    },
+    {
+      "variant": "working",
+      "phase": 8,
+      "sourcePath": "scripts\\run-phase8-playwright.mjs",
+      "sha256": "160a795d593baf6ee00c4971b3fecf2eb605de6d8ffaa053f3fe5e6420bb9e3d",
+      "rejectsExpiredZeroExit": true,
+      "forwardsOutput": true,
+      "cleanupReached": true,
+      "passed": true
+    },
+    {
+      "variant": "working",
+      "phase": 10,
+      "sourcePath": "scripts\\run-phase10-playwright.mjs",
+      "sha256": "0fb102d7d8ee9a977a1f01a8608c9e3c3beac3b9ff6dffb8fde8cfcc7bb84a02",
+      "rejectsExpiredZeroExit": true,
+      "forwardsOutput": true,
+      "cleanupReached": true,
+      "passed": true
+    },
+    {
+      "variant": "working",
+      "phase": 11,
+      "sourcePath": "scripts\\run-phase11-playwright.mjs",
+      "sha256": "15905cb837bce3600644e54041cf7a2409fb2ee3cbf897e7f252f3b5353f7fa8",
+      "rejectsExpiredZeroExit": true,
+      "forwardsOutput": true,
+      "cleanupReached": true,
+      "passed": true
+    }
+  ],
+  "temporaryDirectoryRemoved": true
+}

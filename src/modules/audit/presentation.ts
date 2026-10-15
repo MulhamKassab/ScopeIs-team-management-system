@@ -75,6 +75,8 @@ export const auditActions: Record<string, { label: string; fields: readonly stri
   "leave.allowance_updated": { label: "Leave allowance updated", fields: [...shared, "employeeUserId", "allowance"] },
   "coverage.replacement_requested": { label: "Replacement requested", fields: [...shared, "intent", "requiredCount", "eligibleCount", "nomineeProvided"] },
   "coverage.replacement_approved": { label: "Replacement request approved", fields: [...shared, "intent", "selectedEmployeeUserId", "effectStatus", "effectPeriodId"] },
+  "coverage.replacement_edited": { label: "Cover request edited", fields: [...shared, "intent", "nomineeProvided"] },
+  "coverage.replacement_cancelled": { label: "Cover request cancelled", fields: [...shared, "intent"] },
   "coverage.replacement_rejected": { label: "Replacement request rejected", fields: [...shared, "intent"] },
   "evidence.created": { label: "Capability evidence created", fields: [...shared, "kind", "relatedSkill", "hasExpiry", "hasFile", "hasExternalUrl"] },
   "evidence.updated": { label: "Capability evidence updated", fields: [...shared, "kind", "reviewedBeforeUpdate", "hasExpiry", "hasExternalUrl", "hasDetails"] },

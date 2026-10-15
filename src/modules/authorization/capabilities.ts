@@ -6,7 +6,7 @@ export type Capability = `module:${ModuleKey}:view` | "foundation:scope_probe:vi
 
 const roleCapabilities: Record<SystemRole, readonly Capability[]> = {
   SUPER_ADMIN: moduleKeys.map((module) => `module:${module}:view` as Capability).concat("foundation:scope_probe:view"),
-  ADMIN: ["dashboard", "tickets", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "profile"].map((module) => `module:${module}:view` as Capability).concat("foundation:scope_probe:view"),
+  ADMIN: ["dashboard", "tickets", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "coverage", "replacements", "notifications", "profile", "requests"].map((module) => `module:${module}:view` as Capability).concat("foundation:scope_probe:view"),
   EMPLOYEE: ["dashboard", "tickets", "skills", "schedule", "leave", "profile", "notifications", "requests"].map((module) => `module:${module}:view` as Capability),
 };
 

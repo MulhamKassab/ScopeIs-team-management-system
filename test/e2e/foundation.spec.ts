@@ -7,6 +7,8 @@ async function expectNoHorizontalOverflow(page: import("@playwright/test").Page)
 
 async function expectAuthorizedLink(page: import("@playwright/test").Page, label: string) {
   if (test.info().project.name === "mobile") {
+    const primary = page.getByRole("navigation", { name: "Mobile primary navigation", exact: true }).getByRole("link", { name: label, exact: true });
+    if (await primary.count()) { await expect(primary).toBeVisible(); return; }
     const more = page.getByRole("button", { name: "More", exact: true });
     await more.click();
     await expect(more).toHaveAttribute("aria-expanded", "true");
@@ -27,6 +29,8 @@ test("Super Admin receives global shell navigation", async ({ page }) => {
   await signIn(page, "Nora Albright");
   await expectAuthorizedLink(page, "Work map");
   if (test.info().project.name === "mobile") {
+    if (!(await page.getByRole("dialog", { name: "More navigation" }).isVisible())) await page.getByRole("button", { name: "More", exact: true }).click();
+    await expect(page.getByRole("dialog", { name: "More navigation" })).toBeVisible();
     await page.getByRole("button", { name: "Close more navigation" }).click();
     await expect(page.getByRole("dialog", { name: "More navigation" })).toBeHidden();
   }
@@ -101,7 +105,9 @@ test("theme preference and RTL shell state persist safely", async ({ page, conte
   const scheduleLink = navigation.getByRole("link", { name: "Timetable", exact: true });
   await expect(scheduleLink).toBeVisible();
   await scheduleLink.click();
-  await expect(page).toHaveURL(/\/schedule$/);
+  // This transition includes the timetable's server queries in an isolated cold build.
+  await expect(page).toHaveURL(/\/schedule$/, { timeout: 15_000 });
+  await expect(page.getByRole("heading", { name: "Monthly timetable", exact: true })).toBeVisible();
   await expectNoHorizontalOverflow(page);
   if (test.info().project.name === "mobile") {
     const more = page.getByRole("button", { name: "More", exact: true });

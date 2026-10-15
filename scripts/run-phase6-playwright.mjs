@@ -9,8 +9,8 @@ let exitCode = 1;
 try {
   await withDisposableTestDatabase("phase6_browser", async ({ databaseUrl, env }) => {
     await seedPhase4Journey(databaseUrl);
-    const result = await runBrowserWithOwnedBuild(process.execPath, [join(repositoryRoot, "node_modules", "playwright", "cli.js"), "test", "--config", "playwright.phase6.config.ts"], { cwd: repositoryRoot, env: { ...env, SCOPEIS_PHASE6_E2E: "true", SCOPEIS_PLAYWRIGHT_PORT: String(port) }, timeoutMs: 840_000 });
-    exitCode = result.exitCode;
+    const result = await runBrowserWithOwnedBuild(process.execPath, [join(repositoryRoot, "node_modules", "playwright", "cli.js"), "test", "--config", "playwright.phase6.config.ts", ...process.argv.slice(2)], { cwd: repositoryRoot, env: { ...env, SCOPEIS_PHASE6_E2E: "true", SCOPEIS_PLAYWRIGHT_PORT: String(port) }, timeoutMs: 840_000 });
+    exitCode = result.exitCode; if (result.timedOut) throw new Error("Phase 6 browser journey timed out.");
   });
 } finally { process.stdout.write("Phase 6 browser disposable database cleanup complete.\n"); }
 process.exitCode = exitCode;

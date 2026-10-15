@@ -72,7 +72,7 @@ describe("Phase 8 map interactions", () => {
 
   it("groups coincident assignments, cycles them and synchronizes search, selection and layers", () => {
     const second = { ...projection.assignments[0], id: "b", employeeId: "other", employeeName: "Second Employee", startTime: "12:00", endTime: "14:00", unavailable: false, coverageGap: false };
-    render(<PlanningMapClient projection={{ ...projection, assignments: [...projection.assignments, second] }} />);
+    render(<PlanningMapClient projection={{ ...projection, role: "SUPER_ADMIN", assignments: [...projection.assignments, second] }} />);
     const group = screen.getByRole("button", { name: /Employee: Fictional Employee, Second Employee · 2 assignments/ });
     fireEvent.click(group);
     expect(screen.getByRole("heading", { name: "Second Employee" })).toBeInTheDocument();
@@ -118,4 +118,18 @@ describe("Phase 8 map interactions", () => {
     fireEvent.click(screen.getByRole("button", { name: "Lock map to scroll" }));
     expect(canvas).not.toHaveClass("map-touch-active");
   });
+});
+
+it("shows place labels and moves between assignments with focused map selection", () => {
+  const second = { ...projection.assignments[0], id: "second", employeeId: "second-person", employeeName: "Next Person", worksite: { ...projection.assignments[0].worksite, name: "Second Site" } };
+  render(<PlanningMapClient projection={{ ...projection, assignments: [...projection.assignments, second] }} />);
+  expect(screen.getByRole("button", { name: "Place labels" })).toHaveAttribute("aria-pressed", "true");
+  expect(document.querySelectorAll(".map-pin-label").length).toBeGreaterThan(0);
+  fireEvent.click(screen.getByRole("button", { name: "Next assignment", exact: true }));
+  expect(screen.getByRole("heading", { name: "Next Person", exact: true })).toBeInTheDocument();
+  expect(document.querySelector(".map-selection-card")).toHaveTextContent("Second Site");
+  fireEvent.click(screen.getByRole("button", { name: "Place labels" }));
+  expect(document.querySelector(".map-pin-label")).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Previous assignment", exact: true }));
+  expect(screen.getByRole("heading", { name: "Fictional Employee", exact: true })).toBeInTheDocument();
 });

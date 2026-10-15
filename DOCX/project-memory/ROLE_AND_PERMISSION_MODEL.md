@@ -1,5 +1,9 @@
 # Role and Permission Model
 
+## Confirmed Cover and access amendment — 2026-10-15
+
+The owner authorized the [consolidated Cover workspace and access amendment](COVER_WORKSPACE_AND_ACCESS_AMENDMENT_2026_10_15.md). It supersedes older statements permitting Admin unpublished timetable/team-leave/report reads or project creation. Super Admin alone holds those capabilities; Employee own vacation self-service remains. Cover unifies timetable selection, creation, versioned editing/cancellation and direct decisions, with separate publication. The main timetable exposes assignment creation and the map gains place labels and selected-work controls. Existing scope, privacy, conflict, accessibility and RTL rules remain.
+
 ## Governing rules
 
 `Super Admin > Admin > Employee` is the system-access hierarchy. A system role is not a job designation, skill, department, employment type, or assignment arrangement. Authorization combines role, Admin scope where applicable, record participation, publication state, and data sensitivity.

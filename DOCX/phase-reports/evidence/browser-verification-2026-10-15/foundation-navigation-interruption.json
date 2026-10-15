@@ -1,0 +1,22 @@
+{
+  "capturedAt": "2026-10-15T16:11:26.448Z",
+  "reason": "Desktop RTL Timetable navigation exceeded default 5-second URL expectation;13/14 foundation cases pass. Operator stopped only the owned root and descendants. Full run is diagnostic, not a green certificate.",
+  "matchingFrozenInputs": 472,
+  "directories": [
+    {
+      "path": "C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-wODamr",
+      "removed": true
+    }
+  ],
+  "databasesAtStop": [
+    "postgres",
+    "scopeis_browser_verification_base_test",
+    "scopeis_phase2_directory_playwright_36976_24a9c61c8d_test"
+  ],
+  "status": "OWNED_RESOURCES_CLEANED",
+  "droppedOwnedDatabase": "scopeis_phase2_directory_playwright_36976_24a9c61c8d_test",
+  "remainingDatabases": [
+    "postgres",
+    "scopeis_browser_verification_base_test"
+  ]
+}

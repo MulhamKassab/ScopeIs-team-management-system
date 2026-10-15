@@ -1,0 +1,58 @@
+{
+  "status": "VERIFIED",
+  "completedAt": "2026-10-15T18:25:29.452Z",
+  "scope": "Only src/app/timetable.css changed after the immutable813-case full run. Mobile Timetable view buttons keep complete labels and wrap whole buttons; existing44px minimum remains.",
+  "changedFiles": [
+    "src/app/timetable.css"
+  ],
+  "fullGateRerunAfterCss": false,
+  "fullRunBasis": "verification-full-run.json",
+  "focusedBrowser": {
+    "passed": 4,
+    "total": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0,
+    "errors": 0,
+    "report": "responsive-mobile-labels.json"
+  },
+  "guardedTypecheck": true,
+  "guardedProductionBuild": true,
+  "runnerExitCode": 0,
+  "cleanup": {
+    "databasesCreated": 1,
+    "dropped": 1,
+    "retained": 0
+  },
+  "sourceBefore": "inputs-mobile-labels-before.json",
+  "sourceAfter": "inputs-mobile-labels-after.json",
+  "sourceInputsMatching": 472,
+  "log": "mobile-labels-after.log",
+  "images": [
+    {
+      "path": "mobile-labels-screenshots/1280-clear-coverage.png",
+      "sha256": "2dc6676188824371e4dcc1c6534414d9ba05dd00f160be60b7f8dc732f6afd80",
+      "bytes": 158565
+    },
+    {
+      "path": "mobile-labels-screenshots/320-clear-coverage.png",
+      "sha256": "6a629d21297e045e96da8551887698870ba2cec8c6fdc5654e3a100e4e8a6f0e",
+      "bytes": 61061
+    },
+    {
+      "path": "mobile-labels-screenshots/390-clear-coverage.png",
+      "sha256": "bce680c5df3d43aa61f95edac9f2bcddaf12bc7063399bac5fe7cd44da84458c",
+      "bytes": 67670
+    },
+    {
+      "path": "mobile-labels-screenshots/timetable-mobile-rtl.png",
+      "sha256": "9cc68514235435d10dc0f6720bd8efebabb57bdda1ada596a52890aae7e6b793",
+      "bytes": 136219
+    },
+    {
+      "path": "mobile-labels-screenshots/320-planning-workspace.png",
+      "sha256": "d9830f5eef499127384c6b3a742c6b1b063492ac97282fa2c8ca3049b149f109",
+      "bytes": 46549
+    }
+  ]
+}

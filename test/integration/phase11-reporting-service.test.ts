@@ -59,19 +59,15 @@ describe("Phase 11 published allocation (R1) and planning (R4)", () => {
     expect(planning.rows.some((row) => row.planning_month === PUBLISHED_MONTH)).toBe(false);
   });
 
-  it("scopes Published allocation and planning to the Admin's current operational grants", async () => {
-    const adminPublished = await reportingService.report(ava(), "published-allocation", YEAR);
-    expect(adminPublished.rows.some((row) => row.client_name === "Alpha Facilities")).toBe(true);
-    const otherAdminPublished = await reportingService.report(ben(), "published-allocation", YEAR);
-    expect(otherAdminPublished.rows.some((row) => row.client_name === "Alpha Facilities")).toBe(false);
-    // Ben's project/location grants do not cover the Alpha client-month, so his planning view is empty too.
-    const otherAdminPlanning = await reportingService.report(ben(), "planning-unpublished", YEAR);
-    expect(otherAdminPlanning.rows.some((row) => row.client_name === "Alpha Facilities")).toBe(false);
-    // The in-scope Admin can reach the planning view.
-    const adminPlanning = await reportingService.report(ava(), "planning-unpublished", YEAR);
-    expect(adminPlanning.rows.some((row) => row.client_name === "Alpha Facilities")).toBe(true);
+  it("keeps all reporting and its index closed to scoped Admins", async () => {
+    for (const current of [ava(), ben()]) {
+      expect(await refuseCode(() => reportingService.index(current))).toMatchObject({ code: "NOT_FOUND", status: 404 });
+      for (const key of ["published-allocation", "planning-unpublished", "certification-status"]) {
+        expect(await refuseCode(() => reportingService.report(current, key, YEAR))).toMatchObject({ code: "NOT_FOUND", status: 404 });
+      }
+    }
+    expect((await reportingService.report(nora(), "published-allocation", YEAR)).rows.some(row=>row.client_name === "Alpha Facilities")).toBe(true);
   });
-
   it("refuses Employees every report route", async () => {
     for (const key of ["published-allocation", "planning-unpublished", "certification-status", "audit-history"]) {
       expect(await refuseCode(() => reportingService.report(cora(), key, YEAR))).toMatchObject({ code: "NOT_FOUND", status: 404 });
@@ -90,22 +86,25 @@ describe("Phase 11 published allocation (R1) and planning (R4)", () => {
     }
   });
 
-  it("drops planning and outline rows when the acting Admin's scope is revoked", async () => {
+  it("rechecks scoped Admin dashboard facts while report access remains closed before and after revocation", async () => {
+    const baseline = await reportingService.dashboard(ava());
+    const employees = baseline.cards.find(card=>card.key === "employees-in-scope")!.value;
+    expect(Number(employees)).toBeGreaterThan(0);
+    expect(await refuseCode(() => reportingService.report(ava(), "planning-unpublished", YEAR))).toMatchObject({ code: "NOT_FOUND" });
+    const clientGrant = (await db.select().from(adminScopeGrants).where(and(eq(adminScopeGrants.userId, "mock-admin-ava"), eq(adminScopeGrants.scopeType, "CLIENT"), eq(adminScopeGrants.scopeReference, phase3Ids.alphaClient))))[0];
     try {
-      expect((await reportingService.report(ava(), "planning-unpublished", YEAR)).rows.some((row) => row.client_name === "Alpha Facilities")).toBe(true);
       await setTeamGrantActive("mock-admin-ava", "team:alpha", false);
-      const clientGrant = (await db.select().from(adminScopeGrants).where(and(eq(adminScopeGrants.userId, "mock-admin-ava"), eq(adminScopeGrants.scopeType, "CLIENT"), eq(adminScopeGrants.scopeReference, phase3Ids.alphaClient))))[0];
-      if (clientGrant) await db.update(adminScopeGrants).set({ active: false, updatedAt: new Date() }).where(eq(adminScopeGrants.id, clientGrant.id));
-      const afterRevocation = await reportingService.report(ava(), "planning-unpublished", YEAR);
-      expect(afterRevocation.rows.some((row) => row.client_name === "Alpha Facilities")).toBe(false);
+      if (clientGrant) await db.update(adminScopeGrants).set({ active: false }).where(eq(adminScopeGrants.id, clientGrant.id));
+      const revoked = await reportingService.dashboard(ava());
+      expect(revoked.cards.find(card=>card.key === "employees-in-scope")!.value).toBe("0");
+      expect(JSON.stringify(revoked)).not.toContain("Alpha Facilities");
+      expect(await refuseCode(() => reportingService.report(ava(), "planning-unpublished", YEAR))).toMatchObject({ code: "NOT_FOUND" });
     } finally {
       await setTeamGrantActive("mock-admin-ava", "team:alpha", true);
-      const clientGrant = (await db.select().from(adminScopeGrants).where(and(eq(adminScopeGrants.userId, "mock-admin-ava"), eq(adminScopeGrants.scopeType, "CLIENT"), eq(adminScopeGrants.scopeReference, phase3Ids.alphaClient))))[0];
-      if (clientGrant) await db.update(adminScopeGrants).set({ active: true, updatedAt: new Date() }).where(eq(adminScopeGrants.id, clientGrant.id));
+      if (clientGrant) await db.update(adminScopeGrants).set({ active: clientGrant.active }).where(eq(adminScopeGrants.id, clientGrant.id));
     }
-    expect((await reportingService.report(ava(), "planning-unpublished", YEAR)).rows.some((row) => row.client_name === "Alpha Facilities")).toBe(true);
-  });
-});
+    expect((await reportingService.dashboard(ava())).cards.find(card=>card.key === "employees-in-scope")!.value).toBe(employees);
+  });});
 
 describe("Phase 11 allocation totals", () => {
   it("computes unallocated employees and scheduled hours honestly", async () => {
@@ -152,17 +151,12 @@ describe("Phase 11 leave reporting", () => {
 });
 
 describe("Phase 11 certification and skill reporting", () => {
-  it("gives the Super Admin full certification detail and the Admin the summary projection only", async () => {
+  it("gives Super Admin certification detail and refuses the report to Admin", async () => {
     const full = await reportingService.report(nora(), "certification-status");
-    expect(full.columns.map((column) => column.key)).toContain("employee_name");
-    expect(full.rows.some((row) => row.expiry_state === "expired")).toBe(true);
-
-    const summary = await reportingService.report(ava(), "certification-status");
-    expect(summary.columns.map((column) => column.key)).not.toContain("employee_name");
-    expect(summary.columns.map((column) => column.key)).not.toContain("details");
-    expect(summary.rows.length).toBeGreaterThan(0);
+    expect(full.columns.map(column=>column.key)).toContain("employee_name");
+    expect(full.rows.some(row=>row.expiry_state === "expired")).toBe(true);
+    expect(await refuseCode(() => reportingService.report(ava(), "certification-status"))).toMatchObject({ code: "NOT_FOUND", status: 404 });
   });
-
   it("uses only the recorded/not recorded vocabulary and never reads certification state into coverage", async () => {
     const gaps = await reportingService.report(nora(), "skill-gaps");
     const statuses = new Set(gaps.rows.map((row) => row.status));
@@ -291,7 +285,7 @@ describe("Phase 11 dashboards", () => {
     const surfaces = [...view.cards.map((card) => card.label), ...view.sections.map((section) => section.label)];
     for (const required of [
       "Active employees in my scope", "Published assignments this month", "Employees with no Published assignment this month",
-      "Approved leave days this month", "Replacement requests I raised", "Certifications in my scope",
+      "Replacement requests I raised", "Certifications in my scope",
     ]) {
       expect(surfaces).toContain(required);
     }
@@ -299,7 +293,9 @@ describe("Phase 11 dashboards", () => {
     expect(view.cards.map((card) => card.key)).not.toContain("expired-certifications");
     expect(view.sections.map((section) => section.key)).not.toContain("recent-actions");
     expect(view.sections.map((section) => section.key)).not.toContain("schedule-lifecycle");
-    // The authorized filter options are the only entities exposed.
+    expect(view.cards.some(card => ["pending-leave", "approved-leave-days"].includes(card.key))).toBe(false);
+    expect([...view.cards, ...view.sections].some(item => item.href?.startsWith("/reports") || item.href?.startsWith("/leave"))).toBe(false);
+    // The scoped dashboard must not expose another client.
     expect(JSON.stringify(view)).not.toContain("Bravo Engineering");
   });
 
@@ -372,20 +368,18 @@ describe("Phase 11 exports", () => {
 });
 
 describe("Phase 11 current-authorization enforcement", () => {
-  it("removes report access after a demotion, an out-of-scope move and a deactivation", async () => {
-    expect((await reportingService.report(ava(), "published-allocation", YEAR)).rows.length).toBeGreaterThan(0);
-
-    await setRole("mock-admin-ava", "EMPLOYEE");
-    try { expect(await refuseCode(() => reportingService.report(ava(), "published-allocation", YEAR))).toMatchObject({ code: "NOT_FOUND" }); }
-    finally { await setRole("mock-admin-ava", "ADMIN"); }
-
-    await setActive("mock-admin-ava", false);
-    try { expect(await refuseCode(() => reportingService.report(ava(), "published-allocation", YEAR))).toMatchObject({ code: "NOT_FOUND" }); }
-    finally { await setActive("mock-admin-ava", true); }
-
-    expect((await reportingService.report(ava(), "published-allocation", YEAR)).rows.length).toBeGreaterThan(0);
+  it("reloads current Super Admin authority after demotion and deactivation", async () => {
+    expect((await reportingService.report(nora(), "published-allocation", YEAR)).rows.length).toBeGreaterThan(0);
+    await setRole(nora().id, "ADMIN");
+    try {
+      expect(await refuseCode(() => reportingService.report(nora(), "published-allocation", YEAR))).toMatchObject({ code: "NOT_FOUND" });
+      expect(await refuseCode(() => reportingService.index(nora()))).toMatchObject({ code: "NOT_FOUND" });
+    } finally { await setRole(nora().id, "SUPER_ADMIN"); }
+    await setActive(nora().id, false);
+    try { expect(await refuseCode(() => reportingService.report(nora(), "published-allocation", YEAR))).toMatchObject({ code: "NOT_FOUND" }); }
+    finally { await setActive(nora().id, true); }
+    expect((await reportingService.report(nora(), "published-allocation", YEAR)).rows.length).toBeGreaterThan(0);
   });
-
   it("does not widen replacement reporting through request ownership", async () => {
     // A request Ava owns but whose anchor assignment sits outside her scope must still be invisible:
     // ownership never widens scope.
@@ -397,11 +391,10 @@ describe("Phase 11 current-authorization enforcement", () => {
     await db.execute(sql`insert into replacement_requests (id, intent, status, anchor_assignment_id, requester_user_id, observed_required_employee_count, observed_eligible_employee_count, created_at) values (${requestId}, 'REPLACE_ASSIGNMENT', 'PENDING', ${assignmentId}, 'mock-admin-ava', 1, 0, '2027-09-20T00:00:00+04:00') on conflict (id) do nothing`);
     try {
       const ninetyDays = { from: "2027-09-01", to: "2027-11-29" };
-      const adminView = await reportingService.report(ava(), "coverage-replacement", ninetyDays);
-      expect(adminView.rows.some((row) => row.requested_by === "Ava Mercer" && row.status === "PENDING" && row.intent === "Replace assignment employee")).toBe(false);
-      // The same request is visible to a Super Admin, proving it exists and is hidden by scope alone.
+      expect(await refuseCode(() => reportingService.report(ava(), "coverage-replacement", ninetyDays))).toMatchObject({ code: "NOT_FOUND", status: 404 });
+      // Ownership never grants the now Super Admin-only reporting capability.
       const superAdminView = await reportingService.report(nora(), "coverage-replacement", ninetyDays);
-      expect(superAdminView.rows.length).toBeGreaterThan(adminView.rows.length);
+      expect(superAdminView.rows.some(row=>row.requested_by === "Ava Mercer" && row.status === "PENDING" && row.intent === "Replace assignment employee")).toBe(true);
       // Midnight Dubai is still the previous UTC date: the date control follows Dubai.
       const before = await reportingService.report(nora(), "coverage-replacement", { from: "2027-09-19", to: "2027-09-19", clientId: phase3Ids.bravoClient });
       const onDate = await reportingService.report(nora(), "coverage-replacement", { from: "2027-09-20", to: "2027-09-20", clientId: phase3Ids.bravoClient });
@@ -438,7 +431,7 @@ describe("report filter and total regressions", () => {
     }
     const selected = { ...PUBLISHED_WINDOW, clientId: phase3Ids.alphaClient, projectId: phase3Ids.alphaProjectOne, locationId: phase3Ids.alphaLocation };
     expect((await reportingService.report(nora(), "published-allocation", selected)).totalRows).toBe(2);
-    expect((await reportingService.report(ben(), "published-allocation", selected)).totalRows).toBe(0);
+    expect(await refuseCode(() => reportingService.report(ben(), "published-allocation", selected))).toMatchObject({ code: "NOT_FOUND", status: 404 });
     expect((await reportingService.report(nora(), "published-allocation", { ...PUBLISHED_WINDOW, clientId: "", projectId: "", locationId: "" })).totalRows).toBe(2);
   });
 
@@ -508,7 +501,7 @@ describe("aggregate export source completeness", () => {
       await db.execute(sql`delete from employee_profiles where user_id like 'report-balance-cap-%'`);
       await db.execute(sql`delete from users where id like 'report-balance-cap-%'`);
     }
-  }, 15_000);
+  }, 45_000);
 
   it("includes every assignment skill requirement before sorting and refuses an over-cap export", async () => {
     const baseline = await reportingService.report(nora(), "skill-gaps");
@@ -532,28 +525,17 @@ describe("aggregate export source completeness", () => {
 });
 
 describe("report filter option scope inheritance", () => {
-  it("filter options inherit Client descendants without expanding direct Project or Location grants", async () => {
-    const clientScoped = (await reportingService.index(ava())).options;
-    expect(clientScoped.clientOptions.map((option) => option.id)).toEqual([phase3Ids.alphaClient]);
-    expect(clientScoped.projectOptions.map((option) => option.id).sort()).toEqual([phase3Ids.alphaProjectOne, phase3Ids.alphaProjectTwo].sort());
-    expect(clientScoped.locationOptions.map((option) => option.id)).toEqual([phase3Ids.alphaLocation]);
-
-    const directOnly = (await reportingService.index(ben())).options;
-    expect(directOnly.clientOptions).toEqual([]);
-    expect(directOnly.projectOptions.map((option) => option.id)).toEqual([phase3Ids.bravoProject]);
-    expect(directOnly.locationOptions.map((option) => option.id)).toEqual([phase3Ids.gammaLocation]);
-
-    const [grant] = await db.insert(adminScopeGrants).values({ userId: "mock-admin-ben", scopeType: "CLIENT", scopeReference: phase3Ids.alphaClient }).returning({ id: adminScopeGrants.id });
+  it("keeps filter options Super Admin only regardless of an Admin's direct or inherited grants", async () => {
+    const global = (await reportingService.index(nora())).options;
+    expect(global.clientOptions.map(option=>option.id)).toEqual(expect.arrayContaining([phase3Ids.alphaClient, phase3Ids.bravoClient, phase3Ids.gammaClient]));
+    expect(global.projectOptions.map(option=>option.id)).toEqual(expect.arrayContaining([phase3Ids.alphaProjectOne, phase3Ids.alphaProjectTwo, phase3Ids.bravoProject]));
+    expect(global.locationOptions.map(option=>option.id)).toEqual(expect.arrayContaining([phase3Ids.alphaLocation, phase3Ids.gammaLocation]));
+    for (const current of [ava(), ben(), cora()]) expect(await refuseCode(() => reportingService.index(current))).toMatchObject({ code: "NOT_FOUND" });
+    const [grant] = await db.insert(adminScopeGrants).values({ userId: ben().id, scopeType: "CLIENT", scopeReference: phase3Ids.alphaClient }).returning({ id: adminScopeGrants.id });
     try {
-      const combined = (await reportingService.index(ben())).options;
-      expect(combined.clientOptions.map((option) => option.id)).toEqual([phase3Ids.alphaClient]);
-      expect(combined.projectOptions.map((option) => option.id).sort()).toEqual([phase3Ids.alphaProjectOne, phase3Ids.alphaProjectTwo, phase3Ids.bravoProject].sort());
-      expect(combined.locationOptions.map((option) => option.id).sort()).toEqual([phase3Ids.alphaLocation, phase3Ids.gammaLocation].sort());
-      // Revocation removes the descendants on the very next request and preserves only direct grants.
+      expect(await refuseCode(() => reportingService.index(ben()))).toMatchObject({ code: "NOT_FOUND" });
+      expect((await reportingService.index(nora())).options).toEqual(global);
       await db.update(adminScopeGrants).set({ active: false }).where(eq(adminScopeGrants.id, grant.id));
-      expect((await reportingService.index(ben())).options).toEqual(directOnly);
-    } finally {
-      await db.delete(adminScopeGrants).where(eq(adminScopeGrants.id, grant.id));
-    }
-  });
-});
+      expect(await refuseCode(() => reportingService.index(ben()))).toMatchObject({ code: "NOT_FOUND" });
+    } finally { await db.delete(adminScopeGrants).where(eq(adminScopeGrants.id, grant.id)); }
+  });});

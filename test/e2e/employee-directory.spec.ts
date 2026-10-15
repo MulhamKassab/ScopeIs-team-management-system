@@ -112,6 +112,9 @@ test("management details preserve Admin privacy and provide visible Super Admin 
 });
 
 test("Super Admin can use visible management controls without granting manager or Admin authority implicitly", async ({ page }, testInfo) => {
+  // This journey submits several management forms, including role/scope and
+  // lifecycle changes. Keep a bounded full-journey budget on phones as well.
+  test.setTimeout(90_000);
   const name = `Managed Workforce ${testInfo.project.name}`;
   await signIn(page, "Nora Albright");
   await page.goto("/employees");

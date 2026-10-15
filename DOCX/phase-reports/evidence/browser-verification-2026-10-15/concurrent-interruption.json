@@ -1,0 +1,36 @@
+{
+  "stoppedAt": "2026-10-15T14:18:47.508Z",
+  "rootPid": 39952,
+  "reason": "Foreign application and permission edits during frozen verification; user requests wait and review combined work before release.",
+  "stoppedOwnedTree": [
+    39952,
+    28900,
+    29500,
+    27440,
+    41148,
+    34544,
+    33780,
+    20588
+  ],
+  "cleaned": [
+    {
+      "ownerPid": 29500,
+      "directory": "C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-1KvHqf",
+      "removed": true
+    }
+  ],
+  "dropped": [
+    "scopeis_phase3_playwright_29500_26d87d7e19_test",
+    "scopeis_p2_exported_test_26504_11"
+  ],
+  "remaining": [
+    {
+      "datname": "postgres"
+    },
+    {
+      "datname": "scopeis_browser_verification_base_test"
+    }
+  ],
+  "productionWrites": 0,
+  "temporaryPostgresRetained": "Owned base database retained for combined verification; no service/other instance stopped."
+}

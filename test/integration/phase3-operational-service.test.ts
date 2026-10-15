@@ -52,10 +52,11 @@ describe("Phase 3 operational service", () => {
 
   it("enforces client descendant inheritance while Project and Location scopes never climb or reach siblings", async () => {
     const client = await root(); const siblingClient = await root(); await grant(personas.ava.id, "CLIENT", client.id);
-    const project = await operationalService.createProject(personas.ava, { clientId: client.id, name: `Ava project ${randomUUID()}` });
+    await expect(operationalService.createProject(personas.ava, { clientId: client.id, name: "Admin cannot create an in-scope project" })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    const project = await operationalService.createProject(personas.nora, { clientId: client.id, name: `Super Admin project ${randomUUID()}` });
     const sibling = await operationalService.createProject(personas.nora, { clientId: client.id, name: `Sibling ${randomUUID()}` });
     const location = await operationalService.createLocation(personas.ava, { clientId: client.id, name: "Ava location", address: "1 Alpha Road" });
-    await expect(operationalService.createProject(personas.ava, { clientId: siblingClient.id, name: "Forbidden" })).rejects.toMatchObject({ code: "OUT_OF_SCOPE" });
+    await expect(operationalService.createProject(personas.ava, { clientId: siblingClient.id, name: "Forbidden" })).rejects.toMatchObject({ code: "FORBIDDEN" });
     await grant(personas.projectAdmin.id, "PROJECT", project.id); await grant(personas.locationAdmin.id, "LOCATION", location.id);
     await expect(operationalService.getProjectDetail(personas.projectAdmin, project.id)).resolves.toMatchObject({ project: { id: project.id } });
     await expect(operationalService.getClientDetail(personas.projectAdmin, client.id)).rejects.toMatchObject({ code: "OUT_OF_SCOPE" });

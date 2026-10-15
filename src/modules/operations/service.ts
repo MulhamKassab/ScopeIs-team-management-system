@@ -2,6 +2,7 @@ import "server-only";
 import { db } from "@/db/client";
 import { writeAuditEvent } from "@/modules/audit/audit-service";
 import { OperationalDomainError } from "@/modules/operations/domain-error";
+import { resolveCurrentActor } from "@/modules/authorization/current-actor";
 import { hasOperationalTargetScope } from "@/modules/authorization/operational-scope";
 import { operationalRepository, scopeGrantRepository, type OperationalExecutor, type OperationalTransaction } from "@/modules/operations/repositories";
 import {
@@ -81,7 +82,7 @@ export class OperationalService {
     const [employees, skills] = await Promise.all([operationalRepository.listEmployees(db), operationalRepository.listSkills(db)]); return { employees, skills };
   }
   async createClient(actor: AuthenticatedActor, input: unknown) {
-    if (actor.role !== "SUPER_ADMIN") throw new OperationalDomainError("FORBIDDEN"); const parsed = parseOperational(createClientSchema, input); if (parsed.accountManagerUserId) await this.validateEmployee(db, parsed.accountManagerUserId);
+    if ((await resolveCurrentActor(actor))?.role !== "SUPER_ADMIN") throw new OperationalDomainError("FORBIDDEN"); const parsed = parseOperational(createClientSchema, input); if (parsed.accountManagerUserId) await this.validateEmployee(db, parsed.accountManagerUserId);
     try { return await db.transaction(async (tx) => { const row = await operationalRepository.createClient(tx, parsed); await this.audit(tx, actor, "client.created", "client", row.id, { fields: fields(parsed) }); return row; }); } catch (error) { if (uniqueFailure(error)) throw new OperationalDomainError("CONFLICT"); throw error; }
   }
   async updateClient(actor: AuthenticatedActor, id: string, input: unknown) {
@@ -94,6 +95,7 @@ export class OperationalService {
     return db.transaction(async (tx) => { if (parsed.archived && await operationalRepository.unfinishedProjectCount(tx, id) > 0) throw new OperationalDomainError("ARCHIVE_BLOCKED"); const row = await operationalRepository.updateClient(tx, id, parsed.expectedVersion, { status: parsed.archived ? "ARCHIVED" : "ACTIVE" }); if (!row) throw new OperationalDomainError("STALE_VERSION"); await this.audit(tx, actor, `client.${parsed.archived ? "archived" : "reactivated"}`, "client", id, { status: row.status, version: row.version }); return row; });
   }
   async createProject(actor: AuthenticatedActor, input: unknown) {
+    if ((await resolveCurrentActor(actor))?.role !== "SUPER_ADMIN") throw new OperationalDomainError("FORBIDDEN");
     const parsed = parseOperational(createProjectSchema, input); const loaded = await this.requireTarget(db, actor, { type: "CLIENT", id: parsed.clientId }); this.ensureActive(loaded); if (parsed.responsibleAdminUserId) await this.validateEmployee(db, parsed.responsibleAdminUserId, "ADMIN");
     try { return await db.transaction(async (tx) => { const row = await operationalRepository.createProject(tx, parsed); await this.audit(tx, actor, "project.created", "project", row.id, { clientId: row.clientId, fields: fields(parsed) }); return row; }); } catch (error) { if (uniqueFailure(error)) throw new OperationalDomainError("CONFLICT"); throw error; }
   }

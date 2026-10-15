@@ -218,7 +218,10 @@ for (const viewport of viewports) test(`all management screens and report tables
 
 // Every distinct task and populated day is checked; empty days share one component.
 // Reopening the same empty calendar dialog 31 times adds no layout coverage.
-function taskTriggers(page: Page) {
+async function taskTriggers(page: Page) {
+  // Count every available task after hydration; do not silently omit triggers
+  // that are correctly disabled while their client handlers are loading.
+  await expect(page.locator('#page-content button[aria-haspopup="dialog"][aria-busy="true"]:visible')).toHaveCount(0, { timeout: 30_000 });
   const base = '#page-content button[aria-haspopup="dialog"]:enabled:visible';
   return page.locator(`${base}:not(.timetable-day-button)`)
     .or(page.locator(`${base}.timetable-day-button:not([aria-label$="· 0 assignments"])`))
@@ -232,7 +235,7 @@ for (const viewport of [{ width: 320, height: 640 }, { width: 768, height: 360 }
   await page.setViewportSize(viewport);
   for (const path of managementRoutes) {
     await page.goto(path);
-    const triggers = taskTriggers(page);
+    const triggers = await taskTriggers(page);
     const count = await triggers.count();
     for (let index = 0; index < count; index++) {
       const trigger = triggers.nth(index);
@@ -268,7 +271,8 @@ test("role navigation, RTL, dark theme and enlarged text reflow", async ({ page,
       const path = route === "/schedule" ? `${route}?month=2027-09` : route;
       expect((await page.goto(path))?.status(), `${persona} ${path}`).toBe(200);
       issues.push(...await layoutIssues(page, `${persona} ${path}`));
-      for (const trigger of await taskTriggers(page).all()) {
+      const triggers = await taskTriggers(page);
+      for (const trigger of await triggers.all()) {
         await trigger.click();
         issues.push(...await layoutIssues(page, `${persona} ${path} dialog`));
         await page.keyboard.press("Escape");
@@ -620,9 +624,11 @@ test("monthly timetable and people catalogues stay usable across phone, desktop,
     await calendar.getByRole("button", { name: "Agenda", exact: true }).click();
     await expect(calendar.locator(".timetable-agenda").getByText(/^Cora Bell/)).toBeVisible();
     await page.goto("/coverage?month=2027-09");
-    await expect(page.getByRole("heading", { name: "Choose work to review" })).toBeVisible();
-    await page.getByRole("link", { name: /^Check cover for Cora Bell/ }).click();
-    await expect(page.getByRole("heading", { name: "What needs attention?" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Cover", exact: true })).toBeVisible();
+    await page.getByRole("region", { name: "Monthly timetable" }).getByRole("button", { name: /Open .*14 September.*1 assignment/ }).click();
+    await page.getByRole("dialog").getByRole("link", { name: "Request cover", exact: true }).click();
+    await expect(page.getByRole("heading", { name: /^Cora Bell.* ·/ })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /^Current requests/ })).toBeVisible();
     for (const route of ["/teams", "/designations", "/replacements"]) {
       await page.goto(route);
       await expect(page.locator("main h2").first()).toBeVisible();
@@ -697,14 +703,19 @@ test("clear user journeys keep every authorized tab understandable and make the 
     await insights.locator("summary").click();
     await captureVisual(page, testInfo, `${width}-clear-home.png`);
 
-    await page.goto("/coverage?month=2027-09");
-    await page.getByRole("combobox", { name: "Person", exact: true }).selectOption("mock-employee-cora");
-    await expect(page.getByRole("link", { name: /^Check cover for Cora Bell/ })).toBeVisible();
-    await page.getByLabel("Search work").fill("no-such-worksite");
-    await expect(page.getByRole("heading", { name: "No work matches your search" })).toBeVisible();
-    await page.getByRole("button", { name: "Clear search" }).click();
-    await page.getByLabel("Search work").fill("Cora");
-    issues.push(...await layoutIssues(page, `${width}px cover search`));
+    await page.goto("/coverage?month=2027-05");
+    const coverTimetable = page.getByRole("region", { name: "Monthly timetable" });
+    await coverTimetable.locator(".timetable-filter-disclosure summary").click();
+    await coverTimetable.getByRole("combobox", { name: "Person", exact: true }).selectOption("mock-employee-cora");
+    await coverTimetable.getByRole("button", { name: "Agenda", exact: true }).click();
+    await expect(coverTimetable.locator(".timetable-entry")).not.toHaveCount(0);
+    await expect(coverTimetable.locator(".timetable-entry").getByText(/^Cora Bell/).first()).toBeVisible();
+    await page.getByRole("button", { name: "Create request", exact: true }).first().click();
+    await expect(page.getByRole("dialog", { name: "Create cover request", exact: true })).toBeVisible();
+    issues.push(...await layoutIssues(page, `${width}px cover request creation`));
+    await page.keyboard.press("Escape");
+    await page.getByRole("combobox", { name: "Person", exact: true }).selectOption("");
+    await expect(page.getByRole("combobox", { name: "Person", exact: true })).toHaveValue("");
     await captureVisual(page, testInfo, `${width}-clear-coverage.png`);
 
     await page.goto("/skills");

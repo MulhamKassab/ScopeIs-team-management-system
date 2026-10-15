@@ -1,0 +1,429 @@
+
+=== Phase 1 PostgreSQL foundation :: test/integration/foundation-postgres.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/foundation-postgres.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 221[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 18:37:02
+[2m   Duration [22m 2.22s[2m (import 53%, transform 20%, setup 15%, tests 11%, worker 1%)[22m
+
+--- Phase 1 PostgreSQL foundation: PASS ---
+
+=== Phase 2 employee core service :: test/integration/phase2-core-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase2-core-service.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 901[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 18:37:09
+[2m   Duration [22m 2.68s[2m (tests 37%, import 36%, transform 18%, setup 8%, worker 1%)[22m
+
+--- Phase 2 employee core service: PASS ---
+
+=== Phase 3 operational service :: test/integration/phase3-operational-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase3-operational-service.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 986[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 18:37:17
+[2m   Duration [22m 2.87s[2m (tests 38%, import 34%, transform 16%, setup 11%, worker 1%)[22m
+
+--- Phase 3 operational service: PASS ---
+
+=== Monthly timetable and organisation service :: test/integration/timetable-organisation.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/timetable-organisation.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 815[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 18:37:25
+[2m   Duration [22m 2.85s[2m (import 37%, tests 32%, transform 21%, setup 11%, worker 1%)[22m
+
+--- Monthly timetable and organisation service: PASS ---
+
+=== Phase 4 scheduling service :: test/integration/phase4-scheduling-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase4-scheduling-service.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 2705[2mms[22m[39m
+   [32m✓[39m Phase 4 scheduling service [2m(5)[22m
+     [33m[2m✓[22m[39m keeps Admin reads scoped to current Published schedules while refusing Draft creation and edits[33m 377[2mms[22m[39m
+   [32m✓[39m Schedule revision and scope regressions [2m(4)[22m
+     [33m[2m✓[22m[39m publishes successive unchanged revisions and releases historical assignment slots[33m 699[2mms[22m[39m
+     [33m[2m✓[22m[39m copies active assignment requirements without altering archived or Published history[33m 351[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+[2m   Start at [22m 18:37:33
+[2m   Duration [22m 5.48s[2m (tests 52%, transform 22%, import 20%, setup 5%)[22m
+
+--- Phase 4 scheduling service: PASS ---
+
+=== Phase 5 leave service :: test/integration/phase5-leave-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase5-leave-service.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 908[2mms[22m[39m
+   [32m✓[39m Phase 5 leave service [2m(3)[22m
+     [33m[2m✓[22m[39m enforces privacy, lifecycle, balance, and schedule leave integrity[33m 443[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 18:37:43
+[2m   Duration [22m 3.02s[2m (import 35%, tests 33%, transform 21%, setup 10%, worker 1%)[22m
+
+--- Phase 5 leave service: PASS ---
+
+=== Phase 6 capabilities service :: test/integration/phase6-capabilities-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase6-capabilities-service.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 1268[2mms[22m[39m
+   [32m✓[39m Phase 6 skills and operational capabilities [2m(3)[22m
+     [33m[2m✓[22m[39m records controlled skills, keeps them private, and does not let operational scope expand Team visibility[33m 327[2mms[22m[39m
+     [33m[2m✓[22m[39m unions Client, Project, Location, and assignment requirements and leaves the schedule lifecycle non-blocking[33m 621[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 18:37:51
+[2m   Duration [22m 3.61s[2m (tests 38%, import 30%, transform 23%, setup 8%)[22m
+
+--- Phase 6 capabilities service: PASS ---
+
+=== Phase 7 coverage service :: test/integration/phase7-coverage-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase7-coverage-service.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 7025[2mms[22m[39m
+   [32m✓[39m Coverage and support conflict integrity [2m(12)[22m
+     [33m[2m✓[22m[39m serializes duplicate support requests before either can create another review item[33m 589[2mms[22m[39m
+     [33m[2m✓[22m[39m rechecks independent gaps under the schedule lock so simultaneous approvals cannot overfill one shortage[33m 524[2mms[22m[39m
+     [33m[2m✓[22m[39m never offers the anchor person as their own replacement or additional support[33m 348[2mms[22m[39m
+     [33m[2m✓[22m[39m preserves support when a replacement updates the same Published plan and reuses its one Draft[33m 558[2mms[22m[39m
+     [33m[2m✓[22m[39m refuses stale support after the original person has already been replaced, while allowing rejection[33m 381[2mms[22m[39m
+     [33m[2m✓[22m[39m shares employee-time locks with manual scheduling across different clients[33m 478[2mms[22m[39m
+     [33m[2m✓[22m[39m allows adjacent work after support ends without treating it as an overlap[33m 310[2mms[22m[39m
+     [33m[2m✓[22m[39m handles approval racing publication of an existing revision without deadlock or a second Draft[33m 309[2mms[22m[39m
+     [33m[2m✓[22m[39m uses the same lock order as publication when adjacent work belongs to another client[33m 420[2mms[22m[39m
+   [32m✓[39m Phase 7 coverage and replacement journey [2m(4)[22m
+     [33m[2m✓[22m[39m keeps independent coverage rules non-blocking and applies an approved add request only to Draft[33m 346[2mms[22m[39m
+     [33m[2m✓[22m[39m returns Proposed to Draft and creates an immutable Draft revision from Published[33m 583[2mms[22m[39m
+   [32m✓[39m Consolidated Cover lifecycle and role amendment [2m(3)[22m
+     [33m[2m✓[22m[39m allows a Published replacement without a gap, edits and cancels it, retains history, then approves only a Draft[33m 501[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m21 passed[39m[22m[90m (21)[39m
+[2m   Start at [22m 18:38:00
+[2m   Duration [22m 10.88s[2m (tests 66%, transform 22%, import 10%, setup 2%)[22m
+
+--- Phase 7 coverage service: PASS ---
+
+=== Phase 8 planning map service :: test/integration/phase8-planning-map-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase8-planning-map-service.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 580[2mms[22m[39m
+   [32m✓[39m Phase 8 PostgreSQL planning projection [2m(2)[22m
+     [33m[2m✓[22m[39m allows only current Super Admin coordinate maintenance and prevents stale delete/recreate writes[33m 330[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m   Start at [22m 18:38:15
+[2m   Duration [22m 2.46s[2m (import 37%, transform 29%, tests 25%, setup 8%)[22m
+
+--- Phase 8 planning map service: PASS ---
+
+=== Phase 9 capability evidence service :: test/integration/phase9-evidence-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase9-evidence-service.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 1547[2mms[22m[39m
+   [32m✓[39m Phase 9 capability evidence service [2m(12)[22m
+     [33m[2m✓[22m[39m does not change Phase 7 coverage results when evidence is verified[33m 318[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m12 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 18:38:23
+[2m   Duration [22m 4.77s[2m (tests 35%, transform 30%, import 29%, setup 6%)[22m
+
+--- Phase 9 capability evidence service: PASS ---
+
+=== Phase 10 collaboration and governance service :: test/integration/phase10-collaboration-service.test.ts, test/integration/phase10-management-note-authorization.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [31m❯[39m test/integration/phase10-collaboration-service.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 1095[2mms[22m[39m
+   [32m✓[39m Phase 10 shared operational notes [2m(1)[22m
+     [33m[2m✓[22m[39m preserves the previous content as a revision and keeps Employee access refused[33m 466[2mms[22m[39m
+   [32m✓[39m Phase 10 employee-management notes [2m(2)[22m
+     [32m✓[39m applies the visibility matrix and keeps guessed ids non-enumerating[32m 160[2mms[22m[39m
+     [32m✓[39m rolls the note back when the audit write fails[32m 14[2mms[22m[39m
+   [31m❯[39m Phase 10 replacement-request discussions [2m(3)[22m
+[31m     [31m×[31m keeps discussion to live participants and notifies the other participants once[39m[32m 69[2mms[22m[39m
+     [32m✓[39m rolls the message and its notification back when the notification write fails[32m 32[2mms[22m[39m
+     [32m✓[39m creates exactly one thread per request under concurrent first messages[32m 84[2mms[22m[39m
+   [31m❯[39m Phase 10 notification centre [2m(3)[22m
+[31m     [31m×[31m keeps read and archive independent, scoped to one recipient, and navigation authorized[39m[32m 11[2mms[22m[39m
+     [32m✓[39m bounds mark-all-read to the acting recipient and paginates deterministically[32m 32[2mms[22m[39m
+     [32m✓[39m renders a neutral unavailable state instead of disclosing an unknown or inaccessible target[32m 13[2mms[22m[39m
+   [32m✓[39m Phase 10 audit-history interface [2m(2)[22m
+     [32m✓[39m is Super Admin only, filters server-side, and never renders raw metadata[32m 38[2mms[22m[39m
+     [32m✓[39m keeps every event readable after its actor is removed[32m 169[2mms[22m[39m
+ [32m✓[39m test/integration/phase10-management-note-authorization.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 586[2mms[22m[39m
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/integration/phase10-collaboration-service.test.ts > Phase 10 replacement-request discussions > keeps discussion to live participants and notifies the other participants once
+AssertionError: expected null to match object { employeeName: 'Cora Bell', …(1) }
+
+- Expected:
+{
+  "date": "2027-10-12",
+  "employeeName": "Cora Bell",
+}
+
++ Received:
+null
+
+ ❯ test/integration/phase10-collaboration-service.test.ts:130:32
+    128|     expect(thread.threadId).toBeNull();
+    129|     expect(thread.requestedAt).toBeTruthy();
+    130|     expect(thread.workContext).toMatchObject({ employeeName: "Cora Bel…
+       |                                ^
+    131|     const employeeThread = await discussionService.openThread(cora, ph…
+    132|     expect(employeeThread.workContext).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  test/integration/phase10-collaboration-service.test.ts > Phase 10 notification centre > keeps read and archive independent, scoped to one recipient, and navigation authorized
+AssertionError: expected undefined to be truthy
+
+- Expected:
+true
+
++ Received:
+undefined
+
+ ❯ test/integration/phase10-collaboration-service.test.ts:220:20
+    218|     expect(page.pageSize).toBe(25);
+    219|     const target = page.items[0];
+    220|     expect(target).toBeTruthy();
+       |                    ^
+    221|     // Ava is a participant on the request, so the thread link resolve…
+    222|     const threadItem = page.items.find((item) => item.relatedRecordTyp…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m24 passed[39m[22m[90m (26)[39m
+[2m   Start at [22m 18:38:34
+[2m   Duration [22m 6.49s[2m (import 33%, transform 30%, tests 28%, setup 9%, worker 1%)[22m
+
+--- Phase 10 collaboration and governance service: FAIL ---
+
+=== Phase 11 reporting service :: test/integration/phase11-reporting-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [31m❯[39m test/integration/phase11-reporting-service.test.ts [2m([22m[2m35 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 13122[2mms[22m[39m
+   [32m✓[39m Phase 11 published allocation (R1) and planning (R4) [2m(6)[22m
+     [32m✓[39m keeps Published allocation strictly Published and planning strictly Draft/Proposed[32m 293[2mms[22m[39m
+     [32m✓[39m keeps the Published window narrower than the planning window for the same month[32m 40[2mms[22m[39m
+     [32m✓[39m keeps all reporting and its index closed to scoped Admins[32m 37[2mms[22m[39m
+     [32m✓[39m refuses Employees every report route[32m 14[2mms[22m[39m
+     [32m✓[39m refuses Admin-only-excluded and unknown report keys with one non-enumerating error[32m 206[2mms[22m[39m
+     [33m[2m✓[22m[39m rechecks scoped Admin dashboard facts while report access remains closed before and after revocation[33m 324[2mms[22m[39m
+   [32m✓[39m Phase 11 allocation totals [2m(1)[22m
+     [32m✓[39m computes unallocated employees and scheduled hours honestly[32m 29[2mms[22m[39m
+   [32m✓[39m Phase 11 leave reporting [2m(4)[22m
+     [32m✓[39m reports approved days and the conflict fact without leaking private text[32m 25[2mms[22m[39m
+     [32m✓[39m refuses a conflict date outside the requested window[32m 5[2mms[22m[39m
+     [32m✓[39m refuses a window beyond the report maximum[32m 5[2mms[22m[39m
+     [32m✓[39m keeps leave balance Super Admin only[32m 20[2mms[22m[39m
+   [32m✓[39m Phase 11 certification and skill reporting [2m(3)[22m
+     [32m✓[39m gives Super Admin certification detail and refuses the report to Admin[32m 37[2mms[22m[39m
+     [32m✓[39m uses only the recorded/not recorded vocabulary and never reads certification state into coverage[32m 122[2mms[22m[39m
+     [32m✓[39m keeps reporting read-only[32m 131[2mms[22m[39m
+   [32m✓[39m Phase 11 dashboards [2m(5)[22m
+     [33m[2m✓[22m[39m gives each role a distinct, honestly-sourced card set[33m 316[2mms[22m[39m
+     [32m✓[39m presents all twelve approved Super Admin information surfaces, each independently named and backed[32m 148[2mms[22m[39m
+     [32m✓[39m presents all five approved Employee information areas with a leave balance taken from the leave service[32m 46[2mms[22m[39m
+     [32m✓[39m keeps the approved scoped Admin shape and no Super-Admin-only surface[32m 43[2mms[22m[39m
+     [32m✓[39m keeps a Draft or Proposed assignment invisible from the Employee dashboard[32m 19[2mms[22m[39m
+   [32m✓[39m Phase 11 exports [2m(6)[22m
+     [32m✓[39m allows Super Admin to export planning and refuses the scoped Admin the same export[32m 25[2mms[22m[39m
+     [32m✓[39m exports the same projection the report renders and neutralises spreadsheet formulas[32m 62[2mms[22m[39m
+     [32m✓[39m writes one content-free generated event and refuses an unknown key non-enumeratingly[32m 26[2mms[22m[39m
+     [32m✓[39m never exports audit history[32m 6[2mms[22m[39m
+     [32m✓[39m gives an authorized export an actionable over-window refusal[32m 9[2mms[22m[39m
+     [32m✓[39m prevents the export when the audit write fails[32m 13[2mms[22m[39m
+   [32m✓[39m Phase 11 current-authorization enforcement [2m(3)[22m
+     [32m✓[39m reloads current Super Admin authority after demotion and deactivation[32m 37[2mms[22m[39m
+     [32m✓[39m does not widen replacement reporting through request ownership[32m 82[2mms[22m[39m
+     [32m✓[39m keeps an Employee's dashboard limited to their own records[32m 30[2mms[22m[39m
+   [31m❯[39m report filter and total regressions [2m(4)[22m
+[31m     [31m×[31m applies every selected assignment dimension to rows, counts, hours and exports without widening scope[39m[32m 180[2mms[22m[39m
+     [32m✓[39m filters lifecycle by intersecting planning month and client[32m 17[2mms[22m[39m
+     [32m✓[39m calculates annual balance using the full current Dubai year and refuses partial-year requests[32m 27[2mms[22m[39m
+     [33m[2m✓[22m[39m sums more than 5,000 source assignments before grouping and keeps the export row cap[33m 1309[2mms[22m[39m
+   [32m✓[39m aggregate export source completeness [2m(2)[22m
+     [33m[2m✓[22m[39m counts and paginates every balance employee and refuses an over-cap export[33m 7703[2mms[22m[39m
+     [33m[2m✓[22m[39m includes every assignment skill requirement before sorting and refuses an over-cap export[33m 1580[2mms[22m[39m
+   [32m✓[39m report filter option scope inheritance [2m(1)[22m
+     [32m✓[39m keeps filter options Super Admin only regardless of an Admin's direct or inherited grants[32m 150[2mms[22m[39m
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/integration/phase11-reporting-service.test.ts > report filter and total regressions > applies every selected assignment dimension to rows, counts, hours and exports without widening scope
+ReportDomainError: The requested report was not found.
+ ❯ ReportingService.authorize src/modules/reporting/service.ts:87:61
+     85|     // An unauthorized role receives byte-identical output to an unkno…
+     86|     // that a report exists but is reserved.
+     87|     if (!canViewReport(current.role, definition.key)) throw new Report…
+       |                                                             ^
+     88|     return { current, scope: resolveScope(current), definition };
+     89|   }
+ ❯ ReportingService.report src/modules/reporting/service.ts:120:44
+ ❯ test/integration/phase11-reporting-service.test.ts:434:13
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m34 passed[39m[22m[90m (35)[39m
+[2m   Start at [22m 18:38:47
+[2m   Duration [22m 16.07s[2m (tests 83%, transform 9%, import 6%, setup 2%)[22m
+
+--- Phase 11 reporting service: FAIL ---
+
+=== Credential authentication service :: test/integration/credential-authentication.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/credential-authentication.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 10268[2mms[22m[39m
+   [32m✓[39m credential authentication service [2m(20)[22m
+     [32m✓[39m bootstrap [2m(4)[22m
+       [33m[2m✓[22m[39m initializes exactly five credentials once and is idempotent on re-run[33m 1346[2mms[22m[39m
+     [32m✓[39m credential login [2m(6)[22m
+       [33m[2m✓[22m[39m accepts every approved account by username and by email[33m 2299[2mms[22m[39m
+       [33m[2m✓[22m[39m matches case-insensitively on identifiers and case-sensitively on passwords[33m 375[2mms[22m[39m
+       [33m[2m✓[22m[39m returns an identical public refusal for an unknown identifier and a wrong password[33m 430[2mms[22m[39m
+     [32m✓[39m brute-force protection [2m(4)[22m
+       [33m[2m✓[22m[39m locks after five failures within the window and refuses further attempts[33m 1108[2mms[22m[39m
+       [33m[2m✓[22m[39m serializes concurrent failures so the threshold cannot be bypassed[33m 2065[2mms[22m[39m
+       [33m[2m✓[22m[39m resets the failure counters after a successful login[33m 834[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m20 passed[39m[22m[90m (20)[39m
+[2m   Start at [22m 18:39:07
+[2m   Duration [22m 12.04s[2m (tests 87%, import 7%, transform 3%, setup 2%)[22m
+
+--- Credential authentication service: PASS ---
+
+=== Account administration service :: test/integration/account-administration.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/account-administration.test.ts [2m([22m[2m30 tests[22m[2m)[22m[33m 7346[2mms[22m[39m
+   [32m✓[39m account administration service [2m(30)[22m
+     [32m✓[39m password reset [2m(7)[22m
+       [33m[2m✓[22m[39m rejects weak and identifier-equal passwords without changing credentials, sessions, or audit[33m 362[2mms[22m[39m
+       [33m[2m✓[22m[39m rotates a self-reset session under the new version and invalidates every old session[33m 1154[2mms[22m[39m
+       [33m[2m✓[22m[39m rolls back a self-reset and keeps its session valid if audit persistence fails[33m 691[2mms[22m[39m
+       [33m[2m✓[22m[39m changes hash and salt, clears lock, bumps version, revokes sessions and audits once[33m 821[2mms[22m[39m
+       [33m[2m✓[22m[39m requires the acting password and confirmation to reset another Super Admin[33m 319[2mms[22m[39m
+       [33m[2m✓[22m[39m leaves an inactive account inactive and does not change its role[33m 363[2mms[22m[39m
+     [32m✓[39m self password change [2m(3)[22m
+       [33m[2m✓[22m[39m rejects the account's stored username or login email as the new password[33m 623[2mms[22m[39m
+       [33m[2m✓[22m[39m clears the requirement, rotates the session, and audits without password content[33m 804[2mms[22m[39m
+       [33m[2m✓[22m[39m rejects a wrong current password and a reused new password[33m 443[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m30 passed[39m[22m[90m (30)[39m
+[2m   Start at [22m 18:39:25
+[2m   Duration [22m 9.33s[2m (tests 81%, import 10%, transform 6%, setup 3%)[22m
+
+--- Account administration service: PASS ---
+
+=== Company ticket service :: test/integration/tickets.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/tickets.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 13281[2mms[22m[39m
+   [32m✓[39m Company tickets PostgreSQL access boundaries [2m(24)[22m
+     [33m[2m✓[22m[39m consolidates current related and supervised tickets across workspaces without exposing unrelated work[33m 719[2mms[22m[39m
+     [33m[2m✓[22m[39m provides workspace-specific eligible membership choices while preserving the minimal company ticket directory[33m 534[2mms[22m[39m
+     [33m[2m✓[22m[39m changes only status and its reason with current writer permissions, versions, audit and notifications[33m 1014[2mms[22m[39m
+     [33m[2m✓[22m[39m rechecks scopes, participation, role, activity and session revocation for focused status changes[33m 575[2mms[22m[39m
+     [33m[2m✓[22m[39m serializes focused status changes and rolls them back if audit or notification delivery fails[33m 648[2mms[22m[39m
+     [33m[2m✓[22m[39m lets every company role create in published dashboards and shares only explicit tickets without enrollment[33m 1221[2mms[22m[39m
+     [33m[2m✓[22m[39m preserves multiple dashboards and tickets and validates every selected active person under the creation transaction[33m 649[2mms[22m[39m
+     [33m[2m✓[22m[39m rechecks revoked participation when a conflicted read restarts[33m 342[2mms[22m[39m
+     [33m[2m✓[22m[39m permits scoped workspace corrections, refuses stale and unauthorized changes, and rolls back a failed audit[33m 394[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps manager access current and Employees on published explicit work with private projections[33m 572[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps container supervision scoped while explicit tickets can cross all company roles and teams[33m 890[2mms[22m[39m
+     [33m[2m✓[22m[39m allows creator grants across teams while assignees work and mentioned people remain read-only[33m 753[2mms[22m[39m
+     [33m[2m✓[22m[39m rechecks board versions, lifecycle and required hold reasons on every transition[33m 573[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps explicit sharing independent of membership while participation and supervisory scopes revoke immediately[33m 624[2mms[22m[39m
+     [33m[2m✓[22m[39m preserves TEAM boundaries for retained work after a cross-team participant is revoked[33m 440[2mms[22m[39m
+     [33m[2m✓[22m[39m serializes current grant/activity revocation with list and detail projection reads[33m 455[2mms[22m[39m
+     [33m[2m✓[22m[39m uses retained archives, restores creator access and limits work-log edits to authors[33m 551[2mms[22m[39m
+     [33m[2m✓[22m[39m serializes competing edits and commits primary state, audit and notifications atomically[33m 500[2mms[22m[39m
+     [33m[2m✓[22m[39m handles membership/board changes under shared parent locks without changing schedules or leave[33m 566[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m24 passed[39m[22m[90m (24)[39m
+[2m   Start at [22m 18:39:40
+[2m   Duration [22m 15.41s[2m (tests 88%, import 6%, transform 4%, setup 2%)[22m
+
+--- Company ticket service: PASS ---
+
+=== Company ticket private files :: test/integration/ticket-files.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/ticket-files.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 4352[2mms[22m[39m
+   [32m✓[39m Company private ticket files [2m(7)[22m
+     [33m[2m✓[22m[39m authorizes live participants, gives scoped management access, and withholds storage keys[33m 630[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps observers read-only and restricts employee file archive to their own uploads[33m 828[2mms[22m[39m
+     [33m[2m✓[22m[39m refuses stale ticket/file versions and prevents archived ticket writes[33m 545[2mms[22m[39m
+     [33m[2m✓[22m[39m revokes participant, supervisory scope and session access while creator access is independent of workspace enrollment[33m 584[2mms[22m[39m
+     [33m[2m✓[22m[39m compensates a private upload when parent archive or participation removal wins the race[33m 510[2mms[22m[39m
+     [33m[2m✓[22m[39m commits one simultaneous upload for a shared ticket version and removes the losing bytes[33m 496[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 18:40:00
+[2m   Duration [22m 6.52s[2m (tests 70%, import 19%, transform 7%, setup 3%)[22m
+
+--- Company ticket private files: PASS ---
+
+Aggregate integration summary (each suite in its own disposable database):
+  PASS  Phase 1 PostgreSQL foundation
+  PASS  Phase 2 employee core service
+  PASS  Phase 3 operational service
+  PASS  Monthly timetable and organisation service
+  PASS  Phase 4 scheduling service
+  PASS  Phase 5 leave service
+  PASS  Phase 6 capabilities service
+  PASS  Phase 7 coverage service
+  PASS  Phase 8 planning map service
+  PASS  Phase 9 capability evidence service
+  FAIL  Phase 10 collaboration and governance service
+  FAIL  Phase 11 reporting service
+  PASS  Credential authentication service
+  PASS  Account administration service
+  PASS  Company ticket service
+  PASS  Company ticket private files
+  Overall: 14/16 suites passed

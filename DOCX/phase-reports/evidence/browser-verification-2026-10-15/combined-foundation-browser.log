@@ -1,0 +1,47 @@
+{"event":"browser_build_directory_allocated","ownerPid":18408,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-IgX16v"}
+
+Running 14 tests using 2 workers
+
+  ok  1 [mobile] › test\e2e\foundation.spec.ts:22:1 › unauthenticated users do not receive protected shell navigation (1.9s)
+  ok  2 [desktop] › test\e2e\foundation.spec.ts:22:1 › unauthenticated users do not receive protected shell navigation (2.0s)
+  ok  4 [desktop] › test\e2e\foundation.spec.ts:28:1 › Super Admin receives global shell navigation (5.0s)
+  ok  3 [mobile] › test\e2e\foundation.spec.ts:28:1 › Super Admin receives global shell navigation (5.3s)
+  ok  5 [desktop] › test\e2e\foundation.spec.ts:42:1 › Admin scope is enforced by the direct server seam (4.1s)
+  ok  6 [mobile] › test\e2e\foundation.spec.ts:42:1 › Admin scope is enforced by the direct server seam (4.0s)
+  ok  7 [desktop] › test\e2e\foundation.spec.ts:59:1 › Admin Bravo receives only Bravo scope (2.5s)
+  ok  9 [desktop] › test\e2e\foundation.spec.ts:69:1 › Employee navigation excludes management-only modules (3.7s)
+  ok 10 [desktop] › test\e2e\foundation.spec.ts:85:1 › Employee Bravo remains outside management pages and scopes (3.2s)
+  ok 11 [desktop] › test\e2e\foundation.spec.ts:96:1 › theme preference and RTL shell state persist safely (3.3s)
+  x   8 [mobile] › test\e2e\foundation.spec.ts:59:1 › Admin Bravo receives only Bravo scope (35.0s)
+  ok 12 [mobile] › test\e2e\foundation.spec.ts:69:1 › Employee navigation excludes management-only modules (4.0s)
+  ok 13 [mobile] › test\e2e\foundation.spec.ts:85:1 › Employee Bravo remains outside management pages and scopes (3.0s)
+  ok 14 [mobile] › test\e2e\foundation.spec.ts:96:1 › theme preference and RTL shell state persist safely (4.7s)
+
+
+  1) [mobile] › test\e2e\foundation.spec.ts:59:1 › Admin Bravo receives only Bravo scope ───────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.goto: net::ERR_ABORTED; maybe frame was detached?
+    Call log:
+      - navigating to "http://127.0.0.1:53748/login", waiting until "load"
+
+
+       at sign-in.ts:21
+
+      19 |   const identifier = credentialIdentifiers[name];
+      20 |   if (!identifier) throw new Error(`No credential fixture mapping for ${name}.`);
+    > 21 |   await page.goto("/login");
+         |              ^
+      22 |   await page.getByLabel("Username or email").fill(identifier);
+      23 |   await page.getByLabel("Password", { exact: true }).fill(fictionalTestPassword);
+      24 |   await page.getByRole("button", { name: "Sign in" }).click();
+        at signIn (C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\sign-in.ts:21:14)
+        at C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\foundation.spec.ts:60:9
+
+    Error Context: test-results\combined-foundation\foundation-Admin-Bravo-receives-only-Bravo-scope-mobile\error-context.md
+
+  1 failed
+    [mobile] › test\e2e\foundation.spec.ts:59:1 › Admin Bravo receives only Bravo scope ────────────
+  13 passed (3.8m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":18408,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-IgX16v"}

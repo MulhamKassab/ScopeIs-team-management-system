@@ -1,0 +1,126 @@
+{
+  "state": "D",
+  "ledger": [
+    {
+      "hash": "cd7965d9b11f756075d76c0a9ef2adb4159827391224233cc143b05dfbe22e34",
+      "createdAt": "1787814000000"
+    },
+    {
+      "hash": "d0dc109b1cca66b727ea2843186559c1b9e0f802ad001d8013322f6a2beddd60",
+      "createdAt": "1787827000000"
+    },
+    {
+      "hash": "11913dffe54013a53021896f7c57d7357cbab8cf12e674ae86366bddd039c62c",
+      "createdAt": "1787830000000"
+    },
+    {
+      "hash": "fac18923754fb6f8049a69356749770280722d272a1b83bc42d313ccaf3b2be9",
+      "createdAt": "1787831000000"
+    },
+    {
+      "hash": "9847376cc77dd89bf3332dd50f8612b0db3b5e388b5c6f398863ffd1fafde4b3",
+      "createdAt": "1788325200000"
+    },
+    {
+      "hash": "70292ede041907b0c6629666c6e7038eedf40d9749dc0c4b82cc977c84ce8251",
+      "createdAt": "1788411600000"
+    },
+    {
+      "hash": "ca5b71e516e94ec060ebb752eb596fd72e2be21e8cd94d63ea5e24512e0f78b1",
+      "createdAt": "1788498000000"
+    },
+    {
+      "hash": "0dafbc3f3ca4bb7f6eb42ffc12acf218dc2eff8b86f56c5f561eba0d40a65a2d",
+      "createdAt": "1788584400000"
+    },
+    {
+      "hash": "76fbf89e3c679723f129f43d4863648a84518aef5a610f6684419416f1663ec7",
+      "createdAt": "1788670800000"
+    },
+    {
+      "hash": "040b97336e5a1fdb1c80523c6ef14d6c07e900f4824b7bda65a2ddcee9046a5d",
+      "createdAt": "1788757200000"
+    },
+    {
+      "hash": "38d9834ebd810cbc23c38eac7ea46d4f018e7fd6e05ac8bfcae7025ae7f216b2",
+      "createdAt": "1788843600000"
+    },
+    {
+      "hash": "cdaad137e8328f70424e04456f00dafad2e444eff1fbb2c41c358cf6232f8e46",
+      "createdAt": "1788930000000"
+    },
+    {
+      "hash": "18718d09a2266a00a76023eaa3fb7232f7da935d5a77a87a1b7469f8d884847f",
+      "createdAt": "1789707600000"
+    },
+    {
+      "hash": "d884258673f2c645fa7a0891431942155394f3396bc12d3d08ce5772bb38f6e9",
+      "createdAt": "1789794000000"
+    },
+    {
+      "hash": "ca3379424eb3e39683beacdd598b1de68892f87fcb5a55268bd57dff9b4416dd",
+      "createdAt": "1791283248313"
+    },
+    {
+      "hash": "4c329595f8939836a0cac9d00d0fab5a904e80e0e5c5a78b52de8cac44d50276",
+      "createdAt": "1791487936805"
+    },
+    {
+      "hash": "5774d471fc1ac8007dfce84726be07f39fa0fe7925e20c4c167484477a58b4df",
+      "createdAt": "1791973854276"
+    }
+  ],
+  "fingerprint": "6d2a4fd5d09f62eb112306ed44b88d94f1df733af057a3f5f33a83e3029e3fa6",
+  "tables": [
+    "admin_scope_grants",
+    "arrangement_labels",
+    "assignment_skill_requirements",
+    "audit_events",
+    "clients",
+    "designations",
+    "discussion_messages",
+    "discussion_threads",
+    "employee_code_sequence",
+    "employee_evidence",
+    "employee_files",
+    "employee_management_notes",
+    "employee_planning_locations",
+    "employee_profiles",
+    "employee_skills",
+    "leave_allowance_settings",
+    "leave_requests",
+    "locations",
+    "notifications",
+    "operational_contacts",
+    "operational_employee_relations",
+    "operational_note_revisions",
+    "operational_notes",
+    "project_locations",
+    "projects",
+    "replacement_requests",
+    "schedule_assignments",
+    "schedule_periods",
+    "sessions",
+    "skills",
+    "staffing_requirements",
+    "teams",
+    "ticket_boards",
+    "ticket_files",
+    "ticket_participants",
+    "ticket_work_logs",
+    "ticket_workspace_members",
+    "ticket_workspaces",
+    "tickets",
+    "user_credentials",
+    "users"
+  ],
+  "counts": {
+    "users": 0,
+    "admin_scope_grants": 0,
+    "sessions": 0,
+    "audit_events": 0,
+    "notifications": 0
+  },
+  "personas": [],
+  "scopes": []
+}

@@ -14,7 +14,7 @@ const createdSessionIds = new Set<string>();
 // persona can never silently skip a route check.
 const moduleKeys = ["dashboard", "tickets", "employees", "teams", "designations", "arrangements", "accounts", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "audit", "settings", "profile", "requests"] as const;
 const superAdminModules = [...moduleKeys];
-const adminModules = ["dashboard", "tickets", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "leave", "coverage", "replacements", "notifications", "reports", "profile"];
+const adminModules = ["dashboard", "tickets", "employees", "skills", "clients", "projects", "locations", "schedule", "map", "coverage", "replacements", "notifications", "profile", "requests"];
 const employeeModules = ["dashboard", "tickets", "skills", "schedule", "leave", "profile", "notifications", "requests"];
 
 type Persona = {
@@ -35,11 +35,11 @@ type Persona = {
 };
 
 const personas: Persona[] = [
-  { id: "mock-super-admin-nora", displayName: "Nora Albright", role: "SUPER_ADMIN", allowedModules: superAdminModules, alphaStatus: 200, bravoStatus: 200 },
-  { id: "mock-admin-ava", displayName: "Ava Mercer", role: "ADMIN", allowedModules: adminModules, alphaStatus: 200, bravoStatus: 403 },
-  { id: "mock-admin-ben", displayName: "Ben Iqbal", role: "ADMIN", allowedModules: adminModules, alphaStatus: 403, bravoStatus: 200 },
-  { id: "mock-employee-cora", displayName: "Cora Bell", role: "EMPLOYEE", allowedModules: employeeModules, navigationModules: employeeModules.filter((key) => key !== "skills"), refusalModules: ["coverage", "replacements"], alphaStatus: 403, bravoStatus: 403 },
-  { id: "mock-employee-dan", displayName: "Dan Rowan", role: "EMPLOYEE", allowedModules: employeeModules, navigationModules: employeeModules.filter((key) => key !== "skills"), refusalModules: ["coverage", "replacements"], alphaStatus: 403, bravoStatus: 403 },
+  { id: "mock-super-admin-nora", displayName: "Nora Albright", role: "SUPER_ADMIN", allowedModules: superAdminModules, navigationModules: superAdminModules.filter(key=>key!=="replacements"), alphaStatus: 200, bravoStatus: 200 },
+  { id: "mock-admin-ava", displayName: "Ava Mercer", role: "ADMIN", allowedModules: adminModules, navigationModules: adminModules.filter(key=>key!=="replacements"), alphaStatus: 200, bravoStatus: 403 },
+  { id: "mock-admin-ben", displayName: "Ben Iqbal", role: "ADMIN", allowedModules: adminModules, navigationModules: adminModules.filter(key=>key!=="replacements"), alphaStatus: 403, bravoStatus: 200 },
+  { id: "mock-employee-cora", displayName: "Cora Bell", role: "EMPLOYEE", allowedModules: employeeModules, navigationModules: employeeModules.filter((key) => key !== "skills"), refusalModules: ["coverage"], alphaStatus: 403, bravoStatus: 403 },
+  { id: "mock-employee-dan", displayName: "Dan Rowan", role: "EMPLOYEE", allowedModules: employeeModules, navigationModules: employeeModules.filter((key) => key !== "skills"), refusalModules: ["coverage"], alphaStatus: 403, bravoStatus: 403 },
 ];
 
 const unknownTicketId = "00000000-0000-4000-8000-000000000998";
@@ -201,7 +201,8 @@ describe("Phase 1 public HTTP route certification", () => {
         const linked = (persona.navigationModules ?? persona.allowedModules).includes(moduleKey);
         expect(primaryNavigationHtml.includes(`href="/${moduleKey}"`), `${persona.id} navigation for ${moduleKey}`).toBe(linked);
         const page = await request(`/${moduleKey}`, { headers: { Cookie: session.cookie } });
-        expect(page.status, `${persona.id} direct page /${moduleKey}`).toBe(allowed || refusal ? 200 : 404);
+        expect(page.status, `${persona.id} direct page /${moduleKey}`).toBe(moduleKey === "replacements" ? 307 : allowed || refusal ? 200 : 404);
+        if (moduleKey === "replacements") expect(page.headers.get("location")).toBe("/coverage#current-requests");
         const html = await page.text();
         // A refusal page must be an explicit no-data statement, never a management projection.
         if (refusal) expect(html, `${persona.id} refusal page /${moduleKey}`).toContain("management-only");
@@ -346,26 +347,26 @@ describe("Phase 1 public HTTP route certification", () => {
         expect(dashboard.status).toBe(200);
         safeResponse(await dashboard.text(), session.token);
       }
-      // Reports are management-only; an Employee receives a non-enumerating 404.
+      // Reports are Super Admin only; Admin and Employee receive non-enumerating refusals.
       expect((await request("/reports", { headers: { Cookie: superAdmin.cookie } })).status).toBe(200);
-      expect((await request("/reports", { headers: { Cookie: scopedAdmin.cookie } })).status).toBe(200);
+      expect((await request("/reports", { headers: { Cookie: scopedAdmin.cookie } })).status).toBe(404);
       expect((await request("/reports", { headers: { Cookie: employee.cookie } })).status).toBe(404);
       expect((await request(`/reports/published-allocation?${window}`, { headers: { Cookie: superAdmin.cookie } })).status).toBe(200);
-      // Planning is reachable for both management roles in scope and closed to an Employee.
+      // Planning reports are Super Admin only.
       expect((await request(`/reports/planning-unpublished?${window}`, { headers: { Cookie: superAdmin.cookie } })).status).toBe(200);
-      expect((await request(`/reports/planning-unpublished?${window}`, { headers: { Cookie: scopedAdmin.cookie } })).status).toBe(200);
+      expect((await request(`/reports/planning-unpublished?${window}`, { headers: { Cookie: scopedAdmin.cookie } })).status).toBe(404);
       expect((await request(`/reports/planning-unpublished?${window}`, { headers: { Cookie: employee.cookie } })).status).toBe(404);
       // Super-Admin-only and unknown report keys behave identically for a scoped Admin.
-      for (const path of ["/reports/leave-balance", "/reports/evidence-review-queue", "/reports/audit-history", "/reports/not-a-report"]) {
+      for (const path of ["/reports/published-allocation", "/reports/certification-status", "/reports/leave-balance", "/reports/evidence-review-queue", "/reports/audit-history", "/reports/not-a-report"]) {
         expect((await request(`${path}?${window}`, { headers: { Cookie: scopedAdmin.cookie } })).status, path).toBe(404);
       }
       // Export authorization mirrors the view authorization.
-      const allowedExport = await request(`/api/reports/published-allocation/export?${window}`, { headers: { Cookie: scopedAdmin.cookie } });
+      const allowedExport = await request(`/api/reports/published-allocation/export?${window}`, { headers: { Cookie: superAdmin.cookie } });
       expect(allowedExport.status).toBe(200);
       expect(allowedExport.headers.get("x-content-type-options")).toBe("nosniff");
       expect(allowedExport.headers.get("cache-control")).toContain("no-store");
-      safeResponse(await allowedExport.text(), scopedAdmin.token);
-      for (const path of ["/api/reports/planning-unpublished/export", "/api/reports/not-a-report/export"]) {
+      safeResponse(await allowedExport.text(), superAdmin.token);
+      for (const path of ["/api/reports/published-allocation/export", "/api/reports/certification-status/export", "/api/reports/planning-unpublished/export", "/api/reports/not-a-report/export"]) {
         const refused = await request(`${path}?${window}`, { headers: { Cookie: scopedAdmin.cookie } });
         expect(refused.status, path).toBe(404);
         safeResponse(await refused.text(), scopedAdmin.token);

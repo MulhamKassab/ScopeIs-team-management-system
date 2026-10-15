@@ -1,0 +1,16 @@
+{
+  "status": "CLEANED",
+  "capturedAt": "2026-10-15T18:25:57.424Z",
+  "loopbackPort": 52699,
+  "configuredTestDatabaseBeforeAfterUnchanged": true,
+  "baseDatabaseDropped": "scopeis_browser_verification_base_test",
+  "suiteDatabasesRetained": 0,
+  "sharedPeer5432Untouched": true,
+  "unrelated55441Untouched": true,
+  "awakeGuardCreated": false,
+  "verificationEnvironmentRemovalPending": false,
+  "completedAt": "2026-10-15T18:26:36.412Z",
+  "runtimeStopped": true,
+  "loopbackPortClosed": true,
+  "ownedVerificationEnvironmentRemoved": true
+}

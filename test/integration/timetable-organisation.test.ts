@@ -4,6 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "@/db/client";
 import { adminScopeGrants, designations, employeeProfiles, scheduleAssignments, schedulePeriods, users } from "@/db/schema";
 import { getTimetable } from "@/modules/scheduling/timetable-service";
+import { schedulingService } from "@/modules/scheduling/service";
 import { organisationService } from "@/modules/employees/organisation-service";
 import { employeeCatalogueService, employeeProfileService } from "@/modules/employees/employee-services";
 import { phase3Ids, phase4Ids } from "../../scripts/phase4-test-fixtures.mjs";
@@ -18,6 +19,17 @@ beforeAll(async () => {
  }
 });
 describe("monthly timetable permissions and organisation management", () => {
+ it("keeps Published schedule details within the same TEAM and operational intersection as the timetable", async () => {
+  const [period] = await db.select().from(schedulePeriods).where(and(eq(schedulePeriods.planningMonth, `${month}-01`), eq(schedulePeriods.status, "PUBLISHED"), eq(schedulePeriods.isCurrent, true)));
+  expect((await schedulingService.getPeriodEditor(superAdmin, period.id)).assignments).toHaveLength(2);
+  const scoped = await schedulingService.getPeriodEditor(admin, period.id);
+  expect(scoped.assignments.map(row=>row.assignment.employeeUserId)).toEqual([employee.id]);
+  expect(JSON.stringify(scoped.assignments)).not.toContain(phase4Ids.bravoEmployee);
+  const [grant] = await db.select().from(adminScopeGrants).where(and(eq(adminScopeGrants.userId, admin.id), eq(adminScopeGrants.scopeType, "TEAM"))).limit(1);
+  await db.update(adminScopeGrants).set({ active: false }).where(eq(adminScopeGrants.id, grant.id));
+  try { expect((await schedulingService.getPeriodEditor(admin, period.id)).assignments).toEqual([]); }
+  finally { await db.update(adminScopeGrants).set({ active: true }).where(eq(adminScopeGrants.id, grant.id)); }
+ });
  it("projects only current Published work, separates plans and restricts employees to themselves", async () => {
   const published=await getTimetable(superAdmin,month); expect(published).toHaveLength(2); expect(published.every(row=>row.status==="PUBLISHED")).toBe(true);
   const plans=await getTimetable(superAdmin,month,true); expect(plans).toHaveLength(2); expect(plans.every(row=>row.status==="DRAFT")).toBe(true);
@@ -26,6 +38,9 @@ describe("monthly timetable permissions and organisation management", () => {
  });
  it("requires both TEAM and operational Admin grants and reloads authority each time", async () => {
   expect(await getTimetable(admin,month)).toHaveLength(1);
+  const requestedPlans = await getTimetable(admin,month,true);
+  expect(requestedPlans).toHaveLength(1);
+  expect(requestedPlans.every(row=>row.status === "PUBLISHED")).toBe(true);
   const [grant]=await db.select().from(adminScopeGrants).where(and(eq(adminScopeGrants.userId,admin.id),eq(adminScopeGrants.scopeType,"TEAM"))).limit(1);
   await db.update(adminScopeGrants).set({active:false}).where(eq(adminScopeGrants.id,grant.id));
   try { expect(await getTimetable(admin,month)).toEqual([]); } finally { await db.update(adminScopeGrants).set({active:true}).where(eq(adminScopeGrants.id,grant.id)); }

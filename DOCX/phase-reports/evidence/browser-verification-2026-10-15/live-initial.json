@@ -1,0 +1,121 @@
+{
+  "verifiedAt": "2026-10-15T09:19:24.117Z",
+  "source": "48e3e7cb5b7312a103fe1dbdfa88263605a6231b",
+  "checks": [
+    {
+      "role": "SUPER_ADMIN",
+      "path": "/schedule",
+      "passed": true,
+      "detail": "Fresh reload; People table has 4 rows of 32 cells, 3 people and October days."
+    },
+    {
+      "role": "SUPER_ADMIN",
+      "path": "/tickets?view=archive",
+      "passed": true,
+      "detail": "0 active tickets; all 6 existing archived tickets visible, no application error."
+    },
+    {
+      "role": "ADMIN",
+      "path": "/schedule",
+      "passed": true,
+      "detail": "Read only notice; 4 authorized monthly schedules; no writer controls."
+    },
+    {
+      "role": "ADMIN",
+      "error": false,
+      "headings": [
+        "Tickets",
+        "All accessible tickets0",
+        "No tickets match yet"
+      ],
+      "mains": 1,
+      "path": "/tickets",
+      "safeReturn": false,
+      "passed": true
+    },
+    {
+      "role": "ADMIN",
+      "error": false,
+      "headings": [
+        "Page not found"
+      ],
+      "mains": 1,
+      "path": "/accounts",
+      "safeReturn": true,
+      "passed": true
+    },
+    {
+      "role": "ADMIN",
+      "error": false,
+      "headings": [
+        "Page not found"
+      ],
+      "mains": 1,
+      "path": "/arrangements",
+      "safeReturn": true,
+      "passed": true
+    },
+    {
+      "error": false,
+      "heading": "My timetable",
+      "mainText": "Demo workspace\nFictional company data · Changes are saved\n\nHow to use Schedule\n\nYOUR WORK\n\nMy timetable\n\nYour published assignments · Asia/Dubai\n\nPlanning month\nGo\n\nPUBLISHED WORK\n\nOctober 2026\n\n6 assignments · 1 person · 2 sites\n\nMonth\nPeople\nAgenda\nFilter timetable\n\nSelect a day to see every assignment, location and work instruction.\n\nMon\nTue\nWed\nThu\nFri\nSat\nSun\n1\nNo assignme",
+      "path": "/schedule?mode=planning",
+      "planningLink": false,
+      "publication": "Published workOctober 20266 assignments · 1 person · 2 sitesMonthPeopleAgendaFilter timetableClientAll clientsMarina Hei",
+      "role": "EMPLOYEE",
+      "writerControls": [],
+      "passed": true
+    },
+    {
+      "role": "EMPLOYEE",
+      "error": false,
+      "headings": [
+        "Tickets",
+        "All accessible tickets0",
+        "No tickets match yet"
+      ],
+      "mains": 1,
+      "path": "/tickets",
+      "planningLink": false,
+      "safeReturn": false,
+      "writerControls": [],
+      "passed": true
+    },
+    {
+      "role": "EMPLOYEE",
+      "error": false,
+      "headings": [
+        "Page not found"
+      ],
+      "mains": 1,
+      "path": "/accounts",
+      "planningLink": false,
+      "safeReturn": true,
+      "writerControls": [],
+      "passed": true
+    }
+  ],
+  "diagnostics": [
+    {
+      "issue": "Initial manual probe expected management heading on Employee view.",
+      "observation": {
+        "role": "EMPLOYEE",
+        "error": false,
+        "headings": [
+          "My timetable",
+          "October 2026"
+        ],
+        "mains": 1,
+        "path": "/schedule?mode=planning",
+        "planningLink": false,
+        "safeReturn": false,
+        "writerControls": [],
+        "passed": false
+      },
+      "resolution": "Use the implemented role-specific My timetable heading and verify Published work controls."
+    }
+  ],
+  "scope": "Normal saved-account sessions; read-only business data; expected authentication/session audits only.",
+  "sessionRestored": true,
+  "authenticationNote": "One misspelled account identifier was refused; corrected to the documented identifier, then normal saved sign-in succeeded. No password or permission changes."
+}

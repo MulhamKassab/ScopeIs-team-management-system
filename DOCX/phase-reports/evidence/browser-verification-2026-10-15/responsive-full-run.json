@@ -1,0 +1,1071 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\m.kassab\\.codex\\worktrees\\combined-browser-release\\Team management system\\node_modules\\playwright\\cli.js",
+      "test",
+      "--config",
+      "playwright.responsive.config.ts",
+      "--output",
+      "C:\\Users\\m.kassab\\.codex\\worktrees\\combined-browser-release\\Team management system\\test-results\\aggregate\\run-responsive-playwright"
+    ],
+    "configFile": "C:\\Users\\m.kassab\\.codex\\worktrees\\combined-browser-release\\Team management system\\playwright.responsive.config.ts",
+    "rootDir": "C:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system/test/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system/test-results/aggregate/run-responsive-playwright",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/m.kassab/.codex/worktrees/combined-browser-release/Team management system/test/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "responsive.spec.ts"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\m.kassab\\.codex\\worktrees\\combined-browser-release\\Team management system\\test-results\\aggregate\\run-responsive-playwright",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\m.kassab\\.codex\\worktrees\\combined-browser-release\\Team management system\\test\\e2e",
+        "snapshotDir": "C:\\Users\\m.kassab\\.codex\\worktrees\\combined-browser-release\\Team management system\\test\\e2e",
+        "testIgnore": [],
+        "testMatch": "responsive.spec.ts",
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:64735",
+          "browserName": "chromium",
+          "channel": "chrome",
+          "launchOptions": {
+            "executablePath": "C:\\Users\\m.kassab\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe"
+          },
+          "hasTouch": true,
+          "actionTimeout": 10000,
+          "trace": "retain-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/responsive-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "responsive.spec.ts",
+      "file": "responsive.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "all management screens and report tables fit from phone to wide desktop · 320×640",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15290,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T17:56:19.611Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-451ff93025442bbab7d3",
+          "file": "responsive.spec.ts",
+          "line": 195,
+          "column": 35
+        },
+        {
+          "title": "all management screens and report tables fit from phone to wide desktop · 390×844",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 16121,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T17:56:34.917Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-f587e450b5857125a35b",
+          "file": "responsive.spec.ts",
+          "line": 195,
+          "column": 35
+        },
+        {
+          "title": "all management screens and report tables fit from phone to wide desktop · 600×900",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 27988,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T17:56:51.065Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-5e9b12f29ecb5124a525",
+          "file": "responsive.spec.ts",
+          "line": 195,
+          "column": 35
+        },
+        {
+          "title": "all management screens and report tables fit from phone to wide desktop · 768×1024",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 24190,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T17:57:19.122Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-796d49e6b8bb2d29615b",
+          "file": "responsive.spec.ts",
+          "line": 195,
+          "column": 35
+        },
+        {
+          "title": "all management screens and report tables fit from phone to wide desktop · 820×1180",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 22741,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T17:57:43.335Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-20cc06b6ad9ae69ca828",
+          "file": "responsive.spec.ts",
+          "line": 195,
+          "column": 35
+        },
+        {
+          "title": "all management screens and report tables fit from phone to wide desktop · 1024×768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 24727,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T17:58:06.103Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-8a1db8f90a74966cb162",
+          "file": "responsive.spec.ts",
+          "line": 195,
+          "column": 35
+        },
+        {
+          "title": "all management screens and report tables fit from phone to wide desktop · 1280×800",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 40492,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T17:58:30.858Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-ab968a8b3692da338ba4",
+          "file": "responsive.spec.ts",
+          "line": 195,
+          "column": 35
+        },
+        {
+          "title": "all management screens and report tables fit from phone to wide desktop · 1920×1080",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 39339,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T17:59:11.389Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-9d1c83e8c4eb6dfd5b21",
+          "file": "responsive.spec.ts",
+          "line": 195,
+          "column": 35
+        },
+        {
+          "title": "create and review dialogs fit phones, tablets, and short landscape screens · 320×640",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 112407,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T17:59:50.773Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-3c1397c287c30d5cb7f3",
+          "file": "responsive.spec.ts",
+          "line": 231,
+          "column": 114
+        },
+        {
+          "title": "create and review dialogs fit phones, tablets, and short landscape screens · 768×360",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 113312,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:01:43.213Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-b2ac5cce012e2faf445f",
+          "file": "responsive.spec.ts",
+          "line": 231,
+          "column": 114
+        },
+        {
+          "title": "create and review dialogs fit phones, tablets, and short landscape screens · 1024×768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 128929,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:03:36.567Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-3ea8ec93d87a632fabcb",
+          "file": "responsive.spec.ts",
+          "line": 231,
+          "column": 114
+        },
+        {
+          "title": "role navigation, RTL, dark theme and enlarged text reflow",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 98495,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:05:45.533Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-a6dc555db7bd4d348b8e",
+          "file": "responsive.spec.ts",
+          "line": 263,
+          "column": 1
+        },
+        {
+          "title": "sign in, password change and unavailable pages fit every viewport",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 19024,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:07:24.103Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-6261d9336d823176aeb4",
+          "file": "responsive.spec.ts",
+          "line": 307,
+          "column": 1
+        },
+        {
+          "title": "More navigation stays usable on tablets and closes with focus restored on desktop",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4517,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:07:43.189Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-e25083f24ad29191de95",
+          "file": "responsive.spec.ts",
+          "line": 328,
+          "column": 1
+        },
+        {
+          "title": "task dialogs keep fields and actions above a simulated mobile keyboard",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4045,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:07:47.791Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-fcfae6378763f95c979a",
+          "file": "responsive.spec.ts",
+          "line": 350,
+          "column": 1
+        },
+        {
+          "title": "visual controls keep contrast, focus and native modal behavior in both themes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12895,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:07:51.871Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "light-control-contrast",
+                      "contentType": "application/json",
+                      "path": "C:\\Users\\m.kassab\\.codex\\worktrees\\combined-browser-release\\Team management system\\test-results\\aggregate\\run-responsive-playwright\\responsive-visual-controls-0c467-dal-behavior-in-both-themes\\attachments\\light-control-contrast-a0acfa32fe05151db46c4829a0b2b7b53ca5dc9c.json"
+                    },
+                    {
+                      "name": "dark-control-contrast",
+                      "contentType": "application/json",
+                      "path": "C:\\Users\\m.kassab\\.codex\\worktrees\\combined-browser-release\\Team management system\\test-results\\aggregate\\run-responsive-playwright\\responsive-visual-controls-0c467-dal-behavior-in-both-themes\\attachments\\dark-control-contrast-43c49fab77add75987ad2ee230c78f466ac177a2.json"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-d56eaa4f181a7cd3de47",
+          "file": "responsive.spec.ts",
+          "line": 379,
+          "column": 1
+        },
+        {
+          "title": "reduced motion removes decorative movement and forced colors retain controls",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3751,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:08:04.792Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-ea6a8c8cd905f301eef3",
+          "file": "responsive.spec.ts",
+          "line": 460,
+          "column": 1
+        },
+        {
+          "title": "desktop hover is tactile and reduced motion removes its movement",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5737,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:08:08.567Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-7dc8bdb5fa3b1adc8ed2",
+          "file": "responsive.spec.ts",
+          "line": 488,
+          "column": 1
+        },
+        {
+          "title": "the planning workspace fits its pins and exposes filters, search and next actions on every screen",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 39098,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:08:14.336Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-1111d9e29f454dfaac6d",
+          "file": "responsive.spec.ts",
+          "line": 509,
+          "column": 1
+        },
+        {
+          "title": "feature discovery stays usable and role-specific on phone, desktop and RTL with larger text",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 27188,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:08:53.481Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-23514cb887de70a7ecea",
+          "file": "responsive.spec.ts",
+          "line": 563,
+          "column": 1
+        },
+        {
+          "title": "monthly timetable and people catalogues stay usable across phone, desktop, RTL and reduced motion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 43416,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:09:20.726Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-a345e7f51936261ebaa1",
+          "file": "responsive.spec.ts",
+          "line": 605,
+          "column": 1
+        },
+        {
+          "title": "clear user journeys keep every authorized tab understandable and make the main tasks work on phone and desktop",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 69356,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:10:04.200Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-8ded97b0b050d337d80f",
+          "file": "responsive.spec.ts",
+          "line": 670,
+          "column": 1
+        },
+        {
+          "title": "populated tickets, destination filters and work dialogs fit every responsive viewport",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 75032,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T18:11:13.698Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "responsive-layout-issues",
+                      "contentType": "application/json",
+                      "body": "W10="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e0223b006feb3d306446-83ba2d90b2e7d9c68dfb",
+          "file": "responsive.spec.ts",
+          "line": 750,
+          "column": 1
+        }
+      ],
+      "suites": [
+        {
+          "title": "expressive motion",
+          "file": "responsive.spec.ts",
+          "line": 50,
+          "column": 6,
+          "specs": [
+            {
+              "title": "motion stays finite, preserves modal focus and works across desktop and phone",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "",
+                  "projectName": "",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11634,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-15T17:56:06.660Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "responsive-layout-issues",
+                          "contentType": "application/json",
+                          "body": "W10="
+                        },
+                        {
+                          "name": "motion-desktop-and-phone",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\m.kassab\\.codex\\worktrees\\combined-browser-release\\Team management system\\test-results\\aggregate\\run-responsive-playwright\\responsive-expressive-moti-881c3-ks-across-desktop-and-phone\\attachments\\motion-desktop-and-phone-d9d773d7c99c05bdea8cdb99b9d4de58a5d04a7f.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e0223b006feb3d306446-333fe5174565fbeb9289",
+              "file": "responsive.spec.ts",
+              "line": 51,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-15T17:56:05.863Z",
+    "duration": 998004.303,
+    "expected": 24,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

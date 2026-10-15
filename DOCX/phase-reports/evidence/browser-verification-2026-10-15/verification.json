@@ -1,0 +1,31 @@
+{
+  "status": "LOCAL_VERIFIED_PRODUCTION_PENDING",
+  "completedAt": "2026-10-15T18:25:29.453Z",
+  "fullRun": {
+    "certificate": "verification-full-run.json",
+    "gates": 14,
+    "totalGates": 14,
+    "uniqueAutomatedCases": 813,
+    "browserSuites": 15,
+    "responsive": 24,
+    "matchingInputs": 472
+  },
+  "cssOnlyFollowup": {
+    "certificate": "mobile-labels-verification.json",
+    "passedCases": 4,
+    "totalCases": 4,
+    "guardedProductionBuild": true,
+    "matchingInputs": 472
+  },
+  "finalInputManifest": "inputs-mobile-labels-after.json",
+  "fullGateRerunAfterCss": false,
+  "additionalUniqueCaseCountClaimed": false,
+  "productionReleasePending": true,
+  "cleanup": "local-cleanup.json",
+  "visualReview": {
+    "beforeAfter320LabelsReviewed": true,
+    "rtlTimetableReviewed": true,
+    "phoneMapReviewed": true,
+    "evidence": "mobile-labels-verification.json"
+  }
+}

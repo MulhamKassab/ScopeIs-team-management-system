@@ -1,5 +1,9 @@
 # Phase 7 — Coverage and replacement decisions
 
+## Confirmed Cover and access amendment — 2026-10-15
+
+The owner authorized the [consolidated Cover workspace and access amendment](COVER_WORKSPACE_AND_ACCESS_AMENDMENT_2026_10_15.md). It supersedes older statements permitting Admin unpublished timetable/team-leave/report reads or project creation. Super Admin alone holds those capabilities; Employee own vacation self-service remains. Cover unifies timetable selection, creation, versioned editing/cancellation and direct decisions, with separate publication. The main timetable exposes assignment creation and the map gains place labels and selected-work controls. Existing scope, privacy, conflict, accessibility and RTL rules remain.
+
 Phase 7 reuses the Phase 3 `staffing_requirements` records as independent Client, Project, and Location rules. Counts are evaluated per rule against same-date, same-interval assignment context in `Asia/Dubai`; they are not summed. A recorded active skill, active employee, absence of Approved leave, and no time overlap are the only candidate facts used. Assignment-specific skill requirements can create a qualification warning but never a count rule.
 
 Gaps are explainable and non-blocking. They do not assert sufficient coverage, candidate ranking, certification eligibility, replacement availability, or a factual capability judgment. There is no coverage override or special override reason.

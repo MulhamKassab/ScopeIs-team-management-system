@@ -1,5 +1,13 @@
 # UI/UX Foundation
 
+## Confirmed Cover and access amendment — 2026-10-15
+
+The owner authorized the [consolidated Cover workspace and access amendment](COVER_WORKSPACE_AND_ACCESS_AMENDMENT_2026_10_15.md). It supersedes older statements permitting Admin unpublished timetable/team-leave/report reads or project creation. Super Admin alone holds those capabilities; Employee own vacation self-service remains. Cover unifies timetable selection, creation, versioned editing/cancellation and direct decisions, with separate publication. The main timetable exposes assignment creation and the map gains place labels and selected-work controls. Existing scope, privacy, conflict, accessibility and RTL rules remain.
+
+## Task-dialog readiness — 2026-10-15
+
+Task-dialog triggers remain disabled with accessible busy state until their client handlers are ready. Initial server and hydration output agree; the trigger then becomes interactive while preserving any existing explicit restriction. A visible button must open its named task dialog when enabled. Delayed-JavaScript desktop/phone regression checks and the complete dialog inventory verify this behavior. Existing modal focus, Escape/dismissal, responsive layout, RTL, themes and role restrictions remain binding. See [the browser verification report](../phase-reports/SCOPEIS_BROWSER_VERIFICATION_2026_10_15.md) for current certification and release status.
+
 ## Authorized missing controls — 2026-10-14
 
 The connected-control completion adds Assignment labels to Super Admin navigation, job-title lifecycle disclosures, separate default-location and planning-coordinate dialogs, skill history restoration and optional informational-description editing. All use the established native dialogs/disclosures, named fields, pending/error/success feedback and logical responsive layout. Skill restore and coordinate-clear confirmations survive their changing forms. The notification bell exposes the own-unread count through accessible descriptive text, logical placement and forced-colour support. Evidence uploads state the applicable limit before submission and retained large-file downloads provide bounded progress/error/retry behavior. Existing role projections, touch targets, RTL, themes and reduced motion remain binding; Settings stays explicitly unfinished. See [the implementation report](../phase-reports/SCOPEIS_FRONTEND_BACKEND_GAP_FIXES_2026_10_14.md).

@@ -1,0 +1,39 @@
+
+ RUN  v5.0.3 C:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system
+
+ ❯ test/component/workspace-guide.test.tsx (2 tests | 1 failed) 352ms
+   ❯ workspace task discovery (2)
+     × closes the native task dialog and restores scroll when a feature is chosen 24ms
+{"event":"browser_build_directory_allocated","ownerPid":27292,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-oSmiUv"}
+{"event":"browser_build_directory_cleanup_complete","ownerPid":27292,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-oSmiUv"}
+{"event":"browser_build_directory_allocated","ownerPid":27292,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-P0KHtq"}
+{"event":"browser_build_directory_cleanup_complete","ownerPid":27292,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-P0KHtq"}
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/component/workspace-guide.test.tsx > workspace task discovery > closes the native task dialog and restores scroll when a feature is chosen
+Error: expect(element).toHaveTextContent()
+
+Expected element to have text content:
+  View schedules within your access
+Received:
+  TimetableView the published timetable within your access and request cover.
+ ❯ test/component/workspace-guide.test.tsx:26:38
+     24|     render(<WorkspaceGuide navigation={[modules.schedule]} role="ADMIN…
+     25|     fireEvent.click(screen.getByRole("button", { name: "Find a feature…
+     26|     expect(screen.getByRole("link")).toHaveTextContent("View schedules…
+       |                                      ^
+     27|     expect(document.body.style.overflow).toBe("hidden");
+     28|     fireEvent.click(screen.getByRole("link"));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 59 passed (60)
+      Tests  1 failed | 421 passed (422)
+   Start at  18:40:31
+   Duration  149.90s (tests 34%, environment 32%, import 13%, setup 12%, transform 9%, worker 1%)
+
+    Isolate  60 workers spawned · ~953ms startup each (spawn + environment, per file)
+             at least ~56.24s faster with isolate: false — reuses workers across files instead of one per file
+

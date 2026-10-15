@@ -1,5 +1,9 @@
 # Phase 4 Scheduling Domain Decisions
 
+## Confirmed Cover and access amendment — 2026-10-15
+
+The owner authorized the [consolidated Cover workspace and access amendment](COVER_WORKSPACE_AND_ACCESS_AMENDMENT_2026_10_15.md). It supersedes older statements permitting Admin unpublished timetable/team-leave/report reads or project creation. Super Admin alone holds those capabilities; Employee own vacation self-service remains. Cover unifies timetable selection, creation, versioned editing/cancellation and direct decisions, with separate publication. The main timetable exposes assignment creation and the map gains place labels and selected-work controls. Existing scope, privacy, conflict, accessibility and RTL rules remain.
+
 ## Authorized retained-history removal repair — 2026-10-14
 
 The product owner authorized repairing the confirmed Draft/revision removal gap. Removing an assignment now records `omitted_at` rather than deleting its row. Assignment-specific requirements, copied-source provenance and coverage-request references remain intact. Active Draft planning, revisions, overlap checks, requirements, maps and report queries exclude omitted rows. Coverage history remains readable under its existing permissions, while new candidate/request/decision operations refuse omitted or obsolete work. Period and assignment versions, period locks, audit rollback and Super Admin-only writing remain enforced.

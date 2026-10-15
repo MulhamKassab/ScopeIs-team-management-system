@@ -1,5 +1,9 @@
 # Phase 8 Static Planning Map decisions
 
+## Confirmed Cover and access amendment — 2026-10-15
+
+The owner authorized the [consolidated Cover workspace and access amendment](COVER_WORKSPACE_AND_ACCESS_AMENDMENT_2026_10_15.md). It supersedes older statements permitting Admin unpublished timetable/team-leave/report reads or project creation. Super Admin alone holds those capabilities; Employee own vacation self-service remains. Cover unifies timetable selection, creation, versioned editing/cancellation and direct decisions, with separate publication. The main timetable exposes assignment creation and the map gains place labels and selected-work controls. Existing scope, privacy, conflict, accessibility and RTL rules remain.
+
 ## Authorized coordinate controls — 2026-10-14
 
 The employee-detail page provides Super Admin-only manual create, correct and clear controls for the existing employee planning coordinate. Latitude/longitude must be finite and within geographic bounds. Writes recheck current active Super Admin authority and session version inside the transaction, serialize the target coordinate and check both profile and coordinate versions. Clearing and recreating cannot reuse stale form authority. Each change records safe audit fields/version without raw coordinates. Default work location text remains separate from this coordinate and assignment worksites. Admin keeps the existing authorized coarse map projection; Employee has no coordinate editor or exact-coordinate disclosure. No GPS, geocoding, tracking, provider change or automatic movement is introduced. See [the local implementation report](../phase-reports/SCOPEIS_FRONTEND_BACKEND_GAP_FIXES_2026_10_14.md).

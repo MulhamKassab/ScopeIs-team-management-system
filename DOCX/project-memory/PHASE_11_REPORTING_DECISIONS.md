@@ -1,5 +1,9 @@
 # Phase 11 — Reporting Decisions
 
+## Confirmed Cover and access amendment — 2026-10-15
+
+The owner authorized the [consolidated Cover workspace and access amendment](COVER_WORKSPACE_AND_ACCESS_AMENDMENT_2026_10_15.md). It supersedes older statements permitting Admin unpublished timetable/team-leave/report reads or project creation. Super Admin alone holds those capabilities; Employee own vacation self-service remains. Cover unifies timetable selection, creation, versioned editing/cancellation and direct decisions, with separate publication. The main timetable exposes assignment creation and the map gains place labels and selected-work controls. Existing scope, privacy, conflict, accessibility and RTL rules remain.
+
 ## Assignment omission projection — 2026-10-14
 
 The authorized history-preserving Draft removal repair excludes `omitted_at` assignments from current/planning totals and assignment requirement datasets. Published predecessor rows remain counted until separate revision publication replaces them. Reporting grains, filters, exports and role/privacy projections remain unchanged. Retained assignment/coverage history is not erased. See [the repair report](../phase-reports/SCOPEIS_FRONTEND_BACKEND_GAP_FIXES_2026_10_14.md).

@@ -1,0 +1,67 @@
+{
+  "status": "FULL_RUN_VERIFIED",
+  "completedAt": "2026-10-15T18:16:22.008Z",
+  "baseline": "48e3e7cb5b7312a103fe1dbdfa88263605a6231b",
+  "gates": {
+    "passed": 14,
+    "total": 14,
+    "interruptions": 0
+  },
+  "cases": {
+    "unit": 243,
+    "component": 180,
+    "integration": 234,
+    "migration": 11,
+    "route": 21,
+    "browser": 124
+  },
+  "uniqueAutomatedCases": 813,
+  "browserSuites": {
+    "passed": 15,
+    "total": 15,
+    "caseCounts": [
+      14,
+      20,
+      14,
+      2,
+      2,
+      6,
+      2,
+      6,
+      4,
+      2,
+      8,
+      2,
+      4,
+      14,
+      24
+    ]
+  },
+  "responsive": {
+    "startTime": "2026-10-15T17:56:05.863Z",
+    "duration": 998004.303,
+    "expected": 24,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0,
+    "errors": 0,
+    "report": "responsive-full-run.json"
+  },
+  "inputs": {
+    "count": 472,
+    "changed": 0,
+    "originalCheckoutMatches": true,
+    "environmentMatches": true,
+    "before": "inputs-final-before.json",
+    "after": "inputs-final-after.json"
+  },
+  "cleanup": {
+    "loggedBuildAllocations": 15,
+    "loggedBuildDirectoriesRetained": 0,
+    "databaseAndRuntimeReceiptPending": false,
+    "receipt": "local-cleanup.json"
+  },
+  "log": "system-lock-final.log",
+  "screenshots": "responsive-screenshots.json",
+  "scope": "Complete immutable full run before the separately recorded mobile Timetable label CSS follow-up. Supplemental controls and focused repeats are excluded from the unique case count."
+}

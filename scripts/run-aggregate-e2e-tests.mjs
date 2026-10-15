@@ -21,7 +21,7 @@
 // phase's seed data (for example, the employee directory must never run on Phase 1-only fixtures).
 
 import { spawn } from "node:child_process";
-import { join } from "node:path";
+import { basename, join } from "node:path";
 import { repositoryRoot } from "./phase1-test-environment.mjs";
 
 const suites = [
@@ -43,7 +43,10 @@ const suites = [
 ];
 
 function runSuite(script) {
-  const child = spawn(process.execPath, [join(repositoryRoot, "scripts", script)], { cwd: repositoryRoot, stdio: "inherit" });
+  // Each runner forwards Playwright arguments. A suite must only clear its own
+  // output directory, preserving earlier failure contexts and screenshots.
+  const outputDirectory = join(repositoryRoot, "test-results", "aggregate", basename(script, ".mjs"));
+  const child = spawn(process.execPath, [join(repositoryRoot, "scripts", script), "--output", outputDirectory], { cwd: repositoryRoot, stdio: "inherit" });
   return new Promise((resolve, reject) => {
     child.once("error", reject);
     child.once("exit", (code, signal) => resolve({ exitCode: code ?? (signal ? 1 : 0), signal }));

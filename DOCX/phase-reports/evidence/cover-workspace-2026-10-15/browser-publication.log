@@ -1,0 +1,10 @@
+{"event":"browser_build_directory_allocated","ownerPid":18948,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-clcP9K"}
+
+Running 2 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase7-coverage.spec.ts:6:1 › Cover combines timetable requests, editing, cancellation and direct decisions with role-safe planning (24.7s)
+  ok 2 [mobile] › test\e2e\phase7-coverage.spec.ts:6:1 › Cover combines timetable requests, editing, cancellation and direct decisions with role-safe planning (23.8s)
+
+  2 passed (2.8m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":18948,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-clcP9K"}
+Phase 7 browser disposable database cleanup complete.

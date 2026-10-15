@@ -55,6 +55,7 @@ export class SchedulingService {
     const grants = await this.grants(executor, actor);
     if (actor.role === "SUPER_ADMIN") return period;
     if (actor.role !== "ADMIN") throw new SchedulingDomainError("FORBIDDEN");
+    if (period.status !== "PUBLISHED" || !period.isCurrent) throw new SchedulingDomainError("NOT_FOUND");
     const allowedClient = grants.some((grant) => grant.scopeType === "CLIENT" && grant.scopeReference === period.clientId);
     if (management && !allowedClient) throw new SchedulingDomainError("OUT_OF_SCOPE");
     if (allowedClient) return period;
@@ -126,7 +127,7 @@ export class SchedulingService {
     const projectIds = actor.role === "SUPER_ADMIN" ? [] : grants.filter((grant) => grant.scopeType === "PROJECT").map((grant) => grant.scopeReference);
     const locationIds = actor.role === "SUPER_ADMIN" ? [] : grants.filter((grant) => grant.scopeType === "LOCATION").map((grant) => grant.scopeReference);
     const [clients, periods, employees, skills] = await Promise.all([schedulingRepository.activeClients(db, actor.role === "SUPER_ADMIN" ? undefined : clientIds), schedulingRepository.listPeriods(db, parsed.month, clientIds, projectIds, locationIds), this.listVisibleEmployees(actor, parsed.skillId), capabilityRepository.activeSkills(db)]);
-    return { kind: "manager" as const, month: parsed.month, clients, periods, employees, skills, selectedSkillId: parsed.skillId };
+    return { kind: "manager" as const, month: parsed.month, clients, periods: actor.role === "SUPER_ADMIN" ? periods : periods.filter(({ period }) => period.status === "PUBLISHED" && period.isCurrent), employees, skills, selectedSkillId: parsed.skillId };
   }
 
   async getPeriodEditor(actor: AuthenticatedActor, periodId: string, skillId?: string) {
@@ -135,7 +136,7 @@ export class SchedulingService {
     const clientScope = actor.role === "SUPER_ADMIN" || grants.some((grant) => grant.scopeType === "CLIENT" && grant.scopeReference === period.clientId);
     const projectIds = clientScope || actor.role === "SUPER_ADMIN" ? [] : grants.filter((grant) => grant.scopeType === "PROJECT").map((grant) => grant.scopeReference);
     const locationIds = clientScope || actor.role === "SUPER_ADMIN" ? [] : grants.filter((grant) => grant.scopeType === "LOCATION").map((grant) => grant.scopeReference);
-    const [client, assignments, projects, employees, skills] = await Promise.all([schedulingRepository.client(db, period.clientId), schedulingRepository.assignmentsForPeriod(db, period.id, projectIds, locationIds), schedulingRepository.projectsForClient(db, period.clientId, clientScope ? undefined : projectIds, locationIds), this.listVisibleEmployees(actor, skillId), capabilityRepository.activeSkills(db)]);
+    const [client, assignments, projects, employees, skills] = await Promise.all([schedulingRepository.client(db, period.clientId), schedulingRepository.assignmentsForPeriod(db, period.id, projectIds, locationIds, actor.role === "SUPER_ADMIN" ? undefined : grants.filter((grant) => grant.scopeType === "TEAM").map((grant) => grant.scopeReference)), schedulingRepository.projectsForClient(db, period.clientId, clientScope ? undefined : projectIds, locationIds), this.listVisibleEmployees(actor, skillId), capabilityRepository.activeSkills(db)]);
     const locationsByProject = new Map<string, Awaited<ReturnType<typeof schedulingRepository.locationsForProject>>[number][]>();
     for (const project of projects) locationsByProject.set(project.project.id, await schedulingRepository.locationsForProject(db, period.clientId, project.project.id, clientScope || projectIds.includes(project.project.id) ? undefined : locationIds));
     const requirements = await Promise.all(assignments.map((item) => capabilityRepository.assignmentRequirements(db, item.assignment.id))); const warnings = actor.role === "SUPER_ADMIN" ? await capabilityService.warningsForPeriod(actor, period.id) : [];

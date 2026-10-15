@@ -244,7 +244,7 @@ export const reportingRepository = {
   /** Replacement requests whose anchor assignment is in current scope. Ownership never widens this. */
   replacementRequests(scope: ResolvedScope, limit: number, offset: number, window?: Window, filters: AssignmentFilters = {}) {
     return db.select({
-      id: replacementRequests.id, intent: replacementRequests.intent, status: replacementRequests.status,
+      id: replacementRequests.id, intent: replacementRequests.intent, status: replacementRequests.status, decidedByUserId: replacementRequests.decidedByUserId,
       effectStatus: replacementRequests.effectStatus, requesterUserId: replacementRequests.requesterUserId,
       requesterName: users.displayName, createdAt: replacementRequests.createdAt,
       observedRequiredEmployeeCount: replacementRequests.observedRequiredEmployeeCount,

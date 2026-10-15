@@ -1,0 +1,99 @@
+{
+  "detectedAt": "2026-10-15T14:16:59.283Z",
+  "stage": "Browser Phase 2; Phase 1 failed after navigation source changed",
+  "frozenInputs": 467,
+  "changed": [
+    {
+      "path": "src/app/(protected)/clients/[clientId]/page.tsx",
+      "sha256": "98eac91842b99a845f2aa0438a4e7fcb5cf0d90953a2d68a6abf3deec897ef8f",
+      "actualSha256": "a7a41057e27330320f69a3a473c081df1424fb51943f9bcd2961761d60e694fe"
+    },
+    {
+      "path": "src/app/(protected)/coverage/page.tsx",
+      "sha256": "88c7fcc75379b31c02dd67e53de1217691417bf1e1094bab7e446303a16202f1",
+      "actualSha256": "f346c2fa6643bef862dbf441d93070da39218a98aa72c842a7739aff1a928752"
+    },
+    {
+      "path": "src/app/(protected)/leave/page.tsx",
+      "sha256": "4bb95011d3dd4d9f3d2c0903ef95a5157251303d78322bfd70ab75d08b3a950a",
+      "actualSha256": "59f6b2dca74b20d6899d8a50fcf65869b54c5e149397a8b9631f147698f80635"
+    },
+    {
+      "path": "src/app/(protected)/projects/page.tsx",
+      "sha256": "7ed65067e995cd38b3181b96e33e0b94bb1aa2b7f0a939d281d8abd5a7aab04f",
+      "actualSha256": "dde5054dd7710489198ddb97f13bfdeb713a478f085f77fe17f6bcfa874b5a92"
+    },
+    {
+      "path": "src/app/(protected)/replacements/page.tsx",
+      "sha256": "3efb73789ad379fb664753e82b7208a850d4da24121c42eab534a2fc0d964dd0",
+      "actualSha256": "8e555c5f423d43e4e780f829cca35261686d91ac6062dee029fa47826db13f1d"
+    },
+    {
+      "path": "src/modules/authorization/capabilities.ts",
+      "sha256": "78ebd231c7ea2d3fa4b7d685b1648cd15b9ca9b122639ba0ee136a29ecadaae8",
+      "actualSha256": "09bcdedc8d2b5314596a66afe01fb432dc0e2da630520d9a0a4eee1dfd9fb83c"
+    },
+    {
+      "path": "src/modules/coverage/actions.ts",
+      "sha256": "9b9a33cea988ced3e6158f7f25af34a71a06c25f65945e4669e58c10d27d3f46",
+      "actualSha256": "63b36307d06472664f3a884e1a38e2b9858f507c8020285ae30293a52d4630cc"
+    },
+    {
+      "path": "src/modules/coverage/forms.tsx",
+      "sha256": "22d7a4d3314cdc1362279597a24d397895cecc8b1c7ecd23a298b3225c8e4fd4",
+      "actualSha256": "80a124765f5a5048979453e68faf32806e69228a27e26457255d98cc243a2a0c"
+    },
+    {
+      "path": "src/modules/coverage/repositories.ts",
+      "sha256": "f4eda8f93a73b5aae6a44f33b3c2e05445027529a2a96a5c072a4b99ebfe3c0b",
+      "actualSha256": "ed1e654e6afefefc7f8e1779cef05f164b945514fe54fbbea7db6de1aeb89715"
+    },
+    {
+      "path": "src/modules/coverage/service.ts",
+      "sha256": "683bb9c0b2f22c1f12a1406baf439621abbc149599e415821ccc26ed09aca30b",
+      "actualSha256": "e080c2b9b4476dcf3efdb9c25891bc942b88ea8792728cd096790f45df0fc234"
+    },
+    {
+      "path": "src/modules/coverage/validation.ts",
+      "sha256": "a475c2d92933785a042f4800e9fd8fe1f8a200a45237a331fb73b0edb78f57ce",
+      "actualSha256": "9a42bdab52cca397f03c007f96a92736aef7769662797a0b9dfd68208dfb43fc"
+    },
+    {
+      "path": "src/modules/leave/service.ts",
+      "sha256": "bdc5ced7eef9da6f4863667856fdcfd5b0f7c02c5547cab3093c03114870f86e",
+      "actualSha256": "550ba0ba04011afaf67cf6aa58f65484fab61a1698f9d65582a55e0246a6359e"
+    },
+    {
+      "path": "src/modules/navigation/navigation.ts",
+      "sha256": "4c8c837404756d3c62e7ff0baf87ede2a2d72ff92516b017f2379445c8bcd0b6",
+      "actualSha256": "a1292e567997b4606ffd317b09985352e33021eafc996af6d6369a0d9618fe0e"
+    },
+    {
+      "path": "src/modules/operations/service.ts",
+      "sha256": "88ad6a538eaef1370c177559c0cea9d46b4c1e790b9e61e9dd67806499fd14f4",
+      "actualSha256": "728cd589da801f56b9001c3e59832a14d83efba87eee7c1875ba59331fba3a04"
+    },
+    {
+      "path": "src/modules/reporting/definitions.ts",
+      "sha256": "383f5a21d47237d84b52478d526e2b2dd85cacf9a3099070230371db3e1ccfad",
+      "actualSha256": "5a83dd0000368ce5acde397d297e1c829e5ba23f1629c130ab7717ff38bef0fb"
+    },
+    {
+      "path": "src/modules/reporting/service.ts",
+      "sha256": "97a1612cb3c573e939dcb92222d6f9cf6360a123da8eda861274e9efe96a2701",
+      "actualSha256": "9fb55e41ae5be16f17fa1b05c58b3cf40a3f2e05cbfa29a12d454ef494ac6b74"
+    },
+    {
+      "path": "src/modules/scheduling/service.ts",
+      "sha256": "fa47d8055fc12ed5b65af5586408dbaa71ecb7408417ca2f3ad2f0f9fb3d98ec",
+      "actualSha256": "9dcf7519367e5b9726b49b503cd278b3ff94b258d34b1ea74e66bd0774c9b3cf"
+    },
+    {
+      "path": "src/modules/scheduling/timetable-service.ts",
+      "sha256": "54c9d912441750bb562377f972f35a83264beb6c0015b6ae624bd5c92a1f367f",
+      "actualSha256": "07de6a129bc6427a0d82c64fd952f7d88b2e24151758bfcf6a91c32b10fdc6a2"
+    }
+  ],
+  "status": "Certificate invalidated; preserve all concurrent source edits; no foundation assertion change",
+  "reason": "Foreign changes to authorization, navigation, scheduling, coverage, reporting and operational code appeared during the frozen run."
+}

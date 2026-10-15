@@ -1,5 +1,9 @@
 # Phase 5 Leave Domain Decisions
 
+## Confirmed Cover and access amendment — 2026-10-15
+
+The owner authorized the [consolidated Cover workspace and access amendment](COVER_WORKSPACE_AND_ACCESS_AMENDMENT_2026_10_15.md). It supersedes older statements permitting Admin unpublished timetable/team-leave/report reads or project creation. Super Admin alone holds those capabilities; Employee own vacation self-service remains. Cover unifies timetable selection, creation, versioned editing/cancellation and direct decisions, with separate publication. The main timetable exposes assignment creation and the map gains place labels and selected-work controls. Existing scope, privacy, conflict, accessibility and RTL rules remain.
+
 Phase 5 implements annual leave only. A global, Super-Admin-managed allowance defaults to 22 working days per `Asia/Dubai` calendar year. Monday–Friday consume balance; Saturday/Sunday do not. Holidays, work patterns, proration, carry-over, per-employee entitlements, payroll, and attendance are not modeled.
 
 Requests are inclusive full-date ranges and persist `PENDING`, `APPROVED`, `REJECTED`, or `CANCELLED`. Employees create and cancel only their own Pending requests. Super Admin alone approves or rejects Pending requests; rejection has an employee-visible response. Reasons and responses are private to the employee and Super Admin. Admin sees only identity and Approved unavailable dates for Employees made visible by explicit `TEAM` scope.

@@ -1,0 +1,727 @@
+
+===== SYSTEM LOCK :: Scenario manifest validation =====
+Scenario manifest validation (PASS):
+  Checkpoint: SCOPEIS_PHASE_12_COMPANY_TICKETS_LOCAL_INTEGRATION_R1
+  Scenarios: 84 (83 automated, 1 manual)
+  Domain counts: SYS=13, AUTH=7, EMP=7, ORG=4, SCH=4, LEV=4, SKL=4, CVR=4, MAP=5, EVD=4, COL=4, NTF=2, AUD=2, RPT=4, UI=4, TKT=12
+  Registered test files: 94; runner-covered files: 94
+  Protected routes: 40; route certification evidence present.
+----- Scenario manifest validation: PASS -----
+
+===== SYSTEM LOCK :: Typecheck =====
+----- Typecheck: PASS -----
+
+===== SYSTEM LOCK :: Lint =====
+----- Lint: PASS -----
+
+===== SYSTEM LOCK :: Unit tests =====
+
+ RUN  v5.0.3 C:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system
+
+{"event":"browser_build_directory_allocated","ownerPid":33868,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-IWrnBF"}
+{"event":"browser_build_directory_cleanup_complete","ownerPid":33868,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-IWrnBF"}
+{"event":"browser_build_directory_allocated","ownerPid":33868,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-VnkgRM"}
+{"event":"browser_build_directory_cleanup_complete","ownerPid":33868,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-VnkgRM"}
+
+ Test Files  32 passed (32)
+      Tests  242 passed (242)
+   Start at  17:22:43
+   Duration  38.12s (setup 54%, import 29%, transform 8%, tests 7%, worker 2%)
+
+     Import  126 modules were evaluated 248 times · 8.63s total, 29% of tracked time
+             ~4.25s faster with isolate: false — shared modules are evaluated once per worker instead of once per file
+             learn more: https://vitest.dev/guide/improving-performance#test-isolation
+
+----- Unit tests: PASS -----
+
+===== SYSTEM LOCK :: Component tests =====
+
+ RUN  v5.0.3 C:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system
+
+Not implemented: navigation to another Document
+
+ Test Files  28 passed (28)
+      Tests  177 passed (177)
+   Start at  17:23:22
+   Duration  140.69s (environment 61%, tests 21%, import 8%, setup 6%, transform 4%)
+
+    Isolate  28 workers spawned · ~3.17s startup each (spawn + environment, per file)
+             at least ~85.69s faster with isolate: false — reuses workers across files instead of one per file
+
+----- Component tests: PASS -----
+
+===== SYSTEM LOCK :: Aggregate integration tests =====
+
+=== Phase 1 PostgreSQL foundation :: test/integration/foundation-postgres.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/foundation-postgres.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 223[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 17:25:50
+[2m   Duration [22m 2.21s[2m (import 49%, transform 22%, setup 17%, tests 12%, worker 1%)[22m
+
+--- Phase 1 PostgreSQL foundation: PASS ---
+
+=== Phase 2 employee core service :: test/integration/phase2-core-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase2-core-service.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 731[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 17:25:57
+[2m   Duration [22m 2.51s[2m (import 33%, tests 33%, transform 19%, setup 14%, worker 1%)[22m
+
+--- Phase 2 employee core service: PASS ---
+
+=== Phase 3 operational service :: test/integration/phase3-operational-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase3-operational-service.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 863[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 17:26:04
+[2m   Duration [22m 2.51s[2m (tests 38%, import 33%, transform 17%, setup 12%, worker 1%)[22m
+
+--- Phase 3 operational service: PASS ---
+
+=== Monthly timetable and organisation service :: test/integration/timetable-organisation.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/timetable-organisation.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 1001[2mms[22m[39m
+   [32m✓[39m monthly timetable permissions and organisation management [2m(5)[22m
+     [33m[2m✓[22m[39m creates empty teams, renames stable references and moves/removes membership without granting access[33m 371[2mms[22m[39m
+     [33m[2m✓[22m[39m preserves existing archived titles on unrelated edits and refuses new archived memberships[33m 322[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 17:26:12
+[2m   Duration [22m 3.19s[2m (import 37%, tests 35%, transform 18%, setup 10%, worker 1%)[22m
+
+--- Monthly timetable and organisation service: PASS ---
+
+=== Phase 4 scheduling service :: test/integration/phase4-scheduling-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase4-scheduling-service.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 2974[2mms[22m[39m
+   [32m✓[39m Phase 4 scheduling service [2m(5)[22m
+     [33m[2m✓[22m[39m keeps Admin schedule reads scoped while refusing Draft creation and edits[33m 340[2mms[22m[39m
+   [32m✓[39m Schedule revision and scope regressions [2m(4)[22m
+     [33m[2m✓[22m[39m publishes successive unchanged revisions and releases historical assignment slots[33m 679[2mms[22m[39m
+     [33m[2m✓[22m[39m copies active assignment requirements without altering archived or Published history[33m 351[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+[2m   Start at [22m 17:26:20
+[2m   Duration [22m 6.06s[2m (tests 52%, transform 24%, import 18%, setup 5%)[22m
+
+--- Phase 4 scheduling service: PASS ---
+
+=== Phase 5 leave service :: test/integration/phase5-leave-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase5-leave-service.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 1108[2mms[22m[39m
+   [32m✓[39m Phase 5 leave service [2m(3)[22m
+     [33m[2m✓[22m[39m enforces privacy, lifecycle, balance, and schedule leave integrity[33m 549[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 17:26:33
+[2m   Duration [22m 3.35s[2m (tests 36%, import 34%, transform 20%, setup 10%)[22m
+
+--- Phase 5 leave service: PASS ---
+
+=== Phase 6 capabilities service :: test/integration/phase6-capabilities-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase6-capabilities-service.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 1255[2mms[22m[39m
+   [32m✓[39m Phase 6 skills and operational capabilities [2m(3)[22m
+     [33m[2m✓[22m[39m records controlled skills, keeps them private, and does not let operational scope expand Team visibility[33m 312[2mms[22m[39m
+     [33m[2m✓[22m[39m unions Client, Project, Location, and assignment requirements and leaves the schedule lifecycle non-blocking[33m 663[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 17:26:41
+[2m   Duration [22m 3.56s[2m (tests 38%, import 30%, transform 23%, setup 8%)[22m
+
+--- Phase 6 capabilities service: PASS ---
+
+=== Phase 7 coverage service :: test/integration/phase7-coverage-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase7-coverage-service.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 4287[2mms[22m[39m
+   [32m✓[39m Coverage and support conflict integrity [2m(12)[22m
+     [33m[2m✓[22m[39m serializes duplicate support requests before either can create another review item[33m 526[2mms[22m[39m
+     [33m[2m✓[22m[39m rechecks independent gaps under the schedule lock so simultaneous approvals cannot overfill one shortage[33m 471[2mms[22m[39m
+     [33m[2m✓[22m[39m never offers the anchor person as their own replacement or additional support[33m 311[2mms[22m[39m
+     [33m[2m✓[22m[39m preserves support when a replacement updates the same Published plan and reuses its one Draft[33m 343[2mms[22m[39m
+     [33m[2m✓[22m[39m shares employee-time locks with manual scheduling across different clients[33m 366[2mms[22m[39m
+   [32m✓[39m Phase 7 coverage and replacement journey [2m(4)[22m
+     [33m[2m✓[22m[39m returns Proposed to Draft and creates an immutable Draft revision from Published[33m 325[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m18 passed[39m[22m[90m (18)[39m
+[2m   Start at [22m 17:26:50
+[2m   Duration [22m 6.78s[2m (tests 65%, import 16%, transform 14%, setup 5%)[22m
+
+--- Phase 7 coverage service: PASS ---
+
+=== Phase 8 planning map service :: test/integration/phase8-planning-map-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase8-planning-map-service.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 701[2mms[22m[39m
+   [32m✓[39m Phase 8 PostgreSQL planning projection [2m(2)[22m
+     [33m[2m✓[22m[39m allows only current Super Admin coordinate maintenance and prevents stale delete/recreate writes[33m 416[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m   Start at [22m 17:27:02
+[2m   Duration [22m 3.18s[2m (import 36%, transform 29%, tests 24%, setup 11%, worker 1%)[22m
+
+--- Phase 8 planning map service: PASS ---
+
+=== Phase 9 capability evidence service :: test/integration/phase9-evidence-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase9-evidence-service.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 994[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m12 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 17:27:09
+[2m   Duration [22m 3.28s[2m (import 33%, tests 32%, transform 26%, setup 9%)[22m
+
+--- Phase 9 capability evidence service: PASS ---
+
+=== Phase 10 collaboration and governance service :: test/integration/phase10-collaboration-service.test.ts, test/integration/phase10-management-note-authorization.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase10-collaboration-service.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 1019[2mms[22m[39m
+   [32m✓[39m Phase 10 shared operational notes [2m(1)[22m
+     [33m[2m✓[22m[39m preserves the previous content as a revision and keeps Employee access refused[33m 340[2mms[22m[39m
+ [32m✓[39m test/integration/phase10-management-note-authorization.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 503[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m26 passed[39m[22m[90m (26)[39m
+[2m   Start at [22m 17:27:18
+[2m   Duration [22m 5.91s[2m (import 40%, tests 28%, transform 20%, setup 11%, worker 1%)[22m
+
+--- Phase 10 collaboration and governance service: PASS ---
+
+=== Phase 11 reporting service :: test/integration/phase11-reporting-service.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/phase11-reporting-service.test.ts [2m([22m[2m35 tests[22m[2m)[22m[33m 5737[2mms[22m[39m
+   [32m✓[39m Phase 11 published allocation (R1) and planning (R4) [2m(6)[22m
+     [33m[2m✓[22m[39m keeps Published allocation strictly Published and planning strictly Draft/Proposed[33m 345[2mms[22m[39m
+   [32m✓[39m report filter and total regressions [2m(4)[22m
+     [33m[2m✓[22m[39m sums more than 5,000 source assignments before grouping and keeps the export row cap[33m 972[2mms[22m[39m
+   [32m✓[39m aggregate export source completeness [2m(2)[22m
+     [33m[2m✓[22m[39m counts and paginates every balance employee and refuses an over-cap export[33m 2294[2mms[22m[39m
+     [33m[2m✓[22m[39m includes every assignment skill requirement before sorting and refuses an over-cap export[33m 679[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m35 passed[39m[22m[90m (35)[39m
+[2m   Start at [22m 17:27:28
+[2m   Duration [22m 8.45s[2m (tests 70%, transform 14%, import 12%, setup 4%)[22m
+
+--- Phase 11 reporting service: PASS ---
+
+=== Credential authentication service :: test/integration/credential-authentication.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/credential-authentication.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 5802[2mms[22m[39m
+   [32m✓[39m credential authentication service [2m(20)[22m
+     [32m✓[39m bootstrap [2m(4)[22m
+       [33m[2m✓[22m[39m initializes exactly five credentials once and is idempotent on re-run[33m 1219[2mms[22m[39m
+     [32m✓[39m credential login [2m(6)[22m
+       [33m[2m✓[22m[39m accepts every approved account by username and by email[33m 1348[2mms[22m[39m
+     [32m✓[39m brute-force protection [2m(4)[22m
+       [33m[2m✓[22m[39m locks after five failures within the window and refuses further attempts[33m 494[2mms[22m[39m
+       [33m[2m✓[22m[39m serializes concurrent failures so the threshold cannot be bypassed[33m 926[2mms[22m[39m
+       [33m[2m✓[22m[39m resets the failure counters after a successful login[33m 389[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m20 passed[39m[22m[90m (20)[39m
+[2m   Start at [22m 17:27:41
+[2m   Duration [22m 7.84s[2m (tests 77%, import 13%, transform 6%, setup 4%)[22m
+
+--- Credential authentication service: PASS ---
+
+=== Account administration service :: test/integration/account-administration.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/account-administration.test.ts [2m([22m[2m30 tests[22m[2m)[22m[33m 6330[2mms[22m[39m
+   [32m✓[39m account administration service [2m(30)[22m
+     [32m✓[39m password reset [2m(7)[22m
+       [33m[2m✓[22m[39m rejects weak and identifier-equal passwords without changing credentials, sessions, or audit[33m 341[2mms[22m[39m
+       [33m[2m✓[22m[39m rotates a self-reset session under the new version and invalidates every old session[33m 844[2mms[22m[39m
+       [33m[2m✓[22m[39m rolls back a self-reset and keeps its session valid if audit persistence fails[33m 538[2mms[22m[39m
+       [33m[2m✓[22m[39m changes hash and salt, clears lock, bumps version, revokes sessions and audits once[33m 755[2mms[22m[39m
+       [33m[2m✓[22m[39m requires the acting password and confirmation to reset another Super Admin[33m 332[2mms[22m[39m
+     [32m✓[39m self password change [2m(3)[22m
+       [33m[2m✓[22m[39m rejects the account's stored username or login email as the new password[33m 508[2mms[22m[39m
+       [33m[2m✓[22m[39m clears the requirement, rotates the session, and audits without password content[33m 723[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m30 passed[39m[22m[90m (30)[39m
+[2m   Start at [22m 17:27:53
+[2m   Duration [22m 8.43s[2m (tests 78%, import 12%, transform 7%, setup 4%)[22m
+
+--- Account administration service: PASS ---
+
+=== Company ticket service :: test/integration/tickets.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/tickets.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 7586[2mms[22m[39m
+   [32m✓[39m Company tickets PostgreSQL access boundaries [2m(24)[22m
+     [33m[2m✓[22m[39m consolidates current related and supervised tickets across workspaces without exposing unrelated work[33m 538[2mms[22m[39m
+     [33m[2m✓[22m[39m changes only status and its reason with current writer permissions, versions, audit and notifications[33m 402[2mms[22m[39m
+     [33m[2m✓[22m[39m serializes focused status changes and rolls them back if audit or notification delivery fails[33m 382[2mms[22m[39m
+     [33m[2m✓[22m[39m lets every company role create in published dashboards and shares only explicit tickets without enrollment[33m 562[2mms[22m[39m
+     [33m[2m✓[22m[39m preserves multiple dashboards and tickets and validates every selected active person under the creation transaction[33m 362[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps manager access current and Employees on published explicit work with private projections[33m 314[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps container supervision scoped while explicit tickets can cross all company roles and teams[33m 421[2mms[22m[39m
+     [33m[2m✓[22m[39m allows creator grants across teams while assignees work and mentioned people remain read-only[33m 383[2mms[22m[39m
+     [33m[2m✓[22m[39m rechecks board versions, lifecycle and required hold reasons on every transition[33m 375[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps explicit sharing independent of membership while participation and supervisory scopes revoke immediately[33m 387[2mms[22m[39m
+     [33m[2m✓[22m[39m serializes current grant/activity revocation with list and detail projection reads[33m 396[2mms[22m[39m
+     [33m[2m✓[22m[39m uses retained archives, restores creator access and limits work-log edits to authors[33m 319[2mms[22m[39m
+     [33m[2m✓[22m[39m serializes competing edits and commits primary state, audit and notifications atomically[33m 304[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m24 passed[39m[22m[90m (24)[39m
+[2m   Start at [22m 17:28:06
+[2m   Duration [22m 9.93s[2m (tests 79%, import 10%, transform 8%, setup 3%)[22m
+
+--- Company ticket service: PASS ---
+
+=== Company ticket private files :: test/integration/ticket-files.test.ts (isolated disposable database) ===
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/integration/ticket-files.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 2417[2mms[22m[39m
+   [32m✓[39m Company private ticket files [2m(7)[22m
+     [33m[2m✓[22m[39m authorizes live participants, gives scoped management access, and withholds storage keys[33m 458[2mms[22m[39m
+     [33m[2m✓[22m[39m commits one simultaneous upload for a shared ticket version and removes the losing bytes[33m 321[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 17:28:21
+[2m   Duration [22m 4.96s[2m (tests 52%, import 30%, transform 11%, setup 6%)[22m
+
+--- Company ticket private files: PASS ---
+
+Aggregate integration summary (each suite in its own disposable database):
+  PASS  Phase 1 PostgreSQL foundation
+  PASS  Phase 2 employee core service
+  PASS  Phase 3 operational service
+  PASS  Monthly timetable and organisation service
+  PASS  Phase 4 scheduling service
+  PASS  Phase 5 leave service
+  PASS  Phase 6 capabilities service
+  PASS  Phase 7 coverage service
+  PASS  Phase 8 planning map service
+  PASS  Phase 9 capability evidence service
+  PASS  Phase 10 collaboration and governance service
+  PASS  Phase 11 reporting service
+  PASS  Credential authentication service
+  PASS  Account administration service
+  PASS  Company ticket service
+  PASS  Company ticket private files
+  Overall: 16/16 suites passed
+----- Aggregate integration tests: PASS -----
+
+===== SYSTEM LOCK :: Migration tests =====
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/migration/phase2-database-foundation.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 52695[2mms[22m[39m
+   [32m✓[39m Phase 2 database foundation reconciliation [2m(11)[22m
+     [33m[2m✓[22m[39m performs a clean normal migration install and is idempotent[33m 3462[2mms[22m[39m
+     [33m[2m✓[22m[39m upgrades the previous account-management schema and backfills teams without changing membership or grants[33m 3030[2mms[22m[39m
+     [33m[2m✓[22m[39m adds Company tickets and assignment omission while preserving prior workforce data and ledger facts[33m 3919[2mms[22m[39m
+     [33m[2m✓[22m[39m dry-runs and safely adopts an exact ledgerless Phase 1 database[33m 3703[2mms[22m[39m
+     [33m[2m✓[22m[39m dry-runs and safely adopts an exact ledgerless Phase 1+2 database[33m 4308[2mms[22m[39m
+     [33m[2m✓[22m[39m refuses a partial Phase 2 schema with a non-zero CLI exit and no mutation[33m 4449[2mms[22m[39m
+     [33m[2m✓[22m[39m refuses ledger/schema disagreement with a non-zero exit and no mutation[33m 4505[2mms[22m[39m
+     [33m[2m✓[22m[39m uses all eight authoritative Drizzle tables with real relationships and constraints[33m 3909[2mms[22m[39m
+     [33m[2m✓[22m[39m uses all seven Company ticket tables with enforced relationships and content constraints[33m 4612[2mms[22m[39m
+     [33m[2m✓[22m[39m detects migration, journal, manifest, and TypeScript-schema drift[33m 15317[2mms[22m[39m
+     [33m[2m✓[22m[39m cleans up a disposable database even after a deliberate callback failure[33m 1395[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 17:28:27
+[2m   Duration [22m 54.31s[2m (tests 98%, import 1%, setup 1%)[22m
+
+----- Migration tests: PASS -----
+
+===== SYSTEM LOCK :: Route certification =====
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 251ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 40s
+  Running TypeScript ...
+  Finished TypeScript in 32.4s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 1399ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[module]
+├ ƒ /account/change-password
+├ ƒ /accounts
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/mock-login
+├ ƒ /api/evidence/[evidenceId]/files
+├ ƒ /api/evidence/files/[fileId]
+├ ƒ /api/foundation/scope/[scopeRef]
+├ ƒ /api/reports/[reportKey]/export
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[ticketId]
+├ ƒ /api/tickets/[ticketId]/files
+├ ƒ /api/tickets/[ticketId]/files/[fileId]
+├ ƒ /api/tickets/commands
+├ ƒ /arrangements
+├ ƒ /audit
+├ ƒ /clients
+├ ƒ /clients/[clientId]
+├ ƒ /coverage
+├ ƒ /dashboard
+├ ƒ /designations
+├ ƒ /employees
+├ ƒ /employees/[userId]
+├ ƒ /leave
+├ ƒ /locations
+├ ƒ /locations/[locationId]
+├ ƒ /login
+├ ƒ /map
+├ ƒ /notifications
+├ ƒ /profile
+├ ƒ /projects
+├ ƒ /projects/[projectId]
+├ ƒ /replacements
+├ ƒ /reports
+├ ƒ /reports/[reportKey]
+├ ƒ /requests
+├ ƒ /schedule
+├ ƒ /skills
+├ ƒ /teams
+├ ƒ /tickets
+└ ƒ /tickets/[ticketId]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+▲ Next.js 16.4.0
+- Local:         http://127.0.0.1:56419
+- Network:       http://127.0.0.1:56419
+✓ Ready in 476ms
+✓ Running next.config.ts took 86ms
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [32m✓[39m test/route-certification/phase1-http.test.ts [2m([22m[2m21 tests[22m[2m)[22m[33m 10782[2mms[22m[39m
+   [32m✓[39m Phase 1 public HTTP route certification [2m(21)[22m
+     [33m[2m✓[22m[39m keeps unauthenticated users outside protected pages and APIs[33m 581[2mms[22m[39m
+     [33m[2m✓[22m[39m Nora Albright receives only the certified role and scope access[33m 1756[2mms[22m[39m
+     [33m[2m✓[22m[39m Ava Mercer receives only the certified role and scope access[33m 1011[2mms[22m[39m
+     [33m[2m✓[22m[39m Ben Iqbal receives only the certified role and scope access[33m 905[2mms[22m[39m
+     [33m[2m✓[22m[39m Cora Bell receives only the certified role and scope access[33m 766[2mms[22m[39m
+     [33m[2m✓[22m[39m Dan Rowan receives only the certified role and scope access[33m 613[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps /accounts Super Admin-only and never returns credential secrets[33m 455[2mms[22m[39m
+     [33m[2m✓[22m[39m certifies credential login, generic refusals, and no-store headers[33m 392[2mms[22m[39m
+     [33m[2m✓[22m[39m certifies Phase 11 reporting routes, role boundaries and export refusals[33m 516[2mms[22m[39m
+     [33m[2m✓[22m[39m protects Company ticket routes and keeps missing ticket and file identities private[33m 1134[2mms[22m[39m
+     [33m[2m✓[22m[39m refuses unsafe ticket origins, malformed commands and unsupported methods without ticket state[33m 339[2mms[22m[39m
+     [33m[2m✓[22m[39m enforces creator, assignee and read-only observer ticket access over HTTP[33m 1300[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m21 passed[39m[22m[90m (21)[39m
+[2m   Start at [22m 17:31:04
+[2m   Duration [22m 11.57s[2m (tests 95%, setup 2%, transform 1%, import 1%)[22m
+
+Phase 1 route certification runner cleanup complete.
+----- Route certification: PASS -----
+
+===== SYSTEM LOCK :: Isolation tests =====
+Isolation proof
+  PASS  disposable databases are distinct — scopeis_isolation_probe_one_1748_e90c701943_test vs scopeis_isolation_probe_two_1748_39d28776f3_test
+  PASS  disposable database names are test-scoped — persistent target is scopeis_browser_verification_base_test
+  PASS  one disposable database cannot see the other's rows — observed 0 and 0
+  PASS  disposable databases are dropped after their suite finishes
+  PASS  persistent configured test database is unchanged by disposable work
+  PASS  allocated loopback ports are unique — 60193, 60194, 60195
+  PASS  allocated loopback ports are non-privileged
+  PASS  unsafe disposable names are refused — 5/5 refused
+  PASS  no harness or configuration file loads or reads .env.production — 81 files scanned
+Isolation proof: 9/9 checks passed
+----- Isolation tests: PASS -----
+
+===== SYSTEM LOCK :: Seed smoke =====
+Seeded 5 fictional mock personas.
+Fictional seed pass 1 completed (idempotent re-run included).
+Seeded 5 fictional mock personas.
+Fictional seed pass 2 completed (idempotent re-run included).
+Fictional seed smoke verified 5 personas and 2 non-duplicated Admin scope grants.
+Fictional seed smoke verified capability evidence with an opaque private file object.
+Fictional seed smoke verified shared-note revision history, notification, audit event, and the discussion parent guard.
+Seed smoke disposable database cleanup complete (PASS).
+----- Seed smoke: PASS -----
+
+===== SYSTEM LOCK :: Fresh-system smoke =====
+System smoke verified migration State D and fingerprint tables.
+Seeded 5 fictional mock personas.
+System smoke seed pass 1 completed.
+Seeded 5 fictional mock personas.
+System smoke seed pass 2 completed.
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 83ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 20.5s
+  Running TypeScript ...
+  Finished TypeScript in 32.5s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 897ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[module]
+├ ƒ /account/change-password
+├ ƒ /accounts
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/mock-login
+├ ƒ /api/evidence/[evidenceId]/files
+├ ƒ /api/evidence/files/[fileId]
+├ ƒ /api/foundation/scope/[scopeRef]
+├ ƒ /api/reports/[reportKey]/export
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[ticketId]
+├ ƒ /api/tickets/[ticketId]/files
+├ ƒ /api/tickets/[ticketId]/files/[fileId]
+├ ƒ /api/tickets/commands
+├ ƒ /arrangements
+├ ƒ /audit
+├ ƒ /clients
+├ ƒ /clients/[clientId]
+├ ƒ /coverage
+├ ƒ /dashboard
+├ ƒ /designations
+├ ƒ /employees
+├ ƒ /employees/[userId]
+├ ƒ /leave
+├ ƒ /locations
+├ ƒ /locations/[locationId]
+├ ƒ /login
+├ ƒ /map
+├ ƒ /notifications
+├ ƒ /profile
+├ ƒ /projects
+├ ƒ /projects/[projectId]
+├ ƒ /replacements
+├ ƒ /reports
+├ ƒ /reports/[reportKey]
+├ ƒ /requests
+├ ƒ /schedule
+├ ƒ /skills
+├ ƒ /teams
+├ ƒ /tickets
+└ ƒ /tickets/[ticketId]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+▲ Next.js 16.4.0
+- Local:         http://127.0.0.1:54270
+- Network:       http://127.0.0.1:54270
+✓ Ready in 552ms
+✓ Running next.config.ts took 307ms
+System smoke server ready on loopback port.
+System smoke verified anonymous enforcement.
+System smoke verified all five persona route and scope contracts plus sign-in audit events.
+System smoke verified a recipient notification round-trip.
+Phase 2 safe build preflight passed: isolated copy contains no .env* files.
+Phase 2 isolated typecheck passed.
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 83ms
+
+  Creating an optimized production build ...
+----- Fresh-system smoke: FAIL (terminated by SIGTERM) -----
+
+===== SYSTEM LOCK :: Aggregate E2E =====
+
+=== Phase 1 foundation shell, personas, and scope :: node scripts/run-phase1-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":29540,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-9sKWQY"}
+
+Running 14 tests using 2 workers
+
+  ok  2 [mobile] › test\e2e\foundation.spec.ts:20:1 › unauthenticated users do not receive protected shell navigation (3.1s)
+  ok  1 [desktop] › test\e2e\foundation.spec.ts:20:1 › unauthenticated users do not receive protected shell navigation (3.1s)
+  ok  4 [desktop] › test\e2e\foundation.spec.ts:26:1 › Super Admin receives global shell navigation (1.5s)
+  ok  5 [desktop] › test\e2e\foundation.spec.ts:38:1 › Admin scope is enforced by the direct server seam (1.2s)
+  ok  6 [desktop] › test\e2e\foundation.spec.ts:55:1 › Admin Bravo receives only Bravo scope (897ms)
+  ok  7 [desktop] › test\e2e\foundation.spec.ts:65:1 › Employee navigation excludes management-only modules (1.5s)
+  ok  8 [desktop] › test\e2e\foundation.spec.ts:81:1 › Employee Bravo remains outside management pages and scopes (1.5s)
+  ok  9 [desktop] › test\e2e\foundation.spec.ts:92:1 › theme preference and RTL shell state persist safely (2.7s)
+  x   3 [mobile] › test\e2e\foundation.spec.ts:26:1 › Super Admin receives global shell navigation (6.6s)
+  x  10 [mobile] › test\e2e\foundation.spec.ts:38:1 › Admin scope is enforced by the direct server seam (13.6s)
+  x  11 [mobile] › test\e2e\foundation.spec.ts:55:1 › Admin Bravo receives only Bravo scope (6.7s)
+  ok 12 [mobile] › test\e2e\foundation.spec.ts:65:1 › Employee navigation excludes management-only modules (2.4s)
+  ok 13 [mobile] › test\e2e\foundation.spec.ts:81:1 › Employee Bravo remains outside management pages and scopes (1.3s)
+  ok 14 [mobile] › test\e2e\foundation.spec.ts:92:1 › theme preference and RTL shell state persist safely (2.8s)
+
+
+  1) [mobile] › test\e2e\foundation.spec.ts:26:1 › Super Admin receives global shell navigation ────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog', { name: 'More navigation' }).getByRole('navigation', { name: 'Primary navigation', exact: true }).getByRole('link', { name: 'Work map', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('dialog', { name: 'More navigation' }).getByRole('navigation', { name: 'Primary navigation', exact: true }).getByRole('link', { name: 'Work map', exact: true }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: 'More navigation' }).getByRole('navigation', { name: 'Primary navigation', exact: true }).getByRole('link', { name: 'Work map', exact: true })
+
+
+      15 |     ? page.getByRole("dialog", { name: "More navigation" }).getByRole("navigation", { name: "Primary navigation", exact: true })
+      16 |     : page.getByRole("navigation", { name: "Primary navigation", exact: true });
+    > 17 |   await expect(navigation.getByRole("link", { name: label, exact: true })).toBeVisible();
+         |                                                                            ^
+      18 | }
+      19 |
+      20 | test("unauthenticated users do not receive protected shell navigation", async ({ page }) => {
+        at expectAuthorizedLink (C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\foundation.spec.ts:17:76)
+        at C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\foundation.spec.ts:28:3
+
+    Error Context: test-results\aggregate\run-phase1-playwright\foundation-Super-Admin-receives-global-shell-navigation-mobile\error-context.md
+
+  2) [mobile] › test\e2e\foundation.spec.ts:38:1 › Admin scope is enforced by the direct server seam 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog', { name: 'More navigation' }).getByRole('navigation', { name: 'Primary navigation', exact: true }).getByRole('link', { name: 'Work map', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('dialog', { name: 'More navigation' }).getByRole('navigation', { name: 'Primary navigation', exact: true }).getByRole('link', { name: 'Work map', exact: true }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: 'More navigation' }).getByRole('navigation', { name: 'Primary navigation', exact: true }).getByRole('link', { name: 'Work map', exact: true })
+
+
+      15 |     ? page.getByRole("dialog", { name: "More navigation" }).getByRole("navigation", { name: "Primary navigation", exact: true })
+      16 |     : page.getByRole("navigation", { name: "Primary navigation", exact: true });
+    > 17 |   await expect(navigation.getByRole("link", { name: label, exact: true })).toBeVisible();
+         |                                                                            ^
+      18 | }
+      19 |
+      20 | test("unauthenticated users do not receive protected shell navigation", async ({ page }) => {
+        at expectAuthorizedLink (C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\foundation.spec.ts:17:76)
+        at C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\foundation.spec.ts:45:3
+
+    Error Context: test-results\aggregate\run-phase1-playwright\foundation-Admin-scope-is-enforced-by-the-direct-server-seam-mobile\error-context.md
+
+  3) [mobile] › test\e2e\foundation.spec.ts:55:1 › Admin Bravo receives only Bravo scope ───────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog', { name: 'More navigation' }).getByRole('navigation', { name: 'Primary navigation', exact: true }).getByRole('link', { name: 'Work map', exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('dialog', { name: 'More navigation' }).getByRole('navigation', { name: 'Primary navigation', exact: true }).getByRole('link', { name: 'Work map', exact: true }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: 'More navigation' }).getByRole('navigation', { name: 'Primary navigation', exact: true }).getByRole('link', { name: 'Work map', exact: true })
+
+
+      15 |     ? page.getByRole("dialog", { name: "More navigation" }).getByRole("navigation", { name: "Primary navigation", exact: true })
+      16 |     : page.getByRole("navigation", { name: "Primary navigation", exact: true });
+    > 17 |   await expect(navigation.getByRole("link", { name: label, exact: true })).toBeVisible();
+         |                                                                            ^
+      18 | }
+      19 |
+      20 | test("unauthenticated users do not receive protected shell navigation", async ({ page }) => {
+        at expectAuthorizedLink (C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\foundation.spec.ts:17:76)
+        at C:\Users\m.kassab\OneDrive - Sharjah Investment & Development Authority\Desktop\Applications\CodeBase\For Me\Team management system\test\e2e\foundation.spec.ts:60:3
+
+    Error Context: test-results\aggregate\run-phase1-playwright\foundation-Admin-Bravo-receives-only-Bravo-scope-mobile\error-context.md
+
+  3 failed
+    [mobile] › test\e2e\foundation.spec.ts:26:1 › Super Admin receives global shell navigation ─────
+    [mobile] › test\e2e\foundation.spec.ts:38:1 › Admin scope is enforced by the direct server seam 
+    [mobile] › test\e2e\foundation.spec.ts:55:1 › Admin Bravo receives only Bravo scope ────────────
+  11 passed (2.8m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":29540,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-9sKWQY"}
+--- Phase 1 foundation shell, personas, and scope: FAIL ---
+
+=== Phase 2 employee directory :: node scripts/run-phase2-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":36776,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-ayrUoU"}
+
+Running 20 tests using 2 workers
+
+  ok  1 [mobile] › test\e2e\employee-directory.spec.ts:4:1 › Super Admin searches employee name and employee code (2.4s)
+  ok  2 [desktop] › test\e2e\employee-directory.spec.ts:4:1 › Super Admin searches employee name and employee code (2.4s)
+  ok  3 [mobile] › test\e2e\employee-directory.spec.ts:17:1 › Super Admin creates a workforce record with a server-generated code and no editable code field (2.8s)
+  ok  4 [desktop] › test\e2e\employee-directory.spec.ts:17:1 › Super Admin creates a workforce record with a server-generated code and no editable code field (2.9s)
+  ok  5 [mobile] › test\e2e\employee-directory.spec.ts:36:1 › creation form returns field-level validation errors (2.7s)
+  ok  6 [desktop] › test\e2e\employee-directory.spec.ts:36:1 › creation form returns field-level validation errors (3.1s)
+  ok  7 [mobile] › test\e2e\employee-directory.spec.ts:46:1 › Super Admin combines designation, team, and status filters (1.6s)
+  ok  8 [desktop] › test\e2e\employee-directory.spec.ts:46:1 › Super Admin combines designation, team, and status filters (1.7s)
+  ok  9 [mobile] › test\e2e\employee-directory.spec.ts:60:1 › Admin filtering remains safe within their Team scope (1.1s)
+  ok 10 [desktop] › test\e2e\employee-directory.spec.ts:60:1 › Admin filtering remains safe within their Team scope (1.1s)
+  ok 11 [mobile] › test\e2e\employee-directory.spec.ts:72:1 › invalid repeated directory parameters fail safely (997ms)
+  ok 12 [desktop] › test\e2e\employee-directory.spec.ts:72:1 › invalid repeated directory parameters fail safely (1.2s)
+  ok 13 [mobile] › test\e2e\employee-directory.spec.ts:81:1 › Employee is forbidden from the workforce directory (1.3s)
+  ok 14 [desktop] › test\e2e\employee-directory.spec.ts:81:1 › Employee is forbidden from the workforce directory (1.1s)
+  ok 15 [mobile] › test\e2e\employee-directory.spec.ts:89:1 › management details preserve Admin privacy and provide visible Super Admin controls (5.9s)
+  ok 16 [desktop] › test\e2e\employee-directory.spec.ts:89:1 › management details preserve Admin privacy and provide visible Super Admin controls (5.6s)
+  ok 17 [mobile] › test\e2e\employee-directory.spec.ts:114:1 › Super Admin can use visible management controls without granting manager or Admin authority implicitly (10.0s)
+  ok 18 [desktop] › test\e2e\employee-directory.spec.ts:114:1 › Super Admin can use visible management controls without granting manager or Admin authority implicitly (9.7s)
+  ok 19 [mobile] › test\e2e\employee-directory.spec.ts:165:1 › Employee views and updates only the self-service profile (3.9s)
+  ok 20 [desktop] › test\e2e\employee-directory.spec.ts:165:1 › Employee views and updates only the self-service profile (4.0s)
+
+  20 passed (1.8m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":36776,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-ayrUoU"}
+--- Phase 2 employee directory: PASS ---
+
+=== Phase 3 client/project/location :: node scripts/run-phase3-playwright.mjs (own disposable database + allocated port) ===
+{"event":"browser_build_directory_allocated","ownerPid":29500,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-1KvHqf"}

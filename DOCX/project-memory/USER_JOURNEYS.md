@@ -1,5 +1,9 @@
 # Clear user journeys — 2026-10-06
 
+## Confirmed Cover and access amendment — 2026-10-15
+
+The owner authorized the [consolidated Cover workspace and access amendment](COVER_WORKSPACE_AND_ACCESS_AMENDMENT_2026_10_15.md). It supersedes older statements permitting Admin unpublished timetable/team-leave/report reads or project creation. Super Admin alone holds those capabilities; Employee own vacation self-service remains. Cover unifies timetable selection, creation, versioned editing/cancellation and direct decisions, with separate publication. The main timetable exposes assignment creation and the map gains place labels and selected-work controls. Existing scope, privacy, conflict, accessibility and RTL rules remain.
+
 ## Connected controls — authorized 2026-10-14
 
 Super Admin has a new Assignment labels tab: New label → set descriptive name/colour/order → Edit, Archive or Reactivate. This catalogue stays separate from scheduling and access. Job titles now include Archive/Reactivate and retain existing members; unrelated employee edits preserve their archived title. In People → person → Super Admin controls, Default work location edits the management text reference and Employee planning coordinate separately saves/corrects/clears protected manual coordinates. Admin and Employee do not receive these controls.

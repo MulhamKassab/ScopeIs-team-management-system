@@ -1,0 +1,100 @@
+{
+  "capturedAt": "2026-10-15T15:26:11.574Z",
+  "status": "LOCAL_IMPLEMENTATION_READY_FOR_COMBINED_REVIEW",
+  "sourceInputs": "source-inputs.json",
+  "coverageServices": {
+    "passed": 24,
+    "total": 24,
+    "log": "services-publication.log"
+  },
+  "collaborationServices": {
+    "passed": 26,
+    "total": 26,
+    "log": "collaboration-services.log"
+  },
+  "focusedComponents": {
+    "passed": 50,
+    "total": 50,
+    "log": "components.log"
+  },
+  "finalMapTimetableGuideComponents": {
+    "passed": 19,
+    "total": 19,
+    "log": "final-components.log"
+  },
+  "browser": {
+    "passed": 2,
+    "total": 2,
+    "log": "browser-publication.log",
+    "sourceInputs": "source-inputs.json",
+    "desktop": true,
+    "phone": true,
+    "rtlDark320": true,
+    "publicationTransition": true
+  },
+  "unitComponentDiagnostic": {
+    "passed": 421,
+    "total": 422,
+    "log": "unit-component-all.log",
+    "remaining": "Outdated feature-discovery wording was repaired and its focused test passes. Full combined rerun remains required."
+  },
+  "collaborationBrowserDiagnostic": {
+    "passed": 1,
+    "total": 2,
+    "log": "collaboration-browser.log",
+    "remaining": "Desktop Management note saved expectation exceeded5seconds while other builds ran; pending Saving state observed. Phone complete journey passed. Sequential combined gate required."
+  },
+  "manifest": {
+    "passed": true,
+    "scenarios": 85,
+    "files": 94,
+    "routes": 40
+  },
+  "push": false,
+  "productionWrites": false,
+  "productionMigration": false,
+  "scope": "Owned fictional disposable loopback journeys only; combined full gate and release owned by authorized coordinating chat.",
+  "teamScopeRepair": {
+    "passed": 6,
+    "total": 6,
+    "before": "../browser-verification-2026-10-15/editor-team-scope-before.log",
+    "after": "../browser-verification-2026-10-15/editor-team-scope-after.log",
+    "typecheck": true,
+    "lint": true
+  },
+  "minimalClientProjection": {
+    "implemented": true,
+    "source": "src/app/(protected)/coverage/page.tsx",
+    "browserAssertion": "test/e2e/phase10-collaboration.spec.ts",
+    "status": "Pending sequential combined gate"
+  },
+  "previousCoverBrowser": {
+    "passed": 2,
+    "total": 2,
+    "log": "browser.log",
+    "desktop": true,
+    "phone": true,
+    "rtlDark320": true,
+    "sourceInputs": "source-inputs-before-team-scope.json"
+  },
+  "finalScreenshots": [
+    "final-desktop-cover-admin-pending.png",
+    "final-mobile-cover-admin-pending.png",
+    "final-desktop-work-map-selection.png",
+    "final-mobile-work-map-320-rtl-dark.png"
+  ],
+  "publicationPresentation": {
+    "implemented": true,
+    "storedFlag": false,
+    "migration": false,
+    "supersededEffectTest": true,
+    "unavailableEffectLabel": "Approved"
+  },
+  "combinedVerification": {
+    "status": "LOCAL_VERIFIED_PRODUCTION_PENDING",
+    "receipt": "../browser-verification-2026-10-15/verification.json",
+    "fullRun": "../browser-verification-2026-10-15/verification-full-run.json",
+    "cssFollowup": "../browser-verification-2026-10-15/mobile-labels-verification.json",
+    "fullGateRerunAfterCss": false
+  }
+}

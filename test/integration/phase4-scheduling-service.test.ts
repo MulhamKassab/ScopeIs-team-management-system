@@ -31,19 +31,24 @@ describe("Phase 4 scheduling service", () => {
     expect(await db.select().from(notifications).where(and(eq(notifications.recipientUserId, cora.id), eq(notifications.eventType, "schedule.published")))).toHaveLength(1);
   });
 
-  it("keeps Admin schedule reads scoped while refusing Draft creation and edits", async () => {
+  it("keeps Admin reads scoped to current Published schedules while refusing Draft creation and edits", async () => {
     const period = await schedulingService.createPeriod(nora, { clientId: phase3Ids.bravoClient, month: "2026-06" });
     const assignment = await schedulingService.addAssignment(nora, { periodId: period.id, expectedPeriodVersion: period.version, employeeUserId: phase4Ids.bravoEmployee, projectId: phase3Ids.bravoProject, locationId: phase3Ids.bravoLocation, assignmentDate: "2026-06-10", startTime: "11:00", endTime: "12:00" });
     expect(assignment.projectId).toBe(phase3Ids.bravoProject);
-    const editor = await schedulingService.getPeriodEditor(ben, period.id);
-    expect(editor.assignments.map((row) => row.assignment.id)).toEqual([assignment.id]);
-    expect(editor).toMatchObject({ canManage: false, canPropose: false, canPublish: false });
-    await expect(schedulingService.getPeriodEditor(ava, period.id)).rejects.toMatchObject({ code: "OUT_OF_SCOPE" });
+    await expect(schedulingService.getPeriodEditor(ben, period.id)).rejects.toMatchObject({ code: "NOT_FOUND" });
+    await expect(schedulingService.getPeriodEditor(ava, period.id)).rejects.toMatchObject({ code: "NOT_FOUND" });
     await expect(schedulingService.createPeriod(ben, { clientId: phase3Ids.bravoClient, month: "2026-07" })).rejects.toMatchObject({ code: "FORBIDDEN" });
     await expect(schedulingService.propose(ben, { periodId: period.id, expectedVersion: period.version + 1 })).rejects.toMatchObject({ code: "FORBIDDEN" });
     await expect(schedulingService.addAssignment(ben, { periodId: period.id, expectedPeriodVersion: period.version + 1, employeeUserId: phase4Ids.bravoEmployee, projectId: alphaProject.id, locationId: phase3Ids.alphaLocation, assignmentDate: "2026-06-11", startTime: "11:00", endTime: "12:00" })).rejects.toMatchObject({ code: "FORBIDDEN" });
     await expect(schedulingService.createPeriod(unscoped, { clientId: phase3Ids.alphaClient, month: "2026-08" })).rejects.toMatchObject({ code: "FORBIDDEN" });
     await expect(schedulingService.getMySchedule(cora, { month: "2026-06" })).resolves.toHaveLength(0);
+    const proposed = await schedulingService.propose(nora, { periodId: period.id, expectedVersion: period.version + 1 });
+    await expect(schedulingService.getPeriodEditor(ben, period.id)).rejects.toMatchObject({ code: "NOT_FOUND" });
+    await schedulingService.publish(nora, { periodId: period.id, expectedVersion: proposed.version });
+    const editor = await schedulingService.getPeriodEditor(ben, period.id);
+    expect(editor.assignments.map((row) => row.assignment.id)).toEqual([assignment.id]);
+    expect(editor).toMatchObject({ canManage: false, canPropose: false, canPublish: false });
+    await expect(schedulingService.getPeriodEditor(ava, period.id)).rejects.toMatchObject({ code: "OUT_OF_SCOPE" });
   });
 
   it("blocks invalid relationships, stale writes, overlaps, and self-conflict from a copied predecessor", async () => {
@@ -152,6 +157,9 @@ describe("Schedule revision and scope regressions", () => {
     await db.insert(projectLocations).values([{ projectId: phase3Ids.alphaProjectTwo, locationId: secondLocation.id }, { projectId: phase3Ids.alphaProjectTwo, locationId: hiddenLocation.id }]);
     await db.insert(adminScopeGrants).values([{ userId: manager.id, scopeType: "PROJECT", scopeReference: phase3Ids.alphaProjectOne }, { userId: manager.id, scopeType: "LOCATION", scopeReference: secondLocation.id }]);
     const period = await schedulingService.createPeriod(nora, { clientId: phase3Ids.alphaClient, month: "2031-04" });
+    await expect(schedulingService.getPeriodEditor(manager, period.id)).rejects.toMatchObject({ code: "NOT_FOUND" });
+    const proposed = await schedulingService.propose(nora, { periodId: period.id, expectedVersion: period.version });
+    await schedulingService.publish(nora, { periodId: period.id, expectedVersion: proposed.version });
     const editor = await schedulingService.getPeriodEditor(manager, period.id);
     expect(editor.projects.map((row) => row.project.id).sort()).toEqual([phase3Ids.alphaProjectOne, phase3Ids.alphaProjectTwo].sort());
     const choices = new Map(editor.locationsByProject);
@@ -192,13 +200,13 @@ describe("Super Admin schedule mutation authority", () => {
     expect(await db.select().from(scheduleAssignments).where(eq(scheduleAssignments.id, assignment.id))).toEqual([assignment]);
     expect(await db.select().from(auditEvents)).toEqual(auditBefore);
     expect(await db.select().from(notifications)).toEqual(notificationsBefore);
-    const draft = await schedulingService.getPeriodEditor(manager, period.id);
-    expect(draft.period.status).toBe("DRAFT");
-    expect(draft).toMatchObject({ canManage: false, canPropose: false, canPublish: false });
+    await expect(schedulingService.getPeriodEditor(manager, period.id)).rejects.toMatchObject({ code: "NOT_FOUND" });
     const proposed = await schedulingService.propose(nora, { periodId: period.id, expectedVersion: period.version + 1 });
-    expect((await schedulingService.getPeriodEditor(manager, period.id)).period.status).toBe("PROPOSED");
+    await expect(schedulingService.getPeriodEditor(manager, period.id)).rejects.toMatchObject({ code: "NOT_FOUND" });
     await schedulingService.publish(nora, { periodId: period.id, expectedVersion: proposed.version });
-    expect((await schedulingService.getPeriodEditor(manager, period.id)).period.status).toBe("PUBLISHED");
+    const published = await schedulingService.getPeriodEditor(manager, period.id);
+    expect(published.period.status).toBe("PUBLISHED");
+    expect(published).toMatchObject({ canManage: false, canPropose: false, canPublish: false });
   });
 
   it("refuses a forged Super Admin actor and every mutation after a planner is demoted", async () => {

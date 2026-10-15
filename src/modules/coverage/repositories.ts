@@ -5,6 +5,7 @@ import { adminScopeGrants, clients, employeeProfiles, employeeSkills, leaveReque
 
 export type CoverageTransaction = Parameters<Parameters<typeof db.transaction>[0]>[0]; export type CoverageExecutor = typeof db | CoverageTransaction;
 export const coverageRepository = {
+  actor(executor: CoverageExecutor, id: string) { return executor.select({ role: users.role, active: users.active, sessionVersion: users.sessionVersion }).from(users).where(eq(users.id, id)).limit(1).then(([row]) => row ?? null); },
   grants(executor: CoverageExecutor, userId: string) { return executor.select().from(adminScopeGrants).where(and(eq(adminScopeGrants.userId, userId), eq(adminScopeGrants.active, true))); },
   employee(executor: CoverageExecutor, id: string) { return executor.select({ id: users.id, role: users.role, active: users.active, team: employeeProfiles.team }).from(users).innerJoin(employeeProfiles, eq(employeeProfiles.userId, users.id)).where(eq(users.id, id)).limit(1).then(([row]) => row ?? null); },
   assignment(executor: CoverageExecutor, id: string) { return executor.select({ assignment: scheduleAssignments, period: schedulePeriods, employeeName: users.displayName, clientName: clients.companyName, projectName: projects.name, locationName: locations.name }).from(scheduleAssignments).innerJoin(schedulePeriods, eq(schedulePeriods.id, scheduleAssignments.schedulePeriodId)).innerJoin(users, eq(users.id, scheduleAssignments.employeeUserId)).innerJoin(clients, eq(clients.id, schedulePeriods.clientId)).innerJoin(projects, eq(projects.id, scheduleAssignments.projectId)).innerJoin(locations, eq(locations.id, scheduleAssignments.locationId)).where(eq(scheduleAssignments.id, id)).limit(1).then(([row]) => row ?? null); },
@@ -24,6 +25,8 @@ export const coverageRepository = {
   createRequest(tx: CoverageTransaction, values: typeof replacementRequests.$inferInsert) { return tx.insert(replacementRequests).values(values).returning().then(([row]) => row!); },
   updateRequest(tx: CoverageTransaction, id: string, version: number, values: Partial<typeof replacementRequests.$inferInsert>) { return tx.update(replacementRequests).set({ ...values, version: sql`${replacementRequests.version} + 1`, updatedAt: new Date() }).where(and(eq(replacementRequests.id, id), eq(replacementRequests.version, version))).returning().then(([row]) => row ?? null); },
   requestsForRequester(executor: CoverageExecutor, userId: string) { return executor.select().from(replacementRequests).where(eq(replacementRequests.requesterUserId, userId)).orderBy(asc(replacementRequests.createdAt)); },
+  effectPeriods(executor: CoverageExecutor, ids: string[]) { return ids.length ? executor.select({ id: schedulePeriods.id, status: schedulePeriods.status }).from(schedulePeriods).where(inArray(schedulePeriods.id, ids)) : Promise.resolve([]); },
+  allRequests(executor: CoverageExecutor) { return executor.select().from(replacementRequests).orderBy(asc(replacementRequests.createdAt)); },
   pendingRequests(executor: CoverageExecutor) { return executor.select().from(replacementRequests).where(eq(replacementRequests.status, "PENDING")).orderBy(asc(replacementRequests.createdAt)); },
   superAdmins(executor: CoverageExecutor) { return executor.select({ id: users.id }).from(users).where(and(eq(users.role, "SUPER_ADMIN"), eq(users.active, true))); },
 };

@@ -1,0 +1,8 @@
+{
+  "recordedAt": "2026-10-15T09:31:22.886Z",
+  "reason": "Operator stopped the initial full lock after smoke safe-build failure to align its 180-second budget with the standalone 300-second gate; failure retained in system-lock-initial.log.",
+  "rootPid": 35884,
+  "disposableDatabaseDropped": "scopeis_phase1_playwright_28636_6e75bcbcc8_test",
+  "temporaryBuildRemoved": "C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase1-server-vKGo7H",
+  "testsNotCertified": true
+}

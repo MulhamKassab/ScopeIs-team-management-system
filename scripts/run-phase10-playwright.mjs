@@ -9,7 +9,7 @@ let exitCode = 1;
 try {
   await withDisposableTestDatabase("phase10_browser", async ({ databaseUrl, env }) => {
     await seedPhase10Journey(databaseUrl);
-    const result = await runBrowserWithOwnedBuild(process.execPath, [join(repositoryRoot, "node_modules", "playwright", "cli.js"), "test", "--config", "playwright.phase10.config.ts"], { cwd: repositoryRoot, env: { ...env, SCOPEIS_PHASE10_E2E: "true", SCOPEIS_PLAYWRIGHT_PORT: String(port) }, timeoutMs: 1_020_000 });
+    const result = await runBrowserWithOwnedBuild(process.execPath, [join(repositoryRoot, "node_modules", "playwright", "cli.js"), "test", "--config", "playwright.phase10.config.ts", ...process.argv.slice(2)], { cwd: repositoryRoot, env: { ...env, SCOPEIS_PHASE10_E2E: "true", SCOPEIS_PLAYWRIGHT_PORT: String(port) }, timeoutMs: 1_020_000 });
     exitCode = result.exitCode;
     if (result.timedOut) throw new Error("Phase 10 collaboration journey timed out.");
   });

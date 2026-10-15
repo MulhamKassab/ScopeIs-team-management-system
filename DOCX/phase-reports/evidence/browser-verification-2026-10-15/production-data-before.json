@@ -1,0 +1,28 @@
+{
+  "target": {
+    "project": "morning-flower-68935124",
+    "branch": "br-dark-union-av16a3zh",
+    "endpoint": "ep-steep-poetry-avl3re9t",
+    "database": "scopeis_company_demo"
+  },
+  "queryKind": "SELECT only",
+  "counts": {
+    "database_name": "scopeis_company_demo",
+    "database_role": "scopeis_company_demo_owner",
+    "verified_at": "2026-10-15T11:17:07.224Z",
+    "accounts": "7",
+    "credentials": "7",
+    "admin_scope_grants": "8",
+    "assignments": "61",
+    "omitted_assignments": "0",
+    "tickets": "6",
+    "archived_tickets": "6",
+    "migrations": "17",
+    "role_counts": {
+      "ADMIN": 2,
+      "EMPLOYEE": 3,
+      "SUPER_ADMIN": 2
+    }
+  }
+}
+

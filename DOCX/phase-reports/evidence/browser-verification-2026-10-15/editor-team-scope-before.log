@@ -1,0 +1,41 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/m.kassab/OneDrive - Sharjah Investment & Development Authority/Desktop/Applications/CodeBase/For Me/Team management system[39m
+
+ [31m❯[39m test/integration/timetable-organisation.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1218[2mms[22m[39m
+   [31m❯[39m monthly timetable permissions and organisation management [2m(6)[22m
+[31m     [31m×[31m keeps Published schedule details within the same TEAM and operational intersection as the timetable[39m[33m 306[2mms[22m[39m
+     [32m✓[39m projects only current Published work, separates plans and restricts employees to themselves[32m 34[2mms[22m[39m
+     [32m✓[39m requires both TEAM and operational Admin grants and reloads authority each time[32m 85[2mms[22m[39m
+     [32m✓[39m creates empty teams, renames stable references and moves/removes membership without granting access[32m 202[2mms[22m[39m
+     [32m✓[39m preserves existing archived titles on unrelated edits and refuses new archived memberships[32m 252[2mms[22m[39m
+     [32m✓[39m rejects forbidden or stale membership operations and concurrent duplicate names[32m 50[2mms[22m[39m
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  test/integration/timetable-organisation.test.ts > monthly timetable permissions and organisation management > keeps Published schedule details within the same TEAM and operational intersection as the timetable
+AssertionError: expected [ 'phase4-employee-bravo', …(1) ] to deeply equal [ 'mock-employee-cora' ]
+
+- Expected
++ Received
+
+  [
++   "phase4-employee-bravo",
+    "mock-employee-cora",
+  ]
+
+ ❯ test/integration/timetable-organisation.test.ts:26:70
+     24|   expect((await schedulingService.getPeriodEditor(superAdmin, period.i…
+     25|   const scoped = await schedulingService.getPeriodEditor(admin, period…
+     26|   expect(scoped.assignments.map(row=>row.assignment.employeeUserId)).t…
+       |                                                                      ^
+     27|   expect(JSON.stringify(scoped.assignments)).not.toContain(phase4Ids.b…
+     28|   const [grant] = await db.select().from(adminScopeGrants).where(and(e…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 18:53:41
+[2m   Duration [22m 3.68s[2m (tests 36%, import 29%, transform 26%, setup 8%)[22m
+

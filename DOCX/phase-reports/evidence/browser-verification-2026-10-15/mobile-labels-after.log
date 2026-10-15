@@ -1,0 +1,86 @@
+Phase 2 safe build preflight passed: isolated copy contains no .env* files.
+Phase 2 isolated typecheck passed.
+▲ Next.js 16.4.0 (webpack)
+✓ Running next.config.ts took 58ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 29.9s
+  Running TypeScript ...
+  Finished TypeScript in 23.1s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/8) ...
+  Generating static pages using 7 workers (2/8) 
+  Generating static pages using 7 workers (4/8) 
+  Generating static pages using 7 workers (6/8) 
+✓ Generating static pages using 7 workers (8/8) in 1057ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /[module]
+├ ƒ /account/change-password
+├ ƒ /accounts
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/mock-login
+├ ƒ /api/evidence/[evidenceId]/files
+├ ƒ /api/evidence/files/[fileId]
+├ ƒ /api/foundation/scope/[scopeRef]
+├ ƒ /api/reports/[reportKey]/export
+├ ƒ /api/tickets
+├ ƒ /api/tickets/[ticketId]
+├ ƒ /api/tickets/[ticketId]/files
+├ ƒ /api/tickets/[ticketId]/files/[fileId]
+├ ƒ /api/tickets/commands
+├ ƒ /arrangements
+├ ƒ /audit
+├ ƒ /clients
+├ ƒ /clients/[clientId]
+├ ƒ /coverage
+├ ƒ /dashboard
+├ ƒ /designations
+├ ƒ /employees
+├ ƒ /employees/[userId]
+├ ƒ /leave
+├ ƒ /locations
+├ ƒ /locations/[locationId]
+├ ƒ /login
+├ ƒ /map
+├ ƒ /notifications
+├ ƒ /profile
+├ ƒ /projects
+├ ƒ /projects/[projectId]
+├ ƒ /replacements
+├ ƒ /reports
+├ ƒ /reports/[reportKey]
+├ ƒ /requests
+├ ƒ /schedule
+├ ƒ /skills
+├ ƒ /teams
+├ ƒ /tickets
+└ ƒ /tickets/[ticketId]
+
+
+ƒ  (Dynamic)  server-rendered on demand
+
+▲ Next.js 16.4.0
+- Local:         http://127.0.0.1:55119
+- Network:       http://127.0.0.1:55119
+✓ Ready in 604ms
+✓ Running next.config.ts took 103ms
+Responsive browser: Google Chrome (C:\Users\m.kassab\AppData\Local\Google\Chrome\Application\chrome.exe).
+
+Running 4 tests using 1 worker
+
+Responsive browser: Google Chrome (C:\Users\m.kassab\AppData\Local\Google\Chrome\Application\chrome.exe).
+  ok 1 test\e2e\responsive.spec.ts:263:1 › role navigation, RTL, dark theme and enlarged text reflow (1.9m)
+  ok 2 test\e2e\responsive.spec.ts:509:1 › the planning workspace fits its pins and exposes filters, search and next actions on every screen (43.9s)
+  ok 3 test\e2e\responsive.spec.ts:605:1 › monthly timetable and people catalogues stay usable across phone, desktop, RTL and reduced motion (1.1m)
+  ok 4 test\e2e\responsive.spec.ts:670:1 › clear user journeys keep every authorized tab understandable and make the main tasks work on phone and desktop (1.4m)
+
+  Slow test file: test\e2e\responsive.spec.ts (5.2m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  4 passed (5.4m)
+Responsive browser cleanup complete: 1 databases created, 1 dropped, 0 retained; owned process trees stopped, build checkout and private fictional file directory removed.

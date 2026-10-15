@@ -1,0 +1,21 @@
+{
+  "capturedAt": "2026-10-15T18:29:53.036Z",
+  "sourceManifest": "inputs-mobile-labels-after.json",
+  "inputs": 472,
+  "matching": 472,
+  "changed": [],
+  "method": "Working bytes match final SHA256 manifest; Git clean-filtered blob IDs match staged index for every input. Repository LF conversion retained.",
+  "gitCleanBlobDigest": "904982746c065c956fbb981b58fb1451aba7d96fbb198eec418f55a0ddd3dd0f",
+  "rawLogsPreserved": true,
+  "rawEvidenceExcludedFromAuthoredWhitespaceCheck": [
+    "*.log",
+    "foundation-navigation-error-context.md",
+    "diagnostic-account-admin-desktop.md",
+    "diagnostic-responsive-journey.md",
+    "production-data-before.json"
+  ],
+  "unrelatedUntrackedPreserved": [
+    "test.py"
+  ],
+  "authoredWhitespaceCheck": "PASS"
+}

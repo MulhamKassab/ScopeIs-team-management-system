@@ -1,0 +1,16 @@
+{"event":"browser_build_directory_allocated","ownerPid":40772,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-6owxWy"}
+
+Running 8 tests using 1 worker
+
+  ok 1 [desktop] › test\e2e\phase11-reporting.spec.ts:20:1 › Super Admin reporting: dashboard, published allocation drill-down, planning separation, and a bounded CSV export (2.8s)
+  ok 2 [desktop] › test\e2e\phase11-reporting.spec.ts:76:1 › Scoped Admin dashboard remains useful while every report and export is refused (3.1s)
+  ok 3 [desktop] › test\e2e\phase11-reporting.spec.ts:104:1 › Employee dashboard is self-only and reporting stays closed (3.5s)
+  ok 4 [desktop] › test\e2e\phase11-reporting.spec.ts:160:1 › report filters apply without errors, retain their values and export the same conflict window (3.5s)
+  ok 5 [mobile] › test\e2e\phase11-reporting.spec.ts:20:1 › Super Admin reporting: dashboard, published allocation drill-down, planning separation, and a bounded CSV export (3.6s)
+  ok 6 [mobile] › test\e2e\phase11-reporting.spec.ts:76:1 › Scoped Admin dashboard remains useful while every report and export is refused (5.4s)
+  ok 7 [mobile] › test\e2e\phase11-reporting.spec.ts:104:1 › Employee dashboard is self-only and reporting stays closed (5.7s)
+  ok 8 [mobile] › test\e2e\phase11-reporting.spec.ts:160:1 › report filters apply without errors, retain their values and export the same conflict window (4.0s)
+
+  8 passed (4.1m)
+{"event":"browser_build_directory_cleanup_complete","ownerPid":40772,"directory":"C:\\Users\\M1465~1.KAS\\AppData\\Local\\Temp\\scopeis-phase2-safe-build-6owxWy"}
+Phase 11 browser disposable database cleanup complete.

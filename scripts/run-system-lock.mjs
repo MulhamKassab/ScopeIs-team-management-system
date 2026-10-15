@@ -13,7 +13,8 @@ const steps = [
   { name: "typecheck", label: "Typecheck", command: process.execPath, args: [join(repositoryRoot, "node_modules", "typescript", "bin", "tsc"), "--noEmit"], timeoutMs: 180_000 },
   { name: "lint", label: "Lint", command: process.execPath, args: [join(repositoryRoot, "node_modules", "eslint", "bin", "eslint.js"), ".", "--max-warnings=0"], timeoutMs: 180_000 },
   { name: "unit", label: "Unit tests", command: process.execPath, args: [join(repositoryRoot, "node_modules", "vitest", "vitest.mjs"), "run", "test/unit"], timeoutMs: 180_000 },
-  { name: "component", label: "Component tests", command: process.execPath, args: [join(repositoryRoot, "node_modules", "vitest", "vitest.mjs"), "run", "test/component"], timeoutMs: 180_000 },
+  // Allow cold isolated JSDOM workers and module-boundary imports to complete.
+  { name: "component", label: "Component tests", command: process.execPath, args: [join(repositoryRoot, "node_modules", "vitest", "vitest.mjs"), "run", "test/component"], timeoutMs: 300_000 },
   { name: "integration", label: "Aggregate integration tests", command: process.execPath, args: [join(repositoryRoot, "scripts", "run-aggregate-integration-tests.mjs")], timeoutMs: 900_000 },
   { name: "migration", label: "Migration tests", command: process.execPath, args: [join(repositoryRoot, "scripts", "run-phase2-migration-tests.mjs")], timeoutMs: 180_000 },
   // Include the guarded server's 600-second readiness and 240-second test budgets.

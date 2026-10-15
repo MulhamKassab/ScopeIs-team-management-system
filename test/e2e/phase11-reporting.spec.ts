@@ -73,48 +73,31 @@ test("Super Admin reporting: dashboard, published allocation drill-down, plannin
   await signOut(page);
 });
 
-test("Scoped Admin reporting is scope-bounded, may open planning, may not reach audit, and may not export planning", async ({ page }) => {
+test("Scoped Admin dashboard remains useful while every report and export is refused", async ({ page }) => {
   await signIn(page, "Ava Mercer");
-
-  // 1. The dashboard is the scoped variant, with no audit or review-queue card.
   await expect(page.getByRole("heading", { name: "Home" })).toBeVisible();
   const shortcuts = page.getByRole("navigation", { name: "Workspace starting points" });
   await expect(shortcuts.getByRole("link", { name: /View team schedules/ })).toHaveAttribute("href", "/schedule");
   await expect(shortcuts.getByRole("link", { name: /Plan, review, publish/ })).toHaveCount(0);
   await expect(page.getByText("People you manage", { exact: true })).toBeVisible();
-  await expect(page.getByText("Documents to review", { exact: true })).toHaveCount(0);
-  // The scoped Admin keeps the approved shape and never receives the Super-Admin-only tables.
-  await expect(page.getByRole("heading", { name: "Schedule lifecycle" })).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "Recent recorded actions" })).toHaveCount(0);
+  for (const heading of ["Schedule lifecycle", "Recent recorded actions"]) await expect(page.getByRole("heading", { name: heading })).toHaveCount(0);
+  for (const label of ["Documents to review", "Pending leave requests", "Approved leave days this month"]) await expect(page.getByText(label, { exact: true })).toHaveCount(0);
   await page.getByText("More team insights", { exact: true }).click();
   await expect(page.getByText("Certifications in my scope", { exact: true })).toBeVisible();
+  await expect(page.locator('a[href^="/reports"], a[href^="/leave"]')).toHaveCount(0);
   await expectCleanTerminology(page);
-
-  // 2. The Admin reaches the report index and the planning report inside their scope.
-  await page.goto("/reports");
-  await expect(page.getByRole("heading", { name: "Reports" })).toBeVisible();
-  await expect(page.getByText("Certification status", { exact: true })).toBeVisible();
-  await page.goto(`/reports/planning-unpublished?${WINDOW}`);
-  await expect(page.getByRole("heading", { name: "Unpublished plans" })).toBeVisible();
-  await expectNoHorizontalOverflow(page);
-
-  // 3. The certification report shows the approved summary projection without employee attribution.
-  await page.goto("/reports/certification-status");
-  await expect(page.getByRole("heading", { name: "Certification status" })).toBeVisible();
-  await expect(page.locator(".report-table thead")).not.toContainText("Employee");
-  await expect(page.locator(".report-table thead")).toContainText("Review state");
-
-  // 4. Admin-only-excluded and Super-Admin-only reports are non-enumerating 404s.
-  for (const path of ["/reports/leave-balance", "/reports/evidence-review-queue", "/reports/audit-history"]) {
-    expect((await page.goto(path))?.status()).toBe(404);
+  for (const path of ["/reports", "/reports/published-allocation", "/reports/planning-unpublished", "/reports/certification-status", "/reports/leave-balance", "/reports/evidence-review-queue", "/reports/audit-history"]) {
+    expect((await page.goto(path + "?" + WINDOW))?.status(), path).toBe(404);
+    await expect(page.getByRole("main")).toHaveCount(1);
+    await expect(page.getByRole("link", { name: "Return to a safe page" })).toBeVisible();
+    await expect(page.locator(".report-table")).toHaveCount(0);
+    await expectNoHorizontalOverflow(page);
   }
-
-  // 5. The Admin may export the published allocation but not the planning report.
-  const allowed = await page.request.get(`/api/reports/published-allocation/export?${WINDOW}`);
-  expect(allowed.status()).toBe(200);
-  const refused = await page.request.get(`/api/reports/planning-unpublished/export?${WINDOW}`);
-  expect(refused.status()).toBe(404);
-  expect(await refused.text()).not.toContain("assignment");
+  for (const key of ["published-allocation", "planning-unpublished", "certification-status"]) {
+    const refused = await page.request.get("/api/reports/" + key + "/export?" + WINDOW);
+    expect(refused.status()).toBe(404);
+    expect(await refused.text()).not.toContain("assignment");
+  }
   await signOut(page);
 });
 

@@ -1,0 +1,152 @@
+{
+  "verifiedAt": "2026-10-15T15:27:09.605Z",
+  "scope": "Controlled pure presentation checks; no database/browser/network; supplemental and not a full-gate case count",
+  "sourcePath": "src/modules/coverage/presentation.ts",
+  "beforeSourceSha256": "6a4f9fc252b4f153411a8cd7230659d2f03b59531e6e59d7ca69708032db65ea",
+  "afterSourceSha256": "bbba1703bc569876c554b0cbe8deaa282179e7c3467ff42bfd71b6c2d5b63ac0",
+  "beforeFrozenManifest": "inputs-publication-marker-before.json",
+  "beforeChecks": [
+    {
+      "request": {
+        "status": "PENDING",
+        "decidedByUserId": null,
+        "effectPeriodStatus": null
+      },
+      "expected": "Awaiting decision",
+      "actual": "Awaiting decision",
+      "passed": true
+    },
+    {
+      "request": {
+        "status": "APPROVED",
+        "decidedByUserId": "fictional-super-admin",
+        "effectPeriodStatus": "DRAFT"
+      },
+      "expected": "Draft prepared",
+      "actual": "Draft prepared",
+      "passed": true
+    },
+    {
+      "request": {
+        "status": "APPROVED",
+        "decidedByUserId": "fictional-super-admin",
+        "effectPeriodStatus": "PROPOSED"
+      },
+      "expected": "Draft prepared",
+      "actual": "Draft prepared",
+      "passed": true
+    },
+    {
+      "request": {
+        "status": "APPROVED",
+        "decidedByUserId": "fictional-super-admin",
+        "effectPeriodStatus": "PUBLISHED"
+      },
+      "expected": "Schedule published",
+      "actual": "Draft prepared",
+      "passed": false
+    },
+    {
+      "request": {
+        "status": "APPROVED",
+        "decidedByUserId": "fictional-super-admin",
+        "effectPeriodStatus": null
+      },
+      "expected": "Approved",
+      "actual": "Draft prepared",
+      "passed": false
+    },
+    {
+      "request": {
+        "status": "REJECTED",
+        "decidedByUserId": null,
+        "effectPeriodStatus": null
+      },
+      "expected": "Cancelled",
+      "actual": "Cancelled",
+      "passed": true
+    },
+    {
+      "request": {
+        "status": "REJECTED",
+        "decidedByUserId": "fictional-super-admin",
+        "effectPeriodStatus": null
+      },
+      "expected": "Rejected",
+      "actual": "Rejected",
+      "passed": true
+    }
+  ],
+  "afterChecks": [
+    {
+      "request": {
+        "status": "PENDING",
+        "decidedByUserId": null,
+        "effectPeriodStatus": null
+      },
+      "expected": "Awaiting decision",
+      "actual": "Awaiting decision",
+      "passed": true
+    },
+    {
+      "request": {
+        "status": "APPROVED",
+        "decidedByUserId": "fictional-super-admin",
+        "effectPeriodStatus": "DRAFT"
+      },
+      "expected": "Draft prepared",
+      "actual": "Draft prepared",
+      "passed": true
+    },
+    {
+      "request": {
+        "status": "APPROVED",
+        "decidedByUserId": "fictional-super-admin",
+        "effectPeriodStatus": "PROPOSED"
+      },
+      "expected": "Draft prepared",
+      "actual": "Draft prepared",
+      "passed": true
+    },
+    {
+      "request": {
+        "status": "APPROVED",
+        "decidedByUserId": "fictional-super-admin",
+        "effectPeriodStatus": "PUBLISHED"
+      },
+      "expected": "Schedule published",
+      "actual": "Schedule published",
+      "passed": true
+    },
+    {
+      "request": {
+        "status": "APPROVED",
+        "decidedByUserId": "fictional-super-admin",
+        "effectPeriodStatus": null
+      },
+      "expected": "Approved",
+      "actual": "Approved",
+      "passed": true
+    },
+    {
+      "request": {
+        "status": "REJECTED",
+        "decidedByUserId": null,
+        "effectPeriodStatus": null
+      },
+      "expected": "Cancelled",
+      "actual": "Cancelled",
+      "passed": true
+    },
+    {
+      "request": {
+        "status": "REJECTED",
+        "decidedByUserId": "fictional-super-admin",
+        "effectPeriodStatus": null
+      },
+      "expected": "Rejected",
+      "actual": "Rejected",
+      "passed": true
+    }
+  ]
+}

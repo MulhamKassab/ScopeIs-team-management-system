@@ -1,0 +1,39 @@
+{
+  "stoppedAt": "2026-10-15T15:19:33.921Z",
+  "rootPid": 37844,
+  "ownedPids": [
+    37844,
+    21420,
+    31460,
+    21768
+  ],
+  "reason": "Confirmed approved Cover request retained Draft prepared after effect publication; owner-authorized repair before release.",
+  "localGatesCompleted": [
+    "Manifest85",
+    "Typecheck",
+    "Lint",
+    "Unit242",
+    "Component180",
+    "Integration16/16"
+  ],
+  "completedFullGate": false,
+  "allFrozenTechnicalInputsMatch": true,
+  "frozenInputs": 472,
+  "found": [
+    "postgres",
+    "scopeis_browser_verification_base_test",
+    "scopeis_p2_phase12_test_21768_5"
+  ],
+  "dropped": [
+    "scopeis_p2_phase12_test_21768_5"
+  ],
+  "remaining": [
+    {
+      "datname": "postgres"
+    },
+    {
+      "datname": "scopeis_browser_verification_base_test"
+    }
+  ],
+  "productionWrites": 0
+}

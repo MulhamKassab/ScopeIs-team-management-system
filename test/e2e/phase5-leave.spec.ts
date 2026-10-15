@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { signIn, signOut } from "./sign-in";
 test.skip(process.env.SCOPEIS_PHASE5_E2E !== "true", "Run with the guarded Phase 5 fixture runner.");
-test("Employee previews and requests a vacation, Super Admin decides it, and Admin reads only approved team dates", async ({ page }, testInfo) => {
+test("Employee previews and requests a vacation, Super Admin decides it, and Admin cannot read team leave", async ({ page }, testInfo) => {
   const startDate = testInfo.project.name === "mobile" ? "2026-11-09" : "2026-11-02";
   const endDate = testInfo.project.name === "mobile" ? "2026-11-13" : "2026-11-06";
   const privateReason = `Fictional private vacation note ${testInfo.project.name}`;
@@ -46,15 +46,15 @@ test("Employee previews and requests a vacation, Super Admin decides it, and Adm
   await expect(page.getByText("APPROVED", { exact: true })).toBeVisible();
   await signOut(page);
 
-  // The Admin receives neither the new preview nor the Employee's private request fields.
+  // The updated restriction refuses the entire team-leave page to Admin.
   await signIn(page, "Ava Mercer");
-  await page.goto("/leave");
-  await expect(page.getByRole("heading", { name: "Team leave", exact: true })).toBeVisible();
+  expect((await page.goto("/leave"))?.status()).toBe(404);
+  await expect(page.getByRole("main")).toHaveCount(1);
+  await expect(page.getByRole("link", { name: "Return to a safe page" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Apply for vacation", exact: true })).toHaveCount(0);
   await expect(page.getByRole("region", { name: "Vacation balance preview" })).toHaveCount(0);
   await expect(page.locator(".leave-balance")).toHaveCount(0);
-  await expect(page.locator(".workflow-leave-list")).toContainText("Cora Bell");
-  await expect(page.locator(".workflow-leave-list")).toContainText("APPROVED");
+  await expect(page.locator(".workflow-leave-list")).toHaveCount(0);
   await expect(page.locator("body")).not.toContainText(privateReason);
   await signOut(page);
 

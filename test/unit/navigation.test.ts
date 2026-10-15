@@ -15,9 +15,12 @@ describe("company Employee workspace", () => {
 
   it.each(["SUPER_ADMIN", "ADMIN"] as const)("preserves the %s primary destinations and familiar management labels", (role) => {
     const navigation = navigationFor(actor(role));
-    expect(navigation.filter((item) => item.mobilePrimary).slice(0, 4).map((item) => item.key)).toEqual(["dashboard", "employees", "schedule", "leave"]);
+    expect(navigation.filter((item) => item.mobilePrimary).slice(0, 4).map((item) => item.key)).toEqual(["dashboard", "schedule", "map", "coverage"]);
     expect(navigation.find((item) => item.key === "schedule")?.label).toBe("Timetable");
-    expect(navigation.find((item) => item.key === "leave")?.label).toBe("Leave");
+    expect(navigation.some((item) => item.key === "leave")).toBe(role === "SUPER_ADMIN");
+    expect(navigation.some((item) => item.key === "reports")).toBe(role === "SUPER_ADMIN");
+    expect(navigation.find((item) => item.key === "coverage")?.label).toBe("Cover");
+    expect(navigation.some((item) => item.key === "replacements")).toBe(false);
     expect(navigation.find((item) => item.key === "tickets")?.href).toBe("/tickets");
   });
 
