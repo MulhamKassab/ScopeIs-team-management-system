@@ -181,6 +181,22 @@ export const clients = pgTable("clients", {
   check("clients_service_dates_check", sql`${table.serviceEndDate} is null or ${table.serviceStartDate} is null or ${table.serviceEndDate} >= ${table.serviceStartDate}`),
 ]);
 
+export const clientBookings = pgTable("client_bookings", {
+  id: uuid("id").defaultRandom().primaryKey(), clientId: uuid("client_id").notNull(), employeeUserId: text("employee_user_id").notNull(),
+  startDate: date("start_date").notNull(), endDate: date("end_date").notNull(), note: text("note"), createdByUserId: text("created_by_user_id").notNull(),
+  cancelledAt: timestamp("cancelled_at", { withTimezone: true }), cancelledByUserId: text("cancelled_by_user_id"), version: integer("version").notNull().default(1), ...timestamps,
+}, (table) => [
+  foreignKey({ name: "client_bookings_client_fkey", columns: [table.clientId], foreignColumns: [clients.id] }).onDelete("restrict"),
+  foreignKey({ name: "client_bookings_employee_fkey", columns: [table.employeeUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  foreignKey({ name: "client_bookings_creator_fkey", columns: [table.createdByUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  foreignKey({ name: "client_bookings_canceller_fkey", columns: [table.cancelledByUserId], foreignColumns: [users.id] }).onDelete("restrict"),
+  check("client_bookings_dates_check", sql`${table.endDate} >= ${table.startDate} and ${table.endDate} - ${table.startDate} < 366`),
+  check("client_bookings_note_check", sql`${table.note} is null or char_length(${table.note}) <= 1000`),
+  check("client_bookings_version_check", sql`${table.version} > 0`),
+  index("client_bookings_employee_dates_idx").on(table.employeeUserId, table.startDate, table.endDate).where(sql`${table.cancelledAt} is null`),
+  index("client_bookings_client_idx").on(table.clientId),
+]);
+
 export const projects = pgTable("projects", {
   id: uuid("id").defaultRandom().primaryKey(), clientId: uuid("client_id").notNull(), name: text("name").notNull(), status: projectStatusEnum("status").notNull().default("PLANNED"),
   responsibleAdminUserId: text("responsible_admin_user_id"), startDate: date("start_date"), endDate: date("end_date"), version: integer("version").notNull().default(1), ...timestamps,

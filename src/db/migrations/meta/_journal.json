@@ -18,6 +18,7 @@
     { "idx": 13, "version": "7", "when": 1789794000000, "tag": "0013_super_admin_account_management", "breakpoints": true },
     {"idx": 14, "version": "7", "when": 1791283248313, "tag": "0014_team_catalogue", "breakpoints": true},
     {"idx":15,"version":"7","when":1791487936805,"tag":"0015_company_tickets","breakpoints":true},
-    { "idx": 16, "version": "7", "when": 1791973854276, "tag": "0016_schedule_assignment_omission", "breakpoints": true }
+    { "idx": 16, "version": "7", "when": 1791973854276, "tag": "0016_schedule_assignment_omission", "breakpoints": true },
+    {"idx":17,"version":"7","when":1792130938555,"tag":"0017_client_outsource_bookings","breakpoints":true}
   ]
 }

@@ -1,0 +1,15 @@
+{
+  "completedAt": "2026-10-16T06:16:46.319Z",
+  "migration": "0017_client_outsource_bookings",
+  "migrationHash": "b48b8e93bd9244714c533b08f242cbc702ac990d85168b86b8969bae615b6af0",
+  "ledgerRows": 18,
+  "tables": 42,
+  "existingRowsPreserved": 838,
+  "unchangedRows": true,
+  "unchangedSchemas": true,
+  "priorLedgerUnchanged": true,
+  "emptyBookings": true,
+  "backupWrittenAndReadBack": true,
+  "fingerprint": "dea7cd8702034672dab5743a1574cdf708d44567208c2dedc6cd247b14e92b8e",
+  "productionBusinessRecordsCreated": 0
+}

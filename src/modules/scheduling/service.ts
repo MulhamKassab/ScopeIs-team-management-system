@@ -1,4 +1,5 @@
 import "server-only";
+import { bookingRepository } from "@/modules/outsourcing/repositories";
 import { randomUUID } from "node:crypto";
 import { and, asc, eq, sql } from "drizzle-orm";
 import { db } from "@/db/client";
@@ -83,6 +84,7 @@ export class SchedulingService {
 
   private async assertNoOverlap(tx: SchedulingTransaction, period: typeof schedulePeriods.$inferSelect, input: { employeeUserId: string; assignmentDate: string; startTime: string; endTime: string; copiedFromAssignmentId?: string | null }, excludeAssignmentId?: string) {
     await this.lockOverlap(tx, input.employeeUserId, input.assignmentDate);
+    if ((await bookingRepository.overlapping(tx, input.employeeUserId, input.assignmentDate, input.assignmentDate)).length) throw new SchedulingDomainError("OVERLAP", "This employee is booked to a client on this date. Cancel or revise the client booking first.");
     const candidates = await schedulingRepository.overlapCandidates(tx, input);
     for (const candidate of candidates) {
       if (candidate.assignment.id === excludeAssignmentId) continue;

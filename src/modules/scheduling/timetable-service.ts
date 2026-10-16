@@ -1,4 +1,6 @@
 import "server-only";
+import { bookingRepository } from "@/modules/outsourcing/repositories";
+import { monthDays } from "./calendar-dates";
 import { and, asc, eq, inArray, or, sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import { clients, employeeProfiles, locations, projects, scheduleAssignments as a, schedulePeriods as p, users } from "@/db/schema";
@@ -10,6 +12,7 @@ export type TimetableEntry = {
   projectId: string; clientId: string; clientName: string; projectName: string; locationName: string;
   date: string; start: string; end: string; instruction: string | null;
   status: "DRAFT" | "PROPOSED" | "PUBLISHED";
+  bookingId?: string;
 };
 
 /** Read current authority before projecting the minimal calendar payload. */
@@ -33,5 +36,12 @@ export async function getTimetable(actor: { id: string }, month: string, plannin
     .innerJoin(employeeProfiles, eq(employeeProfiles.userId, users.id)).innerJoin(clients, eq(p.clientId, clients.id))
     .innerJoin(projects, eq(a.projectId, projects.id)).innerJoin(locations, eq(a.locationId, locations.id))
     .where(and(...conditions)).orderBy(asc(a.assignmentDate), asc(a.startTime), asc(users.displayName), asc(a.id));
-  return rows.map((row) => ({ ...row, start: row.start.slice(0, 5), end: row.end.slice(0, 5) }));
+  const days = monthDays(month);
+  const bookings = await bookingRepository.visible(db, current, { start: days[0]!, end: days.at(-1)! });
+  const bookingEntries: TimetableEntry[] = bookings.flatMap(({ booking, employeeName, clientName }) => days.filter((day) => day >= booking.startDate && day <= booking.endDate).map((day) => ({
+    id: `booking:${booking.id}:${day}`, bookingId: booking.id, periodId: "", projectId: "", employeeId: booking.employeeUserId, employeeName,
+    clientId: booking.clientId, clientName, projectName: clientName, locationName: "Outsourced to client", date: day,
+    start: "00:00", end: "24:00", instruction: booking.note, status: "PUBLISHED" as const,
+  })));
+  return [...rows.map((row) => ({ ...row, start: row.start.slice(0, 5), end: row.end.slice(0, 5) })), ...bookingEntries].sort((a, b) => a.date.localeCompare(b.date) || a.start.localeCompare(b.start) || a.employeeName.localeCompare(b.employeeName));
 }

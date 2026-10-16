@@ -1,5 +1,10 @@
 # UI/UX Foundation
 
+## Client outsource booking action, 16 October 2026
+
+[Confirmed bookings](CLIENT_OUTSOURCE_BOOKINGS_2026_10_16.md) use a named timetable/client action, searchable employee checkboxes, inclusive start/end fields, optional note, explicit all-calendar-day copy and inline error/success feedback. Month, People and Agenda show All day/Outsourced to client. Managers cancel through a named dialog with retained history; employees see only their own entries. Existing themes, responsive layout, native dialog access and RTL principles apply.
+
+
 ## Confirmed presentation and practical map amendment, 16 October 2026
 
 The owner authorized [consistent control/text colours, a practical map and date-bounded vacation-review context](PRESENTATION_MAP_LEAVE_REVIEW_AMENDMENT_2026_10_16.md), with implementation and push to main. Semantic primary foregrounds survive contextual link/card styles; disabled controls remain readable in both themes. Authored website copy and empty-value labels use no em dashes. The map puts an identifiable people/worksite list beside the canvas, offers explicit shared-marker choices and pointer-centred wheel zoom, and removes the requested long controls/privacy disclosure. Existing attribution, static/published status, exact/coarse privacy, scopes, touch/keyboard access, RTL and reduced motion remain. Super Admin vacation review includes related cover, unpublished work, other leave and permission-filtered assigned tickets; it changes no approval rule.

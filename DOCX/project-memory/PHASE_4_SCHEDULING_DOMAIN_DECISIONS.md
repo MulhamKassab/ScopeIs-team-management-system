@@ -1,5 +1,10 @@
 # Phase 4 Scheduling Domain Decisions
 
+## Confirmed outsource booking exception, 16 October 2026
+
+[Client outsource bookings](CLIENT_OUTSOURCE_BOOKINGS_2026_10_16.md) allow scoped Admin and Super Admin to reserve employees for a Client and inclusive date range, immediately visible on the timetable. This narrow separate booking operation does not grant ordinary schedule editing, unpublished reads or publication to Admin. Full-day commitments participate in scheduling/leave/cover conflicts.
+
+
 ## Confirmed Cover and access amendment — 2026-10-15
 
 The owner authorized the [consolidated Cover workspace and access amendment](COVER_WORKSPACE_AND_ACCESS_AMENDMENT_2026_10_15.md). It supersedes older statements permitting Admin unpublished timetable/team-leave/report reads or project creation. Super Admin alone holds those capabilities; Employee own vacation self-service remains. Cover unifies timetable selection, creation, versioned editing/cancellation and direct decisions, with separate publication. The main timetable exposes assignment creation and the map gains place labels and selected-work controls. Existing scope, privacy, conflict, accessibility and RTL rules remain.

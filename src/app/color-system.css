@@ -1,4 +1,8 @@
 /* Semantic action colours must survive page-specific link and card styles. */
+.booking-people { display: grid; gap: 8px; max-block-size: 240px; overflow: auto; min-inline-size: 0; border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+.booking-people .operation-check { display: flex; align-items: center; gap: 10px; min-block-size: 44px; }
+.booking-people input[type="checkbox"] { inline-size: 20px; block-size: 20px; flex: 0 0 auto; }
+.client-booking-entry { border-inline-start: 4px solid var(--primary); }
 :is(.app-shell, .task-dialog, .login-card) .button.primary {
   color: var(--on-primary);
   background-color: var(--control-fill, var(--primary));

@@ -1,5 +1,10 @@
 ## Presentation, practical map and vacation-review context, 16 October 2026
 
+## Client outsource bookings, 16 October 2026
+
+[Confirmed client-period booking requirements](project-memory/CLIENT_OUTSOURCE_BOOKINGS_2026_10_16.md): scoped Admin/Super Admin creation and cancellation, multiple employees, inclusive calendar dates, immediate timetable display, overlap and leave protection. Owner requested smoke verification and deployment without full suites.
+
+
 - [Confirmed requirements](project-memory/PRESENTATION_MAP_LEAVE_REVIEW_AMENDMENT_2026_10_16.md) and [production release report](phase-reports/SCOPEIS_PRESENTATION_MAP_LEAVE_REVIEW_2026_10_16.md). Final application `3e44d6c` is pushed/deployed: 428 unit/components, unchanged-service integration 74, fresh-build browser 14/14, matching 479 inputs and bounded normal Super Admin live checks. Stored record text is preserved; only displayed typography changes. Existing role, provider, privacy and approval boundaries remain; no fresh full system lock is claimed.
 
 ## Consolidated Cover and access amendment — 2026-10-15

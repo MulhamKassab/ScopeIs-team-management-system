@@ -1,5 +1,10 @@
 # System Architecture Decisions
 
+## Client outsource bookings, 16 October 2026
+
+[Confirmed amendment](CLIENT_OUTSOURCE_BOOKINGS_2026_10_16.md) adds an independent date-range reservation table through migration 0017. Client-only bookings never fabricate Projects, Locations or hours, and never rewrite schedule revisions. Admin requires current CLIENT and employee TEAM scope; ordinary schedule publishing remains Super Admin only. Existing transactional audit, versions and employee/date/leave locks protect immediate bookings and intersecting schedule/leave/cover operations.
+
+
 ## Presentation and read-only review context, 16 October 2026
 
 The [confirmed amendment](PRESENTATION_MAP_LEAVE_REVIEW_AMENDMENT_2026_10_16.md) uses existing UI tokens, the provider-neutral browser map and date-bounded repositories for vacation review. Related ticket metadata is projected by the ticket service after its current session, role and ticket-permission checks; the leave module never queries private ticket rows directly or turns ticket dates into booked time. This is contextual reading within the already implemented Phase 12 core, not an automatic workforce handoff. No schema, provider, authentication, worker or approval-policy change is introduced.

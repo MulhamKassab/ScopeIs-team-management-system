@@ -1,4 +1,6 @@
 import { displayText } from "@/shared/presentation/display-text";
+import { ClientBookingsPanel } from "@/modules/outsourcing/panel";
+import { WorkflowFeedback } from "@/shared/components/workflow-feedback";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentActor } from "@/modules/auth/session-service";
@@ -28,8 +30,9 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ c
   const [view, options, grants] = await loadClientPage(actor, clientId);
   const manager = options.employees.find((employee) => employee.id === view.client.accountManagerUserId);
   return <section className="operations-page records-workspace">
+    <WorkflowFeedback />
     <nav className="record-breadcrumbs" aria-label="Breadcrumb"><Link href="/clients">Clients</Link><span aria-hidden="true">/</span><span aria-current="page">{displayText(view.client.companyName)}</span></nav>
-    <header className="operations-heading"><div><p className="eyebrow">Client</p><h2>{displayText(view.client.companyName)}</h2><p>{displayText(view.client.serviceSummary || "Manage this client’s projects, work locations and contacts.")}</p></div><TaskDialog triggerLabel="Edit client" title="Edit client"><ClientEditForm client={view.client} employees={options.employees} /></TaskDialog></header>
+    <header className="operations-heading"><div><p className="eyebrow">Client</p><h2>{displayText(view.client.companyName)}</h2><p>{displayText(view.client.serviceSummary || "Manage this client’s projects, work locations and contacts.")}</p></div><Link className="button primary" href="#client-bookings">Book employees to client</Link><TaskDialog triggerLabel="Edit client" title="Edit client"><ClientEditForm client={view.client} employees={options.employees} /></TaskDialog></header>
     <dl className="record-summary"><div><dt>Status</dt><dd><RecordStatus status={view.client.status} /></dd></div><div><dt>Account manager</dt><dd>{displayText(manager?.displayName ?? "Not assigned")}</dd></div><div><dt>Service dates</dt><dd><RecordDates start={view.client.serviceStartDate} end={view.client.serviceEndDate} /></dd></div></dl>
     {view.client.status === "ARCHIVED" ? <p className="operation-callout">This client is archived. Open Edit client to reactivate it before adding projects or locations.</p> : null}
     <div className="record-related-grid">
@@ -42,6 +45,7 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ c
         {!view.locations.length ? <p className="record-empty">No locations yet. Add a worksite address, then link it to a project.</p> : null}
       </section>
     </div>
+    <ClientBookingsPanel actor={actor} clientId={clientId} />
     <SupportingDetailsPanel target={{ type: "CLIENT", id: view.client.id }} details={view.details} employees={options.employees} skills={options.skills} actorId={actor.id} isSuperAdmin={actor.role === "SUPER_ADMIN"} />
     {actor.role === "SUPER_ADMIN" ? <ScopeManagementPanel target={{ type: "CLIENT", id: view.client.id }} employees={options.employees} grants={grants} /> : null}
   </section>;

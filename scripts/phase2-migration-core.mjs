@@ -74,6 +74,7 @@ function expectedStage(manifest, count) {
   if (count === 15) return manifest.states.teamCatalogue;
   if (count === 16) return manifest.states.companyTickets;
   if (count === 17) return manifest.states.assignmentOmission;
+  if (count === 18) return manifest.states.clientOutsourceBookings;
   return null;
 }
 
