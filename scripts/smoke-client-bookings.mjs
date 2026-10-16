@@ -55,6 +55,8 @@ await withDisposableTestDatabase("client_booking_smoke",async({databaseUrl,env})
     await page.getByText("Employees booked. The client booking is now on their timetable.",{exact:true}).waitFor();
     check(true,"Real multi-select booking form submits successfully");
     await page.getByRole("dialog").getByRole("link",{name:"View timetable",exact:true}).click();
+    await page.waitForURL(`**/schedule?month=2027-03`);
+    await page.getByRole("heading",{name:"March 2027",exact:true}).waitFor();
     await page.getByRole("button",{name:"Agenda",exact:true}).click();await page.getByText("Outsourced to client · Booked",{exact:true}).first().waitFor();
     await page.screenshot({path:join(folder,"admin-timetable.png"),fullPage:true});
     check(true,"Created booking appears in the timetable Agenda");

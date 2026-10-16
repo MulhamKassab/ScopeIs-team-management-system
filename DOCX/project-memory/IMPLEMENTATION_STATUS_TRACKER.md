@@ -2,7 +2,7 @@
 
 ## Client outsource bookings, 16 October 2026
 
-Implementation and bounded smoke verification are complete under [the release report](../phase-reports/SCOPEIS_CLIENT_BOOKINGS_2026_10_16.md). Admin/Super Admin can book multiple scoped employees to a client for inclusive calendar dates and cancel with retained history. Timetable/cover/leave conflict handling is connected. Twelve smoke observations, compilation/build and changed-code lint pass; full suites were omitted at the owner’s request. Production additive migration0017 preserves all838 existing rows and41 existing table schemas. Exact final-main deployment observations are recorded in the private post-push receipt named in the report.
+Status `COMPLETED`. Application `20afaa5e365fa56b5b3458f32572a69d5e53b347` is pushed and deployed, with the new dialog observed through a normal Super Admin session. Implementation and bounded smoke verification are complete under [the release report](../phase-reports/SCOPEIS_CLIENT_BOOKINGS_2026_10_16.md). Admin/Super Admin can book multiple scoped employees to a client for inclusive calendar dates and cancel with retained history. Timetable/cover/leave conflict handling is connected. Twelve smoke observations, compilation/build and changed-code lint pass; full suites were omitted at the owner’s request. Production additive migration0017 preserves all838 existing rows and41 existing table schemas. Exact final-main deployment observations are recorded in the private post-push receipt named in the report.
 
 
 ## Presentation, practical map and vacation review, 16 October 2026

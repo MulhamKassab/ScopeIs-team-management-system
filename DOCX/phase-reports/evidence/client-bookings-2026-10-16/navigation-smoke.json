@@ -1,0 +1,20 @@
+{
+  "completedAt": "2026-10-16T06:26:04.333Z",
+  "checks": [
+    "Scoped Admin books two employees to the same client atomically",
+    "January timetable includes both weekend days for both employees",
+    "Employee sees only own cross-month booking",
+    "Overlapping booking refused",
+    "Employee booking creation refused",
+    "Out-of-scope Admin booking refused",
+    "Production build and TypeScript compilation passed",
+    "Normal scoped Admin session established",
+    "Real multi-select booking form submits successfully",
+    "Created booking appears in the timetable Agenda",
+    "Real cancellation form releases a booking",
+    "Cancellation retains its stored record"
+  ],
+  "scope": "bounded smoke only; no unit, integration, regression or full-system suites",
+  "reusedPreviouslyBuiltApplication": true,
+  "targetMonthConfirmedByURLAndHeading": "2027-03"
+}
